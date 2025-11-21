@@ -1,0 +1,464 @@
+/**
+ * PatternFly Card Component Styles
+ * Adapted from @patternfly/patternfly v6 Card component
+ *
+ * Uses two-layer CSS variable pattern for Shadow DOM:
+ * - Public API variables (--pf-v6-c-card--*) can be overridden from Light DOM
+ * - Private variables (--_pfv6-card-*) consume public API with fallbacks
+ *
+ * See: https://www.patternfly.org/components/card#css-variables
+ */
+
+:host {
+  display: flex;
+  flex-direction: column;
+
+  /* ========================================================================
+   * PUBLIC API VARIABLES - Cascaded to child components
+   * These base values are consumed by sub-components (pfv6-card-title, etc.)
+   * Modifiers (compact, large) will override these below
+   * ======================================================================== */
+
+  --pf-v6-c-card__title-text--FontSize: var(--pf-t--global--font--size--heading--xs);
+  --pf-v6-c-card__body--FontSize: var(--pf-t--global--font--size--body--default);
+  --pf-v6-c-card__footer--FontSize: var(--pf-t--global--font--size--body--default);
+  --pf-v6-c-card--first-child--PaddingBlockStart: var(--pf-t--global--spacer--lg);
+  --pf-v6-c-card--child--PaddingInlineEnd: var(--pf-t--global--spacer--lg);
+  --pf-v6-c-card--child--PaddingBlockEnd: var(--pf-t--global--spacer--lg);
+  --pf-v6-c-card--child--PaddingInlineStart: var(--pf-t--global--spacer--lg);
+  --pf-v6-c-card--c-divider--child--PaddingBlockStart: var(--pf-t--global--spacer--lg);
+  --pf-v6-c-card__title--not--last-child--PaddingBlockEnd: var(--pf-t--global--spacer--md);
+
+  /* ========================================================================
+   * PRIVATE IMPLEMENTATION VARIABLES
+   * Internal use only - DO NOT document these in JSDoc
+   * Reference PUBLIC API variables (--pf-v6-c-card--*) with fallback to design tokens
+   * ======================================================================== */
+
+  /* Base Card - Private */
+  --_pfv6-card-background-color: var(--pf-v6-c-card--BackgroundColor, var(--pf-t--global--background--color--primary--default));
+  --_pfv6-card-border-color: var(--pf-v6-c-card--BorderColor, var(--pf-t--global--border--color--default));
+  --_pfv6-card-border-style: var(--pf-v6-c-card--BorderStyle, solid);
+  --_pfv6-card-border-width: var(--pf-v6-c-card--BorderWidth, var(--pf-t--global--border--width--box--default));
+  --_pfv6-card-border-radius: var(--pf-v6-c-card--BorderRadius, var(--pf-t--global--border--radius--medium));
+
+  /* Spacing - Private */
+  --_pfv6-card-first-child-padding-block-start: var(--pf-v6-c-card--first-child--PaddingBlockStart, var(--pf-t--global--spacer--lg));
+  --_pfv6-card-child-padding-inline-end: var(--pf-v6-c-card--child--PaddingInlineEnd, var(--pf-t--global--spacer--lg));
+  --_pfv6-card-child-padding-block-end: var(--pf-v6-c-card--child--PaddingBlockEnd, var(--pf-t--global--spacer--lg));
+  --_pfv6-card-child-padding-inline-start: var(--pf-v6-c-card--child--PaddingInlineStart, var(--pf-t--global--spacer--lg));
+  --_pfv6-card-c-divider-child-padding-block-start: var(--pf-v6-c-card--c-divider--child--PaddingBlockStart, var(--pf-t--global--spacer--lg));
+
+  /* Typography - Private */
+  --_pfv6-card-title-text-color: var(--pf-v6-c-card__title-text--Color, var(--pf-t--global--text--color--regular));
+  --_pfv6-card-title-text-font-family: var(--pf-v6-c-card__title-text--FontFamily, var(--pf-t--global--font--family--heading));
+  --_pfv6-card-title-text-font-size: var(--pf-v6-c-card__title-text--FontSize, var(--pf-t--global--font--size--heading--xs));
+  --_pfv6-card-title-text-font-weight: var(--pf-v6-c-card__title-text--FontWeight, var(--pf-t--global--font--weight--heading--default));
+  --_pfv6-card-title-text-line-height: var(--pf-v6-c-card__title-text--LineHeight, var(--pf-t--global--font--line-height--heading));
+  --_pfv6-card-body-font-size: var(--pf-v6-c-card__body--FontSize, var(--pf-t--global--font--size--body--default));
+  --_pfv6-card-body-color: var(--pf-v6-c-card__body--Color, var(--pf-t--global--text--color--regular));
+  --_pfv6-card-footer-font-size: var(--pf-v6-c-card__footer--FontSize, var(--pf-t--global--font--size--body--default));
+  --_pfv6-card-footer-color: var(--pf-v6-c-card__footer--Color, var(--pf-t--global--text--color--subtle));
+  --_pfv6-card-title-not-last-child-padding-block-end: var(--pf-v6-c-card__title--not--last-child--PaddingBlockEnd, 0);
+
+  /* Disabled Button Color - Private */
+  --_pfv6-card-c-button-disabled-color: var(--pf-v6-c-card--c-button--disabled--Color, var(--pf-t--global--text--color--on-disabled));
+
+  /* Expandable - Private */
+  --_pfv6-card-m-expanded-header-toggle-icon-rotate: var(--pf-v6-c-card--m-expanded__header-toggle-icon--Rotate, 90deg);
+
+  /* Interactive States - Private */
+  --_pfv6-card-m-selectable-border-width: var(--pf-v6-c-card--m-selectable--BorderWidth, var(--pf-v6-c-card--BorderWidth, var(--pf-t--global--border--width--box--default)));
+  --_pfv6-card-m-clickable-m-current-border-color: var(--pf-v6-c-card--m-clickable--m-current--BorderColor, var(--pf-t--global--border--color--clicked));
+  --_pfv6-card-m-clickable-m-current-border-width: var(--pf-v6-c-card--m-clickable--m-current--BorderWidth, var(--pf-t--global--border--width--box--clicked));
+  --_pfv6-card-m-selectable-m-selected-border-color: var(--pf-v6-c-card--m-selectable--m-selected--BorderColor, var(--pf-t--global--border--color--clicked));
+  --_pfv6-card-m-selectable-m-selected-border-width: var(--pf-v6-c-card--m-selectable--m-selected--BorderWidth, var(--pf-t--global--border--width--box--clicked));
+  --_pfv6-card-m-selectable-hover-border-color: var(--pf-v6-c-card--m-selectable--hover--BorderColor, var(--pf-t--global--border--color--hover));
+  --_pfv6-card-m-selectable-hover-border-width: var(--pf-v6-c-card--m-selectable--hover--BorderWidth, var(--pf-t--global--border--width--box--hover));
+  --_pfv6-card-m-selectable-focus-border-color: var(--pf-v6-c-card--m-selectable--focus--BorderColor, var(--pf-t--global--border--color--hover));
+  --_pfv6-card-m-selectable-focus-border-width: var(--pf-v6-c-card--m-selectable--focus--BorderWidth, var(--pf-t--global--border--width--box--hover));
+  --_pfv6-card-m-selectable-m-selected-focus-border-color: var(--pf-v6-c-card--m-selectable--m-selected--focus--BorderColor, var(--pf-t--global--border--color--clicked));
+  --_pfv6-card-m-selectable-m-selected-focus-border-width: var(--pf-v6-c-card--m-selectable--m-selected--focus--BorderWidth, var(--pf-t--global--border--width--box--clicked));
+  --_pfv6-card-m-selectable-m-disabled-title-text-color: var(--pf-v6-c-card--m-selectable--m-disabled__title-text--Color, var(--pf-t--global--text--color--on-disabled));
+  --_pfv6-card-m-selectable-m-disabled-body-color: var(--pf-v6-c-card--m-selectable--m-disabled__body--Color, var(--pf-t--global--text--color--on-disabled));
+  --_pfv6-card-m-selectable-m-disabled-footer-color: var(--pf-v6-c-card--m-selectable--m-disabled__footer--Color, var(--pf-t--global--text--color--on-disabled));
+  --_pfv6-card-m-selectable-m-disabled-background-color: var(--pf-v6-c-card--m-selectable--m-disabled--BackgroundColor, var(--pf-t--global--background--color--disabled--default));
+  --_pfv6-card-m-selectable-m-disabled-border-color: var(--pf-v6-c-card--m-selectable--m-disabled--BorderColor, transparent);
+  --_pfv6-card-m-selectable-m-clickable-m-current-border-color: var(--pf-v6-c-card--m-selectable--m-clickable--m-current--BorderColor, var(--pf-t--global--border--color--clicked));
+  --_pfv6-card-m-selectable-m-clickable-m-current-border-width: var(--pf-v6-c-card--m-selectable--m-clickable--m-current--BorderWidth, var(--pf-t--global--border--width--box--clicked));
+
+  /* Compact Modifier - Private */
+  --_pfv6-card-m-compact-title-text-font-size: var(--pf-v6-c-card--m-compact__title-text--FontSize, var(--pf-t--global--font--size--heading--xs));
+  --_pfv6-card-m-compact-body-font-size: var(--pf-v6-c-card--m-compact__body--FontSize, var(--pf-t--global--font--size--body--default));
+  --_pfv6-card-m-compact-footer-font-size: var(--pf-v6-c-card--m-compact__footer--FontSize, var(--pf-t--global--font--size--body--sm));
+  --_pfv6-card-m-compact-first-child-padding-block-start: var(--pf-v6-c-card--m-compact--first-child--PaddingBlockStart, var(--pf-t--global--spacer--md));
+  --_pfv6-card-m-compact-child-padding-inline-end: var(--pf-v6-c-card--m-compact--child--PaddingInlineEnd, var(--pf-t--global--spacer--md));
+  --_pfv6-card-m-compact-child-padding-block-end: var(--pf-v6-c-card--m-compact--child--PaddingBlockEnd, var(--pf-t--global--spacer--md));
+  --_pfv6-card-m-compact-child-padding-inline-start: var(--pf-v6-c-card--m-compact--child--PaddingInlineStart, var(--pf-t--global--spacer--md));
+  --_pfv6-card-m-compact-c-divider-child-padding-block-start: var(--pf-v6-c-card--m-compact--c-divider--child--PaddingBlockStart, var(--pf-t--global--spacer--md));
+  --_pfv6-card-m-compact-title-not-last-child-padding-block-end: var(--pf-v6-c-card--m-compact__title--not--last-child--PaddingBlockEnd, var(--pf-t--global--spacer--sm));
+
+  /* Large Display Modifier - Private */
+  --_pfv6-card-m-display-lg-title-text-font-size: var(--pf-v6-c-card--m-display-lg__title-text--FontSize, var(--pf-t--global--font--size--heading--md));
+  --_pfv6-card-m-display-lg-body-font-size: var(--pf-v6-c-card--m-display-lg__body--FontSize, var(--pf-t--global--font--size--body--lg));
+  --_pfv6-card-m-display-lg-footer-font-size: var(--pf-v6-c-card--m-display-lg__footer--FontSize, var(--pf-t--global--font--size--body--default));
+  --_pfv6-card-m-display-lg-first-child-padding-block-start: var(--pf-v6-c-card--m-display-lg--first-child--PaddingBlockStart, var(--pf-t--global--spacer--xl));
+  --_pfv6-card-m-display-lg-child-padding-inline-end: var(--pf-v6-c-card--m-display-lg--child--PaddingInlineEnd, var(--pf-t--global--spacer--xl));
+  --_pfv6-card-m-display-lg-child-padding-block-end: var(--pf-v6-c-card--m-display-lg--child--PaddingBlockEnd, var(--pf-t--global--spacer--xl));
+  --_pfv6-card-m-display-lg-child-padding-inline-start: var(--pf-v6-c-card--m-display-lg--child--PaddingInlineStart, var(--pf-t--global--spacer--xl));
+  --_pfv6-card-m-display-lg-c-divider-child-padding-block-start: var(--pf-v6-c-card--m-display-lg--c-divider--child--PaddingBlockStart, var(--pf-t--global--spacer--xl));
+  --_pfv6-card-m-display-lg-title-not-last-child-padding-block-end: var(--pf-v6-c-card--m-display-lg__title--not--last-child--PaddingBlockEnd, var(--pf-t--global--spacer--lg));
+
+  /* Secondary Variant - Private */
+  --_pfv6-card-m-secondary-background-color: var(--pf-v6-c-card--m-secondary--BackgroundColor, var(--pf-t--global--background--color--secondary--default));
+  --_pfv6-card-m-secondary-border-color: var(--pf-v6-c-card--m-secondary--BorderColor, var(--pf-t--global--border--color--high-contrast));
+  --_pfv6-card-m-secondary-border-width: var(--pf-v6-c-card--m-secondary--BorderWidth, var(--pf-t--global--border--width--high-contrast--regular));
+
+  /* Plain Modifier - Private */
+  --_pfv6-card-m-plain-background-color: var(--pf-v6-c-card--m-plain--BackgroundColor, transparent);
+  --_pfv6-card-m-plain-border-color: var(--pf-v6-c-card--m-plain--BorderColor, transparent);
+}
+
+/* Compact Modifier - Override PUBLIC API variables so sub-components inherit them
+   Matches React: .pf-v6-c-card.pf-m-compact overrides public vars */
+:host(.compact),
+#container.compact {
+  /* Override PUBLIC API vars (cascaded to sub-components) */
+  --pf-v6-c-card__title-text--FontSize: var(--_pfv6-card-m-compact-title-text-font-size);
+  --pf-v6-c-card__body--FontSize: var(--_pfv6-card-m-compact-body-font-size);
+  --pf-v6-c-card__footer--FontSize: var(--_pfv6-card-m-compact-footer-font-size);
+  --pf-v6-c-card--first-child--PaddingBlockStart: var(--_pfv6-card-m-compact-first-child-padding-block-start);
+  --pf-v6-c-card--child--PaddingInlineEnd: var(--_pfv6-card-m-compact-child-padding-inline-end);
+  --pf-v6-c-card--child--PaddingBlockEnd: var(--_pfv6-card-m-compact-child-padding-block-end);
+  --pf-v6-c-card--child--PaddingInlineStart: var(--_pfv6-card-m-compact-child-padding-inline-start);
+  --pf-v6-c-card--c-divider--child--PaddingBlockStart: var(--_pfv6-card-m-compact-c-divider-child-padding-block-start);
+  --pf-v6-c-card__title--not--last-child--PaddingBlockEnd: var(--_pfv6-card-m-compact-title-not-last-child-padding-block-end);
+}
+
+/* Large Modifier - Override PUBLIC API variables so sub-components inherit them
+   Matches React: .pf-v6-c-card.pf-m-display-lg overrides public vars */
+:host(.large),
+#container.large {
+  /* Override PUBLIC API vars (cascaded to sub-components) */
+  --pf-v6-c-card__title-text--FontSize: var(--_pfv6-card-m-display-lg-title-text-font-size);
+  --pf-v6-c-card__body--FontSize: var(--_pfv6-card-m-display-lg-body-font-size);
+  --pf-v6-c-card__footer--FontSize: var(--_pfv6-card-m-display-lg-footer-font-size);
+  --pf-v6-c-card--first-child--PaddingBlockStart: var(--_pfv6-card-m-display-lg-first-child-padding-block-start);
+  --pf-v6-c-card--child--PaddingInlineEnd: var(--_pfv6-card-m-display-lg-child-padding-inline-end);
+  --pf-v6-c-card--child--PaddingBlockEnd: var(--_pfv6-card-m-display-lg-child-padding-block-end);
+  --pf-v6-c-card--child--PaddingInlineStart: var(--_pfv6-card-m-display-lg-child-padding-inline-start);
+  --pf-v6-c-card--c-divider--child--PaddingBlockStart: var(--_pfv6-card-m-display-lg-c-divider-child-padding-block-start);
+  --pf-v6-c-card__title--not--last-child--PaddingBlockEnd: var(--_pfv6-card-m-display-lg-title-not-last-child-padding-block-end);
+}
+
+/* Full Height Modifier */
+#container.full-height {
+  block-size: 100%;
+}
+
+/* Card container */
+#container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto; /* Grow to fill the host element's height */
+  overflow: auto;
+  background-color: var(--_pfv6-card-background-color);
+  border-radius: var(--_pfv6-card-border-radius);
+}
+
+/* Border using ::before pseudo-element (PatternFly pattern) */
+#container::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  border: var(--_pfv6-card-border-color) var(--_pfv6-card-border-style) var(--_pfv6-card-border-width);
+  border-radius: inherit;
+}
+
+/* Variant: Secondary */
+#container.secondary {
+  background-color: var(--_pfv6-card-m-secondary-background-color);
+}
+
+#container.secondary::before {
+  border-color: var(--_pfv6-card-m-secondary-border-color);
+  border-width: var(--_pfv6-card-m-secondary-border-width);
+}
+
+/* Modifier: Plain */
+#container.plain {
+  background-color: var(--_pfv6-card-m-plain-background-color);
+}
+
+#container.plain::before {
+  border-color: var(--_pfv6-card-m-plain-border-color);
+}
+
+/* Card Header */
+#header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--pf-t--global--spacer--gap--text-to-element--default);
+  padding-block: var(--_pfv6-card-first-child-padding-block-start) 0;
+  padding-inline: var(--_pfv6-card-child-padding-inline-start) var(--_pfv6-card-child-padding-inline-end);
+}
+
+/* Header spacing handled by sub-components */
+
+/* Header Content Container */
+#header-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+  gap: var(--pf-t--global--spacer--gap--text-to-element--default);
+  min-inline-size: 0; /* Allow flex shrinking */
+}
+
+/* Header Image Slot */
+#header-content ::slotted([slot="header-image"]) {
+  flex-shrink: 0;
+}
+
+/* Header Icon Slot */
+#header-content ::slotted([slot="header-icon"]) {
+  flex-shrink: 0;
+  inline-size: var(--pf-t--global--icon--size--font--md);
+  block-size: var(--pf-t--global--icon--size--font--md);
+  color: var(--pf-t--global--icon--color--regular);
+}
+
+/* Card Title Sub-Component */
+
+/* Note: pfv6-card-title uses display:contents, so these styles pass through to its shadow content */
+
+/* Layout properties are handled by the sub-component's internal container */
+
+/* Card Actions */
+#actions {
+  display: flex;
+  align-items: center;
+  gap: var(--pf-t--global--spacer--gap--action-to-action--default);
+  margin-block: calc(var(--pf-t--global--spacer--control--vertical--default) * -1);
+  padding-inline-start: var(--pf-t--global--spacer--md);
+}
+
+/* Actions with no offset */
+#actions.no-offset {
+  padding-inline-start: 0;
+}
+
+#actions:empty {
+  display: none;
+}
+
+/* Card Body Sub-Component */
+
+/* Note: pfv6-card-body uses display:contents, so layout is handled by its internal container */
+
+/* Layout properties are handled by the sub-component's internal container */
+
+/* Dividers between body sections */
+::slotted(hr) {
+  margin: 0;
+  border: 0;
+  border-block-start:
+    var(--pf-t--global--border--width--divider--default)
+    solid
+    var(--pf-t--global--border--color--default);
+}
+
+/* Card Footer Sub-Component */
+
+/* Note: pfv6-card-footer uses display:contents, so layout is handled by its internal container */
+
+/* Layout properties are handled by the sub-component's internal container */
+
+/* Card Expandable Content Sub-Component */
+::slotted(pfv6-card-expandable-content) {
+  display: contents;
+}
+
+/* Hide expandable content when card is not expanded */
+#container:not(.expanded) ::slotted(pfv6-card-expandable-content) {
+  display: none;
+}
+
+/*
+ * Phase 2 Interactive States
+ * These use the PatternFly CSS variables defined above
+ */
+
+/* Base interactive states */
+#container.clickable {
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+#container.selectable {
+  cursor: pointer;
+}
+
+/* Disabled state */
+#container.disabled {
+  cursor: not-allowed;
+  background-color: var(--_pfv6-card-disabled-background-color);
+}
+
+#container.disabled::before {
+  border-color: var(--_pfv6-card-disabled-border-color);
+}
+
+#container.disabled ::slotted(pfv6-card-title) {
+  color: var(--pf-v6-c-card--m-selectable--m-disabled__title-text--Color, var(--pf-t--global--text--color--on-disabled));
+}
+
+#container.disabled ::slotted(pfv6-card-body) {
+  color: var(--pf-v6-c-card--m-selectable--m-disabled__body--Color, var(--pf-t--global--text--color--on-disabled));
+}
+
+#container.disabled ::slotted(pfv6-card-footer) {
+  color: var(--pf-v6-c-card--m-selectable--m-disabled__footer--Color, var(--pf-t--global--text--color--on-disabled));
+}
+
+/* Remove default focus outline on interactive cards to match PatternFly behavior */
+#container.clickable,
+#container.selectable {
+  outline: none;
+}
+
+/* Hover states */
+#container.clickable:hover:not(.disabled) {
+  --_pfv6-card-border-color: var(--pf-v6-c-card--m-selectable--hover--BorderColor, var(--pf-t--global--border--color--hover));
+  --_pfv6-card-border-width: var(--pf-v6-c-card--m-selectable--hover--BorderWidth, var(--pf-t--global--border--width--box--hover));
+}
+
+#container.selectable:hover:not(.disabled) {
+  --_pfv6-card-border-color: var(--pf-v6-c-card--m-selectable--hover--BorderColor, var(--pf-t--global--border--color--hover));
+  --_pfv6-card-border-width: var(--pf-v6-c-card--m-selectable--hover--BorderWidth, var(--pf-t--global--border--width--box--hover));
+}
+
+/* Selected state */
+#container.selectable.selected {
+  --_pfv6-card-border-color: var(--pf-v6-c-card--m-selectable--m-selected--BorderColor, var(--pf-t--global--border--color--clicked));
+  --_pfv6-card-border-width: var(--pf-v6-c-card--m-selectable--m-selected--BorderWidth, var(--pf-t--global--border--width--box--clicked));
+}
+
+/* Focus states */
+#container.clickable:focus-within:not(.disabled) {
+  --_pfv6-card-border-color: var(--pf-v6-c-card--m-selectable--focus--BorderColor, var(--pf-t--global--border--color--hover));
+  --_pfv6-card-border-width: var(--pf-v6-c-card--m-selectable--focus--BorderWidth, var(--pf-t--global--border--width--box--hover));
+}
+
+#container.selectable.selected:focus-within:not(.disabled) {
+  --_pfv6-card-border-color: var(--pf-v6-c-card--m-selectable--m-selected--focus--BorderColor, var(--pf-t--global--border--color--clicked));
+  --_pfv6-card-border-width: var(--pf-v6-c-card--m-selectable--m-selected--focus--BorderWidth, var(--pf-t--global--border--width--box--clicked));
+}
+
+/* Clicked state */
+#container.clickable.clicked {
+  --_pfv6-card-border-color: var(--pf-v6-c-card--m-clickable--m-current--BorderColor, var(--pf-t--global--border--color--clicked));
+  --_pfv6-card-border-width: var(--pf-v6-c-card--m-clickable--m-current--BorderWidth, var(--pf-t--global--border--width--box--clicked));
+}
+
+/* Selectable + Clickable + Current state */
+#container.selectable.clickable.clicked {
+  --_pfv6-card-border-color: var(--pf-v6-c-card--m-selectable--m-clickable--m-current--BorderColor, var(--pf-t--global--border--color--clicked));
+  --_pfv6-card-border-width: var(--pf-v6-c-card--m-selectable--m-clickable--m-current--BorderWidth, var(--pf-t--global--border--width--box--clicked));
+}
+
+/* Selectable checkbox */
+.selectable-input {
+  position: absolute;
+  inset-block-start: var(--pf-t--global--spacer--md);
+  inset-inline-start: var(--pf-t--global--spacer--md);
+  z-index: 1;
+}
+
+.selectable-input input[type="checkbox"] {
+  cursor: pointer;
+  inline-size: var(--pf-t--global--icon--size--md);
+  block-size: var(--pf-t--global--icon--size--md);
+}
+
+.selectable-input input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+}
+
+.visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Expandable toggle button */
+.expand-toggle {
+  position: absolute;
+  inset-block-start: var(--pf-t--global--spacer--md);
+  inset-inline-start: var(--pf-t--global--spacer--md);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding:
+    var(--pf-t--global--spacer--control--vertical--default)
+    var(--pf-t--global--spacer--control--horizontal--default);
+  background: transparent;
+  border: none;
+  border-radius: var(--pf-t--global--border--radius--small);
+  cursor: pointer;
+  color: var(--pf-t--global--icon--color--regular);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.expand-toggle:focus {
+  outline: var(--pf-t--global--border--width--focus--default) solid var(--pf-t--global--color--brand--default);
+  outline-offset: var(--pf-t--global--spacer--gap--focus--default);
+}
+
+.expand-toggle:disabled {
+  cursor: not-allowed;
+  color: var(--pf-t--global--icon--color--on-disabled);
+}
+
+.expand-toggle:hover:not(:disabled) {
+  color: var(--pf-t--global--icon--color--hover);
+  background-color: var(--pf-t--global--background--color--action--plain--hover);
+}
+
+.expand-icon {
+  inline-size: var(--pf-t--global--icon--size--font--sm);
+  block-size: var(--pf-t--global--icon--size--font--sm);
+  transition: transform 0.2s ease;
+}
+
+/* Toggle positioned on right side */
+#container.toggle-right-aligned .expand-toggle {
+  inset-inline: auto var(--pf-t--global--spacer--md);
+}
+
+#container.expanded .expand-toggle .expand-icon {
+  transform: rotate(var(--_pfv6-card-expanded-icon-rotate));
+}
+
+/* Divider styling - Matches PatternFly Divider component
+   Applies to slotted <hr> elements */
+::slotted(hr) {
+  width: 100%;
+  height: var(--pf-t--global--border--width--divider--default, 1px);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: var(--pf-t--global--border--color--default, #d2d2d2);
+  flex-shrink: 0;
+  align-self: stretch;
+}

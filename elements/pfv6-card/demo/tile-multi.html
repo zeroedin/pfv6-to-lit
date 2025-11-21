@@ -1,0 +1,45 @@
+<div class="pf-v6-c-gallery pf-m-gutter">
+  <pfv6-card id="multi-tile-example-1" selectable>
+    <pfv6-card-title style="display: flex; gap: 0.5rem; align-items: center;">
+      <input type="checkbox" id="multi-tile-1" name="multi-tile-1" style="display: none;">
+      <span>➕</span>
+      <strong>Tile header</strong>
+    </pfv6-card-title>
+    <pfv6-card-body>Tile content and description</pfv6-card-body>
+  </pfv6-card>
+  
+  <pfv6-card id="multi-tile-example-2" selectable>
+    <pfv6-card-title style="display: flex; gap: 0.5rem; align-items: center;">
+      <input type="checkbox" id="multi-tile-2" name="multi-tile-2" style="display: none;">
+      <span>➕</span>
+      <strong>Tile header</strong>
+    </pfv6-card-title>
+    <pfv6-card-body>Tile content and description</pfv6-card-body>
+  </pfv6-card>
+  
+  <pfv6-card id="multi-tile-example-3" selectable disabled>
+    <pfv6-card-title style="display: flex; gap: 0.5rem; align-items: center;">
+      <input type="checkbox" id="multi-tile-3" name="multi-tile-3" disabled style="display: none;">
+      <span>➕</span>
+      <strong>Tile header (disabled)</strong>
+    </pfv6-card-title>
+    <pfv6-card-body>Tile content and description</pfv6-card-body>
+  </pfv6-card>
+</div>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-card/pfv6-card.js';
+  
+  const cards = document.querySelectorAll('pfv6-card[selectable]');
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  
+  cards.forEach((card, index) => {
+    card.addEventListener('click', () => {
+      if (!card.hasAttribute('disabled')) {
+        checkboxes[index].checked = !checkboxes[index].checked;
+        card.toggleAttribute('selected', checkboxes[index].checked);
+      }
+    });
+  });
+</script>
+

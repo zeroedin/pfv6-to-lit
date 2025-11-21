@@ -1,0 +1,97 @@
+/**
+ * Demo page styles
+ */
+
+:root {
+  --pf-v6-global--Color--100: #151515;
+  --pf-v6-global--Color--200: #fff;
+}
+
+body {
+  font-family: var(--pf-t--global--font--family--body, "RedHatText", "Overpass", overpass, helvetica, arial, sans-serif);
+  font-size: var(--pf-t--global--font--size--body--default, 1rem);
+  line-height: var(--pf-t--global--line-height--body, 1.5);
+  color: var(--pf-t--global--text--color, #151515);
+  background-color: var(--pf-t--global--background--color, #fff);
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--pf-t--global--space--xl, 2rem);
+}
+
+h1 {
+  font-size: var(--pf-t--global--font--size--heading--h1, 2.5rem);
+  font-weight: var(--pf-t--global--font--weight--heading--default, 500);
+  margin-bottom: var(--pf-t--global--space--md, 1rem);
+}
+
+h2 {
+  font-size: var(--pf-t--global--font--size--heading--h2, 2rem);
+  font-weight: var(--pf-t--global--font--weight--heading--default, 500);
+  margin-top: var(--pf-t--global--space--lg, 1.5rem);
+  margin-bottom: var(--pf-t--global--space--sm, 0.5rem);
+}
+
+p {
+  margin-bottom: var(--pf-t--global--space--md, 1rem);
+}
+
+section {
+  margin-bottom: var(--pf-t--global--space--xl, 2rem);
+}
+
+/* Demo comparison table styles */
+#demo-comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--pf-t--global--space--md, 1rem);
+  border: 1px solid var(--pf-t--global--border--color--default, #d2d2d2);
+  background-color: var(--pf-t--global--background--color, #fff);
+}
+
+#demo-comparison-table thead {
+  background-color: var(--pf-t--global--background--color--secondary, #f0f0f0);
+}
+
+#demo-comparison-table th {
+  padding: var(--pf-t--global--space--md, 1rem);
+  text-align: left;
+  font-weight: var(--pf-t--global--font--weight--heading--default, 600);
+  border-bottom: 2px solid var(--pf-t--global--border--color--default, #d2d2d2);
+  color: var(--pf-t--global--text--color, #151515);
+}
+
+#demo-comparison-table td {
+  padding: var(--pf-t--global--space--md, 1rem);
+  border-bottom: 1px solid var(--pf-t--global--border--color--default, #d2d2d2);
+}
+
+#demo-comparison-table tbody tr:hover {
+  background-color: var(--pf-t--global--background--color--secondary, #f5f5f5);
+}
+
+#demo-comparison-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+#demo-comparison-table a {
+  color: var(--pf-t--global--color--link--default, #0066cc);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.2s ease;
+}
+
+#demo-comparison-table a:hover {
+  color: var(--pf-t--global--color--link--hover, #004080);
+  text-decoration: underline;
+}
+
+#demo-comparison-table a:visited {
+  color: var(--pf-t--global--color--link--visited, #6753ac);
+}

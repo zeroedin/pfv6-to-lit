@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include 'partials/head-meta.liquid' %}
+  <title>{% block title %}PatternFly Elements v6{% endblock %}</title>
+  {% block styles %}{% endblock %}
+</head>
+<body>
+  {% block navigation %}{% endblock %}
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  {% block footer %}{% endblock %}
+  {% block scripts %}{% endblock %}
+</body>
+</html>
+

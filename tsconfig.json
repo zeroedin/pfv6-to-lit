@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    // File Layout
+    "rootDir": ".",
+    
+    // Environment Settings
+    "module": "nodenext",
+    "target": "esnext",
+    "types": [],
+    "resolveJsonModule": true,
+    
+    // JSX Support
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+
+    // Other Outputs
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": false,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Recommended Options
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
+  },
+  "include": [
+    "elements/**/*.ts",
+    "lib/**/*.ts",
+    "dev-server/**/*.ts",
+    "dev-server/**/*.tsx",
+    "*.ts",
+    "declaration.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "tests/**/*"
+  ]
+}
+

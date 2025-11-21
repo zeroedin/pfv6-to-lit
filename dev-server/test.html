@@ -1,0 +1,40 @@
+{% layout 'base.liquid' %}
+
+{% block title %}{{ title }} - {% if isReactDemo %}React {% endif %}Visual Test{% endblock %}
+
+{% block styles %}
+  {% include 'partials/patternfly-styles.liquid' %}
+  {% if isReactDemo %}
+  <link rel="stylesheet" href="/patternfly-react/dist/patternfly.css">
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if isReactDemo %}
+  <div id="root">{{ content }}</div>
+{% else %}
+{{ content }}
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+  {% if scriptSrc %}
+    {% if isReactDemo %}
+    <script type="module">
+      import { createRoot } from 'react-dom/client';
+      import { createElement } from 'react';
+      import * as Demo from '{{ scriptSrc }}';
+      
+      // Get the exported component (it's the default or first named export)
+      const Component = Demo.default || Object.values(Demo)[0];
+      
+      const root = document.getElementById('root');
+      if (root && Component) {
+        createRoot(root).render(createElement(Component));
+      }
+    </script>
+    {% else %}
+    <script type="module" src="{{ scriptSrc }}"></script>
+    {% endif %}
+  {% endif %}
+{% endblock %}

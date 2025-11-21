@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+*.js
+*.js.map
+*.d.ts
+*.d.ts.map
+
+# Exceptions to build artifacts
+!*.config*.js
+!declaration.d.ts
+
+# Wireit cache
+.wireit/
+
+# Test results
+test-results/
+playwright-report/
+coverage/
+test-results.json
+
+# Visual test snapshots (regenerated on each machine)
+# Playwright creates these next to test files with .spec.ts-snapshots suffix
+*.spec.ts-snapshots/
+
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+
+# Copied PatternFly assets (generated from node_modules)
+dev-server/styles/patternfly/
+dev-server/assets/patternfly/
+
+# Copied React demos (generated from PatternFly React repository)
+/patternfly-react
+
+

@@ -1,0 +1,51 @@
+{% layout 'base.liquid' %}
+
+{% block title %}PatternFly Elements v6 - Development{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="/dev-server/styles/patternfly/base.css">
+  <link rel="stylesheet" href="/dev-server/styles/styles.css">
+{% endblock %}
+
+{% block content %}
+  <h1>PatternFly Elements v6</h1>
+  <p>Web components implementing PatternFly v6 design system</p>
+  
+  <section>
+    <h2>Development Environment</h2>
+    <p>This is the development index page for PatternFly Elements v6.</p>
+    <p>Components will be added here as they are developed.</p>
+  </section>
+
+    <section>
+      <h2>Component Demos Comparison</h2>
+      <p>Compare LitElement web component demos with React comparison demos to ensure 1:1 parity.</p>
+      
+      <table id="demo-comparison-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>LitElement Demos</th>
+            <th>React Demos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Card</strong></td>
+            <td><a href="/elements/pfv6-card/demo">View LitElement Demo →</a></td>
+            <td><a href="/elements/pfv6-card/react">View React Demo →</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+  <!-- Component imports will go here -->
+  <script type="module">
+    // Example: import '@pfv6/elements/pfv6-button/pfv6-button.js';
+    
+    console.log('PatternFly Elements v6 - Development environment loaded');
+  </script>
+{% endblock %}
+

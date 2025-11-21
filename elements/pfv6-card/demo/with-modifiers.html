@@ -1,0 +1,33 @@
+<div>
+  <label><input type="checkbox" id="isCompact"> isCompact</label>
+  <label><input type="checkbox" id="isLarge"> isLarge</label>
+  <label><input type="checkbox" id="isFullHeight"> isFullHeight</label>
+  <label><input type="checkbox" id="isPlain"> isPlain</label>
+</div>
+
+<div style="height: 15rem; margin-top: 12px;">
+  <pfv6-card id="modifiable-card">
+    <pfv6-card-title>Title</pfv6-card-title>
+    <pfv6-card-body>Body</pfv6-card-body>
+    <pfv6-card-footer>Footer</pfv6-card-footer>
+  </pfv6-card>
+</div>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-card/pfv6-card.js';
+  
+  const card = document.getElementById('modifiable-card');
+  document.getElementById('isCompact').addEventListener('change', (e) => {
+    card.toggleAttribute('compact', e.target.checked);
+  });
+  document.getElementById('isLarge').addEventListener('change', (e) => {
+    card.toggleAttribute('large', e.target.checked);
+  });
+  document.getElementById('isFullHeight').addEventListener('change', (e) => {
+    card.toggleAttribute('full-height', e.target.checked);
+  });
+  document.getElementById('isPlain').addEventListener('change', (e) => {
+    card.toggleAttribute('plain', e.target.checked);
+  });
+</script>
+

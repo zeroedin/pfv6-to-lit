@@ -1,0 +1,26 @@
+<div style="margin-bottom: 12px;">
+  <label><input type="checkbox" id="isToggleRightAligned"> isToggleRightAligned</label>
+</div>
+
+<pfv6-card id="expandable-card" expandable>
+  <div slot="actions">
+    <button aria-label="Card checkbox example">☑</button>
+    <button aria-label="Card expandable example kebab toggle">⋮</button>
+  </div>
+  <pfv6-card-title>Title</pfv6-card-title>
+  <pfv6-card-expandable-content>
+    <pfv6-card-body>Body</pfv6-card-body>
+    <pfv6-card-footer>Footer</pfv6-card-footer>
+  </pfv6-card-expandable-content>
+</pfv6-card>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-card/pfv6-card.js';
+  
+  const card = document.getElementById('expandable-card');
+  
+  document.getElementById('isToggleRightAligned').addEventListener('change', (e) => {
+    card.toggleAttribute('toggle-right-aligned', e.target.checked);
+  });
+</script>
+

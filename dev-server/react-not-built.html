@@ -1,0 +1,66 @@
+<!-- NOTE: This template intentionally does NOT use layouts/base.liquid
+     because it's a standalone error page with custom inline styles -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Demo Not Built - {{ componentName }}</title>
+  <style>
+    body {
+      font-family: "Red Hat Text", "Overpass", overpass, helvetica, arial, sans-serif;
+      max-inline-size: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 { color: #151515; }
+    pre {
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: 'Red Hat Mono', 'Courier New', monospace;
+      font-size: 14px;
+    }
+    .info {
+      background: #e7f1fa;
+      border-inline-start: 4px solid #2b9af3;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    a {
+      color: #06c;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚠️ React Demo Not Built</h1>
+  
+  <div class="info">
+    <p><strong>{{ componentName }}</strong> has a React comparison demo, but it hasn't been built yet.</p>
+  </div>
+
+  <h2>To view this React demo:</h2>
+
+  <p>Build all project artifacts including React demos:</p>
+  <pre><code>npm run compile</code></pre>
+  <p>Or build just the React demos:</p>
+  <pre><code>npm run compile:react-demos</code></pre>
+
+  <hr style="margin: 40px 0; border: none; border-block-start: 1px solid #ddd;">
+  
+  <p>
+    <a href="/">← Back to Component List</a> | 
+    <a href="/elements/{{ componentName }}/demo">View Web Component Demo</a>
+  </p>
+</body>
+</html>
+

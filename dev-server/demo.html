@@ -1,0 +1,67 @@
+{% layout 'base.liquid' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block styles %}
+  {% include 'partials/patternfly-styles.liquid' %}
+  {% if isReactDemo %}
+  <link rel="stylesheet" href="/patternfly-react/dist/patternfly.css">
+  {% endif %}
+  {% include 'partials/demo-styles.liquid' %}
+  {% if includeReactDemoCSS %}
+  <link rel="stylesheet" href="/dev-server/styles/react-demo.css">
+  {% endif %}
+{% endblock %}
+
+{% block navigation %}
+  {% include 'partials/demo-nav.liquid' %}
+{% endblock %}
+
+{% block content %}
+{% if isReactDemo and isIndex %}
+  <div class="react-demo-container">
+    <h1>{{ componentName }} - React Demos</h1>
+    <p class="subtitle">
+      {{ demos.size }} demos from PatternFly React {{ componentName }} component
+    </p>
+
+    <div class="demo-list">
+      {% for demo in demos %}
+      <div class="demo-card">
+        <h3>
+          <a href="{{ demo.url }}">{{ demo.title }}</a>
+        </h3>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{% elsif isReactDemo %}
+  <div id="root"></div>
+{% else %}
+{{ content }}
+{% endif %}
+{% endblock %}
+
+
+{% block scripts %}
+  {% if scriptSrc and not isIndex %}
+    {% if isReactDemo %}
+    <script type="module">
+      import { createRoot } from 'react-dom/client';
+
+      import { createElement } from 'react';
+      import * as Demo from '{{ scriptSrc }}';
+      
+      // Get the exported component (it's the default or first named export)
+      const Component = Demo.default || Object.values(Demo)[0];
+      
+      const root = document.getElementById('root');
+      if (root && Component) {
+        createRoot(root).render(createElement(Component));
+      }
+    </script>
+    {% else %}
+    <script type="module" src="{{ scriptSrc }}"></script>
+    {% endif %}
+  {% endif %}
+{% endblock %}

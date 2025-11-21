@@ -1,0 +1,208 @@
+{
+  "name": "@pfv6/elements",
+  "version": "0.0.1",
+  "description": "PatternFly Elements v6 - Web components implementing PatternFly v6 design system",
+  "type": "module",
+  "scripts": {
+    "postinstall": "npx tsx scripts/copy-patternfly-react-demos.ts",
+    "test": "wireit",
+    "dev": "wireit",
+    "compile": "wireit",
+    "compile:react-demos": "wireit",
+    "lint": "wireit",
+    "e2e": "wireit",
+    "e2e:react-baseline": "wireit",
+    "e2e:parity": "wireit"
+  },
+  "wireit": {
+    "dev": {
+      "service": true,
+      "command": "web-dev-server --watch --open",
+      "description": "Start the development server (web components only)",
+      "dependencies": [
+        "clean:plugins",
+        "clean:react-demos",
+        "copy:pf-assets",
+        "compile:pfv6-elements",
+        "compile:react-demos"
+      ]
+    },
+    "watch:react-demos": {
+      "service": true,
+      "command": "vite build --watch --config vite.config.react-demos.ts",
+      "description": "Watch and rebuild React comparison demos",
+      "files": [
+        "patternfly-react/**/*.tsx"
+      ],
+      "output": []
+    },
+    "clean:plugins": {
+      "command": "rm -f dev-server/plugins/*.js dev-server/plugins/*.js.map dev-server/plugins/*.d.ts dev-server/plugins/*.d.ts.map"
+    },
+    "clean:react-demos": {
+      "command": "rm -rf patternfly-react/dist",
+      "description": "Clean React demo build output"
+    },
+    "copy:pf-assets": {
+      "command": "npx tsx scripts/copy-patternfly-assets.ts",
+      "description": "Copy PatternFly base CSS, fonts, and images to dev-server",
+      "files": [
+        "scripts/copy-patternfly-assets.ts",
+        "node_modules/@patternfly/react-core/dist/styles/base.css",
+        "node_modules/@patternfly/patternfly/assets/fonts/**/*",
+        "node_modules/@patternfly/react-styles/css/assets/images/**/*"
+      ],
+      "output": [
+        "dev-server/styles/patternfly/base.css",
+        "dev-server/styles/assets/fonts/**/*",
+        "dev-server/assets/patternfly/images/**/*"
+      ]
+    },
+    "compile:pfv6-elements": {
+      "service": true,
+      "command": "tsc --watch",
+      "description": "Compile and watch PatternFly v6 elements",
+      "files": []
+    },
+    "compile": {
+      "dependencies": [
+        "compile:tsc",
+        "compile:cem",
+        "compile:react-demos"
+      ],
+      "description": "Compile the project (TypeScript + CEM + React demos)"
+    },
+    "compile:tsc": {
+      "command": "tsc",
+      "description": "Compile TypeScript",
+      "files": [],
+      "output": []
+    },
+    "compile:cem": {
+      "command": "cem generate 'elements/pfv6-*/pfv6-*.ts' --output custom-elements.json && node dev-server/plugins/add-demo-paths.js",
+      "description": "Generate Custom Elements Manifest and add demo paths",
+      "dependencies": [
+        "compile:tsc"
+      ],
+      "files": [
+        "elements/**/*.ts",
+        "elements/**/*.html",
+        "dev-server/plugins/add-demo-paths.ts"
+      ],
+      "output": [
+        "custom-elements.json"
+      ]
+    },
+    "compile:react-demos": {
+      "command": "vite build --config vite.config.react-demos.js",
+      "description": "Build React comparison demos with bundled PatternFly dependencies",
+      "dependencies": [
+        "clean:react-demos"
+      ],
+      "files": [
+        "patternfly-react/**/*.tsx",
+        "vite.config.react-demos.ts"
+      ],
+      "output": [
+        "patternfly-react/dist/**"
+      ]
+    },
+    "lint": {
+      "dependencies": [
+        "lint:eslint",
+        "lint:stylelint"
+      ]
+    },
+    "lint:eslint": {
+      "command": "eslint elements/**/*.ts lib/**/*.ts",
+      "description": "Lint TypeScript files"
+    },
+    "lint:stylelint": {
+      "command": "stylelint elements/**/*.css",
+      "description": "Lint CSS files"
+    },
+    "test": {
+      "command": "wtr",
+      "description": "Run unit tests"
+    },
+    "e2e": {
+      "command": "playwright test",
+      "description": "Run ALL E2E tests (Parity + CSS API)",
+      "dependencies": [
+        "compile:tsc",
+        "compile:react-demos"
+      ]
+    },
+    "e2e:react-baseline": {
+      "command": "playwright test tests/visual/card-visual-react-baseline.spec.ts",
+      "description": "Validate React baseline stability (React vs React baseline)",
+      "dependencies": [
+        "compile:tsc",
+        "compile:react-demos"
+      ]
+    },
+    "e2e:parity": {
+      "command": "playwright test tests/visual/card-visual-parity.spec.ts",
+      "description": "CRITICAL: Validate 1:1 visual parity (Lit vs React live comparison)",
+      "dependencies": [
+        "compile:tsc",
+        "compile:react-demos"
+      ]
+    }
+  },
+  "keywords": [
+    "web-components",
+    "patternfly",
+    "design-system",
+    "lit",
+    "custom-elements"
+  ],
+  "author": "PatternFly",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patternfly/patternfly-elements.git"
+  },
+  "devDependencies": {
+    "@koa/router": "^14.0.0",
+    "@open-wc/testing": "^4.0.0",
+    "@parse5/tools": "^0.7.0",
+    "@patternfly/eslint-config-elements": "^4.0.0",
+    "@patternfly/patternfly": "^6.4.0",
+    "@patternfly/react-core": "^6.4.0",
+    "@playwright/test": "^1.56.1",
+    "@pwrs/cem": "^0.6.7",
+    "@stylistic/stylelint-config": "^3.0.1",
+    "@stylistic/stylelint-plugin": "^4.0.0",
+    "@types/koa__router": "^12.0.5",
+    "@types/node": "^24.10.0",
+    "@types/pixelmatch": "^5.2.6",
+    "@types/pngjs": "^6.0.5",
+    "@types/react": "^19.2.6",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@web/dev-server": "^0.4.6",
+    "@web/dev-server-esbuild": "^1.0.4",
+    "@web/test-runner": "^0.20.2",
+    "@web/test-runner-playwright": "^0.11.0",
+    "esbuild-plugin-lit-css": "^4.0.0",
+    "eslint": "^9.38.0",
+    "liquidjs": "^10.24.0",
+    "pixelmatch": "^7.1.0",
+    "pngjs": "^7.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "stylelint": "^16.0.0",
+    "stylelint-config-standard": "^39.0.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.2",
+    "vite": "^6.0.5",
+    "web-dev-server-plugin-lit-css": "^4.0.0",
+    "wireit": "^0.14.12"
+  },
+  "dependencies": {
+    "@lit/context": "^1.1.6",
+    "lit": "^3.3.1"
+  }
+}

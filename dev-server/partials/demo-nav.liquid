@@ -1,0 +1,17 @@
+<nav>
+  <a href="/">Component Index</a>
+  
+  {% unless isIndex %}
+    {% if isReactDemo %}
+      | <a href="/elements/{{ componentName }}/react">{{ componentName }} Index - React</a>
+    {% else %}
+      | <a href="/elements/{{ componentName }}/demo">{{ componentName }} Index - LitElement</a>
+    {% endif %}
+  {% endunless %}
+  
+  {% if isReactDemo %}
+    |&nbsp; <a href="{{ webComponentDemoUrl }}">{{ componentName }} Web Component Demos</a>
+  {% elsif hasReactDemo %}
+    |&nbsp; <a href="{{ reactDemoUrl }}">{{ componentName }} React Demos</a>
+  {% endif %}
+</nav>

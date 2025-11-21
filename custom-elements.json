@@ -1,0 +1,1464 @@
+{
+  "schemaVersion": "2.1.0",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "elements/pfv6-card/pfv6-card-body.js",
+      "declarations": [
+        {
+          "name": "Pfv6CardBody",
+          "description": "PatternFly Card Body Component\n\nA container for card body content. Can be used multiple times within a card\nto create multiple body sections with individual control over fill behavior.\n\n<figure>\n<figcaption>Basic usage</figcaption>\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>Body content</pfv6-card-body>\n<pfv6-card-footer>Footer</pfv6-card-footer>\n</pfv6-card>\n```\n</figure>\n\n<figure>\n<figcaption>Multiple body sections</figcaption>\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>First body section (fills)</pfv6-card-body>\n<pfv6-card-body filled=\"false\">Second body section (no fill)</pfv6-card-body>\n<pfv6-card-body>Third body section (fills)</pfv6-card-body>\n<pfv6-card-footer>Footer</pfv6-card-footer>\n</pfv6-card>\n```\n</figure>",
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "members": [
+            {
+              "name": "filled",
+              "description": "Whether the body section should fill available height (flex-grow)\nWhen 'true', the body will expand to fill available space.\nWhen 'false', the body will only take up as much space as its content needs.",
+              "type": {
+                "text": "'true' | 'false'"
+              },
+              "default": "'true'",
+              "kind": "field",
+              "attribute": "filled",
+              "reflects": true
+            }
+          ],
+          "kind": "class",
+          "tagName": "pfv6-card-body",
+          "attributes": [
+            {
+              "name": "filled",
+              "description": "Whether the body section should fill available height (flex-grow)\nWhen 'true', the body will expand to fill available space.\nWhen 'false', the body will only take up as much space as its content needs.",
+              "type": {
+                "text": "'true' | 'false'"
+              },
+              "default": "'true'",
+              "fieldName": "filled"
+            }
+          ],
+          "slots": [
+            {
+              "name": "",
+              "description": "Default slot for body content"
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--pf-v6-c-card__body--FontSize",
+              "description": "Body font size"
+            },
+            {
+              "name": "--pf-v6-c-card__body--Color",
+              "description": "Body text color"
+            },
+            {
+              "name": "--pf-v6-c-card--first-child--PaddingBlockStart",
+              "description": "Padding block start"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingBlockEnd",
+              "description": "Padding block end"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineStart",
+              "description": "Padding inline start"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineEnd",
+              "description": "Padding inline end"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingBlockEnd",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineStart",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineEnd",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-v6-c-card--first-child--PaddingBlockStart",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-t--global--spacer--lg"
+            },
+            {
+              "name": "--pf-v6-c-card__body--FontSize",
+              "default": "var(--pf-t--global--font--size--body--default)"
+            },
+            {
+              "name": "--pf-t--global--font--size--body--default"
+            },
+            {
+              "name": "--pf-v6-c-card__body--Color",
+              "default": "var(--pf-t--global--text--color--regular)"
+            },
+            {
+              "name": "--pf-t--global--text--color--regular"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "pfv6-card-body",
+          "declaration": {
+            "name": "Pfv6CardBody",
+            "module": "elements/pfv6-card/pfv6-card-body.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Pfv6CardBody",
+          "declaration": {
+            "name": "Pfv6CardBody",
+            "module": "elements/pfv6-card/pfv6-card-body.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "elements/pfv6-card/pfv6-card-expandable-content.js",
+      "declarations": [
+        {
+          "name": "Pfv6CardExpandableContent",
+          "description": "PatternFly Card Expandable Content Component\n\nA wrapper for expandable card content (body and footer sections).\nVisibility is controlled by the parent card's `expanded` state.\n\n```html\n<pfv6-card expandable>\n<pfv6-card-title>Title</pfv6-card-title>\n<pfv6-card-expandable-content>\n<pfv6-card-body>Body content</pfv6-card-body>\n<pfv6-card-footer>Footer content</pfv6-card-footer>\n</pfv6-card-expandable-content>\n</pfv6-card>\n```",
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "kind": "class",
+          "tagName": "pfv6-card-expandable-content",
+          "slots": [
+            {
+              "name": "",
+              "description": "Default slot for expandable content (typically pfv6-card-body and pfv6-card-footer)"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "pfv6-card-expandable-content",
+          "declaration": {
+            "name": "Pfv6CardExpandableContent",
+            "module": "elements/pfv6-card/pfv6-card-expandable-content.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Pfv6CardExpandableContent",
+          "declaration": {
+            "name": "Pfv6CardExpandableContent",
+            "module": "elements/pfv6-card/pfv6-card-expandable-content.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "elements/pfv6-card/pfv6-card-footer.js",
+      "declarations": [
+        {
+          "name": "Pfv6CardFooter",
+          "description": "PatternFly Card Footer Component\n\nA wrapper for card footer content.\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>Body content</pfv6-card-body>\n<pfv6-card-footer>Footer content</pfv6-card-footer>\n</pfv6-card>\n```",
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "kind": "class",
+          "tagName": "pfv6-card-footer",
+          "slots": [
+            {
+              "name": "",
+              "description": "Default slot for footer content"
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--pf-v6-c-card--child--PaddingBlockEnd",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineStart",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineEnd",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-t--global--spacer--lg"
+            },
+            {
+              "name": "--pf-v6-c-card__footer--FontSize",
+              "default": "var(--pf-t--global--font--size--body--default)"
+            },
+            {
+              "name": "--pf-t--global--font--size--body--default"
+            },
+            {
+              "name": "--pf-v6-c-card__footer--Color",
+              "default": "var(--pf-t--global--text--color--subtle)"
+            },
+            {
+              "name": "--pf-t--global--text--color--subtle"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "pfv6-card-footer",
+          "declaration": {
+            "name": "Pfv6CardFooter",
+            "module": "elements/pfv6-card/pfv6-card-footer.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Pfv6CardFooter",
+          "declaration": {
+            "name": "Pfv6CardFooter",
+            "module": "elements/pfv6-card/pfv6-card-footer.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "elements/pfv6-card/pfv6-card-title.js",
+      "declarations": [
+        {
+          "name": "Pfv6CardTitle",
+          "description": "PatternFly Card Title Component\n\nA wrapper for card title content with optional semantic heading element.\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>Body content</pfv6-card-body>\n</pfv6-card>\n```\n\n<figure>\n<figcaption>With semantic heading</figcaption>\n\n```html\n<pfv6-card>\n<pfv6-card-title component=\"h4\">Card Title</pfv6-card-title>\n<pfv6-card-body>Body content</pfv6-card-body>\n</pfv6-card>\n```\n</figure>",
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "members": [
+            {
+              "name": "component",
+              "description": "HTML element to use for the title wrapper\nAllows semantic heading elements (h1-h6) or default div",
+              "type": {
+                "text": "'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'"
+              },
+              "default": "'div'",
+              "kind": "field",
+              "attribute": "component",
+              "reflects": true
+            }
+          ],
+          "kind": "class",
+          "tagName": "pfv6-card-title",
+          "attributes": [
+            {
+              "name": "component",
+              "description": "HTML element to use for the title wrapper\nAllows semantic heading elements (h1-h6) or default div",
+              "type": {
+                "text": "'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'"
+              },
+              "default": "'div'",
+              "fieldName": "component"
+            }
+          ],
+          "slots": [
+            {
+              "name": "",
+              "description": "Default slot for title content"
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--pf-v6-c-card--first-child--PaddingBlockStart",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-v6-c-card__title--not--last-child--PaddingBlockEnd",
+              "default": "var(--pf-t--global--spacer--md)"
+            },
+            {
+              "name": "--pf-t--global--spacer--md"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineStart",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineEnd",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-t--global--spacer--lg"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--Color",
+              "default": "var(--pf-t--global--text--color--regular)"
+            },
+            {
+              "name": "--pf-t--global--text--color--regular"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--FontFamily",
+              "default": "var(--pf-t--global--font--family--heading)"
+            },
+            {
+              "name": "--pf-t--global--font--family--heading"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--FontSize",
+              "default": "var(--pf-t--global--font--size--heading--xs)"
+            },
+            {
+              "name": "--pf-t--global--font--size--heading--xs"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--FontWeight",
+              "default": "var(--pf-t--global--font--weight--heading--default)"
+            },
+            {
+              "name": "--pf-t--global--font--weight--heading--default"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--LineHeight",
+              "default": "var(--pf-t--global--font--line-height--heading)"
+            },
+            {
+              "name": "--pf-t--global--font--line-height--heading"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "pfv6-card-title",
+          "declaration": {
+            "name": "Pfv6CardTitle",
+            "module": "elements/pfv6-card/pfv6-card-title.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Pfv6CardTitle",
+          "declaration": {
+            "name": "Pfv6CardTitle",
+            "module": "elements/pfv6-card/pfv6-card-title.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "elements/pfv6-card/pfv6-card.js",
+      "declarations": [
+        {
+          "name": "Pfv6Card",
+          "description": "PatternFly Card Component\n\nA card is a content container that displays entry-level information—typically \nwithin dashboards, galleries, and catalogs.\n\nSupports all PatternFly v6 Card features including:\n- Size modifiers (compact, large)\n- Variants (default, secondary)\n- Interactive states (selectable, clickable, disabled)\n- Expandable content\n- Full height layout\n- Plain styling\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>Card body content goes here</pfv6-card-body>\n<pfv6-card-footer>Footer content</pfv6-card-footer>\n</pfv6-card>\n```\n\n<figure>\n<figcaption>Secondary variant</figcaption>\n\n```html\n<pfv6-card variant=\"secondary\">\n<pfv6-card-title>Secondary Card</pfv6-card-title>\n<pfv6-card-body>Card with secondary background color</pfv6-card-body>\n</pfv6-card>\n```\n</figure>\n\n<figure>\n<figcaption>Compact card</figcaption>\n\n```html\n<pfv6-card compact>\n<pfv6-card-title>Compact Card</pfv6-card-title>\n<pfv6-card-body>Card with compact spacing</pfv6-card-body>\n</pfv6-card>\n```\n</figure>\n\n<figure>\n<figcaption>Expandable card</figcaption>\n\n```html\n<pfv6-card expandable>\n<pfv6-card-title>Expandable Card</pfv6-card-title>\n<pfv6-card-expandable-content>\n<pfv6-card-body>Expandable body content</pfv6-card-body>\n<pfv6-card-footer>Footer content</pfv6-card-footer>\n</pfv6-card-expandable-content>\n</pfv6-card>\n```\n</figure>\n\n<figure>\n<figcaption>Customizing with CSS variables</figcaption>\n\n```css\npfv6-card {\n--pf-v6-c-card--BackgroundColor: #f0f0f0;\n--pf-v6-c-card--BorderColor: #06c;\n--pf-v6-c-card--BorderRadius: 8px;\n}\n```\n</figure>",
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "members": [
+            {
+              "name": "variant",
+              "description": "Card variant - changes the visual style of the card",
+              "type": {
+                "text": "'default' | 'secondary'"
+              },
+              "default": "'default'",
+              "kind": "field",
+              "attribute": "variant",
+              "reflects": true
+            },
+            {
+              "name": "compact",
+              "description": "Modifies the card to include compact styling\nShould not be used with `large`",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "compact",
+              "reflects": true
+            },
+            {
+              "name": "large",
+              "description": "Modifies the card to be large\nShould not be used with `compact`",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "large",
+              "reflects": true
+            },
+            {
+              "name": "fullHeight",
+              "description": "Modifies the card so that it fills the total available height of its container",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "full-height",
+              "reflects": true
+            },
+            {
+              "name": "plain",
+              "description": "Modifies the card to include plain styling (removes border and background)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "plain",
+              "reflects": true
+            },
+            {
+              "name": "clickable",
+              "description": "Makes the entire card clickable/actionable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "clickable",
+              "reflects": true
+            },
+            {
+              "name": "selectable",
+              "description": "Makes the card selectable with a checkbox",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "selectable",
+              "reflects": true
+            },
+            {
+              "name": "selected",
+              "description": "Whether the card is currently selected (when selectable=true)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "selected",
+              "reflects": true
+            },
+            {
+              "name": "clicked",
+              "description": "Whether the card is currently clicked (when clickable=true)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "clicked",
+              "reflects": true
+            },
+            {
+              "name": "expandable",
+              "description": "Makes the card expandable with a toggle",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "expandable",
+              "reflects": true
+            },
+            {
+              "name": "expanded",
+              "description": "Whether the card is currently expanded (when expandable=true)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "expanded",
+              "reflects": true
+            },
+            {
+              "name": "disabled",
+              "description": "Disables the card (when selectable or clickable)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "disabled",
+              "reflects": true
+            },
+            {
+              "name": "actionsNoOffset",
+              "description": "Removes the offset/padding before actions in the card header",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "actions-no-offset",
+              "reflects": true
+            },
+            {
+              "name": "toggleRightAligned",
+              "description": "Positions the expand toggle button on the right side instead of the left",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "toggle-right-aligned",
+              "reflects": true
+            },
+            {
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "name": "_hasHeader",
+              "description": "Check if the card has header content (images, icons, or actions)",
+              "kind": "method",
+              "privacy": "private"
+            }
+          ],
+          "kind": "class",
+          "tagName": "pfv6-card",
+          "attributes": [
+            {
+              "name": "variant",
+              "description": "Card variant - changes the visual style of the card",
+              "type": {
+                "text": "'default' | 'secondary'"
+              },
+              "default": "'default'",
+              "fieldName": "variant"
+            },
+            {
+              "name": "compact",
+              "description": "Modifies the card to include compact styling\nShould not be used with `large`",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "compact"
+            },
+            {
+              "name": "large",
+              "description": "Modifies the card to be large\nShould not be used with `compact`",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "large"
+            },
+            {
+              "name": "full-height",
+              "description": "Modifies the card so that it fills the total available height of its container",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "fullHeight"
+            },
+            {
+              "name": "plain",
+              "description": "Modifies the card to include plain styling (removes border and background)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "plain"
+            },
+            {
+              "name": "clickable",
+              "description": "Makes the entire card clickable/actionable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "clickable"
+            },
+            {
+              "name": "selectable",
+              "description": "Makes the card selectable with a checkbox",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "selectable"
+            },
+            {
+              "name": "selected",
+              "description": "Whether the card is currently selected (when selectable=true)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "selected"
+            },
+            {
+              "name": "clicked",
+              "description": "Whether the card is currently clicked (when clickable=true)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "clicked"
+            },
+            {
+              "name": "expandable",
+              "description": "Makes the card expandable with a toggle",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "expandable"
+            },
+            {
+              "name": "expanded",
+              "description": "Whether the card is currently expanded (when expandable=true)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "expanded"
+            },
+            {
+              "name": "disabled",
+              "description": "Disables the card (when selectable or clickable)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "disabled"
+            },
+            {
+              "name": "actions-no-offset",
+              "description": "Removes the offset/padding before actions in the card header",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "actionsNoOffset"
+            },
+            {
+              "name": "toggle-right-aligned",
+              "description": "Positions the expand toggle button on the right side instead of the left",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "toggleRightAligned"
+            }
+          ],
+          "events": [
+            {
+              "name": "card-click",
+              "description": "Dispatched when a clickable or selectable card is clicked"
+            },
+            {
+              "name": "card-select",
+              "description": "Dispatched when a selectable card's selection state changes"
+            },
+            {
+              "name": "card-expand",
+              "description": "Dispatched when an expandable card's expansion state changes"
+            }
+          ],
+          "slots": [
+            {
+              "name": "header-image",
+              "description": "Card header image (e.g. brand logo)"
+            },
+            {
+              "name": "header-icon",
+              "description": "Card header icon (positioned before title, e.g. for expandable cards)"
+            },
+            {
+              "name": "actions",
+              "description": "Card header actions (buttons, menus, etc.)"
+            },
+            {
+              "name": "",
+              "description": "Default slot for card sub-components (pfv6-card-title, pfv6-card-body, pfv6-card-footer, pfv6-card-expandable-content)"
+            }
+          ],
+          "cssParts": [
+            {
+              "name": "title",
+              "description": "The card title element"
+            },
+            {
+              "name": "body",
+              "description": "The card body element"
+            },
+            {
+              "name": "footer",
+              "description": "The card footer element"
+            },
+            {
+              "name": "container",
+              "description": "The card container element"
+            },
+            {
+              "name": "expand-toggle",
+              "description": "The expandable card toggle button"
+            },
+            {
+              "name": "selectable-input",
+              "description": "The selectable card checkbox container"
+            },
+            {
+              "name": "header",
+              "description": "The card header element"
+            },
+            {
+              "name": "header-content",
+              "description": "The card header content container (images and title)"
+            },
+            {
+              "name": "actions",
+              "description": "The card actions container"
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--pf-v6-c-card--BackgroundColor",
+              "description": "Card background color"
+            },
+            {
+              "name": "--pf-v6-c-card--BorderColor",
+              "description": "Card border color"
+            },
+            {
+              "name": "--pf-v6-c-card--BorderStyle",
+              "description": "Card border style"
+            },
+            {
+              "name": "--pf-v6-c-card--BorderWidth",
+              "description": "Card border width"
+            },
+            {
+              "name": "--pf-v6-c-card--BorderRadius",
+              "description": "Card border radius"
+            },
+            {
+              "name": "--pf-v6-c-card--first-child--PaddingBlockStart",
+              "description": "First child padding block start"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineEnd",
+              "description": "Child padding inline end"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingBlockEnd",
+              "description": "Child padding block end"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineStart",
+              "description": "Child padding inline start"
+            },
+            {
+              "name": "--pf-v6-c-card--c-divider--child--PaddingBlockStart",
+              "description": "Divider child padding block start"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--Color",
+              "description": "Title text color"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--FontFamily",
+              "description": "Title font family"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--FontSize",
+              "description": "Title font size"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--FontWeight",
+              "description": "Title font weight"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--LineHeight",
+              "description": "Title line height"
+            },
+            {
+              "name": "--pf-v6-c-card__body--FontSize",
+              "description": "Body font size"
+            },
+            {
+              "name": "--pf-v6-c-card__body--Color",
+              "description": "Body text color"
+            },
+            {
+              "name": "--pf-v6-c-card__footer--FontSize",
+              "description": "Footer font size"
+            },
+            {
+              "name": "--pf-v6-c-card__footer--Color",
+              "description": "Footer text color"
+            },
+            {
+              "name": "--pf-v6-c-card--c-button--disabled--Color",
+              "description": "Disabled button color"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact__title-text--FontSize",
+              "description": "Compact variant title font size"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact__body--FontSize",
+              "description": "Compact variant body font size"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact__footer--FontSize",
+              "description": "Compact variant footer font size"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact--first-child--PaddingBlockStart",
+              "description": "Compact variant first child padding block start"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact--child--PaddingInlineEnd",
+              "description": "Compact variant child padding inline end"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact--child--PaddingBlockEnd",
+              "description": "Compact variant child padding block end"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact--child--PaddingInlineStart",
+              "description": "Compact variant child padding inline start"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg__title-text--FontSize",
+              "description": "Large variant title font size"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg__body--FontSize",
+              "description": "Large variant body font size"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg__footer--FontSize",
+              "description": "Large variant footer font size"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg--first-child--PaddingBlockStart",
+              "description": "Large variant first child padding block start"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg--child--PaddingInlineEnd",
+              "description": "Large variant child padding inline end"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg--child--PaddingBlockEnd",
+              "description": "Large variant child padding block end"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg--child--PaddingInlineStart",
+              "description": "Large variant child padding inline start"
+            },
+            {
+              "name": "--pf-v6-c-card--m-secondary--BackgroundColor",
+              "description": "Secondary variant background color"
+            },
+            {
+              "name": "--pf-v6-c-card--m-secondary--BorderColor",
+              "description": "Secondary variant border color"
+            },
+            {
+              "name": "--pf-v6-c-card--m-secondary--BorderWidth",
+              "description": "Secondary variant border width"
+            },
+            {
+              "name": "--pf-v6-c-card--m-plain--BackgroundColor",
+              "description": "Plain modifier background color"
+            },
+            {
+              "name": "--pf-v6-c-card--m-plain--BorderColor",
+              "description": "Plain modifier border color"
+            },
+            {
+              "name": "--pf-v6-c-card--m-rounded--BorderRadius",
+              "description": "Rounded modifier border radius"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--hover--BorderColor",
+              "description": "Selectable hover border color"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--hover--BorderWidth",
+              "description": "Selectable hover border width"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-selected--BorderColor",
+              "description": "Selected state border color"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-selected--BorderWidth",
+              "description": "Selected state border width"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-disabled--BackgroundColor",
+              "description": "Disabled state background color"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-disabled--BorderColor",
+              "description": "Disabled state border color"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-disabled__title-text--Color",
+              "description": "Disabled state title color"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-disabled__body--Color",
+              "description": "Disabled state body color"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-disabled__footer--Color",
+              "description": "Disabled state footer color"
+            },
+            {
+              "name": "--pf-v6-c-card--BackgroundColor",
+              "default": "var(--pf-t--global--background--color--primary--default)"
+            },
+            {
+              "name": "--pf-t--global--background--color--primary--default"
+            },
+            {
+              "name": "--pf-v6-c-card--BorderColor",
+              "default": "var(--pf-t--global--border--color--default)"
+            },
+            {
+              "name": "--pf-v6-c-card--BorderStyle",
+              "default": "solid"
+            },
+            {
+              "name": "--pf-v6-c-card--BorderRadius",
+              "default": "var(--pf-t--global--border--radius--medium)"
+            },
+            {
+              "name": "--pf-t--global--border--radius--medium"
+            },
+            {
+              "name": "--pf-v6-c-card--first-child--PaddingBlockStart",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineEnd",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingBlockEnd",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineStart",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-v6-c-card--c-divider--child--PaddingBlockStart",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--Color",
+              "default": "var(--pf-t--global--text--color--regular)"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--FontFamily",
+              "default": "var(--pf-t--global--font--family--heading)"
+            },
+            {
+              "name": "--pf-t--global--font--family--heading"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--FontSize",
+              "default": "var(--pf-t--global--font--size--heading--xs)"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--FontWeight",
+              "default": "var(--pf-t--global--font--weight--heading--default)"
+            },
+            {
+              "name": "--pf-t--global--font--weight--heading--default"
+            },
+            {
+              "name": "--pf-v6-c-card__title-text--LineHeight",
+              "default": "var(--pf-t--global--font--line-height--heading)"
+            },
+            {
+              "name": "--pf-t--global--font--line-height--heading"
+            },
+            {
+              "name": "--pf-v6-c-card__body--FontSize",
+              "default": "var(--pf-t--global--font--size--body--default)"
+            },
+            {
+              "name": "--pf-v6-c-card__body--Color",
+              "default": "var(--pf-t--global--text--color--regular)"
+            },
+            {
+              "name": "--pf-t--global--text--color--regular"
+            },
+            {
+              "name": "--pf-v6-c-card__footer--FontSize",
+              "default": "var(--pf-t--global--font--size--body--default)"
+            },
+            {
+              "name": "--pf-v6-c-card__footer--Color",
+              "default": "var(--pf-t--global--text--color--subtle)"
+            },
+            {
+              "name": "--pf-t--global--text--color--subtle"
+            },
+            {
+              "name": "--pf-v6-c-card__title--not--last-child--PaddingBlockEnd",
+              "default": "0"
+            },
+            {
+              "name": "--pf-v6-c-card--c-button--disabled--Color",
+              "default": "var(--pf-t--global--text--color--on-disabled)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-expanded__header-toggle-icon--Rotate",
+              "default": "90deg"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--BorderWidth",
+              "default": "var(--pf-v6-c-card--BorderWidth, var(--pf-t--global--border--width--box--default))"
+            },
+            {
+              "name": "--pf-v6-c-card--BorderWidth",
+              "default": "var(--pf-t--global--border--width--box--default)"
+            },
+            {
+              "name": "--pf-t--global--border--width--box--default"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-disabled--BackgroundColor",
+              "default": "var(--pf-t--global--background--color--disabled--default)"
+            },
+            {
+              "name": "--pf-t--global--background--color--disabled--default"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-disabled--BorderColor",
+              "default": "transparent"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact__title-text--FontSize",
+              "default": "var(--pf-t--global--font--size--heading--xs)"
+            },
+            {
+              "name": "--pf-t--global--font--size--heading--xs"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact__body--FontSize",
+              "default": "var(--pf-t--global--font--size--body--default)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact__footer--FontSize",
+              "default": "var(--pf-t--global--font--size--body--sm)"
+            },
+            {
+              "name": "--pf-t--global--font--size--body--sm"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact--first-child--PaddingBlockStart",
+              "default": "var(--pf-t--global--spacer--md)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact--child--PaddingInlineEnd",
+              "default": "var(--pf-t--global--spacer--md)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact--child--PaddingBlockEnd",
+              "default": "var(--pf-t--global--spacer--md)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact--child--PaddingInlineStart",
+              "default": "var(--pf-t--global--spacer--md)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact--c-divider--child--PaddingBlockStart",
+              "default": "var(--pf-t--global--spacer--md)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-compact__title--not--last-child--PaddingBlockEnd",
+              "default": "var(--pf-t--global--spacer--sm)"
+            },
+            {
+              "name": "--pf-t--global--spacer--sm"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg__title-text--FontSize",
+              "default": "var(--pf-t--global--font--size--heading--md)"
+            },
+            {
+              "name": "--pf-t--global--font--size--heading--md"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg__body--FontSize",
+              "default": "var(--pf-t--global--font--size--body--lg)"
+            },
+            {
+              "name": "--pf-t--global--font--size--body--lg"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg__footer--FontSize",
+              "default": "var(--pf-t--global--font--size--body--default)"
+            },
+            {
+              "name": "--pf-t--global--font--size--body--default"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg--first-child--PaddingBlockStart",
+              "default": "var(--pf-t--global--spacer--xl)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg--child--PaddingInlineEnd",
+              "default": "var(--pf-t--global--spacer--xl)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg--child--PaddingBlockEnd",
+              "default": "var(--pf-t--global--spacer--xl)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg--child--PaddingInlineStart",
+              "default": "var(--pf-t--global--spacer--xl)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg--c-divider--child--PaddingBlockStart",
+              "default": "var(--pf-t--global--spacer--xl)"
+            },
+            {
+              "name": "--pf-t--global--spacer--xl"
+            },
+            {
+              "name": "--pf-v6-c-card--m-display-lg__title--not--last-child--PaddingBlockEnd",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-t--global--spacer--lg"
+            },
+            {
+              "name": "--pf-v6-c-card--m-secondary--BackgroundColor",
+              "default": "var(--pf-t--global--background--color--secondary--default)"
+            },
+            {
+              "name": "--pf-t--global--background--color--secondary--default"
+            },
+            {
+              "name": "--pf-v6-c-card--m-secondary--BorderColor",
+              "default": "var(--pf-t--global--border--color--high-contrast)"
+            },
+            {
+              "name": "--pf-t--global--border--color--high-contrast"
+            },
+            {
+              "name": "--pf-v6-c-card--m-secondary--BorderWidth",
+              "default": "var(--pf-t--global--border--width--high-contrast--regular)"
+            },
+            {
+              "name": "--pf-t--global--border--width--high-contrast--regular"
+            },
+            {
+              "name": "--pf-v6-c-card--m-plain--BackgroundColor",
+              "default": "transparent"
+            },
+            {
+              "name": "--pf-v6-c-card--m-plain--BorderColor",
+              "default": "transparent"
+            },
+            {
+              "name": "--pf-t--global--spacer--gap--text-to-element--default"
+            },
+            {
+              "name": "--pf-t--global--icon--size--font--md"
+            },
+            {
+              "name": "--pf-t--global--spacer--gap--action-to-action--default"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-disabled__title-text--Color",
+              "default": "var(--pf-t--global--text--color--on-disabled)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-disabled__body--Color",
+              "default": "var(--pf-t--global--text--color--on-disabled)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-disabled__footer--Color",
+              "default": "var(--pf-t--global--text--color--on-disabled)"
+            },
+            {
+              "name": "--pf-t--global--text--color--on-disabled"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--hover--BorderColor",
+              "default": "var(--pf-t--global--border--color--hover)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--hover--BorderWidth",
+              "default": "var(--pf-t--global--border--width--box--hover)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-selected--BorderColor",
+              "default": "var(--pf-t--global--border--color--clicked)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-selected--BorderWidth",
+              "default": "var(--pf-t--global--border--width--box--clicked)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--focus--BorderColor",
+              "default": "var(--pf-t--global--border--color--hover)"
+            },
+            {
+              "name": "--pf-t--global--border--color--hover"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--focus--BorderWidth",
+              "default": "var(--pf-t--global--border--width--box--hover)"
+            },
+            {
+              "name": "--pf-t--global--border--width--box--hover"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-selected--focus--BorderColor",
+              "default": "var(--pf-t--global--border--color--clicked)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-selected--focus--BorderWidth",
+              "default": "var(--pf-t--global--border--width--box--clicked)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-clickable--m-current--BorderColor",
+              "default": "var(--pf-t--global--border--color--clicked)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-clickable--m-current--BorderWidth",
+              "default": "var(--pf-t--global--border--width--box--clicked)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-clickable--m-current--BorderColor",
+              "default": "var(--pf-t--global--border--color--clicked)"
+            },
+            {
+              "name": "--pf-t--global--border--color--clicked"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-clickable--m-current--BorderWidth",
+              "default": "var(--pf-t--global--border--width--box--clicked)"
+            },
+            {
+              "name": "--pf-t--global--border--width--box--clicked"
+            },
+            {
+              "name": "--pf-t--global--icon--size--md"
+            },
+            {
+              "name": "--pf-t--global--spacer--control--vertical--default"
+            },
+            {
+              "name": "--pf-t--global--spacer--control--horizontal--default"
+            },
+            {
+              "name": "--pf-t--global--border--radius--small"
+            },
+            {
+              "name": "--pf-t--global--icon--color--regular"
+            },
+            {
+              "name": "--pf-t--global--border--width--focus--default"
+            },
+            {
+              "name": "--pf-t--global--color--brand--default"
+            },
+            {
+              "name": "--pf-t--global--spacer--gap--focus--default"
+            },
+            {
+              "name": "--pf-t--global--icon--color--on-disabled"
+            },
+            {
+              "name": "--pf-t--global--icon--color--hover"
+            },
+            {
+              "name": "--pf-t--global--background--color--action--plain--hover"
+            },
+            {
+              "name": "--pf-t--global--icon--size--font--sm"
+            },
+            {
+              "name": "--pf-t--global--spacer--md"
+            },
+            {
+              "name": "--pf-t--global--border--width--divider--default",
+              "default": "1px"
+            },
+            {
+              "name": "--pf-t--global--border--color--default",
+              "default": "#d2d2d2"
+            }
+          ],
+          "customElement": true,
+          "demos": [
+            {
+              "name": "with-only-body-section",
+              "url": "/elements/pfv6-card/demo/with-only-body-section",
+              "path": "elements/pfv6-card/demo/with-only-body-section.html"
+            },
+            {
+              "name": "with-no-header",
+              "url": "/elements/pfv6-card/demo/with-no-header",
+              "path": "elements/pfv6-card/demo/with-no-header.html"
+            },
+            {
+              "name": "with-no-footer",
+              "url": "/elements/pfv6-card/demo/with-no-footer",
+              "path": "elements/pfv6-card/demo/with-no-footer.html"
+            },
+            {
+              "name": "with-multiple-body-sections",
+              "url": "/elements/pfv6-card/demo/with-multiple-body-sections",
+              "path": "elements/pfv6-card/demo/with-multiple-body-sections.html"
+            },
+            {
+              "name": "with-modifiers",
+              "url": "/elements/pfv6-card/demo/with-modifiers",
+              "path": "elements/pfv6-card/demo/with-modifiers.html"
+            },
+            {
+              "name": "with-image-and-actions",
+              "url": "/elements/pfv6-card/demo/with-image-and-actions",
+              "path": "elements/pfv6-card/demo/with-image-and-actions.html"
+            },
+            {
+              "name": "with-heading-element",
+              "url": "/elements/pfv6-card/demo/with-heading-element",
+              "path": "elements/pfv6-card/demo/with-heading-element.html"
+            },
+            {
+              "name": "with-dividers",
+              "url": "/elements/pfv6-card/demo/with-dividers",
+              "path": "elements/pfv6-card/demo/with-dividers.html"
+            },
+            {
+              "name": "with-body-section-fills",
+              "url": "/elements/pfv6-card/demo/with-body-section-fills",
+              "path": "elements/pfv6-card/demo/with-body-section-fills.html"
+            },
+            {
+              "name": "tile-multi",
+              "url": "/elements/pfv6-card/demo/tile-multi",
+              "path": "elements/pfv6-card/demo/tile-multi.html"
+            },
+            {
+              "name": "tile-cards",
+              "url": "/elements/pfv6-card/demo/tile-cards",
+              "path": "elements/pfv6-card/demo/tile-cards.html"
+            },
+            {
+              "name": "single-selectable",
+              "url": "/elements/pfv6-card/demo/single-selectable",
+              "path": "elements/pfv6-card/demo/single-selectable.html"
+            },
+            {
+              "name": "selectable",
+              "url": "/elements/pfv6-card/demo/selectable",
+              "path": "elements/pfv6-card/demo/selectable.html"
+            },
+            {
+              "name": "secondary-cards",
+              "url": "/elements/pfv6-card/demo/secondary-cards",
+              "path": "elements/pfv6-card/demo/secondary-cards.html"
+            },
+            {
+              "name": "only-actions-in-card-head",
+              "url": "/elements/pfv6-card/demo/only-actions-in-card-head",
+              "path": "elements/pfv6-card/demo/only-actions-in-card-head.html"
+            },
+            {
+              "name": "index",
+              "url": "/elements/pfv6-card/demo/index",
+              "path": "elements/pfv6-card/demo/index.html"
+            },
+            {
+              "name": "header-wraps",
+              "url": "/elements/pfv6-card/demo/header-wraps",
+              "path": "elements/pfv6-card/demo/header-wraps.html"
+            },
+            {
+              "name": "header-in-card-head",
+              "url": "/elements/pfv6-card/demo/header-in-card-head",
+              "path": "elements/pfv6-card/demo/header-in-card-head.html"
+            },
+            {
+              "name": "expandable",
+              "url": "/elements/pfv6-card/demo/expandable",
+              "path": "elements/pfv6-card/demo/expandable.html"
+            },
+            {
+              "name": "expandable-with-icon",
+              "url": "/elements/pfv6-card/demo/expandable-with-icon",
+              "path": "elements/pfv6-card/demo/expandable-with-icon.html"
+            },
+            {
+              "name": "clickable-selectable",
+              "url": "/elements/pfv6-card/demo/clickable-selectable",
+              "path": "elements/pfv6-card/demo/clickable-selectable.html"
+            },
+            {
+              "name": "clickable-cards",
+              "url": "/elements/pfv6-card/demo/clickable-cards",
+              "path": "elements/pfv6-card/demo/clickable-cards.html"
+            },
+            {
+              "name": "basic-cards",
+              "url": "/elements/pfv6-card/demo/basic-cards",
+              "path": "elements/pfv6-card/demo/basic-cards.html"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "pfv6-card",
+          "declaration": {
+            "name": "Pfv6Card",
+            "module": "elements/pfv6-card/pfv6-card.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Pfv6Card",
+          "declaration": {
+            "name": "Pfv6Card",
+            "module": "elements/pfv6-card/pfv6-card.js"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+<div class="pf-v6-c-gallery pf-m-gutter">
+  <pfv6-card id="tile-example-1" selectable>
+    <pfv6-card-title style="display: flex; gap: 0.5rem; align-items: center;">
+      <input type="radio" id="tile-1" name="tile-group" style="display: none;">
+      <span>➕</span>
+      <strong>Tile header</strong>
+    </pfv6-card-title>
+    <pfv6-card-body>Tile content and description</pfv6-card-body>
+  </pfv6-card>
+  
+  <pfv6-card id="tile-example-2" selectable>
+    <pfv6-card-title style="display: flex; gap: 0.5rem; align-items: center;">
+      <input type="radio" id="tile-2" name="tile-group" style="display: none;">
+      <span>➕</span>
+      <strong>Tile header</strong>
+    </pfv6-card-title>
+    <pfv6-card-body>Tile content and description</pfv6-card-body>
+  </pfv6-card>
+  
+  <pfv6-card id="tile-example-3" selectable disabled>
+    <pfv6-card-title style="display: flex; gap: 0.5rem; align-items: center;">
+      <input type="radio" id="tile-3" name="tile-group" disabled style="display: none;">
+      <span>➕</span>
+      <strong>Tile header (disabled)</strong>
+    </pfv6-card-title>
+    <pfv6-card-body>Tile content and description</pfv6-card-body>
+  </pfv6-card>
+</div>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-card/pfv6-card.js';
+  
+  const cards = document.querySelectorAll('pfv6-card[selectable]');
+  const radios = document.querySelectorAll('input[type="radio"][name="tile-group"]');
+  
+  cards.forEach((card, index) => {
+    card.addEventListener('click', () => {
+      if (!card.hasAttribute('disabled')) {
+        radios[index].checked = true;
+        cards.forEach(c => c.removeAttribute('selected'));
+        card.setAttribute('selected', '');
+      }
+    });
+  });
+</script>
+

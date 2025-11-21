@@ -1,0 +1,26 @@
+<div>
+  <label><input type="checkbox" id="hasNoOffset"> actions hasNoOffset</label>
+</div>
+
+<div style="margin-top: 15px;">
+  <pfv6-card id="image-actions-card">
+    <img slot="header-image" src="/dev-server/assets/patternfly/images/PF-HorizontalLogo-Color.svg" alt="PatternFly logo" style="width: 300px;">
+    <div slot="actions">
+      <button aria-label="Card checkbox example">☑</button>
+      <button aria-label="Card header images and actions example kebab toggle">⋮</button>
+    </div>
+    <pfv6-card-title>Title</pfv6-card-title>
+    <pfv6-card-body>Body</pfv6-card-body>
+    <pfv6-card-footer>Footer</pfv6-card-footer>
+  </pfv6-card>
+</div>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-card/pfv6-card.js';
+  
+  document.getElementById('hasNoOffset').addEventListener('change', (e) => {
+    const card = document.getElementById('image-actions-card');
+    card.toggleAttribute('actions-no-offset', e.target.checked);
+  });
+</script>
+
