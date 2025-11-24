@@ -16,7 +16,7 @@ test('Check Lit demo console errors', async ({ page }) => {
     errors.push(`[pageerror] ${error.message}`);
   });
 
-  await page.goto('http://localhost:8000/elements/pfv6-card/demo/basic-cards');
+  await page.goto('http://localhost:8000/elements/pfv6-card/demo/basic');
   await page.waitForTimeout(2000); // Wait for any async errors
 
   console.log('\n📊 Console Messages:\n' + '='.repeat(80));

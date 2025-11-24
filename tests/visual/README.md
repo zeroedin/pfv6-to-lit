@@ -2,32 +2,42 @@
 
 Visual regression tests for PatternFly Elements v6 components, comparing Lit implementations against React PatternFly for 1:1 visual parity.
 
-## Test Files
+## Directory Structure
 
-### `card-visual-react-baseline.spec.ts`
+Tests are organized by component:
+
+```
+tests/visual/
+├── card/
+│   ├── card-visual-react-baseline.spec.ts
+│   ├── card-visual-react-baseline.spec.ts-snapshots/
+│   ├── card-visual-parity.spec.ts
+│   └── card-visual-parity.spec.ts-snapshots/
+├── checkbox/
+│   ├── checkbox-visual-react-baseline.spec.ts
+│   ├── checkbox-visual-react-baseline.spec.ts-snapshots/
+│   ├── checkbox-visual-parity.spec.ts
+│   └── checkbox-visual-parity.spec.ts-snapshots/
+└── README.md
+```
+
+## Test Files (Per Component)
+
+### `{component}-visual-react-baseline.spec.ts`
 **Purpose**: Generate React baseline screenshots (source of truth)
 
 Takes screenshots of official PatternFly React components. These serve as the reference for validating that our Lit components achieve pixel-perfect visual parity.
 
-**Snapshots**: `card-visual-react-baseline.spec.ts-snapshots/`
+**Example**: `card/card-visual-react-baseline.spec.ts`  
+**Snapshots**: `{component}-visual-react-baseline.spec.ts-snapshots/`
 
-### `card-visual-parity.spec.ts`
-**Purpose**: Compare Lit demos against React baselines
+### `{component}-visual-parity.spec.ts`
+**Purpose**: Compare Lit demos against React baselines (THE CRITICAL TEST)
 
-Takes screenshots of both React and Lit demos side-by-side, attaching them to the Playwright report for visual comparison using the diff slider.
+Takes screenshots of both React and Lit demos, compares them pixel-by-pixel using `pixelmatch`, and attaches them to the Playwright report for visual inspection.
 
-**Snapshots**: `card-visual-parity.spec.ts-snapshots/`
-
-### `card-visual.spec.ts`
-**Purpose**: Comprehensive Lit component visual tests
-
-Tests Lit components across:
-- Default styles for all demos
-- CSS variable overrides
-- Interactive states (hover, focus, expanded)
-- Responsive layouts (mobile viewports)
-
-**Snapshots**: `card-visual.spec.ts-snapshots/`
+**Example**: `card/card-visual-parity.spec.ts`  
+**Snapshots**: `{component}-visual-parity.spec.ts-snapshots/`
 
 ## Snapshot Organization
 
