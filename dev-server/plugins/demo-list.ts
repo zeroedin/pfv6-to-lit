@@ -10,41 +10,48 @@ interface DemoInfo {
   title: string;
 }
 
+interface ComponentComparison {
+  componentName: string;
+  displayName: string;
+  litDemos: Array<{ name: string; url: string }>;
+  reactDemos: Array<{ name: string; url: string }>;
+}
+
 /**
- * Generate demo list HTML from custom-elements.json
+ * Generate component comparison table HTML
  */
-async function generateDemoListHTML(): Promise<string> {
-  const demos: DemoInfo[] = [];
+async function generateComparisonTableHTML(): Promise<string> {
+  const components = new Map<string, ComponentComparison>();
   
+  // Read Lit demos from custom-elements.json
   try {
     const manifestPath = join(process.cwd(), 'custom-elements.json');
     const manifestContent = await readFile(manifestPath, 'utf-8');
     const manifest = JSON.parse(manifestContent);
 
-    // Extract demos from manifest
     for (const module of manifest.modules || []) {
       for (const declaration of module.declarations || []) {
         if (declaration.customElement && declaration.demos) {
           const tagName = declaration.tagName;
+          const componentKey = tagName.replace('pfv6-', '');
           
+          if (!components.has(componentKey)) {
+            components.set(componentKey, {
+              componentName: componentKey,
+              displayName: componentKey
+                .split('-')
+                .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(' '),
+              litDemos: [],
+              reactDemos: [],
+            });
+          }
+          
+          const component = components.get(componentKey)!;
           for (const demo of declaration.demos) {
-            const componentTitle = tagName
-              .replace('pfv6-', '')
-              .replace(/-/g, ' ')
-              .split(' ')
-              .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
-              .join(' ');
-            
-            const demoTitle = demo.name === 'index'
-              ? componentTitle
-              : `${componentTitle} - ${demo.name.replace(/-/g, ' ').split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}`;
-
-            demos.push({
-              componentName: tagName,
-              tagName,
-              demoName: demo.name,
+            component.litDemos.push({
+              name: demo.name,
               url: demo.url,
-              title: demoTitle,
             });
           }
         }
@@ -54,36 +61,81 @@ async function generateDemoListHTML(): Promise<string> {
     console.warn('[demo-list-plugin] Could not read custom-elements.json:', error instanceof Error ? error.message : error);
   }
 
-  // Sort demos by component name, then demo name
-  demos.sort((a, b) => {
-    if (a.componentName !== b.componentName) {
-      return a.componentName.localeCompare(b.componentName);
-    }
-    return a.demoName.localeCompare(b.demoName);
-  });
+  // Read React demos from patternfly-react/demos.json
+  try {
+    const reactManifestPath = join(process.cwd(), 'patternfly-react', 'demos.json');
+    const reactManifestContent = await readFile(reactManifestPath, 'utf-8');
+    const reactManifest = JSON.parse(reactManifestContent);
 
-  return demos.length > 0
-    ? demos.map(demo => 
-        `<li><a href="${demo.url}">${demo.title}</a></li>`
-      ).join('\n            ')
-    : '<li>No demos available yet. Run <code>npm run compile</code> to generate the manifest.</li>';
+    for (const [componentName, componentData] of Object.entries<any>(reactManifest.components)) {
+      const componentKey = componentName.toLowerCase();
+      
+      if (!components.has(componentKey)) {
+        components.set(componentKey, {
+          componentName: componentKey,
+          displayName: componentName,
+          litDemos: [],
+          reactDemos: [],
+        });
+      }
+      
+      const component = components.get(componentKey)!;
+      for (const [demoName] of Object.entries(componentData.demos)) {
+        component.reactDemos.push({
+          name: demoName,
+          url: `/elements/pfv6-${componentKey}/react/${demoName}`,
+        });
+      }
+    }
+  } catch (error) {
+    console.warn('[demo-list-plugin] Could not read patternfly-react/demos.json:', error instanceof Error ? error.message : error);
+  }
+
+  // Sort components alphabetically
+  const sortedComponents = Array.from(components.values()).sort((a, b) =>
+    a.displayName.localeCompare(b.displayName)
+  );
+
+  if (sortedComponents.length === 0) {
+    return `<tr>
+            <td colspan="3">No components available yet. Run <code>npm run compile</code> to generate manifests.</td>
+          </tr>`;
+  }
+
+  return sortedComponents
+    .map(component => {
+      const litCell = component.litDemos.length > 0
+        ? `<a href="/elements/pfv6-${component.componentName}/demo">View Lit Demos (${component.litDemos.length}) →</a>`
+        : '<span style="color: #999;">N/A</span>';
+      
+      const reactCell = component.reactDemos.length > 0
+        ? `<a href="/elements/pfv6-${component.componentName}/react">View React Demos (${component.reactDemos.length}) →</a>`
+        : '<span style="color: #999;">N/A</span>';
+
+      return `<tr>
+            <td><strong>${component.displayName}</strong></td>
+            <td>${litCell}</td>
+            <td>${reactCell}</td>
+          </tr>`;
+    })
+    .join('\n          ');
 }
 
 /**
- * Plugin that injects a list of available demos into dev-server/index.html
- * Reads from custom-elements.json generated by CEM
+ * Plugin that injects a component comparison table into dev-server/index.html
+ * Reads from custom-elements.json (Lit) and patternfly-react/demos.json (React)
  */
 export function demoListPlugin(): Plugin {
   return {
     name: 'demo-list-plugin',
     async transform(context) {
-      // Only inject demo list into the root index.html (served via router)
+      // Only inject comparison table into the root index.html (served via router)
       if (context.path === '/' && context.response.is('html')) {
-        const demoListHTML = await generateDemoListHTML();
+        const comparisonTableHTML = await generateComparisonTableHTML();
         let html = context.body as string;
         html = html.replace(
-          /<ul id="demo-list">[\s\S]*?<\/ul>/,
-          `<ul id="demo-list">\n            ${demoListHTML}\n          </ul>`
+          /<tbody id="demo-comparison-tbody">[\s\S]*?<\/tbody>/,
+          `<tbody id="demo-comparison-tbody">\n          ${comparisonTableHTML}\n        </tbody>`
         );
         return html;
       }

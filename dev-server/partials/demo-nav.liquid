@@ -3,15 +3,14 @@
   
   {% unless isIndex %}
     {% if isReactDemo %}
-      | <a href="/elements/{{ componentName }}/react">{{ componentName }} Index - React</a>
+      | <a href="/elements/{{ componentName }}/react">React - {{ componentName }} Index</a>
     {% else %}
-      | <a href="/elements/{{ componentName }}/demo">{{ componentName }} Index - LitElement</a>
+      | <a href="/elements/{{ componentName }}/demo">Lit - {{ componentName }} Index</a>  
     {% endif %}
   {% endunless %}
-  
-  {% if isReactDemo %}
-    |&nbsp; <a href="{{ webComponentDemoUrl }}">{{ componentName }} Web Component Demos</a>
-  {% elsif hasReactDemo %}
-    |&nbsp; <a href="{{ reactDemoUrl }}">{{ componentName }} React Demos</a>
+  {% if isReactDemo and webComponentDemoUrl %}
+    | <a href="{{ webComponentDemoUrl }}">Lit {% if isIndex %}Demos{% else %}demo{% endif %}</a>
+  {% elsif hasReactDemo and reactDemoUrl %}
+    | <a href="{{ reactDemoUrl }}">React {% if isIndex %}Demos{% else %}demo{% endif %}</a>
   {% endif %}
 </nav>

@@ -224,7 +224,6 @@ interface TemplateContext {
   isReactDemo: boolean;
   content?: string;
   scriptSrc?: string;
-  includeReactDemoCSS: boolean;
   // Lit demo specific
   hasReactDemo?: boolean;
   reactDemoUrl?: string;
@@ -239,20 +238,21 @@ interface TemplateContext {
  */
 interface RenderTemplateOptions {
   componentName: string;
+  componentTitle?: string;
   demoName?: string;
   isIndex?: boolean;
   isReactDemo?: boolean;
   content?: string;
   scriptSrc?: string;
   demos?: DemoInfo[];
-  includeReactDemoCSS?: boolean;
+  hasReactDemos?: boolean;
 }
 
 /**
  * Renders a template with the given context
  */
 async function renderTemplate(
-  templateName: 'demo.html' | 'test.html' | 'react-not-built.html',
+  templateName: 'demo.html' | 'test.html' | 'react-not-built.html' | 'demos.html',
   options: RenderTemplateOptions
 ): Promise<string> {
   const { componentName, demoName = 'index', isIndex = false, isReactDemo = false } = options;
@@ -281,9 +281,11 @@ async function renderTemplate(
     demoName,
     isIndex,
     isReactDemo,
-    includeReactDemoCSS: options.includeReactDemoCSS ?? false,
     ...(options.content !== undefined && { content: options.content }),
     ...(options.scriptSrc !== undefined && { scriptSrc: options.scriptSrc }),
+    ...(options.componentTitle !== undefined && { componentTitle: options.componentTitle }),
+    ...(options.demos !== undefined && { demos: options.demos }),
+    ...(options.hasReactDemos !== undefined && { hasReactDemos: options.hasReactDemos }),
   };
 
   // Add demo-specific context for Lit demos
@@ -291,17 +293,13 @@ async function renderTemplate(
     const hasReact = await hasReactDemos(componentName);
     context.hasReactDemo = hasReact;
     
-    // Link to corresponding React demo if it exists, otherwise link to React index
-    if (hasReact) {
-      if (isIndex) {
-        context.reactDemoUrl = `/elements/${componentName}/react`;
-      } else {
-        // Check if this specific demo exists in React
-        const reactDemoExistsForThis = await reactDemoExists(componentName, demoName);
-        context.reactDemoUrl = reactDemoExistsForThis
-          ? `/elements/${componentName}/react/${demoName}`
-          : `/elements/${componentName}/react`;
-      }
+    // Link to corresponding React demo if it exists (but not for index pages)
+    if (hasReact && !isIndex) {
+      // Check if this specific demo exists in React
+      const reactDemoExistsForThis = await reactDemoExists(componentName, demoName);
+      context.reactDemoUrl = reactDemoExistsForThis
+        ? `/elements/${componentName}/react/${demoName}`
+        : `/elements/${componentName}/react`;
     } else {
       context.reactDemoUrl = '';
     }
@@ -318,17 +316,12 @@ async function renderTemplate(
     context.demos = options.demos;
   }
 
-  // Add web component demo URL for React demos
+  // Add web component demo URL for React demos (but not index pages)
   if (isReactDemo && !isIndex) {
     const hasLitDemo = await litDemoExists(componentName, demoName);
     context.webComponentDemoUrl = hasLitDemo
       ? `/elements/${componentName}/demo/${demoName}`
       : `/elements/${componentName}/demo`;
-  }
-
-  // Add web component demo URL for React index
-  if (isReactDemo && isIndex) {
-    context.webComponentDemoUrl = `/elements/${componentName}/demo`;
   }
 
   return liquid.renderFile(templateName, context);
@@ -400,13 +393,21 @@ export function routerPlugin(): Plugin {
           return;
         }
 
+        // Format component title
+        const componentTitle = componentName
+          .replace('pfv6-', '')
+          .split('-')
+          .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(' ');
+
         ctx.type = 'html';
-        ctx.body = await renderTemplate('demo.html', {
+        ctx.body = await renderTemplate('demos.html', {
           componentName,
-          isIndex: true,
-          isReactDemo: true,
+          componentTitle: `${componentTitle} (React)`,
           demos,
-          includeReactDemoCSS: true,
+          hasReactDemos: false, // Don't show "View React Demos" link on React index
+          isReactDemo: true,
+          isIndex: true,
         });
       });
 
@@ -465,28 +466,34 @@ export function routerPlugin(): Plugin {
           return;
         }
 
-        const filePath = join(process.cwd(), 'elements', componentName, 'demo', 'index.html');
-        let content = await readFileOrNull(filePath);
+        // Dynamically generate demo index page
+        const demos = await getComponentDemos(componentName);
         
-        if (!content) {
+        if (demos.length === 0) {
           ctx.status = 404;
-          ctx.body = 'Demo index not found';
+          ctx.body = 'No demos found for this component';
           return;
         }
         
-        // Process inline Liquid templates in demo content
-        if (content.includes('{% for demo in demos %}')) {
-          const demos = await getComponentDemos(componentName);
-          const inlineLiquid = new Liquid();
-          content = await inlineLiquid.parseAndRender(content, { demos, demoCount: demos.length });
-        }
+        // Check if React demos exist
+        const manifest = await loadReactManifest();
+        const pascalComponentName = getPascalCaseComponentName(componentName);
+        const hasReactDemos = !!(manifest?.components[pascalComponentName]);
+        
+        // Format component title
+        const componentTitle = componentName
+          .replace('pfv6-', '')
+          .split('-')
+          .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(' ');
         
         ctx.type = 'html';
-        ctx.body = await renderTemplate('demo.html', {
+        ctx.body = await renderTemplate('demos.html', {
           componentName,
-          demoName: 'index',
+          componentTitle,
+          demos,
+          hasReactDemos,
           isIndex: true,
-          content: content as string, // Safe: we checked for null above
         });
       });
 

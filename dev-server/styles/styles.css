@@ -17,6 +17,23 @@ body {
   padding: 0;
 }
 
+/* Top navigation bar */
+nav {
+  padding: 1rem;
+  border-bottom: 1px solid var(--pf-t--global--border--color--default, #c7c7c7);
+  background-color: var(--pf-t--global--background--color--primary--default, #fff);
+}
+
+nav a {
+  color: var(--pf-t--global--color--brand--default, #06c);
+  text-decoration: none;
+  margin-right: 0.5rem;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
 main {
   max-width: 1200px;
   margin: 0 auto;
@@ -79,7 +96,7 @@ section {
 }
 
 #demo-comparison-table a {
-  color: var(--pf-t--global--color--link--default, #0066cc);
+  color: var(--pf-t--global--color--link--default, #06c);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -94,4 +111,59 @@ section {
 
 #demo-comparison-table a:visited {
   color: var(--pf-t--global--color--link--visited, #6753ac);
+}
+
+/* Demo index page styles */
+.demo-nav {
+  display: flex;
+  gap: 1rem;
+  margin-block: 2rem;
+  padding-block: 1rem;
+  border-block: 1px solid var(--pf-t--global--border--color--default, #d2d2d2);
+}
+
+.demo-nav a {
+  color: var(--pf-t--global--text--color--link--default, #06c);
+  text-decoration: none;
+}
+
+.demo-nav a:hover {
+  text-decoration: underline;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-block: 2rem;
+}
+
+@media (width <= 992px) {
+  .demo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (width <= 576px) {
+  .demo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.demo-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--pf-t--global--border--radius--small, 3px);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.badge-lit {
+  background-color: var(--pf-t--global--background--color--action--primary--default, #06c);
+  color: var(--pf-t--global--text--color--on-action--primary--default, #fff);
+}
+
+.badge-react {
+  background-color: var(--pf-t--global--background--color--status--info--default, #2b9af3);
+  color: var(--pf-t--global--text--color--on-status--info--default, #fff);
 }

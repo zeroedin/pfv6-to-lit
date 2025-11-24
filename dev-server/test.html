@@ -3,7 +3,7 @@
 {% block title %}{{ title }} - {% if isReactDemo %}React {% endif %}Visual Test{% endblock %}
 
 {% block styles %}
-  {% include 'partials/patternfly-styles.liquid' %}
+  <link rel="stylesheet" href="/dev-server/styles/patternfly/base.css">
   {% if isReactDemo %}
   <link rel="stylesheet" href="/patternfly-react/dist/patternfly.css">
   {% endif %}

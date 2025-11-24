@@ -13,20 +13,158 @@ Achieve **1:1 visual parity** between Lit web components and PatternFly React co
 
 ---
 
+## 🚨 STANDARDIZED VISUAL TEST PATTERN
+
+**ALWAYS use this exact pattern for all visual parity tests. This is mandatory for consistency across all components.**
+
+```typescript
+import { test, expect, Page } from '@playwright/test';
+import pixelmatch from 'pixelmatch';
+import { PNG } from 'pngjs';
+
+// Helper to wait for full page load including main thread idle
+async function waitForFullLoad(page: Page): Promise<void> {
+  await page.waitForLoadState('networkidle');
+  await page.evaluate(() => document.fonts.ready);
+  
+  // Wait for all images to load
+  await page.evaluate(() => {
+    const images = Array.from(document.images);
+    return Promise.all(
+      images.map(img => img.complete ? Promise.resolve() : 
+        new Promise(resolve => { img.onload = img.onerror = resolve; })
+      )
+    );
+  });
+  
+  // CRITICAL: Wait for main thread to be idle (with Safari fallback)
+  await page.evaluate(() => {
+    return new Promise<void>(resolve => {
+      if (typeof requestIdleCallback !== 'undefined') {
+        requestIdleCallback(() => resolve(), { timeout: 2000 });
+      } else {
+        // Fallback for Safari/WebKit
+        requestAnimationFrame(() => {
+          setTimeout(() => resolve(), 0);
+        });
+      }
+    });
+  });
+}
+
+const litDemos = ['demo1', 'demo2', 'demo3']; // Your component's demos
+
+test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
+  litDemos.forEach(demoName => {
+    test(`Parity: ${demoName} (Lit vs React)`, async ({ page, browser }) => {
+      // Set consistent viewport
+      await page.setViewportSize({ width: 1280, height: 720 });
+      
+      // Open SECOND page for React demo
+      const reactPage = await browser.newPage();
+      await reactPage.setViewportSize({ width: 1280, height: 720 });
+      
+      try {
+        // Load BOTH demos simultaneously
+        await reactPage.goto(`/elements/pfv6-{component}/react/test/${demoName}`);
+        await waitForFullLoad(reactPage);
+        
+        await page.goto(`/elements/pfv6-{component}/test/${demoName}`);
+        await waitForFullLoad(page);
+        
+        // Take FRESH screenshots (no baseline files)
+        const reactBuffer = await reactPage.screenshot({
+          fullPage: true,
+          animations: 'disabled'
+        });
+        
+        const litBuffer = await page.screenshot({
+          fullPage: true,
+          animations: 'disabled'
+        });
+        
+        // Decode and compare pixel-by-pixel
+        const reactPng = PNG.sync.read(reactBuffer);
+        const litPng = PNG.sync.read(litBuffer);
+        
+        expect(reactPng.width).toBe(litPng.width);
+        expect(reactPng.height).toBe(litPng.height);
+        
+        const diff = new PNG({ width: reactPng.width, height: reactPng.height });
+        
+        const numDiffPixels = pixelmatch(
+          reactPng.data,
+          litPng.data,
+          diff.data,
+          reactPng.width,
+          reactPng.height,
+          { threshold: 0 } // Pixel-perfect (zero tolerance)
+        );
+        
+        // Attach all 3 images to report
+        await test.info().attach('React (expected)', {
+          body: reactBuffer,
+          contentType: 'image/png'
+        });
+        
+        await test.info().attach('Lit (actual)', {
+          body: litBuffer,
+          contentType: 'image/png'
+        });
+        
+        await test.info().attach('Diff (red = different pixels)', {
+          body: PNG.sync.write(diff),
+          contentType: 'image/png'
+        });
+        
+        // Assert pixel-perfect match
+        expect(numDiffPixels).toBe(0);
+      } finally {
+        await reactPage.close();
+      }
+    });
+  });
+});
+```
+
+**Why This Approach is Mandatory:**
+
+✅ **Direct comparison** - No baseline files stored on disk  
+✅ **Fresh renders every run** - Compares live React vs live Lit  
+✅ **Two browser pages** - Both demos rendered simultaneously  
+✅ **Pixel-perfect matching** - `threshold: 0` for exact comparison  
+✅ **Visual diff report** - Red pixels show exact differences  
+✅ **Three attachments** - React (expected), Lit (actual), Diff  
+✅ **Consistent pattern** - All components use identical test structure
+
+**What NOT to Do:**
+
+❌ **Never** use `toMatchSnapshot()` - creates unnecessary snapshot files  
+❌ **Never** store baseline files on disk - compares stale data  
+❌ **Never** use single page navigation - creates timing issues  
+❌ **Never** use different patterns per component - breaks consistency  
+
+---
+
 ## 📋 Test Suite Overview
 
 ### 1. Visual Parity Tests ⭐ **CRITICAL**
-**File**: `tests/visual/card-visual-parity.spec.ts`  
+**Files**: `tests/visual/{component}/{component}-visual-parity.spec.ts`  
+**Example**: `tests/visual/card/card-visual-parity.spec.ts`  
 **Purpose**: Validate 1:1 visual matching between Lit and React  
 **Command**: `npm run e2e:parity`
 
+**🚨 ALWAYS USE THIS STANDARDIZED APPROACH**
+
+This is the **mandatory pattern** for all visual parity tests. Never use baseline files, never use `toMatchSnapshot()`, always use direct live comparison with `pixelmatch`.
+
 #### How It Works
-1. Opens **both** React and Lit test demos in the same test run
-2. Captures live screenshots of both frameworks simultaneously
+1. Opens **two browser pages simultaneously** (React and Lit in the same test run)
+2. Captures **live screenshots** of both frameworks at the same time (no stored baselines)
 3. Decodes PNG buffers into pixel arrays using `pngjs`
 4. Compares pixel-by-pixel using `pixelmatch` (threshold: 0 for exact matching)
 5. Generates diff image highlighting differences in red
-6. Attaches 3 images to report: React (expected), Lit (actual), Diff (red pixels)
+6. Attaches **3 images** to Playwright report: React (expected), Lit (actual), Diff (red pixels)
 7. Asserts `numDiffPixels === 0` for pixel-perfect match
 
 #### Test Coverage
@@ -77,13 +215,16 @@ Achieve **1:1 visual parity** between Lit web components and PatternFly React co
 
 ---
 
-### 3. React Consistency Test (Optional)
-**File**: `tests/visual/card-visual-react-baseline.spec.ts`  
-**Purpose**: Debugging tool to verify React demos render consistently  
-**Command**: `npm run e2e:react-baseline`
+### 3. React Consistency Test (Deprecated - Not Needed)
+**Status**: ⚠️ **No longer necessary with direct comparison approach**
 
-#### Use Case
-Validates that React demos themselves are stable across test runs. Useful when debugging unexpected test failures to isolate whether the issue is with Lit changes or React demo instability.
+With the standardized visual testing pattern, we compare live React vs live Lit in every test run. React baseline tests are no longer needed because:
+- ✅ Both frameworks render fresh on every test
+- ✅ Any React demo changes are immediately detected
+- ✅ No stale baseline files to maintain
+- ✅ Simpler, more reliable testing workflow
+
+**Note**: If you see `*-visual-react-baseline.spec.ts` files in the codebase, they can be deleted. All components should use only the parity test pattern.
 
 ---
 
@@ -260,18 +401,31 @@ When tests run, Playwright generates an HTML report with:
 **Note**: Unlike Playwright's built-in snapshot diff slider, pixelmatch provides a standalone diff image. Red pixels show exactly where React and Lit differ, making debugging straightforward.
 
 ### Test File Structure
+
+Tests are organized by component for scalability:
+
 ```
 tests/
   ├── visual/
-  │   ├── card-visual-parity.spec.ts              ← Primary test file
-  │   ├── card-visual-react-baseline.spec.ts      ← Optional debugging
-  │   └── card-visual-parity.spec.ts-snapshots/   ← Gitignored (Playwright default)
-  └── css-api/
-      ├── card-api.spec.ts                        ← CSS API tests
-      └── card-api.spec.ts-snapshots/             ← Gitignored
+  │   ├── card/
+  │   │   ├── card-visual-parity.spec.ts       ⭐ ONLY FILE NEEDED
+  │   │   └── card-visual-parity.spec.ts-snapshots/  (auto-generated, gitignored)
+  │   ├── checkbox/
+  │   │   ├── checkbox-visual-parity.spec.ts   ⭐ ONLY FILE NEEDED
+  │   │   └── checkbox-visual-parity.spec.ts-snapshots/  (auto-generated, gitignored)
+  │   └── README.md
+  ├── css-api/
+  │   ├── card-api.spec.ts
+  │   └── card-api.spec.ts-snapshots/  (auto-generated, gitignored)
+  └── diagnostics/
+      └── check-lit-console.spec.ts
 ```
 
-**Note**: Playwright auto-generates `*.spec.ts-snapshots/` directories. These are gitignored and not used for comparison—pixelmatch does all comparison in-memory.
+**Key Points:**
+- ⭐ **Each component needs ONLY ONE test file**: `{component}-visual-parity.spec.ts`
+- 🗑️ **No baseline test files needed** - direct comparison eliminates them
+- 📁 **Snapshot directories are auto-generated** by Playwright but not used for comparison
+- 🚫 **All `*-snapshots/` directories are gitignored** - pixelmatch does comparison in-memory
 
 ---
 
@@ -368,6 +522,10 @@ npm run e2e:parity
 
 # Run only React baseline (debugging)
 npm run e2e:react-baseline
+
+# Run specific component tests
+npx playwright test tests/visual/card/ --project=chromium
+npx playwright test tests/visual/checkbox/ --project=chromium
 
 # Run specific browser
 npx playwright test tests/visual/ --project=chromium
