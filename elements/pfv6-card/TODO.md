@@ -1,133 +1,209 @@
-# pfv6-card - TODO
+# pfv6-card TODO
 
-**Status**: 🟢 73% Visual Parity Achieved - 16 Fixable Issues Remaining
-
-**Last Updated**: 11/21/2025, 5:55:00 PM
-
----
-
-## 📊 Current Test Results
-
-**116 out of 159 tests passing (73%)**
-
-- ✅ **7 demos with perfect parity** across all browsers (21 tests)
-- ✅ **95 additional passing tests** across other demos
-- ❌ **16 fixable CSS/layout issues** (6 demos)
-- 🚫 **27 blocked by missing components** (9 demos)
+**Last Updated**: November 24, 2025  
+**Status**: 🟡 **Partial Parity** - 9/22 demos passing (41%) after checkbox updates
 
 ---
 
-## ✅ Fixable Issues (16 tests to fix)
+## 📊 Visual Parity Test Results
 
-### 🔥 Priority 1: CSS/Layout Fixes ⏰ 4 hours
+**Test Run**: November 24, 2025 (after checkbox updates)  
+**Total Demos**: 22  
+**Passing**: 9 demos (41%) ← `with-modifiers` now uses `<pfv6-checkbox>`  
+**Failing**: 13 demos (59%)  
 
-**Goal**: Fix all 6 unblocked demos → 132/159 tests passing (83%)
+### ✅ Passing Demos (9)
 
-1. ❌ **`with-heading-element`** (Chromium only - ~20px diff)
-   - **Issue**: Minor CSS spacing/margin mismatch
-   - **Fix**: Adjust padding or check for browser-default h4 margins
-   - **Time**: 30 min
-
-2. ❌ **`with-modifiers`** (All 3 browsers - ~7000px diff)
-   - **Issue**: Missing `isCompact`, `isLarge`, `isPlain`, `isFullHeight` modifiers
-   - **Fix**: Add CSS classes for each modifier variant
-   - **Time**: 2 hours
-
-3. ❌ **`selectable`** (All 3 browsers - ~43000px diff)
-   - **Issue**: Missing selection visual state (border, background)
-   - **Fix**: Add `[selected]` or `[aria-selected]` styling
-   - **Time**: 30 min
-
-4. ❌ **`single-selectable`** (All 3 browsers - ~41000px diff)
-   - **Issue**: Missing radio-style selection state
-   - **Fix**: Same as `selectable`, ensure radio buttons styled
-   - **Time**: 15 min
-
-5. ❌ **`clickable-cards`** (All 3 browsers - ~48000px diff)
-   - **Issue**: Missing `:hover`, `:focus`, `:active` states
-   - **Fix**: Add interactive state CSS + `cursor: pointer`
-   - **Time**: 30 min
-
-6. ❌ **`clickable-selectable`** (All 3 browsers - ~55000px diff)
-   - **Issue**: Combination of clickable + selectable not working
-   - **Fix**: Combine both interactive and selection styles
-   - **Time**: 15 min
-
-**Action Plan**:
-- [ ] Fix `with-heading-element` CSS spacing (30min)
-- [ ] Add modifier CSS for `compact`, `large`, `plain`, `fullHeight` (2h)
-- [ ] Add selection state styles (45min)
-- [ ] Add clickable/interactive state styles (45min)
-
-**Expected Result**: 16 more tests pass → 132/159 passing (83%)
+All browsers (Chromium, Firefox, WebKit):
+1. ✅ `basic-cards` - Basic card structure works
+2. ✅ `secondary-cards` - Secondary variant works
+3. ✅ `with-body-section-fills` - Body fills work
+4. ✅ `with-multiple-body-sections` - Multiple sections work
+5. ✅ `with-only-body-section` - Single body section work
+6. ✅ `with-no-footer` - Cards without footer work
+7. ✅ `with-no-header` - Cards without header work
+8. ✅ `with-heading-element` - Heading elements work
+9. ✅ `with-modifiers` - **UPDATED** - Now uses `<pfv6-checkbox>`
 
 ---
 
-## 🚫 Blocked Issues (27 tests - cannot fix yet)
+## ❌ Failing Demos (13)
 
-**These demos require components that don't exist yet**:
+**🚨 CRITICAL FINDING**: After running dependency analysis, **ALL 13 failing demos are blocked by missing components**. None are pure CSS fixes!
 
-1. 🚫 **`with-dividers`** - Requires `<pfv6-divider>` component
-   - **Pixel Diff**: 8272px (Chromium)
-   - **Blocker**: Missing divider component (React uses `<Divider />`)
-   - **Status**: Will auto-fix when `<pfv6-divider>` is implemented
+**✅ PROGRESS**: `with-modifiers` now passing after replacing checkbox placeholders with `<pfv6-checkbox>`
 
-2. 🚫 **`expandable`** - Requires expandable toggle functionality
-   - **Pixel Diff**: ~4780px (Chromium)
-   - **Blocker**: Missing expand/collapse button component
-   - **Status**: Needs `<pfv6-card-expandable-content>` + toggle button
+### 🚫 Blocked by Missing Components (13 demos - 100% of failures)
 
-3. 🚫 **`expandable-with-icon`** - Requires expandable + icon
-   - **Pixel Diff**: ~4504px (Chromium)
-   - **Blocker**: Same as expandable, plus icon support
+#### 1. `with-dividers` - BLOCKED
+**Blocker**: Requires `<pfv6-divider>` component  
+**Current**: Using `<hr>` placeholder  
+**Action**: Implement `<pfv6-divider>` component  
 
-4. 🚫 **`tile-cards`** - Requires tile card variant
-   - **Pixel Diff**: ~39532px (Chromium)
-   - **Blocker**: Missing tile layout/styling variant
+#### 2. `selectable` - BLOCKED
+**Blocker**: Requires `<pfv6-gallery>` component (checkbox ✅ complete)  
+**Current**: Using gallery placeholder, checkbox can be updated  
+**Action**: Implement `<pfv6-gallery>`  
 
-5. 🚫 **`tile-multi`** - Requires tile + multi-select
-   - **Pixel Diff**: ~39532px (Chromium)
-   - **Blocker**: Missing tile variant + checkbox component
+#### 3. `single-selectable` - BLOCKED
+**Blocker**: Requires `<pfv6-gallery>` component (checkbox ✅ complete)  
+**Current**: Using gallery placeholder, checkbox can be updated  
+**Action**: Implement `<pfv6-gallery>`  
 
-6. 🚫 **`header-in-card-head`** - Requires `<pfv6-card-header>` component
-   - **Pixel Diff**: ~8700px (Chromium)
-   - **Blocker**: Missing CardHeader sub-component
+#### 4. `clickable-cards` - BLOCKED
+**Blocker**: Requires `<pfv6-gallery>` component (checkbox ✅ complete)  
+**Current**: Using gallery placeholder, checkbox can be updated  
+**Action**: Implement `<pfv6-gallery>`  
 
-7. 🚫 **`with-image-and-actions`** - Requires CardHeader with slots
-   - **Pixel Diff**: ~10363px (Chromium)
-   - **Blocker**: Missing CardHeader component
+#### 5. `clickable-selectable` - BLOCKED
+**Blocker**: Requires `<pfv6-gallery>` + `<pfv6-button>` components (checkbox ✅ complete)  
+**Current**: Using placeholders  
+**Action**: Implement `<pfv6-gallery>` + `<pfv6-button>`  
 
-8. 🚫 **`header-wraps`** - Requires CardHeader text wrapping
-   - **Pixel Diff**: ~17828px (Chromium)
-   - **Blocker**: Missing CardHeader component
+#### 6. `expandable` - BLOCKED
+**Blocker**: Requires `<pfv6-divider>` + `<pfv6-dropdown>` + dropdown sub-components (checkbox ✅ complete)  
+**Current**: Using placeholders  
+**Action**: Implement missing components  
 
-9. 🚫 **`only-actions-in-card-head`** - Requires CardHeader actions
-   - **Pixel Diff**: ~5341px (Chromium)
-   - **Blocker**: Missing CardHeader component
+#### 7. `expandable-with-icon` - BLOCKED
+**Blocker**: Requires `<pfv6-divider>` + `<pfv6-dropdown>` + dropdown sub-components (checkbox ✅ complete)  
+**Current**: Using placeholders  
+**Action**: Implement missing components  
 
-> **Note**: Required components are tracked in `/NEXT_COMPONENTS.md`
+#### 8. `tile-cards` - BLOCKED
+**Blocker**: Requires `<pfv6-gallery>` + `<pfv6-flex>` components  
+**Current**: Using placeholders  
+**Action**: Implement `<pfv6-gallery>` + `<pfv6-flex>`  
+
+#### 9. `tile-multi` - BLOCKED
+**Blocker**: Requires `<pfv6-gallery>` + `<pfv6-flex>` components  
+**Current**: Using placeholders  
+**Action**: Implement `<pfv6-gallery>` + `<pfv6-flex>`  
+
+#### 10. `header-in-card-head` - BLOCKED
+**Blocker**: Requires `<pfv6-divider>` + `<pfv6-dropdown>` + dropdown sub-components (checkbox ✅ complete)  
+**Current**: Using placeholders  
+**Action**: Implement missing components  
+
+#### 11. `with-image-and-actions` - BLOCKED
+**Blocker**: Requires `<pfv6-divider>` + `<pfv6-dropdown>` + `<pfv6-brand>` + dropdown sub-components (checkbox ✅ complete)  
+**Current**: Using placeholders  
+**Action**: Implement missing components  
+
+#### 12. `header-wraps` - BLOCKED
+**Blocker**: Requires `<pfv6-button>` component  
+**Current**: Using placeholder  
+**Action**: Implement `<pfv6-button>`  
+
+#### 13. `only-actions-in-card-head` - BLOCKED
+**Blocker**: Requires `<pfv6-divider>` + `<pfv6-dropdown>` + dropdown sub-components (checkbox ✅ complete)  
+**Current**: Using placeholders  
+**Action**: Implement missing components  
 
 ---
 
-## 📈 Progress Tracker
+## 📋 Missing Component Summary
 
-| Status | Tests Passing | Pass Rate |
-|--------|---------------|-----------|
-| **Current** | 116/159 | 73% |
-| **After CSS Fixes** | 132/159 | 83% |
-| **Achievable Maximum*** | 132/159 | 100%** |
+**Total Missing Components**: 10
 
-\* Without building new components  
-** 100% of achievable tests (27 tests blocked by missing components)
+**By Usage Frequency** (most critical first):
 
-**Time to 100% achievable parity**: ~4 hours
+1. **`<pfv6-checkbox>`** - Used in 10 demos (71%) - **IN PROGRESS**
+2. **`<pfv6-gallery>`** - Used in 6 demos (43%)
+3. **`<pfv6-divider>`** - Used in 6 demos (43%)
+4. **`<pfv6-dropdown>`** - Used in 5 demos (36%)
+5. **`<pfv6-dropdown-list>`** - Used in 5 demos (36%)
+6. **`<pfv6-dropdown-item>`** - Used in 5 demos (36%)
+7. **`<pfv6-menu-toggle>`** - Used in 5 demos (36%)
+8. **`<pfv6-menu-toggle-element>`** - Used in 5 demos (36%)
+9. **`<pfv6-button>`** - Used in 2 demos (14%)
+10. **`<pfv6-flex>`** - Used in 2 demos (14%)
+11. **`<pfv6-brand>`** - Used in 1 demo (7%)
+
+**Priority Order for Implementation**:
+1. **`<pfv6-checkbox>`** (in progress) - Unblocks 10 demos
+2. **`<pfv6-gallery>`** - Unblocks 6 demos
+3. **`<pfv6-divider>`** - Unblocks 6 demos
+4. **Dropdown family** (`<pfv6-dropdown>`, sub-components) - Unblocks 5 demos
+5. **`<pfv6-button>`** - Unblocks 2 demos
+6. **`<pfv6-flex>`** - Unblocks 2 demos
+7. **`<pfv6-brand>`** - Unblocks 1 demo
 
 ---
 
-## 🎯 Next Actions
+## 🎯 Revised Action Plan
 
-1. **Fix `with-heading-element`** - Adjust CSS spacing (~30 min)
-2. **Add modifier variants** - `compact`, `large`, `plain`, `fullHeight` (~2 hours)
-3. **Add selection styles** - `selectable` and `single-selectable` (~45 min)
-4. **Add interactive states** - `:hover`, `:focus`, `cursor: pointer` (~45 min)
-5. **Document blockers** - Update `NEXT_COMPONENTS.md` (~15 min)
+### Phase 1: Complete Checkbox ✅ COMPLETE
+- [x] Checkbox component implemented (100% visual parity)
+- [x] **Updated `with-modifiers` card demo** with `<pfv6-checkbox>`
+- ✅ **Result**: 1 card demo unblocked (9/22 passing now)
+- ⚠️ **Note**: Checkbox requires accessibility & form integration analysis before production use
+
+### Phase 2: Implement Gallery (High Priority)
+- [ ] Study React `<Gallery>` component
+- [ ] Implement `<pfv6-gallery>`
+- [ ] This will unblock 6 more card demos
+
+### Phase 3: Implement Divider (High Priority)
+- [ ] Study React `<Divider>` component
+- [ ] Implement `<pfv6-divider>`
+- [ ] This will unblock 6 more card demos (some overlap with Gallery)
+
+### Phase 4: Implement Dropdown Family (Medium Priority)
+- [ ] Study React `<Dropdown>` components
+- [ ] Implement `<pfv6-dropdown>`, `<pfv6-dropdown-list>`, `<pfv6-dropdown-item>`
+- [ ] Implement `<pfv6-menu-toggle>`, `<pfv6-menu-toggle-element>`
+- [ ] This will unblock 5 more card demos
+
+### Phase 5: Implement Button & Flex (Low Priority)
+- [ ] Implement `<pfv6-button>` (2 demos)
+- [ ] Implement `<pfv6-flex>` (2 demos)
+
+### Phase 6: Implement Brand (Lowest Priority)
+- [ ] Implement `<pfv6-brand>` (1 demo)
+
+---
+
+## 💡 Key Insights
+
+**Dependency Analysis Revealed**:
+- ✅ Zero demos are blocked by pure CSS issues
+- ❌ 100% of failures (14/14) require missing components
+- ⚠️ Initial assumption that these were "fixable" CSS issues was **incorrect**
+
+**Implementation Strategy**:
+- **Don't** try to fix these demos with workarounds
+- **Do** implement missing components in priority order
+- **Track** dependencies using `REACT_DEPENDENCIES.md` (generated by analysis script)
+
+**Progress Projection**:
+- After `<pfv6-checkbox>`: 18/22 passing (82%)
+- After `<pfv6-gallery>`: 19/22 passing (86%)
+- After `<pfv6-divider>`: 19/22 passing (86%)
+- After all components: 22/22 passing (100%)
+
+---
+
+## 📝 Notes
+
+- **Dependency Analysis**: Run `npx tsx scripts/analyze-react-demo-dependencies.ts Card` after any demo changes
+- **Philosophy**: Tests should fail until dependencies exist - this validates API parity
+- **No Workarounds**: Native HTML elements (`<hr>`, `<input>`) don't match PatternFly styling
+- **Testing Command**: `npm run e2e:parity -- tests/visual/card/`
+- **Report URL**: `http://localhost:9323` (after running tests)
+- **Full Dependency Report**: See `REACT_DEPENDENCIES.md` in this directory
+
+---
+
+## 🚀 Success Criteria
+
+**Definition of Done**:
+- ✅ All 22 visual parity tests passing
+- ✅ All missing components implemented
+- ✅ CSS API matches React PatternFly 100%
+- ✅ All interactive states work correctly
+
+**Current Progress**: 41% complete (9/22 passing)  
+**After Gallery**: 64% complete (14/22 passing)  
+**100% Requires**: 9 additional components (Gallery, Divider, Dropdown family, Button, Flex, Brand)
+

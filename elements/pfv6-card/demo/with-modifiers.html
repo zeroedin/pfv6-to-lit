@@ -1,11 +1,10 @@
-<div>
-  <label><input type="checkbox" id="isCompact"> isCompact</label>
-  <label><input type="checkbox" id="isLarge"> isLarge</label>
-  <label><input type="checkbox" id="isFullHeight"> isFullHeight</label>
-  <label><input type="checkbox" id="isPlain"> isPlain</label>
+<div style="margin-bottom: 12px;">
+  <pfv6-checkbox id="isCompact">isCompact</pfv6-checkbox>
+  <pfv6-checkbox id="isLarge">isLarge</pfv6-checkbox>
+  <pfv6-checkbox id="isFullHeight">isFullHeight</pfv6-checkbox>
+  <pfv6-checkbox id="isPlain">isPlain</pfv6-checkbox>
 </div>
-
-<div style="height: 15rem; margin-top: 12px;">
+<div style="height: 15rem;">
   <pfv6-card id="modifiable-card">
     <pfv6-card-title>Title</pfv6-card-title>
     <pfv6-card-body>Body</pfv6-card-body>
@@ -15,19 +14,20 @@
 
 <script type="module">
   import '@pfv6/elements/pfv6-card/pfv6-card.js';
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
   
   const card = document.getElementById('modifiable-card');
   document.getElementById('isCompact').addEventListener('change', (e) => {
-    card.toggleAttribute('compact', e.target.checked);
+    card.toggleAttribute('compact', e.checked);
   });
   document.getElementById('isLarge').addEventListener('change', (e) => {
-    card.toggleAttribute('large', e.target.checked);
+    card.toggleAttribute('large', e.checked);
   });
   document.getElementById('isFullHeight').addEventListener('change', (e) => {
-    card.toggleAttribute('full-height', e.target.checked);
+    card.toggleAttribute('full-height', e.checked);
   });
   document.getElementById('isPlain').addEventListener('change', (e) => {
-    card.toggleAttribute('plain', e.target.checked);
+    card.toggleAttribute('plain', e.checked);
   });
 </script>
 
