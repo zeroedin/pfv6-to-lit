@@ -4,22 +4,33 @@
 
 ---
 
-## 🎯 How to Use This Document (For AI)
+## Common Commands (Run These Frequently)
 
-**First Time?** Read these sections in order:
-1. **Quick Reference for AI** (below) - Essential info
-2. **AI Assistant Guidelines** (bottom of document) - Critical behavioral guidance
-3. **Key Concepts & Domain Knowledge** - PatternFly expertise required
+```bash
+# Development
+npm run dev                    # Start dev server (web components only, fast)
+npm run dev:react             # Start dev server + React demo watch
+killall node                  # Kill hanging node processes before starting dev
 
-**When implementing a component?**
-1. **START HERE**: Read **Complete Workflow: Creating a New PatternFly Component** - Step-by-step mandatory process
-2. Read **React-to-LitElement API Translation** - Critical for understanding API parity
-3. Review **Architecture & Design Patterns**
-4. Check **Code Conventions** and **CSS Style Guidelines**
-5. Reference **Testing Strategy** for test patterns
-6. Use **Resources & References** to find PatternFly docs
+# Building
+npm run compile               # Compile TypeScript + CEM + React demos
+npm run compile:react-demos   # Compile React demos only
 
-**When stuck?** Check **Known Issues & Gotchas** and **Common Tasks**
+# Testing
+npm run test                  # Run unit tests
+npm run e2e                   # Run all E2E tests (visual + CSS API)
+npm run e2e:parity           # Run Lit vs React parity tests (THE CRITICAL TEST)
+npm run e2e:react-baseline   # Validate React baseline consistency (debugging)
+npm run rebuild:snapshots    # Regenerate React baseline screenshots
+
+# Linting
+npm run lint                  # Run all linters (ESLint + Stylelint)
+```
+
+**🚨 CRITICAL RULES:**
+- **ALWAYS** use `npm run dev` (never manual `tsc` commands) - Wireit handles all compilation
+- **ALWAYS** use `npm run e2e:parity` (never `npx playwright test` directly) - npm scripts ensure dev server is running
+- **ALWAYS** run `killall node` before starting dev server to prevent hanging processes
 
 ---
 
@@ -40,6 +51,17 @@
 - **Tokens**: Use semantic tokens with fallback values, never hardcode colors/spacing
 - **Shadow DOM CSS**: Use `#id` selectors (not BEM classes), `classMap()` (not `:host([attr])`), no unnecessary CSS custom properties
 - **Render Method**: Keep all HTML in `render()`, use ternaries for conditionals, don't break into subroutines
+
+---
+
+## Repository Etiquette
+
+- **Never commit without testing**: Run `npm run e2e:parity` before committing component changes
+- **Never modify React demos**: They are immutable - copied directly from PatternFly React GitHub
+- **Always use Wireit scripts**: Never manually run `tsc` or `npx playwright test`
+- **Git workflow**: Work in feature branches, never force push to main
+- **Component organization**: Visual tests in `tests/visual/{component}/`, keep organized by component
+- **Documentation**: Update `CLAUDE.md`, `TODO.md`, and `IMPLEMENTATION_PLAN.md` as you work
 
 ---
 
@@ -149,10 +171,7 @@ Note: React demos are stored separately in `/patternfly-react/Button/` (see stru
     base.liquid        - Master HTML layout with block system
   /partials/           - Reusable LiquidJS template fragments
     head-meta.liquid   - Common <head> tags and import map
-    patternfly-styles.liquid - PatternFly CSS links
-    demo-styles.liquid - Demo-specific CSS
     demo-nav.liquid    - Navigation for demo pages
-    demo-list.liquid   - Auto-generated demo listings
   /plugins/            - Custom dev server plugins (router, import maps, demo list)
   /assets/             - Static resources
     /patternfly/       - PatternFly assets (copied from node_modules)
@@ -172,8 +191,17 @@ Note: React demos are stored separately in `/patternfly-react/Button/` (see stru
   implementation-notes.md
 
 /tests/                - Test files and test utilities
+  /visual/             - Visual regression tests (organized by component)
+    /{element}/        - Component visual tests (e.g., card, checkbox)
+      {element}-visual-react-baseline.spec.ts       - React baseline screenshots
+      {element}-visual-react-baseline.spec.ts-snapshots/
+      {element}-visual-parity.spec.ts               - Lit vs React parity tests
+      {element}-visual-parity.spec.ts-snapshots/
+    README.md          - Visual testing documentation
+  /css-api/            - CSS variable API parity tests
+    {element}-api.spec.ts   - Component CSS variable tests
+  /diagnostics/        - Diagnostic tests (console errors, etc.)
   /pages/              - Page objects for E2E tests
-  *.spec.ts            - Test specifications
 
 /patternfly-react/     - React comparison demos (copied from PatternFly React GitHub)
   /Card/               - Card component React demos (PascalCase folder names)
@@ -215,55 +243,135 @@ Each component has a `/demo/` folder containing HTML demo files:
 ```
 /elements/pfv6-card/
   /demo/
-    index.html       - Primary demo (always present)
-    basic-cards.html - Demo files use kebab-case (matches URL routing)
+    basic.html       - Demo files use kebab-case (descriptor only, no component name suffix)
     with-body-section-fills.html - Additional demo pages
     selectable.html  - More demo variations
 ```
 
 **File Naming Convention**:
-- ✅ **DO** use kebab-case for Lit demo filenames: `basic-cards.html`, `with-body-section-fills.html`
-- ✅ **DO** match the kebab-case URL routing: `/elements/pfv6-card/demo/basic-cards`
-- ✅ **DO** convert React PascalCase names to kebab-case: `CardBasic.tsx` → `basic-cards.html`
+- ✅ **DO** use kebab-case for Lit demo filenames: `basic.html`, `with-body-section-fills.html`
+- ✅ **DO** match the kebab-case URL routing: `/elements/pfv6-card/demo/basic`
+- ✅ **DO** convert React PascalCase names to kebab-case (descriptor only): `CardBasic.tsx` → `basic.html`
 - ❌ **DON'T** use PascalCase for Lit demos: ~~`BasicCards.html`~~
 - ❌ **DON'T** use camelCase: ~~`basicCards.html`~~
+- ❌ **DON'T** add component name suffix: ~~`basic-cards.html`~~ (redundant!)
 
 **Demo File Format** (Minimal HTML fragments):
 ```html
-<h1>Component Name</h1>
-
-<section>
-  <h2>Demo Section Title</h2>
-  <pfv6-component>
-    Component markup here
-  </pfv6-component>
-</section>
+<pfv6-component>
+  Component markup here
+</pfv6-component>
 
 <script type="module">
   import '@pfv6/elements/pfv6-component/pfv6-component.js';
 </script>
+```
+
+**CRITICAL: React-to-Lit Demo Conversion Rules**
+
+When converting a PatternFly React demo to a LitElement demo, follow these steps:
+
+1. **Identify and Ignore React-Specific Syntax**:
+   - ❌ **Ignore `<Fragment> | <>` wrappers** - They're React-specific (JSX can't have multiple root elements). HTML doesn't need them.
+   - ❌ **Remove React imports, hooks, and type annotations** - `useState`, `useEffect`, type definitions, etc.
+   - ✅ **Convert React event handlers to vanilla JavaScript** - If the React demo has interactivity, convert it to work with LitElement components using standard DOM events
+
+2. **Component Conversion**:
+   - ✅ **Map React components to Lit components 1:1**:
+     - `<Card>` → `<pfv6-card>`
+     - `<CardTitle>` → `<pfv6-card-title>`
+     - `<CardBody>` → `<pfv6-card-body>`
+   - ✅ **Preserve component structure exactly** - Same nesting, same order
+   - ✅ **Preserve content (text) exactly** - All text content must match React demo character-for-character
+   - ✅ **Convert props to attributes**:
+     - React: `<Card isCompact>` → Lit: `<pfv6-card compact>`
+     - React: `<CardBody isFilled>` → Lit: `<pfv6-card-body filled>`
+
+3. **Handle Missing Components**:
+   - ✅ **Stub with HTML comments** - If a component doesn't exist yet:
+     ```html
+     <!-- TODO: Replace with <pfv6-divider> when available -->
+     <hr>
+     ```
+   - ❌ **DON'T apply CSS workarounds** - Use plain HTML stubs, document the blocker
+
+4. **Styling**:
+   - ❌ **NEVER add custom CSS** unless it exists in the React demo
+   - ❌ **NEVER add section headings** (`<h1>`, `<h2>`, etc.) - demos are pure component usage
+   - ❌ **NEVER add demo-specific styling** - PatternFly styles are loaded globally
+   - ✅ **Keep demos as minimal as possible** - Just the component markup and script tag
+
+5. **Interactivity** (Special Cases):
+   - ✅ **If React demo has state/event handlers, convert to vanilla JavaScript**:
+     - React `useState` → JavaScript variables or direct DOM manipulation
+     - React `onChange` handlers → `addEventListener('change', ...)`
+     - React `useEffect` → Direct function calls or event listeners
+   - ✅ **Preserve the demo's interactive behavior** - The Lit demo should function identically to React
+   - ❌ **DON'T add interactivity that doesn't exist in the React demo**
+
+**Example: Correct Conversion**
+
+React Demo:
+```tsx
+import { Card, CardTitle, CardBody } from '@patternfly/react-core';
+
+export const CardBasic: React.FunctionComponent = () => (
+  <Card>
+    <CardTitle>Title</CardTitle>
+    <CardBody>Body</CardBody>
+  </Card>
+);
+```
+
+Lit Demo (CORRECT):
+```html
+<pfv6-card>
+  <pfv6-card-title>Title</pfv6-card-title>
+  <pfv6-card-body>Body</pfv6-card-body>
+</pfv6-card>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-card/pfv6-card.js';
+</script>
+```
+
+Lit Demo (WRONG - too much):
+```html
+<h1>Card</h1>
+
+<section>
+  <h2>Basic card</h2>
+  <pfv6-card>
+    <pfv6-card-title>Title</pfv6-card-title>
+    <pfv6-card-body>Body</pfv6-card-body>
+  </pfv6-card>
+</section>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-card/pfv6-card.js';
+</script>
 
 <style>
-  /* Optional demo-specific styles */
-  pfv6-component {
+  pfv6-card {
     margin: 1rem;
   }
 </style>
 ```
 
 **Important Notes**:
-- ✅ **DO** keep demo files minimal - just component markup, imports, and demo styles
-- ✅ **DO** create multiple demo files to showcase different features/variants
-- ✅ **DO** use semantic section headings to organize demos
-- ❌ **DON'T** include full HTML boilerplate (head, body, etc.) - dev server wraps demos using `dev-server/index.html` as the template
-- ❌ **DON'T** duplicate PatternFly base styles - they're loaded globally
-- ❌ **DON'T** overcomplicate - follow the pattern from reference projects (RHDS, PatternFly Elements)
+- ✅ **DO** keep demo files minimal - just component markup and imports
+- ✅ **DO** mirror React demo structure exactly (1:1 component mapping)
+- ✅ **DO** ignore `<Fragment>, <>` wrappers completely - render multiple root elements naturally in HTML
+- ❌ **DON'T** include section headings, wrapper divs, or demo-specific styles
+- ❌ **DON'T** add CSS unless it exists in the React demo
+- ❌ **DON'T** overcomplicate - the goal is the simplest possible representation
+- ❌ **NEVER** create an `index.html` file in `demo/` directory - all demos should use descriptive kebab-case names matching their React counterparts
 
 **Dev Server Routing**:
 - Primary demo: `/elements/pfv6-card/demo/index`
 - Additional demos: `/elements/pfv6-card/demo/variants`
 - React comparison: `/elements/pfv6-card/react` (serves from `patternfly-react/Card/`)
-- Test routes (for visual regression): `/elements/pfv6-card/test/basic-cards`, `/elements/pfv6-card/react/test/basic-cards`
+- Test routes (for visual regression): `/elements/pfv6-card/test/basic`, `/elements/pfv6-card/react/test/basic`
 - Dev server automatically discovers and lists all demos on homepage via Custom Elements Manifest
 - Demo pages use LiquidJS template system: `dev-server/demo.html` wraps demo content with `layouts/base.liquid`
 
@@ -488,9 +596,22 @@ https://github.com/patternfly/patternfly-react/tree/main/packages/react-core/src
 4. **Create CSS files**:
    - `pfv6-{component}.css` - Shadow DOM styles
    - `pfv6-{component}-lightdom.css` - Only if needed for deeply nested slotted content
+   - **🚨 MANDATORY: Start EVERY CSS file with box-sizing reset**:
+     ```css
+     *,
+     *::before,
+     *::after {
+       box-sizing: border-box;
+     }
+     ```
    - Use PatternFly design tokens with fallbacks
    - **Expose PUBLIC API CSS variables on `:host`**
    - **Use PRIVATE variables (`--_`) internally that reference public ones**
+   - **🚨 MANDATORY: Validate against React CSS source (`node_modules/@patternfly/react-styles/css/components/{Component}/{component}.css`)**
+     - Verify all variable names match exactly
+     - Check calculations reference correct variables (not just tokens)
+     - Ensure nested fallbacks preserve API names
+     - Confirm all selectors are translated
 
 5. **Implement events**:
    - Extend `Event` class (NOT `CustomEvent`)
@@ -513,8 +634,8 @@ https://github.com/patternfly/patternfly-react/tree/main/packages/react-core/src
    - **Source files are gitignored** (only `demos.json` is tracked)
 
 2. **React demos are served via router**:
-   - URLs use kebab-case: `/elements/pfv6-card/react/basic-cards`
-   - Router reads `demos.json` to find `CardBasic.tsx`
+  - URLs use kebab-case: `/elements/pfv6-card/react/basic`
+  - Router reads `demos.json` to find `CardBasic.tsx`
    - Compiled JS at: `/patternfly-react/dist/Card/CardBasic.js`
    - Mounting handled by `demo.html` template
 
@@ -535,9 +656,9 @@ https://github.com/patternfly/patternfly-react/tree/main/packages/react-core/src
 
 1. **For each React demo, create corresponding Lit demo**:
    - React file: `patternfly-react/{Component}/CardBasic.tsx` (copied via `postinstall`)
-   - Lit file: `elements/pfv6-{component}/demo/basic-cards.html` (**kebab-case**)
-   - **Rule**: Convert React PascalCase filename to kebab-case for Lit demo
-   - Example: `CardBasic.tsx` → `basic-cards.html`
+   - Lit file: `elements/pfv6-{component}/demo/basic.html` (**kebab-case, descriptor only**)
+   - **Rule**: Convert React PascalCase filename to kebab-case (descriptor only, no component name suffix)
+   - Example: `CardBasic.tsx` → `basic.html`
    - Example: `CardWithBodySectionFills.tsx` → `with-body-section-fills.html`
 
 2. **Keep Lit demos minimal** (HTML fragments only):
@@ -589,37 +710,145 @@ https://github.com/patternfly/patternfly-react/tree/main/packages/react-core/src
 
 **This is the FINAL validation step. Tests reveal what needs fixing.**
 
-1. **Start dev server**:
+**🚨 CRITICAL: Standardized Visual Testing Approach**
+
+**ALWAYS use this exact pattern for visual parity tests:**
+
+```typescript
+import { test, expect, Page } from '@playwright/test';
+import pixelmatch from 'pixelmatch';
+import { PNG } from 'pngjs';
+
+// Helper to wait for full page load including main thread idle
+async function waitForFullLoad(page: Page): Promise<void> {
+  await page.waitForLoadState('networkidle');
+  await page.evaluate(() => document.fonts.ready);
+  
+  // Wait for all images to load
+  await page.evaluate(() => {
+    const images = Array.from(document.images);
+    return Promise.all(
+      images.map(img => img.complete ? Promise.resolve() : 
+        new Promise(resolve => { img.onload = img.onerror = resolve; })
+      )
+    );
+  });
+  
+  // Wait for main thread to be idle (with Safari fallback)
+  await page.evaluate(() => {
+    return new Promise<void>(resolve => {
+      if (typeof requestIdleCallback !== 'undefined') {
+        requestIdleCallback(() => resolve(), { timeout: 2000 });
+      } else {
+        // Fallback for Safari/WebKit
+        requestAnimationFrame(() => {
+          setTimeout(() => resolve(), 0);
+        });
+      }
+    });
+  });
+}
+
+test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
+  litDemos.forEach(demoName => {
+    test(`Parity: ${demoName} (Lit vs React)`, async ({ page, browser }) => {
+      // Set consistent viewport
+      await page.setViewportSize({ width: 1280, height: 720 });
+      
+      // Open SECOND page for React demo
+      const reactPage = await browser.newPage();
+      await reactPage.setViewportSize({ width: 1280, height: 720 });
+      
+      try {
+        // Load BOTH demos simultaneously
+        await reactPage.goto(`/elements/pfv6-{component}/react/test/${demoName}`);
+        await waitForFullLoad(reactPage);
+        
+        await page.goto(`/elements/pfv6-{component}/test/${demoName}`);
+        await waitForFullLoad(page);
+        
+        // Take FRESH screenshots (no baseline files)
+        const reactBuffer = await reactPage.screenshot({
+          fullPage: true,
+          animations: 'disabled'
+        });
+        
+        const litBuffer = await page.screenshot({
+          fullPage: true,
+          animations: 'disabled'
+        });
+        
+        // Decode and compare pixel-by-pixel
+        const reactPng = PNG.sync.read(reactBuffer);
+        const litPng = PNG.sync.read(litBuffer);
+        
+        expect(reactPng.width).toBe(litPng.width);
+        expect(reactPng.height).toBe(litPng.height);
+        
+        const diff = new PNG({ width: reactPng.width, height: reactPng.height });
+        
+        const numDiffPixels = pixelmatch(
+          reactPng.data,
+          litPng.data,
+          diff.data,
+          reactPng.width,
+          reactPng.height,
+          { threshold: 0 } // Pixel-perfect (zero tolerance)
+        );
+        
+        // Attach all 3 images to report
+        await test.info().attach('React (expected)', {
+          body: reactBuffer,
+          contentType: 'image/png'
+        });
+        
+        await test.info().attach('Lit (actual)', {
+          body: litBuffer,
+          contentType: 'image/png'
+        });
+        
+        await test.info().attach('Diff (red = different pixels)', {
+          body: PNG.sync.write(diff),
+          contentType: 'image/png'
+        });
+        
+        // Assert pixel-perfect match
+        expect(numDiffPixels).toBe(0);
+      } finally {
+        await reactPage.close();
+      }
+    });
+  });
+});
+```
+
+**Why This Approach:**
+
+✅ **Direct comparison** - No baseline files stored on disk  
+✅ **Fresh renders every run** - Compares live React vs live Lit  
+✅ **Two browser pages** - Both demos rendered simultaneously  
+✅ **Pixel-perfect matching** - `threshold: 0` for exact comparison  
+✅ **Visual diff report** - Red pixels show exact differences  
+✅ **Three attachments** - React (expected), Lit (actual), Diff  
+
+**Testing Workflow:**
+
+1. **Start dev server** (if not already running):
    ```bash
    killall node
    npm run dev &
    sleep 10
    ```
 
-2. **Generate React baseline snapshots**:
+2. **Run parity tests** (THE CRITICAL TEST):
    ```bash
-   npm run rebuild:snapshots
+   npm run e2e:parity -- tests/visual/{component}/
    ```
-   - Creates screenshots of React demos (source of truth)
-   - Stored in `*-snapshots/` folders (gitignored)
-   - Tests run across multiple browsers (Chromium, Firefox, WebKit)
-
-3. **Validate React baseline stability** (optional check):
-   ```bash
-   npm run e2e:react-baseline
-   ```
-   - Ensures React demos render consistently
-   - Helps identify if React demos changed unexpectedly
-
-4. **Run parity tests** (THE CRITICAL TEST):
-   ```bash
-   npm run e2e:parity
-   ```
-   - Compares your Lit demos against React baselines
+   - Compares Lit demos against React demos (live, not baseline)
    - Failures show EXACTLY what's visually different
    - This is the **only test that matters** for Lit component validation
 
-5. **Analyze test failures and categorize**:
+3. **Analyze test failures and categorize**:
    - Review Playwright report: `npx playwright show-report`
    - Examine diff images for each failure
    - **CRITICAL**: Categorize failures into two groups:
@@ -629,13 +858,13 @@ https://github.com/patternfly/patternfly-react/tree/main/packages/react-core/src
    - **Document missing components** - Add to root `NEXT_COMPONENTS.md` for project-wide visibility
    - **Never apply workarounds** - If React uses `<Divider />`, we need `<pfv6-divider>`, not styled `<hr>`
 
-6. **Fix only unblocked issues**:
+4. **Fix only unblocked issues**:
    - Fix CSS, spacing, tokens, or component logic in Lit component
-   - Re-run: `npm run e2e:parity`
+   - Re-run: `npm run e2e:parity -- tests/visual/{component}/`
    - Repeat until all **unblocked** tests pass
    - **Leave blocked tests failing** - They will auto-fix when dependencies are implemented
 
-7. **Goal: 100% Achievable Parity**: All parity tests that don't require missing components must pass.
+5. **Goal: 100% Achievable Parity**: All parity tests that don't require missing components must pass.
    - **Expected**: Some tests will fail due to missing components (e.g., `<pfv6-divider>`, `<pfv6-checkbox>`)
    - **This is correct behavior** - Tests validate our API matches React's API
    - **Document all blockers**:
@@ -809,7 +1038,7 @@ When implementing components:
   - Gitignored, generated by Vite
   - Shared PatternFly chunks in `patternfly-react/dist/shared/`
 - **Manifest**: `patternfly-react/demos.json` - Maps kebab-case URLs to PascalCase filenames (tracked in git)
-- **URL**: `http://localhost:8000/elements/pfv6-card/react` (index), `http://localhost:8000/elements/pfv6-card/react/basic-cards` (specific demo)
+- **URL**: `http://localhost:8000/elements/pfv6-card/react` (index), `http://localhost:8000/elements/pfv6-card/react/basic` (specific demo)
 
 **Implementation Checklist**:
 - [ ] React demos copied automatically via `npm install` (postinstall)
@@ -923,6 +1152,476 @@ pfv6-card {
 }
 ```
 
+#### 🚨 CRITICAL: How to Translate React CSS to Shadow DOM
+
+**Source of Truth**: `node_modules/@patternfly/react-styles/css/components/{Component}/{component}.css`
+
+**NEVER make up CSS values**. ALWAYS translate directly from the React CSS file.
+
+**Translation Process**:
+
+1. **Locate the React CSS file**:
+   ```
+   node_modules/@patternfly/react-styles/css/components/Card/card.css
+   node_modules/@patternfly/react-styles/css/components/Check/check.css
+   etc.
+   ```
+
+2. **Copy the CSS variable declarations from the class**:
+   
+   React (Light DOM):
+   ```css
+   /* From card.css */
+   .pf-v6-c-card {
+     --pf-v6-c-card--BackgroundColor: var(--pf-t--global--background--color--primary--default);
+     --pf-v6-c-card--BorderColor: var(--pf-t--global--border--color--default);
+     --pf-v6-c-card--BorderRadius: var(--pf-t--global--border--radius--medium);
+   }
+   ```
+
+3. **Paste into `:host` block WITHOUT modifications** (Shadow DOM):
+   ```css
+   /* pfv6-card.css */
+   :host {
+     /* Public API - copied directly from card.css - DO NOT MODIFY */
+     --pf-v6-c-card--BackgroundColor: var(--pf-t--global--background--color--primary--default);
+     --pf-v6-c-card--BorderColor: var(--pf-t--global--border--color--default);
+     --pf-v6-c-card--BorderRadius: var(--pf-t--global--border--radius--medium);
+   }
+   ```
+   
+   **IMPORTANT**: Do NOT wrap these in `--_private` variables yet. Copy them **exactly as-is** from React CSS.
+
+4. **Translate class selectors to Shadow DOM selectors**:
+   
+   React (Light DOM):
+   ```css
+   .pf-v6-c-card {
+     display: grid;
+     gap: var(--pf-v6-c-card--GridGap);
+   }
+   
+   .pf-v6-c-card__title {
+     font-size: var(--pf-v6-c-card__title--FontSize);
+   }
+   ```
+   
+   LitElement (Shadow DOM) - **Use variables directly (no `--_private` wrapper)**:
+   ```css
+   #container {
+     display: grid;
+     gap: var(--pf-v6-c-card--GridGap);
+   }
+   
+   #title {
+     font-size: var(--pf-v6-c-card__title--FontSize);
+   }
+   ```
+   
+   **CRITICAL**: Reference the public API variables **directly** in your CSS. The variables are already defined on `:host`, so they pierce the Shadow DOM boundary and can be overridden from Light DOM. You do **NOT** need the two-layer `--_private` pattern for most PatternFly CSS translations.
+
+5. **🚨 CRITICAL: ALWAYS Add box-sizing Reset**:
+
+   **MANDATORY**: Every component CSS file MUST start with this reset:
+   
+   ```css
+   /* 
+    * CRITICAL: Shadow DOM box-sizing reset
+    * PatternFly base.css sets: *, *::before, *::after { box-sizing: border-box; }
+    * box-sizing is NOT inherited, so Shadow DOM elements default to content-box
+    * This causes layout differences vs React PatternFly
+    * MUST be included in EVERY component's CSS
+    */
+   *,
+   *::before,
+   *::after {
+     box-sizing: border-box;
+   }
+   ```
+   
+   **Why This Matters**:
+   - PatternFly React relies on `box-sizing: border-box` from base.css
+   - `box-sizing` is **NOT an inherited property**
+   - Shadow DOM elements default to `content-box` (browser default)
+   - This causes width/height calculations to differ between React and Lit
+   - Text reflow and layout will be incorrect without this reset
+   
+   **When to Add**:
+   - ✅ At the **top** of every component CSS file (before `:host`)
+   - ✅ For main components (e.g., `pfv6-card.css`)
+   - ✅ For sub-components (e.g., `pfv6-card-title.css`, `pfv6-card-body.css`)
+   - ✅ Even if the component seems simple
+
+6. **Key Translation Rules**:
+   - ✅ `.pf-v6-c-{component}` → `#container` (main wrapper)
+   - ✅ `.pf-v6-c-{component}__{element}` → `#{element}` (sub-elements)
+   - ✅ `.pf-m-{modifier}` → CSS class with `classMap()` or host attribute
+   - ✅ Keep ALL CSS variable names **exactly** as they appear in React CSS
+   - ✅ Use same token references (don't substitute with hardcoded values)
+   - ❌ **NEVER** make up CSS variable names
+   - ❌ **NEVER** guess at token values
+
+7. **🚨 CRITICAL: ALWAYS Validate Against React CSS Source**:
+
+   **MANDATORY VALIDATION STEP** - After writing or modifying component CSS:
+
+   ```bash
+   # Open the React CSS file side-by-side with your Lit CSS
+   node_modules/@patternfly/react-styles/css/components/{Component}/{component}.css
+   ```
+
+   **Verify EVERY aspect**:
+   - ✅ **Variable names**: Do they match React exactly?
+   - ✅ **Variable values**: Do token references match?
+   - ✅ **Calculations**: Do `calc()` expressions reference the correct variables?
+   - ✅ **Selectors**: Are all React selectors translated?
+   - ✅ **Properties**: Are all CSS properties preserved?
+   - ✅ **Order**: Are selectors in logical order (no specificity issues)?
+
+   **Special attention for calculations**:
+   
+   When React CSS has calculations that reference other CSS variables:
+   ```css
+   /* React (check.css line 15) */
+   --pf-v6-c-check__input--TranslateY: calc(
+     (var(--pf-v6-c-check__label--LineHeight) * var(--pf-v6-c-check__label--FontSize) / 2) - 50%
+   );
+   ```
+
+   **❌ DON'T** substitute with token values directly:
+   ```css
+   /* WRONG - loses API parity! */
+   calc((var(--pf-t--global--font--line-height--body) * var(--pf-t--global--font--size--body--default) / 2) - 50%)
+   ```
+
+   **✅ DO** preserve variable references with nested fallbacks:
+   ```css
+   /* CORRECT - maintains API parity */
+   calc(
+     (
+       var(--pf-v6-c-check__label--LineHeight, var(--pf-t--global--font--line-height--body)) *
+       var(--pf-v6-c-check__label--FontSize, var(--pf-t--global--font--size--body--default)) / 2
+     ) - 50%
+   )
+   ```
+
+   **Why this matters**:
+   - Users can customize `--pf-v6-c-check__label--FontSize` and calculations update automatically
+   - Maintains 1:1 API parity with React PatternFly
+   - Ensures same customization patterns work across React and Lit
+
+   **Validation checklist** (after every CSS change):
+   - [ ] Opened React CSS file (`node_modules/@patternfly/react-styles/css/components/{Component}/{component}.css`)
+   - [ ] Compared variable names line-by-line
+   - [ ] Verified calculations reference correct variables
+   - [ ] Checked that nested fallbacks preserve API names
+   - [ ] Confirmed all selectors are translated
+   - [ ] Tested that computed styles match React in browser
+
+   **If you skip this validation, visual parity tests WILL fail.**
+
+7. **🚨 CRITICAL: Slotted Component Layout Integration**
+
+   **The Problem**: When web components are slotted into another component's layout, their internal Shadow DOM structure (e.g., `display: grid` with `grid-gap`) can add unwanted space, breaking visual parity with React.
+
+   **Core Issue**: React components are just divs that naturally participate in the parent's layout. Lit web components have their own Shadow DOM containers with their own layout properties (grid, flex, gaps, padding), which can interfere with the parent's layout expectations.
+
+   **Why This Happens**:
+   - **React**: Child components render as plain divs - no internal layout, participate naturally in parent's layout
+   - **Lit**: Child components have Shadow DOM with their own layout (e.g., `display: grid`, `grid-gap`) that adds structural height/width
+   - **Result**: Slotted Lit components can be taller/wider than React equivalents, even with identical content
+   
+   **Real Example: Nested Checkboxes**:
+   
+   React structure:
+   ```html
+   <div class="pf-v6-c-check">  <!-- Parent -->
+     <div class="pf-v6-c-check__body">  <!-- Body -->
+       <div class="pf-v6-c-check">  <!-- Child 1 - just a div, height: 21px -->
+         <input />
+         <label>Child 1</label>
+       </div>
+       <div class="pf-v6-c-check">  <!-- Child 2 - just a div, height: 21px -->
+         <input />
+         <label>Child 2</label>
+       </div>
+     </div>
+   </div>
+   ```
+   
+   Lit structure (BEFORE fix):
+   ```html
+   <pfv6-checkbox>  <!-- Parent -->
+     #shadow-root
+       <div id="body">
+         <pfv6-checkbox slot="body">  <!-- Child 1 :host - height: 29px! (8px extra) -->
+           #shadow-root
+             <div id="container" style="display: grid; gap: 8px">
+               <input />
+               <label>Child 1</label>
+             </div>
+         </pfv6-checkbox>
+         <pfv6-checkbox slot="body">  <!-- Child 2 :host - height: 29px! (8px extra) -->
+           #shadow-root
+             <div id="container" style="display: grid; gap: 8px">
+               <input />
+               <label>Child 2</label>
+             </div>
+         </pfv6-checkbox>
+       </div>
+   </pfv6-checkbox>
+   ```
+   
+   **Problem**: Child checkbox's `grid-gap: 8px` adds 8px to container height, even though there's only 1 row. React children (plain divs) have no gap, so they're exactly 21px tall.
+   
+   **The Solution**:
+   ```css
+   /* In parent component CSS - target slotted components */
+   ::slotted(pfv6-checkbox) {
+     display: block;  /* Ensure proper stacking */
+   
+     /* CRITICAL: Remove ROW gap, keep COLUMN gap for checkbox-to-label spacing */
+     /* IMPORTANT: Override PRIVATE variable (--_grid-gap), not public API */
+     --_grid-gap: 0 var(--pf-t--global--spacer--gap--text-to-element--default);
+   }
+   ```
+   
+   **General Pattern**:
+   ```css
+   /* Parent component CSS */
+   ::slotted(pfv6-some-component) {
+     /* Override child's internal PRIVATE variables (--_*) */
+     --_some-property: adjusted-value;
+   }
+   ```
+   
+   **CRITICAL: Override Private Variables, Not Public API**:
+   - ✅ **DO** override private variables (`--_*`) - these are implementation details
+   - ❌ **DON'T** override public API variables (`--pf-v6-c-*`) - these are for end users
+   - **Why**: Slotted component integration is an internal implementation concern
+   - Public API remains available for user customization
+   
+   ```css
+   /* BAD - Overrides public API variable */
+   ::slotted(pfv6-checkbox) {
+     --pf-v6-c-check--GridGap: 0;  /* ❌ Wrong layer! */
+   }
+   
+   /* GOOD - Overrides private implementation variable */
+   ::slotted(pfv6-checkbox) {
+     --_grid-gap: 0 var(--pf-t--global--spacer--gap--text-to-element--default);  /* ✅ Correct! */
+   }
+   ```
+   
+   **Important**: When overriding compound CSS properties like `grid-gap` (shorthand for `row-gap column-gap`), preserve the values you need:
+   ```css
+   /* BAD - Removes both row AND column gap */
+   --_grid-gap: 0;
+   
+   /* GOOD - Removes row gap, keeps column gap for spacing */
+   --_grid-gap: 0 var(--pf-t--global--spacer--gap--text-to-element--default);
+   ```
+   
+   **Why This Works**:
+   - Uses `::slotted()` selector to target only slotted instances
+   - Overrides CSS custom properties in child's Shadow DOM
+   - Preserves normal behavior for standalone components
+   - Matches React's expectation: child components participate in parent layout without adding their own spacing
+   
+   **When to Apply This**:
+   - ✅ Component slots in other web components (recursive nesting or composition)
+   - ✅ Slotted component uses `display: grid` or `display: flex` with gaps
+   - ✅ React expects child to participate naturally in parent's layout
+   - ✅ Visual tests show extra spacing around slotted components
+   - ✅ Browser DevTools shows slotted component `:host` is taller/wider than its content
+   
+   **Common Scenarios**:
+   1. **Recursive nesting**: `<pfv6-checkbox>` inside `<pfv6-checkbox>`
+   2. **List items**: `<pfv6-list-item>` inside `<pfv6-list>`
+   3. **Menu items**: `<pfv6-menu-item>` inside `<pfv6-menu>`
+   4. **Tree nodes**: `<pfv6-tree-node>` inside `<pfv6-tree-node>`
+   5. **Accordion items**: `<pfv6-accordion-item>` inside `<pfv6-accordion>`
+   6. **Any composition** where React uses plain divs and Lit uses web components
+   
+   **How to Detect This Issue**:
+   
+   1. **Visual inspection**: Slotted components appear more spaced out than React
+   
+   2. **Browser DevTools**: 
+      - Inspect parent component in React (highlight shows tight layout)
+      - Inspect parent component in Lit (highlight shows extra spacing)
+      - Compare highlighted grid/flex containers
+   
+   3. **Measure heights/widths**:
+   ```typescript
+   // In browser console or test
+   const slottedChild = document.querySelector('pfv6-component[slot="..."]');
+   const childRect = slottedChild.getBoundingClientRect();
+   const containerRect = slottedChild.shadowRoot.querySelector('#container').getBoundingClientRect();
+   
+   console.log('Child :host height:', childRect.height);
+   console.log('Child #container height:', containerRect.height);
+   
+   // If :host height > container height, there's extra space from layout properties
+   const extraSpace = childRect.height - containerRect.height;
+   console.log('Extra space:', extraSpace, 'px');
+   ```
+   
+   4. **Check CSS properties**:
+   ```typescript
+   const container = slottedChild.shadowRoot.querySelector('#container');
+   const computed = window.getComputedStyle(container);
+   console.log('display:', computed.display);  // grid, flex?
+   console.log('gap:', computed.gap);  // Non-zero gap?
+   console.log('padding:', computed.padding);  // Extra padding?
+   ```
+   
+   **Properties to Check for Overrides**:
+   - `--_grid-gap` / `--_gap` - Grid/flex gaps (use private variables!)
+   - `--_padding-*` - Internal padding (use private variables!)
+   - `--_margin-*` - Internal margins (use private variables!)
+   - Any **private** layout property (`--_*`) that adds structural space
+   - **NEVER** override public API variables (`--pf-v6-c-*`) for integration fixes
+   
+   **Important Notes**:
+   - ✅ **DO** override layout properties that add unwanted space
+   - ✅ **DO** test both standalone and slotted usage
+   - ✅ **DO** check React demos for composition patterns
+   - ❌ **DON'T** override properties that affect visual styling (colors, borders, fonts)
+   - ❌ **DON'T** assume all slotted components need overrides - only when React expects natural participation
+   
+   **Testing Checklist**:
+   - [ ] Measure component height/width in React vs Lit
+   - [ ] Highlight grid/flex containers in browser DevTools
+   - [ ] Check for extra space in `:host` wrapper
+   - [ ] Verify slotted components match React tightness
+   - [ ] Test both standalone and slotted usage
+
+**Complete Example**:
+
+React CSS (`check.css`):
+```css
+.pf-v6-c-check {
+  --pf-v6-c-check--GridGap: var(--pf-t--global--spacer--gap--group--vertical) var(--pf-t--global--spacer--gap--text-to-element--default);
+  --pf-v6-c-check__label--FontSize: var(--pf-t--global--font--size--body--default);
+  --pf-v6-c-check__label--LineHeight: var(--pf-t--global--font--line-height--body);
+}
+
+.pf-v6-c-check {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: var(--pf-v6-c-check--GridGap);
+}
+
+.pf-v6-c-check__label {
+  font-size: var(--pf-v6-c-check__label--FontSize);
+  line-height: var(--pf-v6-c-check__label--LineHeight);
+}
+```
+
+LitElement CSS (`pfv6-checkbox.css`):
+```css
+:host {
+  /* Public API - copied EXACTLY from check.css */
+  --pf-v6-c-check--GridGap: var(--pf-t--global--spacer--gap--group--vertical) var(--pf-t--global--spacer--gap--text-to-element--default);
+  --pf-v6-c-check__label--FontSize: var(--pf-t--global--font--size--body--default);
+  --pf-v6-c-check__label--LineHeight: var(--pf-t--global--font--line-height--body);
+}
+
+#container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: var(--pf-v6-c-check--GridGap);
+}
+
+#label {
+  font-size: var(--pf-v6-c-check__label--FontSize);
+  line-height: var(--pf-v6-c-check__label--LineHeight);
+}
+```
+
+**Why This Matters**:
+- ✅ Ensures 100% CSS API parity with React
+- ✅ Uses exact same token references
+- ✅ Computed styles will match pixel-perfect
+- ✅ Users can customize using identical CSS variable names
+- ❌ Making up values causes visual differences in parity tests
+
+#### 🚨 CRITICAL: Two-Layer Pattern is ALWAYS Required
+
+**For Shadow DOM components, ALWAYS use the two-layer CSS variable pattern.**
+
+**How it works**: Create private variables that reference the public API variable name (first argument) with the token fallback (second argument). This automatically exposes the public API without needing to define it separately.
+
+**Single-line format** (on `:host`):
+```css
+:host {
+  /* Private variables that reference public API with fallback (single line) */
+  --_grid-gap: var(--pf-v6-c-check--GridGap, var(--pf-t--global--spacer--gap--group--vertical) var(--pf-t--global--spacer--gap--text-to-element--default));
+  --_label-font-size: var(--pf-v6-c-check__label--FontSize, var(--pf-t--global--font--size--body--default));
+}
+```
+
+**This exposes the public API automatically**:
+- Users can override `--pf-v6-c-check--GridGap` from Light DOM
+- If not overridden, falls back to the token value
+- Component uses `--_grid-gap` internally
+
+**Use private variables in your CSS**:
+```css
+#container {
+  gap: var(--_grid-gap);
+}
+
+#label {
+  font-size: var(--_label-font-size);
+}
+```
+
+**Why Two Layers?**
+1. **Public API** (`--pf-v6-c-*`) - Exposed to users, can be overridden from Light DOM
+2. **Private variables** (`--_*`) - Internal implementation, provides fallback resilience
+
+**Complete Translation Example**:
+
+React CSS (`check.css`):
+```css
+.pf-v6-c-check {
+  --pf-v6-c-check--GridGap: var(--pf-t--global--spacer--gap--group--vertical) var(--pf-t--global--spacer--gap--text-to-element--default);
+}
+
+.pf-v6-c-check {
+  grid-gap: var(--pf-v6-c-check--GridGap);
+}
+```
+
+Lit CSS (`pfv6-checkbox.css`) - CORRECT two-layer pattern:
+```css
+:host {
+  /* Private variable references public API name with token fallback (single line) */
+  --_grid-gap: var(--pf-v6-c-check--GridGap, var(--pf-t--global--spacer--gap--group--vertical) var(--pf-t--global--spacer--gap--text-to-element--default));
+}
+
+#container {
+  /* Use private variable internally */
+  gap: var(--_grid-gap);
+}
+```
+
+**How users customize**:
+```css
+/* User's Light DOM CSS */
+pfv6-checkbox {
+  --pf-v6-c-check--GridGap: 1rem; /* Overrides the public API */
+}
+```
+
+**Benefits**:
+- ✅ Exposes PatternFly public API automatically (users can override `--pf-v6-c-check--GridGap`)
+- ✅ More resilient than React (maintains token defaults when variables are `unset`)
+- ✅ Single-line format is concise and maintainable
+- ✅ Clean separation between public API and internal implementation
+
 #### Shadow DOM vs Light DOM: No Difference for API
 
 **Key Insight**: Even though our components use Shadow DOM (encapsulated styles), CSS custom properties **pierce** the Shadow boundary.
@@ -958,23 +1657,34 @@ pfv6-card {
 When implementing a component:
 
 1. ✅ **Research PatternFly CSS variables**: Check [PatternFly component CSS variables docs](https://www.patternfly.org/components)
-2. ✅ **Expose identical variables**: Use the exact same variable names on `:host`
-3. ✅ **Document with JSDoc**: Use `@cssprop` tags for each public CSS variable
-4. ✅ **Use variables internally**: Reference them in your component's CSS
-5. ✅ **Provide fallback values**: Always include fallback values for tokens
-6. ✅ **Test customization**: Verify variables work the same as React version
+2. ✅ **Translate React CSS directly**: Copy CSS variables from `node_modules/@patternfly/react-styles/css/components/{Component}/{component}.css`
+3. ✅ **Use two-layer pattern**: Private variables reference public API names with token fallbacks (single line)
+4. ✅ **Document with JSDoc**: Use `@cssprop` tags for each public CSS variable
+5. ✅ **Use private variables internally**: Reference `--_` variables in your component's CSS
+6. ✅ **Test customization**: Verify users can override public API variables the same as React
 
 **Example from pfv6-card**:
 
 ```css
 :host {
-  /* Public API - Matches PatternFly React Card */
-  --pf-v6-c-card--BackgroundColor: var(--pf-t--global--background--color--primary--default);
-  --pf-v6-c-card--BoxShadow: var(--pf-t--global--box-shadow--md);
-  --pf-v6-c-card--first-child--PaddingBlockStart: var(--pf-t--global--space--md);
-  
-  /* Private variables (not part of public API) */
-  --_padding-inline: var(--pf-v6-c-card--child--PaddingInline);
+  /* Two-layer pattern: private variables reference public API with fallbacks */
+  --_background-color: var(--pf-v6-c-card--BackgroundColor, var(--pf-t--global--background--color--primary--default));
+  --_box-shadow: var(--pf-v6-c-card--BoxShadow, var(--pf-t--global--box-shadow--md));
+  --_first-child-padding: var(--pf-v6-c-card--first-child--PaddingBlockStart, var(--pf-t--global--spacer--lg));
+}
+
+#container {
+  /* Use private variables internally */
+  background-color: var(--_background-color);
+  box-shadow: var(--_box-shadow);
+}
+```
+
+**User customization** (from Light DOM):
+```css
+pfv6-card {
+  /* Override public API - automatically picked up by private variable */
+  --pf-v6-c-card--BackgroundColor: red;
 }
 ```
 
@@ -1869,6 +2579,20 @@ npm run test
 npm run e2e
 # - Uses Playwright
 # - Runs browser automation tests
+# - Includes visual parity and CSS API tests
+
+# Run only visual parity tests
+npm run e2e:parity
+# - THE CRITICAL TEST for component validation
+# - Compares Lit vs React pixel-by-pixel
+
+# Run only React baseline tests (debugging)
+npm run e2e:react-baseline
+# - Validates React demo consistency
+
+# Rebuild visual regression baselines
+npm run rebuild:snapshots
+# - Regenerates React baseline screenshots
 
 # Bootstrap a new component (planned)
 npm run new
@@ -1881,6 +2605,7 @@ npm run new
 - **Working on web components?** → `npm run dev` (fast, no React overhead)
 - **Working on React comparison demos?** → `npm run dev:react` (includes Vite watch)
 - **Building for production?** → `npm run compile` (builds everything)
+- **Running tests?** → `npm run e2e` or `npm run e2e:parity` (NEVER `npx playwright test` directly)
 
 ### Development Server
 
@@ -1889,6 +2614,32 @@ The dev server uses **Wireit** for task orchestration, which manages:
 - Development server with hot reload
 - Automatic plugin compilation
 - Dependency management between tasks
+
+**🚨 CRITICAL: Always Use Wireit Scripts**
+
+**NEVER manually compile TypeScript files.** Wireit handles all compilation automatically through `npm run dev`.
+
+❌ **DON'T** do this:
+```bash
+npx tsc dev-server/plugins/router.ts --outDir dev-server/plugins --module esnext --target ES2020 --moduleResolution bundler --esModuleInterop
+npm run dev
+```
+
+✅ **DO** this instead:
+```bash
+killall node 2>/dev/null || true
+npm run dev
+```
+
+**Why**: `npm run dev` automatically:
+1. Cleans compiled plugin files (`clean:plugins`)
+2. Starts `tsc --watch` which compiles ALL TypeScript (including plugins, scripts, elements)
+3. Automatically recompiles when files change
+4. Manages dependencies between compilation steps
+
+**AI Directive**: 
+- When making changes to ANY TypeScript file (components, plugins, scripts), just restart `npm run dev`. The Wireit task orchestration handles all compilation automatically. Manual `tsc` commands are unnecessary and bypass the project's build system.
+- When running tests, ALWAYS use `npm run e2e`, `npm run e2e:parity`, or other npm test scripts. NEVER run `npx playwright test` directly, as it may not ensure the dev server is running or configured correctly.
 
 **CDN Requirements**:
 - ✅ **ONLY use jsDelivr** for all CDN imports:
@@ -1955,6 +2706,80 @@ npm run lint:stylelint
 // GOOD
 @property({ type: Boolean, reflect: true }) open = false;
 ```
+
+#### ARIA Attributes & Accessibility
+
+**🚨 CRITICAL: Use ElementInternals for ARIA Attributes**
+
+Web components should **NEVER** implement `aria-*` attributes as direct properties. Instead, use the **ElementInternals specification** to properly expose ARIA semantics.
+
+- ✅ **DO** use `ElementInternals` API for ARIA attributes
+- ✅ **DO** attach internals in `constructor`
+- ✅ **DO** create user-facing properties that map to ARIA attributes
+- ✅ **DO** set ARIA properties on `this.internals` in lifecycle methods
+- ❌ **DON'T** create `@property()` for `aria-label`, `aria-describedby`, etc.
+- ❌ **DON'T** manually manage ARIA attributes on the host element
+
+**Property Naming Convention:**
+When React demos use `aria-*` attributes, create semantic property names:
+- React `aria-label` → LitElement property `accessible-label` → `this.internals.ariaLabel`
+- React `aria-describedby` → LitElement property `accessible-description` → `this.internals.ariaDescribedBy`
+- React `aria-labelledby` → LitElement property `accessible-label-id` → `this.internals.ariaLabelledBy`
+
+```typescript
+// GOOD - Using ElementInternals with user-facing property
+export class Pfv6Checkbox extends LitElement {
+  static formAssociated = true;
+  
+  /**
+   * Accessible label for the checkbox (use when no visible label)
+   */
+  @property({ type: String, attribute: 'accessible-label' })
+  accessibleLabel?: string;
+  
+  private internals: ElementInternals;
+  
+  constructor() {
+    super();
+    this.internals = this.attachInternals();
+  }
+  
+  updated(changed: PropertyChangedMap<this>) {
+    super.updated(changed);
+    
+    // Map user-facing property to ARIA via ElementInternals
+    if (changed.has('accessibleLabel')) {
+      this.internals.ariaLabel = this.accessibleLabel || null;
+    }
+  }
+}
+```
+
+**Usage:**
+```html
+<!-- User provides semantic property name -->
+<pfv6-checkbox accessible-label="Accept terms"></pfv6-checkbox>
+
+<!-- ElementInternals exposes to assistive technologies as aria-label -->
+```
+
+```typescript
+// BAD - Direct ARIA attribute as property
+export class Pfv6Checkbox extends LitElement {
+  @property({ type: String, attribute: 'aria-label' })
+  ariaLabel?: string;  // ❌ Wrong approach - bypasses ElementInternals
+}
+```
+
+**Why ElementInternals?**
+- ✅ Follows web component standards
+- ✅ Properly exposes ARIA to assistive technologies
+- ✅ Integrates with Shadow DOM correctly
+- ✅ Provides form association capabilities
+- ✅ Future-proof for platform evolution
+- ✅ Semantic property names improve developer experience
+
+**Reference**: [MDN ElementInternals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals)
 
 #### Events
 - ✅ **DO** extend `Event` class (not `CustomEvent`)

@@ -67,9 +67,10 @@ async function getPackageVersion(packageName: string): Promise<string> {
 /**
  * Convert PascalCase to kebab-case for URL routing
  * Examples:
- * - CardBasic → basic-cards (special case: add "cards" suffix)
+ * - CardBasic → basic
  * - CardExpandableWithIcon → expandable-with-icon
- * - ButtonPrimary → primary
+ * - CheckboxDisabled → disabled
+ * - CheckboxWithDescriptionBody → with-description-body
  */
 function toKebabCase(pascalCase: string, componentName: string): string {
   // Remove component prefix (e.g., "Card" from "CardBasic")
@@ -79,6 +80,7 @@ function toKebabCase(pascalCase: string, componentName: string): string {
   }
   
   // If nothing left after removing prefix, use the component name in plural
+  // Example: "Card" component with "Card.tsx" demo → "cards"
   if (!withoutPrefix) {
     return `${componentName.toLowerCase()}s`;
   }
@@ -88,12 +90,6 @@ function toKebabCase(pascalCase: string, componentName: string): string {
     .replace(/([A-Z])/g, '-$1')
     .toLowerCase()
     .replace(/^-/, '');
-  
-  // Special case: if it's just a descriptor like "Basic", append component name
-  // "Basic" → "basic-cards"
-  if (!kebab.includes('-') && kebab.length < 10) {
-    return `${kebab}-${componentName.toLowerCase()}s`;
-  }
   
   return kebab;
 }

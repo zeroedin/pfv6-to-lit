@@ -1,0 +1,209 @@
+/**
+ * PatternFly Checkbox Styles
+ *
+ * Translated from PatternFly React check.css to Shadow DOM.
+ * Source: @patternfly/react-styles/css/components/Check/check.css
+ *
+ * Translation rules:
+ * - .pf-v6-c-check → #container (main wrapper)
+ * - .pf-v6-c-check__input → input[type="checkbox"]
+ * - .pf-v6-c-check__label → #label
+ * - .pf-v6-c-check__label-required → #required
+ * - .pf-v6-c-check__description → .description (wrapper div for description slot)
+ * - .pf-v6-c-check__body → #body (wrapper div for body slot)
+ * - .pf-m-standalone → #container.standalone (via classMap)
+ * - .pf-m-start → #container.start (via classMap)
+ */
+
+/*
+ * CRITICAL: Shadow DOM box-sizing reset
+ * PatternFly base.css sets: *, *::before, *::after { box-sizing: border-box; }
+ * box-sizing is NOT inherited, so Shadow DOM elements default to content-box
+ * This causes layout differences vs React PatternFly
+ * MUST be included in EVERY component's CSS
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /*
+   * Two-layer CSS variable pattern (from check.css lines 1-16)
+   * Private variables reference public API names with token fallbacks (single line format)
+   * This automatically exposes the PatternFly public API without redundant declarations
+   */
+  --_grid-gap:
+    var(
+      --pf-v6-c-check--GridGap,
+      var(--pf-t--global--spacer--gap--group--vertical) var(--pf-t--global--spacer--gap--text-to-element--default)
+    );
+  --_accent-color: var(--pf-v6-c-check--AccentColor, var(--pf-t--global--color--brand--default));
+  --_standalone-min-height:
+    var(
+      --pf-v6-c-check--m-standalone--MinHeight,
+      calc(
+        var(--pf-v6-c-check__label--FontSize, var(--pf-t--global--font--size--body--default)) *
+        var(--pf-v6-c-check__label--LineHeight, var(--pf-t--global--font--line-height--body))
+      )
+    );
+  --_label-disabled-color:
+    var(
+      --pf-v6-c-check__label--disabled--Color,
+      var(--pf-t--global--text--color--disabled)
+    );
+  --_label-color: var(--pf-v6-c-check__label--Color, var(--pf-t--global--text--color--regular));
+  --_label-font-weight:
+    var(
+      --pf-v6-c-check__label--FontWeight,
+      var(--pf-t--global--font--weight--body--default)
+    );
+  --_label-font-size:
+    var(
+      --pf-v6-c-check__label--FontSize,
+      var(--pf-t--global--font--size--body--default)
+    );
+  --_label-line-height:
+    var(
+      --pf-v6-c-check__label--LineHeight,
+      var(--pf-t--global--font--line-height--body)
+    );
+  --_description-font-size:
+    var(
+      --pf-v6-c-check__description--FontSize,
+      var(--pf-t--global--font--size--body--sm)
+    );
+  --_description-color:
+    var(
+      --pf-v6-c-check__description--Color,
+      var(--pf-t--global--text--color--subtle)
+    );
+  --_required-margin:
+    var(
+      --pf-v6-c-check__label-required--MarginInlineStart,
+      var(--pf-t--global--spacer--xs)
+    );
+  --_required-font-size:
+    var(
+      --pf-v6-c-check__label-required--FontSize,
+      var(--pf-t--global--font--size--body--sm)
+    );
+  --_required-color:
+    var(
+      --pf-v6-c-check__label-required--Color,
+      var(--pf-t--global--color--status--danger--default)
+    );
+  --_input-translate-y:
+    var(
+      --pf-v6-c-check__input--TranslateY,
+      calc(
+        (
+          var(--pf-v6-c-check__label--LineHeight, var(--pf-t--global--font--line-height--body)) *
+          var(--pf-v6-c-check__label--FontSize, var(--pf-t--global--font--size--body--default)) / 2
+        ) - 50%
+      )
+    );
+}
+
+:host([disabled]) {
+  cursor: not-allowed;
+}
+
+/* .pf-v6-c-check (check.css:18-23) */
+#container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--_grid-gap);
+  accent-color: var(--_accent-color);
+}
+
+/* .pf-v6-c-check__input (check.css:34-39, 58-61) */
+input[type="checkbox"] {
+  place-self: start; /* Combines align-self + justify-self from check.css:34-39 and check.css:58-61 */
+  margin: 0; /* CRITICAL: Reset browser default margin (browsers add ~3-4px by default) */
+  font-size: var(--_label-font-size);
+  line-height: var(--_label-line-height);
+  transform: translateY(var(--_input-translate-y));
+  cursor: pointer; /* From check.css:62-65 (combined rule with label) */
+}
+
+input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+}
+
+/* .pf-v6-c-check.pf-m-standalone (check.css:24-28) */
+#container.pf-m-standalone {
+  display: inline-grid;
+  grid-template-columns: auto;
+  min-block-size: var(--_standalone-min-height);
+}
+
+/* .pf-v6-c-check.pf-m-standalone .pf-v6-c-check__input (check.css:29-32) */
+#container.pf-m-standalone input[type="checkbox"] {
+  align-self: center;
+  transform: none;
+}
+
+/* .pf-v6-c-check__label (check.css:41-46) */
+#label {
+  justify-self: start; /* From check.css:58-61 (combined rule with input) */
+  font-size: var(--_label-font-size);
+  font-weight: var(--_label-font-weight);
+  line-height: var(--_label-line-height);
+  color: var(--_label-color);
+  cursor: pointer; /* From check.css:62-65 (combined rule with input) */
+}
+
+/* .pf-v6-c-check__description (check.css:48-52) */
+.description {
+  grid-column: 2;
+  font-size: var(--_description-font-size);
+  color: var(--_description-color);
+}
+
+/* .pf-v6-c-check__body (check.css:54-56) */
+#body {
+  grid-column: 2;
+
+  /* Note: No display property needed - div is already block-level by default */
+
+  /* slot[name="body"] inside keeps its default display: contents */
+}
+
+/* CRITICAL: Nested checkboxes in body slot must display as block
+ * React: Child .pf-v6-c-check elements are block-level by default
+ * Lit: Slotted <pfv6-checkbox> elements have :host { display: inline } by default
+ * Solution: Force slotted pfv6-checkbox to display: block so they stack vertically
+ *
+ * CRITICAL FIX: Remove ROW gap from nested checkboxes, keep COLUMN gap!
+ * - Child checkboxes have only 1 row (input + label side-by-side)
+ * - Row-gap adds vertical space even with single row
+ * - Column-gap is needed for spacing between checkbox input and label
+ * - React children don't have row-gap because they're just divs, not grids
+ * - This was causing 8px extra height per child checkbox
+ *
+ * IMPORTANT: Override the PRIVATE variable (--_grid-gap), not the public API
+ * - This is an implementation detail of how slotted components integrate
+ * - Public API (--pf-v6-c-check--GridGap) remains available for user overrides
+ * - Private variable is what the component actually uses internally
+ */
+::slotted(pfv6-checkbox) {
+  display: block;
+
+  /* Set row-gap to 0, keep column-gap for checkbox-to-label spacing */
+  --_grid-gap: 0 var(--pf-t--global--spacer--gap--text-to-element--default);
+}
+
+/* .pf-v6-c-check__label:disabled, .pf-v6-c-check__label.pf-m-disabled (check.css:67-72) */
+:host([disabled]) #label {
+  color: var(--_label-disabled-color);
+  cursor: not-allowed;
+}
+
+/* .pf-v6-c-check__label-required (check.css:74-78) */
+#required {
+  margin-inline-start: var(--_required-margin);
+  font-size: var(--_required-font-size);
+  color: var(--_required-color);
+}

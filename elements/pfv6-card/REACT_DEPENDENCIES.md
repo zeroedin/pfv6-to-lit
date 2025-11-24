@@ -1,6 +1,6 @@
 # React Demo Dependency Analysis: Card
 
-**Generated**: 2025-11-21T18:06:38.074Z
+**Generated**: 2025-11-21T22:23:18.672Z
 
 ---
 
@@ -8,18 +8,13 @@
 
 - **Total React Demos**: 22
 - **Total PatternFly Components Used**: 17
-- **Missing Components** (need to build): 11
+- **Missing Components** (need to build): 10
 
 ---
 
 ## 🚫 Missing Components
 
 **These components must be built before achieving 100% parity:**
-
-### `<pfv6-checkbox>`
-- **Used in**: 10 demos
-- **Demos**: `CardClickable`, `CardClickableSelectable`, `CardExpandable`, `CardExpandableWithIcon`, `CardHeaderInCardHead`, `CardOnlyActionsInCardHead`, `CardSelectable`, `CardSingleSelectable`, `CardWithImageAndActions`, `CardWithModifiers`
-- **React Component**: `<Checkbox>`
 
 ### `<pfv6-divider>`
 - **Used in**: 6 demos
@@ -83,7 +78,7 @@
 - ✅ `CardFooter` (used in 12 demos)
 - ✅ `CardHeader` (used in 12 demos)
 - ✅ `CardTitle` (used in 16 demos)
-- ❌ `Checkbox` (used in 10 demos)
+- ✅ `Checkbox` (used in 10 demos)
 - ❌ `Divider` (used in 6 demos)
 - ❌ `Dropdown` (used in 5 demos)
 - ❌ `DropdownItem` (used in 5 demos)
@@ -110,7 +105,7 @@
 - ✅ `CardHeader`
 - ✅ `CardTitle`
 - ✅ `CardBody`
-- ❌ `Checkbox` **(MISSING)**
+- ✅ `Checkbox`
 - ❌ `Gallery` **(MISSING)**
 
 ### `CardClickableSelectable`
@@ -120,7 +115,7 @@
 - ✅ `CardTitle`
 - ✅ `CardBody`
 - ❌ `Button` **(MISSING)**
-- ❌ `Checkbox` **(MISSING)**
+- ✅ `Checkbox`
 - ❌ `Gallery` **(MISSING)**
 
 ### `CardExpandable`
@@ -131,7 +126,7 @@
 - ✅ `CardBody`
 - ✅ `CardFooter`
 - ✅ `CardExpandableContent`
-- ❌ `Checkbox` **(MISSING)**
+- ✅ `Checkbox`
 - ❌ `Dropdown` **(MISSING)**
 - ❌ `DropdownList` **(MISSING)**
 - ❌ `DropdownItem` **(MISSING)**
@@ -146,7 +141,7 @@
 - ✅ `CardBody`
 - ✅ `CardFooter`
 - ✅ `CardExpandableContent`
-- ❌ `Checkbox` **(MISSING)**
+- ✅ `Checkbox`
 - ❌ `Dropdown` **(MISSING)**
 - ❌ `DropdownList` **(MISSING)**
 - ❌ `DropdownItem` **(MISSING)**
@@ -161,7 +156,7 @@
 - ✅ `CardTitle`
 - ✅ `CardBody`
 - ✅ `CardFooter`
-- ❌ `Checkbox` **(MISSING)**
+- ✅ `Checkbox`
 - ❌ `Dropdown` **(MISSING)**
 - ❌ `DropdownList` **(MISSING)**
 - ❌ `DropdownItem` **(MISSING)**
@@ -179,7 +174,7 @@
 
 ### `CardOnlyActionsInCardHead`
 
-- ❌ `Checkbox` **(MISSING)**
+- ✅ `Checkbox`
 - ✅ `Card`
 - ✅ `CardHeader`
 - ✅ `CardBody`
@@ -203,7 +198,7 @@
 - ✅ `CardHeader`
 - ✅ `CardTitle`
 - ✅ `CardBody`
-- ❌ `Checkbox` **(MISSING)**
+- ✅ `Checkbox`
 - ❌ `Gallery` **(MISSING)**
 
 ### `CardSingleSelectable`
@@ -213,7 +208,7 @@
 - ✅ `CardTitle`
 - ✅ `CardBody`
 - ❌ `Gallery` **(MISSING)**
-- ❌ `Checkbox` **(MISSING)**
+- ✅ `Checkbox`
 
 ### `CardTile`
 
@@ -261,7 +256,7 @@
 - ✅ `CardTitle`
 - ✅ `CardBody`
 - ✅ `CardFooter`
-- ❌ `Checkbox` **(MISSING)**
+- ✅ `Checkbox`
 - ❌ `Dropdown` **(MISSING)**
 - ❌ `DropdownList` **(MISSING)**
 - ❌ `DropdownItem` **(MISSING)**
@@ -275,7 +270,7 @@
 - ✅ `CardTitle`
 - ✅ `CardBody`
 - ✅ `CardFooter`
-- ❌ `Checkbox` **(MISSING)**
+- ✅ `Checkbox`
 
 ### `CardWithMultipleBodySections`
 

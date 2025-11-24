@@ -3,14 +3,11 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block styles %}
-  {% include 'partials/patternfly-styles.liquid' %}
+  <link rel="stylesheet" href="/dev-server/styles/patternfly/base.css">
   {% if isReactDemo %}
   <link rel="stylesheet" href="/patternfly-react/dist/patternfly.css">
   {% endif %}
-  {% include 'partials/demo-styles.liquid' %}
-  {% if includeReactDemoCSS %}
-  <link rel="stylesheet" href="/dev-server/styles/react-demo.css">
-  {% endif %}
+  <link rel="stylesheet" href="/dev-server/styles/styles.css">
 {% endblock %}
 
 {% block navigation %}

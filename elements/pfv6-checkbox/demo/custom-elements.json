@@ -7,7 +7,7 @@
       "declarations": [
         {
           "name": "Pfv6CardBody",
-          "description": "PatternFly Card Body Component\n\nA container for card body content. Can be used multiple times within a card\nto create multiple body sections with individual control over fill behavior.\n\n<figure>\n<figcaption>Basic usage</figcaption>\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>Body content</pfv6-card-body>\n<pfv6-card-footer>Footer</pfv6-card-footer>\n</pfv6-card>\n```\n</figure>\n\n<figure>\n<figcaption>Multiple body sections</figcaption>\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>First body section (fills)</pfv6-card-body>\n<pfv6-card-body filled=\"false\">Second body section (no fill)</pfv6-card-body>\n<pfv6-card-body>Third body section (fills)</pfv6-card-body>\n<pfv6-card-footer>Footer</pfv6-card-footer>\n</pfv6-card>\n```\n</figure>",
+          "description": "PatternFly Card Body Component\n\nA container for card body content. Can be used multiple times within a card\nto create multiple body sections with individual control over fill behavior.\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eBasic usage\u003c/figcaption\u003e\n\n```html\n\u003cpfv6-card\u003e\n\u003cpfv6-card-title\u003eCard Title\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eBody content\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-footer\u003eFooter\u003c/pfv6-card-footer\u003e\n\u003c/pfv6-card\u003e\n```\n\u003c/figure\u003e\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eMultiple body sections\u003c/figcaption\u003e\n\n```html\n\u003cpfv6-card\u003e\n\u003cpfv6-card-title\u003eCard Title\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eFirst body section (fills)\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-body filled=\"false\"\u003eSecond body section (no fill)\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-body\u003eThird body section (fills)\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-footer\u003eFooter\u003c/pfv6-card-footer\u003e\n\u003c/pfv6-card\u003e\n```\n\u003c/figure\u003e",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -131,7 +131,7 @@
       "declarations": [
         {
           "name": "Pfv6CardExpandableContent",
-          "description": "PatternFly Card Expandable Content Component\n\nA wrapper for expandable card content (body and footer sections).\nVisibility is controlled by the parent card's `expanded` state.\n\n```html\n<pfv6-card expandable>\n<pfv6-card-title>Title</pfv6-card-title>\n<pfv6-card-expandable-content>\n<pfv6-card-body>Body content</pfv6-card-body>\n<pfv6-card-footer>Footer content</pfv6-card-footer>\n</pfv6-card-expandable-content>\n</pfv6-card>\n```",
+          "description": "PatternFly Card Expandable Content Component\n\nA wrapper for expandable card content (body and footer sections).\nVisibility is controlled by the parent card's `expanded` state.\n\n```html\n\u003cpfv6-card expandable\u003e\n\u003cpfv6-card-title\u003eTitle\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-expandable-content\u003e\n\u003cpfv6-card-body\u003eBody content\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-footer\u003eFooter content\u003c/pfv6-card-footer\u003e\n\u003c/pfv6-card-expandable-content\u003e\n\u003c/pfv6-card\u003e\n```",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -172,7 +172,7 @@
       "declarations": [
         {
           "name": "Pfv6CardFooter",
-          "description": "PatternFly Card Footer Component\n\nA wrapper for card footer content.\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>Body content</pfv6-card-body>\n<pfv6-card-footer>Footer content</pfv6-card-footer>\n</pfv6-card>\n```",
+          "description": "PatternFly Card Footer Component\n\nA wrapper for card footer content.\n\n```html\n\u003cpfv6-card\u003e\n\u003cpfv6-card-title\u003eCard Title\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eBody content\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-footer\u003eFooter content\u003c/pfv6-card-footer\u003e\n\u003c/pfv6-card\u003e\n```",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -244,7 +244,7 @@
       "declarations": [
         {
           "name": "Pfv6CardTitle",
-          "description": "PatternFly Card Title Component\n\nA wrapper for card title content with optional semantic heading element.\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>Body content</pfv6-card-body>\n</pfv6-card>\n```\n\n<figure>\n<figcaption>With semantic heading</figcaption>\n\n```html\n<pfv6-card>\n<pfv6-card-title component=\"h4\">Card Title</pfv6-card-title>\n<pfv6-card-body>Body content</pfv6-card-body>\n</pfv6-card>\n```\n</figure>",
+          "description": "PatternFly Card Title Component\n\nA wrapper for card title content with optional semantic heading element.\n\n```html\n\u003cpfv6-card\u003e\n\u003cpfv6-card-title\u003eCard Title\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eBody content\u003c/pfv6-card-body\u003e\n\u003c/pfv6-card\u003e\n```\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eWith semantic heading\u003c/figcaption\u003e\n\n```html\n\u003cpfv6-card\u003e\n\u003cpfv6-card-title component=\"h4\"\u003eCard Title\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eBody content\u003c/pfv6-card-body\u003e\n\u003c/pfv6-card\u003e\n```\n\u003c/figure\u003e",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -368,7 +368,7 @@
       "declarations": [
         {
           "name": "Pfv6Card",
-          "description": "PatternFly Card Component\n\nA card is a content container that displays entry-level information—typically \nwithin dashboards, galleries, and catalogs.\n\nSupports all PatternFly v6 Card features including:\n- Size modifiers (compact, large)\n- Variants (default, secondary)\n- Interactive states (selectable, clickable, disabled)\n- Expandable content\n- Full height layout\n- Plain styling\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>Card body content goes here</pfv6-card-body>\n<pfv6-card-footer>Footer content</pfv6-card-footer>\n</pfv6-card>\n```\n\n<figure>\n<figcaption>Secondary variant</figcaption>\n\n```html\n<pfv6-card variant=\"secondary\">\n<pfv6-card-title>Secondary Card</pfv6-card-title>\n<pfv6-card-body>Card with secondary background color</pfv6-card-body>\n</pfv6-card>\n```\n</figure>\n\n<figure>\n<figcaption>Compact card</figcaption>\n\n```html\n<pfv6-card compact>\n<pfv6-card-title>Compact Card</pfv6-card-title>\n<pfv6-card-body>Card with compact spacing</pfv6-card-body>\n</pfv6-card>\n```\n</figure>\n\n<figure>\n<figcaption>Expandable card</figcaption>\n\n```html\n<pfv6-card expandable>\n<pfv6-card-title>Expandable Card</pfv6-card-title>\n<pfv6-card-expandable-content>\n<pfv6-card-body>Expandable body content</pfv6-card-body>\n<pfv6-card-footer>Footer content</pfv6-card-footer>\n</pfv6-card-expandable-content>\n</pfv6-card>\n```\n</figure>\n\n<figure>\n<figcaption>Customizing with CSS variables</figcaption>\n\n```css\npfv6-card {\n--pf-v6-c-card--BackgroundColor: #f0f0f0;\n--pf-v6-c-card--BorderColor: #06c;\n--pf-v6-c-card--BorderRadius: 8px;\n}\n```\n</figure>",
+          "description": "PatternFly Card Component\n\nA card is a content container that displays entry-level information—typically \nwithin dashboards, galleries, and catalogs.\n\nSupports all PatternFly v6 Card features including:\n- Size modifiers (compact, large)\n- Variants (default, secondary)\n- Interactive states (selectable, clickable, disabled)\n- Expandable content\n- Full height layout\n- Plain styling\n\n```html\n\u003cpfv6-card\u003e\n\u003cpfv6-card-title\u003eCard Title\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eCard body content goes here\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-footer\u003eFooter content\u003c/pfv6-card-footer\u003e\n\u003c/pfv6-card\u003e\n```\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eSecondary variant\u003c/figcaption\u003e\n\n```html\n\u003cpfv6-card variant=\"secondary\"\u003e\n\u003cpfv6-card-title\u003eSecondary Card\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eCard with secondary background color\u003c/pfv6-card-body\u003e\n\u003c/pfv6-card\u003e\n```\n\u003c/figure\u003e\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eCompact card\u003c/figcaption\u003e\n\n```html\n\u003cpfv6-card compact\u003e\n\u003cpfv6-card-title\u003eCompact Card\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eCard with compact spacing\u003c/pfv6-card-body\u003e\n\u003c/pfv6-card\u003e\n```\n\u003c/figure\u003e\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eExpandable card\u003c/figcaption\u003e\n\n```html\n\u003cpfv6-card expandable\u003e\n\u003cpfv6-card-title\u003eExpandable Card\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-expandable-content\u003e\n\u003cpfv6-card-body\u003eExpandable body content\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-footer\u003eFooter content\u003c/pfv6-card-footer\u003e\n\u003c/pfv6-card-expandable-content\u003e\n\u003c/pfv6-card\u003e\n```\n\u003c/figure\u003e\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eCustomizing with CSS variables\u003c/figcaption\u003e\n\n```css\npfv6-card {\n--pf-v6-c-card--BackgroundColor: #f0f0f0;\n--pf-v6-c-card--BorderColor: #06c;\n--pf-v6-c-card--BorderRadius: 8px;\n}\n```\n\u003c/figure\u003e",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -1039,63 +1039,6 @@
               "default": "var(--pf-t--global--text--color--on-disabled)"
             },
             {
-              "name": "--pf-v6-c-card__actions--PaddingInlineStart",
-              "default": "var(--pf-t--global--spacer--md)"
-            },
-            {
-              "name": "--pf-v6-c-card__actions--Gap",
-              "default": "var(--pf-t--global--spacer--gap--action-to-action--default)"
-            },
-            {
-              "name": "--pf-t--global--spacer--gap--action-to-action--default"
-            },
-            {
-              "name": "--pf-v6-c-card__actions--MarginBlockStart",
-              "default": "calc(var(--pf-t--global--spacer--control--vertical--default) * -1)"
-            },
-            {
-              "name": "--pf-v6-c-card__actions--MarginBlockEnd",
-              "default": "calc(var(--pf-t--global--spacer--control--vertical--default) * -1)"
-            },
-            {
-              "name": "--pf-v6-c-card__header--m-wrap--RowGap",
-              "default": "var(--pf-t--global--spacer--sm)"
-            },
-            {
-              "name": "--pf-v6-c-card__header--m-wrap--ColumnGap",
-              "default": "var(--pf-t--global--spacer--md)"
-            },
-            {
-              "name": "--pf-v6-c-card__header-toggle--MarginBlockStart",
-              "default": "calc(var(--pf-t--global--spacer--control--vertical--default) * -1)"
-            },
-            {
-              "name": "--pf-v6-c-card__header-toggle--MarginInlineEnd",
-              "default": "var(--pf-t--global--spacer--gap--text-to-element--default)"
-            },
-            {
-              "name": "--pf-v6-c-card__header-toggle--MarginBlockEnd",
-              "default": "calc(var(--pf-t--global--spacer--control--vertical--default) * -1)"
-            },
-            {
-              "name": "--pf-v6-c-card__header-toggle--MarginInlineStart",
-              "default": "calc(var(--pf-t--global--spacer--action--horizontal--plain--default) * -1)"
-            },
-            {
-              "name": "--pf-v6-c-card__header-toggle-icon--TransitionTimingFunction",
-              "default": "var(--pf-t--global--motion--timing-function--default)"
-            },
-            {
-              "name": "--pf-t--global--motion--timing-function--default"
-            },
-            {
-              "name": "--pf-v6-c-card__header-toggle-icon--TransitionDuration",
-              "default": "var(--pf-t--global--motion--duration--icon--default)"
-            },
-            {
-              "name": "--pf-t--global--motion--duration--icon--default"
-            },
-            {
               "name": "--pf-v6-c-card--m-expanded__header-toggle-icon--Rotate",
               "default": "90deg"
             },
@@ -1247,25 +1190,13 @@
               "default": "transparent"
             },
             {
-              "name": "--pf-v6-c-card__header--m-toggle-right--toggle--MarginInlineEnd",
-              "default": "calc(var(--pf-t--global--spacer--action--horizontal--plain--default) * -1)"
-            },
-            {
-              "name": "--pf-t--global--spacer--action--horizontal--plain--default"
-            },
-            {
-              "name": "--pf-v6-c-card__header--m-toggle-right--toggle--MarginInlineStart",
-              "default": "var(--pf-t--global--spacer--gap--text-to-element--default)"
-            },
-            {
-              "name": "--pf-v6-c-card--m-full-height--Height",
-              "default": "100%"
-            },
-            {
               "name": "--pf-t--global--spacer--gap--text-to-element--default"
             },
             {
               "name": "--pf-t--global--icon--size--font--md"
+            },
+            {
+              "name": "--pf-t--global--spacer--gap--action-to-action--default"
             },
             {
               "name": "--pf-v6-c-card--m-selectable--m-disabled__title-text--Color",
@@ -1390,119 +1321,7 @@
               "default": "#d2d2d2"
             }
           ],
-          "customElement": true,
-          "demos": [
-            {
-              "name": "with-only-body-section",
-              "url": "/elements/pfv6-card/demo/with-only-body-section",
-              "path": "elements/pfv6-card/demo/with-only-body-section.html"
-            },
-            {
-              "name": "with-no-header",
-              "url": "/elements/pfv6-card/demo/with-no-header",
-              "path": "elements/pfv6-card/demo/with-no-header.html"
-            },
-            {
-              "name": "with-no-footer",
-              "url": "/elements/pfv6-card/demo/with-no-footer",
-              "path": "elements/pfv6-card/demo/with-no-footer.html"
-            },
-            {
-              "name": "with-multiple-body-sections",
-              "url": "/elements/pfv6-card/demo/with-multiple-body-sections",
-              "path": "elements/pfv6-card/demo/with-multiple-body-sections.html"
-            },
-            {
-              "name": "with-modifiers",
-              "url": "/elements/pfv6-card/demo/with-modifiers",
-              "path": "elements/pfv6-card/demo/with-modifiers.html"
-            },
-            {
-              "name": "with-image-and-actions",
-              "url": "/elements/pfv6-card/demo/with-image-and-actions",
-              "path": "elements/pfv6-card/demo/with-image-and-actions.html"
-            },
-            {
-              "name": "with-heading-element",
-              "url": "/elements/pfv6-card/demo/with-heading-element",
-              "path": "elements/pfv6-card/demo/with-heading-element.html"
-            },
-            {
-              "name": "with-dividers",
-              "url": "/elements/pfv6-card/demo/with-dividers",
-              "path": "elements/pfv6-card/demo/with-dividers.html"
-            },
-            {
-              "name": "with-body-section-fills",
-              "url": "/elements/pfv6-card/demo/with-body-section-fills",
-              "path": "elements/pfv6-card/demo/with-body-section-fills.html"
-            },
-            {
-              "name": "tile",
-              "url": "/elements/pfv6-card/demo/tile",
-              "path": "elements/pfv6-card/demo/tile.html"
-            },
-            {
-              "name": "tile-multi",
-              "url": "/elements/pfv6-card/demo/tile-multi",
-              "path": "elements/pfv6-card/demo/tile-multi.html"
-            },
-            {
-              "name": "single-selectable",
-              "url": "/elements/pfv6-card/demo/single-selectable",
-              "path": "elements/pfv6-card/demo/single-selectable.html"
-            },
-            {
-              "name": "selectable",
-              "url": "/elements/pfv6-card/demo/selectable",
-              "path": "elements/pfv6-card/demo/selectable.html"
-            },
-            {
-              "name": "secondary",
-              "url": "/elements/pfv6-card/demo/secondary",
-              "path": "elements/pfv6-card/demo/secondary.html"
-            },
-            {
-              "name": "only-actions-in-card-head",
-              "url": "/elements/pfv6-card/demo/only-actions-in-card-head",
-              "path": "elements/pfv6-card/demo/only-actions-in-card-head.html"
-            },
-            {
-              "name": "header-wraps",
-              "url": "/elements/pfv6-card/demo/header-wraps",
-              "path": "elements/pfv6-card/demo/header-wraps.html"
-            },
-            {
-              "name": "header-in-card-head",
-              "url": "/elements/pfv6-card/demo/header-in-card-head",
-              "path": "elements/pfv6-card/demo/header-in-card-head.html"
-            },
-            {
-              "name": "expandable",
-              "url": "/elements/pfv6-card/demo/expandable",
-              "path": "elements/pfv6-card/demo/expandable.html"
-            },
-            {
-              "name": "expandable-with-icon",
-              "url": "/elements/pfv6-card/demo/expandable-with-icon",
-              "path": "elements/pfv6-card/demo/expandable-with-icon.html"
-            },
-            {
-              "name": "clickable",
-              "url": "/elements/pfv6-card/demo/clickable",
-              "path": "elements/pfv6-card/demo/clickable.html"
-            },
-            {
-              "name": "clickable-selectable",
-              "url": "/elements/pfv6-card/demo/clickable-selectable",
-              "path": "elements/pfv6-card/demo/clickable-selectable.html"
-            },
-            {
-              "name": "basic",
-              "url": "/elements/pfv6-card/demo/basic",
-              "path": "elements/pfv6-card/demo/basic.html"
-            }
-          ]
+          "customElement": true
         }
       ],
       "exports": [
@@ -1530,22 +1349,12 @@
       "declarations": [
         {
           "name": "Pfv6Checkbox",
-          "description": "PatternFly Checkbox Component\n\nA checkbox is used to select a single item or multiple items, typically to \nchoose elements to perform an action or to reflect a binary setting.\n\nSupports all PatternFly v6 Checkbox features including:\n- Checked/unchecked/indeterminate states\n- Required indicator\n- Disabled state\n- Validation states\n- Label positioning (before/after input)\n- Standalone mode (no visible label)\n- Description and body content\n- Form integration\n\n```html\n<!-- Basic checkbox -->\n<pfv6-checkbox id=\"check1\">Subscribe to newsletter</pfv6-checkbox>\n\n<!-- Checked by default -->\n<pfv6-checkbox id=\"check2\" checked>I agree to the terms</pfv6-checkbox>\n\n<!-- Disabled -->\n<pfv6-checkbox id=\"check3\" disabled>Disabled option</pfv6-checkbox>\n\n<!-- Required with indicator -->\n<pfv6-checkbox id=\"check4\" required>Required field</pfv6-checkbox>\n\n<!-- Indeterminate state -->\n<pfv6-checkbox id=\"check5\" .checked=${null}>Select all</pfv6-checkbox>\n\n<!-- With description -->\n<pfv6-checkbox id=\"check6\">\nEnable notifications\n<span slot=\"description\">You will receive email notifications</span>\n</pfv6-checkbox>\n\n<!-- Label before checkbox -->\n<pfv6-checkbox id=\"check7\" label-position=\"start\">Label first</pfv6-checkbox>\n\n<!-- Standalone (no visible label, use accessible-label) -->\n<pfv6-checkbox id=\"check8\" accessible-label=\"Select row\"></pfv6-checkbox>\n```",
+          "description": "PatternFly Checkbox Component\n\nA checkbox is used to select a single item or multiple items, typically to \nchoose elements to perform an action or to reflect a binary setting.\n\nSupports all PatternFly v6 Checkbox features including:\n- Checked/unchecked/indeterminate states\n- Required indicator\n- Disabled state\n- Validation states\n- Label positioning (before/after input)\n- Standalone mode (no visible label)\n- Description and body content\n- Form integration\n\n```html\n\u003c!-- Basic checkbox --\u003e\n\u003cpfv6-checkbox id=\"check1\"\u003eSubscribe to newsletter\u003c/pfv6-checkbox\u003e\n\n\u003c!-- Checked by default --\u003e\n\u003cpfv6-checkbox id=\"check2\" checked\u003eI agree to the terms\u003c/pfv6-checkbox\u003e\n\n\u003c!-- Disabled --\u003e\n\u003cpfv6-checkbox id=\"check3\" disabled\u003eDisabled option\u003c/pfv6-checkbox\u003e\n\n\u003c!-- Required with indicator --\u003e\n\u003cpfv6-checkbox id=\"check4\" required\u003eRequired field\u003c/pfv6-checkbox\u003e\n\n\u003c!-- Indeterminate state --\u003e\n\u003cpfv6-checkbox id=\"check5\" .checked=${null}\u003eSelect all\u003c/pfv6-checkbox\u003e\n\n\u003c!-- With description --\u003e\n\u003cpfv6-checkbox id=\"check6\"\u003e\nEnable notifications\n\u003cspan slot=\"description\"\u003eYou will receive email notifications\u003c/span\u003e\n\u003c/pfv6-checkbox\u003e\n\n\u003c!-- Label before checkbox --\u003e\n\u003cpfv6-checkbox id=\"check7\" label-position=\"start\"\u003eLabel first\u003c/pfv6-checkbox\u003e\n\n\u003c!-- Standalone (no visible label, use aria-label) --\u003e\n\u003cpfv6-checkbox id=\"check8\" aria-label=\"Select row\"\u003e\u003c/pfv6-checkbox\u003e\n```",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
           },
           "members": [
-            {
-              "name": "internals",
-              "description": "ElementInternals for form association and ARIA attributes",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "readonly": true,
-              "kind": "field",
-              "privacy": "private"
-            },
             {
               "name": "id",
               "description": "Unique identifier for the checkbox (required for accessibility)",
@@ -1602,21 +1411,20 @@
               "reflects": true
             },
             {
-              "name": "accessibleLabel",
-              "description": "Accessible label for the checkbox (use when no visible label)\nMaps to aria-label via ElementInternals",
+              "name": "ariaLabel",
+              "description": "Accessible label for the checkbox (use when no visible label)",
               "type": {
                 "text": "string"
               },
               "kind": "field",
-              "attribute": "accessible-label"
+              "attribute": "aria-label"
             },
             {
               "name": "name",
               "description": "Name attribute for form integration",
               "type": {
-                "text": "string | undefined"
+                "text": "string"
               },
-              "default": "undefined",
               "kind": "field",
               "attribute": "name",
               "reflects": true
@@ -1625,9 +1433,8 @@
               "name": "value",
               "description": "Value attribute for form integration",
               "type": {
-                "text": "string | undefined"
+                "text": "string"
               },
-              "default": "undefined",
               "kind": "field",
               "attribute": "value",
               "reflects": true
@@ -1710,29 +1517,27 @@
               "fieldName": "labelPosition"
             },
             {
-              "name": "accessible-label",
-              "description": "Accessible label for the checkbox (use when no visible label)\nMaps to aria-label via ElementInternals",
+              "name": "aria-label",
+              "description": "Accessible label for the checkbox (use when no visible label)",
               "type": {
                 "text": "string"
               },
-              "fieldName": "accessibleLabel"
+              "fieldName": "ariaLabel"
             },
             {
               "name": "name",
               "description": "Name attribute for form integration",
               "type": {
-                "text": "string | undefined"
+                "text": "string"
               },
-              "default": "undefined",
               "fieldName": "name"
             },
             {
               "name": "value",
               "description": "Value attribute for form integration",
               "type": {
-                "text": "string | undefined"
+                "text": "string"
               },
-              "default": "undefined",
               "fieldName": "value"
             }
           ],
@@ -1762,10 +1567,6 @@
               "description": "The native checkbox input element"
             },
             {
-              "name": "body",
-              "description": "The body element"
-            },
-            {
               "name": "container",
               "description": "The checkbox container element"
             },
@@ -1776,6 +1577,10 @@
             {
               "name": "description",
               "description": "The description element"
+            },
+            {
+              "name": "body",
+              "description": "The body element"
             }
           ],
           "cssProperties": [
@@ -1837,154 +1642,114 @@
             },
             {
               "name": "--pf-v6-c-check--GridGap",
-              "default": "var(--pf-t--global--spacer--gap--group--vertical) var(--pf-t--global--spacer--gap--text-to-element--default)"
+              "default": "var(--pf-t--global--spacer--gap--group--vertical, 0.5rem) var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem)"
             },
             {
-              "name": "--pf-t--global--spacer--gap--group--vertical"
+              "name": "--pf-t--global--spacer--gap--group--vertical",
+              "default": "0.5rem"
             },
             {
-              "name": "--pf-t--global--spacer--gap--text-to-element--default"
+              "name": "--pf-t--global--spacer--gap--text-to-element--default",
+              "default": "0.5rem"
             },
             {
               "name": "--pf-v6-c-check--AccentColor",
-              "default": "var(--pf-t--global--color--brand--default)"
+              "default": "var(--pf-t--global--color--brand--default, #0066cc)"
             },
             {
-              "name": "--pf-t--global--color--brand--default"
+              "name": "--pf-t--global--color--brand--default",
+              "default": "#0066cc"
             },
             {
               "name": "--pf-v6-c-check--m-standalone--MinHeight",
-              "default": "calc(\n        var(--pf-v6-c-check__label--FontSize, var(--pf-t--global--font--size--body--default)) *\n        var(--pf-v6-c-check__label--LineHeight, var(--pf-t--global--font--line-height--body))\n      )"
-            },
-            {
-              "name": "--pf-v6-c-check__label--disabled--Color",
-              "default": "var(--pf-t--global--text--color--disabled)"
-            },
-            {
-              "name": "--pf-t--global--text--color--disabled"
+              "default": "calc(var(--pf-t--global--font--size--body--default, 1rem) * var(--pf-t--global--font--line-height--body, 1.5))"
             },
             {
               "name": "--pf-v6-c-check__label--Color",
-              "default": "var(--pf-t--global--text--color--regular)"
+              "default": "var(--pf-t--global--text--color--regular, #151515)"
             },
             {
-              "name": "--pf-t--global--text--color--regular"
+              "name": "--pf-t--global--text--color--regular",
+              "default": "#151515"
+            },
+            {
+              "name": "--pf-v6-c-check__label--disabled--Color",
+              "default": "var(--pf-t--global--text--color--disabled, #6a6e73)"
+            },
+            {
+              "name": "--pf-t--global--text--color--disabled",
+              "default": "#6a6e73"
             },
             {
               "name": "--pf-v6-c-check__label--FontWeight",
-              "default": "var(--pf-t--global--font--weight--body--default)"
+              "default": "var(--pf-t--global--font--weight--body--default, 400)"
             },
             {
-              "name": "--pf-t--global--font--weight--body--default"
-            },
-            {
-              "name": "--pf-v6-c-check__description--FontSize",
-              "default": "var(--pf-t--global--font--size--body--sm)"
-            },
-            {
-              "name": "--pf-v6-c-check__description--Color",
-              "default": "var(--pf-t--global--text--color--subtle)"
-            },
-            {
-              "name": "--pf-t--global--text--color--subtle"
-            },
-            {
-              "name": "--pf-v6-c-check__label-required--MarginInlineStart",
-              "default": "var(--pf-t--global--spacer--xs)"
-            },
-            {
-              "name": "--pf-t--global--spacer--xs"
-            },
-            {
-              "name": "--pf-v6-c-check__label-required--FontSize",
-              "default": "var(--pf-t--global--font--size--body--sm)"
-            },
-            {
-              "name": "--pf-t--global--font--size--body--sm"
-            },
-            {
-              "name": "--pf-v6-c-check__label-required--Color",
-              "default": "var(--pf-t--global--color--status--danger--default)"
-            },
-            {
-              "name": "--pf-t--global--color--status--danger--default"
-            },
-            {
-              "name": "--pf-v6-c-check__input--TranslateY",
-              "default": "calc(\n        (\n          var(--pf-v6-c-check__label--LineHeight, var(--pf-t--global--font--line-height--body)) *\n          var(--pf-v6-c-check__label--FontSize, var(--pf-t--global--font--size--body--default)) / 2\n        ) - 50%\n      )"
-            },
-            {
-              "name": "--pf-v6-c-check__label--LineHeight",
-              "default": "var(--pf-t--global--font--line-height--body)"
-            },
-            {
-              "name": "--pf-t--global--font--line-height--body"
+              "name": "--pf-t--global--font--weight--body--default",
+              "default": "400"
             },
             {
               "name": "--pf-v6-c-check__label--FontSize",
-              "default": "var(--pf-t--global--font--size--body--default)"
+              "default": "var(--pf-t--global--font--size--body--default, 1rem)"
             },
             {
-              "name": "--pf-t--global--font--size--body--default"
+              "name": "--pf-v6-c-check__label--LineHeight",
+              "default": "var(--pf-t--global--font--line-height--body, 1.5)"
+            },
+            {
+              "name": "--pf-v6-c-check__description--FontSize",
+              "default": "var(--pf-t--global--font--size--body--sm, 0.875rem)"
+            },
+            {
+              "name": "--pf-v6-c-check__description--Color",
+              "default": "var(--pf-t--global--text--color--subtle, #6a6e73)"
+            },
+            {
+              "name": "--pf-t--global--text--color--subtle",
+              "default": "#6a6e73"
+            },
+            {
+              "name": "--pf-v6-c-check__label-required--MarginInlineStart",
+              "default": "var(--pf-t--global--spacer--xs, 0.25rem)"
+            },
+            {
+              "name": "--pf-t--global--spacer--xs",
+              "default": "0.25rem"
+            },
+            {
+              "name": "--pf-v6-c-check__label-required--FontSize",
+              "default": "var(--pf-t--global--font--size--body--sm, 0.875rem)"
+            },
+            {
+              "name": "--pf-t--global--font--size--body--sm",
+              "default": "0.875rem"
+            },
+            {
+              "name": "--pf-v6-c-check__label-required--Color",
+              "default": "var(--pf-t--global--color--status--danger--default, #c9190b)"
+            },
+            {
+              "name": "--pf-t--global--color--status--danger--default",
+              "default": "#c9190b"
+            },
+            {
+              "name": "--pf-v6-c-check__input--TranslateY",
+              "default": "calc((var(--pf-t--global--font--line-height--body, 1.5) * var(--pf-t--global--font--size--body--default, 1rem) / 2) - 50%)"
+            },
+            {
+              "name": "--pf-t--global--font--line-height--body",
+              "default": "1.5"
+            },
+            {
+              "name": "--pf-t--global--font--size--body--default",
+              "default": "1rem"
             }
           ],
-          "customElement": true,
-          "demos": [
-            {
-              "name": "with-description",
-              "url": "/elements/pfv6-checkbox/demo/with-description",
-              "path": "elements/pfv6-checkbox/demo/with-description.html"
-            },
-            {
-              "name": "with-description-body",
-              "url": "/elements/pfv6-checkbox/demo/with-description-body",
-              "path": "elements/pfv6-checkbox/demo/with-description-body.html"
-            },
-            {
-              "name": "with-body",
-              "url": "/elements/pfv6-checkbox/demo/with-body",
-              "path": "elements/pfv6-checkbox/demo/with-body.html"
-            },
-            {
-              "name": "uncontrolled",
-              "url": "/elements/pfv6-checkbox/demo/uncontrolled",
-              "path": "elements/pfv6-checkbox/demo/uncontrolled.html"
-            },
-            {
-              "name": "standalone-input",
-              "url": "/elements/pfv6-checkbox/demo/standalone-input",
-              "path": "elements/pfv6-checkbox/demo/standalone-input.html"
-            },
-            {
-              "name": "reversed",
-              "url": "/elements/pfv6-checkbox/demo/reversed",
-              "path": "elements/pfv6-checkbox/demo/reversed.html"
-            },
-            {
-              "name": "required",
-              "url": "/elements/pfv6-checkbox/demo/required",
-              "path": "elements/pfv6-checkbox/demo/required.html"
-            },
-            {
-              "name": "label-wraps",
-              "url": "/elements/pfv6-checkbox/demo/label-wraps",
-              "path": "elements/pfv6-checkbox/demo/label-wraps.html"
-            },
-            {
-              "name": "disabled",
-              "url": "/elements/pfv6-checkbox/demo/disabled",
-              "path": "elements/pfv6-checkbox/demo/disabled.html"
-            },
-            {
-              "name": "controlled",
-              "url": "/elements/pfv6-checkbox/demo/controlled",
-              "path": "elements/pfv6-checkbox/demo/controlled.html"
-            }
-          ]
+          "customElement": true
         },
         {
           "name": "Pfv6CheckboxChangeEvent",
-          "description": "Event dispatched when the checkbox state changes\n\n```typescript\ncheckbox.addEventListener('change', (e: Pfv6CheckboxChangeEvent) => {\nconsole.log('Checked:', e.checked);\nconsole.log('Indeterminate:', e.indeterminate);\n});\n```",
+          "description": "Event dispatched when the checkbox state changes\n\n```typescript\ncheckbox.addEventListener('change', (e: Pfv6CheckboxChangeEvent) =\u003e {\nconsole.log('Checked:', e.checked);\nconsole.log('Indeterminate:', e.indeterminate);\n});\n```",
           "superclass": {
             "name": "Event",
             "package": "global:"

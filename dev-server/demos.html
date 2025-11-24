@@ -1,0 +1,51 @@
+{% layout 'base.liquid' %}
+
+{% block title %}{{ componentTitle }} Demos - PatternFly Elements v6{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="/dev-server/styles/patternfly/base.css">
+  <link rel="stylesheet" href="/dev-server/styles/styles.css">
+  {% if isReactDemo %}
+    <link rel="stylesheet" href="/patternfly-react/dist/patternfly.css">
+  {% endif %}
+{% endblock %}
+
+{% block navigation %}
+  <nav>
+    <a href="/">Component Index</a>
+    
+    {% if isReactDemo %}
+      | <a href="/elements/{{ componentName }}/demo">Lit - {{ componentName }} Demos</a>
+    {% elsif hasReactDemos %}
+      | <a href="/elements/{{ componentName }}/react">React - {{ componentName }} Demos</a>
+    {% endif %}
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <h1>{{ componentTitle }} Demos</h1>
+
+  {% if demos.size > 0 %}
+    <div class="demo-grid">
+      {% for demo in demos %}
+        <pfv6-card>
+          <pfv6-card-title>
+            <a href="{{ demo.url }}">{{ demo.title }}</a>
+          </pfv6-card-title>
+          <pfv6-card-body>
+            View this demo to see the component in action.
+          </pfv6-card-body>
+        </pfv6-card>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No demos available for this component.</p>
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  <script type="module">
+    import '@pfv6/elements/pfv6-card/pfv6-card.js';
+    console.log('{{ componentTitle }} demo index loaded');
+  </script>
+{% endblock %}
