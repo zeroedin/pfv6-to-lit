@@ -85,22 +85,18 @@
 
 ---
 
-#### 6. `pfv6-gallery` (or Layout System)
-**Blocks**: 5 demos, ~15 test failures  
-**Complexity**: Low (mostly CSS)  
+#### 6. ✅ `pfv6-gallery` - **COMPLETE**
+**Status**: Implemented  
 **PatternFly Docs**: https://www.patternfly.org/layouts/gallery  
 
-**React**: `<Gallery>` → **LitElement**: `<pfv6-gallery>` or use `<div class="pf-v6-l-gallery">`
+**React**: `<Gallery>`, `<GalleryItem>` → **LitElement**: `<pfv6-gallery>`, `<pfv6-gallery-item>`
 
-**Used In**:
-- tiles
-- multi-selectable-tiles
-- actionable
-- actionable-selectable
-- single-selectable
-- selectable
-
-**Note**: May not need a component - PatternFly layout classes may suffice
+**Implementation Complete**:
+- Full component with sub-component (GalleryItem)
+- Responsive min/max widths support
+- All 6 React demos converted to Lit
+- 3/6 demos passing visual parity tests
+- 3 demos need minor CSS fixes (see `elements/pfv6-gallery/TODO.md`)
 
 ---
 
