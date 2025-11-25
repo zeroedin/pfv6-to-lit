@@ -1,0 +1,24 @@
+<pfv6-gallery id="gallery" has-gutter>
+  <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>
+  <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>
+  <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>
+  <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>
+  <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>
+  <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>
+  <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>
+  <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>
+</pfv6-gallery>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-gallery/pfv6-gallery.js';
+  import '@pfv6/elements/pfv6-gallery/pfv6-gallery-item.js';
+  
+  const gallery = document.getElementById('gallery');
+  gallery.minWidths = {
+    md: '100px',
+    lg: '150px',
+    xl: '200px',
+    '2xl': '300px'
+  };
+</script>
+

@@ -1,0 +1,28 @@
+/*
+ * CRITICAL: Shadow DOM box-sizing reset
+ * PatternFly base.css sets: *, *::before, *::after { box-sizing: border-box; }
+ * box-sizing is NOT inherited, so Shadow DOM elements default to content-box
+ * This causes layout differences vs React PatternFly
+ * MUST be included in EVERY component's CSS
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /*
+   * Use display: contents to make the custom element layout-transparent.
+   * This allows the #container to participate directly in the parent gallery's grid.
+   * When component="li", ElementInternals sets role="listitem" for semantic list behavior.
+   */
+  display: contents;
+}
+
+#container {
+  /*
+   * Container wraps the slot content so text nodes can participate in grid layout.
+   * No layout properties - just acts as a grid item wrapper.
+   */
+}
