@@ -4,14 +4,13 @@
   "description": "PatternFly Elements v6 - Web components implementing PatternFly v6 design system",
   "type": "module",
   "scripts": {
-    "postinstall": "npx tsx scripts/copy-patternfly-react-demos.ts",
+    "postinstall": "npx tsx scripts/copy-patternfly-react-demos.ts && npx tsx scripts/extract-layout-demos.ts",
     "test": "wireit",
     "dev": "wireit",
     "compile": "wireit",
     "compile:react-demos": "wireit",
     "lint": "wireit",
     "e2e": "wireit",
-    "e2e:react-baseline": "wireit",
     "e2e:parity": "wireit"
   },
   "wireit": {
@@ -128,14 +127,6 @@
     "e2e": {
       "command": "playwright test",
       "description": "Run ALL E2E tests (Parity + CSS API)",
-      "dependencies": [
-        "compile:tsc",
-        "compile:react-demos"
-      ]
-    },
-    "e2e:react-baseline": {
-      "command": "playwright test tests/visual/card-visual-react-baseline.spec.ts",
-      "description": "Validate React baseline stability (React vs React baseline)",
       "dependencies": [
         "compile:tsc",
         "compile:react-demos"

@@ -1,6 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
+import { discoverDemos } from '../../helpers/discover-demos.js';
 
 /**
  * Parity Visual Tests
@@ -18,6 +19,9 @@ import { PNG } from 'pngjs';
  * 5. Attaches all 3 images to Playwright report (React, Lit, Diff)
  * 
  * No baseline files needed - we compare fresh renders on every run!
+ * 
+ * CRITICAL: Demos are discovered dynamically from the filesystem, not hardcoded.
+ * This ensures tests automatically pick up new demos or renamed demos.
  */
 
 // Helper to wait for full page load including main thread idle
@@ -50,30 +54,8 @@ async function waitForFullLoad(page: Page): Promise<void> {
   });
 }
 
-const litDemos = [
-  'basic-cards',
-  'secondary-cards',
-  'with-body-section-fills',
-  'with-multiple-body-sections',
-  'with-only-body-section',
-  'with-no-footer',
-  'with-no-header',
-  'with-dividers',
-  'with-heading-element',
-  'with-modifiers',
-  'selectable',
-  'single-selectable',
-  'clickable-cards',
-  'clickable-selectable',
-  'expandable',
-  'expandable-with-icon',
-  'tile-cards',
-  'tile-multi',
-  'header-in-card-head',
-  'with-image-and-actions',
-  'header-wraps',
-  'only-actions-in-card-head'
-];
+// Dynamically discover all demos from the filesystem
+const litDemos = discoverDemos('card');
 
 test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
   litDemos.forEach(demoName => {
