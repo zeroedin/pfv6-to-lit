@@ -20,8 +20,6 @@ npm run compile:react-demos   # Compile React demos only
 npm run test                  # Run unit tests
 npm run e2e                   # Run all E2E tests (visual + CSS API)
 npm run e2e:parity           # Run Lit vs React parity tests (THE CRITICAL TEST)
-npm run e2e:react-baseline   # Validate React baseline consistency (debugging)
-npm run rebuild:snapshots    # Regenerate React baseline screenshots
 
 # Linting
 npm run lint                  # Run all linters (ESLint + Stylelint)
@@ -190,11 +188,9 @@ Note: React demos are stored separately in `/patternfly-react/Button/` (see stru
   component-guide.md
   implementation-notes.md
 
-/tests/                - Test files and test utilities
+  /tests/                - Test files and test utilities
   /visual/             - Visual regression tests (organized by component)
     /{element}/        - Component visual tests (e.g., card, checkbox)
-      {element}-visual-react-baseline.spec.ts       - React baseline screenshots
-      {element}-visual-react-baseline.spec.ts-snapshots/
       {element}-visual-parity.spec.ts               - Lit vs React parity tests
       {element}-visual-parity.spec.ts-snapshots/
     README.md          - Visual testing documentation
@@ -362,10 +358,79 @@ Lit Demo (WRONG - too much):
 - ✅ **DO** keep demo files minimal - just component markup and imports
 - ✅ **DO** mirror React demo structure exactly (1:1 component mapping)
 - ✅ **DO** ignore `<Fragment>, <>` wrappers completely - render multiple root elements naturally in HTML
+- ✅ **DO** verify content parity before moving to next demo (see checklist below)
 - ❌ **DON'T** include section headings, wrapper divs, or demo-specific styles
 - ❌ **DON'T** add CSS unless it exists in the React demo
 - ❌ **DON'T** overcomplicate - the goal is the simplest possible representation
+- ❌ **DON'T** approximate property values or element counts
 - ❌ **NEVER** create an `index.html` file in `demo/` directory - all demos should use descriptive kebab-case names matching their React counterparts
+
+**🚨 CRITICAL: Content Parity Verification (for EVERY Lit demo)**
+
+Before considering a Lit demo complete, verify these details match the React demo **exactly**:
+
+1. **Attribute/Property Count** (CRITICAL - most common failure):
+   - **Count React props, count Lit attributes - numbers must match**
+   - React: `<Gallery component="ul">` (1 prop)
+   - Lit: `<pfv6-gallery component="ul">` (1 attribute) ✅
+   - React: `<Gallery hasGutter component="ul">` (2 props)
+   - Lit: `<pfv6-gallery has-gutter component="ul">` (2 attributes) ✅
+   - ❌ **DON'T add extra attributes**: Adding `has-gutter` when React has no `hasGutter`
+   - ❌ **DON'T omit attributes**: Missing `component` when React has `component`
+   - **Why this matters**: Extra/missing attributes cause visual differences (spacing, layout)
+
+2. **Element Count** (must be identical):
+   - React: `<GalleryItem>Gallery Item</GalleryItem>` (x8)
+   - Lit: `<pfv6-gallery-item>Gallery Item</pfv6-gallery-item>` (x8)
+   - ❌ **DON'T** approximate: 6 items when React has 8
+
+3. **Text Content** (case-sensitive):
+   - React: `<GalleryItem>Gallery Item</GalleryItem>` (capital "I")
+   - Lit: `<pfv6-gallery-item>Gallery Item</pfv6-gallery-item>` (capital "I")
+   - ❌ **DON'T** change casing: ~~"Gallery item"~~ (lowercase "i")
+
+4. **Property Values** (exact match required):
+   - React: `maxWidths={{ md: '280px', lg: '320px', '2xl': '400px' }}`
+   - Lit: `gallery.maxWidths = { md: '280px', lg: '320px', '2xl': '400px' }`
+   - ❌ **DON'T** approximate: ~~`{ md: '200px', xl: '400px' }`~~
+   - ❌ **DON'T** omit keys: All properties must be present
+
+5. **Property Keys** (all must be present):
+   - If React uses `{ default: '100%', md: '100px', xl: '300px' }`
+   - Lit must use `{ default: '100%', md: '100px', xl: '300px' }`
+   - ❌ **DON'T** omit: ~~`{ md: '100px' }`~~ (missing `default` and `xl`)
+
+**Manual Verification Workflow**:
+```bash
+# 1. Open React demo in editor
+code patternfly-react/Gallery/GalleryBasic.tsx
+
+# 2. Open Lit demo side-by-side
+code elements/pfv6-gallery/demo/basic.html
+
+# 3. Compare line-by-line:
+#    - **COUNT PROPS vs ATTRIBUTES** (most critical check!)
+#      - Example: React has `<Gallery component="ul">` (1 prop)
+#      - Lit must have `<pfv6-gallery component="ul">` (1 attribute)
+#      - If React adds `hasGutter`, Lit must add `has-gutter`
+#    - Count elements (must match)
+#    - Verify text content (case-sensitive)
+#    - Verify property values (exact match)
+#    - Verify all property keys present
+
+# 4. Test in browser side-by-side
+open http://localhost:8000/elements/pfv6-gallery/react/basic
+open http://localhost:8000/elements/pfv6-gallery/demo/basic
+
+# 5. Visual comparison - should be pixel-identical
+```
+
+**Why This Matters**:
+- ✅ Visual parity tests compare Lit vs React pixel-by-pixel
+- ✅ Content mismatches are the #1 cause of test failures
+- ✅ Approximations break 1:1 API parity expectations
+- ❌ Fixing test failures later wastes time
+- ❌ Incomplete content creates confusion about what's "correct"
 
 **Dev Server Routing**:
 - Primary demo: `/elements/pfv6-card/demo/index`
@@ -718,6 +783,12 @@ https://github.com/patternfly/patternfly-react/tree/main/packages/react-core/src
 import { test, expect, Page } from '@playwright/test';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
+import { discoverDemos } from '../../helpers/discover-demos.js';
+
+/**
+ * CRITICAL: Demos are discovered dynamically from the filesystem, not hardcoded.
+ * This ensures tests automatically pick up new demos or renamed demos.
+ */
 
 // Helper to wait for full page load including main thread idle
 async function waitForFullLoad(page: Page): Promise<void> {
@@ -748,6 +819,9 @@ async function waitForFullLoad(page: Page): Promise<void> {
     });
   });
 }
+
+// Dynamically discover all demos from the filesystem
+const litDemos = discoverDemos('card'); // Replace 'card' with component name
 
 test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
   litDemos.forEach(demoName => {
@@ -905,8 +979,6 @@ test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
 - [ ] Created corresponding Lit demos for each React demo
 - [ ] Wrote comprehensive unit tests
 - [ ] Compiled React demos successfully (`npm run compile:react-demos`)
-- [ ] Generated React baseline snapshots (`npm run rebuild:snapshots`)
-- [ ] Validated React baseline stability (`npm run e2e:react-baseline` - optional)
 - [ ] Ran parity tests (`npm run e2e:parity`) and fixed ALL visual differences
 - [ ] Achieved 100% visual parity (all parity tests passing)
 - [ ] Cleaned up temporary files
@@ -1519,44 +1591,52 @@ React CSS (`check.css`):
 }
 ```
 
-LitElement CSS (`pfv6-checkbox.css`):
+LitElement CSS (`pfv6-checkbox.css`) - CORRECT two-layer pattern:
 ```css
 :host {
-  /* Public API - copied EXACTLY from check.css */
-  --pf-v6-c-check--GridGap: var(--pf-t--global--spacer--gap--group--vertical) var(--pf-t--global--spacer--gap--text-to-element--default);
-  --pf-v6-c-check__label--FontSize: var(--pf-t--global--font--size--body--default);
-  --pf-v6-c-check__label--LineHeight: var(--pf-t--global--font--line-height--body);
+  /* Two-layer pattern: Private variables reference public API with fallbacks */
+  --_grid-gap: var(--pf-v6-c-check--GridGap, var(--pf-t--global--spacer--gap--group--vertical) var(--pf-t--global--spacer--gap--text-to-element--default));
+  --_label-font-size: var(--pf-v6-c-check__label--FontSize, var(--pf-t--global--font--size--body--default));
+  --_label-line-height: var(--pf-v6-c-check__label--LineHeight, var(--pf-t--global--font--line-height--body));
 }
 
 #container {
   display: grid;
   grid-template-columns: auto 1fr;
-  grid-gap: var(--pf-v6-c-check--GridGap);
+  /* ✅ Use private variable internally */
+  gap: var(--_grid-gap);
 }
 
 #label {
-  font-size: var(--pf-v6-c-check__label--FontSize);
-  line-height: var(--pf-v6-c-check__label--LineHeight);
+  /* ✅ Use private variables internally */
+  font-size: var(--_label-font-size);
+  line-height: var(--_label-line-height);
 }
 ```
 
 **Why This Matters**:
-- ✅ Ensures 100% CSS API parity with React
-- ✅ Uses exact same token references
+- ✅ Ensures 100% CSS API parity with React (users can override `--pf-v6-c-check--GridGap`)
+- ✅ Uses exact same token references in fallbacks
 - ✅ Computed styles will match pixel-perfect
-- ✅ Users can customize using identical CSS variable names
+- ✅ **Internal CSS only uses private variables** - clean separation
 - ❌ Making up values causes visual differences in parity tests
+- ❌ Using public API variables directly violates the two-layer pattern
 
 #### 🚨 CRITICAL: Two-Layer Pattern is ALWAYS Required
 
 **For Shadow DOM components, ALWAYS use the two-layer CSS variable pattern.**
 
-**How it works**: Create private variables that reference the public API variable name (first argument) with the token fallback (second argument). This automatically exposes the public API without needing to define it separately.
+**THE ABSOLUTE RULE**: **ALL internal CSS must use ONLY private variables (`--_*`).**
+
+**How it works**: 
+1. **In `:host`**: Define private variables that reference public API with fallbacks
+2. **In internal selectors** (`#container`, `#label`, etc.): Use ONLY private variables
+3. **NEVER** use public API variables (`--pf-v6-c-*`) directly in internal CSS
 
 **Single-line format** (on `:host`):
 ```css
 :host {
-  /* Private variables that reference public API with fallback (single line) */
+  /* Private variables reference public API with fallback (single line) */
   --_grid-gap: var(--pf-v6-c-check--GridGap, var(--pf-t--global--spacer--gap--group--vertical) var(--pf-t--global--spacer--gap--text-to-element--default));
   --_label-font-size: var(--pf-v6-c-check__label--FontSize, var(--pf-t--global--font--size--body--default));
 }
@@ -1567,20 +1647,31 @@ LitElement CSS (`pfv6-checkbox.css`):
 - If not overridden, falls back to the token value
 - Component uses `--_grid-gap` internally
 
-**Use private variables in your CSS**:
+**Use private variables in your CSS** (MANDATORY):
 ```css
 #container {
+  /* ✅ CORRECT - Use private variable */
   gap: var(--_grid-gap);
 }
 
 #label {
+  /* ✅ CORRECT - Use private variable */
   font-size: var(--_label-font-size);
+}
+```
+
+**WRONG - Don't do this**:
+```css
+#container {
+  /* ❌ WRONG - Using public API variable directly! */
+  gap: var(--pf-v6-c-check--GridGap);
 }
 ```
 
 **Why Two Layers?**
 1. **Public API** (`--pf-v6-c-*`) - Exposed to users, can be overridden from Light DOM
 2. **Private variables** (`--_*`) - Internal implementation, provides fallback resilience
+3. **Clean separation** - Internal CSS never directly touches public API
 
 **Complete Translation Example**:
 
@@ -1603,7 +1694,7 @@ Lit CSS (`pfv6-checkbox.css`) - CORRECT two-layer pattern:
 }
 
 #container {
-  /* Use private variable internally */
+  /* ✅ ALWAYS use private variable internally */
   gap: var(--_grid-gap);
 }
 ```
@@ -1621,6 +1712,52 @@ pfv6-checkbox {
 - ✅ More resilient than React (maintains token defaults when variables are `unset`)
 - ✅ Single-line format is concise and maintainable
 - ✅ Clean separation between public API and internal implementation
+- ✅ **Internal CSS only uses private variables** - no accidental public API pollution
+
+**Special Case: Responsive Variables**
+
+For components with responsive behavior (media queries), private variables may need to be **redefined** in `#container`:
+
+```css
+:host {
+  /* Define base private variables */
+  --_grid-template-columns-min: var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px);
+  --_grid-template-columns-max: var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr);
+}
+
+#container {
+  /* Redefine private variable for responsive composition */
+  --_grid-template-columns-minmax-min: var(--_grid-template-columns-min);
+  --_grid-template-columns-minmax-max: var(--_grid-template-columns-max);
+  
+  /* Use private variables in grid */
+  grid-template-columns: 
+    repeat(
+      auto-fill, 
+      minmax(
+        var(--_grid-template-columns-minmax-min), 
+        var(--_grid-template-columns-minmax-max)
+      )
+    );
+}
+
+@media (width >= 48rem) {
+  #container {
+    /* Redefine private variable to reference breakpoint-specific public API */
+    --_grid-template-columns-minmax-min:
+      var(
+        --pf-v6-l-gallery--GridTemplateColumns--min-on-md,
+        var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)
+      );
+  }
+}
+```
+
+**Why responsive variables must be redefined in `#container`**:
+1. `grid-template-columns` is applied to `#container`, so variables must be evaluated there
+2. Media queries update the private variable to reference **different public API variables** at each breakpoint
+3. The fallback chain still references public API, so users can override from Light DOM
+4. **All variables remain private** (`--_*`) - internal CSS never directly uses `--pf-v6-c-*`
 
 #### Shadow DOM vs Light DOM: No Difference for API
 
@@ -1874,7 +2011,15 @@ This makes our components more robust in real-world scenarios where:
 - Third-party libraries manipulate styles
 - User overrides are removed/reverted
 
-**AI Directive**: When implementing components, ALWAYS use the two-layer pattern for CSS variables that should be part of the public API. Never define variables on `:host` and use them directly - always create a private variable layer. This pattern is not just for Shadow DOM compatibility - it's a fundamental improvement over React PatternFly's approach.
+**AI Directive**: When implementing components:
+1. **ALWAYS** use the two-layer pattern for CSS variables
+2. **NEVER** use public API variables (`--pf-v6-c-*`) directly in internal CSS
+3. **ALWAYS** define private variables (`--_*`) in `:host` that reference public API with fallbacks
+4. **ALWAYS** use only private variables in internal selectors (`#container`, `#label`, etc.)
+5. For responsive variables, private variables may be **redefined** in `#container` within media queries
+6. This pattern is not just for Shadow DOM compatibility - it's a fundamental improvement over React PatternFly's approach
+
+**The Absolute Rule**: **ALL internal CSS must use ONLY private variables (`--_*`).**
 
 ### 2. Composition: Slots vs React Children
 
@@ -2586,14 +2731,6 @@ npm run e2e:parity
 # - THE CRITICAL TEST for component validation
 # - Compares Lit vs React pixel-by-pixel
 
-# Run only React baseline tests (debugging)
-npm run e2e:react-baseline
-# - Validates React demo consistency
-
-# Rebuild visual regression baselines
-npm run rebuild:snapshots
-# - Regenerates React baseline screenshots
-
 # Bootstrap a new component (planned)
 npm run new
 # - Creates component folder structure
@@ -2780,6 +2917,253 @@ export class Pfv6Checkbox extends LitElement {
 - ✅ Semantic property names improve developer experience
 
 **Reference**: [MDN ElementInternals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals)
+
+#### 🚨 CRITICAL: Use ElementInternals for Semantic Roles (Alternative Components)
+
+**Problem**: When React uses semantic HTML like `<ul>` + `<li>`, but web components can't replicate that Light DOM structure due to Shadow DOM encapsulation.
+
+**Example Scenario**: 
+- React: `<Gallery component="ul"><GalleryItem component="li">Item</GalleryItem></Gallery>`
+- Renders as: `<ul><li>Item</li></ul>` ✅ Semantic HTML
+
+**Web Component Challenge**:
+```html
+<!-- ❌ WRONG: Renders <li> inside shadow DOM -->
+<pfv6-gallery-item component="li">
+  #shadow-root
+    <li><slot></slot></li>  <!-- Extra DOM node! -->
+</pfv6-gallery-item>
+```
+
+**The Correct Solution: ElementInternals with `role`**
+
+Use ElementInternals to expose semantic roles WITHOUT rendering extra DOM elements:
+
+```typescript
+// GOOD - ElementInternals for semantic roles
+@customElement('pfv6-gallery-item')
+export class Pfv6GalleryItem extends LitElement {
+  static readonly styles = styles;
+  static readonly formAssociated = true;  // Required for ElementInternals
+  
+  @property({ type: String })
+  component: 'div' | 'li' = 'div';
+  
+  private internals: ElementInternals;
+  
+  constructor() {
+    super();
+    this.internals = this.attachInternals();
+  }
+  
+  updated(changed: PropertyValues): void {
+    super.updated(changed);
+    
+    // Map component type to ARIA role
+    if (changed.has('component')) {
+      if (this.component === 'li') {
+        this.internals.role = 'listitem';  // ✅ Sets role, no extra DOM!
+      } else {
+        this.internals.role = null;
+      }
+    }
+  }
+  
+  render() {
+    // ✅ CRITICAL: Wrapper div needed so text nodes can participate in grid layout
+    // Text nodes cannot be direct grid items - they need an element wrapper
+    return html`
+      <div id="container">
+        <slot></slot>
+      </div>
+    `;
+  }
+}
+```
+
+**CSS for Layout Transparency**:
+```css
+:host {
+  /*
+   * display: contents makes the custom element layout-transparent.
+   * The #container div participates directly in the parent gallery's grid.
+   * When component="li", ElementInternals sets role="listitem" for semantic list behavior.
+   */
+  display: contents;
+}
+
+#container {
+  /*
+   * Container wraps the slot content so text nodes can participate in grid layout.
+   * No layout properties - just acts as a grid item wrapper.
+   */
+}
+```
+
+**Why the Wrapper is Critical**:
+
+When using `display: contents`, text nodes **cannot** participate in grid/flex layouts:
+
+```html
+<!-- ❌ BAD: Text nodes can't be grid items -->
+<pfv6-gallery-item style="display: contents">
+  #shadow-root
+    <slot></slot>  <!-- Text node slotted here can't be a grid item! -->
+</pfv6-gallery-item>
+```
+
+**Result**: Text content stacks vertically, ignores grid layout.
+
+```html
+<!-- ✅ GOOD: Wrapper div becomes the grid item -->
+<pfv6-gallery-item style="display: contents">
+  #shadow-root
+    <div id="container">  <!-- This div IS a grid item! -->
+      <slot></slot>
+    </div>
+</pfv6-gallery-item>
+```
+
+**Result**: The `#container` div participates in the grid, text content renders correctly.
+
+**Parent Component Role Mapping**:
+
+Both parent and child components need appropriate roles for complete semantic structure:
+
+```typescript
+// pfv6-gallery.ts - Parent component
+export class Pfv6Gallery extends LitElement {
+  static readonly formAssociated = true;
+  
+  @property({ type: String })
+  component: 'div' | 'section' | 'article' | 'ul' | 'ol' = 'div';
+  
+  private internals: ElementInternals;
+  
+  constructor() {
+    super();
+    this.internals = this.attachInternals();
+  }
+  
+  updated(changed: PropertyValues): void {
+    super.updated(changed);
+    
+    if (changed.has('component')) {
+      // Map component type to ARIA role for semantic structures
+      switch (this.component) {
+        case 'ul':
+        case 'ol':
+          this.internals.role = 'list';
+          break;
+        case 'article':
+          this.internals.role = 'article';
+          break;
+        case 'section':
+          this.internals.role = 'region';
+          break;
+        default:
+          this.internals.role = null;
+      }
+    }
+  }
+  
+  render() {
+    // ✅ Always render <div>, semantic meaning comes from ElementInternals.role
+    return html`
+      <div id="container" class=${classMap({ 'pf-m-gutter': this.hasGutter })}>
+        <slot></slot>
+      </div>
+    `;
+  }
+}
+```
+
+**Complete Semantic Structure**:
+```html
+<pfv6-gallery component="ul" role="list">  <!-- ✅ Parent gets role="list" -->
+  <pfv6-gallery-item component="li" role="listitem">  <!-- ✅ Child gets role="listitem" -->
+    #shadow-root (display: contents)
+      <div id="container">  <!-- Grid item wrapper -->
+        Gallery item
+      </div>
+  </pfv6-gallery-item>
+</pfv6-gallery>
+```
+
+**Benefits**:
+- ✅ **No extra DOM nodes** - `display: contents` makes `:host` layout-transparent
+- ✅ **Proper semantics** - `role="list"` + `role="listitem"` expose correct ARIA roles
+- ✅ **Visual parity** - Identical layout to React (text nodes wrapped in grid-compatible div)
+- ✅ **Accessibility** - Screen readers announce "List with 5 items"
+- ✅ **API parity** - `component="ul"` + `component="li"` work as expected
+
+**Why Dynamic Tag Rendering is NOT Needed**:
+
+With ElementInternals, you **do not need** to render different HTML tags. The semantic meaning comes from the ARIA role, not the actual element type!
+
+```typescript
+// ❌ BAD: Overcomplicated with unsafeStatic
+import { unsafeStatic, html as staticHtml } from 'lit/static-html.js';
+
+render() {
+  const tag = unsafeStatic(this.component);  // 'ul', 'ol', 'article', etc.
+  return staticHtml`<${tag} id="container"><slot></slot></${tag}>`;
+}
+
+// ✅ GOOD: Simplified - always render <div>
+render() {
+  return html`
+    <div id="container">
+      <slot></slot>
+    </div>
+  `;
+}
+```
+
+**ElementInternals.role provides the semantic meaning**, eliminating the need for:
+- `unsafeStatic` and `staticHtml` imports
+- Complex tag switching logic
+- CSS selector complications (always targeting `#container`)
+
+**When to Use This Pattern**:
+1. **Semantic HTML structures** that React renders in Light DOM (lists, articles, sections)
+2. **Alternative component types** where `component` prop changes the semantic meaning
+3. **Accessibility-critical structures** (navigation menus, lists, landmarks)
+
+**Common Roles for PatternFly Components**:
+
+| React Component | `component` Prop | ElementInternals Role |
+|-----------------|------------------|----------------------|
+| `<GalleryItem>` | `component="li"` | `role="listitem"` |
+| `<Gallery>` | `component="ul"` or `"ol"` | `role="list"` |
+| `<Card>` | `component="article"` | `role="article"` |
+| `<Panel>` | `component="section"` | `role="region"` |
+| `<MenuItem>` | `component="li"` | `role="menuitem"` |
+| `<NavItem>` | `component="li"` | `role="listitem"` or `role="none"` |
+
+**Accessibility Note - Automated Tool Limitations**:
+
+⚠️ **Important**: Most automated accessibility testing tools (axe-core, Lighthouse, WAVE) **cannot yet read from ElementInternals**. This will cause **false positives** in automated audits even though the component is correctly exposing ARIA roles via the accessibility tree.
+
+**What This Means**:
+- ✅ **Screen readers WILL work correctly** - ElementInternals properly exposes roles to browser's accessibility tree
+- ❌ **Automated tools WILL report false positives** - They check DOM attributes, not accessibility tree
+- ⚠️ **Manual verification required** - Use browser DevTools accessibility inspector or actual screen readers
+
+**Verification Methods**:
+1. **Browser DevTools Accessibility Inspector** - Shows correct `role="listitem"` in computed properties
+2. **Real Screen Readers** (NVDA, JAWS, VoiceOver) - Correctly announce "List with 5 items"
+3. **Programmatic** - Access `element.internals.role` (if component exposes internals)
+
+**Documentation Strategy**: When creating comparative documentation for "PatternFly LitElements vs React PatternFly", document that automated a11y tools may report false positives for components using ElementInternals. This is a tool limitation, not a component issue.
+
+**Key Principle**: When you **cannot replicate Light DOM semantics** due to Shadow DOM encapsulation, use **ElementInternals to simulate the DOM structure and a11y representation**.
+
+**Reference**: 
+- [MDN ElementInternals.role](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals/role)
+- [WHATWG ElementInternals Spec](https://html.spec.whatwg.org/multipage/custom-elements.html#element-internals)
+- Example: `pfv6-gallery` and `pfv6-gallery-item` implementation
+- See `ELEMENTINTERNALS_ACCESSIBILITY_NOTES.md` for complete accessibility testing guidance
 
 #### Events
 - ✅ **DO** extend `Event` class (not `CustomEvent`)
@@ -3311,24 +3695,13 @@ describe('pfv6-button', () => {
 
 **Visual Regression Testing** (Primary E2E Focus):
 
-**Test Files**:
-1. **`card-visual-react-baseline.spec.ts`** - Validates React demo stability
-   - Command: `npm run e2e:react-baseline`
-   - Compares current React demos against React baseline snapshots
-   - Ensures reference implementation hasn't changed
-   
-2. **`card-visual-parity.spec.ts`** ⭐ **CRITICAL TEST**
-   - Command: `npm run e2e:parity`
-   - Compares Lit demos against React baseline snapshots
-   - **This is THE test that validates 1:1 visual parity**
-   - Must pass 100% for component to be considered complete
-
-3. **`card-visual.spec.ts`** - Comprehensive unified test suite
-   - Contains all visual tests in one file
-   - Tests both React and Lit implementations
-   
-4. **`card-visual-lit-baseline.spec.ts`** - Lit baseline stability (optional)
-   - Validates Lit demos render consistently
+**Test File**:
+- **`{element}-visual-parity.spec.ts`** ⭐ **CRITICAL TEST**
+  - Command: `npm run e2e:parity`
+  - Compares Lit demos against React demos **live** (no baselines needed)
+  - **This is THE test that validates 1:1 visual parity**
+  - Must pass 100% for component to be considered complete
+  - Uses `pixelmatch` for pixel-perfect comparison
 
 **Key Features**:
 - ✅ Uses dedicated `/test/` routes (no demo page styling interference)
@@ -3361,12 +3734,6 @@ test('CSS variable customization produces identical computed styles', async ({ p
 
 **Visual Test Commands**:
 ```bash
-# Rebuild React baselines (source of truth)
-npm run rebuild:snapshots
-
-# Validate React baseline stability
-npm run e2e:react-baseline
-
 # Validate Lit vs React parity (CRITICAL)
 npm run e2e:parity
 

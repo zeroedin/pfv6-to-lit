@@ -1,0 +1,211 @@
+/*
+ * CRITICAL: Shadow DOM box-sizing reset
+ * PatternFly base.css sets: *, *::before, *::after { box-sizing: border-box; }
+ * box-sizing is NOT inherited, so Shadow DOM elements default to content-box
+ * This causes layout differences vs React PatternFly
+ * MUST be included in EVERY component's CSS
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /*
+   * Two-layer pattern: Private variables reference public API with fallbacks
+   * Public API variables match PatternFly React CSS exactly
+   */
+  --_gutter-gap: var(--pf-v6-l-gallery--m-gutter--GridGap, var(--pf-t--global--spacer--gutter--default));
+  --_grid-template-columns-min: var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px);
+  --_grid-template-columns-max: var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr);
+  --_grid-template-rows: var(--pf-v6-l-gallery--GridTemplateRows, auto);
+}
+
+#container {
+  display: grid;
+  grid-template-rows: var(--_grid-template-rows);
+
+  /*
+   * CRITICAL: Responsive composition defined here, not in :host
+   * This ensures var() references pick up updated values from media queries.
+   * Private variables are redefined at this level to capture media query updates.
+   */
+  --_grid-template-columns-minmax-min: var(--_grid-template-columns-min);
+  --_grid-template-columns-minmax-max: var(--_grid-template-columns-max);
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(
+        var(--_grid-template-columns-minmax-min),
+        var(--_grid-template-columns-minmax-max)
+      )
+    );
+}
+
+#container.pf-m-gutter {
+  gap: var(--_gutter-gap);
+}
+
+/* Responsive min widths - update private variable to reference public API at each breakpoint */
+@media (width >= 36rem) {
+  #container {
+    --_grid-template-columns-minmax-min:
+      var(
+        --pf-v6-l-gallery--GridTemplateColumns--min-on-sm,
+        var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)
+      );
+  }
+}
+
+@media (width >= 48rem) {
+  #container {
+    --_grid-template-columns-minmax-min:
+      var(
+        --pf-v6-l-gallery--GridTemplateColumns--min-on-md,
+        var(
+          --pf-v6-l-gallery--GridTemplateColumns--min-on-sm,
+          var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)
+        )
+      );
+  }
+}
+
+@media (width >= 62rem) {
+  #container {
+    --_grid-template-columns-minmax-min:
+      var(
+        --pf-v6-l-gallery--GridTemplateColumns--min-on-lg,
+        var(
+          --pf-v6-l-gallery--GridTemplateColumns--min-on-md,
+          var(
+            --pf-v6-l-gallery--GridTemplateColumns--min-on-sm,
+            var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)
+          )
+        )
+      );
+  }
+}
+
+@media (width >= 75rem) {
+  #container {
+    --_grid-template-columns-minmax-min:
+      var(
+        --pf-v6-l-gallery--GridTemplateColumns--min-on-xl,
+        var(
+          --pf-v6-l-gallery--GridTemplateColumns--min-on-lg,
+          var(
+            --pf-v6-l-gallery--GridTemplateColumns--min-on-md,
+            var(
+              --pf-v6-l-gallery--GridTemplateColumns--min-on-sm,
+              var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)
+            )
+          )
+        )
+      );
+  }
+}
+
+@media (width >= 90.625rem) {
+  #container {
+    --_grid-template-columns-minmax-min:
+      var(
+        --pf-v6-l-gallery--GridTemplateColumns--min-on-2xl,
+        var(
+          --pf-v6-l-gallery--GridTemplateColumns--min-on-xl,
+          var(
+            --pf-v6-l-gallery--GridTemplateColumns--min-on-lg,
+            var(
+              --pf-v6-l-gallery--GridTemplateColumns--min-on-md,
+              var(
+                --pf-v6-l-gallery--GridTemplateColumns--min-on-sm,
+                var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)
+              )
+            )
+          )
+        )
+      );
+  }
+}
+
+/* Responsive max widths - update private variable to reference public API at each breakpoint */
+@media (width >= 36rem) {
+  #container {
+    --_grid-template-columns-minmax-max:
+      var(
+        --pf-v6-l-gallery--GridTemplateColumns--max-on-sm,
+        var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)
+      );
+  }
+}
+
+@media (width >= 48rem) {
+  #container {
+    --_grid-template-columns-minmax-max:
+      var(
+        --pf-v6-l-gallery--GridTemplateColumns--max-on-md,
+        var(
+          --pf-v6-l-gallery--GridTemplateColumns--max-on-sm,
+          var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)
+        )
+      );
+  }
+}
+
+@media (width >= 62rem) {
+  #container {
+    --_grid-template-columns-minmax-max:
+      var(
+        --pf-v6-l-gallery--GridTemplateColumns--max-on-lg,
+        var(
+          --pf-v6-l-gallery--GridTemplateColumns--max-on-md,
+          var(
+            --pf-v6-l-gallery--GridTemplateColumns--max-on-sm,
+            var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)
+          )
+        )
+      );
+  }
+}
+
+@media (width >= 75rem) {
+  #container {
+    --_grid-template-columns-minmax-max:
+      var(
+        --pf-v6-l-gallery--GridTemplateColumns--max-on-xl,
+        var(
+          --pf-v6-l-gallery--GridTemplateColumns--max-on-lg,
+          var(
+            --pf-v6-l-gallery--GridTemplateColumns--max-on-md,
+            var(
+              --pf-v6-l-gallery--GridTemplateColumns--max-on-sm,
+              var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)
+            )
+          )
+        )
+      );
+  }
+}
+
+@media (width >= 90.625rem) {
+  #container {
+    --_grid-template-columns-minmax-max:
+      var(
+        --pf-v6-l-gallery--GridTemplateColumns--max-on-2xl,
+        var(
+          --pf-v6-l-gallery--GridTemplateColumns--max-on-xl,
+          var(
+            --pf-v6-l-gallery--GridTemplateColumns--max-on-lg,
+            var(
+              --pf-v6-l-gallery--GridTemplateColumns--max-on-md,
+              var(
+                --pf-v6-l-gallery--GridTemplateColumns--max-on-sm,
+                var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)
+              )
+            )
+          )
+        )
+      );
+  }
+}

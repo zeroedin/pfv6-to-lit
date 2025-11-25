@@ -11,15 +11,6 @@ import { discoverDemos } from '../../helpers/discover-demos.js';
  * 
  * Run: npm run e2e:parity
  * 
- * How it works:
- * 1. Opens both React and Lit test demos in the same test run
- * 2. Takes screenshots of both (as PNG Buffers)
- * 3. Compares them pixel-by-pixel using pixelmatch library
- * 4. Generates a diff image highlighting differences in red
- * 5. Attaches all 3 images to Playwright report (React, Lit, Diff)
- * 
- * No baseline files needed - we compare fresh renders on every run!
- * 
  * CRITICAL: Demos are discovered dynamically from the filesystem, not hardcoded.
  * This ensures tests automatically pick up new demos or renamed demos.
  */
@@ -39,13 +30,13 @@ async function waitForFullLoad(page: Page): Promise<void> {
     );
   });
   
-  // CRITICAL: Wait for main thread to be idle using requestIdleCallback (with fallback for Safari)
+  // Wait for main thread to be idle (with Safari fallback)
   await page.evaluate(() => {
     return new Promise<void>(resolve => {
       if (typeof requestIdleCallback !== 'undefined') {
         requestIdleCallback(() => resolve(), { timeout: 2000 });
       } else {
-        // Fallback for Safari/WebKit which doesn't support requestIdleCallback
+        // Fallback for Safari/WebKit
         requestAnimationFrame(() => {
           setTimeout(() => resolve(), 0);
         });
@@ -55,61 +46,56 @@ async function waitForFullLoad(page: Page): Promise<void> {
 }
 
 // Dynamically discover all demos from the filesystem
-const litDemos = discoverDemos('card');
+const litDemos = discoverDemos('gallery');
 
 test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
   litDemos.forEach(demoName => {
     test(`Parity: ${demoName} (Lit vs React)`, async ({ page, browser }) => {
-      // Set consistent viewport for both pages
+      // Set consistent viewport
       await page.setViewportSize({ width: 1280, height: 720 });
       
-      // Open a new page for React demo
+      // Open SECOND page for React demo
       const reactPage = await browser.newPage();
       await reactPage.setViewportSize({ width: 1280, height: 720 });
       
       try {
-        // Load React demo
-        await reactPage.goto(`/elements/pfv6-card/react/test/${demoName}`);
+        // Load BOTH demos simultaneously
+        await reactPage.goto(`http://localhost:8000/elements/pfv6-gallery/react/test/${demoName}`);
         await waitForFullLoad(reactPage);
         
-        // Load Lit demo
-        await page.goto(`/elements/pfv6-card/test/${demoName}`);
+        await page.goto(`http://localhost:8000/elements/pfv6-gallery/test/${demoName}`);
         await waitForFullLoad(page);
         
-        // Take React screenshot
+        // Take FRESH screenshots (no baseline files)
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
           animations: 'disabled'
         });
         
-        // Take Lit screenshot
         const litBuffer = await page.screenshot({
           fullPage: true,
           animations: 'disabled'
         });
         
-        // Decode PNG buffers
+        // Decode and compare pixel-by-pixel
         const reactPng = PNG.sync.read(reactBuffer);
         const litPng = PNG.sync.read(litBuffer);
         
-        // Ensure dimensions match
         expect(reactPng.width).toBe(litPng.width);
         expect(reactPng.height).toBe(litPng.height);
         
-        // Create diff image
         const diff = new PNG({ width: reactPng.width, height: reactPng.height });
         
-        // Compare pixel-by-pixel (threshold: 0 = pixel-perfect matching)
         const numDiffPixels = pixelmatch(
           reactPng.data,
           litPng.data,
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 } // Pixel-perfect (zero tolerance for differences)
+          { threshold: 0 } // Pixel-perfect (zero tolerance)
         );
         
-        // Attach all 3 images to Playwright report
+        // Attach all 3 images to report
         await test.info().attach('React (expected)', {
           body: reactBuffer,
           contentType: 'image/png'
@@ -125,8 +111,7 @@ test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
           contentType: 'image/png'
         });
         
-        // CRITICAL: Assert pixel-perfect match
-        // If this fails, check the diff image to see exactly what's different
+        // Assert pixel-perfect match
         expect(numDiffPixels).toBe(0);
       } finally {
         await reactPage.close();

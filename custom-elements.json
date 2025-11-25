@@ -1762,20 +1762,20 @@
               "description": "The native checkbox input element"
             },
             {
-              "name": "body",
-              "description": "The body element"
+              "name": "label",
+              "description": "The label element"
             },
             {
               "name": "container",
               "description": "The checkbox container element"
             },
             {
-              "name": "label",
-              "description": "The label element"
-            },
-            {
               "name": "description",
               "description": "The description element"
+            },
+            {
+              "name": "body",
+              "description": "The body element"
             }
           ],
           "cssProperties": [
@@ -1841,9 +1841,6 @@
             },
             {
               "name": "--pf-t--global--spacer--gap--group--vertical"
-            },
-            {
-              "name": "--pf-t--global--spacer--gap--text-to-element--default"
             },
             {
               "name": "--pf-v6-c-check--AccentColor",
@@ -1926,6 +1923,9 @@
             },
             {
               "name": "--pf-t--global--font--size--body--default"
+            },
+            {
+              "name": "--pf-t--global--spacer--gap--text-to-element--default"
             }
           ],
           "customElement": true,
@@ -2031,6 +2031,299 @@
           "declaration": {
             "name": "Pfv6CheckboxChangeEvent",
             "module": "elements/pfv6-checkbox/pfv6-checkbox.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "elements/pfv6-gallery/pfv6-gallery-item.js",
+      "declarations": [
+        {
+          "name": "Pfv6GalleryItem",
+          "description": "Gallery Item is a wrapper component for items within a Gallery layout.",
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "members": [
+            {
+              "name": "internals",
+              "type": {
+                "text": "ElementInternals"
+              },
+              "kind": "field",
+              "privacy": "private"
+            }
+          ],
+          "kind": "class",
+          "tagName": "pfv6-gallery-item",
+          "slots": [
+            {
+              "name": "",
+              "description": "Default slot for item content"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "pfv6-gallery-item",
+          "declaration": {
+            "name": "Pfv6GalleryItem",
+            "module": "elements/pfv6-gallery/pfv6-gallery-item.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Pfv6GalleryItem",
+          "declaration": {
+            "name": "Pfv6GalleryItem",
+            "module": "elements/pfv6-gallery/pfv6-gallery-item.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "elements/pfv6-gallery/pfv6-gallery.js",
+      "declarations": [
+        {
+          "name": "Pfv6Gallery",
+          "description": "Gallery is a layout component that displays content in a responsive grid.",
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "members": [
+            {
+              "name": "hasGutter",
+              "description": "Adds space between gallery items",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "has-gutter",
+              "reflects": true
+            },
+            {
+              "name": "minWidths",
+              "description": "Minimum widths at various breakpoints",
+              "type": {
+                "text": "{\n    default?: string;\n    sm?: string;\n    md?: string;\n    lg?: string;\n    xl?: string;\n    '2xl'?: string;\n  }"
+              },
+              "kind": "field"
+            },
+            {
+              "name": "maxWidths",
+              "description": "Maximum widths at various breakpoints",
+              "type": {
+                "text": "{\n    default?: string;\n    sm?: string;\n    md?: string;\n    lg?: string;\n    xl?: string;\n    '2xl'?: string;\n  }"
+              },
+              "kind": "field"
+            },
+            {
+              "name": "internals",
+              "type": {
+                "text": "ElementInternals"
+              },
+              "kind": "field",
+              "privacy": "private"
+            }
+          ],
+          "kind": "class",
+          "tagName": "pfv6-gallery",
+          "attributes": [
+            {
+              "name": "has-gutter",
+              "description": "Adds space between gallery items",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "hasGutter"
+            }
+          ],
+          "slots": [
+            {
+              "name": "",
+              "description": "Default slot for gallery items"
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns",
+              "description": "Grid template columns"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateRows",
+              "description": "Grid template rows"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--min",
+              "description": "Minimum width for grid items (default: 250px)"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--max",
+              "description": "Maximum width for grid items (default: 1fr)"
+            },
+            {
+              "name": "--pf-v6-l-gallery--m-gutter--GridGap",
+              "description": "Gap between items when hasGutter is true"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-sm",
+              "description": "Minimum width at sm breakpoint"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-md",
+              "description": "Minimum width at md breakpoint"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-lg",
+              "description": "Minimum width at lg breakpoint"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-xl",
+              "description": "Minimum width at xl breakpoint"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-2xl",
+              "description": "Minimum width at 2xl breakpoint"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-sm",
+              "description": "Maximum width at sm breakpoint"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-md",
+              "description": "Maximum width at md breakpoint"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-lg",
+              "description": "Maximum width at lg breakpoint"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-xl",
+              "description": "Maximum width at xl breakpoint"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-2xl",
+              "description": "Maximum width at 2xl breakpoint"
+            },
+            {
+              "name": "--pf-v6-l-gallery--m-gutter--GridGap",
+              "default": "var(--pf-t--global--spacer--gutter--default)"
+            },
+            {
+              "name": "--pf-t--global--spacer--gutter--default"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateRows",
+              "default": "auto"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-2xl",
+              "default": "var(\n          --pf-v6-l-gallery--GridTemplateColumns--min-on-xl,\n          var(\n            --pf-v6-l-gallery--GridTemplateColumns--min-on-lg,\n            var(\n              --pf-v6-l-gallery--GridTemplateColumns--min-on-md,\n              var(\n                --pf-v6-l-gallery--GridTemplateColumns--min-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)\n              )\n            )\n          )\n        )"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-xl",
+              "default": "var(\n            --pf-v6-l-gallery--GridTemplateColumns--min-on-lg,\n            var(\n              --pf-v6-l-gallery--GridTemplateColumns--min-on-md,\n              var(\n                --pf-v6-l-gallery--GridTemplateColumns--min-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)\n              )\n            )\n          )"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-lg",
+              "default": "var(\n              --pf-v6-l-gallery--GridTemplateColumns--min-on-md,\n              var(\n                --pf-v6-l-gallery--GridTemplateColumns--min-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)\n              )\n            )"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-md",
+              "default": "var(\n                --pf-v6-l-gallery--GridTemplateColumns--min-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)\n              )"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-sm",
+              "default": "var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--min",
+              "default": "250px"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-2xl",
+              "default": "var(\n          --pf-v6-l-gallery--GridTemplateColumns--max-on-xl,\n          var(\n            --pf-v6-l-gallery--GridTemplateColumns--max-on-lg,\n            var(\n              --pf-v6-l-gallery--GridTemplateColumns--max-on-md,\n              var(\n                --pf-v6-l-gallery--GridTemplateColumns--max-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)\n              )\n            )\n          )\n        )"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-xl",
+              "default": "var(\n            --pf-v6-l-gallery--GridTemplateColumns--max-on-lg,\n            var(\n              --pf-v6-l-gallery--GridTemplateColumns--max-on-md,\n              var(\n                --pf-v6-l-gallery--GridTemplateColumns--max-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)\n              )\n            )\n          )"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-lg",
+              "default": "var(\n              --pf-v6-l-gallery--GridTemplateColumns--max-on-md,\n              var(\n                --pf-v6-l-gallery--GridTemplateColumns--max-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)\n              )\n            )"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-md",
+              "default": "var(\n                --pf-v6-l-gallery--GridTemplateColumns--max-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)\n              )"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-sm",
+              "default": "var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)"
+            },
+            {
+              "name": "--pf-v6-l-gallery--GridTemplateColumns--max",
+              "default": "1fr"
+            }
+          ],
+          "customElement": true,
+          "demos": [
+            {
+              "name": "with-gutters",
+              "url": "/elements/pfv6-gallery/demo/with-gutters",
+              "path": "elements/pfv6-gallery/demo/with-gutters.html"
+            },
+            {
+              "name": "basic",
+              "url": "/elements/pfv6-gallery/demo/basic",
+              "path": "elements/pfv6-gallery/demo/basic.html"
+            },
+            {
+              "name": "alternative-components",
+              "url": "/elements/pfv6-gallery/demo/alternative-components",
+              "path": "elements/pfv6-gallery/demo/alternative-components.html"
+            },
+            {
+              "name": "adjusting-min-widths",
+              "url": "/elements/pfv6-gallery/demo/adjusting-min-widths",
+              "path": "elements/pfv6-gallery/demo/adjusting-min-widths.html"
+            },
+            {
+              "name": "adjusting-min-and-max-widths",
+              "url": "/elements/pfv6-gallery/demo/adjusting-min-and-max-widths",
+              "path": "elements/pfv6-gallery/demo/adjusting-min-and-max-widths.html"
+            },
+            {
+              "name": "adjusting-max-widths",
+              "url": "/elements/pfv6-gallery/demo/adjusting-max-widths",
+              "path": "elements/pfv6-gallery/demo/adjusting-max-widths.html"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "pfv6-gallery",
+          "declaration": {
+            "name": "Pfv6Gallery",
+            "module": "elements/pfv6-gallery/pfv6-gallery.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Pfv6Gallery",
+          "declaration": {
+            "name": "Pfv6Gallery",
+            "module": "elements/pfv6-gallery/pfv6-gallery.js"
           }
         }
       ]

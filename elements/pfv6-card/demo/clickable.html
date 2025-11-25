@@ -3,7 +3,7 @@
 </div>
 
 <div style="margin-top: 15px;">
-  <div class="pf-v6-c-gallery pf-m-gutter">
+  <pfv6-gallery has-gutter>
     <pfv6-card clickable id="clickable-card-1">
       <pfv6-card-title id="clickable-card-example-title-1">First card in the actionable example</pfv6-card-title>
       <pfv6-card-body>This card performs an action on click.</pfv6-card-body>
@@ -18,11 +18,12 @@
       <pfv6-card-title id="clickable-card-example-title-3">Third card in the actionable example</pfv6-card-title>
       <pfv6-card-body>This card is clickable but disabled.</pfv6-card-body>
     </pfv6-card>
-  </div>
+  </pfv6-gallery>
 </div>
 
 <script type="module">
   import '@pfv6/elements/pfv6-card/pfv6-card.js';
+  import '@pfv6/elements/pfv6-gallery/pfv6-gallery.js';
   
   const cards = document.querySelectorAll('pfv6-card[clickable]');
   
