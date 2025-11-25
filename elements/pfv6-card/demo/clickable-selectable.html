@@ -1,57 +1,100 @@
-<div>
-  <label><input type="checkbox" id="secondaryVariant"> secondary styling</label>
-</div>
+<!-- TODO: This demo is BLOCKED until the following components are available:
+     - <pfv6-checkbox> for "secondary styling" toggle and selectable checkboxes in CardHeader
+     - <pfv6-button variant="link"> for clickable link buttons in card titles
+     - <pfv6-card-header> with selectableActions support
+     
+     CRITICAL: The React demo uses:
+     1. <Checkbox> component (not plain HTML checkbox)
+     2. <CardHeader selectableActions={{...}}> to render checkboxes (not manual checkboxes in CardTitle)
+     3. <Button variant="link" isInline> for clickable links
+     
+     Current implementation uses plain HTML as placeholders. This will be replaced when:
+     - pfv6-checkbox is integrated into pfv6-card-header API
+     - pfv6-button component is implemented
+     - CardHeader selectableActions prop is implemented
+-->
+
+<pfv6-checkbox 
+  label="secondary styling" 
+  id="toggle-variant-clickable-selectable" 
+  name="toggle-variant"
+  accessible-label="add secondary styling">
+</pfv6-checkbox>
 
 <div style="margin-top: 15px;">
-  <div class="pf-v6-c-gallery pf-m-gutter">
+  <pfv6-gallery has-gutter>
+    <!-- Card 1: Selectable with clickable button in title -->
     <pfv6-card id="clickable-selectable-card-example-1" clickable selectable>
+      <!-- TODO: Replace with <pfv6-card-header selectableActions={{...}}> when available -->
       <pfv6-card-title>
-        <input type="checkbox" id="clickable-selectable-card-input-1" name="clickable-selectable-card-input-1" style="margin-inline-end: 8px;">
-        <label for="clickable-selectable-card-input-1">
+        <pfv6-checkbox 
+          id="clickable-selectable-card-input-1" 
+          name="clickable-selectable-card-input-1"
+          accessible-label-id="clickable-selectable-card-example-1">
+          <!-- TODO: Replace with <pfv6-button variant="link" inline> when available -->
           <button style="all: unset; color: var(--pf-t--global--color--brand--default); cursor: pointer; text-decoration: underline;">First card</button>
-        </label>
+        </pfv6-checkbox>
       </pfv6-card-title>
       <pfv6-card-body>This card performs an action upon clicking the card title and is selectable.</pfv6-card-body>
     </pfv6-card>
     
+    <!-- Card 2: Selectable with plain title and link in body -->
     <pfv6-card id="clickable-selectable-card-example-2" clickable selectable>
+      <!-- TODO: Replace with <pfv6-card-header selectableActions={{...}}> when available -->
       <pfv6-card-title>
-        <input type="checkbox" id="clickable-selectable-card-input-2" name="clickable-selectable-card-input-2" style="margin-inline-end: 8px;">
-        <label for="clickable-selectable-card-input-2">Second Card</label>
+        <pfv6-checkbox 
+          id="clickable-selectable-card-input-2" 
+          name="clickable-selectable-card-input-2"
+          accessible-label-id="clickable-selectable-card-example-2">
+          Second Card
+        </pfv6-checkbox>
       </pfv6-card-title>
       <pfv6-card-body>
-        This card is selectable and has a link in the card body that navigates to
+        This card is selectable and has a link in the card body that navigates to 
+        <!-- TODO: Replace with <pfv6-button variant="link" inline component="a"> when available -->
         <a href="#" style="color: var(--pf-t--global--color--brand--default); text-decoration: underline;">Patternfly</a>.
       </pfv6-card-body>
     </pfv6-card>
     
+    <!-- Card 3: Selectable, clickable, but disabled -->
     <pfv6-card id="clickable-selectable-card-example-3" clickable selectable disabled>
+      <!-- TODO: Replace with <pfv6-card-header selectableActions={{...}}> when available -->
       <pfv6-card-title>
-        <input type="checkbox" id="clickable-selectable-card-input-3" name="clickable-selectable-card-input-3" disabled style="margin-inline-end: 8px;">
-        <label for="clickable-selectable-card-input-3">
+        <pfv6-checkbox 
+          id="clickable-selectable-card-input-3" 
+          name="clickable-selectable-card-input-3"
+          disabled
+          accessible-label-id="clickable-selectable-card-example-3">
+          <!-- TODO: Replace with <pfv6-button variant="link" inline disabled component="a"> when available -->
           <a href="https://www.patternfly.org/" style="pointer-events: none; color: inherit; text-decoration: none;">Third card</a>
-        </label>
+        </pfv6-checkbox>
       </pfv6-card-title>
       <pfv6-card-body>This card is clickable and selectable, but disabled.</pfv6-card-body>
     </pfv6-card>
-  </div>
+  </pfv6-gallery>
 </div>
 
 <script type="module">
   import '@pfv6/elements/pfv6-card/pfv6-card.js';
+  import '@pfv6/elements/pfv6-gallery/pfv6-gallery.js';
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
   
   const cards = document.querySelectorAll('pfv6-card[selectable]');
-  const checkboxes = document.querySelectorAll('input[type="checkbox"][id^="clickable-selectable-card-input"]');
+  const cardCheckboxes = document.querySelectorAll('pfv6-checkbox[id^="clickable-selectable-card-input"]');
+  const toggleCheckbox = document.getElementById('toggle-variant-clickable-selectable');
   
-  checkboxes.forEach((checkbox, index) => {
+  // Handle card selection via checkboxes
+  cardCheckboxes.forEach((checkbox, index) => {
     checkbox.addEventListener('change', (e) => {
       cards[index].toggleAttribute('selected', e.target.checked);
     });
   });
   
-  document.getElementById('secondaryVariant').addEventListener('change', (e) => {
+  // Handle secondary variant toggle
+  toggleCheckbox.addEventListener('change', (e) => {
+    const isSecondary = e.target.checked;
     cards.forEach(card => {
-      card.variant = e.target.checked ? 'secondary' : 'default';
+      card.variant = isSecondary ? 'secondary' : 'default';
     });
   });
 </script>

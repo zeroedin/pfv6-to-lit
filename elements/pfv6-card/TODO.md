@@ -1,7 +1,8 @@
 # pfv6-card TODO
 
-**Last Updated**: November 24, 2025  
-**Status**: 🟡 **Partial Parity** - 9/22 demos passing (41%) after checkbox updates
+**Last Updated**: January 20, 2025  
+**Status**: 🟡 **Partial Parity** - 9/22 demos passing (41%) after gallery+checkbox updates  
+**⚠️ CRITICAL**: 3 demos now use `<pfv6-checkbox>` properly but are **BLOCKED** by missing `<pfv6-card-header>` and `<pfv6-button>` components
 
 ---
 
@@ -40,25 +41,29 @@ All browsers (Chromium, Firefox, WebKit):
 **Current**: Using `<hr>` placeholder  
 **Action**: Implement `<pfv6-divider>` component  
 
-#### 2. `selectable` - BLOCKED
-**Blocker**: Requires `<pfv6-gallery>` component (checkbox ✅ complete)  
-**Current**: Using gallery placeholder, checkbox can be updated  
-**Action**: Implement `<pfv6-gallery>`  
+#### 2. `selectable` - BLOCKED BY CARD HEADER
+**Blocker**: Requires `<pfv6-card-header>` with `selectableActions` support  
+**Current**: Using `<pfv6-checkbox>` in `<pfv6-card-title>` as placeholder  
+**Action**: Implement `<pfv6-card-header>` component  
+**Progress**: ✅ Gallery complete, ✅ Checkbox complete, ❌ CardHeader missing  
 
-#### 3. `single-selectable` - BLOCKED
-**Blocker**: Requires `<pfv6-gallery>` component (checkbox ✅ complete)  
-**Current**: Using gallery placeholder, checkbox can be updated  
-**Action**: Implement `<pfv6-gallery>`  
+#### 3. `single-selectable` - BLOCKED BY CARD HEADER
+**Blocker**: Requires `<pfv6-card-header>` with `selectableActions={{ variant: 'single' }}`  
+**Current**: Using plain HTML radio buttons in `<pfv6-card-title>` (correct for single-select)  
+**Action**: Implement `<pfv6-card-header>` component with single-select support  
+**Progress**: ✅ Gallery complete, ✅ Checkbox complete, ❌ CardHeader missing  
 
-#### 4. `clickable-cards` - BLOCKED
-**Blocker**: Requires `<pfv6-gallery>` component (checkbox ✅ complete)  
-**Current**: Using gallery placeholder, checkbox can be updated  
-**Action**: Implement `<pfv6-gallery>`  
+#### 4. `clickable-cards` - BLOCKED BY GALLERY
+**Blocker**: Requires `<pfv6-gallery>` component  
+**Current**: Gallery demo updated, needs visual parity test rerun  
+**Action**: Verify visual parity  
+**Progress**: ✅ Gallery complete  
 
-#### 5. `clickable-selectable` - BLOCKED
-**Blocker**: Requires `<pfv6-gallery>` + `<pfv6-button>` components (checkbox ✅ complete)  
-**Current**: Using placeholders  
-**Action**: Implement `<pfv6-gallery>` + `<pfv6-button>`  
+#### 5. `clickable-selectable` - BLOCKED BY CARD HEADER & BUTTON
+**Blocker**: Requires `<pfv6-card-header>` with `selectableActions` + `<pfv6-button variant="link">`  
+**Current**: Using `<pfv6-checkbox>` placeholder + styled `<button>` placeholder  
+**Action**: Implement `<pfv6-card-header>` + `<pfv6-button>`  
+**Progress**: ✅ Gallery complete, ✅ Checkbox complete, ❌ CardHeader missing, ❌ Button missing  
 
 #### 6. `expandable` - BLOCKED
 **Blocker**: Requires `<pfv6-divider>` + `<pfv6-dropdown>` + dropdown sub-components (checkbox ✅ complete)  
@@ -70,15 +75,17 @@ All browsers (Chromium, Firefox, WebKit):
 **Current**: Using placeholders  
 **Action**: Implement missing components  
 
-#### 8. `tile-cards` - BLOCKED
-**Blocker**: Requires `<pfv6-gallery>` + `<pfv6-flex>` components  
-**Current**: Using placeholders  
-**Action**: Implement `<pfv6-gallery>` + `<pfv6-flex>`  
+#### 8. `tile-cards` - BLOCKED BY FLEX
+**Blocker**: Requires `<pfv6-flex>` component  
+**Current**: Gallery updated, needs flex component  
+**Action**: Implement `<pfv6-flex>`  
+**Progress**: ✅ Gallery complete, ❌ Flex missing  
 
-#### 9. `tile-multi` - BLOCKED
-**Blocker**: Requires `<pfv6-gallery>` + `<pfv6-flex>` components  
-**Current**: Using placeholders  
-**Action**: Implement `<pfv6-gallery>` + `<pfv6-flex>`  
+#### 9. `tile-multi` - BLOCKED BY FLEX
+**Blocker**: Requires `<pfv6-flex>` component  
+**Current**: Gallery updated, needs flex component  
+**Action**: Implement `<pfv6-flex>`  
+**Progress**: ✅ Gallery complete, ❌ Flex missing  
 
 #### 10. `header-in-card-head` - BLOCKED
 **Blocker**: Requires `<pfv6-divider>` + `<pfv6-dropdown>` + dropdown sub-components (checkbox ✅ complete)  
@@ -108,26 +115,28 @@ All browsers (Chromium, Firefox, WebKit):
 
 **By Usage Frequency** (most critical first):
 
-1. **`<pfv6-checkbox>`** - Used in 10 demos (71%) - **IN PROGRESS**
-2. **`<pfv6-gallery>`** - Used in 6 demos (43%)
-3. **`<pfv6-divider>`** - Used in 6 demos (43%)
-4. **`<pfv6-dropdown>`** - Used in 5 demos (36%)
-5. **`<pfv6-dropdown-list>`** - Used in 5 demos (36%)
-6. **`<pfv6-dropdown-item>`** - Used in 5 demos (36%)
-7. **`<pfv6-menu-toggle>`** - Used in 5 demos (36%)
-8. **`<pfv6-menu-toggle-element>`** - Used in 5 demos (36%)
-9. **`<pfv6-button>`** - Used in 2 demos (14%)
-10. **`<pfv6-flex>`** - Used in 2 demos (14%)
-11. **`<pfv6-brand>`** - Used in 1 demo (7%)
+1. ✅ **`<pfv6-checkbox>`** - Used in 10 demos (71%) - **COMPLETE**
+2. ✅ **`<pfv6-gallery>`** - Used in 6 demos (43%) - **COMPLETE**
+3. ❌ **`<pfv6-card-header>`** - **NEW CRITICAL BLOCKER** - Blocks 3 demos (21%) with checkbox/radio placeholders
+4. ❌ **`<pfv6-divider>`** - Used in 6 demos (43%)
+5. ❌ **`<pfv6-dropdown>`** - Used in 5 demos (36%)
+6. ❌ **`<pfv6-dropdown-list>`** - Used in 5 demos (36%)
+7. ❌ **`<pfv6-dropdown-item>`** - Used in 5 demos (36%)
+8. ❌ **`<pfv6-menu-toggle>`** - Used in 5 demos (36%)
+9. ❌ **`<pfv6-menu-toggle-element>`** - Used in 5 demos (36%)
+10. ❌ **`<pfv6-button>`** - Used in 2 demos (14%) - **CRITICAL for `clickable-selectable`**
+11. ❌ **`<pfv6-flex>`** - Used in 2 demos (14%)
+12. ❌ **`<pfv6-brand>`** - Used in 1 demo (7%)
 
 **Priority Order for Implementation**:
-1. **`<pfv6-checkbox>`** (in progress) - Unblocks 10 demos
-2. **`<pfv6-gallery>`** - Unblocks 6 demos
-3. **`<pfv6-divider>`** - Unblocks 6 demos
-4. **Dropdown family** (`<pfv6-dropdown>`, sub-components) - Unblocks 5 demos
-5. **`<pfv6-button>`** - Unblocks 2 demos
-6. **`<pfv6-flex>`** - Unblocks 2 demos
-7. **`<pfv6-brand>`** - Unblocks 1 demo
+1. ✅ **`<pfv6-checkbox>`** (complete) - Unblocked 10 demos
+2. ✅ **`<pfv6-gallery>`** (complete) - Unblocked 6 demos
+3. 🔴 **`<pfv6-card-header>`** (CRITICAL - NEW BLOCKER) - Will unblock 3 demos currently using placeholders
+4. 🔴 **`<pfv6-button>`** (CRITICAL) - Will unblock 1 demo (`clickable-selectable`)
+5. **`<pfv6-divider>`** - Unblocks 6 demos
+6. **Dropdown family** (`<pfv6-dropdown>`, sub-components) - Unblocks 5 demos
+7. **`<pfv6-flex>`** - Unblocks 2 demos
+8. **`<pfv6-brand>`** - Unblocks 1 demo
 
 ---
 
@@ -139,10 +148,32 @@ All browsers (Chromium, Firefox, WebKit):
 - ✅ **Result**: 1 card demo unblocked (9/22 passing now)
 - ⚠️ **Note**: Checkbox requires accessibility & form integration analysis before production use
 
-### Phase 2: Implement Gallery (High Priority)
-- [ ] Study React `<Gallery>` component
-- [ ] Implement `<pfv6-gallery>`
-- [ ] This will unblock 6 more card demos
+### Phase 2: Implement Gallery ✅ COMPLETE
+- [x] Gallery component implemented (100% visual parity)
+- [x] **Updated 6 card demos** with `<pfv6-gallery has-gutter>`
+- ✅ **Result**: All card demos now use proper gallery component
+- ⚠️ **Note**: 3 demos (`selectable`, `single-selectable`, `clickable-selectable`) are still **BLOCKED** by missing `<pfv6-card-header>` and `<pfv6-button>` (see Phase 2a below)
+
+### Phase 2a: Implement Card Header & Button (CRITICAL - BLOCKS 3 DEMOS)
+- [ ] Study React `<CardHeader>` component with `selectableActions` prop
+- [ ] Implement `<pfv6-card-header>` with `selectableActions` support:
+  - `variant: 'single'` (renders radio buttons for single-select)
+  - `variant: 'multiple'` (default - renders checkboxes for multi-select)
+  - `isHidden` property (hide the input control)
+  - `hasNoOffset` property (remove default spacing)
+  - `onChange` event handler
+- [ ] Study React `<Button>` component
+- [ ] Implement `<pfv6-button>` with:
+  - `variant` property (primary, secondary, **link**, etc.)
+  - `inline` property for inline display
+  - `component` property for rendering as different elements (button, a, etc.)
+  - `disabled` property
+- [ ] Update 3 card demos to use proper components:
+  - `clickable-selectable.html` (uses CardHeader + Button link)
+  - `selectable.html` (uses CardHeader)
+  - `single-selectable.html` (uses CardHeader variant="single")
+- ✅ **Result**: This will unblock 3 card demos that currently use placeholder checkboxes
+- 📖 **Documentation**: See `CARD_DEMOS_CHECKBOX_UPDATE.md` for detailed API requirements
 
 ### Phase 3: Implement Divider (High Priority)
 - [ ] Study React `<Divider>` component

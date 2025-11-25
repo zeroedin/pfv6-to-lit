@@ -1,4 +1,4 @@
-<div class="pf-v6-c-gallery pf-m-gutter">
+<pfv6-gallery has-gutter>
   <pfv6-card id="tile-example-1" selectable>
     <pfv6-card-title style="display: flex; gap: 0.5rem; align-items: center;">
       <input type="radio" id="tile-1" name="tile-group" style="display: none;">
@@ -25,10 +25,11 @@
     </pfv6-card-title>
     <pfv6-card-body>Tile content and description</pfv6-card-body>
   </pfv6-card>
-</div>
+</pfv6-gallery>
 
 <script type="module">
   import '@pfv6/elements/pfv6-card/pfv6-card.js';
+  import '@pfv6/elements/pfv6-gallery/pfv6-gallery.js';
   
   const cards = document.querySelectorAll('pfv6-card[selectable]');
   const radios = document.querySelectorAll('input[type="radio"][name="tile-group"]');
