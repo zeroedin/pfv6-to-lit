@@ -1,12 +1,15 @@
 <pfv6-card>
-  <div slot="actions">
-    <button aria-label="Card checkbox example">☑</button>
-    <button aria-label="Card header without title example kebab toggle">⋮</button>
-  </div>
+  <pfv6-card-header>
+    <div slot="actions">
+      <!-- TODO: Replace with <pfv6-dropdown> when available -->
+      <button aria-label="Card header without title example kebab toggle">⋮</button>
+      <pfv6-checkbox id="check-3" accessible-label="card checkbox example"></pfv6-checkbox>
+    </div>
+  </pfv6-card-header>
   <pfv6-card-body>This is the card body. There are only actions in the card head.</pfv6-card-body>
 </pfv6-card>
 
 <script type="module">
   import '@pfv6/elements/pfv6-card/pfv6-card.js';
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
 </script>
-

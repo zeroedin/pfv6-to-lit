@@ -1,14 +1,18 @@
-<div>
-  <label><input type="checkbox" id="hasNoOffset"> actions hasNoOffset</label>
-</div>
+<pfv6-checkbox id="toggle-actions-offset">actions hasNoOffset</pfv6-checkbox>
 
 <div style="margin-top: 15px;">
   <pfv6-card id="image-actions-card">
-    <img slot="header-image" src="/dev-server/assets/patternfly/images/PF-HorizontalLogo-Color.svg" alt="PatternFly logo" style="width: 300px;">
-    <div slot="actions">
-      <button aria-label="Card checkbox example">☑</button>
-      <button aria-label="Card header images and actions example kebab toggle">⋮</button>
-    </div>
+    <pfv6-card-header id="card-header">
+      <!-- TODO: Replace with <pfv6-brand> when available -->
+      <img src="/dev-server/assets/patternfly/images/PF-HorizontalLogo-Color.svg" alt="PatternFly logo" style="width: 300px;">
+      
+      <div slot="actions">
+        <!-- TODO: Replace with <pfv6-dropdown> when available -->
+        <button aria-label="Card header images and actions example kebab toggle">⋮</button>
+        <!-- TODO: Replace with <pfv6-checkbox> when available -->
+        <pfv6-checkbox id="check-1" accessible-label="card checkbox example"></pfv6-checkbox>
+      </div>
+    </pfv6-card-header>
     <pfv6-card-title>Title</pfv6-card-title>
     <pfv6-card-body>Body</pfv6-card-body>
     <pfv6-card-footer>Footer</pfv6-card-footer>
@@ -17,10 +21,12 @@
 
 <script type="module">
   import '@pfv6/elements/pfv6-card/pfv6-card.js';
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
   
-  document.getElementById('hasNoOffset').addEventListener('change', (e) => {
-    const card = document.getElementById('image-actions-card');
-    card.toggleAttribute('actions-no-offset', e.target.checked);
+  const header = document.getElementById('card-header');
+  const offsetToggle = document.getElementById('toggle-actions-offset');
+  
+  offsetToggle.addEventListener('change', (e) => {
+    header.toggleAttribute('actions-no-offset', e.target.checked);
   });
 </script>
-

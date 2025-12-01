@@ -1,21 +1,35 @@
-<div>
-  <label><input type="checkbox" id="secondaryVariant"> secondary styling</label>
-</div>
+<pfv6-checkbox id="toggle-variant-clickable">secondary styling</pfv6-checkbox>
 
 <div style="margin-top: 15px;">
   <pfv6-gallery has-gutter>
-    <pfv6-card clickable id="clickable-card-1">
-      <pfv6-card-title id="clickable-card-example-title-1">First card in the actionable example</pfv6-card-title>
+    <pfv6-card id="clickable-card-1" is-clickable>
+      <pfv6-card-header
+        clickable-only
+        selectable-aria-labelledby="clickable-card-example-title-1"
+      >
+        <pfv6-card-title id="clickable-card-example-title-1">First card in the actionable example</pfv6-card-title>
+      </pfv6-card-header>
       <pfv6-card-body>This card performs an action on click.</pfv6-card-body>
     </pfv6-card>
     
-    <pfv6-card clickable id="clickable-card-2">
-      <pfv6-card-title id="clickable-card-example-title-2">Second card in the actionable example</pfv6-card-title>
+    <pfv6-card id="clickable-card-2" is-clickable>
+      <pfv6-card-header
+        clickable-only
+        clickable-href="#"
+        selectable-aria-labelledby="clickable-card-example-title-2"
+      >
+        <pfv6-card-title id="clickable-card-example-title-2">Second card in the actionable example</pfv6-card-title>
+      </pfv6-card-header>
       <pfv6-card-body>This card can navigate to a link on click.</pfv6-card-body>
     </pfv6-card>
     
-    <pfv6-card clickable disabled id="clickable-card-3">
-      <pfv6-card-title id="clickable-card-example-title-3">Third card in the actionable example</pfv6-card-title>
+    <pfv6-card id="clickable-card-3" is-clickable is-disabled>
+      <pfv6-card-header
+        clickable-only
+        selectable-aria-labelledby="clickable-card-example-title-3"
+      >
+        <pfv6-card-title id="clickable-card-example-title-3">Third card in the actionable example</pfv6-card-title>
+      </pfv6-card-header>
       <pfv6-card-body>This card is clickable but disabled.</pfv6-card-body>
     </pfv6-card>
   </pfv6-gallery>
@@ -24,20 +38,24 @@
 <script type="module">
   import '@pfv6/elements/pfv6-card/pfv6-card.js';
   import '@pfv6/elements/pfv6-gallery/pfv6-gallery.js';
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
   
-  const cards = document.querySelectorAll('pfv6-card[clickable]');
+  const cards = document.querySelectorAll('pfv6-card[is-clickable]');
+  const variantToggle = document.getElementById('toggle-variant-clickable');
   
-  document.getElementById('secondaryVariant').addEventListener('change', (e) => {
+  variantToggle.addEventListener('change', (e) => {
     cards.forEach(card => {
       card.variant = e.target.checked ? 'secondary' : 'default';
     });
   });
   
-  document.getElementById('clickable-card-1').addEventListener('click', () => {
+  const header1 = document.querySelector('#clickable-card-1 pfv6-card-header');
+  header1.addEventListener('click', () => {
     console.log('First card in actionable example clicked');
   });
   
-  document.getElementById('clickable-card-3').addEventListener('click', () => {
+  const header3 = document.querySelector('#clickable-card-3 pfv6-card-header');
+  header3.addEventListener('click', () => {
     console.log('Third card in actionable example clicked');
   });
 </script>
