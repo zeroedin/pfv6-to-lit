@@ -74,14 +74,14 @@
         // Unselect all other cards
         cards.forEach((card, i) => {
           if (i !== index) {
-            card.setAttribute('is-selected', 'false');
-            headers[i].setAttribute('selectable-checked', 'false');
+            card.removeAttribute('is-selected');
+            headers[i].removeAttribute('selectable-checked');
           }
         });
         
         // Select this card
-        cards[index].setAttribute('is-selected', 'true');
-        header.setAttribute('selectable-checked', 'true');
+        cards[index].setAttribute('is-selected', '');
+        header.setAttribute('selectable-checked', '');
       }
     });
   });

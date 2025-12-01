@@ -29,7 +29,12 @@
   // Handle expand/collapse
   header.addEventListener('expand', (e) => {
     const expanded = e.detail.expanded;
-    card.setAttribute('is-expanded', expanded);
-    header.setAttribute('expanded', expanded);
+    if (expanded) {
+      card.setAttribute('is-expanded', '');
+      header.setAttribute('expanded', '');
+    } else {
+      card.removeAttribute('is-expanded');
+      header.removeAttribute('expanded');
+    }
   });
 </script>
