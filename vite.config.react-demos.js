@@ -115,9 +115,6 @@ export default defineConfig({
     experimental: {
         renderBuiltUrl(filename, { hostType }) {
             // For assets, use relative path to the shared folder
-            if (hostType === 'js') {
-                return { relative: true };
-            }
             return { relative: true };
         }
     },
