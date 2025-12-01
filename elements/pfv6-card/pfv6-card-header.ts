@@ -6,6 +6,33 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './pfv6-card-header.css';
 
 /**
+ * Event fired when card expand toggle is clicked
+ */
+export class Pfv6CardExpandEvent extends Event {
+  constructor(public expanded: boolean) {
+    super('expand', { bubbles: true, composed: true });
+  }
+}
+
+/**
+ * Event fired when selectable action (checkbox/radio) changes
+ */
+export class Pfv6CardSelectableChangeEvent extends Event {
+  constructor(public checked: boolean) {
+    super('change', { bubbles: true, composed: true });
+  }
+}
+
+/**
+ * Event fired when clickable action is clicked
+ */
+export class Pfv6CardClickableClickEvent extends Event {
+  constructor() {
+    super('click', { bubbles: true, composed: true });
+  }
+}
+
+/**
  * Card Header Component
  * 
  * The header section of a card that can contain:
@@ -160,30 +187,19 @@ export class Pfv6CardHeader extends LitElement {
   #handleExpandToggle = (e: MouseEvent) => {
     e.stopPropagation();
     
-    const event = new CustomEvent('expand', {
-      bubbles: true,
-      composed: true,
-      detail: { expanded: !this.expanded }
-    });
+    const event = new Pfv6CardExpandEvent(!this.expanded);
     this.dispatchEvent(event);
   };
 
   #handleSelectableChange = (e: Event) => {
     const input = e.target as HTMLInputElement;
     
-    const event = new CustomEvent('change', {
-      bubbles: true,
-      composed: true,
-      detail: { checked: input.checked }
-    });
+    const event = new Pfv6CardSelectableChangeEvent(input.checked);
     this.dispatchEvent(event);
   };
 
   #handleClickableClick = (e: MouseEvent) => {
-    const event = new CustomEvent('click', {
-      bubbles: true,
-      composed: true
-    });
+    const event = new Pfv6CardClickableClickEvent();
     this.dispatchEvent(event);
   };
 

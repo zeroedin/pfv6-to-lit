@@ -64,8 +64,13 @@
   headers.forEach((header, index) => {
     header.addEventListener('change', (e) => {
       const checked = e.detail.checked;
-      cards[index].setAttribute('is-selected', checked);
-      header.setAttribute('selectable-checked', checked);
+      if (checked) {
+        cards[index].setAttribute('is-selected', '');
+        header.setAttribute('selectable-checked', '');
+      } else {
+        cards[index].removeAttribute('is-selected');
+        header.removeAttribute('selectable-checked');
+      }
     });
   });
   

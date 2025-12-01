@@ -9,7 +9,7 @@
  * See: https://www.patternfly.org/components/card#css-variables
  */
 
-/* 
+/*
  * CRITICAL: Shadow DOM box-sizing reset
  * PatternFly base.css sets: *, *::before, *::after { box-sizing: border-box; }
  * box-sizing is NOT inherited, so Shadow DOM elements default to content-box
@@ -344,14 +344,14 @@
   --_pfv6-card-border-width: var(--pf-v6-c-card--m-selectable--m-selected--focus--BorderWidth, var(--pf-t--global--border--width--box--clicked));
 }
 
-/* Clicked state */
-#container.clickable.clicked {
+/* Current state (clicked/active) */
+#container.clickable.current {
   --_pfv6-card-border-color: var(--pf-v6-c-card--m-clickable--m-current--BorderColor, var(--pf-t--global--border--color--clicked));
   --_pfv6-card-border-width: var(--pf-v6-c-card--m-clickable--m-current--BorderWidth, var(--pf-t--global--border--width--box--clicked));
 }
 
 /* Selectable + Clickable + Current state */
-#container.selectable.clickable.clicked {
+#container.selectable.clickable.current {
   --_pfv6-card-border-color: var(--pf-v6-c-card--m-selectable--m-clickable--m-current--BorderColor, var(--pf-t--global--border--color--clicked));
   --_pfv6-card-border-width: var(--pf-v6-c-card--m-selectable--m-clickable--m-current--BorderWidth, var(--pf-t--global--border--width--box--clicked));
 }

@@ -208,12 +208,12 @@ export class Pfv6Card extends LitElement {
 
   /**
    * Visual state flag indicating the card is currently clicked/active (applies .pf-m-current class).
-   * Note: React calls this "isClicked" but the CSS class is "pf-m-current".
+   * Note: React prop is "isClicked", CSS class is "pf-m-current".
    * @type {boolean}
    * @default false
    */
-  @property({ type: Boolean, reflect: true, attribute: 'is-current' })
-  isCurrent = false;
+  @property({ type: Boolean, reflect: true, attribute: 'is-clicked' })
+  isClicked = false;
 
   /**
    * Visual state flag indicating the card is disabled.
@@ -243,7 +243,7 @@ export class Pfv6Card extends LitElement {
       selectable: this.isSelectable,
       clickable: this.isClickable,
       selected: this.isSelected,
-      current: this.isCurrent,
+      current: this.isClicked,  // Note: Property is isClicked, CSS class is .current
       disabled: this.isDisabled,
       expanded: this.isExpanded,
     };

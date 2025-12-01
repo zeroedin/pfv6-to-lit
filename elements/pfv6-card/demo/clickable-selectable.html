@@ -128,7 +128,11 @@
   
   // Handle title button click (toggle isClicked state)
   titleButton.addEventListener('click', () => {
-    const isClicked = card1.getAttribute('is-clicked') === 'true';
-    card1.setAttribute('is-clicked', !isClicked);
+    const isClicked = card1.hasAttribute('is-clicked');
+    if (isClicked) {
+      card1.removeAttribute('is-clicked');
+    } else {
+      card1.setAttribute('is-clicked', '');
+    }
   });
 </script>
