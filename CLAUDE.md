@@ -4476,6 +4476,30 @@ When implementing components:
 6. **Document lightdom CSS** when used
 7. **Test thoroughly** - compare with React side-by-side
 
+### Visual Parity Analysis Methodology
+
+When visual tests fail, use the systematic analysis process documented in `VISUAL_PARITY_ANALYSIS_METHODOLOGY.md`:
+
+1. **Analyze test report** - Review Playwright report, examine diff images
+2. **Side-by-side visual inspection** - Open both demos in browser, take screenshots
+3. **Source code comparison** - Compare React and Lit demo files line-by-line
+4. **Browser DevTools inspection** - Check computed styles, Shadow DOM structure
+5. **Interactive state testing** - Test hover, focus, selection states
+6. **Root cause analysis** - Categorize issues (fixable vs blocked)
+
+**Key principle**: Document your analysis process! Create a specific analysis document for complex failures (e.g., `CLICKABLE_SELECTABLE_ANALYSIS.md`) showing:
+- Visual differences observed
+- Source code comparison
+- Root cause identification
+- Recommended fixes
+- Testing checklist
+
+This documentation helps:
+- ✅ Future developers understand the issue
+- ✅ Track decision-making process
+- ✅ Validate fixes systematically
+- ✅ Create reusable patterns for similar issues
+
 ---
 
 ## Document Metadata
