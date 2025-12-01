@@ -109,6 +109,11 @@ Developers using the PatternFly design system who are **not in React-based envir
   - ✅ **DO** use generics when working with dynamic types
   - ❌ **NEVER** use `any` as a shortcut or workaround
   - **Why**: `any` defeats the purpose of TypeScript and eliminates type safety
+- **CRITICAL**: NEVER use deprecated JavaScript methods
+  - ✅ **DO** use `substring()` or `slice()` instead of deprecated `substr()`
+  - ✅ **DO** check MDN for current best practices
+  - ❌ **NEVER** use `substr()` (deprecated since ES2022)
+  - **Example**: `str.substring(2, 11)` instead of `str.substr(2, 9)`
 
 ### Framework & Styling
 - **Lit** (LitElement) for web component implementation

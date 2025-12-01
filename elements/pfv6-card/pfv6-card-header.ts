@@ -264,7 +264,7 @@ export class Pfv6CardHeader extends LitElement {
     if (!this.selectableVariant) return '';
 
     const inputType = this.selectableVariant === 'single' ? 'radio' : 'checkbox';
-    const inputId = this.selectableId || `card-selectable-${Math.random().toString(36).substr(2, 9)}`;
+    const inputId = this.selectableId || `card-selectable-${Math.random().toString(36).substring(2, 11)}`;
 
     return html`
       <div 
