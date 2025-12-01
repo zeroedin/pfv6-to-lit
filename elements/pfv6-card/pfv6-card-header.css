@@ -1,0 +1,154 @@
+/*
+ * CRITICAL: Shadow DOM box-sizing reset
+ * PatternFly base.css sets: *, *::before, *::after { box-sizing: border-box; }
+ * box-sizing is NOT inherited, so Shadow DOM elements default to content-box
+ * This causes layout differences vs React PatternFly
+ * MUST be included in EVERY component's CSS
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Two-layer pattern: private variables reference public API with fallbacks */
+  --_header-toggle-margin-block-start: var(--pf-v6-c-card__header-toggle--MarginBlockStart, calc(var(--pf-t--global--spacer--control--vertical--default) * -1));
+  --_header-toggle-margin-inline-end: var(--pf-v6-c-card__header-toggle--MarginInlineEnd, var(--pf-t--global--spacer--gap--text-to-element--default));
+  --_header-toggle-margin-block-end: var(--pf-v6-c-card__header-toggle--MarginBlockEnd, calc(var(--pf-t--global--spacer--control--vertical--default) * -1));
+  --_header-toggle-margin-inline-start: var(--pf-v6-c-card__header-toggle--MarginInlineStart, calc(var(--pf-t--global--spacer--action--horizontal--plain--default) * -1));
+  
+  --_header-toggle-icon-transition-timing-function: var(--pf-v6-c-card__header-toggle-icon--TransitionTimingFunction, var(--pf-t--global--motion--timing-function--default));
+  --_header-toggle-icon-transition-duration: var(--pf-v6-c-card__header-toggle-icon--TransitionDuration, var(--pf-t--global--motion--duration--icon--default));
+  --_header-toggle-icon-rotate: var(--pf-v6-c-card--m-expanded__header-toggle-icon--Rotate, 90deg);
+  
+  --_actions-padding-inline-start: var(--pf-v6-c-card__actions--PaddingInlineStart, var(--pf-t--global--spacer--md));
+  --_actions-gap: var(--pf-v6-c-card__actions--Gap, var(--pf-t--global--spacer--gap--action-to-action--default));
+  --_actions-margin-block-start: var(--pf-v6-c-card__actions--MarginBlockStart, calc(var(--pf-t--global--spacer--control--vertical--default) * -1));
+  --_actions-margin-block-end: var(--pf-v6-c-card__actions--MarginBlockEnd, calc(var(--pf-t--global--spacer--control--vertical--default) * -1));
+  
+  --_header-wrap-row-gap: var(--pf-v6-c-card__header--m-wrap--RowGap, var(--pf-t--global--spacer--sm));
+  --_header-wrap-column-gap: var(--pf-v6-c-card__header--m-wrap--ColumnGap, var(--pf-t--global--spacer--md));
+  
+  display: contents;
+}
+
+#header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#header.toggle-right {
+  --_header-toggle-margin-inline-end: calc(var(--pf-t--global--spacer--action--horizontal--plain--default, 0.5rem) * -1);
+  --_header-toggle-margin-inline-start: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
+}
+
+#header.toggle-right .header-toggle {
+  order: 2;
+}
+
+#header.wrap {
+  --_actions-padding-inline-start: 0;
+  
+  gap: var(--_header-wrap-row-gap) var(--_header-wrap-column-gap);
+  flex-wrap: wrap;
+}
+
+#header.wrap #actions {
+  flex-wrap: wrap;
+  row-gap: var(--_header-wrap-row-gap);
+  margin-inline-start: 0;
+}
+
+#header.wrap #actions + * {
+  margin-inline-end: auto;
+}
+
+.header-main {
+  flex-grow: 1;
+}
+
+.header-toggle {
+  align-self: flex-start;
+  margin-block-start: var(--_header-toggle-margin-block-start);
+  margin-block-end: var(--_header-toggle-margin-block-end);
+  margin-inline-start: var(--_header-toggle-margin-inline-start);
+  margin-inline-end: var(--_header-toggle-margin-inline-end);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+.header-toggle-icon {
+  display: inline-block;
+  transition-timing-function: var(--_header-toggle-icon-transition-timing-function);
+  transition-duration: var(--_header-toggle-icon-transition-duration);
+  transition-property: transform;
+}
+
+/* Expanded state - rotate icon */
+:host([expanded]) .header-toggle-icon {
+  transform: rotate(var(--_header-toggle-icon-rotate));
+}
+
+/* RTL support */
+:where(:host-context([dir='rtl'])) .header-toggle-icon {
+  scale: -1 1;
+}
+
+#actions {
+  display: flex;
+  gap: var(--_actions-gap);
+  align-items: center;
+  align-self: flex-start;
+  order: 1;
+  padding-inline-start: var(--_actions-padding-inline-start);
+  margin-block-start: var(--_actions-margin-block-start);
+  margin-block-end: var(--_actions-margin-block-end);
+  margin-inline-start: auto;
+}
+
+#actions.no-offset {
+  --_actions-margin-block-start: 0;
+  --_actions-margin-block-end: 0;
+}
+
+/* Selectable actions container */
+.selectable-actions {
+  position: relative;
+}
+
+.selectable-actions.hidden {
+  display: none;
+}
+
+/* Clickable action button/link overlay */
+.clickable-action {
+  position: absolute;
+  inset: 0;
+  justify-self: auto;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  outline: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Visually hidden label */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+
