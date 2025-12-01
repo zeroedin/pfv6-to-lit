@@ -1,14 +1,17 @@
 <pfv6-card>
-  <div slot="actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-    <button>Primary action</button>
-    <button>Secondary action</button>
-    <button>Tertiary action</button>
-  </div>
-  <pfv6-card-title>This is a longer card title that takes up more space</pfv6-card-title>
+  <pfv6-card-header has-wrap actions-no-offset>
+    <pfv6-card-title>This is a longer card title that takes up more space</pfv6-card-title>
+    
+    <div slot="actions">
+      <!-- TODO: Replace with <pfv6-button> when available -->
+      <button>Primary action</button>
+      <button>Secondary action</button>
+      <button>Tertiary action</button>
+    </div>
+  </pfv6-card-header>
   <pfv6-card-body>This is the card body</pfv6-card-body>
 </pfv6-card>
 
 <script type="module">
   import '@pfv6/elements/pfv6-card/pfv6-card.js';
 </script>
-

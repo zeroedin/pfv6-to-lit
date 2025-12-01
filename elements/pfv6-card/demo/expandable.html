@@ -1,13 +1,23 @@
 <div style="margin-bottom: 12px;">
-  <label><input type="checkbox" id="isToggleRightAligned"> isToggleRightAligned</label>
+  <pfv6-checkbox id="isToggleRightAligned">isToggleRightAligned</pfv6-checkbox>
 </div>
 
-<pfv6-card id="expandable-card" expandable>
-  <div slot="actions">
-    <button aria-label="Card checkbox example">☑</button>
-    <button aria-label="Card expandable example kebab toggle">⋮</button>
-  </div>
-  <pfv6-card-title>Title</pfv6-card-title>
+<pfv6-card id="expandable-card" is-expanded="false">
+  <pfv6-card-header 
+    id="card-header"
+    expandable 
+    expanded="false"
+  >
+    <pfv6-card-title id="expandable-card-title">Title</pfv6-card-title>
+    
+    <div slot="actions">
+      <!-- TODO: Replace with <pfv6-dropdown> when available -->
+      <button aria-label="Card expandable example kebab toggle">⋮</button>
+      <!-- TODO: Replace with <pfv6-checkbox> when available -->
+      <pfv6-checkbox id="check-4" accessible-label="card checkbox example"></pfv6-checkbox>
+    </div>
+  </pfv6-card-header>
+  
   <pfv6-card-expandable-content>
     <pfv6-card-body>Body</pfv6-card-body>
     <pfv6-card-footer>Footer</pfv6-card-footer>
@@ -16,11 +26,27 @@
 
 <script type="module">
   import '@pfv6/elements/pfv6-card/pfv6-card.js';
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
   
   const card = document.getElementById('expandable-card');
+  const header = document.getElementById('card-header');
+  const toggleCheckbox = document.getElementById('isToggleRightAligned');
   
-  document.getElementById('isToggleRightAligned').addEventListener('change', (e) => {
-    card.toggleAttribute('toggle-right-aligned', e.target.checked);
+  // Handle toggle-right-aligned
+  toggleCheckbox.addEventListener('change', (e) => {
+    header.toggleAttribute('toggle-right-aligned', e.target.checked);
+  });
+  
+  // Handle expand/collapse
+  header.addEventListener('expand', (e) => {
+    const expanded = e.expanded;
+    if (expanded) {
+      card.setAttribute('is-expanded', '');
+      header.setAttribute('expanded', '');
+    } else {
+      card.removeAttribute('is-expanded');
+      header.removeAttribute('expanded');
+    }
   });
 </script>
 

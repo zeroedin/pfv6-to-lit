@@ -1,63 +1,47 @@
-<!-- TODO: This demo is BLOCKED until the following components are available:
-     - <pfv6-card-header> with selectableActions support (including isHidden property)
-     
-     Current implementation uses <pfv6-checkbox> in CardTitle as a placeholder.
-     React demo uses <CardHeader selectableActions={{...}}> to render checkboxes.
--->
-
-<pfv6-checkbox 
-  label="Secondary card styling" 
-  id="toggle-variant-selectable" 
-  name="toggle-variant">
-</pfv6-checkbox>
-
-<pfv6-checkbox 
-  label="Hide checkbox" 
-  id="selectable-toggle-hide-checkbox" 
-  name="toggle-hide">
-</pfv6-checkbox>
+<pfv6-checkbox id="toggle-variant-selectable">Secondary card styling</pfv6-checkbox>
+<pfv6-checkbox id="selectable-toggle-hide-checkbox">Hide checkbox</pfv6-checkbox>
 
 <pfv6-gallery has-gutter style="margin-top: 15px;">
-  <!-- Card 1: Basic selectable card -->
-  <pfv6-card id="selectable-card-example-1" selectable>
-    <!-- TODO: Replace with <pfv6-card-header selectableActions={{...}}> when available -->
-    <pfv6-card-title>
-      <pfv6-checkbox 
-        id="selectable-card-input-1" 
-        name="selectable-card-input-1"
-        accessible-label-id="selectable-card-example-1">
-        First card
-      </pfv6-checkbox>
-    </pfv6-card-title>
+  <pfv6-card id="selectable-card-example-1" is-selectable>
+    <pfv6-card-header
+      id="header-1"
+      selectable-variant="multiple"
+      selectable-id="selectable-card-input-1"
+      selectable-name="selectable-card-input-1"
+      selectable-aria-labelledby="selectable-card-example-1"
+      actions-no-offset
+    >
+      <pfv6-card-title>First card</pfv6-card-title>
+    </pfv6-card-header>
     <pfv6-card-body>This card is selectable.</pfv6-card-body>
   </pfv6-card>
   
-  <!-- Card 2: Second selectable card -->
-  <pfv6-card id="selectable-card-example-2" selectable>
-    <!-- TODO: Replace with <pfv6-card-header selectableActions={{...}}> when available -->
-    <pfv6-card-title>
-      <pfv6-checkbox 
-        id="selectable-card-input-2" 
-        name="selectable-card-input-2"
-        accessible-label-id="selectable-card-example-2">
-        Second card
-      </pfv6-checkbox>
-    </pfv6-card-title>
+  <pfv6-card id="selectable-card-example-2" is-selectable>
+    <pfv6-card-header
+      id="header-2"
+      selectable-variant="multiple"
+      selectable-id="selectable-card-input-2"
+      selectable-name="selectable-card-input-2"
+      selectable-aria-labelledby="selectable-card-example-2"
+      actions-no-offset
+    >
+      <pfv6-card-title>Second card</pfv6-card-title>
+    </pfv6-card-header>
     <pfv6-card-body>This card is selectable.</pfv6-card-body>
   </pfv6-card>
   
-  <!-- Card 3: Selectable but disabled -->
-  <pfv6-card id="selectable-card-example-3" selectable disabled>
-    <!-- TODO: Replace with <pfv6-card-header selectableActions={{...}}> when available -->
-    <pfv6-card-title>
-      <pfv6-checkbox 
-        id="selectable-card-input-3" 
-        name="selectable-card-input-3" 
-        disabled
-        accessible-label-id="selectable-card-example-3">
-        Third card
-      </pfv6-checkbox>
-    </pfv6-card-title>
+  <pfv6-card id="selectable-card-example-3" is-selectable is-disabled>
+    <pfv6-card-header
+      id="header-3"
+      selectable-variant="multiple"
+      selectable-id="selectable-card-input-3"
+      selectable-name="selectable-card-input-3"
+      selectable-aria-labelledby="selectable-card-example-3"
+      selectable-disabled
+      actions-no-offset
+    >
+      <pfv6-card-title>Third card</pfv6-card-title>
+    </pfv6-card-header>
     <pfv6-card-body>This card is selectable but disabled.</pfv6-card-body>
   </pfv6-card>
 </pfv6-gallery>
@@ -67,15 +51,26 @@
   import '@pfv6/elements/pfv6-gallery/pfv6-gallery.js';
   import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
   
-  const cards = document.querySelectorAll('pfv6-card[selectable]');
-  const cardCheckboxes = document.querySelectorAll('pfv6-checkbox[id^="selectable-card-input"]');
+  const cards = document.querySelectorAll('pfv6-card[is-selectable]');
+  const headers = [
+    document.getElementById('header-1'),
+    document.getElementById('header-2'),
+    document.getElementById('header-3')
+  ];
   const variantToggle = document.getElementById('toggle-variant-selectable');
   const hideToggle = document.getElementById('selectable-toggle-hide-checkbox');
   
-  // Handle card selection via checkboxes
-  cardCheckboxes.forEach((checkbox, index) => {
-    checkbox.addEventListener('change', (e) => {
-      cards[index].toggleAttribute('selected', e.target.checked);
+  // Handle card selection via header change events
+  headers.forEach((header, index) => {
+    header.addEventListener('change', (e) => {
+      const checked = e.checked;
+      if (checked) {
+        cards[index].setAttribute('is-selected', '');
+        header.setAttribute('selectable-checked', '');
+      } else {
+        cards[index].removeAttribute('is-selected');
+        header.removeAttribute('selectable-checked');
+      }
     });
   });
   
@@ -90,8 +85,8 @@
   // Handle hide checkbox toggle (CardHeader selectableActions.isHidden equivalent)
   hideToggle.addEventListener('change', (e) => {
     const shouldHide = e.target.checked;
-    cardCheckboxes.forEach(checkbox => {
-      checkbox.style.display = shouldHide ? 'none' : '';
+    headers.forEach(header => {
+      header.toggleAttribute('selectable-hidden', shouldHide);
     });
   });
 </script>

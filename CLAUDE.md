@@ -49,6 +49,7 @@ npm run lint                  # Run all linters (ESLint + Stylelint)
 - **Tokens**: Use semantic tokens with fallback values, never hardcode colors/spacing
 - **Shadow DOM CSS**: Use `#id` selectors (not BEM classes), `classMap()` (not `:host([attr])`), no unnecessary CSS custom properties
 - **Render Method**: Keep all HTML in `render()`, use ternaries for conditionals, don't break into subroutines
+- **🚨 API Separation**: Match React prop names for component API (e.g., `isClicked`), NOT CSS class names (e.g., `.pf-m-current`)
 
 ---
 
@@ -108,6 +109,11 @@ Developers using the PatternFly design system who are **not in React-based envir
   - ✅ **DO** use generics when working with dynamic types
   - ❌ **NEVER** use `any` as a shortcut or workaround
   - **Why**: `any` defeats the purpose of TypeScript and eliminates type safety
+- **CRITICAL**: NEVER use deprecated JavaScript methods
+  - ✅ **DO** use `substring()` or `slice()` instead of deprecated `substr()`
+  - ✅ **DO** check MDN for current best practices
+  - ❌ **NEVER** use `substr()` (deprecated since ES2022)
+  - **Example**: `str.substring(2, 11)` instead of `str.substr(2, 9)`
 
 ### Framework & Styling
 - **Lit** (LitElement) for web component implementation
@@ -2444,6 +2450,50 @@ render() {
 - Works consistently across HTML and JavaScript usage
 - Pairs perfectly with `classMap()` for performant Shadow DOM CSS
 
+**🚨 CRITICAL: Component API vs CSS API**
+
+**Two Separate APIs - Do NOT Mix:**
+
+1. **Component API** (Public Surface for Developers):
+   - **Properties/Attributes** - Match React prop names exactly
+   - **Events** - Match React callback names (converted to events)
+   - **Slots** - Map React children to slots
+   - **Example**: React prop `isClicked` → Our attribute `is-clicked` → Our property `isClicked`
+
+2. **CSS API** (Internal Styling):
+   - **CSS Classes** - PatternFly's internal naming (`.pf-m-current`, `.pf-m-selected`)
+   - **CSS Variables** - Public styling API (match PatternFly exactly)
+   - **Example**: `.pf-m-current` is the CSS class, but our attribute is `is-clicked`
+
+**The Rule**:
+```typescript
+// ✅ CORRECT - Component API matches React prop name
+@property({ type: Boolean, reflect: true, attribute: 'is-clicked' })
+isClicked = false;
+
+render() {
+  return html`
+    <div class=${classMap({
+      current: this.isClicked  // ← CSS class name is "current"
+    })}>
+  `;
+}
+```
+
+```typescript
+// ❌ WRONG - Using CSS class name for component API
+@property({ type: Boolean, reflect: true, attribute: 'is-current' })
+isCurrent = false;  // ← Should be isClicked to match React!
+```
+
+**Why This Matters**:
+- ✅ **Component API parity**: `isClicked` matches React's `isClicked` prop
+- ✅ **CSS API parity**: `.pf-m-current` class matches PatternFly CSS
+- ✅ **Clear separation**: Developers use React prop names, internal CSS uses PatternFly class names
+- ❌ **Don't confuse the two**: CSS class names (`.pf-m-current`) are implementation details, not public API
+
+**Key Lesson**: **Match React prop names for component API, not CSS class names.**
+
 ### 4. React Component Translation Checklist
 
 When converting a PatternFly React component to LitElement, follow this process:
@@ -2614,20 +2664,145 @@ this.dispatchEvent(new ExpandEvent(this.expanded));
 <pfv6-card @expand=${(e: ExpandEvent) => console.log(e.expanded)}></pfv6-card>
 ```
 
+### 6. Understanding Component API vs CSS API
+
+**CRITICAL DISTINCTION**: Web components have TWO separate APIs that must NOT be confused.
+
+#### Component API (Public Interface for Developers)
+
+This is what developers interact with when using your component:
+
+**Properties/Attributes**:
+- **Source of Truth**: React component's TypeScript interface (`.d.ts` files)
+- **Rule**: Match React prop names EXACTLY
+- **Example**: React `isClicked` → LitElement `@property() isClicked` → HTML attribute `is-clicked`
+
+**Events**:
+- **Source of Truth**: React callback props (`onExpand`, `onChange`)
+- **Rule**: Convert callback names to web component events
+- **Example**: React `onExpand` → LitElement `expand` event
+
+**Slots**:
+- **Source of Truth**: React `children` prop and component composition
+- **Rule**: Map React children/sub-components to slots or sub-components
+
+#### CSS API (Internal Styling)
+
+This is PatternFly's internal styling system:
+
+**CSS Classes**:
+- **Source of Truth**: PatternFly CSS files (`node_modules/@patternfly/react-styles/css/components/`)
+- **Rule**: Use PatternFly class names internally via `classMap()`
+- **Example**: `.pf-m-current`, `.pf-m-selected`, `.pf-m-disabled`
+
+**CSS Variables**:
+- **Source of Truth**: PatternFly component CSS variables
+- **Rule**: Expose same variables on `:host` for user customization
+- **Example**: `--pf-v6-c-card--BackgroundColor`
+
+#### The Critical Mistake to Avoid
+
+**❌ WRONG - Using CSS class name for component API:**
+```typescript
+// React prop: isClicked
+// CSS class: .pf-m-current
+
+// ❌ BAD - Attribute matches CSS class, not React prop!
+@property({ type: Boolean, reflect: true, attribute: 'is-current' })
+isCurrent = false;
+```
+
+**✅ CORRECT - Using React prop name for component API:**
+```typescript
+// React prop: isClicked
+// CSS class: .pf-m-current
+
+// ✅ GOOD - Attribute matches React prop!
+@property({ type: Boolean, reflect: true, attribute: 'is-clicked' })
+isClicked = false;
+
+render() {
+  return html`
+    <div class=${classMap({
+      current: this.isClicked  // ← CSS class is internal implementation
+    })}>
+  `;
+}
+```
+
+#### Real-World Example: Card Component
+
+**React API** (`Card.d.ts`):
+```typescript
+interface CardProps {
+  isClicked?: boolean;    // ← This is what we match!
+  isSelected?: boolean;   // ← This too!
+  isDisabled?: boolean;   // ← And this!
+}
+```
+
+**PatternFly CSS** (`card.css`):
+```css
+.pf-v6-c-card.pf-m-current { }    /* ← "current" is CSS class name */
+.pf-v6-c-card.pf-m-selected { }   /* ← "selected" is CSS class name */
+.pf-v6-c-card.pf-m-disabled { }   /* ← "disabled" is CSS class name */
+```
+
+**Our LitElement Implementation**:
+```typescript
+// ✅ Component API - Matches React props
+@property({ type: Boolean, attribute: 'is-clicked' }) isClicked = false;
+@property({ type: Boolean, attribute: 'is-selected' }) isSelected = false;
+@property({ type: Boolean, attribute: 'is-disabled' }) isDisabled = false;
+
+render() {
+  // ✅ CSS API - Uses PatternFly class names internally
+  return html`
+    <div class=${classMap({
+      current: this.isClicked,    // Prop → CSS class mapping
+      selected: this.isSelected,  // Prop → CSS class mapping
+      disabled: this.isDisabled   // Prop → CSS class mapping
+    })}>
+  `;
+}
+```
+
+#### API Separation Checklist
+
+When implementing a component, verify:
+
+- [ ] **Component API matches React TypeScript interface**
+  - Property names match React prop names (`isClicked`, not `isCurrent`)
+  - Attribute names are kebab-case versions (`is-clicked`, not `is-current`)
+  - Event names match React callbacks (`expand` from `onExpand`)
+
+- [ ] **CSS API matches PatternFly CSS**
+  - CSS classes use PatternFly names (`.pf-m-current`, `.pf-m-selected`)
+  - CSS variables use PatternFly names (`--pf-v6-c-card--BackgroundColor`)
+  - Internal `classMap()` maps properties to CSS classes
+
+- [ ] **Clear separation maintained**
+  - Component API is public, stable, matches React
+  - CSS API is internal, uses PatternFly conventions
+  - No mixing of the two naming systems
+
+**Key Lesson**: **Match React prop names for component API, not CSS class names. The two APIs are separate and serve different purposes.**
+
 ### Key Takeaways for AI
 
 When converting React components to LitElement:
 
-1. **CSS Variables = Public API** - Always expose PatternFly CSS variables on `:host`
-2. **React Sub-Components → LitElement Sub-Components** - Create custom elements, not just slots
-3. **Use `display: contents`** - Make sub-components layout-transparent
-4. **Match Cardinality** - Enforce the same 0..1, 0..*, etc. rules as React
-5. **Props → Properties** - But remember: components can't be properties (use slots!)
-6. **Callbacks → Events** - Extend Event class, dispatch custom events
-7. **Children → Slots** - Default slot for main content, named slots for specific areas
-8. **Native HTML Works** - Form inputs, links, etc. slot naturally without special handling
-9. **Document Everything** - JSDoc for properties, slots, events, CSS variables
-10. **Visual Parity is King** - Compare side-by-side with React, must be pixel-perfect
+1. **Component API ≠ CSS API** - Match React prop names for attributes/properties, use PatternFly class names internally
+2. **CSS Variables = Public API** - Always expose PatternFly CSS variables on `:host`
+3. **React Sub-Components → LitElement Sub-Components** - Create custom elements, not just slots
+4. **Use `display: contents`** - Make sub-components layout-transparent
+5. **Match Cardinality** - Enforce the same 0..1, 0..*, etc. rules as React
+6. **Props → Properties** - But remember: components can't be properties (use slots!)
+7. **Callbacks → Events** - Extend Event class, dispatch custom events
+8. **Children → Slots** - Default slot for main content, named slots for specific areas
+9. **Native HTML Works** - Form inputs, links, etc. slot naturally without special handling
+10. **Document Everything** - JSDoc for properties, slots, events, CSS variables
+11. **Visual Parity is King** - Compare side-by-side with React, must be pixel-perfect
 
 ## Architecture & Design Patterns
 
@@ -3814,11 +3989,15 @@ Our path is clear: **LitElement-based implementations must match PatternFly v6 R
    - Design specs and usage guidelines
 
 2. **Verify the exact API surface**:
-   - ✅ **Check React component's TypeScript interface** - This is the source of truth
+   - ✅ **Check React component's TypeScript interface** - This is the source of truth for **component API**
    - ✅ Compare props with what's documented on patternfly.org
    - ✅ Note default values from TypeScript definitions
    - ✅ Identify required vs optional props
    - ⚠️ If a prop isn't in the React interface, DON'T implement it
+   - **🚨 CRITICAL**: React prop names define our component API, NOT CSS class names
+     - Example: React `isClicked` → Our `is-clicked` attribute (even though CSS uses `.pf-m-current`)
+     - Example: React `isSelected` → Our `is-selected` attribute (even though CSS uses `.pf-m-selected`)
+     - **Always reference the TypeScript interface**, not the CSS file, for property names
 
 3. **Analyze the component anatomy**:
    - What are the visual parts?
@@ -4475,6 +4654,30 @@ When implementing components:
 5. **Match React exactly** - visual parity is the goal
 6. **Document lightdom CSS** when used
 7. **Test thoroughly** - compare with React side-by-side
+
+### Visual Parity Analysis Methodology
+
+When visual tests fail, use the systematic analysis process documented in `VISUAL_PARITY_ANALYSIS_METHODOLOGY.md`:
+
+1. **Analyze test report** - Review Playwright report, examine diff images
+2. **Side-by-side visual inspection** - Open both demos in browser, take screenshots
+3. **Source code comparison** - Compare React and Lit demo files line-by-line
+4. **Browser DevTools inspection** - Check computed styles, Shadow DOM structure
+5. **Interactive state testing** - Test hover, focus, selection states
+6. **Root cause analysis** - Categorize issues (fixable vs blocked)
+
+**Key principle**: Document your analysis process! Create a specific analysis document for complex failures (e.g., `CLICKABLE_SELECTABLE_ANALYSIS.md`) showing:
+- Visual differences observed
+- Source code comparison
+- Root cause identification
+- Recommended fixes
+- Testing checklist
+
+This documentation helps:
+- ✅ Future developers understand the issue
+- ✅ Track decision-making process
+- ✅ Validate fixes systematically
+- ✅ Create reusable patterns for similar issues
 
 ---
 

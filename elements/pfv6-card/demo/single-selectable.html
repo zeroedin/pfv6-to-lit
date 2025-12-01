@@ -1,59 +1,46 @@
-<!-- TODO: This demo is BLOCKED until the following components are available:
-     - <pfv6-card-header> with selectableActions support (variant="single", isHidden property)
-     
-     CRITICAL: React demo uses <CardHeader selectableActions={{ variant: 'single' }}> to render radio buttons.
-     The current implementation uses plain HTML radio buttons in CardTitle as a placeholder.
-     
-     NOTE: React uses <Checkbox> for the "Hide radio button" toggle (not HTML checkbox).
--->
-
-<pfv6-checkbox 
-  label="Hide radio button" 
-  id="single-select-toggle-hide-radio-button" 
-  name="toggle-hide">
-</pfv6-checkbox>
+<pfv6-checkbox id="single-select-toggle-hide-radio-button">Hide radio button</pfv6-checkbox>
 
 <pfv6-gallery has-gutter style="margin-top: 15px;">
-  <!-- Card 1: Single selectable (radio group) -->
-  <pfv6-card id="single-selectable-card-example-1" selectable>
-    <!-- TODO: Replace with <pfv6-card-header selectableActions={{ variant: 'single' }}> when available -->
-    <pfv6-card-title>
-      <input 
-        type="radio" 
-        id="single-selectable-card-input-1" 
-        name="single-selectable-card-example" 
-        style="margin-inline-end: 8px;">
-      <label for="single-selectable-card-input-1">First card</label>
-    </pfv6-card-title>
+  <pfv6-card id="single-selectable-card-example-1" is-selectable>
+    <pfv6-card-header
+      id="header-1"
+      selectable-variant="single"
+      selectable-id="single-selectable-card-input-1"
+      selectable-name="single-selectable-card-example"
+      selectable-aria-labelledby="single-selectable-card-example-1"
+      actions-no-offset
+    >
+      <pfv6-card-title>First card</pfv6-card-title>
+    </pfv6-card-header>
     <pfv6-card-body>This card is single selectable.</pfv6-card-body>
   </pfv6-card>
   
-  <!-- Card 2: Second option in radio group -->
-  <pfv6-card id="single-selectable-card-example-2" selectable>
-    <!-- TODO: Replace with <pfv6-card-header selectableActions={{ variant: 'single' }}> when available -->
-    <pfv6-card-title>
-      <input 
-        type="radio" 
-        id="single-selectable-card-input-2" 
-        name="single-selectable-card-example" 
-        style="margin-inline-end: 8px;">
-      <label for="single-selectable-card-input-2">Second card</label>
-    </pfv6-card-title>
+  <pfv6-card id="single-selectable-card-example-2" is-selectable>
+    <pfv6-card-header
+      id="header-2"
+      selectable-variant="single"
+      selectable-id="single-selectable-card-input-2"
+      selectable-name="single-selectable-card-example"
+      selectable-aria-labelledby="single-selectable-card-example-2"
+      actions-no-offset
+    >
+      <pfv6-card-title>Second card</pfv6-card-title>
+    </pfv6-card-header>
     <pfv6-card-body>This card is single selectable.</pfv6-card-body>
   </pfv6-card>
   
-  <!-- Card 3: Disabled option in radio group -->
-  <pfv6-card id="single-selectable-card-example-3" selectable disabled>
-    <!-- TODO: Replace with <pfv6-card-header selectableActions={{ variant: 'single' }}> when available -->
-    <pfv6-card-title>
-      <input 
-        type="radio" 
-        id="single-selectable-card-input-3" 
-        name="single-selectable-card-example" 
-        disabled 
-        style="margin-inline-end: 8px;">
-      <label for="single-selectable-card-input-3">Third card</label>
-    </pfv6-card-title>
+  <pfv6-card id="single-selectable-card-example-3" is-selectable is-disabled>
+    <pfv6-card-header
+      id="header-3"
+      selectable-variant="single"
+      selectable-id="single-selectable-card-input-3"
+      selectable-name="single-selectable-card-example"
+      selectable-aria-labelledby="single-selectable-card-example-3"
+      selectable-disabled
+      actions-no-offset
+    >
+      <pfv6-card-title>Third card</pfv6-card-title>
+    </pfv6-card-header>
     <pfv6-card-body>This card is single selectable but disabled.</pfv6-card-body>
   </pfv6-card>
 </pfv6-gallery>
@@ -63,28 +50,40 @@
   import '@pfv6/elements/pfv6-gallery/pfv6-gallery.js';
   import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
   
-  const cards = document.querySelectorAll('pfv6-card[selectable]');
-  const radioButtons = document.querySelectorAll('input[type="radio"][name="single-selectable-card-example"]');
+  const cards = document.querySelectorAll('pfv6-card[is-selectable]');
+  const headers = [
+    document.getElementById('header-1'),
+    document.getElementById('header-2'),
+    document.getElementById('header-3')
+  ];
   const hideToggle = document.getElementById('single-select-toggle-hide-radio-button');
   
-  // Handle single selection via radio buttons (only one can be selected)
-  radioButtons.forEach((radio, index) => {
-    radio.addEventListener('change', (e) => {
-      // Clear all selections
-      cards.forEach(card => card.removeAttribute('selected'));
-      // Set selected on the checked radio's card
-      if (e.target.checked) {
-        cards[index].setAttribute('selected', '');
+  // Handle single selection (radio button logic)
+  headers.forEach((header, index) => {
+    header.addEventListener('change', (e) => {
+      const checked = e.checked;
+      
+      if (checked) {
+        // Unselect all other cards
+        cards.forEach((card, i) => {
+          if (i !== index) {
+            card.removeAttribute('is-selected');
+            headers[i].removeAttribute('selectable-checked');
+          }
+        });
+        
+        // Select this card
+        cards[index].setAttribute('is-selected', '');
+        header.setAttribute('selectable-checked', '');
       }
     });
   });
   
-  // Handle hide radio button toggle (CardHeader selectableActions.isHidden equivalent)
+  // Handle hide radio button toggle
   hideToggle.addEventListener('change', (e) => {
     const shouldHide = e.target.checked;
-    radioButtons.forEach(radio => {
-      radio.style.display = shouldHide ? 'none' : '';
+    headers.forEach(header => {
+      header.toggleAttribute('selectable-hidden', shouldHide);
     });
   });
 </script>
-

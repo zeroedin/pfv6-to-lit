@@ -1,28 +1,55 @@
 <pfv6-gallery has-gutter>
-  <pfv6-card id="multi-tile-example-1" selectable>
-    <pfv6-card-title style="display: flex; gap: 0.5rem; align-items: center;">
-      <input type="checkbox" id="multi-tile-1" name="multi-tile-1" style="display: none;">
-      <span>➕</span>
-      <strong>Tile header</strong>
-    </pfv6-card-title>
+  <pfv6-card id="multi-tile-example-1" is-selectable>
+    <pfv6-card-header
+      id="header-1"
+      selectable-variant="multiple"
+      selectable-id="multi-tile-1"
+      selectable-name="multi-tile-1"
+      selectable-aria-labelledby="multi-tile-example-1"
+      selectable-hidden
+    >
+      <!-- TODO: Replace with <pfv6-flex> when available -->
+      <div style="display: flex; gap: var(--pf-t--global--spacer--sm); align-items: center;">
+        <!-- TODO: Replace with <pfv6-icon> when available -->
+        <span>+</span>
+        <b>Tile header</b>
+      </div>
+    </pfv6-card-header>
     <pfv6-card-body>Tile content and description</pfv6-card-body>
   </pfv6-card>
   
-  <pfv6-card id="multi-tile-example-2" selectable>
-    <pfv6-card-title style="display: flex; gap: 0.5rem; align-items: center;">
-      <input type="checkbox" id="multi-tile-2" name="multi-tile-2" style="display: none;">
-      <span>➕</span>
-      <strong>Tile header</strong>
-    </pfv6-card-title>
+  <pfv6-card id="multi-tile-example-2" is-selectable>
+    <pfv6-card-header
+      id="header-2"
+      selectable-variant="multiple"
+      selectable-id="multi-tile-2"
+      selectable-name="multi-tile-2"
+      selectable-aria-labelledby="multi-tile-example-2"
+      selectable-hidden
+    >
+      <div style="display: flex; gap: var(--pf-t--global--spacer--sm); align-items: center;">
+        <span>+</span>
+        <b>Tile header</b>
+      </div>
+    </pfv6-card-header>
     <pfv6-card-body>Tile content and description</pfv6-card-body>
   </pfv6-card>
   
-  <pfv6-card id="multi-tile-example-3" selectable disabled>
-    <pfv6-card-title style="display: flex; gap: 0.5rem; align-items: center;">
-      <input type="checkbox" id="multi-tile-3" name="multi-tile-3" disabled style="display: none;">
-      <span>➕</span>
-      <strong>Tile header (disabled)</strong>
-    </pfv6-card-title>
+  <pfv6-card id="multi-tile-example-3" is-selectable is-disabled>
+    <pfv6-card-header
+      id="header-3"
+      selectable-variant="multiple"
+      selectable-id="multi-tile-3"
+      selectable-name="multi-tile-3"
+      selectable-aria-labelledby="multi-tile-example-3"
+      selectable-disabled
+      selectable-hidden
+    >
+      <div style="display: flex; gap: var(--pf-t--global--spacer--sm); align-items: center;">
+        <span>+</span>
+        <b>Tile header (disabled)</b>
+      </div>
+    </pfv6-card-header>
     <pfv6-card-body>Tile content and description</pfv6-card-body>
   </pfv6-card>
 </pfv6-gallery>
@@ -31,16 +58,24 @@
   import '@pfv6/elements/pfv6-card/pfv6-card.js';
   import '@pfv6/elements/pfv6-gallery/pfv6-gallery.js';
   
-  const cards = document.querySelectorAll('pfv6-card[selectable]');
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const cards = document.querySelectorAll('pfv6-card[is-selectable]');
+  const headers = [
+    document.getElementById('header-1'),
+    document.getElementById('header-2'),
+    document.getElementById('header-3')
+  ];
   
-  cards.forEach((card, index) => {
-    card.addEventListener('click', () => {
-      if (!card.hasAttribute('disabled')) {
-        checkboxes[index].checked = !checkboxes[index].checked;
-        card.toggleAttribute('selected', checkboxes[index].checked);
+  // Handle multiple selection (checkbox logic)
+  headers.forEach((header, index) => {
+    header.addEventListener('change', (e) => {
+      const checked = e.checked;
+      if (checked) {
+        cards[index].setAttribute('is-selected', '');
+        header.setAttribute('selectable-checked', '');
+      } else {
+        cards[index].removeAttribute('is-selected');
+        header.removeAttribute('selectable-checked');
       }
     });
   });
 </script>
-

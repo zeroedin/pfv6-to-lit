@@ -9,7 +9,7 @@
  * See: https://www.patternfly.org/components/card#css-variables
  */
 
-/* 
+/*
  * CRITICAL: Shadow DOM box-sizing reset
  * PatternFly base.css sets: *, *::before, *::after { box-sizing: border-box; }
  * box-sizing is NOT inherited, so Shadow DOM elements default to content-box
@@ -235,70 +235,11 @@
   border-color: var(--_pfv6-card-m-plain-border-color);
 }
 
-/* Card Header */
-#header {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: var(--pf-t--global--spacer--gap--text-to-element--default);
-  padding-block: var(--_pfv6-card-first-child-padding-block-start) 0;
-  padding-inline: var(--_pfv6-card-child-padding-inline-start) var(--_pfv6-card-child-padding-inline-end);
-}
-
-/* Header wrap modifier (card.css lines 27-28) */
-#header.wrap {
-  flex-wrap: wrap;
-  gap: var(--_pfv6-card-header-m-wrap-row-gap) var(--_pfv6-card-header-m-wrap-column-gap);
-}
-
-/* Header spacing handled by sub-components */
-
-/* Header Content Container */
-#header-content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex: 1;
-  gap: var(--pf-t--global--spacer--gap--text-to-element--default);
-  min-inline-size: 0; /* Allow flex shrinking */
-}
-
-/* Header Image Slot */
-#header-content ::slotted([slot="header-image"]) {
-  flex-shrink: 0;
-}
-
-/* Header Icon Slot */
-#header-content ::slotted([slot="header-icon"]) {
-  flex-shrink: 0;
-  inline-size: var(--pf-t--global--icon--size--font--md);
-  block-size: var(--pf-t--global--icon--size--font--md);
-  color: var(--pf-t--global--icon--color--regular);
-}
-
 /* Card Title Sub-Component */
 
 /* Note: pfv6-card-title uses display:contents, so these styles pass through to its shadow content */
 
 /* Layout properties are handled by the sub-component's internal container */
-
-/* Card Actions */
-#actions {
-  display: flex;
-  align-items: center;
-  gap: var(--_pfv6-card-actions-gap);
-  margin-block: var(--_pfv6-card-actions-margin-block-start) var(--_pfv6-card-actions-margin-block-end);
-  padding-inline-start: var(--_pfv6-card-actions-padding-inline-start);
-}
-
-/* Actions with no offset */
-#actions.no-offset {
-  padding-inline-start: 0;
-}
-
-#actions:empty {
-  display: none;
-}
 
 /* Card Body Sub-Component */
 
@@ -403,101 +344,16 @@
   --_pfv6-card-border-width: var(--pf-v6-c-card--m-selectable--m-selected--focus--BorderWidth, var(--pf-t--global--border--width--box--clicked));
 }
 
-/* Clicked state */
-#container.clickable.clicked {
+/* Current state (clicked/active) */
+#container.clickable.current {
   --_pfv6-card-border-color: var(--pf-v6-c-card--m-clickable--m-current--BorderColor, var(--pf-t--global--border--color--clicked));
   --_pfv6-card-border-width: var(--pf-v6-c-card--m-clickable--m-current--BorderWidth, var(--pf-t--global--border--width--box--clicked));
 }
 
 /* Selectable + Clickable + Current state */
-#container.selectable.clickable.clicked {
+#container.selectable.clickable.current {
   --_pfv6-card-border-color: var(--pf-v6-c-card--m-selectable--m-clickable--m-current--BorderColor, var(--pf-t--global--border--color--clicked));
   --_pfv6-card-border-width: var(--pf-v6-c-card--m-selectable--m-clickable--m-current--BorderWidth, var(--pf-t--global--border--width--box--clicked));
-}
-
-/* Selectable checkbox */
-.selectable-input {
-  position: absolute;
-  inset-block-start: var(--pf-t--global--spacer--md);
-  inset-inline-start: var(--pf-t--global--spacer--md);
-  z-index: 1;
-}
-
-.selectable-input input[type="checkbox"] {
-  cursor: pointer;
-  inline-size: var(--pf-t--global--icon--size--md);
-  block-size: var(--pf-t--global--icon--size--md);
-}
-
-.selectable-input input[type="checkbox"]:disabled {
-  cursor: not-allowed;
-}
-
-.visually-hidden {
-  position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* Expandable toggle button (card.css lines 29-35) */
-.expand-toggle {
-  position: absolute;
-  inset-block-start: var(--pf-t--global--spacer--md);
-  inset-inline-start: var(--pf-t--global--spacer--md);
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-block: var(--_pfv6-card-header-toggle-margin-block-start) var(--_pfv6-card-header-toggle-margin-block-end);
-  margin-inline: var(--_pfv6-card-header-toggle-margin-inline-start) var(--_pfv6-card-header-toggle-margin-inline-end);
-  padding:
-    var(--pf-t--global--spacer--control--vertical--default)
-    var(--pf-t--global--spacer--control--horizontal--default);
-  background: transparent;
-  border: none;
-  border-radius: var(--pf-t--global--border--radius--small);
-  cursor: pointer;
-  color: var(--pf-t--global--icon--color--regular);
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.expand-toggle:focus {
-  outline: var(--pf-t--global--border--width--focus--default) solid var(--pf-t--global--color--brand--default);
-  outline-offset: var(--pf-t--global--spacer--gap--focus--default);
-}
-
-.expand-toggle:disabled {
-  cursor: not-allowed;
-  color: var(--pf-t--global--icon--color--on-disabled);
-}
-
-.expand-toggle:hover:not(:disabled) {
-  color: var(--pf-t--global--icon--color--hover);
-  background-color: var(--pf-t--global--background--color--action--plain--hover);
-}
-
-.expand-icon {
-  inline-size: var(--pf-t--global--icon--size--font--sm);
-  block-size: var(--pf-t--global--icon--size--font--sm);
-  transition-property: transform;
-  transition-timing-function: var(--_pfv6-card-header-toggle-icon-transition-timing-function);
-  transition-duration: var(--_pfv6-card-header-toggle-icon-transition-duration);
-}
-
-/* Toggle positioned on right side (card.css lines 78-79) */
-#container.toggle-right-aligned .expand-toggle {
-  inset-inline: auto var(--pf-t--global--spacer--md);
-  margin-inline: var(--_pfv6-card-header-m-toggle-right-toggle-margin-inline-start) var(--_pfv6-card-header-m-toggle-right-toggle-margin-inline-end);
-}
-
-#container.expanded .expand-toggle .expand-icon {
-  transform: rotate(var(--_pfv6-card-expanded-icon-rotate));
 }
 
 /* Divider styling - Matches PatternFly Divider component

@@ -82,13 +82,19 @@ export default defineConfig({
     ],
     // Resolve asset imports to existing PatternFly assets
     resolve: {
-        alias: {
+        alias: [
             // Map React demo asset imports to our copied PatternFly assets
             // These assets are copied by scripts/copy-patternfly-assets.ts
-            '../../assets': resolve('dev-server/assets/patternfly/images'),
-            '../assets': resolve('dev-server/assets/patternfly/images'),
-            '../../PF-IconLogo.svg': resolve('dev-server/assets/patternfly/images/PF-IconLogo.svg'),
-        }
+            // NOTE: Only 2 patterns actually exist in PatternFly React demos:
+            //   1. ../../PF-IconLogo.svg (CardExpandableWithIcon.tsx)
+            //   2. ../../assets/*.svg (all other demos)
+            
+            // Direct logo import (specific file, must come first)
+            { find: '../../PF-IconLogo.svg', replacement: resolve('dev-server/assets/patternfly/images/PF-IconLogo.svg') },
+            
+            // Assets folder imports (regex captures filename)
+            { find: /^\.\.\/\.\.\/assets\/(.*)$/, replacement: resolve('dev-server/assets/patternfly/images/$1') },
+        ]
     },
     // Pre-bundle PatternFly for performance, keep React external
     optimizeDeps: {
@@ -103,6 +109,14 @@ export default defineConfig({
             'react-dom',
             'react/jsx-runtime'
         ]
+    },
+    // Use relative paths for assets (not absolute /assets/)
+    // This ensures assets work when served from any path
+    experimental: {
+        renderBuiltUrl(filename, { hostType }) {
+            // For assets, use relative path to the shared folder
+            return { relative: true };
+        }
     },
     build: {
         // Don't clear the entire elements directory
