@@ -68,7 +68,7 @@
   // Handle single selection (radio button logic)
   headers.forEach((header, index) => {
     header.addEventListener('change', (e) => {
-      const checked = e.detail.checked;
+      const checked = e.checked;
       
       if (checked) {
         // Unselect all other cards

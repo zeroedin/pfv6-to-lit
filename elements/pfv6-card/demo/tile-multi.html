@@ -68,7 +68,7 @@
   // Handle multiple selection (checkbox logic)
   headers.forEach((header, index) => {
     header.addEventListener('change', (e) => {
-      const checked = e.detail.checked;
+      const checked = e.checked;
       if (checked) {
         cards[index].setAttribute('is-selected', '');
         header.setAttribute('selectable-checked', '');
