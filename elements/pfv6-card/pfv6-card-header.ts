@@ -1,11 +1,13 @@
 import { LitElement, html, type TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
-import styles from './pfv6-card-header.css';
 import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
 import { Pfv6CheckboxChangeEvent } from '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
+
+import styles from './pfv6-card-header.css';
 
 /**
  * Event fired when card expand toggle is clicked
@@ -59,6 +61,13 @@ export class Pfv6CardClickableClickEvent extends Event {
 @customElement('pfv6-card-header')
 export class Pfv6CardHeader extends LitElement {
   static readonly styles = styles;
+
+  /**
+   * Consume card context from parent pfv6-card
+   * @internal
+   */
+  // Note: Not consuming context - let it pass through from card to checkbox
+  // The header doesn't need to know about card context, only the checkbox does
 
   /**
    * Whether the expand toggle is positioned on the right instead of left

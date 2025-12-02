@@ -4,10 +4,33 @@ import '../pfv6-card-title.js';
 import '../pfv6-card-body.js';
 import '../pfv6-card-footer.js';
 import '../pfv6-card-expandable-content.js';
+import '../pfv6-card-header.js';
+// Note: pfv6-checkbox is imported by pfv6-card-header, no need to import again
 import type { Pfv6Card } from '../pfv6-card.js';
 import type { Pfv6CardTitle } from '../pfv6-card-title.js';
 import type { Pfv6CardBody } from '../pfv6-card-body.js';
 import type { Pfv6CardFooter } from '../pfv6-card-footer.js';
+import type { Pfv6CardHeader } from '../pfv6-card-header.js';
+import type { Pfv6Checkbox } from '../../pfv6-checkbox/pfv6-checkbox.js';
+
+/**
+ * Waits for an element to completely finish updating, including nested components
+ * Based on RHDS's allUpdates utility
+ * @param element - Element to wait for
+ */
+async function allUpdates(element: HTMLElement & { updateComplete?: Promise<unknown> }): Promise<void> {
+  if (!(element.updateComplete instanceof Promise)) {
+    throw new Error(`${element.localName} does not appear to be a ReactiveElement`);
+  }
+  let count = 0;
+  do {
+    if (count > 100) {
+      throw new Error(`Too Many Updates: ${element.localName} did not finish updating after ${count - 1} tries.`);
+    }
+    await element.updateComplete;
+    count++;
+  } while (!await element.updateComplete);
+}
 
 describe('pfv6-card', () => {
   describe('Basic rendering', () => {
@@ -393,6 +416,173 @@ describe('pfv6-card', () => {
       expect((bodies[1] as Pfv6CardBody).filled).to.be.false;
       // Third body: explicitly set to true
       expect((bodies[2] as Pfv6CardBody).filled).to.be.true;
+    });
+  });
+
+  describe('Context provision (@lit/context)', () => {
+    it('should provide context to nested checkbox when is-selectable is true', async () => {
+      const el = await fixture<Pfv6Card>(html`
+        <pfv6-card is-selectable>
+          <pfv6-card-header
+            selectable-variant="multiple"
+            selectable-id="test-checkbox-1"
+            selectable-name="test-checkbox-1"
+            selectable-aria-labelledby="test-card-1"
+            selectable-actions-no-offset
+          >
+            <pfv6-card-title>Selectable Card</pfv6-card-title>
+          </pfv6-card-header>
+          <pfv6-card-body>Content</pfv6-card-body>
+        </pfv6-card>
+      `);
+      
+      await allUpdates(el);
+      
+      // Find the checkbox rendered inside card-header
+      const header = el.querySelector('pfv6-card-header') as Pfv6CardHeader;
+      await allUpdates(header);
+      
+      const checkbox = header?.shadowRoot?.querySelector('pfv6-checkbox') as Pfv6Checkbox;
+      expect(checkbox).to.exist;
+      
+      // Wait for all updates including context propagation
+      await allUpdates(checkbox);
+      
+      // Verify checkbox received context and applied card-overlay class
+      const container = checkbox?.shadowRoot?.querySelector('#container');
+      console.log('Container classes:', container?.className);
+      expect(container?.classList.contains('card-overlay')).to.be.true;
+    });
+
+    it('should not provide card-overlay context when is-selectable is false', async () => {
+      const el = await fixture<Pfv6Card>(html`
+        <pfv6-card>
+          <pfv6-card-header
+            selectable-variant="multiple"
+            selectable-id="test-checkbox-2"
+            selectable-name="test-checkbox-2"
+            selectable-aria-labelledby="test-card-2"
+            selectable-actions-no-offset
+          >
+            <pfv6-card-title>Non-Selectable Card</pfv6-card-title>
+          </pfv6-card-header>
+          <pfv6-card-body>Content</pfv6-card-body>
+        </pfv6-card>
+      `);
+      
+      await allUpdates(el);
+      
+      const header = el.querySelector('pfv6-card-header') as Pfv6CardHeader;
+      await allUpdates(header);
+      
+      const checkbox = header?.shadowRoot?.querySelector('pfv6-checkbox') as Pfv6Checkbox;
+      expect(checkbox).to.exist;
+      
+      await allUpdates(checkbox);
+      
+      // Verify checkbox did NOT receive card context
+      const container = checkbox?.shadowRoot?.querySelector('#container');
+      expect(container?.classList.contains('card-overlay')).to.be.false;
+    });
+
+    it('should update context when is-selectable changes', async () => {
+      const el = await fixture<Pfv6Card>(html`
+        <pfv6-card>
+          <pfv6-card-header
+            selectable-variant="multiple"
+            selectable-id="test-checkbox-3"
+            selectable-name="test-checkbox-3"
+            selectable-aria-labelledby="test-card-3"
+            selectable-actions-no-offset
+          >
+            <pfv6-card-title>Card</pfv6-card-title>
+          </pfv6-card-header>
+          <pfv6-card-body>Content</pfv6-card-body>
+        </pfv6-card>
+      `);
+      
+      await allUpdates(el);
+      
+      const header = el.querySelector('pfv6-card-header') as Pfv6CardHeader;
+      await allUpdates(header);
+      
+      const checkbox = header?.shadowRoot?.querySelector('pfv6-checkbox') as Pfv6Checkbox;
+      await allUpdates(checkbox);
+      
+      // Initially not selectable
+      let container = checkbox?.shadowRoot?.querySelector('#container');
+      expect(container?.classList.contains('card-overlay')).to.be.false;
+      
+      // Change to selectable
+      el.isSelectable = true;
+      await allUpdates(el);
+      await allUpdates(checkbox);
+      
+      // Verify checkbox received updated context
+      container = checkbox?.shadowRoot?.querySelector('#container');
+      expect(container?.classList.contains('card-overlay')).to.be.true;
+      
+      // Change back to non-selectable
+      el.isSelectable = false;
+      await allUpdates(el);
+      await allUpdates(checkbox);
+      
+      // Verify checkbox context updated again
+      container = checkbox?.shadowRoot?.querySelector('#container');
+      expect(container?.classList.contains('card-overlay')).to.be.false;
+    });
+
+    it('should apply card-overlay styles to checkbox label when in selectable card', async () => {
+      const el = await fixture<Pfv6Card>(html`
+        <pfv6-card is-selectable>
+          <pfv6-card-header
+            selectable-variant="multiple"
+            selectable-id="test-checkbox-4"
+            selectable-name="test-checkbox-4"
+            selectable-aria-labelledby="test-card-4"
+            selectable-actions-no-offset
+          >
+            <pfv6-card-title>Selectable Card</pfv6-card-title>
+          </pfv6-card-header>
+          <pfv6-card-body>Content</pfv6-card-body>
+        </pfv6-card>
+      `);
+      
+      await allUpdates(el);
+      
+      const header = el.querySelector('pfv6-card-header') as Pfv6CardHeader;
+      await allUpdates(header);
+      
+      const checkbox = header?.shadowRoot?.querySelector('pfv6-checkbox') as Pfv6Checkbox;
+      await allUpdates(checkbox);
+      
+      // Verify label exists (for accessibility)
+      const label = checkbox?.shadowRoot?.querySelector('#label');
+      expect(label).to.exist;
+      
+      // Verify container has card-overlay class
+      const container = checkbox?.shadowRoot?.querySelector('#container');
+      console.log('container', container);
+      expect(container?.classList.contains('card-overlay')).to.be.true;
+      
+      // Note: CSS styling verification would require actual DOM measurement
+      // The presence of the card-overlay class confirms the mechanism works
+    });
+
+    it('should work with standalone checkbox outside of cards', async () => {
+      // This test verifies that checkbox works normally when NOT in a card context
+      const checkbox = await fixture<Pfv6Checkbox>(html`
+        <pfv6-checkbox>Standalone checkbox</pfv6-checkbox>
+      `);
+      
+      await checkbox.updateComplete;
+      
+      // Verify checkbox does NOT have card-overlay class
+      const container = checkbox.shadowRoot?.querySelector('#container');
+      expect(container?.classList.contains('card-overlay')).to.be.false;
+      
+      // Verify it has standalone class instead
+      expect(container?.classList.contains('standalone')).to.be.false; // Has label text
     });
   });
 });

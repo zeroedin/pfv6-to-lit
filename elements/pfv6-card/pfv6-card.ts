@@ -1,7 +1,10 @@
 import { LitElement, html, type TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { provide } from '@lit/context';
+
+import { cardContext, type CardContext } from '@pfv6/elements/pfv6-card/context.js';
 
 import './pfv6-card-header.js';
 import './pfv6-card-title.js';
@@ -10,7 +13,6 @@ import './pfv6-card-footer.js';
 import './pfv6-card-expandable-content.js';
 
 import styles from './pfv6-card.css';
-import { cardContext, type CardContext } from './context.js';
 
 /**
  * PatternFly Card Component
@@ -196,9 +198,7 @@ export class Pfv6Card extends LitElement {
    * @internal
    */
   @provide({ context: cardContext })
-  private _cardContext: CardContext = {
-    isSelectable: this.isSelectable,
-  };
+  private _cardContext = this.#makeCardContext();
 
 
   /**
@@ -245,16 +245,24 @@ export class Pfv6Card extends LitElement {
   isExpanded = false;
 
   /**
-   * Update card context when isSelectable changes
+   * Create card context object with current property values
+   * @private
+   */
+  #makeCardContext(): CardContext {
+    return {
+      isSelectable: this.isSelectable,
+    };
+  }
+
+  /**
+   * Update card context before each render
+   * This ensures context is always in sync with current property values
    */
   override willUpdate(changed: Map<PropertyKey, unknown>): void {
     super.willUpdate(changed);
     
-    if (changed.has('isSelectable')) {
-      this._cardContext = {
-        isSelectable: this.isSelectable,
-      };
-    }
+    // Always recreate context to ensure current values are provided
+    this._cardContext = this.#makeCardContext();
   }
 
   render(): TemplateResult {
