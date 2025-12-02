@@ -1,12 +1,15 @@
 import { LitElement, html, type TemplateResult } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators/property.js';
+import { query } from 'lit/decorators/query.js';
+import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { live } from 'lit/directives/live.js';
 import { consume } from '@lit/context';
 
-import styles from './pfv6-checkbox.css';
 import { cardContext, type CardContext } from '@pfv6/elements/pfv6-card/context.js';
+import styles from './pfv6-checkbox.css';
 
 /**
  * PatternFly Checkbox Component
@@ -104,7 +107,7 @@ export class Pfv6Checkbox extends LitElement {
    * @internal
    */
   @consume({ context: cardContext, subscribe: true })
-  @state()
+  @property({ attribute: false })
   private _cardContext?: CardContext;
 
   /**

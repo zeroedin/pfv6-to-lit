@@ -3434,6 +3434,60 @@ focus() {
 }
 ```
 
+#### Import Order
+
+**CRITICAL**: JavaScript/TypeScript imports MUST follow this specific order:
+
+1. **Type-only imports** (unless paired on the same line with value imports)
+2. **Lit core imports** (`lit`, `lit/html.js`, etc.)
+3. **Lit decorators** (import individually from `lit/decorators/*.js`, NOT from `lit/decorators.js`)
+4. **Lit directives** (import individually from `lit/directives/*.js`)
+5. **Third-party imports** (`@lit/context`, `@open-wc/testing`, etc.)
+6. **Project imports** (from `/lib/`, contexts from other elements, etc.)
+7. **Relative imports** (sub-components, utilities in same directory)
+8. **Component style imports** (ALWAYS LAST)
+
+**Example:**
+```typescript
+// 1. Type-only imports (if needed separately)
+import type { PropertyValues } from 'lit';
+
+// 2. Lit core
+import { LitElement, html, type TemplateResult } from 'lit';
+
+// 3. Lit decorators (import individually, not from lit/decorators.js)
+import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators/property.js';
+import { query } from 'lit/decorators/query.js';
+import { state } from 'lit/decorators/state.js';
+
+// 4. Lit directives
+import { classMap } from 'lit/directives/class-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
+import { live } from 'lit/directives/live.js';
+
+// 5. Third-party imports
+import { consume } from '@lit/context';
+
+// 6. Project imports (contexts from other elements, shared utilities)
+import { cardContext, type CardContext } from '@pfv6/elements/pfv6-card/context.js';
+
+// 7. Relative imports (sub-components, local utilities)
+import { Pfv6SomeSubComponent } from './pfv6-some-sub-component.js';
+
+// 8. Component styles (ALWAYS LAST)
+import styles from './pfv6-component.css';
+```
+
+**Why This Order:**
+- ✅ Separates concerns (types → logic → styles)
+- ✅ Makes dependencies clear
+- ✅ Style imports at the end are visually distinct
+- ✅ Consistent across all components
+- ✅ Easier to scan and understand imports
+
+**AI Directive**: Always organize imports in this order when creating or modifying component files.
+
 #### File Naming
 - One element class per file
 - Component files: `pfv6-{component}.ts`
@@ -4304,6 +4358,40 @@ Target modern browsers with ES6+ and Shadow DOM support. IE11 is not supported.
 - Large slot content can impact initial render performance
 - Use `requestAnimationFrame` for expensive operations
 - Be mindful of reactive property changes that trigger re-renders
+
+### @lit/context Module Path Consistency
+
+**CRITICAL**: When using `@lit/context`, ALL components must import the context symbol from the EXACT SAME MODULE PATH.
+
+**The Problem**: If a provider and consumer import the same context from different paths (e.g., `'./context.js'` vs `'@pfv6/elements/pfv6-card/context.js'`), the JavaScript module system may treat them as separate modules, causing context symbols to not match. This breaks context propagation even though `@lit/context` correctly crosses shadow boundaries.
+
+**The Solution**: Use consistent import paths (preferably bare module specifiers) across ALL files:
+
+```typescript
+// ✅ CORRECT - All files use the same path
+// pfv6-card.ts
+import { cardContext } from '@pfv6/elements/pfv6-card/context.js';
+
+// pfv6-checkbox.ts  
+import { cardContext } from '@pfv6/elements/pfv6-card/context.js';
+```
+
+```typescript
+// ❌ WRONG - Different paths break context matching
+// pfv6-card.ts
+import { cardContext } from './context.js';  // Relative path
+
+// pfv6-checkbox.ts
+import { cardContext } from '@pfv6/elements/pfv6-card/context.js';  // Bare specifier
+```
+
+**Key Facts About `@lit/context`**:
+- ✅ **Does** cross shadow boundaries via DOM events (`composed: true`)
+- ✅ **Does not** require intermediate components to consume/re-provide
+- ✅ **Requires** consistent import paths for context symbol matching
+- ❌ **Will fail silently** if context symbols don't match due to module path inconsistency
+
+**Testing Tip**: If context tests show provider has the value but consumer receives `undefined`, check that ALL imports of the context use the exact same path.
 
 ## Resources & References
 
