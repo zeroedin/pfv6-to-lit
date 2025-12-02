@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     "./lib/*": "./lib/*",
-    "./*": "./elements/*"
+    "./elements/*": "./elements/*",
+    "./package.json": "./package.json"
   },
   "scripts": {
     "postinstall": "npx tsx scripts/copy-patternfly-react-demos.ts && npx tsx scripts/extract-layout-demos.ts",
