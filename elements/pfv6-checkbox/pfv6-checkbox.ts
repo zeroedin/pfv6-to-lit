@@ -3,8 +3,10 @@ import { customElement, property, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { live } from 'lit/directives/live.js';
+import { consume } from '@lit/context';
 
 import styles from './pfv6-checkbox.css';
+import { cardContext, type CardContext } from '@pfv6/elements/pfv6-card/context.js';
 
 /**
  * PatternFly Checkbox Component
@@ -96,6 +98,14 @@ export class Pfv6Checkbox extends LitElement {
    * @private
    */
   private readonly internals: ElementInternals;
+
+  /**
+   * Card context - consumed when checkbox is inside a card
+   * @internal
+   */
+  @consume({ context: cardContext, subscribe: true })
+  @state()
+  private _cardContext?: CardContext;
 
   /**
    * Reference to the native checkbox input element
@@ -278,9 +288,11 @@ export class Pfv6Checkbox extends LitElement {
   render(): TemplateResult {
     const isStandalone = !this._hasLabel;
     const isReversed = this.labelPosition === 'start';
+    const isInCard = this._cardContext?.isSelectable ?? false;
 
     const containerClasses = {
       standalone: isStandalone,
+      'card-overlay': isInCard,
     };
 
     // Create input element template
@@ -301,8 +313,8 @@ export class Pfv6Checkbox extends LitElement {
       />
     `;
 
-    // Create label element template
-    const labelElement = this._hasLabel ? html`
+    // Text visibility is controlled by CSS (card-overlay mode hides text visually)
+    const labelElement = html`
       <label 
         id="label"
         part="label"
@@ -310,8 +322,6 @@ export class Pfv6Checkbox extends LitElement {
       >
         <slot @slotchange=${this.#handleSlotChange}></slot>${this.required ? html`<span id="required" aria-hidden="true">*</span>` : ''}
       </label>
-    ` : html`
-      <slot @slotchange=${this.#handleSlotChange}></slot>
     `;
 
     return html`

@@ -1,6 +1,7 @@
 import { LitElement, html, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { provide } from '@lit/context';
 
 import './pfv6-card-header.js';
 import './pfv6-card-title.js';
@@ -9,6 +10,7 @@ import './pfv6-card-footer.js';
 import './pfv6-card-expandable-content.js';
 
 import styles from './pfv6-card.css';
+import { cardContext, type CardContext } from './context.js';
 
 /**
  * PatternFly Card Component
@@ -190,6 +192,16 @@ export class Pfv6Card extends LitElement {
   isSelectable = false;
 
   /**
+   * Provide card context to nested components (e.g., checkbox)
+   * @internal
+   */
+  @provide({ context: cardContext })
+  private _cardContext: CardContext = {
+    isSelectable: this.isSelectable,
+  };
+
+
+  /**
    * Visual state flag indicating the card can be clicked.
    * Note: Actual clickable behavior is handled by CardHeader with selectableActions.
    * @type {boolean}
@@ -232,6 +244,18 @@ export class Pfv6Card extends LitElement {
   @property({ type: Boolean, reflect: true, attribute: 'is-expanded' })
   isExpanded = false;
 
+  /**
+   * Update card context when isSelectable changes
+   */
+  override willUpdate(changed: Map<PropertyKey, unknown>): void {
+    super.willUpdate(changed);
+    
+    if (changed.has('isSelectable')) {
+      this._cardContext = {
+        isSelectable: this.isSelectable,
+      };
+    }
+  }
 
   render(): TemplateResult {
     const containerClasses = {
