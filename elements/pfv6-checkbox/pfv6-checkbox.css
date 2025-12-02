@@ -147,6 +147,11 @@ input[type="checkbox"]:disabled {
   transform: none;
 }
 
+/* Standalone mode: Make label layout-transparent so it doesn't create a grid row */
+#container.standalone #label {
+  display: contents;
+}
+
 /* .pf-v6-c-check__label (check.css:41-46) */
 #label {
   justify-self: start; /* From check.css:58-61 (combined rule with input) */

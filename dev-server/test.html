@@ -10,11 +10,7 @@
 {% endblock %}
 
 {% block content %}
-{% if isReactDemo %}
-  <div id="root">{{ content }}</div>
-{% else %}
-{{ content }}
-{% endif %}
+<div id="root">{{ content }}</div>
 {% endblock %}
 
 {% block scripts %}
