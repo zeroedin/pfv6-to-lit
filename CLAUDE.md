@@ -6,11 +6,13 @@
 
 ## Common Commands (Run These Frequently)
 
+**⚠️ AI NOTE: Always prompt user before running `killall node` or test suites - see "Disruptive Commands" in AI Guidelines section**
+
 ```bash
 # Development
 npm run dev                    # Start dev server (web components only, fast)
 npm run dev:react             # Start dev server + React demo watch
-killall node                  # Kill hanging node processes before starting dev
+killall node                  # ⚠️ AI: PROMPT before running - kills ALL Node processes
 
 # Building
 npm run compile               # Compile TypeScript + CEM + React demos
@@ -28,7 +30,7 @@ npm run lint                  # Run all linters (ESLint + Stylelint)
 **🚨 CRITICAL RULES:**
 - **ALWAYS** use `npm run dev` (never manual `tsc` commands) - Wireit handles all compilation
 - **ALWAYS** use `npm run e2e:parity` (never `npx playwright test` directly) - npm scripts ensure dev server is running
-- **ALWAYS** run `killall node` before starting dev server to prevent hanging processes
+- **ALWAYS** prompt user before running `killall node` or test suites - these commands are disruptive (see AI Guidelines)
 - **NEVER** gitignore `package-lock.json` - it ensures deterministic builds and must be committed
 
 ---
@@ -554,16 +556,18 @@ https://github.com/patternfly/patternfly-react/tree/main/packages/react-core/src
 
 3. **Rebuild visual regression baselines**:
    ```bash
-   killall node
+   killall node  # ⚠️ AI: PROMPT before running - kills ALL Node processes
    npm run dev &
    sleep 10
-   npm run rebuild:snapshots
+   npm run rebuild:snapshots  # ⚠️ AI: PROMPT before running
    ```
+   **AI Note**: Always prompt user before running `killall node` or baseline rebuild commands.
 
 4. **Run parity tests**:
    ```bash
-   npm run e2e:parity
+   npm run e2e:parity  # ⚠️ AI: PROMPT before running
    ```
+   **AI Note**: Always prompt user before running tests - they take ~45s and are resource-intensive.
 
 5. **Analyze test failures**: Failures will reveal visual differences between your Lit component and React PatternFly. This is the **source of truth** for what needs to be fixed in your Lit component.
 
@@ -916,15 +920,18 @@ test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
 
 1. **Start dev server** (if not already running):
    ```bash
-   killall node
+   killall node  # ⚠️ AI: PROMPT before running - kills ALL Node processes
    npm run dev &
    sleep 10
    ```
+   **AI Note**: Always prompt user before running `killall node` - it stops all Node processes on their machine.
 
 2. **Run parity tests** (THE CRITICAL TEST):
    ```bash
-   npm run e2e:parity -- tests/visual/{component}/
+   npm run e2e:parity -- tests/visual/{component}/  # ⚠️ AI: PROMPT before running
    ```
+   **AI Note**: Always prompt user before running tests - they take ~45s and are resource-intensive.
+   
    - Compares Lit demos against React demos (live, not baseline)
    - Failures show EXACTLY what's visually different
    - This is the **only test that matters** for Lit component validation
@@ -2949,7 +2956,7 @@ npm run dev
 
 ✅ **DO** this instead:
 ```bash
-killall node 2>/dev/null || true
+killall node 2>/dev/null || true  # ⚠️ AI: PROMPT before running
 npm run dev
 ```
 
@@ -2960,6 +2967,8 @@ npm run dev
 4. Manages dependencies between compilation steps
 
 **AI Directive**: 
+- **⚠️ ALWAYS PROMPT** before running `killall node` - it kills ALL Node processes on the user's machine (see "Disruptive Commands" in AI Guidelines)
+- **⚠️ ALWAYS PROMPT** before running `npm run e2e` or `npm run e2e:parity` - tests take ~45s and are resource-intensive
 - When making changes to ANY TypeScript file (components, plugins, scripts), just restart `npm run dev`. The Wireit task orchestration handles all compilation automatically. Manual `tsc` commands are unnecessary and bypass the project's build system.
 - When running tests, ALWAYS use `npm run e2e`, `npm run e2e:parity`, or other npm test scripts. NEVER run `npx playwright test` directly, as it may not ensure the dev server is running or configured correctly.
 
@@ -4467,6 +4476,30 @@ Before implementing any component or feature:
 - ❌ Accessibility requirements
 
 **Better to ask 10 questions than build the wrong thing.**
+
+### 🚨 CRITICAL: Disruptive Commands Require User Approval
+
+**AI MUST ALWAYS PROMPT before running these commands:**
+
+#### `killall node`
+- ⚠️ **NEVER run `killall node` automatically** - it kills ALL Node.js processes on the user's machine
+- ✅ **DO** prompt the user: "I need to run `killall node` to free port 8000. This will stop all Node processes. May I proceed?"
+- ✅ **DO** wait for explicit approval
+- **Why**: User may have other important Node processes running (other dev servers, build tools, background tasks)
+
+#### Test Suites (`npm run e2e`, `npm run e2e:parity`)
+- ⚠️ **NEVER run test suites automatically** - they are time-intensive and resource-heavy
+- ✅ **DO** prompt the user: "I'd like to run `npm run e2e:parity` to verify the changes. This will take ~45s and requires port 8000. May I proceed?"
+- ✅ **DO** explain what you'll test and why
+- ✅ **DO** wait for explicit approval
+- **Why**: Tests take significant time, may require stopping other processes, and user may want to review code first
+
+#### Build Commands (`npm run compile`, `npm run compile:react-demos`)
+- ⚠️ **ASK before running full builds** - they take time and may trigger other workflows
+- ✅ **DO** prompt the user: "I need to run `npm run compile:react-demos` to rebuild React demos. May I proceed?"
+- **Why**: User may want to stage other changes first or review before building
+
+**Summary**: If a command affects processes, ports, or takes significant time → **ASK FIRST**.
 
 ### 🚨 CRITICAL: React Demo Immutability
 
