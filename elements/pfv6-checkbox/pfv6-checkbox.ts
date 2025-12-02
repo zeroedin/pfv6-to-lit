@@ -154,7 +154,10 @@ export class Pfv6Checkbox extends LitElement {
 
   /**
    * Accessible label for the checkbox (use when no visible label)
-   * Maps to aria-label via ElementInternals
+   * Maps to aria-label on the input element
+   * 
+   * Note: Future improvement will render this as visually-hidden label text
+   * instead of aria-label for better accessibility (see TODO.md)
    */
   @property({ type: String, attribute: 'accessible-label' })
   accessibleLabel?: string;
@@ -308,6 +311,7 @@ export class Pfv6Checkbox extends LitElement {
         ?disabled=${this.disabled}
         ?required=${this.required}
         aria-invalid=${this.valid ? 'false' : 'true'}
+        aria-label=${ifDefined(this.accessibleLabel)}
         aria-describedby=${ifDefined(this._hasDescription ? `${this.id}-description` : undefined)}
         @change=${this.#handleChange}
       />
