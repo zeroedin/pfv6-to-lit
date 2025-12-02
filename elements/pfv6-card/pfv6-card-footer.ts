@@ -1,5 +1,6 @@
 import { LitElement, html, type TemplateResult } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators/custom-element.js';
+
 import styles from './pfv6-card-footer.css';
 
 /**

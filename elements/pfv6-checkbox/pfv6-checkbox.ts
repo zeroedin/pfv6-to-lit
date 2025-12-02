@@ -1,9 +1,14 @@
 import { LitElement, html, type TemplateResult } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators/property.js';
+import { query } from 'lit/decorators/query.js';
+import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { live } from 'lit/directives/live.js';
+import { consume } from '@lit/context';
 
+import { cardContext, type CardContext } from '@pfv6/elements/pfv6-card/context.js';
 import styles from './pfv6-checkbox.css';
 
 /**
@@ -98,6 +103,14 @@ export class Pfv6Checkbox extends LitElement {
   private readonly internals: ElementInternals;
 
   /**
+   * Card context - consumed when checkbox is inside a card
+   * @internal
+   */
+  @consume({ context: cardContext, subscribe: true })
+  @property({ attribute: false })
+  private _cardContext?: CardContext;
+
+  /**
    * Reference to the native checkbox input element
    * @private
    */
@@ -144,7 +157,10 @@ export class Pfv6Checkbox extends LitElement {
 
   /**
    * Accessible label for the checkbox (use when no visible label)
-   * Maps to aria-label via ElementInternals
+   * Maps to aria-label on the input element
+   * 
+   * Note: Future improvement will render this as visually-hidden label text
+   * instead of aria-label for better accessibility (see TODO.md)
    */
   @property({ type: String, attribute: 'accessible-label' })
   accessibleLabel?: string;
@@ -278,9 +294,11 @@ export class Pfv6Checkbox extends LitElement {
   render(): TemplateResult {
     const isStandalone = !this._hasLabel;
     const isReversed = this.labelPosition === 'start';
+    const isInCard = this._cardContext?.isSelectable ?? false;
 
     const containerClasses = {
       standalone: isStandalone,
+      'card-overlay': isInCard,
     };
 
     // Create input element template
@@ -296,13 +314,14 @@ export class Pfv6Checkbox extends LitElement {
         ?disabled=${this.disabled}
         ?required=${this.required}
         aria-invalid=${this.valid ? 'false' : 'true'}
+        aria-label=${ifDefined(this.accessibleLabel)}
         aria-describedby=${ifDefined(this._hasDescription ? `${this.id}-description` : undefined)}
         @change=${this.#handleChange}
       />
     `;
 
-    // Create label element template
-    const labelElement = this._hasLabel ? html`
+    // Text visibility is controlled by CSS (card-overlay mode hides text visually)
+    const labelElement = html`
       <label 
         id="label"
         part="label"
@@ -310,8 +329,6 @@ export class Pfv6Checkbox extends LitElement {
       >
         <slot @slotchange=${this.#handleSlotChange}></slot>${this.required ? html`<span id="required" aria-hidden="true">*</span>` : ''}
       </label>
-    ` : html`
-      <slot @slotchange=${this.#handleSlotChange}></slot>
     `;
 
     return html`

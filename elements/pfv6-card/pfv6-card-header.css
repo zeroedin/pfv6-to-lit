@@ -17,19 +17,16 @@
   --_header-toggle-margin-inline-end: var(--pf-v6-c-card__header-toggle--MarginInlineEnd, var(--pf-t--global--spacer--gap--text-to-element--default));
   --_header-toggle-margin-block-end: var(--pf-v6-c-card__header-toggle--MarginBlockEnd, calc(var(--pf-t--global--spacer--control--vertical--default) * -1));
   --_header-toggle-margin-inline-start: var(--pf-v6-c-card__header-toggle--MarginInlineStart, calc(var(--pf-t--global--spacer--action--horizontal--plain--default) * -1));
-  
   --_header-toggle-icon-transition-timing-function: var(--pf-v6-c-card__header-toggle-icon--TransitionTimingFunction, var(--pf-t--global--motion--timing-function--default));
   --_header-toggle-icon-transition-duration: var(--pf-v6-c-card__header-toggle-icon--TransitionDuration, var(--pf-t--global--motion--duration--icon--default));
   --_header-toggle-icon-rotate: var(--pf-v6-c-card--m-expanded__header-toggle-icon--Rotate, 90deg);
-  
   --_actions-padding-inline-start: var(--pf-v6-c-card__actions--PaddingInlineStart, var(--pf-t--global--spacer--md));
   --_actions-gap: var(--pf-v6-c-card__actions--Gap, var(--pf-t--global--spacer--gap--action-to-action--default));
   --_actions-margin-block-start: var(--pf-v6-c-card__actions--MarginBlockStart, calc(var(--pf-t--global--spacer--control--vertical--default) * -1));
   --_actions-margin-block-end: var(--pf-v6-c-card__actions--MarginBlockEnd, calc(var(--pf-t--global--spacer--control--vertical--default) * -1));
-  
   --_header-wrap-row-gap: var(--pf-v6-c-card__header--m-wrap--RowGap, var(--pf-t--global--spacer--sm));
   --_header-wrap-column-gap: var(--pf-v6-c-card__header--m-wrap--ColumnGap, var(--pf-t--global--spacer--md));
-  
+
   display: contents;
 }
 
@@ -37,6 +34,22 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  /* Header controls padding when it contains title */
+  padding-block:
+    var(--pf-v6-c-card--first-child--PaddingBlockStart)
+    var(--pf-v6-c-card__title--not--last-child--PaddingBlockEnd);
+  padding-inline:
+    var(--pf-v6-c-card--child--PaddingInlineStart)
+    var(--pf-v6-c-card--child--PaddingInlineEnd);
+}
+
+/* Remove padding from slotted title - header controls it */
+#header ::slotted(pfv6-card-title) {
+  --pf-v6-c-card--first-child--PaddingBlockStart: 0;
+  --pf-v6-c-card__title--not--last-child--PaddingBlockEnd: 0;
+  --pf-v6-c-card--child--PaddingInlineStart: 0;
+  --pf-v6-c-card--child--PaddingInlineEnd: 0;
 }
 
 #header.toggle-right {
@@ -50,7 +63,7 @@
 
 #header.wrap {
   --_actions-padding-inline-start: 0;
-  
+
   gap: var(--_header-wrap-row-gap) var(--_header-wrap-column-gap);
   flex-wrap: wrap;
 }
@@ -71,10 +84,8 @@
 
 .header-toggle {
   align-self: flex-start;
-  margin-block-start: var(--_header-toggle-margin-block-start);
-  margin-block-end: var(--_header-toggle-margin-block-end);
-  margin-inline-start: var(--_header-toggle-margin-inline-start);
-  margin-inline-end: var(--_header-toggle-margin-inline-end);
+  margin-block: var(--_header-toggle-margin-block-start) var(--_header-toggle-margin-block-end);
+  margin-inline: var(--_header-toggle-margin-inline-start) var(--_header-toggle-margin-inline-end);
   background: none;
   border: 0;
   padding: 0;
@@ -95,7 +106,7 @@
 }
 
 /* RTL support */
-:where(:host-context([dir='rtl'])) .header-toggle-icon {
+:where(:host-context([dir="rtl"])) .header-toggle-icon {
   scale: -1 1;
 }
 
@@ -106,8 +117,7 @@
   align-self: flex-start;
   order: 1;
   padding-inline-start: var(--_actions-padding-inline-start);
-  margin-block-start: var(--_actions-margin-block-start);
-  margin-block-end: var(--_actions-margin-block-end);
+  margin-block: var(--_actions-margin-block-start) var(--_actions-margin-block-end);
   margin-inline-start: auto;
 }
 
@@ -116,17 +126,24 @@
   --_actions-margin-block-end: 0;
 }
 
-/* Selectable actions container */
-.selectable-actions {
-  position: relative;
+/*
+ * Selectable actions container (nested inside #actions)
+ * React: .pf-v6-c-card__selectable-actions has no direct styles
+ * All styling is handled by descendants (checkbox/radio)
+ */
+
+/* Match React's checkbox gap override for selectable cards */
+#selectable-actions pfv6-checkbox {
+  /* React: .pf-v6-c-card.pf-m-selectable .pf-v6-c-card__selectable-actions :is(.pf-v6-c-check) { gap: 0; } */
+  --_grid-gap: 0;
 }
 
-.selectable-actions.hidden {
+#selectable-actions.hidden {
   display: none;
 }
 
 /* Clickable action button/link overlay */
-.clickable-action {
+#clickable-action {
   position: absolute;
   inset: 0;
   justify-self: auto;
@@ -138,7 +155,7 @@
   color: inherit;
 }
 
-/* Visually hidden label */
+/* Visually hidden label (utility class - can be reused) */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -150,5 +167,3 @@
   white-space: nowrap;
   border-width: 0;
 }
-
-

@@ -1,7 +1,11 @@
 import { LitElement, html, type TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+
+import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
+import { Pfv6CheckboxChangeEvent } from '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
 
 import styles from './pfv6-card-header.css';
 
@@ -53,11 +57,17 @@ export class Pfv6CardClickableClickEvent extends Event {
  * @csspart header-main - The main content area (title)
  * @csspart header-toggle - The expand toggle button
  * @csspart actions - The actions container
- * @csspart selectable-actions - The selectable actions container (checkbox/radio/clickable button)
  */
 @customElement('pfv6-card-header')
 export class Pfv6CardHeader extends LitElement {
   static readonly styles = styles;
+
+  /**
+   * Consume card context from parent pfv6-card
+   * @internal
+   */
+  // Note: Not consuming context - let it pass through from card to checkbox
+  // The header doesn't need to know about card context, only the checkbox does
 
   /**
    * Whether the expand toggle is positioned on the right instead of left
@@ -82,6 +92,14 @@ export class Pfv6CardHeader extends LitElement {
    */
   @property({ type: Boolean, reflect: true, attribute: 'actions-no-offset' })
   actionsNoOffset = false;
+
+  /**
+   * Whether selectable actions (checkbox/radio) have no offset
+   * @type {boolean}
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true, attribute: 'selectable-actions-no-offset' })
+  selectableActionsNoOffset = false;
 
   /**
    * Callback for expand toggle. If provided, renders expand toggle button.
@@ -192,9 +210,18 @@ export class Pfv6CardHeader extends LitElement {
   };
 
   #handleSelectableChange = (e: Event) => {
-    const input = e.target as HTMLInputElement;
+    let checked: boolean;
     
-    const event = new Pfv6CardSelectableChangeEvent(input.checked);
+    // Handle pfv6-checkbox change event
+    if (e instanceof Pfv6CheckboxChangeEvent) {
+      checked = e.checked;
+    } else {
+      // Handle native radio input change event
+      const input = e.target as HTMLInputElement;
+      checked = input.checked;
+    }
+    
+    const event = new Pfv6CardSelectableChangeEvent(checked);
     this.dispatchEvent(event);
   };
 
@@ -234,10 +261,10 @@ export class Pfv6CardHeader extends LitElement {
     if (this.clickableOnly) {
       if (this.clickableHref) {
         return html`
-          <div id="selectable-actions" part="selectable-actions" class="selectable-actions">
+          <div id="selectable-actions">
             <a
+              id="clickable-action"
               href=${this.clickableHref}
-              class="clickable-action"
               target=${ifDefined(this.clickableExternal ? '_blank' : undefined)}
               rel=${ifDefined(this.clickableExternal ? 'noopener noreferrer' : undefined)}
               aria-label=${ifDefined(this.selectableAriaLabel)}
@@ -249,9 +276,9 @@ export class Pfv6CardHeader extends LitElement {
       }
 
       return html`
-        <div id="selectable-actions" part="selectable-actions" class="selectable-actions">
+        <div id="selectable-actions">
           <button
-            class="clickable-action"
+            id="clickable-action"
             aria-label=${ifDefined(this.selectableAriaLabel)}
             aria-labelledby=${ifDefined(this.selectableAriaLabelledby)}
             @click=${this.#handleClickableClick}
@@ -266,17 +293,37 @@ export class Pfv6CardHeader extends LitElement {
     const inputType = this.selectableVariant === 'single' ? 'radio' : 'checkbox';
     const inputId = this.selectableId || `card-selectable-${Math.random().toString(36).substring(2, 11)}`;
 
+    // For checkboxes, use pfv6-checkbox component
+    if (inputType === 'checkbox') {
+      return html`
+        <div 
+          id="selectable-actions"
+          class=${classMap({ 
+            hidden: this.selectableHidden
+          })}
+        >
+          <pfv6-checkbox
+            id=${inputId}
+            name=${ifDefined(this.selectableName)}
+            .checked=${this.selectableChecked}
+            ?disabled=${this.selectableDisabled}
+            accessible-label=${ifDefined(this.selectableAriaLabel || 'Select card')}
+            @change=${this.#handleSelectableChange}
+          ></pfv6-checkbox>
+        </div>
+      `;
+    }
+
+    // For radio buttons, use native input until pfv6-radio is implemented
     return html`
       <div 
-        id="selectable-actions" 
-        part="selectable-actions" 
+        id="selectable-actions"
         class=${classMap({ 
-          'selectable-actions': true,
           hidden: this.selectableHidden
         })}
       >
         <input
-          type=${inputType}
+          type="radio"
           id=${inputId}
           name=${ifDefined(this.selectableName)}
           .checked=${this.selectableChecked}
@@ -294,7 +341,8 @@ export class Pfv6CardHeader extends LitElement {
 
   #hasActions(): boolean {
     const actionsSlot = this.querySelector('[slot="actions"]');
-    return !!actionsSlot;
+    const hasSelectableActions = !!this.selectableVariant || this.clickableOnly;
+    return !!actionsSlot || hasSelectableActions;
   }
 
   render(): TemplateResult {
@@ -304,7 +352,7 @@ export class Pfv6CardHeader extends LitElement {
     };
 
     const actionsClasses = {
-      'no-offset': this.actionsNoOffset,
+      'no-offset': this.actionsNoOffset || this.selectableActionsNoOffset,
     };
 
     const hasActions = this.#hasActions();
@@ -316,7 +364,6 @@ export class Pfv6CardHeader extends LitElement {
         class=${classMap(headerClasses)}
       >
         ${this.#renderExpandToggle()}
-        ${this.#renderSelectableActions()}
         
         <div id="header-main" part="header-main" class="header-main">
           <slot></slot>
@@ -328,6 +375,7 @@ export class Pfv6CardHeader extends LitElement {
             part="actions" 
             class=${classMap(actionsClasses)}
           >
+            ${this.#renderSelectableActions()}
             <slot name="actions"></slot>
           </div>
         ` : ''}

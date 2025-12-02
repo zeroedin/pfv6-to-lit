@@ -7,7 +7,46 @@
 
 ## 🚨 CRITICAL: Accessibility & Form Integration Analysis
 
-### Issue: Input/Label Structure in Shadow DOM
+### Issue 1: `accessible-label` Should Use Visually Hidden Label Text
+
+**Current Implementation**:
+- `accessible-label` attribute exists but doesn't properly output to label
+- When `accessible-label` is set, label is rendered but potentially empty
+
+**React PatternFly Behavior**:
+```html
+<!-- React standalone checkbox -->
+<input aria-label="Standalone input" type="checkbox" />
+<!-- No <label> element rendered -->
+```
+
+**Our Desired Behavior (Accessibility Improvement)**:
+```html
+<!-- Lit standalone checkbox -->
+<pfv6-checkbox accessible-label="Standalone input">
+  <!-- Should render: -->
+  <label class="visually-hidden">Standalone input</label>
+  <input type="checkbox" />
+</pfv6-checkbox>
+```
+
+**Why Break from PatternFly?**
+- ✅ **Better accessibility**: `<label>` + `for` attribute is more robust than `aria-label` alone
+- ✅ **Semantic HTML**: Label-to-input association is the primary standard
+- ✅ **Broader support**: Works in more assistive technologies
+- ✅ **Best practice**: ARIA should supplement, not replace, native semantics
+
+**Implementation Plan**:
+1. When `accessible-label` is set, render label with text from `accessible-label`
+2. Apply `.visually-hidden` class to hide text (but keep accessible)
+3. DO NOT set `aria-label` on input (label association is sufficient)
+4. Document this as an intentional accessibility improvement over React
+
+**Status**: 🔴 **TO BE FIXED** - Documented for future implementation
+
+---
+
+### Issue 2: Input/Label Structure in Shadow DOM
 
 **Current Implementation**:
 - Input and label are rendered inside Shadow DOM
@@ -141,6 +180,13 @@
 ✅ ARIA attributes properly set  
 ✅ 100% visual parity with React  
 
+### Known Improvements to Implement
+✅ **`accessible-label` fix** (Issue #1 above):
+- This is NOT a refactor - it's an intentional accessibility improvement
+- Will NOT affect visual parity (text is visually hidden)
+- Will IMPROVE accessibility over React PatternFly
+- Should be implemented regardless of testing outcomes
+
 ### Potential Refactor Considerations
 ⚠️ **Only if analysis reveals issues**:
 - Consider Light DOM fallback for label association
@@ -161,6 +207,8 @@ The component currently has:
 - Form integration fails in real-world scenarios
 - Screen reader testing reveals problems
 - Browser compatibility issues emerge
+
+**Exception**: The `accessible-label` fix (Issue #1) should be implemented as it's a clear accessibility improvement that doesn't affect visual parity.
 
 ---
 
@@ -207,30 +255,40 @@ npm run test -- tests/a11y/checkbox-a11y.spec.ts
 
 ## 🚀 Next Steps
 
-1. **Create Form Integration Tests** (Highest Priority)
+1. **Fix `accessible-label` Implementation** (Highest Priority - Accessibility)
+   - Render label text from `accessible-label` attribute
+   - Apply `.visually-hidden` class to label text
+   - DO NOT use `aria-label` on input (rely on native label association)
+   - Add `.visually-hidden` utility class to CSS
+   - Update demos to test this behavior
+   - Document this as an intentional accessibility improvement
+
+2. **Create Form Integration Tests** (High Priority)
    - Write comprehensive test suite for form scenarios
    - Test with `FormData` API
    - Verify form submission and reset
 
-2. **Accessibility Audit** (High Priority)
+3. **Accessibility Audit** (High Priority)
    - Screen reader testing across platforms
    - Keyboard navigation verification
    - WCAG 2.1 compliance check
+   - Specifically test `accessible-label` with screen readers
 
-3. **Real-World Testing** (Medium Priority)
+4. **Real-World Testing** (Medium Priority)
    - Test with popular form libraries
    - Create example implementations
    - Document edge cases
 
-4. **Browser Compatibility** (Medium Priority)
+5. **Browser Compatibility** (Medium Priority)
    - Test across all target browsers
    - Identify any polyfill needs
    - Document minimum versions
 
-5. **Documentation** (Low Priority - After Verification)
+6. **Documentation** (Low Priority - After Verification)
    - Usage guide with form examples
    - Accessibility documentation
    - Migration guide from React
+   - Document `accessible-label` improvement over React
 
 ---
 

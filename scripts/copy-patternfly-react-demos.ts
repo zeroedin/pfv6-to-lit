@@ -105,11 +105,18 @@ function toKebabCase(pascalCase: string, componentName: string): string {
  * Clone or reuse PatternFly React repository
  */
 async function ensurePatternFlyReactClone(version: string): Promise<string> {
-  const clonePath = join('/tmp', `patternfly-react-${version}`);
+  // Use project-local .cache directory instead of /tmp for reliability
+  const cacheDir = join(projectRoot, '.cache');
+  const clonePath = join(cacheDir, `patternfly-react-${version}`);
   
   if (existsSync(clonePath)) {
     console.log(`✓ Using cached PatternFly React ${version} at ${clonePath}`);
     return clonePath;
+  }
+  
+  // Ensure cache directory exists
+  if (!existsSync(cacheDir)) {
+    await mkdir(cacheDir, { recursive: true });
   }
   
   console.log(`📦 Cloning PatternFly React v${version}...`);

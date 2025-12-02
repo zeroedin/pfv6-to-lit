@@ -11,7 +11,7 @@
  * - .pf-v6-c-check__label-required → #required
  * - .pf-v6-c-check__description → .description (wrapper div for description slot)
  * - .pf-v6-c-check__body → #body (wrapper div for body slot)
- * - .pf-m-standalone → #container.standalone (via classMap)
+ * - .pf-m-standalone → #container.standalone (via classMap) - simplified for Shadow DOM
  * - .pf-m-start → #container.start (via classMap)
  */
 
@@ -104,6 +104,8 @@
         ) - 50%
       )
     );
+
+  display: contents;
 }
 
 :host([disabled]) {
@@ -133,14 +135,14 @@ input[type="checkbox"]:disabled {
 }
 
 /* .pf-v6-c-check.pf-m-standalone (check.css:24-28) */
-#container.pf-m-standalone {
+#container.standalone {
   display: inline-grid;
   grid-template-columns: auto;
   min-block-size: var(--_standalone-min-height);
 }
 
 /* .pf-v6-c-check.pf-m-standalone .pf-v6-c-check__input (check.css:29-32) */
-#container.pf-m-standalone input[type="checkbox"] {
+#container.standalone input[type="checkbox"] {
   align-self: center;
   transform: none;
 }
@@ -199,6 +201,43 @@ input[type="checkbox"]:disabled {
 :host([disabled]) #label {
   color: var(--_label-disabled-color);
   cursor: not-allowed;
+}
+
+/*
+ * Card overlay mode - when checkbox is inside a selectable card
+ * React: .pf-v6-c-card__selectable-actions :is(.pf-v6-c-check__label)
+ * { position: absolute; inset: 0; cursor: pointer; }
+ */
+#container.card-overlay #label {
+  position: absolute;
+  inset: 0;
+  justify-self: auto; /* Override start alignment */
+  cursor: pointer;
+
+  /* Hide label text visually (but keep accessible for screen readers) */
+  color: transparent;
+  font-size: 0;
+  line-height: 0;
+
+  /* Ensure any text content doesn't affect layout */
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/*
+ * Card overlay label::before - Creates card border for interactive states
+ * React: .pf-v6-c-card__selectable-actions :is(.pf-v6-c-check__label)::before
+ * { position: absolute; inset: 0; z-index: -1; content: ""; background/border }
+ */
+#container.card-overlay #label::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  cursor: pointer;
+  background-color: var(--pf-v6-c-card--BackgroundColor, transparent);
+  border: var(--pf-v6-c-card--BorderWidth) solid var(--pf-v6-c-card--BorderColor, transparent);
+  border-radius: var(--pf-v6-c-card--BorderRadius);
 }
 
 /* .pf-v6-c-check__label-required (check.css:74-78) */

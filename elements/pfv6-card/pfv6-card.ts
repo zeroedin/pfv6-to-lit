@@ -1,6 +1,10 @@
 import { LitElement, html, type TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { provide } from '@lit/context';
+
+import { cardContext, type CardContext } from '@pfv6/elements/pfv6-card/context.js';
 
 import './pfv6-card-header.js';
 import './pfv6-card-title.js';
@@ -190,6 +194,14 @@ export class Pfv6Card extends LitElement {
   isSelectable = false;
 
   /**
+   * Provide card context to nested components (e.g., checkbox)
+   * @internal
+   */
+  @provide({ context: cardContext })
+  private _cardContext = this.#makeCardContext();
+
+
+  /**
    * Visual state flag indicating the card can be clicked.
    * Note: Actual clickable behavior is handled by CardHeader with selectableActions.
    * @type {boolean}
@@ -232,6 +244,26 @@ export class Pfv6Card extends LitElement {
   @property({ type: Boolean, reflect: true, attribute: 'is-expanded' })
   isExpanded = false;
 
+  /**
+   * Create card context object with current property values
+   * @private
+   */
+  #makeCardContext(): CardContext {
+    return {
+      isSelectable: this.isSelectable,
+    };
+  }
+
+  /**
+   * Update card context before each render
+   * This ensures context is always in sync with current property values
+   */
+  override willUpdate(changed: Map<PropertyKey, unknown>): void {
+    super.willUpdate(changed);
+    
+    // Always recreate context to ensure current values are provided
+    this._cardContext = this.#makeCardContext();
+  }
 
   render(): TemplateResult {
     const containerClasses = {

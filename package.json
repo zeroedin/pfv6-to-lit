@@ -3,6 +3,11 @@
   "version": "0.0.1",
   "description": "PatternFly Elements v6 - Web components implementing PatternFly v6 design system",
   "type": "module",
+  "exports": {
+    "./lib/*": "./lib/*",
+    "./elements/*": "./elements/*",
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "postinstall": "npx tsx scripts/copy-patternfly-react-demos.ts && npx tsx scripts/extract-layout-demos.ts",
     "test": "wireit",
@@ -133,7 +138,7 @@
       ]
     },
     "e2e:parity": {
-      "command": "playwright test tests/visual/card-visual-parity.spec.ts",
+      "command": "playwright test",
       "description": "CRITICAL: Validate 1:1 visual parity (Lit vs React live comparison)",
       "dependencies": [
         "compile:tsc",

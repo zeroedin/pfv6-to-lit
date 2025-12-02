@@ -6,11 +6,13 @@
 
 ## Common Commands (Run These Frequently)
 
+**⚠️ AI NOTE: Always prompt user before running `killall node` or test suites - see "Disruptive Commands" in AI Guidelines section**
+
 ```bash
 # Development
 npm run dev                    # Start dev server (web components only, fast)
 npm run dev:react             # Start dev server + React demo watch
-killall node                  # Kill hanging node processes before starting dev
+killall node                  # ⚠️ AI: PROMPT before running - kills ALL Node processes
 
 # Building
 npm run compile               # Compile TypeScript + CEM + React demos
@@ -28,7 +30,8 @@ npm run lint                  # Run all linters (ESLint + Stylelint)
 **🚨 CRITICAL RULES:**
 - **ALWAYS** use `npm run dev` (never manual `tsc` commands) - Wireit handles all compilation
 - **ALWAYS** use `npm run e2e:parity` (never `npx playwright test` directly) - npm scripts ensure dev server is running
-- **ALWAYS** run `killall node` before starting dev server to prevent hanging processes
+- **ALWAYS** prompt user before running `killall node` or test suites - these commands are disruptive (see AI Guidelines)
+- **NEVER** gitignore `package-lock.json` - it ensures deterministic builds and must be committed
 
 ---
 
@@ -553,16 +556,18 @@ https://github.com/patternfly/patternfly-react/tree/main/packages/react-core/src
 
 3. **Rebuild visual regression baselines**:
    ```bash
-   killall node
+   killall node  # ⚠️ AI: PROMPT before running - kills ALL Node processes
    npm run dev &
    sleep 10
-   npm run rebuild:snapshots
+   npm run rebuild:snapshots  # ⚠️ AI: PROMPT before running
    ```
+   **AI Note**: Always prompt user before running `killall node` or baseline rebuild commands.
 
 4. **Run parity tests**:
    ```bash
-   npm run e2e:parity
+   npm run e2e:parity  # ⚠️ AI: PROMPT before running
    ```
+   **AI Note**: Always prompt user before running tests - they take ~45s and are resource-intensive.
 
 5. **Analyze test failures**: Failures will reveal visual differences between your Lit component and React PatternFly. This is the **source of truth** for what needs to be fixed in your Lit component.
 
@@ -915,15 +920,18 @@ test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
 
 1. **Start dev server** (if not already running):
    ```bash
-   killall node
+   killall node  # ⚠️ AI: PROMPT before running - kills ALL Node processes
    npm run dev &
    sleep 10
    ```
+   **AI Note**: Always prompt user before running `killall node` - it stops all Node processes on their machine.
 
 2. **Run parity tests** (THE CRITICAL TEST):
    ```bash
-   npm run e2e:parity -- tests/visual/{component}/
+   npm run e2e:parity -- tests/visual/{component}/  # ⚠️ AI: PROMPT before running
    ```
+   **AI Note**: Always prompt user before running tests - they take ~45s and are resource-intensive.
+   
    - Compares Lit demos against React demos (live, not baseline)
    - Failures show EXACTLY what's visually different
    - This is the **only test that matters** for Lit component validation
@@ -2856,6 +2864,15 @@ npm install
 npm run compile
 ```
 
+**🚨 CRITICAL: Dependency Management**
+
+- **`package-lock.json` must be committed to version control**
+  - ❌ **NEVER** add `package-lock.json` to `.gitignore`
+  - ✅ **ALWAYS** commit `package-lock.json` changes
+  - **Why**: Ensures deterministic builds - everyone gets the exact same dependency versions
+  - **Without it**: Different developers/CI may get different versions, causing hard-to-debug issues
+- Use `npm ci` (not `npm install`) in CI/CD for faster, more reliable builds
+
 ### Common Commands
 
 ```bash
@@ -2939,7 +2956,7 @@ npm run dev
 
 ✅ **DO** this instead:
 ```bash
-killall node 2>/dev/null || true
+killall node 2>/dev/null || true  # ⚠️ AI: PROMPT before running
 npm run dev
 ```
 
@@ -2950,6 +2967,8 @@ npm run dev
 4. Manages dependencies between compilation steps
 
 **AI Directive**: 
+- **⚠️ ALWAYS PROMPT** before running `killall node` - it kills ALL Node processes on the user's machine (see "Disruptive Commands" in AI Guidelines)
+- **⚠️ ALWAYS PROMPT** before running `npm run e2e` or `npm run e2e:parity` - tests take ~45s and are resource-intensive
 - When making changes to ANY TypeScript file (components, plugins, scripts), just restart `npm run dev`. The Wireit task orchestration handles all compilation automatically. Manual `tsc` commands are unnecessary and bypass the project's build system.
 - When running tests, ALWAYS use `npm run e2e`, `npm run e2e:parity`, or other npm test scripts. NEVER run `npx playwright test` directly, as it may not ensure the dev server is running or configured correctly.
 
@@ -3414,6 +3433,60 @@ focus() {
   this.slottedElement?.focus();
 }
 ```
+
+#### Import Order
+
+**CRITICAL**: JavaScript/TypeScript imports MUST follow this specific order:
+
+1. **Type-only imports** (unless paired on the same line with value imports)
+2. **Lit core imports** (`lit`, `lit/html.js`, etc.)
+3. **Lit decorators** (import individually from `lit/decorators/*.js`, NOT from `lit/decorators.js`)
+4. **Lit directives** (import individually from `lit/directives/*.js`)
+5. **Third-party imports** (`@lit/context`, `@open-wc/testing`, etc.)
+6. **Project imports** (from `/lib/`, contexts from other elements, etc.)
+7. **Relative imports** (sub-components, utilities in same directory)
+8. **Component style imports** (ALWAYS LAST)
+
+**Example:**
+```typescript
+// 1. Type-only imports (if needed separately)
+import type { PropertyValues } from 'lit';
+
+// 2. Lit core
+import { LitElement, html, type TemplateResult } from 'lit';
+
+// 3. Lit decorators (import individually, not from lit/decorators.js)
+import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators/property.js';
+import { query } from 'lit/decorators/query.js';
+import { state } from 'lit/decorators/state.js';
+
+// 4. Lit directives
+import { classMap } from 'lit/directives/class-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
+import { live } from 'lit/directives/live.js';
+
+// 5. Third-party imports
+import { consume } from '@lit/context';
+
+// 6. Project imports (contexts from other elements, shared utilities)
+import { cardContext, type CardContext } from '@pfv6/elements/pfv6-card/context.js';
+
+// 7. Relative imports (sub-components, local utilities)
+import { Pfv6SomeSubComponent } from './pfv6-some-sub-component.js';
+
+// 8. Component styles (ALWAYS LAST)
+import styles from './pfv6-component.css';
+```
+
+**Why This Order:**
+- ✅ Separates concerns (types → logic → styles)
+- ✅ Makes dependencies clear
+- ✅ Style imports at the end are visually distinct
+- ✅ Consistent across all components
+- ✅ Easier to scan and understand imports
+
+**AI Directive**: Always organize imports in this order when creating or modifying component files.
 
 #### File Naming
 - One element class per file
@@ -4286,6 +4359,40 @@ Target modern browsers with ES6+ and Shadow DOM support. IE11 is not supported.
 - Use `requestAnimationFrame` for expensive operations
 - Be mindful of reactive property changes that trigger re-renders
 
+### @lit/context Module Path Consistency
+
+**CRITICAL**: When using `@lit/context`, ALL components must import the context symbol from the EXACT SAME MODULE PATH.
+
+**The Problem**: If a provider and consumer import the same context from different paths (e.g., `'./context.js'` vs `'@pfv6/elements/pfv6-card/context.js'`), the JavaScript module system may treat them as separate modules, causing context symbols to not match. This breaks context propagation even though `@lit/context` correctly crosses shadow boundaries.
+
+**The Solution**: Use consistent import paths (preferably bare module specifiers) across ALL files:
+
+```typescript
+// ✅ CORRECT - All files use the same path
+// pfv6-card.ts
+import { cardContext } from '@pfv6/elements/pfv6-card/context.js';
+
+// pfv6-checkbox.ts  
+import { cardContext } from '@pfv6/elements/pfv6-card/context.js';
+```
+
+```typescript
+// ❌ WRONG - Different paths break context matching
+// pfv6-card.ts
+import { cardContext } from './context.js';  // Relative path
+
+// pfv6-checkbox.ts
+import { cardContext } from '@pfv6/elements/pfv6-card/context.js';  // Bare specifier
+```
+
+**Key Facts About `@lit/context`**:
+- ✅ **Does** cross shadow boundaries via DOM events (`composed: true`)
+- ✅ **Does not** require intermediate components to consume/re-provide
+- ✅ **Requires** consistent import paths for context symbol matching
+- ❌ **Will fail silently** if context symbols don't match due to module path inconsistency
+
+**Testing Tip**: If context tests show provider has the value but consumer receives `undefined`, check that ALL imports of the context use the exact same path.
+
 ## Resources & References
 
 ### Project Context
@@ -4457,6 +4564,30 @@ Before implementing any component or feature:
 - ❌ Accessibility requirements
 
 **Better to ask 10 questions than build the wrong thing.**
+
+### 🚨 CRITICAL: Disruptive Commands Require User Approval
+
+**AI MUST ALWAYS PROMPT before running these commands:**
+
+#### `killall node`
+- ⚠️ **NEVER run `killall node` automatically** - it kills ALL Node.js processes on the user's machine
+- ✅ **DO** prompt the user: "I need to run `killall node` to free port 8000. This will stop all Node processes. May I proceed?"
+- ✅ **DO** wait for explicit approval
+- **Why**: User may have other important Node processes running (other dev servers, build tools, background tasks)
+
+#### Test Suites (`npm run e2e`, `npm run e2e:parity`)
+- ⚠️ **NEVER run test suites automatically** - they are time-intensive and resource-heavy
+- ✅ **DO** prompt the user: "I'd like to run `npm run e2e:parity` to verify the changes. This will take ~45s and requires port 8000. May I proceed?"
+- ✅ **DO** explain what you'll test and why
+- ✅ **DO** wait for explicit approval
+- **Why**: Tests take significant time, may require stopping other processes, and user may want to review code first
+
+#### Build Commands (`npm run compile`, `npm run compile:react-demos`)
+- ⚠️ **ASK before running full builds** - they take time and may trigger other workflows
+- ✅ **DO** prompt the user: "I need to run `npm run compile:react-demos` to rebuild React demos. May I proceed?"
+- **Why**: User may want to stage other changes first or review before building
+
+**Summary**: If a command affects processes, ports, or takes significant time → **ASK FIRST**.
 
 ### 🚨 CRITICAL: React Demo Immutability
 
