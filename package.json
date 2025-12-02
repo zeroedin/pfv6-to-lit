@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "PatternFly Elements v6 - Web components implementing PatternFly v6 design system",
   "type": "module",
+  "exports": {
+    "./lib/*": "./lib/*",
+    "./*": "./elements/*"
+  },
   "scripts": {
     "postinstall": "npx tsx scripts/copy-patternfly-react-demos.ts && npx tsx scripts/extract-layout-demos.ts",
     "test": "wireit",

@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-package-lock.json
 
 # Build outputs
 *.js
@@ -15,6 +14,9 @@ tsconfig.tsbuildinfo
 
 # Wireit cache
 .wireit/
+
+# PatternFly React clone cache
+.cache/
 
 # Test results
 test-results/

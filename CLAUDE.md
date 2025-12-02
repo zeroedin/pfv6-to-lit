@@ -29,6 +29,7 @@ npm run lint                  # Run all linters (ESLint + Stylelint)
 - **ALWAYS** use `npm run dev` (never manual `tsc` commands) - Wireit handles all compilation
 - **ALWAYS** use `npm run e2e:parity` (never `npx playwright test` directly) - npm scripts ensure dev server is running
 - **ALWAYS** run `killall node` before starting dev server to prevent hanging processes
+- **NEVER** gitignore `package-lock.json` - it ensures deterministic builds and must be committed
 
 ---
 
@@ -2855,6 +2856,15 @@ npm install
 # Initial compilation
 npm run compile
 ```
+
+**🚨 CRITICAL: Dependency Management**
+
+- **`package-lock.json` must be committed to version control**
+  - ❌ **NEVER** add `package-lock.json` to `.gitignore`
+  - ✅ **ALWAYS** commit `package-lock.json` changes
+  - **Why**: Ensures deterministic builds - everyone gets the exact same dependency versions
+  - **Without it**: Different developers/CI may get different versions, causing hard-to-debug issues
+- Use `npm ci` (not `npm install`) in CI/CD for faster, more reliable builds
 
 ### Common Commands
 
