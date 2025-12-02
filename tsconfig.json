@@ -2,9 +2,14 @@
   "compilerOptions": {
     // File Layout
     "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@pfv6/elements/*": ["./elements/*"]
+    },
     
     // Environment Settings
     "module": "nodenext",
+    "moduleResolution": "nodenext",
     "target": "esnext",
     "types": [],
     "resolveJsonModule": true,
