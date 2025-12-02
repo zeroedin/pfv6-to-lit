@@ -13,6 +13,13 @@
 
 :host {
   /*
+   * Block display allows margin/padding to work on the component.
+   * Unlike pfv6-gallery-item, the parent gallery does NOT need display: contents
+   * because the grid container is #container inside shadow DOM.
+   */
+  display: block;
+
+  /*
    * Two-layer pattern: Private variables reference public API with fallbacks
    * Public API variables match PatternFly React CSS exactly
    */
