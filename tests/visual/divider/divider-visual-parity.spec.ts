@@ -59,79 +59,139 @@ const litDemos = discoverDemos('divider');
 
 test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
   litDemos.forEach(demoName => {
-    test(`Parity: ${demoName} (Lit vs React)`, async ({ page, browser }) => {
-      // Set consistent viewport for both pages
-      await page.setViewportSize({ width: 1280, height: 720 });
+    // Special handling for responsive demos that need multiple viewport sizes
+    const isResponsiveInsetDemo = demoName === 'vertical-flex-inset-various-breakpoints' || 
+                                   demoName === 'inset-various-breakpoints';
+    
+    if (isResponsiveInsetDemo) {
+      // Test at multiple viewport sizes for responsive demos
+      const viewportWidths = [567, 768, 1054, 1200, 1450];
       
-      // Open a new page for React demo
-      const reactPage = await browser.newPage();
-      await reactPage.setViewportSize({ width: 1280, height: 720 });
-      
-      try {
-        // Load React demo
-        await reactPage.goto(`/elements/pfv6-divider/react/test/${demoName}`);
-        await waitForFullLoad(reactPage);
-        
-        // Load Lit demo
-        await page.goto(`/elements/pfv6-divider/test/${demoName}`);
-        await waitForFullLoad(page);
-        
-        // Take React screenshot
-        const reactBuffer = await reactPage.screenshot({
-          fullPage: true,
-          animations: 'disabled'
+      viewportWidths.forEach(width => {
+        test(`Parity: ${demoName} @ ${width}px (Lit vs React)`, async ({ page, browser }) => {
+          await page.setViewportSize({ width, height: 720 });
+          
+          const reactPage = await browser.newPage();
+          await reactPage.setViewportSize({ width, height: 720 });
+          
+          try {
+            await reactPage.goto(`/elements/pfv6-divider/react/test/${demoName}`);
+            await waitForFullLoad(reactPage);
+            
+            await page.goto(`/elements/pfv6-divider/test/${demoName}`);
+            await waitForFullLoad(page);
+            
+            const reactBuffer = await reactPage.screenshot({
+              fullPage: true,
+              animations: 'disabled'
+            });
+            
+            const litBuffer = await page.screenshot({
+              fullPage: true,
+              animations: 'disabled'
+            });
+            
+            const reactPng = PNG.sync.read(reactBuffer);
+            const litPng = PNG.sync.read(litBuffer);
+            
+            expect(reactPng.width).toBe(litPng.width);
+            expect(reactPng.height).toBe(litPng.height);
+            
+            const diff = new PNG({ width: reactPng.width, height: reactPng.height });
+            
+            const numDiffPixels = pixelmatch(
+              reactPng.data,
+              litPng.data,
+              diff.data,
+              reactPng.width,
+              reactPng.height,
+              { threshold: 0 }
+            );
+            
+            await test.info().attach(`React @ ${width}px (expected)`, {
+              body: reactBuffer,
+              contentType: 'image/png'
+            });
+            
+            await test.info().attach(`Lit @ ${width}px (actual)`, {
+              body: litBuffer,
+              contentType: 'image/png'
+            });
+            
+            await test.info().attach(`Diff @ ${width}px (red = different pixels)`, {
+              body: PNG.sync.write(diff),
+              contentType: 'image/png'
+            });
+            
+            expect(numDiffPixels).toBe(0);
+          } finally {
+            await reactPage.close();
+          }
         });
+      });
+    } else {
+      // Standard test for non-responsive demos
+      test(`Parity: ${demoName} (Lit vs React)`, async ({ page, browser }) => {
+        await page.setViewportSize({ width: 1280, height: 720 });
         
-        // Take Lit screenshot
-        const litBuffer = await page.screenshot({
-          fullPage: true,
-          animations: 'disabled'
-        });
+        const reactPage = await browser.newPage();
+        await reactPage.setViewportSize({ width: 1280, height: 720 });
         
-        // Decode PNG buffers
-        const reactPng = PNG.sync.read(reactBuffer);
-        const litPng = PNG.sync.read(litBuffer);
-        
-        // Ensure dimensions match
-        expect(reactPng.width).toBe(litPng.width);
-        expect(reactPng.height).toBe(litPng.height);
-        
-        // Create diff image
-        const diff = new PNG({ width: reactPng.width, height: reactPng.height });
-        
-        // Compare pixel-by-pixel (threshold: 0 = pixel-perfect matching)
-        const numDiffPixels = pixelmatch(
-          reactPng.data,
-          litPng.data,
-          diff.data,
-          reactPng.width,
-          reactPng.height,
-          { threshold: 0 } // Pixel-perfect (zero tolerance for differences)
-        );
-        
-        // Attach all 3 images to Playwright report
-        await test.info().attach('React (expected)', {
-          body: reactBuffer,
-          contentType: 'image/png'
-        });
-        
-        await test.info().attach('Lit (actual)', {
-          body: litBuffer,
-          contentType: 'image/png'
-        });
-        
-        await test.info().attach('Diff (red = different pixels)', {
-          body: PNG.sync.write(diff),
-          contentType: 'image/png'
-        });
-        
-        // CRITICAL: Assert pixel-perfect match
-        // If this fails, check the diff image to see exactly what's different
-        expect(numDiffPixels).toBe(0);
-      } finally {
-        await reactPage.close();
-      }
-    });
+        try {
+          await reactPage.goto(`/elements/pfv6-divider/react/test/${demoName}`);
+          await waitForFullLoad(reactPage);
+          
+          await page.goto(`/elements/pfv6-divider/test/${demoName}`);
+          await waitForFullLoad(page);
+          
+          const reactBuffer = await reactPage.screenshot({
+            fullPage: true,
+            animations: 'disabled'
+          });
+          
+          const litBuffer = await page.screenshot({
+            fullPage: true,
+            animations: 'disabled'
+          });
+          
+          const reactPng = PNG.sync.read(reactBuffer);
+          const litPng = PNG.sync.read(litBuffer);
+          
+          expect(reactPng.width).toBe(litPng.width);
+          expect(reactPng.height).toBe(litPng.height);
+          
+          const diff = new PNG({ width: reactPng.width, height: reactPng.height });
+          
+          const numDiffPixels = pixelmatch(
+            reactPng.data,
+            litPng.data,
+            diff.data,
+            reactPng.width,
+            reactPng.height,
+            { threshold: 0 }
+          );
+          
+          await test.info().attach('React (expected)', {
+            body: reactBuffer,
+            contentType: 'image/png'
+          });
+          
+          await test.info().attach('Lit (actual)', {
+            body: litBuffer,
+            contentType: 'image/png'
+          });
+          
+          await test.info().attach('Diff (red = different pixels)', {
+            body: PNG.sync.write(diff),
+            contentType: 'image/png'
+          });
+          
+          expect(numDiffPixels).toBe(0);
+        } finally {
+          await reactPage.close();
+        }
+      });
+    }
   });
 });
 

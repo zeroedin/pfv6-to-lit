@@ -9,6 +9,30 @@ import { classMap } from 'lit/directives/class-map.js';
 import styles from './pfv6-divider.css';
 
 /**
+ * Responsive value converter for orientation and inset properties
+ * Converts "vertical sm:horizontal md:vertical" to { default: 'vertical', sm: 'horizontal', md: 'vertical' }
+ */
+function parseResponsiveValue<T extends string>(value: string | null): { default?: T; sm?: T; md?: T; lg?: T; xl?: T; '2xl'?: T } | undefined {
+  if (!value) return undefined;
+  
+  const result: { default?: T; sm?: T; md?: T; lg?: T; xl?: T; '2xl'?: T } = {};
+  const parts = value.trim().split(/\s+/);
+  
+  for (const part of parts) {
+    if (part.includes(':')) {
+      const [breakpoint, val] = part.split(':');
+      if (breakpoint === 'sm' || breakpoint === 'md' || breakpoint === 'lg' || breakpoint === 'xl' || breakpoint === '2xl') {
+        result[breakpoint] = val as T;
+      }
+    } else {
+      result.default = part as T;
+    }
+  }
+  
+  return Object.keys(result).length > 0 ? result : undefined;
+}
+
+/**
  * Divider - A divider is a horizontal or vertical line that is used to separate content.
  *
  * @element pfv6-divider
@@ -31,22 +55,40 @@ export class Pfv6Divider extends LitElement {
 
   /**
    * Insets at various breakpoints
+   * 
+   * Examples:
+   * - inset="sm" → { default: 'sm' }
+   * - inset="sm md:md lg:lg" → { default: 'sm', md: 'md', lg: 'lg' }
    */
-  @property({ type: Object })
+  @property({ 
+    converter: {
+      fromAttribute: (value) => parseResponsiveValue<'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'>(value),
+      toAttribute: (value) => value ? JSON.stringify(value) : null
+    }
+  })
   inset?: {
-    default?: 'insetNone' | 'insetXs' | 'insetSm' | 'insetMd' | 'insetLg' | 'insetXl' | 'inset2xl' | 'inset3xl';
-    sm?: 'insetNone' | 'insetXs' | 'insetSm' | 'insetMd' | 'insetLg' | 'insetXl' | 'inset2xl' | 'inset3xl';
-    md?: 'insetNone' | 'insetXs' | 'insetSm' | 'insetMd' | 'insetLg' | 'insetXl' | 'inset2xl' | 'inset3xl';
-    lg?: 'insetNone' | 'insetXs' | 'insetSm' | 'insetMd' | 'insetLg' | 'insetXl' | 'inset2xl' | 'inset3xl';
-    xl?: 'insetNone' | 'insetXs' | 'insetSm' | 'insetMd' | 'insetLg' | 'insetXl' | 'inset2xl' | 'inset3xl';
-    '2xl'?: 'insetNone' | 'insetXs' | 'insetSm' | 'insetMd' | 'insetLg' | 'insetXl' | 'inset2xl' | 'inset3xl';
+    default?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
+    sm?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
+    md?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
+    lg?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
+    xl?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
+    '2xl'?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
   };
 
   /**
    * Indicates how the divider will display at various breakpoints.
    * Vertical divider must be in a flex layout.
+   * 
+   * Examples:
+   * - orientation="vertical" → { default: 'vertical' }
+   * - orientation="vertical sm:horizontal md:vertical" → { default: 'vertical', sm: 'horizontal', md: 'vertical' }
    */
-  @property({ type: Object })
+  @property({ 
+    converter: {
+      fromAttribute: (value) => parseResponsiveValue<'vertical' | 'horizontal'>(value),
+      toAttribute: (value) => value ? JSON.stringify(value) : null
+    }
+  })
   orientation?: {
     default?: 'vertical' | 'horizontal';
     sm?: 'vertical' | 'horizontal';
@@ -115,25 +157,15 @@ export class Pfv6Divider extends LitElement {
     
     // Inset classes
     if (this.inset?.default) {
-      const insetValue = this.inset.default.replace('inset', '').toLowerCase();
-      if (insetValue === 'none') {
-        classes['inset-none'] = true;
-      } else {
-        classes[`inset-${insetValue}`] = true;
-      }
+      classes[`inset-${this.inset.default}`] = true;
     }
-    
+
     // Responsive inset classes
     ['sm', 'md', 'lg', 'xl', '2xl'].forEach(breakpoint => {
       const bp = breakpoint as 'sm' | 'md' | 'lg' | 'xl' | '2xl';
       const value = this.inset?.[bp];
       if (value) {
-        const insetValue = value.replace('inset', '').toLowerCase();
-        if (insetValue === 'none') {
-          classes[`inset-none-on-${breakpoint}`] = true;
-        } else {
-          classes[`inset-${insetValue}-on-${breakpoint}`] = true;
-        }
+        classes[`inset-${value}-on-${breakpoint}`] = true;
       }
     });
     

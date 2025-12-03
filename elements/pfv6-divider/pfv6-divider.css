@@ -24,76 +24,22 @@
   --_size: var(--pf-v6-c-divider--Size, var(--pf-t--global--border--width--divider--default));
   --_before-flex-basis: var(--pf-v6-c-divider--before--FlexBasis, 100%);
 
-  /* Private variables for hidden/visible state management */
-  --_visible-display: var(--_display);
-  --_hidden-display: none;
-  --_current-display: var(--_visible-display);
+  /* CRITICAL: :host needs flex properties to participate in parent flex layout */
+  display: var(--_display);
+  align-self: stretch;
+  flex-shrink: 0;
 }
 
 #container {
   flex-direction: row;
   width: 100%;
   height: var(--_size);
-  display: var(--_current-display);
+  display: var(--_display);
   flex-shrink: 0;
   align-items: stretch;
   align-self: stretch;
   justify-content: center;
   border: 0;
-}
-
-#container.hidden {
-  --_current-display: var(--_hidden-display);
-}
-
-@media screen and (width >= 36rem) {
-  #container.hidden-on-sm {
-    --_current-display: var(--_hidden-display);
-  }
-
-  #container.visible-on-sm {
-    --_current-display: var(--_visible-display);
-  }
-}
-
-@media screen and (width >= 48rem) {
-  #container.hidden-on-md {
-    --_current-display: var(--_hidden-display);
-  }
-
-  #container.visible-on-md {
-    --_current-display: var(--_visible-display);
-  }
-}
-
-@media screen and (width >= 62rem) {
-  #container.hidden-on-lg {
-    --_current-display: var(--_hidden-display);
-  }
-
-  #container.visible-on-lg {
-    --_current-display: var(--_visible-display);
-  }
-}
-
-@media screen and (width >= 75rem) {
-  #container.hidden-on-xl {
-    --_current-display: var(--_hidden-display);
-  }
-
-  #container.visible-on-xl {
-    --_current-display: var(--_visible-display);
-  }
-}
-
-@media screen and (width >= 90.625rem) {
-  #container.hidden-on-2xl {
-    --_current-display: var(--_hidden-display);
-  }
-
-  #container.visible-on-2xl {
-    --_current-display: var(--_visible-display);
-  }
 }
 
 #container::before {
