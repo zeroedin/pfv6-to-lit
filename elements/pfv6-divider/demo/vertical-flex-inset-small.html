@@ -1,0 +1,14 @@
+<pfv6-flex>
+  <pfv6-flex-item>first item</pfv6-flex-item>
+  <pfv6-divider orientation="vertical"></pfv6-divider>
+  <pfv6-flex-item>second item</pfv6-flex-item>
+</pfv6-flex>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-divider/pfv6-divider.js';
+  import '@pfv6/elements/pfv6-flex/pfv6-flex.js';
+  
+  const divider = document.querySelector('pfv6-divider');
+  divider.inset = { default: 'insetSm' };
+</script>
+

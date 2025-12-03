@@ -3,11 +3,11 @@
   "modules": [
     {
       "kind": "javascript-module",
-      "path": "elements/pfv6-card/pfv6-card-body.js",
+      "path": "pfv6-card/pfv6-card-body.js",
       "declarations": [
         {
           "name": "Pfv6CardBody",
-          "description": "PatternFly Card Body Component\n\nA container for card body content. Can be used multiple times within a card\nto create multiple body sections with individual control over fill behavior.\n\n<figure>\n<figcaption>Basic usage</figcaption>\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>Body content</pfv6-card-body>\n<pfv6-card-footer>Footer</pfv6-card-footer>\n</pfv6-card>\n```\n</figure>\n\n<figure>\n<figcaption>Multiple body sections</figcaption>\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>First body section (fills)</pfv6-card-body>\n<pfv6-card-body filled=\"false\">Second body section (no fill)</pfv6-card-body>\n<pfv6-card-body>Third body section (fills)</pfv6-card-body>\n<pfv6-card-footer>Footer</pfv6-card-footer>\n</pfv6-card>\n```\n</figure>",
+          "description": "PatternFly Card Body Component\n\nA container for card body content. Can be used multiple times within a card\nto create multiple body sections with individual control over fill behavior.\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eBasic usage\u003c/figcaption\u003e\n\n```html\n\u003cpfv6-card\u003e\n\u003cpfv6-card-title\u003eCard Title\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eBody content\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-footer\u003eFooter\u003c/pfv6-card-footer\u003e\n\u003c/pfv6-card\u003e\n```\n\u003c/figure\u003e\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eMultiple body sections\u003c/figcaption\u003e\n\n```html\n\u003cpfv6-card\u003e\n\u003cpfv6-card-title\u003eCard Title\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eFirst body section (fills)\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-body filled=\"false\"\u003eSecond body section (no fill)\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-body\u003eThird body section (fills)\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-footer\u003eFooter\u003c/pfv6-card-footer\u003e\n\u003c/pfv6-card\u003e\n```\n\u003c/figure\u003e",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -25,6 +25,9 @@
               "reflects": true
             }
           ],
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/pfv6-card-body.ts#L46"
+          },
           "kind": "class",
           "tagName": "pfv6-card-body",
           "attributes": [
@@ -112,7 +115,7 @@
           "name": "pfv6-card-body",
           "declaration": {
             "name": "Pfv6CardBody",
-            "module": "elements/pfv6-card/pfv6-card-body.js"
+            "module": "pfv6-card/pfv6-card-body.js"
           }
         },
         {
@@ -120,21 +123,24 @@
           "name": "Pfv6CardBody",
           "declaration": {
             "name": "Pfv6CardBody",
-            "module": "elements/pfv6-card/pfv6-card-body.js"
+            "module": "pfv6-card/pfv6-card-body.js"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "elements/pfv6-card/pfv6-card-expandable-content.js",
+      "path": "pfv6-card/pfv6-card-expandable-content.js",
       "declarations": [
         {
           "name": "Pfv6CardExpandableContent",
-          "description": "PatternFly Card Expandable Content Component\n\nA wrapper for expandable card content (body and footer sections).\nVisibility is controlled by the parent card's `expanded` state.\n\n```html\n<pfv6-card expandable>\n<pfv6-card-title>Title</pfv6-card-title>\n<pfv6-card-expandable-content>\n<pfv6-card-body>Body content</pfv6-card-body>\n<pfv6-card-footer>Footer content</pfv6-card-footer>\n</pfv6-card-expandable-content>\n</pfv6-card>\n```",
+          "description": "PatternFly Card Expandable Content Component\n\nA wrapper for expandable card content (body and footer sections).\nVisibility is controlled by the parent card's `expanded` state.\n\n```html\n\u003cpfv6-card expandable\u003e\n\u003cpfv6-card-title\u003eTitle\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-expandable-content\u003e\n\u003cpfv6-card-body\u003eBody content\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-footer\u003eFooter content\u003c/pfv6-card-footer\u003e\n\u003c/pfv6-card-expandable-content\u003e\n\u003c/pfv6-card\u003e\n```",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
+          },
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/pfv6-card-expandable-content.ts#L28"
           },
           "kind": "class",
           "tagName": "pfv6-card-expandable-content",
@@ -153,7 +159,7 @@
           "name": "pfv6-card-expandable-content",
           "declaration": {
             "name": "Pfv6CardExpandableContent",
-            "module": "elements/pfv6-card/pfv6-card-expandable-content.js"
+            "module": "pfv6-card/pfv6-card-expandable-content.js"
           }
         },
         {
@@ -161,21 +167,24 @@
           "name": "Pfv6CardExpandableContent",
           "declaration": {
             "name": "Pfv6CardExpandableContent",
-            "module": "elements/pfv6-card/pfv6-card-expandable-content.js"
+            "module": "pfv6-card/pfv6-card-expandable-content.js"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "elements/pfv6-card/pfv6-card-footer.js",
+      "path": "pfv6-card/pfv6-card-footer.js",
       "declarations": [
         {
           "name": "Pfv6CardFooter",
-          "description": "PatternFly Card Footer Component\n\nA wrapper for card footer content.\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>Body content</pfv6-card-body>\n<pfv6-card-footer>Footer content</pfv6-card-footer>\n</pfv6-card>\n```",
+          "description": "PatternFly Card Footer Component\n\nA wrapper for card footer content.\n\n```html\n\u003cpfv6-card\u003e\n\u003cpfv6-card-title\u003eCard Title\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eBody content\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-footer\u003eFooter content\u003c/pfv6-card-footer\u003e\n\u003c/pfv6-card\u003e\n```",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
+          },
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/pfv6-card-footer.ts#L25"
           },
           "kind": "class",
           "tagName": "pfv6-card-footer",
@@ -225,7 +234,7 @@
           "name": "pfv6-card-footer",
           "declaration": {
             "name": "Pfv6CardFooter",
-            "module": "elements/pfv6-card/pfv6-card-footer.js"
+            "module": "pfv6-card/pfv6-card-footer.js"
           }
         },
         {
@@ -233,18 +242,586 @@
           "name": "Pfv6CardFooter",
           "declaration": {
             "name": "Pfv6CardFooter",
-            "module": "elements/pfv6-card/pfv6-card-footer.js"
+            "module": "pfv6-card/pfv6-card-footer.js"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "elements/pfv6-card/pfv6-card-title.js",
+      "path": "pfv6-card/pfv6-card-header.js",
+      "declarations": [
+        {
+          "name": "Pfv6CardExpandEvent",
+          "description": "Event fired when card expand toggle is clicked",
+          "superclass": {
+            "name": "Event",
+            "package": "global:"
+          },
+          "members": [
+            {
+              "name": "expanded",
+              "type": {
+                "text": "boolean"
+              },
+              "kind": "field"
+            }
+          ],
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/pfv6-card-header.ts#L15"
+          },
+          "kind": "class"
+        },
+        {
+          "name": "Pfv6CardSelectableChangeEvent",
+          "description": "Event fired when selectable action (checkbox/radio) changes",
+          "superclass": {
+            "name": "Event",
+            "package": "global:"
+          },
+          "members": [
+            {
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "kind": "field"
+            }
+          ],
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/pfv6-card-header.ts#L24"
+          },
+          "kind": "class"
+        },
+        {
+          "name": "Pfv6CardClickableClickEvent",
+          "description": "Event fired when clickable action is clicked",
+          "superclass": {
+            "name": "Event",
+            "package": "global:"
+          },
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/pfv6-card-header.ts#L33"
+          },
+          "kind": "class"
+        },
+        {
+          "name": "Pfv6CardHeader",
+          "description": "Card Header Component\n\nThe header section of a card that can contain:\n- Expand toggle button (for expandable cards)\n- Selectable actions (checkbox/radio for selectable cards)\n- Clickable actions (button/link for clickable-only cards)\n- Title content (slotted CardTitle)\n- Action buttons/menus",
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "members": [
+            {
+              "name": "toggleRightAligned",
+              "description": "Whether the expand toggle is positioned on the right instead of left",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "toggle-right-aligned",
+              "reflects": true
+            },
+            {
+              "name": "hasWrap",
+              "description": "Whether header content should wrap",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "has-wrap",
+              "reflects": true
+            },
+            {
+              "name": "actionsNoOffset",
+              "description": "Whether actions have no offset",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "actions-no-offset",
+              "reflects": true
+            },
+            {
+              "name": "selectableActionsNoOffset",
+              "description": "Whether selectable actions (checkbox/radio) have no offset",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "selectable-actions-no-offset",
+              "reflects": true
+            },
+            {
+              "name": "expandable",
+              "description": "Callback for expand toggle. If provided, renders expand toggle button.\nSet this attribute to enable expandable card functionality.\nListen to the 'expand' event to handle expansion.",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "expandable",
+              "reflects": true
+            },
+            {
+              "name": "expanded",
+              "description": "Whether the card is currently expanded (used for toggle icon rotation)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "expanded",
+              "reflects": true
+            },
+            {
+              "name": "selectableVariant",
+              "description": "Type of selectable input ('single' = radio, 'multiple' = checkbox)\nIf set, renders checkbox or radio input for selectable cards.",
+              "type": {
+                "text": "'single' | 'multiple' | undefined"
+              },
+              "kind": "field",
+              "attribute": "selectable-variant"
+            },
+            {
+              "name": "selectableId",
+              "description": "ID for the selectable input element",
+              "type": {
+                "text": "string | undefined"
+              },
+              "kind": "field",
+              "attribute": "selectable-id"
+            },
+            {
+              "name": "selectableName",
+              "description": "Name attribute for the selectable input (required for radio groups)",
+              "type": {
+                "text": "string | undefined"
+              },
+              "kind": "field",
+              "attribute": "selectable-name"
+            },
+            {
+              "name": "selectableChecked",
+              "description": "Whether the selectable input is checked/selected",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "selectable-checked",
+              "reflects": true
+            },
+            {
+              "name": "selectableDisabled",
+              "description": "Whether the selectable input is disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "selectable-disabled",
+              "reflects": true
+            },
+            {
+              "name": "selectableHidden",
+              "description": "Whether the selectable input is hidden (for clickable-only cards)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "selectable-hidden",
+              "reflects": true
+            },
+            {
+              "name": "selectableAriaLabel",
+              "description": "Accessible label for the selectable input",
+              "type": {
+                "text": "string | undefined"
+              },
+              "kind": "field",
+              "attribute": "selectable-aria-label"
+            },
+            {
+              "name": "selectableAriaLabelledby",
+              "description": "Space-delimited IDs that label the selectable input",
+              "type": {
+                "text": "string | undefined"
+              },
+              "kind": "field",
+              "attribute": "selectable-aria-labelledby"
+            },
+            {
+              "name": "clickableOnly",
+              "description": "Whether this is a clickable-only card (renders button instead of checkbox)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "clickable-only",
+              "reflects": true
+            },
+            {
+              "name": "clickableHref",
+              "description": "Link href for clickable-only cards (renders \u003ca\u003e instead of \u003cbutton\u003e)",
+              "type": {
+                "text": "string | undefined"
+              },
+              "kind": "field",
+              "attribute": "clickable-href"
+            },
+            {
+              "name": "clickableExternal",
+              "description": "Whether clickable link should open in new tab",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "kind": "field",
+              "attribute": "clickable-external",
+              "reflects": true
+            }
+          ],
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/pfv6-card-header.ts#L62"
+          },
+          "kind": "class",
+          "tagName": "pfv6-card-header",
+          "attributes": [
+            {
+              "name": "toggle-right-aligned",
+              "description": "Whether the expand toggle is positioned on the right instead of left",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "toggleRightAligned"
+            },
+            {
+              "name": "has-wrap",
+              "description": "Whether header content should wrap",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "hasWrap"
+            },
+            {
+              "name": "actions-no-offset",
+              "description": "Whether actions have no offset",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "actionsNoOffset"
+            },
+            {
+              "name": "selectable-actions-no-offset",
+              "description": "Whether selectable actions (checkbox/radio) have no offset",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "selectableActionsNoOffset"
+            },
+            {
+              "name": "expandable",
+              "description": "Callback for expand toggle. If provided, renders expand toggle button.\nSet this attribute to enable expandable card functionality.\nListen to the 'expand' event to handle expansion.",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "expandable"
+            },
+            {
+              "name": "expanded",
+              "description": "Whether the card is currently expanded (used for toggle icon rotation)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "expanded"
+            },
+            {
+              "name": "selectable-variant",
+              "description": "Type of selectable input ('single' = radio, 'multiple' = checkbox)\nIf set, renders checkbox or radio input for selectable cards.",
+              "type": {
+                "text": "'single' | 'multiple' | undefined"
+              },
+              "fieldName": "selectableVariant"
+            },
+            {
+              "name": "selectable-id",
+              "description": "ID for the selectable input element",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "selectableId"
+            },
+            {
+              "name": "selectable-name",
+              "description": "Name attribute for the selectable input (required for radio groups)",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "selectableName"
+            },
+            {
+              "name": "selectable-checked",
+              "description": "Whether the selectable input is checked/selected",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "selectableChecked"
+            },
+            {
+              "name": "selectable-disabled",
+              "description": "Whether the selectable input is disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "selectableDisabled"
+            },
+            {
+              "name": "selectable-hidden",
+              "description": "Whether the selectable input is hidden (for clickable-only cards)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "selectableHidden"
+            },
+            {
+              "name": "selectable-aria-label",
+              "description": "Accessible label for the selectable input",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "selectableAriaLabel"
+            },
+            {
+              "name": "selectable-aria-labelledby",
+              "description": "Space-delimited IDs that label the selectable input",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "selectableAriaLabelledby"
+            },
+            {
+              "name": "clickable-only",
+              "description": "Whether this is a clickable-only card (renders button instead of checkbox)",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "clickableOnly"
+            },
+            {
+              "name": "clickable-href",
+              "description": "Link href for clickable-only cards (renders \u003ca\u003e instead of \u003cbutton\u003e)",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "clickableHref"
+            },
+            {
+              "name": "clickable-external",
+              "description": "Whether clickable link should open in new tab",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "clickableExternal"
+            }
+          ],
+          "events": [
+            {
+              "name": "expand",
+              "description": "Dispatched when expand toggle is clicked"
+            }
+          ],
+          "slots": [
+            {
+              "name": "",
+              "description": "Default slot for CardTitle and other header content"
+            },
+            {
+              "name": "actions",
+              "description": "Action buttons, dropdowns, etc."
+            }
+          ],
+          "cssParts": [
+            {
+              "name": "header-toggle",
+              "description": "The expand toggle button"
+            },
+            {
+              "name": "header",
+              "description": "The header container"
+            },
+            {
+              "name": "header-main",
+              "description": "The main content area (title)"
+            },
+            {
+              "name": "actions",
+              "description": "The actions container"
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--pf-v6-c-card__header-toggle--MarginBlockStart",
+              "default": "calc(var(--pf-t--global--spacer--control--vertical--default) * -1)"
+            },
+            {
+              "name": "--pf-v6-c-card__header-toggle--MarginInlineEnd",
+              "default": "var(--pf-t--global--spacer--gap--text-to-element--default)"
+            },
+            {
+              "name": "--pf-v6-c-card__header-toggle--MarginBlockEnd",
+              "default": "calc(var(--pf-t--global--spacer--control--vertical--default) * -1)"
+            },
+            {
+              "name": "--pf-v6-c-card__header-toggle--MarginInlineStart",
+              "default": "calc(var(--pf-t--global--spacer--action--horizontal--plain--default) * -1)"
+            },
+            {
+              "name": "--pf-v6-c-card__header-toggle-icon--TransitionTimingFunction",
+              "default": "var(--pf-t--global--motion--timing-function--default)"
+            },
+            {
+              "name": "--pf-t--global--motion--timing-function--default"
+            },
+            {
+              "name": "--pf-v6-c-card__header-toggle-icon--TransitionDuration",
+              "default": "var(--pf-t--global--motion--duration--icon--default)"
+            },
+            {
+              "name": "--pf-t--global--motion--duration--icon--default"
+            },
+            {
+              "name": "--pf-v6-c-card--m-expanded__header-toggle-icon--Rotate",
+              "default": "90deg"
+            },
+            {
+              "name": "--pf-v6-c-card__actions--PaddingInlineStart",
+              "default": "var(--pf-t--global--spacer--md)"
+            },
+            {
+              "name": "--pf-v6-c-card__actions--Gap",
+              "default": "var(--pf-t--global--spacer--gap--action-to-action--default)"
+            },
+            {
+              "name": "--pf-t--global--spacer--gap--action-to-action--default"
+            },
+            {
+              "name": "--pf-v6-c-card__actions--MarginBlockStart",
+              "default": "calc(var(--pf-t--global--spacer--control--vertical--default) * -1)"
+            },
+            {
+              "name": "--pf-v6-c-card__actions--MarginBlockEnd",
+              "default": "calc(var(--pf-t--global--spacer--control--vertical--default) * -1)"
+            },
+            {
+              "name": "--pf-t--global--spacer--control--vertical--default"
+            },
+            {
+              "name": "--pf-v6-c-card__header--m-wrap--RowGap",
+              "default": "var(--pf-t--global--spacer--sm)"
+            },
+            {
+              "name": "--pf-t--global--spacer--sm"
+            },
+            {
+              "name": "--pf-v6-c-card__header--m-wrap--ColumnGap",
+              "default": "var(--pf-t--global--spacer--md)"
+            },
+            {
+              "name": "--pf-t--global--spacer--md"
+            },
+            {
+              "name": "--pf-v6-c-card--first-child--PaddingBlockStart"
+            },
+            {
+              "name": "--pf-v6-c-card__title--not--last-child--PaddingBlockEnd"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineStart"
+            },
+            {
+              "name": "--pf-v6-c-card--child--PaddingInlineEnd"
+            },
+            {
+              "name": "--pf-t--global--spacer--action--horizontal--plain--default",
+              "default": "0.5rem"
+            },
+            {
+              "name": "--pf-t--global--spacer--gap--text-to-element--default",
+              "default": "0.5rem"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Pfv6CardExpandEvent",
+          "declaration": {
+            "name": "Pfv6CardExpandEvent",
+            "module": "pfv6-card/pfv6-card-header.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Pfv6CardSelectableChangeEvent",
+          "declaration": {
+            "name": "Pfv6CardSelectableChangeEvent",
+            "module": "pfv6-card/pfv6-card-header.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Pfv6CardClickableClickEvent",
+          "declaration": {
+            "name": "Pfv6CardClickableClickEvent",
+            "module": "pfv6-card/pfv6-card-header.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "pfv6-card-header",
+          "declaration": {
+            "name": "Pfv6CardHeader",
+            "module": "pfv6-card/pfv6-card-header.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Pfv6CardHeader",
+          "declaration": {
+            "name": "Pfv6CardHeader",
+            "module": "pfv6-card/pfv6-card-header.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "pfv6-card/pfv6-card-title.js",
       "declarations": [
         {
           "name": "Pfv6CardTitle",
-          "description": "PatternFly Card Title Component\n\nA wrapper for card title content with optional semantic heading element.\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>Body content</pfv6-card-body>\n</pfv6-card>\n```\n\n<figure>\n<figcaption>With semantic heading</figcaption>\n\n```html\n<pfv6-card>\n<pfv6-card-title component=\"h4\">Card Title</pfv6-card-title>\n<pfv6-card-body>Body content</pfv6-card-body>\n</pfv6-card>\n```\n</figure>",
+          "description": "PatternFly Card Title Component\n\nA wrapper for card title content with optional semantic heading element.\n\n```html\n\u003cpfv6-card\u003e\n\u003cpfv6-card-title\u003eCard Title\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eBody content\u003c/pfv6-card-body\u003e\n\u003c/pfv6-card\u003e\n```\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eWith semantic heading\u003c/figcaption\u003e\n\n```html\n\u003cpfv6-card\u003e\n\u003cpfv6-card-title component=\"h4\"\u003eCard Title\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eBody content\u003c/pfv6-card-body\u003e\n\u003c/pfv6-card\u003e\n```\n\u003c/figure\u003e",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -262,6 +839,9 @@
               "reflects": true
             }
           ],
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/pfv6-card-title.ts#L34"
+          },
           "kind": "class",
           "tagName": "pfv6-card-title",
           "attributes": [
@@ -349,7 +929,7 @@
           "name": "pfv6-card-title",
           "declaration": {
             "name": "Pfv6CardTitle",
-            "module": "elements/pfv6-card/pfv6-card-title.js"
+            "module": "pfv6-card/pfv6-card-title.js"
           }
         },
         {
@@ -357,18 +937,18 @@
           "name": "Pfv6CardTitle",
           "declaration": {
             "name": "Pfv6CardTitle",
-            "module": "elements/pfv6-card/pfv6-card-title.js"
+            "module": "pfv6-card/pfv6-card-title.js"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "elements/pfv6-card/pfv6-card.js",
+      "path": "pfv6-card/pfv6-card.js",
       "declarations": [
         {
           "name": "Pfv6Card",
-          "description": "PatternFly Card Component\n\nA card is a content container that displays entry-level information—typically \nwithin dashboards, galleries, and catalogs.\n\nSupports all PatternFly v6 Card features including:\n- Size modifiers (compact, large)\n- Variants (default, secondary)\n- Interactive states (selectable, clickable, disabled)\n- Expandable content\n- Full height layout\n- Plain styling\n\n```html\n<pfv6-card>\n<pfv6-card-title>Card Title</pfv6-card-title>\n<pfv6-card-body>Card body content goes here</pfv6-card-body>\n<pfv6-card-footer>Footer content</pfv6-card-footer>\n</pfv6-card>\n```\n\n<figure>\n<figcaption>Secondary variant</figcaption>\n\n```html\n<pfv6-card variant=\"secondary\">\n<pfv6-card-title>Secondary Card</pfv6-card-title>\n<pfv6-card-body>Card with secondary background color</pfv6-card-body>\n</pfv6-card>\n```\n</figure>\n\n<figure>\n<figcaption>Compact card</figcaption>\n\n```html\n<pfv6-card compact>\n<pfv6-card-title>Compact Card</pfv6-card-title>\n<pfv6-card-body>Card with compact spacing</pfv6-card-body>\n</pfv6-card>\n```\n</figure>\n\n<figure>\n<figcaption>Expandable card</figcaption>\n\n```html\n<pfv6-card expandable>\n<pfv6-card-title>Expandable Card</pfv6-card-title>\n<pfv6-card-expandable-content>\n<pfv6-card-body>Expandable body content</pfv6-card-body>\n<pfv6-card-footer>Footer content</pfv6-card-footer>\n</pfv6-card-expandable-content>\n</pfv6-card>\n```\n</figure>\n\n<figure>\n<figcaption>Customizing with CSS variables</figcaption>\n\n```css\npfv6-card {\n--pf-v6-c-card--BackgroundColor: #f0f0f0;\n--pf-v6-c-card--BorderColor: #06c;\n--pf-v6-c-card--BorderRadius: 8px;\n}\n```\n</figure>",
+          "description": "PatternFly Card Component\n\nA card is a content container that displays entry-level information—typically \nwithin dashboards, galleries, and catalogs.\n\nThe Card component is a **presentational wrapper** that applies visual styling based on props.\nInteractive behavior (expand toggle, checkbox, clickable actions) is handled by the CardHeader sub-component.\n\nSupports all PatternFly v6 Card visual modifiers:\n- Size modifiers (compact, large)\n- Variants (default, secondary)\n- Visual state classes (selectable, clickable, selected, current, disabled, expanded)\n- Full height layout\n- Plain styling\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eBasic card\u003c/figcaption\u003e\n\n```html\n\u003cpfv6-card\u003e\n\u003cpfv6-card-title\u003eCard Title\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eCard body content goes here\u003c/pfv6-card-body\u003e\n\u003cpfv6-card-footer\u003eFooter content\u003c/pfv6-card-footer\u003e\n\u003c/pfv6-card\u003e\n```\n\u003c/figure\u003e\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eSecondary variant\u003c/figcaption\u003e\n\n```html\n\u003cpfv6-card variant=\"secondary\"\u003e\n\u003cpfv6-card-title\u003eSecondary Card\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eCard with secondary background color\u003c/pfv6-card-body\u003e\n\u003c/pfv6-card\u003e\n```\n\u003c/figure\u003e\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eCompact card\u003c/figcaption\u003e\n\n```html\n\u003cpfv6-card compact\u003e\n\u003cpfv6-card-title\u003eCompact Card\u003c/pfv6-card-title\u003e\n\u003cpfv6-card-body\u003eCard with compact spacing\u003c/pfv6-card-body\u003e\n\u003c/pfv6-card\u003e\n```\n\u003c/figure\u003e\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eSelectable card (interactive behavior in CardHeader)\u003c/figcaption\u003e\n\n```html\n\u003cpfv6-card is-selectable is-selected\u003e\n\u003cpfv6-card-header selectable-actions='{\"name\": \"card1\"}'\u003e\n\u003cpfv6-card-title\u003eSelectable Card\u003c/pfv6-card-title\u003e\n\u003c/pfv6-card-header\u003e\n\u003cpfv6-card-body\u003eThis card is selectable\u003c/pfv6-card-body\u003e\n\u003c/pfv6-card\u003e\n```\n\u003c/figure\u003e\n\n\u003cfigure\u003e\n\u003cfigcaption\u003eCustomizing with CSS variables\u003c/figcaption\u003e\n\n```css\npfv6-card {\n--pf-v6-c-card--BackgroundColor: #f0f0f0;\n--pf-v6-c-card--BorderColor: #06c;\n--pf-v6-c-card--BorderRadius: 8px;\n}\n```\n\u003c/figure\u003e",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -430,116 +1010,75 @@
               "reflects": true
             },
             {
-              "name": "clickable",
-              "description": "Makes the entire card clickable/actionable",
+              "name": "isSelectable",
+              "description": "Visual state flag indicating the card can be selected.\nNote: Actual selection behavior is handled by CardHeader with selectableActions.",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
               "kind": "field",
-              "attribute": "clickable",
+              "attribute": "is-selectable",
               "reflects": true
             },
             {
-              "name": "selectable",
-              "description": "Makes the card selectable with a checkbox",
+              "name": "isClickable",
+              "description": "Visual state flag indicating the card can be clicked.\nNote: Actual clickable behavior is handled by CardHeader with selectableActions.",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
               "kind": "field",
-              "attribute": "selectable",
+              "attribute": "is-clickable",
               "reflects": true
             },
             {
-              "name": "selected",
-              "description": "Whether the card is currently selected (when selectable=true)",
+              "name": "isSelected",
+              "description": "Visual state flag indicating the card is currently selected.",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
               "kind": "field",
-              "attribute": "selected",
+              "attribute": "is-selected",
               "reflects": true
             },
             {
-              "name": "clicked",
-              "description": "Whether the card is currently clicked (when clickable=true)",
+              "name": "isClicked",
+              "description": "Visual state flag indicating the card is currently clicked/active (applies .pf-m-current class).\nNote: React prop is \"isClicked\", CSS class is \"pf-m-current\".",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
               "kind": "field",
-              "attribute": "clicked",
+              "attribute": "is-clicked",
               "reflects": true
             },
             {
-              "name": "expandable",
-              "description": "Makes the card expandable with a toggle",
+              "name": "isDisabled",
+              "description": "Visual state flag indicating the card is disabled.",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
               "kind": "field",
-              "attribute": "expandable",
+              "attribute": "is-disabled",
               "reflects": true
             },
             {
-              "name": "expanded",
-              "description": "Whether the card is currently expanded (when expandable=true)",
+              "name": "isExpanded",
+              "description": "Visual state flag indicating the card is expanded.\nNote: Actual expand behavior is handled by CardHeader with onExpand callback.",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
               "kind": "field",
-              "attribute": "expanded",
+              "attribute": "is-expanded",
               "reflects": true
-            },
-            {
-              "name": "disabled",
-              "description": "Disables the card (when selectable or clickable)",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "kind": "field",
-              "attribute": "disabled",
-              "reflects": true
-            },
-            {
-              "name": "actionsNoOffset",
-              "description": "Removes the offset/padding before actions in the card header",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "kind": "field",
-              "attribute": "actions-no-offset",
-              "reflects": true
-            },
-            {
-              "name": "toggleRightAligned",
-              "description": "Positions the expand toggle button on the right side instead of the left",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "kind": "field",
-              "attribute": "toggle-right-aligned",
-              "reflects": true
-            },
-            {
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "name": "_hasHeader",
-              "description": "Check if the card has header content (images, icons, or actions)",
-              "kind": "method",
-              "privacy": "private"
             }
           ],
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/pfv6-card.ts#L134"
+          },
           "kind": "class",
           "tagName": "pfv6-card",
           "attributes": [
@@ -589,155 +1128,70 @@
               "fieldName": "plain"
             },
             {
-              "name": "clickable",
-              "description": "Makes the entire card clickable/actionable",
+              "name": "is-selectable",
+              "description": "Visual state flag indicating the card can be selected.\nNote: Actual selection behavior is handled by CardHeader with selectableActions.",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "fieldName": "clickable"
+              "fieldName": "isSelectable"
             },
             {
-              "name": "selectable",
-              "description": "Makes the card selectable with a checkbox",
+              "name": "is-clickable",
+              "description": "Visual state flag indicating the card can be clicked.\nNote: Actual clickable behavior is handled by CardHeader with selectableActions.",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "fieldName": "selectable"
+              "fieldName": "isClickable"
             },
             {
-              "name": "selected",
-              "description": "Whether the card is currently selected (when selectable=true)",
+              "name": "is-selected",
+              "description": "Visual state flag indicating the card is currently selected.",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "fieldName": "selected"
+              "fieldName": "isSelected"
             },
             {
-              "name": "clicked",
-              "description": "Whether the card is currently clicked (when clickable=true)",
+              "name": "is-clicked",
+              "description": "Visual state flag indicating the card is currently clicked/active (applies .pf-m-current class).\nNote: React prop is \"isClicked\", CSS class is \"pf-m-current\".",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "fieldName": "clicked"
+              "fieldName": "isClicked"
             },
             {
-              "name": "expandable",
-              "description": "Makes the card expandable with a toggle",
+              "name": "is-disabled",
+              "description": "Visual state flag indicating the card is disabled.",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "fieldName": "expandable"
+              "fieldName": "isDisabled"
             },
             {
-              "name": "expanded",
-              "description": "Whether the card is currently expanded (when expandable=true)",
+              "name": "is-expanded",
+              "description": "Visual state flag indicating the card is expanded.\nNote: Actual expand behavior is handled by CardHeader with onExpand callback.",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "fieldName": "expanded"
-            },
-            {
-              "name": "disabled",
-              "description": "Disables the card (when selectable or clickable)",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "fieldName": "disabled"
-            },
-            {
-              "name": "actions-no-offset",
-              "description": "Removes the offset/padding before actions in the card header",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "fieldName": "actionsNoOffset"
-            },
-            {
-              "name": "toggle-right-aligned",
-              "description": "Positions the expand toggle button on the right side instead of the left",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "fieldName": "toggleRightAligned"
-            }
-          ],
-          "events": [
-            {
-              "name": "card-click",
-              "description": "Dispatched when a clickable or selectable card is clicked"
-            },
-            {
-              "name": "card-select",
-              "description": "Dispatched when a selectable card's selection state changes"
-            },
-            {
-              "name": "card-expand",
-              "description": "Dispatched when an expandable card's expansion state changes"
+              "fieldName": "isExpanded"
             }
           ],
           "slots": [
             {
-              "name": "header-image",
-              "description": "Card header image (e.g. brand logo)"
-            },
-            {
-              "name": "header-icon",
-              "description": "Card header icon (positioned before title, e.g. for expandable cards)"
-            },
-            {
-              "name": "actions",
-              "description": "Card header actions (buttons, menus, etc.)"
-            },
-            {
               "name": "",
-              "description": "Default slot for card sub-components (pfv6-card-title, pfv6-card-body, pfv6-card-footer, pfv6-card-expandable-content)"
+              "description": "Default slot for card sub-components (pfv6-card-header, pfv6-card-title, pfv6-card-body, pfv6-card-footer, pfv6-card-expandable-content)"
             }
           ],
           "cssParts": [
             {
-              "name": "title",
-              "description": "The card title element"
-            },
-            {
-              "name": "body",
-              "description": "The card body element"
-            },
-            {
-              "name": "footer",
-              "description": "The card footer element"
-            },
-            {
               "name": "container",
               "description": "The card container element"
-            },
-            {
-              "name": "expand-toggle",
-              "description": "The expandable card toggle button"
-            },
-            {
-              "name": "selectable-input",
-              "description": "The selectable card checkbox container"
-            },
-            {
-              "name": "header",
-              "description": "The card header element"
-            },
-            {
-              "name": "header-content",
-              "description": "The card header content container (images and title)"
-            },
-            {
-              "name": "actions",
-              "description": "The card actions container"
             }
           ],
           "cssProperties": [
@@ -1078,6 +1532,9 @@
               "default": "calc(var(--pf-t--global--spacer--control--vertical--default) * -1)"
             },
             {
+              "name": "--pf-t--global--spacer--control--vertical--default"
+            },
+            {
               "name": "--pf-v6-c-card__header-toggle--MarginInlineStart",
               "default": "calc(var(--pf-t--global--spacer--action--horizontal--plain--default) * -1)"
             },
@@ -1109,6 +1566,21 @@
             },
             {
               "name": "--pf-t--global--border--width--box--default"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-disabled__title-text--Color",
+              "default": "var(--pf-t--global--text--color--on-disabled)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-disabled__body--Color",
+              "default": "var(--pf-t--global--text--color--on-disabled)"
+            },
+            {
+              "name": "--pf-v6-c-card--m-selectable--m-disabled__footer--Color",
+              "default": "var(--pf-t--global--text--color--on-disabled)"
+            },
+            {
+              "name": "--pf-t--global--text--color--on-disabled"
             },
             {
               "name": "--pf-v6-c-card--m-selectable--m-disabled--BackgroundColor",
@@ -1158,6 +1630,9 @@
             {
               "name": "--pf-v6-c-card--m-compact--c-divider--child--PaddingBlockStart",
               "default": "var(--pf-t--global--spacer--md)"
+            },
+            {
+              "name": "--pf-t--global--spacer--md"
             },
             {
               "name": "--pf-v6-c-card--m-compact__title--not--last-child--PaddingBlockEnd",
@@ -1258,29 +1733,17 @@
               "default": "var(--pf-t--global--spacer--gap--text-to-element--default)"
             },
             {
+              "name": "--pf-t--global--spacer--gap--text-to-element--default"
+            },
+            {
               "name": "--pf-v6-c-card--m-full-height--Height",
               "default": "100%"
             },
             {
-              "name": "--pf-t--global--spacer--gap--text-to-element--default"
+              "name": "--pf-t--global--border--width--divider--default"
             },
             {
-              "name": "--pf-t--global--icon--size--font--md"
-            },
-            {
-              "name": "--pf-v6-c-card--m-selectable--m-disabled__title-text--Color",
-              "default": "var(--pf-t--global--text--color--on-disabled)"
-            },
-            {
-              "name": "--pf-v6-c-card--m-selectable--m-disabled__body--Color",
-              "default": "var(--pf-t--global--text--color--on-disabled)"
-            },
-            {
-              "name": "--pf-v6-c-card--m-selectable--m-disabled__footer--Color",
-              "default": "var(--pf-t--global--text--color--on-disabled)"
-            },
-            {
-              "name": "--pf-t--global--text--color--on-disabled"
+              "name": "--pf-t--global--border--color--default"
             },
             {
               "name": "--pf-v6-c-card--m-selectable--hover--BorderColor",
@@ -1341,168 +1804,143 @@
             },
             {
               "name": "--pf-t--global--border--width--box--clicked"
-            },
-            {
-              "name": "--pf-t--global--icon--size--md"
-            },
-            {
-              "name": "--pf-t--global--spacer--control--vertical--default"
-            },
-            {
-              "name": "--pf-t--global--spacer--control--horizontal--default"
-            },
-            {
-              "name": "--pf-t--global--border--radius--small"
-            },
-            {
-              "name": "--pf-t--global--icon--color--regular"
-            },
-            {
-              "name": "--pf-t--global--border--width--focus--default"
-            },
-            {
-              "name": "--pf-t--global--color--brand--default"
-            },
-            {
-              "name": "--pf-t--global--spacer--gap--focus--default"
-            },
-            {
-              "name": "--pf-t--global--icon--color--on-disabled"
-            },
-            {
-              "name": "--pf-t--global--icon--color--hover"
-            },
-            {
-              "name": "--pf-t--global--background--color--action--plain--hover"
-            },
-            {
-              "name": "--pf-t--global--icon--size--font--sm"
-            },
-            {
-              "name": "--pf-t--global--spacer--md"
-            },
-            {
-              "name": "--pf-t--global--border--width--divider--default",
-              "default": "1px"
-            },
-            {
-              "name": "--pf-t--global--border--color--default",
-              "default": "#d2d2d2"
             }
           ],
-          "customElement": true,
           "demos": [
             {
-              "name": "with-only-body-section",
-              "url": "/elements/pfv6-card/demo/with-only-body-section",
-              "path": "elements/pfv6-card/demo/with-only-body-section.html"
-            },
-            {
-              "name": "with-no-header",
-              "url": "/elements/pfv6-card/demo/with-no-header",
-              "path": "elements/pfv6-card/demo/with-no-header.html"
-            },
-            {
-              "name": "with-no-footer",
-              "url": "/elements/pfv6-card/demo/with-no-footer",
-              "path": "elements/pfv6-card/demo/with-no-footer.html"
-            },
-            {
-              "name": "with-multiple-body-sections",
-              "url": "/elements/pfv6-card/demo/with-multiple-body-sections",
-              "path": "elements/pfv6-card/demo/with-multiple-body-sections.html"
-            },
-            {
-              "name": "with-modifiers",
-              "url": "/elements/pfv6-card/demo/with-modifiers",
-              "path": "elements/pfv6-card/demo/with-modifiers.html"
-            },
-            {
-              "name": "with-image-and-actions",
-              "url": "/elements/pfv6-card/demo/with-image-and-actions",
-              "path": "elements/pfv6-card/demo/with-image-and-actions.html"
-            },
-            {
-              "name": "with-heading-element",
-              "url": "/elements/pfv6-card/demo/with-heading-element",
-              "path": "elements/pfv6-card/demo/with-heading-element.html"
-            },
-            {
-              "name": "with-dividers",
-              "url": "/elements/pfv6-card/demo/with-dividers",
-              "path": "elements/pfv6-card/demo/with-dividers.html"
-            },
-            {
-              "name": "with-body-section-fills",
-              "url": "/elements/pfv6-card/demo/with-body-section-fills",
-              "path": "elements/pfv6-card/demo/with-body-section-fills.html"
-            },
-            {
-              "name": "tile",
-              "url": "/elements/pfv6-card/demo/tile",
-              "path": "elements/pfv6-card/demo/tile.html"
-            },
-            {
-              "name": "tile-multi",
-              "url": "/elements/pfv6-card/demo/tile-multi",
-              "path": "elements/pfv6-card/demo/tile-multi.html"
-            },
-            {
-              "name": "single-selectable",
-              "url": "/elements/pfv6-card/demo/single-selectable",
-              "path": "elements/pfv6-card/demo/single-selectable.html"
-            },
-            {
-              "name": "selectable",
-              "url": "/elements/pfv6-card/demo/selectable",
-              "path": "elements/pfv6-card/demo/selectable.html"
-            },
-            {
-              "name": "secondary",
-              "url": "/elements/pfv6-card/demo/secondary",
-              "path": "elements/pfv6-card/demo/secondary.html"
-            },
-            {
-              "name": "only-actions-in-card-head",
-              "url": "/elements/pfv6-card/demo/only-actions-in-card-head",
-              "path": "elements/pfv6-card/demo/only-actions-in-card-head.html"
-            },
-            {
-              "name": "header-wraps",
-              "url": "/elements/pfv6-card/demo/header-wraps",
-              "path": "elements/pfv6-card/demo/header-wraps.html"
-            },
-            {
-              "name": "header-in-card-head",
-              "url": "/elements/pfv6-card/demo/header-in-card-head",
-              "path": "elements/pfv6-card/demo/header-in-card-head.html"
-            },
-            {
-              "name": "expandable",
-              "url": "/elements/pfv6-card/demo/expandable",
-              "path": "elements/pfv6-card/demo/expandable.html"
-            },
-            {
-              "name": "expandable-with-icon",
-              "url": "/elements/pfv6-card/demo/expandable-with-icon",
-              "path": "elements/pfv6-card/demo/expandable-with-icon.html"
-            },
-            {
-              "name": "clickable",
-              "url": "/elements/pfv6-card/demo/clickable",
-              "path": "elements/pfv6-card/demo/clickable.html"
-            },
-            {
-              "name": "clickable-selectable",
-              "url": "/elements/pfv6-card/demo/clickable-selectable",
-              "path": "elements/pfv6-card/demo/clickable-selectable.html"
-            },
-            {
-              "name": "basic",
               "url": "/elements/pfv6-card/demo/basic",
-              "path": "elements/pfv6-card/demo/basic.html"
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/basic.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/clickable-selectable",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/clickable-selectable.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/clickable",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/clickable.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/expandable-with-icon",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/expandable-with-icon.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/expandable",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/expandable.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/header-in-card-head",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/header-in-card-head.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/header-wraps",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/header-wraps.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/only-actions-in-card-head",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/only-actions-in-card-head.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/secondary",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/secondary.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/selectable",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/selectable.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/single-selectable",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/single-selectable.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/tile-multi",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/tile-multi.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/tile",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/tile.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/with-body-section-fills",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/with-body-section-fills.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/with-dividers",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/with-dividers.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/with-heading-element",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/with-heading-element.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/with-image-and-actions",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/with-image-and-actions.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/with-modifiers",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/with-modifiers.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/with-multiple-body-sections",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/with-multiple-body-sections.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/with-no-footer",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/with-no-footer.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/with-no-header",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/with-no-header.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-card/demo/with-only-body-section",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-card/demo/with-only-body-section.html"
+              }
             }
-          ]
+          ],
+          "customElement": true
         }
       ],
       "exports": [
@@ -1511,7 +1949,7 @@
           "name": "pfv6-card",
           "declaration": {
             "name": "Pfv6Card",
-            "module": "elements/pfv6-card/pfv6-card.js"
+            "module": "pfv6-card/pfv6-card.js"
           }
         },
         {
@@ -1519,18 +1957,18 @@
           "name": "Pfv6Card",
           "declaration": {
             "name": "Pfv6Card",
-            "module": "elements/pfv6-card/pfv6-card.js"
+            "module": "pfv6-card/pfv6-card.js"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "elements/pfv6-checkbox/pfv6-checkbox.js",
+      "path": "pfv6-checkbox/pfv6-checkbox.js",
       "declarations": [
         {
           "name": "Pfv6Checkbox",
-          "description": "PatternFly Checkbox Component\n\nA checkbox is used to select a single item or multiple items, typically to \nchoose elements to perform an action or to reflect a binary setting.\n\nSupports all PatternFly v6 Checkbox features including:\n- Checked/unchecked/indeterminate states\n- Required indicator\n- Disabled state\n- Validation states\n- Label positioning (before/after input)\n- Standalone mode (no visible label)\n- Description and body content\n- Form integration\n\n```html\n<!-- Basic checkbox -->\n<pfv6-checkbox id=\"check1\">Subscribe to newsletter</pfv6-checkbox>\n\n<!-- Checked by default -->\n<pfv6-checkbox id=\"check2\" checked>I agree to the terms</pfv6-checkbox>\n\n<!-- Disabled -->\n<pfv6-checkbox id=\"check3\" disabled>Disabled option</pfv6-checkbox>\n\n<!-- Required with indicator -->\n<pfv6-checkbox id=\"check4\" required>Required field</pfv6-checkbox>\n\n<!-- Indeterminate state -->\n<pfv6-checkbox id=\"check5\" .checked=${null}>Select all</pfv6-checkbox>\n\n<!-- With description -->\n<pfv6-checkbox id=\"check6\">\nEnable notifications\n<span slot=\"description\">You will receive email notifications</span>\n</pfv6-checkbox>\n\n<!-- Label before checkbox -->\n<pfv6-checkbox id=\"check7\" label-position=\"start\">Label first</pfv6-checkbox>\n\n<!-- Standalone (no visible label, use accessible-label) -->\n<pfv6-checkbox id=\"check8\" accessible-label=\"Select row\"></pfv6-checkbox>\n```",
+          "description": "PatternFly Checkbox Component\n\nA checkbox is used to select a single item or multiple items, typically to \nchoose elements to perform an action or to reflect a binary setting.\n\nSupports all PatternFly v6 Checkbox features including:\n- Checked/unchecked/indeterminate states\n- Required indicator\n- Disabled state\n- Validation states\n- Label positioning (before/after input)\n- Standalone mode (no visible label)\n- Description and body content\n- Form integration\n\n```html\n\u003c!-- Basic checkbox --\u003e\n\u003cpfv6-checkbox id=\"check1\"\u003eSubscribe to newsletter\u003c/pfv6-checkbox\u003e\n\n\u003c!-- Checked by default --\u003e\n\u003cpfv6-checkbox id=\"check2\" checked\u003eI agree to the terms\u003c/pfv6-checkbox\u003e\n\n\u003c!-- Disabled --\u003e\n\u003cpfv6-checkbox id=\"check3\" disabled\u003eDisabled option\u003c/pfv6-checkbox\u003e\n\n\u003c!-- Required with indicator --\u003e\n\u003cpfv6-checkbox id=\"check4\" required\u003eRequired field\u003c/pfv6-checkbox\u003e\n\n\u003c!-- Indeterminate state --\u003e\n\u003cpfv6-checkbox id=\"check5\" .checked=${null}\u003eSelect all\u003c/pfv6-checkbox\u003e\n\n\u003c!-- With description --\u003e\n\u003cpfv6-checkbox id=\"check6\"\u003e\nEnable notifications\n\u003cspan slot=\"description\"\u003eYou will receive email notifications\u003c/span\u003e\n\u003c/pfv6-checkbox\u003e\n\n\u003c!-- Label before checkbox --\u003e\n\u003cpfv6-checkbox id=\"check7\" label-position=\"start\"\u003eLabel first\u003c/pfv6-checkbox\u003e\n\n\u003c!-- Standalone (no visible label, use accessible-label) --\u003e\n\u003cpfv6-checkbox id=\"check8\" accessible-label=\"Select row\"\u003e\u003c/pfv6-checkbox\u003e\n```",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -1543,6 +1981,15 @@
                 "text": "ElementInternals"
               },
               "readonly": true,
+              "kind": "field",
+              "privacy": "private"
+            },
+            {
+              "name": "_cardContext",
+              "description": "Card context - consumed when checkbox is inside a card",
+              "type": {
+                "text": "CardContext"
+              },
               "kind": "field",
               "privacy": "private"
             },
@@ -1603,7 +2050,7 @@
             },
             {
               "name": "accessibleLabel",
-              "description": "Accessible label for the checkbox (use when no visible label)\nMaps to aria-label via ElementInternals",
+              "description": "Accessible label for the checkbox (use when no visible label)\nMaps to aria-label on the input element\n\nNote: Future improvement will render this as visually-hidden label text\ninstead of aria-label for better accessibility (see TODO.md)",
               "type": {
                 "text": "string"
               },
@@ -1661,6 +2108,9 @@
               "kind": "method"
             }
           ],
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-checkbox/pfv6-checkbox.ts#L90"
+          },
           "kind": "class",
           "tagName": "pfv6-checkbox",
           "attributes": [
@@ -1711,7 +2161,7 @@
             },
             {
               "name": "accessible-label",
-              "description": "Accessible label for the checkbox (use when no visible label)\nMaps to aria-label via ElementInternals",
+              "description": "Accessible label for the checkbox (use when no visible label)\nMaps to aria-label on the input element\n\nNote: Future improvement will render this as visually-hidden label text\ninstead of aria-label for better accessibility (see TODO.md)",
               "type": {
                 "text": "string"
               },
@@ -1926,65 +2376,89 @@
             },
             {
               "name": "--pf-t--global--spacer--gap--text-to-element--default"
+            },
+            {
+              "name": "--pf-v6-c-card--BackgroundColor",
+              "default": "transparent"
+            },
+            {
+              "name": "--pf-v6-c-card--BorderWidth"
+            },
+            {
+              "name": "--pf-v6-c-card--BorderColor",
+              "default": "transparent"
+            },
+            {
+              "name": "--pf-v6-c-card--BorderRadius"
             }
           ],
-          "customElement": true,
           "demos": [
             {
-              "name": "with-description",
-              "url": "/elements/pfv6-checkbox/demo/with-description",
-              "path": "elements/pfv6-checkbox/demo/with-description.html"
-            },
-            {
-              "name": "with-description-body",
-              "url": "/elements/pfv6-checkbox/demo/with-description-body",
-              "path": "elements/pfv6-checkbox/demo/with-description-body.html"
-            },
-            {
-              "name": "with-body",
-              "url": "/elements/pfv6-checkbox/demo/with-body",
-              "path": "elements/pfv6-checkbox/demo/with-body.html"
-            },
-            {
-              "name": "uncontrolled",
-              "url": "/elements/pfv6-checkbox/demo/uncontrolled",
-              "path": "elements/pfv6-checkbox/demo/uncontrolled.html"
-            },
-            {
-              "name": "standalone-input",
-              "url": "/elements/pfv6-checkbox/demo/standalone-input",
-              "path": "elements/pfv6-checkbox/demo/standalone-input.html"
-            },
-            {
-              "name": "reversed",
-              "url": "/elements/pfv6-checkbox/demo/reversed",
-              "path": "elements/pfv6-checkbox/demo/reversed.html"
-            },
-            {
-              "name": "required",
-              "url": "/elements/pfv6-checkbox/demo/required",
-              "path": "elements/pfv6-checkbox/demo/required.html"
-            },
-            {
-              "name": "label-wraps",
-              "url": "/elements/pfv6-checkbox/demo/label-wraps",
-              "path": "elements/pfv6-checkbox/demo/label-wraps.html"
-            },
-            {
-              "name": "disabled",
-              "url": "/elements/pfv6-checkbox/demo/disabled",
-              "path": "elements/pfv6-checkbox/demo/disabled.html"
-            },
-            {
-              "name": "controlled",
               "url": "/elements/pfv6-checkbox/demo/controlled",
-              "path": "elements/pfv6-checkbox/demo/controlled.html"
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-checkbox/demo/controlled.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-checkbox/demo/disabled",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-checkbox/demo/disabled.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-checkbox/demo/label-wraps",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-checkbox/demo/label-wraps.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-checkbox/demo/required",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-checkbox/demo/required.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-checkbox/demo/reversed",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-checkbox/demo/reversed.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-checkbox/demo/standalone-input",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-checkbox/demo/standalone-input.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-checkbox/demo/uncontrolled",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-checkbox/demo/uncontrolled.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-checkbox/demo/with-body",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-checkbox/demo/with-body.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-checkbox/demo/with-description-body",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-checkbox/demo/with-description-body.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-checkbox/demo/with-description",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-checkbox/demo/with-description.html"
+              }
             }
-          ]
+          ],
+          "customElement": true
         },
         {
           "name": "Pfv6CheckboxChangeEvent",
-          "description": "Event dispatched when the checkbox state changes\n\n```typescript\ncheckbox.addEventListener('change', (e: Pfv6CheckboxChangeEvent) => {\nconsole.log('Checked:', e.checked);\nconsole.log('Indeterminate:', e.indeterminate);\n});\n```",
+          "description": "Event dispatched when the checkbox state changes\n\n```typescript\ncheckbox.addEventListener('change', (e: Pfv6CheckboxChangeEvent) =\u003e {\nconsole.log('Checked:', e.checked);\nconsole.log('Indeterminate:', e.indeterminate);\n});\n```",
           "superclass": {
             "name": "Event",
             "package": "global:"
@@ -2005,6 +2479,9 @@
               "kind": "field"
             }
           ],
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-checkbox/pfv6-checkbox.ts#L379"
+          },
           "kind": "class"
         }
       ],
@@ -2014,7 +2491,7 @@
           "name": "pfv6-checkbox",
           "declaration": {
             "name": "Pfv6Checkbox",
-            "module": "elements/pfv6-checkbox/pfv6-checkbox.js"
+            "module": "pfv6-checkbox/pfv6-checkbox.js"
           }
         },
         {
@@ -2022,7 +2499,7 @@
           "name": "Pfv6Checkbox",
           "declaration": {
             "name": "Pfv6Checkbox",
-            "module": "elements/pfv6-checkbox/pfv6-checkbox.js"
+            "module": "pfv6-checkbox/pfv6-checkbox.js"
           }
         },
         {
@@ -2030,14 +2507,845 @@
           "name": "Pfv6CheckboxChangeEvent",
           "declaration": {
             "name": "Pfv6CheckboxChangeEvent",
-            "module": "elements/pfv6-checkbox/pfv6-checkbox.js"
+            "module": "pfv6-checkbox/pfv6-checkbox.js"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "elements/pfv6-gallery/pfv6-gallery-item.js",
+      "path": "pfv6-divider/pfv6-divider.js",
+      "declarations": [
+        {
+          "name": "Pfv6Divider",
+          "description": "Divider - A divider is a horizontal or vertical line that is used to separate content.",
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "members": [
+            {
+              "name": "internals",
+              "type": {
+                "text": "ElementInternals"
+              },
+              "kind": "field",
+              "privacy": "private"
+            }
+          ],
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/pfv6-divider.ts#L22"
+          },
+          "kind": "class",
+          "tagName": "pfv6-divider",
+          "cssProperties": [
+            {
+              "name": "--pf-v6-c-divider--Display",
+              "description": "Display property for the divider"
+            },
+            {
+              "name": "--pf-v6-c-divider--Color",
+              "description": "Color of the divider line"
+            },
+            {
+              "name": "--pf-v6-c-divider--Size",
+              "description": "Size (thickness) of the divider line"
+            },
+            {
+              "name": "--pf-v6-c-divider--before--FlexBasis",
+              "description": "Flex basis for the divider's ::before pseudo-element"
+            },
+            {
+              "name": "--pf-v6-c-divider--Display",
+              "default": "flex"
+            },
+            {
+              "name": "--pf-v6-c-divider--Color",
+              "default": "var(--pf-t--global--border--color--default)"
+            },
+            {
+              "name": "--pf-t--global--border--color--default"
+            },
+            {
+              "name": "--pf-v6-c-divider--Size",
+              "default": "var(--pf-t--global--border--width--divider--default)"
+            },
+            {
+              "name": "--pf-t--global--border--width--divider--default"
+            },
+            {
+              "name": "--pf-v6-c-divider--before--FlexBasis",
+              "default": "100%"
+            },
+            {
+              "name": "--pf-t--global--spacer--xs"
+            },
+            {
+              "name": "--pf-t--global--spacer--sm"
+            },
+            {
+              "name": "--pf-t--global--spacer--md"
+            },
+            {
+              "name": "--pf-t--global--spacer--lg"
+            },
+            {
+              "name": "--pf-t--global--spacer--xl"
+            },
+            {
+              "name": "--pf-t--global--spacer--2xl"
+            },
+            {
+              "name": "--pf-t--global--spacer--3xl"
+            }
+          ],
+          "demos": [
+            {
+              "url": "/elements/pfv6-divider/demo/inset-medium",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/demo/inset-medium.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-divider/demo/inset-various-breakpoints",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/demo/inset-various-breakpoints.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-divider/demo/orientation-various-breakpoints",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/demo/orientation-various-breakpoints.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-divider/demo/using-div",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/demo/using-div.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-divider/demo/using-hr",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/demo/using-hr.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-divider/demo/using-li",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/demo/using-li.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-divider/demo/vertical-flex-inset-small",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/demo/vertical-flex-inset-small.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-divider/demo/vertical-flex-inset-various-breakpoints",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/demo/vertical-flex-inset-various-breakpoints.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-divider/demo/vertical-flex",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/demo/vertical-flex.html"
+              }
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "pfv6-divider",
+          "declaration": {
+            "name": "Pfv6Divider",
+            "module": "pfv6-divider/pfv6-divider.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Pfv6Divider",
+          "declaration": {
+            "name": "Pfv6Divider",
+            "module": "pfv6-divider/pfv6-divider.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "pfv6-flex/pfv6-flex-item.js",
+      "declarations": [
+        {
+          "name": "Pfv6FlexItem",
+          "description": "Flex item - A flex item is a child of a flex layout.",
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "members": [
+            {
+              "name": "alignSelf",
+              "description": "Value to add for align-self property at various breakpoints.\n\nalign-self=\"center\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'alignSelfFlexStart' | 'alignSelfFlexEnd' | 'alignSelfCenter' | 'alignSelfStretch' | 'alignSelfBaseline'\u003e"
+              },
+              "kind": "field",
+              "attribute": "align-self"
+            },
+            {
+              "name": "fullWidth",
+              "description": "Whether to set width: 100% at various breakpoints.",
+              "type": {
+                "text": "ResponsiveValue\u003c'fullWidth'\u003e"
+              },
+              "kind": "field",
+              "attribute": "full-width"
+            }
+          ],
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/pfv6-flex-item.ts#L171"
+          },
+          "kind": "class",
+          "tagName": "pfv6-flex-item",
+          "attributes": [
+            {
+              "name": "align-self",
+              "description": "Value to add for align-self property at various breakpoints.\n\nalign-self=\"center\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'alignSelfFlexStart' | 'alignSelfFlexEnd' | 'alignSelfCenter' | 'alignSelfStretch' | 'alignSelfBaseline'\u003e"
+              },
+              "fieldName": "alignSelf"
+            },
+            {
+              "name": "full-width",
+              "description": "Whether to set width: 100% at various breakpoints.",
+              "type": {
+                "text": "ResponsiveValue\u003c'fullWidth'\u003e"
+              },
+              "fieldName": "fullWidth"
+            }
+          ],
+          "slots": [
+            {
+              "name": ""
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--pf-v6-l-flex--spacer--column",
+              "default": "0"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--row",
+              "default": "0"
+            },
+            {
+              "name": "--pf-v6-l-flex--align--MarginInlineStart",
+              "default": "0"
+            },
+            {
+              "name": "--pf-v6-l-flex--direction--MarginInlineEnd",
+              "default": "var(--_spacer-column)"
+            },
+            {
+              "name": "--pf-v6-l-flex--direction--MarginBlockEnd",
+              "default": "0"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--none"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--xs"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--sm"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--md"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--lg"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--xl"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--2xl"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--3xl"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--4xl"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "pfv6-flex-item",
+          "declaration": {
+            "name": "Pfv6FlexItem",
+            "module": "pfv6-flex/pfv6-flex-item.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Pfv6FlexItem",
+          "declaration": {
+            "name": "Pfv6FlexItem",
+            "module": "pfv6-flex/pfv6-flex-item.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "pfv6-flex/pfv6-flex.js",
+      "declarations": [
+        {
+          "name": "Pfv6Flex",
+          "description": "Flex layout - A flex layout is used to position items in a flexible container.\n\n```html\n\u003c!-- Simple default-only values --\u003e\n\u003cpfv6-flex direction=\"column\"\u003e\n\n\u003c!-- Responsive values with breakpoints --\u003e\n\u003cpfv6-flex direction=\"column lg:row\"\u003e\n\u003cpfv6-flex gap=\"md sm:lg xl:2xl\"\u003e\n\u003cpfv6-flex justify-content=\"flex-start md:space-between\"\u003e\n```",
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "members": [
+            {
+              "name": "spaceItems",
+              "description": "Space items at various breakpoints.\n\nspace-items=\"none\" or space-items=\"md sm:lg\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'spaceItemsNone' | 'spaceItemsXs' | 'spaceItemsSm' | 'spaceItemsMd' | 'spaceItemsLg' | 'spaceItemsXl' | 'spaceItems2xl' | 'spaceItems3xl' | 'spaceItems4xl'\u003e"
+              },
+              "kind": "field",
+              "attribute": "space-items"
+            },
+            {
+              "name": "rowGap",
+              "description": "Gap between rows at various breakpoints.\n\nrow-gap=\"2xl\" or row-gap=\"md sm:lg\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'rowGap' | 'rowGapNone' | 'rowGapXs' | 'rowGapSm' | 'rowGapMd' | 'rowGapLg' | 'rowGapXl' | 'rowGap2xl' | 'rowGap3xl' | 'rowGap4xl'\u003e"
+              },
+              "kind": "field",
+              "attribute": "row-gap"
+            },
+            {
+              "name": "columnGap",
+              "description": "Gap between columns at various breakpoints.\n\ncolumn-gap=\"2xl\" or column-gap=\"md sm:lg\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'columnGap' | 'columnGapNone' | 'columnGapXs' | 'columnGapSm' | 'columnGapMd' | 'columnGapLg' | 'columnGapXl' | 'columnGap2xl' | 'columnGap3xl' | 'columnGap4xl'\u003e"
+              },
+              "kind": "field",
+              "attribute": "column-gap"
+            },
+            {
+              "name": "alignItems",
+              "description": "Value to add for align-items property at various breakpoints.\n\nalign-items=\"center\" or align-items=\"flex-start md:center\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'alignItemsFlexStart' | 'alignItemsFlexEnd' | 'alignItemsCenter' | 'alignItemsStretch' | 'alignItemsBaseline'\u003e"
+              },
+              "kind": "field",
+              "attribute": "align-items"
+            },
+            {
+              "name": "alignContent",
+              "description": "Value to add for align-content property at various breakpoints.\n\nalign-content=\"center\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'alignContentFlexStart' | 'alignContentFlexEnd' | 'alignContentCenter' | 'alignContentStretch' | 'alignContentSpaceBetween' | 'alignContentSpaceAround'\u003e"
+              },
+              "kind": "field",
+              "attribute": "align-content"
+            },
+            {
+              "name": "alignSelf",
+              "description": "Value to add for align-self property at various breakpoints.\n\nalign-self=\"center\" or align-self=\"flex-start md:center\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'alignSelfFlexStart' | 'alignSelfFlexEnd' | 'alignSelfCenter' | 'alignSelfStretch' | 'alignSelfBaseline'\u003e"
+              },
+              "kind": "field",
+              "attribute": "align-self"
+            },
+            {
+              "name": "justifyContent",
+              "description": "Value to add for justify-content property at various breakpoints.\n\njustify-content=\"flex-start\" or justify-content=\"flex-start md:space-between\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'justifyContentFlexStart' | 'justifyContentFlexEnd' | 'justifyContentCenter' | 'justifyContentSpaceBetween' | 'justifyContentSpaceAround' | 'justifyContentSpaceEvenly'\u003e"
+              },
+              "kind": "field",
+              "attribute": "justify-content"
+            },
+            {
+              "name": "fullWidth",
+              "description": "Whether to set width: 100% at various breakpoints.\n\nfull-width=\"full-width\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'fullWidth'\u003e"
+              },
+              "kind": "field",
+              "attribute": "full-width"
+            },
+            {
+              "name": "flexWrap",
+              "description": "Value to set for flex-wrap property at various breakpoints.\n\nflex-wrap=\"nowrap\" or flex-wrap=\"wrap md:nowrap\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'wrap' | 'wrapReverse' | 'nowrap'\u003e"
+              },
+              "kind": "field",
+              "attribute": "flex-wrap"
+            }
+          ],
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/pfv6-flex.ts#L194"
+          },
+          "kind": "class",
+          "tagName": "pfv6-flex",
+          "attributes": [
+            {
+              "name": "space-items",
+              "description": "Space items at various breakpoints.\n\nspace-items=\"none\" or space-items=\"md sm:lg\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'spaceItemsNone' | 'spaceItemsXs' | 'spaceItemsSm' | 'spaceItemsMd' | 'spaceItemsLg' | 'spaceItemsXl' | 'spaceItems2xl' | 'spaceItems3xl' | 'spaceItems4xl'\u003e"
+              },
+              "fieldName": "spaceItems"
+            },
+            {
+              "name": "row-gap",
+              "description": "Gap between rows at various breakpoints.\n\nrow-gap=\"2xl\" or row-gap=\"md sm:lg\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'rowGap' | 'rowGapNone' | 'rowGapXs' | 'rowGapSm' | 'rowGapMd' | 'rowGapLg' | 'rowGapXl' | 'rowGap2xl' | 'rowGap3xl' | 'rowGap4xl'\u003e"
+              },
+              "fieldName": "rowGap"
+            },
+            {
+              "name": "column-gap",
+              "description": "Gap between columns at various breakpoints.\n\ncolumn-gap=\"2xl\" or column-gap=\"md sm:lg\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'columnGap' | 'columnGapNone' | 'columnGapXs' | 'columnGapSm' | 'columnGapMd' | 'columnGapLg' | 'columnGapXl' | 'columnGap2xl' | 'columnGap3xl' | 'columnGap4xl'\u003e"
+              },
+              "fieldName": "columnGap"
+            },
+            {
+              "name": "align-items",
+              "description": "Value to add for align-items property at various breakpoints.\n\nalign-items=\"center\" or align-items=\"flex-start md:center\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'alignItemsFlexStart' | 'alignItemsFlexEnd' | 'alignItemsCenter' | 'alignItemsStretch' | 'alignItemsBaseline'\u003e"
+              },
+              "fieldName": "alignItems"
+            },
+            {
+              "name": "align-content",
+              "description": "Value to add for align-content property at various breakpoints.\n\nalign-content=\"center\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'alignContentFlexStart' | 'alignContentFlexEnd' | 'alignContentCenter' | 'alignContentStretch' | 'alignContentSpaceBetween' | 'alignContentSpaceAround'\u003e"
+              },
+              "fieldName": "alignContent"
+            },
+            {
+              "name": "align-self",
+              "description": "Value to add for align-self property at various breakpoints.\n\nalign-self=\"center\" or align-self=\"flex-start md:center\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'alignSelfFlexStart' | 'alignSelfFlexEnd' | 'alignSelfCenter' | 'alignSelfStretch' | 'alignSelfBaseline'\u003e"
+              },
+              "fieldName": "alignSelf"
+            },
+            {
+              "name": "justify-content",
+              "description": "Value to add for justify-content property at various breakpoints.\n\njustify-content=\"flex-start\" or justify-content=\"flex-start md:space-between\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'justifyContentFlexStart' | 'justifyContentFlexEnd' | 'justifyContentCenter' | 'justifyContentSpaceBetween' | 'justifyContentSpaceAround' | 'justifyContentSpaceEvenly'\u003e"
+              },
+              "fieldName": "justifyContent"
+            },
+            {
+              "name": "full-width",
+              "description": "Whether to set width: 100% at various breakpoints.\n\nfull-width=\"full-width\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'fullWidth'\u003e"
+              },
+              "fieldName": "fullWidth"
+            },
+            {
+              "name": "flex-wrap",
+              "description": "Value to set for flex-wrap property at various breakpoints.\n\nflex-wrap=\"nowrap\" or flex-wrap=\"wrap md:nowrap\"",
+              "type": {
+                "text": "ResponsiveValue\u003c'wrap' | 'wrapReverse' | 'nowrap'\u003e"
+              },
+              "fieldName": "flexWrap"
+            }
+          ],
+          "slots": [
+            {
+              "name": ""
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--pf-t--global--spacer--gutter--default"
+            },
+            {
+              "name": "--pf-t--global--spacer--xs"
+            },
+            {
+              "name": "--pf-t--global--spacer--sm"
+            },
+            {
+              "name": "--pf-t--global--spacer--md"
+            },
+            {
+              "name": "--pf-t--global--spacer--lg"
+            },
+            {
+              "name": "--pf-t--global--spacer--xl"
+            },
+            {
+              "name": "--pf-t--global--spacer--2xl"
+            },
+            {
+              "name": "--pf-t--global--spacer--3xl"
+            },
+            {
+              "name": "--pf-t--global--spacer--4xl"
+            },
+            {
+              "name": "--pf-v6-l-flex--Display",
+              "default": "flex"
+            },
+            {
+              "name": "--pf-v6-l-flex--FlexWrap",
+              "default": "wrap"
+            },
+            {
+              "name": "--pf-v6-l-flex--AlignItems",
+              "default": "baseline"
+            },
+            {
+              "name": "--pf-v6-l-flex--RowGap",
+              "default": "var(--pf-v6-l-flex--spacer--row--base)"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--row--base"
+            },
+            {
+              "name": "--pf-v6-l-flex--ColumnGap",
+              "default": "0"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--column",
+              "default": "0"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--row",
+              "default": "0"
+            },
+            {
+              "name": "--pf-v6-l-flex--item--Order",
+              "default": "0"
+            },
+            {
+              "name": "--pf-v6-l-flex--align--MarginInlineStart",
+              "default": "0"
+            },
+            {
+              "name": "--pf-v6-l-flex--direction--MarginInlineEnd",
+              "default": "var(--_spacer-column)"
+            },
+            {
+              "name": "--pf-v6-l-flex--direction--MarginBlockEnd",
+              "default": "0"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--none"
+            },
+            {
+              "name": "--pf-v6-l-flex--m-gap--RowGap"
+            },
+            {
+              "name": "--pf-v6-l-flex--m-gap--ColumnGap"
+            },
+            {
+              "name": "--pf-v6-l-flex--m-row-gap--RowGap"
+            },
+            {
+              "name": "--pf-v6-l-flex--m-column-gap--ColumnGap"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--xs"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--sm"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--md"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--lg"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--xl"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--2xl"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--3xl"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--4xl"
+            },
+            {
+              "name": "--pf-v6-l-flex--spacer--column--base"
+            },
+            {
+              "name": "--pf-v6-l-flex--m-row--AlignItems"
+            },
+            {
+              "name": "--pf-v6-l-flex--m-row-reverse--AlignItems"
+            }
+          ],
+          "demos": [
+            {
+              "url": "/elements/pfv6-flex/demo/adjusting-width",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/adjusting-width.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/align-adjacent-content",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/align-adjacent-content.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/align-right-on-multiple-groups",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/align-right-on-multiple-groups.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/align-right-on-single-item",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/align-right-on-single-item.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/align-self-baseline",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/align-self-baseline.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/align-self-center",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/align-self-center.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/align-self-flex-end",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/align-self-flex-end.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/align-self-stretch",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/align-self-stretch.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/aligning-right",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/aligning-right.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/alternative-components",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/alternative-components.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/basic",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/basic.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/column-gap",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/column-gap.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/column-layout",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/column-layout.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/controlling-width-of-text",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/controlling-width-of-text.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/default-layout",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/default-layout.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/first-last-ordering",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/first-last-ordering.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/gap",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/gap.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/individually-spaced",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/individually-spaced.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/inline",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/inline.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/justify-content-flex-end",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/justify-content-flex-end.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/justify-content-flex-start",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/justify-content-flex-start.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/justify-content-space-between",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/justify-content-space-between.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/nested-with-items",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/nested-with-items.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/nesting-elements-in-columns",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/nesting-elements-in-columns.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/nesting",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/nesting.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/ordering",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/ordering.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/responsive-first-last-ordering",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/responsive-first-last-ordering.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/responsive-ordering",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/responsive-ordering.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/row-gap",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/row-gap.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/spacing-none",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/spacing-none.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/spacing-xl",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/spacing-xl.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/specifying-column-widths",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/specifying-column-widths.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/stacking-elements",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/stacking-elements.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/switching-between-direction-column-and-row",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/switching-between-direction-column-and-row.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-flex/demo/using-cangrow",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/demo/using-cangrow.html"
+              }
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "pfv6-flex",
+          "declaration": {
+            "name": "Pfv6Flex",
+            "module": "pfv6-flex/pfv6-flex.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Pfv6Flex",
+          "declaration": {
+            "name": "Pfv6Flex",
+            "module": "pfv6-flex/pfv6-flex.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "pfv6-gallery/pfv6-gallery-item.js",
       "declarations": [
         {
           "name": "Pfv6GalleryItem",
@@ -2056,6 +3364,9 @@
               "privacy": "private"
             }
           ],
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/pfv6-gallery-item.ts#L13"
+          },
           "kind": "class",
           "tagName": "pfv6-gallery-item",
           "slots": [
@@ -2073,7 +3384,7 @@
           "name": "pfv6-gallery-item",
           "declaration": {
             "name": "Pfv6GalleryItem",
-            "module": "elements/pfv6-gallery/pfv6-gallery-item.js"
+            "module": "pfv6-gallery/pfv6-gallery-item.js"
           }
         },
         {
@@ -2081,14 +3392,14 @@
           "name": "Pfv6GalleryItem",
           "declaration": {
             "name": "Pfv6GalleryItem",
-            "module": "elements/pfv6-gallery/pfv6-gallery-item.js"
+            "module": "pfv6-gallery/pfv6-gallery-item.js"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "elements/pfv6-gallery/pfv6-gallery.js",
+      "path": "pfv6-gallery/pfv6-gallery.js",
       "declarations": [
         {
           "name": "Pfv6Gallery",
@@ -2134,6 +3445,9 @@
               "privacy": "private"
             }
           ],
+          "source": {
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/pfv6-gallery.ts#L30"
+          },
           "kind": "class",
           "tagName": "pfv6-gallery",
           "attributes": [
@@ -2274,39 +3588,45 @@
               "default": "1fr"
             }
           ],
-          "customElement": true,
           "demos": [
             {
-              "name": "with-gutters",
-              "url": "/elements/pfv6-gallery/demo/with-gutters",
-              "path": "elements/pfv6-gallery/demo/with-gutters.html"
-            },
-            {
-              "name": "basic",
-              "url": "/elements/pfv6-gallery/demo/basic",
-              "path": "elements/pfv6-gallery/demo/basic.html"
-            },
-            {
-              "name": "alternative-components",
-              "url": "/elements/pfv6-gallery/demo/alternative-components",
-              "path": "elements/pfv6-gallery/demo/alternative-components.html"
-            },
-            {
-              "name": "adjusting-min-widths",
-              "url": "/elements/pfv6-gallery/demo/adjusting-min-widths",
-              "path": "elements/pfv6-gallery/demo/adjusting-min-widths.html"
-            },
-            {
-              "name": "adjusting-min-and-max-widths",
-              "url": "/elements/pfv6-gallery/demo/adjusting-min-and-max-widths",
-              "path": "elements/pfv6-gallery/demo/adjusting-min-and-max-widths.html"
-            },
-            {
-              "name": "adjusting-max-widths",
               "url": "/elements/pfv6-gallery/demo/adjusting-max-widths",
-              "path": "elements/pfv6-gallery/demo/adjusting-max-widths.html"
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/demo/adjusting-max-widths.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-gallery/demo/adjusting-min-and-max-widths",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/demo/adjusting-min-and-max-widths.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-gallery/demo/adjusting-min-widths",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/demo/adjusting-min-widths.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-gallery/demo/alternative-components",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/demo/alternative-components.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-gallery/demo/basic",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/demo/basic.html"
+              }
+            },
+            {
+              "url": "/elements/pfv6-gallery/demo/with-gutters",
+              "source": {
+                "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/demo/with-gutters.html"
+              }
             }
-          ]
+          ],
+          "customElement": true
         }
       ],
       "exports": [
@@ -2315,7 +3635,7 @@
           "name": "pfv6-gallery",
           "declaration": {
             "name": "Pfv6Gallery",
-            "module": "elements/pfv6-gallery/pfv6-gallery.js"
+            "module": "pfv6-gallery/pfv6-gallery.js"
           }
         },
         {
@@ -2323,7 +3643,7 @@
           "name": "Pfv6Gallery",
           "declaration": {
             "name": "Pfv6Gallery",
-            "module": "elements/pfv6-gallery/pfv6-gallery.js"
+            "module": "pfv6-gallery/pfv6-gallery.js"
           }
         }
       ]

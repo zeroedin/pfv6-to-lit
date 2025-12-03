@@ -1,0 +1,314 @@
+/*
+ * CRITICAL: Shadow DOM box-sizing reset
+ * PatternFly base.css sets: *, *::before, *::after { box-sizing: border-box; }
+ * box-sizing is NOT inherited, so Shadow DOM elements default to content-box
+ * This causes layout differences vs React PatternFly
+ * MUST be included in EVERY component's CSS
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /*
+   * display: contents makes the custom element layout-transparent.
+   * The #container div participates directly in the parent flex's layout.
+   */
+  display: contents;
+
+  /* Private variables for margins (from lightdom CSS) */
+  --_spacer-column: var(--pf-v6-l-flex--spacer--column, 0);
+  --_spacer-row: var(--pf-v6-l-flex--spacer--row, 0);
+  --_margin-inline-start: var(--pf-v6-l-flex--align--MarginInlineStart, 0);
+  --_margin-inline-end: var(--pf-v6-l-flex--direction--MarginInlineEnd, var(--_spacer-column));
+  --_margin-block-end: var(--pf-v6-l-flex--direction--MarginBlockEnd, 0);
+}
+
+#container {
+  /* Container wraps the slot content so text nodes can participate in flex layout */
+
+  /* Base margins from lightdom CSS variables (same as pfv6-flex) */
+
+  /* Direction-specific margins controlled by lightdom CSS */
+  margin-block: 0 var(--_margin-block-end);
+  margin-inline: var(--_margin-inline-start) var(--_margin-inline-end);
+  order: var(--_item-order, 0);
+  max-width: 100%;
+}
+
+/* Responsive order - set order property directly at each breakpoint (matches React CSS pattern) */
+@media (width >= 48rem) {
+  #container {
+    order: var(--_item-order-md, var(--_item-order, 0));
+  }
+}
+
+@media (width >= 62rem) {
+  #container {
+    order: var(--_item-order-lg, var(--_item-order-md, var(--_item-order, 0)));
+  }
+}
+
+@media (width >= 75rem) {
+  #container {
+    order: var(--_item-order-xl, var(--_item-order-lg, var(--_item-order-md, var(--_item-order, 0))));
+  }
+}
+
+@media (width >= 90.625rem) {
+  #container {
+    order: var(--_item-order-2xl, var(--_item-order-xl, var(--_item-order-lg, var(--_item-order-md, var(--_item-order, 0)))));
+  }
+}
+
+/* Child item modifier classes */
+#container.align-right {
+  margin-inline-start: auto;
+}
+
+#container.align-left {
+  margin-inline-start: 0;
+}
+
+#container.grow {
+  flex-grow: 1;
+}
+
+#container.shrink {
+  flex-shrink: 1;
+}
+
+#container.full-width {
+  width: 100%;
+  margin-inline-end: 0;
+}
+
+#container.flex-1 {
+  flex: 1 0 0;
+}
+
+#container.flex-2 {
+  flex: 2 0 0;
+}
+
+#container.flex-3 {
+  flex: 3 0 0;
+}
+
+#container.flex-4 {
+  flex: 4 0 0;
+}
+
+#container.flex-default {
+  flex: 0 1 auto;
+}
+
+#container.flex-none {
+  flex: none;
+}
+
+#container.align-self-flex-start {
+  align-self: flex-start;
+}
+
+#container.align-self-flex-end {
+  align-self: flex-end;
+}
+
+#container.align-self-center {
+  align-self: center;
+}
+
+#container.align-self-baseline {
+  align-self: baseline;
+}
+
+#container.align-self-stretch {
+  align-self: stretch;
+}
+
+/* Responsive modifiers for flex item - sm breakpoint (36rem) */
+@media (width >= 36rem) {
+  #container.align-right-sm {
+    margin-inline-start: auto;
+  }
+
+  #container.align-left-sm {
+    margin-inline-start: 0;
+  }
+
+  #container.grow-sm {
+    flex-grow: 1;
+  }
+
+  #container.shrink-sm {
+    flex-shrink: 1;
+  }
+
+  #container.full-width-sm {
+    width: 100%;
+    margin-inline-end: 0;
+  }
+
+  #container.flex-1-sm {
+    flex: 1 0 0;
+  }
+
+  #container.flex-2-sm {
+    flex: 2 0 0;
+  }
+
+  #container.flex-3-sm {
+    flex: 3 0 0;
+  }
+
+  #container.flex-4-sm {
+    flex: 4 0 0;
+  }
+
+  #container.flex-default-sm {
+    flex: 0 1 auto;
+  }
+
+  #container.flex-none-sm {
+    flex: none;
+  }
+
+  #container.align-self-flex-start-sm {
+    align-self: flex-start;
+  }
+
+  #container.align-self-flex-end-sm {
+    align-self: flex-end;
+  }
+
+  #container.align-self-center-sm {
+    align-self: center;
+  }
+
+  #container.align-self-baseline-sm {
+    align-self: baseline;
+  }
+
+  #container.align-self-stretch-sm {
+    align-self: stretch;
+  }
+
+  #container.spacer-none-sm {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--none);
+  }
+
+  #container.spacer-xs-sm {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xs);
+  }
+
+  #container.spacer-sm-sm {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--sm);
+  }
+
+  #container.spacer-md-sm {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+  }
+
+  #container.spacer-lg-sm {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--lg);
+  }
+
+  #container.spacer-xl-sm {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xl);
+  }
+
+  #container.spacer-2xl-sm {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--2xl);
+  }
+
+  #container.spacer-3xl-sm {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--3xl);
+  }
+
+  #container.spacer-4xl-sm {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--4xl);
+  }
+}
+
+/* md breakpoint (48rem) */
+@media (width >= 48rem) {
+  #container.align-right-md { margin-inline-start: auto; }
+  #container.align-left-md { margin-inline-start: 0; }
+  #container.grow-md { flex-grow: 1; }
+  #container.shrink-md { flex-shrink: 1; }
+  #container.full-width-md { width: 100%; margin-inline-end: 0; }
+  #container.flex-1-md { flex: 1 0 0; }
+  #container.flex-2-md { flex: 2 0 0; }
+  #container.flex-3-md { flex: 3 0 0; }
+  #container.flex-4-md { flex: 4 0 0; }
+  #container.flex-default-md { flex: 0 1 auto; }
+  #container.flex-none-md { flex: none; }
+  #container.align-self-flex-start-md { align-self: flex-start; }
+  #container.align-self-flex-end-md { align-self: flex-end; }
+  #container.align-self-center-md { align-self: center; }
+  #container.align-self-baseline-md { align-self: baseline; }
+  #container.align-self-stretch-md { align-self: stretch; }
+}
+
+/* lg breakpoint (62rem) */
+@media (width >= 62rem) {
+  #container.align-right-lg { margin-inline-start: auto; }
+  #container.align-left-lg { margin-inline-start: 0; }
+  #container.grow-lg { flex-grow: 1; }
+  #container.shrink-lg { flex-shrink: 1; }
+  #container.full-width-lg { width: 100%; margin-inline-end: 0; }
+  #container.flex-1-lg { flex: 1 0 0; }
+  #container.flex-2-lg { flex: 2 0 0; }
+  #container.flex-3-lg { flex: 3 0 0; }
+  #container.flex-4-lg { flex: 4 0 0; }
+  #container.flex-default-lg { flex: 0 1 auto; }
+  #container.flex-none-lg { flex: none; }
+  #container.align-self-flex-start-lg { align-self: flex-start; }
+  #container.align-self-flex-end-lg { align-self: flex-end; }
+  #container.align-self-center-lg { align-self: center; }
+  #container.align-self-baseline-lg { align-self: baseline; }
+  #container.align-self-stretch-lg { align-self: stretch; }
+}
+
+/* xl breakpoint (75rem) */
+@media (width >= 75rem) {
+  #container.align-right-xl { margin-inline-start: auto; }
+  #container.align-left-xl { margin-inline-start: 0; }
+  #container.grow-xl { flex-grow: 1; }
+  #container.shrink-xl { flex-shrink: 1; }
+  #container.full-width-xl { width: 100%; margin-inline-end: 0; }
+  #container.flex-1-xl { flex: 1 0 0; }
+  #container.flex-2-xl { flex: 2 0 0; }
+  #container.flex-3-xl { flex: 3 0 0; }
+  #container.flex-4-xl { flex: 4 0 0; }
+  #container.flex-default-xl { flex: 0 1 auto; }
+  #container.flex-none-xl { flex: none; }
+  #container.align-self-flex-start-xl { align-self: flex-start; }
+  #container.align-self-flex-end-xl { align-self: flex-end; }
+  #container.align-self-center-xl { align-self: center; }
+  #container.align-self-baseline-xl { align-self: baseline; }
+  #container.align-self-stretch-xl { align-self: stretch; }
+}
+
+/* 2xl breakpoint (90.625rem) */
+@media (width >= 90.625rem) {
+  #container.align-right-2xl { margin-inline-start: auto; }
+  #container.align-left-2xl { margin-inline-start: 0; }
+  #container.grow-2xl { flex-grow: 1; }
+  #container.shrink-2xl { flex-shrink: 1; }
+  #container.full-width-2xl { width: 100%; margin-inline-end: 0; }
+  #container.flex-1-2xl { flex: 1 0 0; }
+  #container.flex-2-2xl { flex: 2 0 0; }
+  #container.flex-3-2xl { flex: 3 0 0; }
+  #container.flex-4-2xl { flex: 4 0 0; }
+  #container.flex-default-2xl { flex: 0 1 auto; }
+  #container.flex-none-2xl { flex: none; }
+  #container.align-self-flex-start-2xl { align-self: flex-start; }
+  #container.align-self-flex-end-2xl { align-self: flex-end; }
+  #container.align-self-center-2xl { align-self: center; }
+  #container.align-self-baseline-2xl { align-self: baseline; }
+  #container.align-self-stretch-2xl { align-self: stretch; }
+}
