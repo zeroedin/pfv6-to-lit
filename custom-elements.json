@@ -2534,7 +2534,7 @@
             }
           ],
           "source": {
-            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/pfv6-divider.ts#L22"
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/pfv6-divider.ts#L46"
           },
           "kind": "class",
           "tagName": "pfv6-divider",
@@ -2690,99 +2690,142 @@
           },
           "members": [
             {
+              "name": "createRenderRoot",
+              "description": "Disable Shadow DOM - children exist naturally in Light DOM",
+              "kind": "method"
+            },
+            {
+              "name": "spacer",
+              "description": "Spacers at various breakpoints.\n\nspacer=\"md\" or spacer=\"md sm:lg\"",
+              "type": {
+                "text": "string"
+              },
+              "kind": "field",
+              "attribute": "spacer",
+              "reflects": true
+            },
+            {
+              "name": "grow",
+              "description": "Whether to add flex: grow at various breakpoints.",
+              "type": {
+                "text": "string"
+              },
+              "kind": "field",
+              "attribute": "grow",
+              "reflects": true
+            },
+            {
+              "name": "shrink",
+              "description": "Whether to add flex: shrink at various breakpoints.",
+              "type": {
+                "text": "string"
+              },
+              "kind": "field",
+              "attribute": "shrink",
+              "reflects": true
+            },
+            {
+              "name": "flex",
+              "description": "Value to add for flex property at various breakpoints.\n\nflex=\"1\" or flex=\"1 lg:2\"",
+              "type": {
+                "text": "string"
+              },
+              "kind": "field",
+              "attribute": "flex",
+              "reflects": true
+            },
+            {
               "name": "alignSelf",
               "description": "Value to add for align-self property at various breakpoints.\n\nalign-self=\"center\"",
               "type": {
-                "text": "ResponsiveValue\u003c'alignSelfFlexStart' | 'alignSelfFlexEnd' | 'alignSelfCenter' | 'alignSelfStretch' | 'alignSelfBaseline'\u003e"
+                "text": "string"
               },
               "kind": "field",
-              "attribute": "align-self"
+              "attribute": "align-self",
+              "reflects": true
+            },
+            {
+              "name": "align",
+              "description": "Value to use for margin: auto at various breakpoints.\n\nalign=\"right\"",
+              "type": {
+                "text": "string"
+              },
+              "kind": "field",
+              "attribute": "align",
+              "reflects": true
             },
             {
               "name": "fullWidth",
               "description": "Whether to set width: 100% at various breakpoints.",
               "type": {
-                "text": "ResponsiveValue\u003c'fullWidth'\u003e"
+                "text": "string"
               },
               "kind": "field",
-              "attribute": "full-width"
+              "attribute": "full-width",
+              "reflects": true
             }
           ],
           "source": {
-            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/pfv6-flex-item.ts#L171"
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/pfv6-flex-item.ts#L12"
           },
           "kind": "class",
           "tagName": "pfv6-flex-item",
           "attributes": [
             {
+              "name": "spacer",
+              "description": "Spacers at various breakpoints.\n\nspacer=\"md\" or spacer=\"md sm:lg\"",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "spacer"
+            },
+            {
+              "name": "grow",
+              "description": "Whether to add flex: grow at various breakpoints.",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "grow"
+            },
+            {
+              "name": "shrink",
+              "description": "Whether to add flex: shrink at various breakpoints.",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "shrink"
+            },
+            {
+              "name": "flex",
+              "description": "Value to add for flex property at various breakpoints.\n\nflex=\"1\" or flex=\"1 lg:2\"",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "flex"
+            },
+            {
               "name": "align-self",
               "description": "Value to add for align-self property at various breakpoints.\n\nalign-self=\"center\"",
               "type": {
-                "text": "ResponsiveValue\u003c'alignSelfFlexStart' | 'alignSelfFlexEnd' | 'alignSelfCenter' | 'alignSelfStretch' | 'alignSelfBaseline'\u003e"
+                "text": "string"
               },
               "fieldName": "alignSelf"
+            },
+            {
+              "name": "align",
+              "description": "Value to use for margin: auto at various breakpoints.\n\nalign=\"right\"",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "align"
             },
             {
               "name": "full-width",
               "description": "Whether to set width: 100% at various breakpoints.",
               "type": {
-                "text": "ResponsiveValue\u003c'fullWidth'\u003e"
+                "text": "string"
               },
               "fieldName": "fullWidth"
-            }
-          ],
-          "slots": [
-            {
-              "name": ""
-            }
-          ],
-          "cssProperties": [
-            {
-              "name": "--pf-v6-l-flex--spacer--column",
-              "default": "0"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--row",
-              "default": "0"
-            },
-            {
-              "name": "--pf-v6-l-flex--align--MarginInlineStart",
-              "default": "0"
-            },
-            {
-              "name": "--pf-v6-l-flex--direction--MarginInlineEnd",
-              "default": "var(--_spacer-column)"
-            },
-            {
-              "name": "--pf-v6-l-flex--direction--MarginBlockEnd",
-              "default": "0"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--none"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--xs"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--sm"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--md"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--lg"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--xl"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--2xl"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--3xl"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--4xl"
             }
           ],
           "customElement": true
@@ -2820,106 +2863,216 @@
           },
           "members": [
             {
+              "name": "createRenderRoot",
+              "description": "Disable Shadow DOM - children exist naturally in Light DOM",
+              "kind": "method"
+            },
+            {
+              "name": "spacer",
+              "description": "Spacers at various breakpoints.\n\nspacer=\"md\" or spacer=\"md sm:lg xl:none\"",
+              "type": {
+                "text": "string"
+              },
+              "kind": "field",
+              "attribute": "spacer",
+              "reflects": true
+            },
+            {
               "name": "spaceItems",
               "description": "Space items at various breakpoints.\n\nspace-items=\"none\" or space-items=\"md sm:lg\"",
               "type": {
-                "text": "ResponsiveValue\u003c'spaceItemsNone' | 'spaceItemsXs' | 'spaceItemsSm' | 'spaceItemsMd' | 'spaceItemsLg' | 'spaceItemsXl' | 'spaceItems2xl' | 'spaceItems3xl' | 'spaceItems4xl'\u003e"
+                "text": "string"
               },
               "kind": "field",
-              "attribute": "space-items"
+              "attribute": "space-items",
+              "reflects": true
+            },
+            {
+              "name": "gap",
+              "description": "Gap between items at various breakpoints.\n\ngap=\"2xl\" or gap=\"md sm:lg xl:2xl\"",
+              "type": {
+                "text": "string"
+              },
+              "kind": "field",
+              "attribute": "gap",
+              "reflects": true
             },
             {
               "name": "rowGap",
               "description": "Gap between rows at various breakpoints.\n\nrow-gap=\"2xl\" or row-gap=\"md sm:lg\"",
               "type": {
-                "text": "ResponsiveValue\u003c'rowGap' | 'rowGapNone' | 'rowGapXs' | 'rowGapSm' | 'rowGapMd' | 'rowGapLg' | 'rowGapXl' | 'rowGap2xl' | 'rowGap3xl' | 'rowGap4xl'\u003e"
+                "text": "string"
               },
               "kind": "field",
-              "attribute": "row-gap"
+              "attribute": "row-gap",
+              "reflects": true
             },
             {
               "name": "columnGap",
               "description": "Gap between columns at various breakpoints.\n\ncolumn-gap=\"2xl\" or column-gap=\"md sm:lg\"",
               "type": {
-                "text": "ResponsiveValue\u003c'columnGap' | 'columnGapNone' | 'columnGapXs' | 'columnGapSm' | 'columnGapMd' | 'columnGapLg' | 'columnGapXl' | 'columnGap2xl' | 'columnGap3xl' | 'columnGap4xl'\u003e"
+                "text": "string"
               },
               "kind": "field",
-              "attribute": "column-gap"
+              "attribute": "column-gap",
+              "reflects": true
+            },
+            {
+              "name": "grow",
+              "description": "Whether to add flex: grow at various breakpoints.\n\ngrow=\"grow\" or grow=\"grow md:grow\"",
+              "type": {
+                "text": "string"
+              },
+              "kind": "field",
+              "attribute": "grow",
+              "reflects": true
+            },
+            {
+              "name": "shrink",
+              "description": "Whether to add flex: shrink at various breakpoints.\n\nshrink=\"shrink\"",
+              "type": {
+                "text": "string"
+              },
+              "kind": "field",
+              "attribute": "shrink",
+              "reflects": true
+            },
+            {
+              "name": "flex",
+              "description": "Value to add for flex property at various breakpoints.\n\nflex=\"1\" or flex=\"1 lg:2\"",
+              "type": {
+                "text": "string"
+              },
+              "kind": "field",
+              "attribute": "flex",
+              "reflects": true
+            },
+            {
+              "name": "direction",
+              "description": "Value to add for flex-direction property at various breakpoints.\n\ndirection=\"column\" or direction=\"column lg:row\"",
+              "type": {
+                "text": "string"
+              },
+              "kind": "field",
+              "attribute": "direction",
+              "reflects": true
             },
             {
               "name": "alignItems",
               "description": "Value to add for align-items property at various breakpoints.\n\nalign-items=\"center\" or align-items=\"flex-start md:center\"",
               "type": {
-                "text": "ResponsiveValue\u003c'alignItemsFlexStart' | 'alignItemsFlexEnd' | 'alignItemsCenter' | 'alignItemsStretch' | 'alignItemsBaseline'\u003e"
+                "text": "string"
               },
               "kind": "field",
-              "attribute": "align-items"
+              "attribute": "align-items",
+              "reflects": true
             },
             {
               "name": "alignContent",
               "description": "Value to add for align-content property at various breakpoints.\n\nalign-content=\"center\"",
               "type": {
-                "text": "ResponsiveValue\u003c'alignContentFlexStart' | 'alignContentFlexEnd' | 'alignContentCenter' | 'alignContentStretch' | 'alignContentSpaceBetween' | 'alignContentSpaceAround'\u003e"
+                "text": "string"
               },
               "kind": "field",
-              "attribute": "align-content"
+              "attribute": "align-content",
+              "reflects": true
             },
             {
               "name": "alignSelf",
               "description": "Value to add for align-self property at various breakpoints.\n\nalign-self=\"center\" or align-self=\"flex-start md:center\"",
               "type": {
-                "text": "ResponsiveValue\u003c'alignSelfFlexStart' | 'alignSelfFlexEnd' | 'alignSelfCenter' | 'alignSelfStretch' | 'alignSelfBaseline'\u003e"
+                "text": "string"
               },
               "kind": "field",
-              "attribute": "align-self"
+              "attribute": "align-self",
+              "reflects": true
+            },
+            {
+              "name": "align",
+              "description": "Value to use for margin: auto at various breakpoints.\n\nalign=\"right\"",
+              "type": {
+                "text": "string"
+              },
+              "kind": "field",
+              "attribute": "align",
+              "reflects": true
             },
             {
               "name": "justifyContent",
               "description": "Value to add for justify-content property at various breakpoints.\n\njustify-content=\"flex-start\" or justify-content=\"flex-start md:space-between\"",
               "type": {
-                "text": "ResponsiveValue\u003c'justifyContentFlexStart' | 'justifyContentFlexEnd' | 'justifyContentCenter' | 'justifyContentSpaceBetween' | 'justifyContentSpaceAround' | 'justifyContentSpaceEvenly'\u003e"
+                "text": "string"
               },
               "kind": "field",
-              "attribute": "justify-content"
+              "attribute": "justify-content",
+              "reflects": true
+            },
+            {
+              "name": "display",
+              "description": "Value to set to display property at various breakpoints.\n\ndisplay=\"inline-flex\"",
+              "type": {
+                "text": "string"
+              },
+              "kind": "field",
+              "attribute": "display",
+              "reflects": true
             },
             {
               "name": "fullWidth",
               "description": "Whether to set width: 100% at various breakpoints.\n\nfull-width=\"full-width\"",
               "type": {
-                "text": "ResponsiveValue\u003c'fullWidth'\u003e"
+                "text": "string"
               },
               "kind": "field",
-              "attribute": "full-width"
+              "attribute": "full-width",
+              "reflects": true
             },
             {
               "name": "flexWrap",
               "description": "Value to set for flex-wrap property at various breakpoints.\n\nflex-wrap=\"nowrap\" or flex-wrap=\"wrap md:nowrap\"",
               "type": {
-                "text": "ResponsiveValue\u003c'wrap' | 'wrapReverse' | 'nowrap'\u003e"
+                "text": "string"
               },
               "kind": "field",
-              "attribute": "flex-wrap"
+              "attribute": "flex-wrap",
+              "reflects": true
             }
           ],
           "source": {
-            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/pfv6-flex.ts#L194"
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-flex/pfv6-flex.ts#L25"
           },
           "kind": "class",
           "tagName": "pfv6-flex",
           "attributes": [
             {
+              "name": "spacer",
+              "description": "Spacers at various breakpoints.\n\nspacer=\"md\" or spacer=\"md sm:lg xl:none\"",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "spacer"
+            },
+            {
               "name": "space-items",
               "description": "Space items at various breakpoints.\n\nspace-items=\"none\" or space-items=\"md sm:lg\"",
               "type": {
-                "text": "ResponsiveValue\u003c'spaceItemsNone' | 'spaceItemsXs' | 'spaceItemsSm' | 'spaceItemsMd' | 'spaceItemsLg' | 'spaceItemsXl' | 'spaceItems2xl' | 'spaceItems3xl' | 'spaceItems4xl'\u003e"
+                "text": "string"
               },
               "fieldName": "spaceItems"
+            },
+            {
+              "name": "gap",
+              "description": "Gap between items at various breakpoints.\n\ngap=\"2xl\" or gap=\"md sm:lg xl:2xl\"",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "gap"
             },
             {
               "name": "row-gap",
               "description": "Gap between rows at various breakpoints.\n\nrow-gap=\"2xl\" or row-gap=\"md sm:lg\"",
               "type": {
-                "text": "ResponsiveValue\u003c'rowGap' | 'rowGapNone' | 'rowGapXs' | 'rowGapSm' | 'rowGapMd' | 'rowGapLg' | 'rowGapXl' | 'rowGap2xl' | 'rowGap3xl' | 'rowGap4xl'\u003e"
+                "text": "string"
               },
               "fieldName": "rowGap"
             },
@@ -2927,15 +3080,47 @@
               "name": "column-gap",
               "description": "Gap between columns at various breakpoints.\n\ncolumn-gap=\"2xl\" or column-gap=\"md sm:lg\"",
               "type": {
-                "text": "ResponsiveValue\u003c'columnGap' | 'columnGapNone' | 'columnGapXs' | 'columnGapSm' | 'columnGapMd' | 'columnGapLg' | 'columnGapXl' | 'columnGap2xl' | 'columnGap3xl' | 'columnGap4xl'\u003e"
+                "text": "string"
               },
               "fieldName": "columnGap"
+            },
+            {
+              "name": "grow",
+              "description": "Whether to add flex: grow at various breakpoints.\n\ngrow=\"grow\" or grow=\"grow md:grow\"",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "grow"
+            },
+            {
+              "name": "shrink",
+              "description": "Whether to add flex: shrink at various breakpoints.\n\nshrink=\"shrink\"",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "shrink"
+            },
+            {
+              "name": "flex",
+              "description": "Value to add for flex property at various breakpoints.\n\nflex=\"1\" or flex=\"1 lg:2\"",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "flex"
+            },
+            {
+              "name": "direction",
+              "description": "Value to add for flex-direction property at various breakpoints.\n\ndirection=\"column\" or direction=\"column lg:row\"",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "direction"
             },
             {
               "name": "align-items",
               "description": "Value to add for align-items property at various breakpoints.\n\nalign-items=\"center\" or align-items=\"flex-start md:center\"",
               "type": {
-                "text": "ResponsiveValue\u003c'alignItemsFlexStart' | 'alignItemsFlexEnd' | 'alignItemsCenter' | 'alignItemsStretch' | 'alignItemsBaseline'\u003e"
+                "text": "string"
               },
               "fieldName": "alignItems"
             },
@@ -2943,7 +3128,7 @@
               "name": "align-content",
               "description": "Value to add for align-content property at various breakpoints.\n\nalign-content=\"center\"",
               "type": {
-                "text": "ResponsiveValue\u003c'alignContentFlexStart' | 'alignContentFlexEnd' | 'alignContentCenter' | 'alignContentStretch' | 'alignContentSpaceBetween' | 'alignContentSpaceAround'\u003e"
+                "text": "string"
               },
               "fieldName": "alignContent"
             },
@@ -2951,23 +3136,39 @@
               "name": "align-self",
               "description": "Value to add for align-self property at various breakpoints.\n\nalign-self=\"center\" or align-self=\"flex-start md:center\"",
               "type": {
-                "text": "ResponsiveValue\u003c'alignSelfFlexStart' | 'alignSelfFlexEnd' | 'alignSelfCenter' | 'alignSelfStretch' | 'alignSelfBaseline'\u003e"
+                "text": "string"
               },
               "fieldName": "alignSelf"
+            },
+            {
+              "name": "align",
+              "description": "Value to use for margin: auto at various breakpoints.\n\nalign=\"right\"",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "align"
             },
             {
               "name": "justify-content",
               "description": "Value to add for justify-content property at various breakpoints.\n\njustify-content=\"flex-start\" or justify-content=\"flex-start md:space-between\"",
               "type": {
-                "text": "ResponsiveValue\u003c'justifyContentFlexStart' | 'justifyContentFlexEnd' | 'justifyContentCenter' | 'justifyContentSpaceBetween' | 'justifyContentSpaceAround' | 'justifyContentSpaceEvenly'\u003e"
+                "text": "string"
               },
               "fieldName": "justifyContent"
+            },
+            {
+              "name": "display",
+              "description": "Value to set to display property at various breakpoints.\n\ndisplay=\"inline-flex\"",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "display"
             },
             {
               "name": "full-width",
               "description": "Whether to set width: 100% at various breakpoints.\n\nfull-width=\"full-width\"",
               "type": {
-                "text": "ResponsiveValue\u003c'fullWidth'\u003e"
+                "text": "string"
               },
               "fieldName": "fullWidth"
             },
@@ -2975,138 +3176,9 @@
               "name": "flex-wrap",
               "description": "Value to set for flex-wrap property at various breakpoints.\n\nflex-wrap=\"nowrap\" or flex-wrap=\"wrap md:nowrap\"",
               "type": {
-                "text": "ResponsiveValue\u003c'wrap' | 'wrapReverse' | 'nowrap'\u003e"
+                "text": "string"
               },
               "fieldName": "flexWrap"
-            }
-          ],
-          "slots": [
-            {
-              "name": ""
-            }
-          ],
-          "cssProperties": [
-            {
-              "name": "--pf-t--global--spacer--gutter--default"
-            },
-            {
-              "name": "--pf-t--global--spacer--xs"
-            },
-            {
-              "name": "--pf-t--global--spacer--sm"
-            },
-            {
-              "name": "--pf-t--global--spacer--md"
-            },
-            {
-              "name": "--pf-t--global--spacer--lg"
-            },
-            {
-              "name": "--pf-t--global--spacer--xl"
-            },
-            {
-              "name": "--pf-t--global--spacer--2xl"
-            },
-            {
-              "name": "--pf-t--global--spacer--3xl"
-            },
-            {
-              "name": "--pf-t--global--spacer--4xl"
-            },
-            {
-              "name": "--pf-v6-l-flex--Display",
-              "default": "flex"
-            },
-            {
-              "name": "--pf-v6-l-flex--FlexWrap",
-              "default": "wrap"
-            },
-            {
-              "name": "--pf-v6-l-flex--AlignItems",
-              "default": "baseline"
-            },
-            {
-              "name": "--pf-v6-l-flex--RowGap",
-              "default": "var(--pf-v6-l-flex--spacer--row--base)"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--row--base"
-            },
-            {
-              "name": "--pf-v6-l-flex--ColumnGap",
-              "default": "0"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--column",
-              "default": "0"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--row",
-              "default": "0"
-            },
-            {
-              "name": "--pf-v6-l-flex--item--Order",
-              "default": "0"
-            },
-            {
-              "name": "--pf-v6-l-flex--align--MarginInlineStart",
-              "default": "0"
-            },
-            {
-              "name": "--pf-v6-l-flex--direction--MarginInlineEnd",
-              "default": "var(--_spacer-column)"
-            },
-            {
-              "name": "--pf-v6-l-flex--direction--MarginBlockEnd",
-              "default": "0"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--none"
-            },
-            {
-              "name": "--pf-v6-l-flex--m-gap--RowGap"
-            },
-            {
-              "name": "--pf-v6-l-flex--m-gap--ColumnGap"
-            },
-            {
-              "name": "--pf-v6-l-flex--m-row-gap--RowGap"
-            },
-            {
-              "name": "--pf-v6-l-flex--m-column-gap--ColumnGap"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--xs"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--sm"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--md"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--lg"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--xl"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--2xl"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--3xl"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--4xl"
-            },
-            {
-              "name": "--pf-v6-l-flex--spacer--column--base"
-            },
-            {
-              "name": "--pf-v6-l-flex--m-row--AlignItems"
-            },
-            {
-              "name": "--pf-v6-l-flex--m-row-reverse--AlignItems"
             }
           ],
           "demos": [

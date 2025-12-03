@@ -1,20 +1,25 @@
-<link rel="stylesheet" href="../pfv6-flex-lightdom.css">
+<link rel="stylesheet" href="/elements/pfv6-flex/pfv6-flex-lightdom.css">
 
 <pfv6-flex class="example-border">
-  <pfv6-flex spacer="none" order="1" class="example-border">
-    <pfv6-flex-item spacer="none" order="3">Set 1, Item A</pfv6-flex-item>
-    <pfv6-flex-item order="1">Set 1, Item B</pfv6-flex-item>
+  <pfv6-flex id="resp-set1" spacer="none" style="--pf-v6-l-flex--item--Order: 1;" class="example-border">
+    <pfv6-flex-item spacer="none" style="--pf-v6-l-flex--item--Order: 3;">Set 1, Item A</pfv6-flex-item>
+    <pfv6-flex-item style="--pf-v6-l-flex--item--Order: 1;">Set 1, Item B</pfv6-flex-item>
     <pfv6-flex-item>Set 1, Item C</pfv6-flex-item>
     <pfv6-flex-item spacer="md">Set 1, Item D</pfv6-flex-item>
   </pfv6-flex>
 
   <pfv6-flex spacer="md" class="example-border">
-    <pfv6-flex-item spacer="none" order="3">Set 2, Item A</pfv6-flex-item>
-    <pfv6-flex-item order="lg:1">Set 2, Item B</pfv6-flex-item>
+    <pfv6-flex-item spacer="none" style="--pf-v6-l-flex--item--Order: 3;">Set 2, Item A</pfv6-flex-item>
+    <pfv6-flex-item id="resp-set2b">Set 2, Item B</pfv6-flex-item>
     <pfv6-flex-item>Set 2, Item C</pfv6-flex-item>
-    <pfv6-flex-item spacer="md" order="2">Set 2, Item D</pfv6-flex-item>
+    <pfv6-flex-item spacer="md" style="--pf-v6-l-flex--item--Order: 2;">Set 2, Item D</pfv6-flex-item>
   </pfv6-flex>
 </pfv6-flex>
+
+<style>
+  /* Responsive order value uses breakpoint-specific CSS variable */
+  #resp-set2b { --pf-v6-l-flex--item--Order-on-lg: 1; }
+</style>
 
 <script type="module">
   import '@pfv6/elements/pfv6-flex/pfv6-flex.js';
