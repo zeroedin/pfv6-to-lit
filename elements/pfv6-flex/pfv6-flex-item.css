@@ -27,7 +27,13 @@
 }
 
 #container {
-  /* Container wraps the slot content so text nodes can participate in flex layout */
+  /* 
+   * Make container a flex container so slotted flex items (like divider) 
+   * can use align-self: stretch to get their height from the parent flex.
+   * align-self: stretch makes this container stretch to fill the parent flex's cross-axis.
+   */
+  display: flex;
+  align-self: stretch;
 
   /* Base margins from lightdom CSS variables (same as pfv6-flex) */
 
