@@ -2,6 +2,13 @@ import { LitElement, html, type PropertyValues } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
+
+import { 
+  type ResponsiveValue, 
+  createResponsiveConverter, 
+  forEachResponsiveValue 
+} from '../../lib/responsive-attributes.js';
 
 import styles from './pfv6-gallery.css';
 
@@ -39,29 +46,25 @@ export class Pfv6Gallery extends LitElement {
 
   /**
    * Minimum widths at various breakpoints
+   * @example min-widths="250px" or min-widths="100% md:100px xl:300px"
    */
-  @property({ type: Object, attribute: false })
-  minWidths?: {
-    default?: string;
-    sm?: string;
-    md?: string;
-    lg?: string;
-    xl?: string;
-    '2xl'?: string;
-  };
+  @property({ 
+    type: Object, 
+    attribute: 'min-widths',
+    converter: createResponsiveConverter()
+  })
+  minWidths?: ResponsiveValue<string>;
 
   /**
    * Maximum widths at various breakpoints
+   * @example max-widths="1fr" or max-widths="md:280px lg:320px 2xl:400px"
    */
-  @property({ type: Object, attribute: false })
-  maxWidths?: {
-    default?: string;
-    sm?: string;
-    md?: string;
-    lg?: string;
-    xl?: string;
-    '2xl'?: string;
-  };
+  @property({ 
+    type: Object, 
+    attribute: 'max-widths',
+    converter: createResponsiveConverter()
+  })
+  maxWidths?: ResponsiveValue<string>;
 
   /**
    * Sets the base component to render (defaults to div)
@@ -83,10 +86,6 @@ export class Pfv6Gallery extends LitElement {
   updated(changed: PropertyValues): void {
     super.updated(changed);
 
-    if (changed.has('minWidths') || changed.has('maxWidths')) {
-      this.#updateBreakpointVariables();
-    }
-
     if (changed.has('component')) {
       // Map component type to ARIA role for semantic structures
       switch (this.component) {
@@ -106,58 +105,38 @@ export class Pfv6Gallery extends LitElement {
     }
   }
 
-  #updateBreakpointVariables(): void {
-    // Set CSS variables for responsive min widths
-    if (this.minWidths) {
-      if (this.minWidths.default) {
-        this.style.setProperty('--pf-v6-l-gallery--GridTemplateColumns--min', this.minWidths.default);
-      }
-      if (this.minWidths.sm) {
-        this.style.setProperty('--pf-v6-l-gallery--GridTemplateColumns--min-on-sm', this.minWidths.sm);
-      }
-      if (this.minWidths.md) {
-        this.style.setProperty('--pf-v6-l-gallery--GridTemplateColumns--min-on-md', this.minWidths.md);
-      }
-      if (this.minWidths.lg) {
-        this.style.setProperty('--pf-v6-l-gallery--GridTemplateColumns--min-on-lg', this.minWidths.lg);
-      }
-      if (this.minWidths.xl) {
-        this.style.setProperty('--pf-v6-l-gallery--GridTemplateColumns--min-on-xl', this.minWidths.xl);
-      }
-      if (this.minWidths['2xl']) {
-        this.style.setProperty('--pf-v6-l-gallery--GridTemplateColumns--min-on-2xl', this.minWidths['2xl']);
-      }
-    }
-
-    // Set CSS variables for responsive max widths
-    if (this.maxWidths) {
-      if (this.maxWidths.default) {
-        this.style.setProperty('--pf-v6-l-gallery--GridTemplateColumns--max', this.maxWidths.default);
-      }
-      if (this.maxWidths.sm) {
-        this.style.setProperty('--pf-v6-l-gallery--GridTemplateColumns--max-on-sm', this.maxWidths.sm);
-      }
-      if (this.maxWidths.md) {
-        this.style.setProperty('--pf-v6-l-gallery--GridTemplateColumns--max-on-md', this.maxWidths.md);
-      }
-      if (this.maxWidths.lg) {
-        this.style.setProperty('--pf-v6-l-gallery--GridTemplateColumns--max-on-lg', this.maxWidths.lg);
-      }
-      if (this.maxWidths.xl) {
-        this.style.setProperty('--pf-v6-l-gallery--GridTemplateColumns--max-on-xl', this.maxWidths.xl);
-      }
-      if (this.maxWidths['2xl']) {
-        this.style.setProperty('--pf-v6-l-gallery--GridTemplateColumns--max-on-2xl', this.maxWidths['2xl']);
-      }
-    }
-  }
-
   render() {
     return html`
-      <div id="container" class=${classMap({ 'pf-m-gutter': this.hasGutter })}>
+      <div id="container" 
+           class=${classMap({ 'pf-m-gutter': this.hasGutter })}
+           style=${styleMap(this.#getContainerStyles())}>
         <slot></slot>
       </div>
     `;
+  }
+
+  #getContainerStyles(): Record<string, string> {
+    const styles: Record<string, string> = {};
+
+    // Set PUBLIC API variables on #container
+    // The private variables on :host will pick these up via var() and fallback chains
+    // This maintains two-layer pattern: JS sets public API, CSS private vars reference it
+    forEachResponsiveValue(this.minWidths, (value, breakpoint) => {
+      const varName = breakpoint === 'default'
+        ? '--pf-v6-l-gallery--GridTemplateColumns--min'
+        : `--pf-v6-l-gallery--GridTemplateColumns--min-on-${breakpoint}`;
+      styles[varName] = value;
+    });
+
+    // Set PUBLIC API variables on #container
+    forEachResponsiveValue(this.maxWidths, (value, breakpoint) => {
+      const varName = breakpoint === 'default'
+        ? '--pf-v6-l-gallery--GridTemplateColumns--max'
+        : `--pf-v6-l-gallery--GridTemplateColumns--max-on-${breakpoint}`;
+      styles[varName] = value;
+    });
+
+    return styles;
   }
 }
 
