@@ -1,0 +1,547 @@
+/**
+ * pfv6-flex Lightdom CSS
+ *
+ * REQUIRED: This file must be manually included by users in their HTML.
+ *
+ * WHY: Shadow DOM's ::slotted() pseudo-element cannot be combined with
+ * pseudo-classes like :last-child. This is a fundamental Shadow DOM limitation.
+ * 
+ * Usage:
+ *   <link rel="stylesheet" href="path/to/pfv6-flex-lightdom.css">
+ * 
+ * All selectors are scoped to pfv6-flex to avoid affecting the entire page.
+ */
+
+/* Base child styles - applies to Flex and FlexItem children only */
+
+/* ONLY sets CSS variables - host has display:contents so properties don't apply */
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item) {
+  /* 'initial' creates a guaranteed-invalid value that triggers var() fallback */
+  --pf-v6-l-flex--spacer: initial;
+  --pf-v6-l-flex--spacer--column: var(--pf-v6-l-flex--spacer, var(--pf-v6-l-flex--spacer--column--base));
+  --pf-v6-l-flex--spacer--row: var(--pf-v6-l-flex--spacer, var(--pf-v6-l-flex--spacer--row--base));
+}
+
+/* CRITICAL: Remove trailing margin on last child */
+
+/* This selector CANNOT be done in Shadow DOM */
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item):last-child {
+  /* Override --pf-v6-l-flex--spacer to 0, which triggers var() to return 0 instead of fallback */
+  --pf-v6-l-flex--spacer: 0;
+}
+
+/* When using gap properties, disable corresponding margin-based spacing */
+
+/* gap disables both row and column margins */
+pfv6-flex[gap] > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--spacer--row: 0;
+  --pf-v6-l-flex--spacer--column: 0;
+}
+
+/* row-gap only disables row margins (vertical spacing) */
+pfv6-flex[row-gap] > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--spacer--row: 0;
+}
+
+/* column-gap only disables column margins (horizontal spacing) */
+pfv6-flex[column-gap] > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--spacer--column: 0;
+}
+
+/* Individual item spacers - FlexItem spacer attribute overrides parent spacing */
+
+/* Individual spacers override :last-child margin removal */
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer="none"] {
+  --pf-v6-l-flex--spacer: 0;
+}
+
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item):is([spacer="xs"], [spacer^="xs "]) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xs);
+}
+
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item):is([spacer="sm"], [spacer^="sm "]) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--sm);
+}
+
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item):is([spacer="md"], [spacer^="md "]) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+}
+
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item):is([spacer="lg"], [spacer^="lg "]) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--lg);
+}
+
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item):is([spacer="xl"], [spacer^="xl "]) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xl);
+}
+
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item):is([spacer="2xl"], [spacer^="2xl "]) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--2xl);
+}
+
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item):is([spacer="3xl"], [spacer^="3xl "]) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--3xl);
+}
+
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item):is([spacer="4xl"], [spacer^="4xl "]) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--4xl);
+}
+
+/* spaceItems modifiers - set specific spacing values on children */
+
+pfv6-flex[space-items="none"] > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--spacer: 0;
+}
+
+pfv6-flex:is([space-items="xs"], [space-items^="xs "]) > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xs);
+}
+
+pfv6-flex:is([space-items="sm"], [space-items^="sm "]) > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--sm);
+}
+
+pfv6-flex:is([space-items="md"], [space-items^="md "]) > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+}
+
+pfv6-flex:is([space-items="lg"], [space-items^="lg "]) > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--lg);
+}
+
+pfv6-flex:is([space-items="xl"], [space-items^="xl "]) > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xl);
+}
+
+pfv6-flex:is([space-items="2xl"], [space-items^="2xl "]) > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--2xl);
+}
+
+pfv6-flex:is([space-items="3xl"], [space-items^="3xl "]) > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--3xl);
+}
+
+pfv6-flex:is([space-items="4xl"], [space-items^="4xl "]) > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--4xl);
+}
+
+/* Align modifiers for children - set CSS variables for shadow DOM consumption */
+
+/* Override margin-inline-start via CSS variable for align="right" */
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[align="right"] {
+  --pf-v6-l-flex--align--MarginInlineStart: auto;
+}
+
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[align="left"] {
+  --pf-v6-l-flex--align--MarginInlineStart: 0;
+}
+
+/* Direction-specific margins for children */
+
+/* Column direction: use block-end margin instead of inline-end */
+
+/* Matches: direction="column", direction="column-reverse", direction="column lg:row", etc. */
+pfv6-flex[direction^="column"] > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--direction--MarginBlockEnd: var(--pf-v6-l-flex--spacer--row);
+  --pf-v6-l-flex--direction--MarginInlineEnd: 0;
+}
+
+/* Row direction: use inline-end margin (default behavior) */
+
+/* Matches: direction="row", direction="row-reverse", direction="row lg:column", or no direction (default) */
+pfv6-flex[direction^="row"] > :is(pfv6-flex, pfv6-flex-item),
+pfv6-flex:not([direction]) > :is(pfv6-flex, pfv6-flex-item) {
+  --pf-v6-l-flex--direction--MarginBlockEnd: 0;
+  --pf-v6-l-flex--direction--MarginInlineEnd: var(--pf-v6-l-flex--spacer--column);
+}
+
+/* Responsive direction modifiers - override direction margins at breakpoints */
+
+/* sm breakpoint (36rem) */
+@media (width >= 36rem) {
+  pfv6-flex[direction*="sm:column"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--direction--MarginBlockEnd: var(--pf-v6-l-flex--spacer--row);
+    --pf-v6-l-flex--direction--MarginInlineEnd: 0;
+  }
+
+  pfv6-flex[direction*="sm:row"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--direction--MarginBlockEnd: 0;
+    --pf-v6-l-flex--direction--MarginInlineEnd: var(--pf-v6-l-flex--spacer--column);
+  }
+}
+
+/* md breakpoint (48rem) */
+@media (width >= 48rem) {
+  pfv6-flex[direction*="md:column"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--direction--MarginBlockEnd: var(--pf-v6-l-flex--spacer--row);
+    --pf-v6-l-flex--direction--MarginInlineEnd: 0;
+  }
+
+  pfv6-flex[direction*="md:row"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--direction--MarginBlockEnd: 0;
+    --pf-v6-l-flex--direction--MarginInlineEnd: var(--pf-v6-l-flex--spacer--column);
+  }
+}
+
+/* lg breakpoint (62rem) */
+@media (width >= 62rem) {
+  pfv6-flex[direction*="lg:column"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--direction--MarginBlockEnd: var(--pf-v6-l-flex--spacer--row);
+    --pf-v6-l-flex--direction--MarginInlineEnd: 0;
+  }
+
+  pfv6-flex[direction*="lg:row"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--direction--MarginBlockEnd: 0;
+    --pf-v6-l-flex--direction--MarginInlineEnd: var(--pf-v6-l-flex--spacer--column);
+  }
+}
+
+/* xl breakpoint (75rem) */
+@media (width >= 75rem) {
+  pfv6-flex[direction*="xl:column"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--direction--MarginBlockEnd: var(--pf-v6-l-flex--spacer--row);
+    --pf-v6-l-flex--direction--MarginInlineEnd: 0;
+  }
+
+  pfv6-flex[direction*="xl:row"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--direction--MarginBlockEnd: 0;
+    --pf-v6-l-flex--direction--MarginInlineEnd: var(--pf-v6-l-flex--spacer--column);
+  }
+}
+
+/* 2xl breakpoint (90.625rem) */
+@media (width >= 90.625rem) {
+  pfv6-flex[direction*="2xl:column"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--direction--MarginBlockEnd: var(--pf-v6-l-flex--spacer--row);
+    --pf-v6-l-flex--direction--MarginInlineEnd: 0;
+  }
+
+  pfv6-flex[direction*="2xl:row"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--direction--MarginBlockEnd: 0;
+    --pf-v6-l-flex--direction--MarginInlineEnd: var(--pf-v6-l-flex--spacer--column);
+  }
+}
+
+/* Responsive individual item spacer modifiers - handle spacer="lg:md" pattern */
+
+@media (width >= 36rem) {
+  /* sm breakpoint - match spacer="sm:value" */
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="sm:none"] {
+    --pf-v6-l-flex--spacer: 0;
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="sm:xs"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xs);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="sm:sm"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--sm);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="sm:md"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="sm:lg"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--lg);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="sm:xl"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xl);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="sm:2xl"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--2xl);
+  }
+}
+
+@media (width >= 48rem) {
+  /* md breakpoint - match spacer="md:value" */
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="md:none"] {
+    --pf-v6-l-flex--spacer: 0;
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="md:xs"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xs);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="md:sm"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--sm);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="md:md"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="md:lg"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--lg);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="md:xl"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xl);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="md:2xl"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--2xl);
+  }
+}
+
+@media (width >= 62rem) {
+  /* lg breakpoint - match spacer="lg:value" */
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="lg:none"] {
+    --pf-v6-l-flex--spacer: 0;
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="lg:xs"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xs);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="lg:sm"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--sm);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="lg:md"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="lg:lg"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--lg);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="lg:xl"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xl);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="lg:2xl"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--2xl);
+  }
+}
+
+@media (width >= 75rem) {
+  /* xl breakpoint - match spacer="xl:value" */
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="xl:none"] {
+    --pf-v6-l-flex--spacer: 0;
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="xl:xs"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xs);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="xl:sm"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--sm);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="xl:md"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="xl:lg"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--lg);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="xl:xl"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xl);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="xl:2xl"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--2xl);
+  }
+}
+
+@media (width >= 90.625rem) {
+  /* 2xl breakpoint - match spacer="2xl:value" */
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="2xl:none"] {
+    --pf-v6-l-flex--spacer: 0;
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="2xl:xs"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xs);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="2xl:sm"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--sm);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="2xl:md"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="2xl:lg"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--lg);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="2xl:xl"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xl);
+  }
+
+  pfv6-flex > :is(pfv6-flex, pfv6-flex-item)[spacer*="2xl:2xl"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--2xl);
+  }
+}
+
+/* Responsive spaceItems modifiers */
+
+/* sm breakpoint */
+@media (width >= 36rem) {
+  pfv6-flex[space-items*="sm:none"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: 0;
+  }
+
+  pfv6-flex[space-items*="sm:xs"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xs);
+  }
+
+  pfv6-flex[space-items*="sm:sm"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--sm);
+  }
+
+  pfv6-flex[space-items*="sm:md"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+  }
+
+  pfv6-flex[space-items*="sm:lg"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--lg);
+  }
+
+  pfv6-flex[space-items*="sm:xl"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xl);
+  }
+
+  pfv6-flex[space-items*="sm:2xl"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--2xl);
+  }
+
+  pfv6-flex[space-items*="sm:3xl"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--3xl);
+  }
+
+  pfv6-flex[space-items*="sm:4xl"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--4xl);
+  }
+}
+
+/* md breakpoint */
+@media (width >= 48rem) {
+  pfv6-flex[space-items*="md:none"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: 0;
+  }
+
+  pfv6-flex[space-items*="md:xs"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xs);
+  }
+
+  pfv6-flex[space-items*="md:sm"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--sm);
+  }
+
+  pfv6-flex[space-items*="md:md"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+  }
+
+  pfv6-flex[space-items*="md:lg"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--lg);
+  }
+
+  pfv6-flex[space-items*="md:xl"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xl);
+  }
+
+  pfv6-flex[space-items*="md:2xl"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--2xl);
+  }
+}
+
+/* lg breakpoint */
+@media (width >= 62rem) {
+  pfv6-flex[space-items*="lg:none"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: 0;
+  }
+
+  pfv6-flex[space-items*="lg:xs"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xs);
+  }
+
+  pfv6-flex[space-items*="lg:sm"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--sm);
+  }
+
+  pfv6-flex[space-items*="lg:md"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+  }
+
+  pfv6-flex[space-items*="lg:lg"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--lg);
+  }
+
+  pfv6-flex[space-items*="lg:xl"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xl);
+  }
+
+  pfv6-flex[space-items*="lg:2xl"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--2xl);
+  }
+}
+
+/* xl breakpoint */
+@media (width >= 75rem) {
+  pfv6-flex[space-items*="xl:none"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: 0;
+  }
+
+  pfv6-flex[space-items*="xl:xs"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xs);
+  }
+
+  pfv6-flex[space-items*="xl:sm"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--sm);
+  }
+
+  pfv6-flex[space-items*="xl:md"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+  }
+
+  pfv6-flex[space-items*="xl:lg"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--lg);
+  }
+
+  pfv6-flex[space-items*="xl:xl"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xl);
+  }
+
+  pfv6-flex[space-items*="xl:2xl"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--2xl);
+  }
+}
+
+/* 2xl breakpoint */
+@media (width >= 90.625rem) {
+  pfv6-flex[space-items*="2xl:none"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: 0;
+  }
+
+  pfv6-flex[space-items*="2xl:xs"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xs);
+  }
+
+  pfv6-flex[space-items*="2xl:sm"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--sm);
+  }
+
+  pfv6-flex[space-items*="2xl:md"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+  }
+
+  pfv6-flex[space-items*="2xl:lg"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--lg);
+  }
+
+  pfv6-flex[space-items*="2xl:xl"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--xl);
+  }
+
+  pfv6-flex[space-items*="2xl:2xl"] > :is(pfv6-flex, pfv6-flex-item) {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--2xl);
+  }
+}
+
+/* Lightdom CSS handles: base spacing, :last-child, align modifiers, direction-specific margins, spacer, and spaceItems via CSS variables */

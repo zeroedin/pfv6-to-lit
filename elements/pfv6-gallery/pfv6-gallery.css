@@ -22,10 +22,15 @@
   /*
    * Two-layer pattern: Private variables reference public API with fallbacks
    * Public API variables match PatternFly React CSS exactly
+   *
+   * Note: Responsive sizing (min/max widths at breakpoints) is handled in media queries
+   * on #container where JavaScript can set public API variables that are immediately visible
    */
-  --_gutter-gap: var(--pf-v6-l-gallery--m-gutter--GridGap, var(--pf-t--global--spacer--gutter--default));
-  --_grid-template-columns-min: var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px);
-  --_grid-template-columns-max: var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr);
+  --_gutter-gap:
+    var(
+      --pf-v6-l-gallery--m-gutter--GridGap,
+      var(--pf-t--global--spacer--gutter--default)
+    );
   --_grid-template-rows: var(--pf-v6-l-gallery--GridTemplateRows, auto);
 }
 
@@ -34,12 +39,12 @@
   grid-template-rows: var(--_grid-template-rows);
 
   /*
-   * CRITICAL: Responsive composition defined here, not in :host
-   * This ensures var() references pick up updated values from media queries.
-   * Private variables are redefined at this level to capture media query updates.
+   * CRITICAL: Responsive composition defined here with direct public API references
+   * This ensures JavaScript-set values on #container are found via variable lookup
+   * Media queries redefine these with breakpoint-specific public API references
    */
-  --_grid-template-columns-minmax-min: var(--_grid-template-columns-min);
-  --_grid-template-columns-minmax-max: var(--_grid-template-columns-max);
+  --_grid-template-columns-minmax-min: var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px);
+  --_grid-template-columns-minmax-max: var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr);
 
   grid-template-columns:
     repeat(
@@ -55,7 +60,7 @@
   gap: var(--_gutter-gap);
 }
 
-/* Responsive min widths - update private variable to reference public API at each breakpoint */
+/* Responsive min widths - redefine private variable with direct public API reference */
 @media (width >= 36rem) {
   #container {
     --_grid-template-columns-minmax-min:
@@ -136,7 +141,7 @@
   }
 }
 
-/* Responsive max widths - update private variable to reference public API at each breakpoint */
+/* Responsive max widths - redefine private variable with direct public API reference */
 @media (width >= 36rem) {
   #container {
     --_grid-template-columns-minmax-max:

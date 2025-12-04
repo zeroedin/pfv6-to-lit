@@ -62,7 +62,14 @@
   flex: 0 1 auto;
 }
 
-/* First child gets top padding */
+/* First child gets top padding from private variable (cascaded from card) */
 :host(:first-child) #container {
   padding-block-start: var(--_pfv6-card-c-first-child-padding-block-start);
+}
+
+/* Divider siblings get top padding from marker variable (ONLY set by lightdom CSS)
+   When unset, this declaration is invalid and doesn't override :first-child rule
+   Elements after divider are NOT :first-child, so they only get this rule */
+#container {
+  padding-block-start: var(--_card-has-divider-sibling);
 }

@@ -25,8 +25,18 @@
 /* Container div - matches React's .pf-v6-c-card__title */
 #container {
   min-inline-size: 0; /* Allow text wrapping */
-  padding-block: var(--_pfv6-card-c-first-child-padding-block-start) var(--_pfv6-card-c-title-not-last-child-padding-block-end);
+  padding-block-end: var(--_pfv6-card-c-title-not-last-child-padding-block-end);
   padding-inline: var(--_pfv6-card-c-child-padding-inline-start) var(--_pfv6-card-c-child-padding-inline-end);
+}
+
+/* First child gets top padding from private variable */
+:host(:first-child) #container {
+  padding-block-start: var(--_pfv6-card-c-first-child-padding-block-start);
+}
+
+/* Divider siblings get padding from marker variable (ONLY set by lightdom CSS) */
+#container {
+  padding-block-start: var(--_card-has-divider-sibling);
 }
 
 /* Title text element (h1-h6 or div) - matches React's .pf-v6-c-card__title-text */

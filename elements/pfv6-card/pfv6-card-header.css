@@ -13,6 +13,7 @@
 
 :host {
   /* Two-layer pattern: private variables reference public API with fallbacks */
+  --_pfv6-card-c-first-child-padding-block-start: var(--pf-v6-c-card--first-child--PaddingBlockStart, var(--pf-t--global--spacer--lg));
   --_header-toggle-margin-block-start: var(--pf-v6-c-card__header-toggle--MarginBlockStart, calc(var(--pf-t--global--spacer--control--vertical--default) * -1));
   --_header-toggle-margin-inline-end: var(--pf-v6-c-card__header-toggle--MarginInlineEnd, var(--pf-t--global--spacer--gap--text-to-element--default));
   --_header-toggle-margin-block-end: var(--pf-v6-c-card__header-toggle--MarginBlockEnd, calc(var(--pf-t--global--spacer--control--vertical--default) * -1));
@@ -36,12 +37,20 @@
   align-items: center;
 
   /* Header controls padding when it contains title */
-  padding-block:
-    var(--pf-v6-c-card--first-child--PaddingBlockStart)
-    var(--pf-v6-c-card__title--not--last-child--PaddingBlockEnd);
+  padding-block-end: var(--pf-v6-c-card__title--not--last-child--PaddingBlockEnd);
   padding-inline:
     var(--pf-v6-c-card--child--PaddingInlineStart)
     var(--pf-v6-c-card--child--PaddingInlineEnd);
+}
+
+/* First child header gets top padding from private variable */
+:host(:first-child) #header {
+  padding-block-start: var(--_pfv6-card-c-first-child-padding-block-start);
+}
+
+/* Divider siblings get padding from marker variable (ONLY set by lightdom CSS) */
+#header {
+  padding-block-start: var(--_card-has-divider-sibling);
 }
 
 /* Remove padding from slotted title - header controls it */

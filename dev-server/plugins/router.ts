@@ -26,8 +26,10 @@ interface DemoInfo {
  * Custom Elements Manifest structure (partial types we use)
  */
 interface CEMDemo {
-  name: string;
   url: string;
+  source?: {
+    href: string;
+  };
 }
 
 interface CEMDeclaration {
@@ -106,12 +108,18 @@ async function getComponentDemos(componentName: string): Promise<DemoInfo[]> {
         if (declaration.customElement && declaration.tagName === componentName) {
           if (declaration.demos) {
             return declaration.demos
-              .filter((demo) => demo.name !== 'index') // Exclude index from list
-              .map((demo) => ({
-                url: demo.url,
-                name: demo.name,
-                title: formatDemoTitle(demo.name),
-              }))
+              .map((demo) => {
+                // Extract demo name from URL: /elements/pfv6-card/demo/basic -> basic
+                const urlParts = demo.url.split('/');
+                const demoName = urlParts[urlParts.length - 1];
+                
+                return {
+                  url: demo.url,
+                  name: demoName || '',
+                  title: formatDemoTitle(demoName || ''),
+                };
+              })
+              .filter((demo) => demo.name && demo.name !== 'index') // Exclude index and invalid names
               .sort((a, b) => a.title.localeCompare(b.title));
           }
         }
