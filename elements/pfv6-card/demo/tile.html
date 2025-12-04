@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/elements/pfv6-flex/pfv6-flex-lightdom.css">
+
 <pfv6-gallery has-gutter>
   <pfv6-card id="tile-example-1" is-selectable>
     <pfv6-card-header
@@ -8,12 +10,15 @@
       selectable-aria-labelledby="tile-example-1"
       selectable-hidden
     >
-      <!-- TODO: Replace with <pfv6-flex> when available -->
-      <div style="display: flex; gap: var(--pf-t--global--spacer--sm); align-items: center;">
-        <!-- TODO: Replace with <pfv6-icon> when available -->
-        <span>+</span>
-        <b>Tile header</b>
-      </div>
+      <pfv6-flex gap="sm" align-items="center">
+        <pfv6-flex-item>
+          <!-- TODO: Replace with <pfv6-icon> when available -->
+          <span>+</span>
+        </pfv6-flex-item>
+        <pfv6-flex-item>
+          <b>Tile header</b>
+        </pfv6-flex-item>
+      </pfv6-flex>
     </pfv6-card-header>
     <pfv6-card-body>Tile content and description</pfv6-card-body>
   </pfv6-card>
@@ -27,10 +32,14 @@
       selectable-aria-labelledby="tile-example-2"
       selectable-hidden
     >
-      <div style="display: flex; gap: var(--pf-t--global--spacer--sm); align-items: center;">
-        <span>+</span>
-        <b>Tile header</b>
-      </div>
+      <pfv6-flex gap="sm" align-items="center">
+        <pfv6-flex-item>
+          <span>+</span>
+        </pfv6-flex-item>
+        <pfv6-flex-item>
+          <b>Tile header</b>
+        </pfv6-flex-item>
+      </pfv6-flex>
     </pfv6-card-header>
     <pfv6-card-body>Tile content and description</pfv6-card-body>
   </pfv6-card>
@@ -45,10 +54,14 @@
       selectable-disabled
       selectable-hidden
     >
-      <div style="display: flex; gap: var(--pf-t--global--spacer--sm); align-items: center;">
-        <span>+</span>
-        <b>Tile header (disabled)</b>
-      </div>
+      <pfv6-flex gap="sm" align-items="center">
+        <pfv6-flex-item>
+          <span>+</span>
+        </pfv6-flex-item>
+        <pfv6-flex-item>
+          <b>Tile header (disabled)</b>
+        </pfv6-flex-item>
+      </pfv6-flex>
     </pfv6-card-header>
     <pfv6-card-body>Tile content and description</pfv6-card-body>
   </pfv6-card>
@@ -57,6 +70,7 @@
 <script type="module">
   import '@pfv6/elements/pfv6-card/pfv6-card.js';
   import '@pfv6/elements/pfv6-gallery/pfv6-gallery.js';
+  import '@pfv6/elements/pfv6-flex/pfv6-flex.js';
   
   const cards = document.querySelectorAll('pfv6-card[is-selectable]');
   const headers = [

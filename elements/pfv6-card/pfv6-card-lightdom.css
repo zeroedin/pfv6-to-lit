@@ -1,0 +1,35 @@
+/**
+ * Light DOM CSS for pfv6-card
+ *
+ * This file handles styling patterns that cannot be achieved with Shadow DOM's ::slotted()
+ * due to limitations with sibling combinators.
+ * 
+ * Users must manually include this file in their projects:
+ * <link rel="stylesheet" href="path/to/pfv6-card-lightdom.css">
+ */
+
+/**
+ * Divider adjacency selector
+ * When a divider is followed by a card child (header/title/body/footer),
+ * adjust the child's top padding via CSS variable.
+ * 
+ * React equivalent (SCSS source):
+ * https://github.com/patternfly/patternfly/blob/v6/src/patternfly/components/Card/card.scss#L253-L260
+ * 
+ * Compiled CSS (from @patternfly/react-styles/css/components/Card/card.css line 174):
+ * 
+ * .pf-v6-c-card > .pf-v6-c-divider + .pf-v6-c-card__header,
+ * .pf-v6-c-card > .pf-v6-c-divider + .pf-v6-c-card__title,
+ * .pf-v6-c-card > .pf-v6-c-divider + .pf-v6-c-card__body,
+ * .pf-v6-c-card > .pf-v6-c-divider + .pf-v6-c-card__footer {
+ *   padding-block-start: var(--pf-v6-c-card--c-divider--child--PaddingBlockStart);
+ * }
+ */
+pfv6-card > pfv6-divider + pfv6-card-header,
+pfv6-card > pfv6-divider + pfv6-card-title,
+pfv6-card > pfv6-divider + pfv6-card-body,
+pfv6-card > pfv6-divider + pfv6-card-footer {
+  /* Set a marker variable that sub-components will check ONLY for divider siblings
+     This references the public API value, which gets compact/display-lg variants automatically */
+  --_card-has-divider-sibling: var(--pf-v6-c-card--c-divider--child--PaddingBlockStart);
+}
