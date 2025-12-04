@@ -169,6 +169,8 @@ Developers using the PatternFly design system who are **not in React-based envir
 Note: React demos are stored separately in `/patternfly-react/Button/` (see structure below)
 
 /lib/                  - Shared utilities, helpers, and contexts
+  helpers.ts           - String utilities (capitalize, toCamelCase)
+  responsive-attributes.ts - Responsive value parsing and class generation
   utils.ts             - Common utilities
   controllers/         - Lit controllers
   contexts/            - Lit contexts for shared state
@@ -1196,6 +1198,381 @@ export const CardBasic: React.FunctionComponent = () => (
 - **Type declarations**: Each component exports global TypeScript declarations
 - **Decorators**: Use Lit decorators (`@customElement`, `@property`, `@state`)
 - **Demo discovery**: Dev server plugins automatically find and route to all demo files
+
+## Shared Libraries & Utilities
+
+The `/lib/` directory contains shared utilities that eliminate code duplication across components.
+
+### `lib/helpers.ts` - String Utilities
+
+**Purpose**: Common string transformation functions used throughout the codebase.
+
+**Functions**:
+
+```typescript
+/**
+ * Capitalizes the first letter of a string.
+ */
+export function capitalize(str: string): string
+
+/**
+ * Converts a kebab-case string to camelCase.
+ */
+export function toCamelCase(str: string): string
+```
+
+**Usage Example**:
+```typescript
+import { capitalize, toCamelCase } from '../../lib/helpers.js';
+
+const camelCased = toCamelCase('flex-wrap');  // 'flexWrap'
+const capitalized = capitalize('hello');       // 'Hello'
+```
+
+### `lib/responsive-attributes.ts` - Responsive Value Handling
+
+**Purpose**: Centralized library for handling responsive attributes with breakpoint values (e.g., `gap="md sm:lg xl:2xl"`).
+
+**Why This Exists**: PatternFly components support responsive values that change at different breakpoints. This library eliminates duplicated parsing, serialization, and class generation logic across components like `pfv6-flex`, `pfv6-divider`, and `pfv6-gallery`.
+
+#### Core Types & Constants
+
+```typescript
+/**
+ * Responsive value type supporting PatternFly breakpoints
+ */
+export type ResponsiveValue<T extends string> = {
+  default?: T;
+  sm?: T;
+  md?: T;
+  lg?: T;
+  xl?: T;
+  '2xl'?: T;
+};
+
+/**
+ * PatternFly breakpoint names
+ */
+export const BREAKPOINTS = ['sm', 'md', 'lg', 'xl', '2xl'] as const;
+export type Breakpoint = typeof BREAKPOINTS[number];
+```
+
+#### Parsing Attributes
+
+**Use Case**: Convert HTML attribute strings to `ResponsiveValue<T>` objects.
+
+```typescript
+/**
+ * Parse responsive attribute string to ResponsiveValue object
+ * @example "md sm:lg xl:2xl" → { default: 'md', sm: 'lg', xl: '2xl' }
+ */
+export function parseResponsiveAttribute<T>(value: string | null): ResponsiveValue<T> | undefined
+
+/**
+ * Parse with value transformation (prefix, enum mapping)
+ * @example "md sm:lg" with prefix "gap" → { default: 'gapMd', sm: 'gapLg' }
+ */
+export function parseResponsiveAttributeWithTransform<T>(
+  value: string | null, 
+  options?: TransformOptions
+): ResponsiveValue<T> | undefined
+```
+
+**Example (pfv6-flex)**:
+```typescript
+// HTML: <pfv6-flex gap="md sm:lg xl:2xl">
+import { parseResponsiveAttribute } from '../../lib/responsive-attributes.js';
+
+const gapValue = parseResponsiveAttribute<string>('md sm:lg xl:2xl');
+// Result: { default: 'md', sm: 'lg', xl: '2xl' }
+```
+
+#### Serializing Values
+
+**Use Case**: Convert `ResponsiveValue<T>` back to attribute string for Lit `toAttribute` converters.
+
+```typescript
+/**
+ * Serialize ResponsiveValue object to attribute string
+ * @example { default: 'md', sm: 'lg', xl: '2xl' } → "md sm:lg xl:2xl"
+ */
+export function serializeResponsiveAttribute<T>(
+  value: ResponsiveValue<T> | undefined,
+  options?: TransformOptions
+): string | null
+```
+
+#### Property Converters (Lit Integration)
+
+**Use Case**: Create Lit property converters for `@property()` decorators.
+
+```typescript
+/**
+ * Factory function for Lit property converters
+ * Handles both fromAttribute (parse) and toAttribute (serialize)
+ */
+export function createResponsiveConverter<T extends string>(
+  options?: TransformOptions
+): {
+  fromAttribute: (value: string | null) => ResponsiveValue<T> | undefined;
+  toAttribute: (value: ResponsiveValue<T> | undefined) => string | null;
+}
+```
+
+**Example (pfv6-flex with prefix)**:
+```typescript
+import { 
+  type ResponsiveValue,
+  createResponsiveConverter 
+} from '../../lib/responsive-attributes.js';
+
+@property({ 
+  type: Object, 
+  converter: createResponsiveConverter({ prefix: 'gap' }) 
+})
+gap?: ResponsiveValue<'gap' | 'gapNone' | 'gapXs' | 'gapSm' | 'gapMd' | 'gapLg' | 'gapXl' | 'gap2xl' | 'gap3xl' | 'gap4xl'>;
+```
+
+**Example (pfv6-flex with enum mapping)**:
+```typescript
+@property({ 
+  type: Object, 
+  converter: createResponsiveConverter({
+    enumMap: {
+      'default': 'flexDefault',
+      'none': 'flexNone',
+      '1': 'flex_1',
+      '2': 'flex_2'
+    }
+  })
+})
+flex?: ResponsiveValue<'flexDefault' | 'flexNone' | 'flex_1' | 'flex_2'>;
+```
+
+**Example (pfv6-divider - simple values)**:
+```typescript
+@property({ 
+  converter: createResponsiveConverter() 
+})
+inset?: ResponsiveValue<'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'>;
+```
+
+#### Building CSS Classes
+
+**Use Case**: Generate responsive CSS class names from `ResponsiveValue<T>` for use with `classMap()`.
+
+```typescript
+/**
+ * Build responsive CSS classes with custom class name generation
+ * @param value ResponsiveValue object
+ * @param options.classNameBuilder Callback to generate class name for each value/breakpoint
+ * @returns Object for classMap() with class names as keys
+ */
+export function buildResponsiveClasses<T extends string>(
+  value: ResponsiveValue<T> | undefined,
+  options: {
+    classNameBuilder: (value: T, breakpoint?: string) => string;
+  }
+): Record<string, boolean>
+```
+
+**Example (pfv6-divider - inset with prefix)**:
+```typescript
+import { buildResponsiveClasses } from '../../lib/responsive-attributes.js';
+
+#getClasses() {
+  const classes = {
+    ...buildResponsiveClasses(this.inset, {
+      classNameBuilder: (value, breakpoint) =>
+        breakpoint ? `inset-${value}-on-${breakpoint}` : `inset-${value}`
+    })
+  };
+  // Result for inset="md lg:lg": { 'inset-md': true, 'inset-lg-on-lg': true }
+  return classes;
+}
+```
+
+**Example (pfv6-divider - orientation without prefix)**:
+```typescript
+#getClasses() {
+  const classes = {
+    ...buildResponsiveClasses(this.orientation, {
+      classNameBuilder: (value, breakpoint) =>
+        breakpoint ? `${value}-on-${breakpoint}` : value
+    })
+  };
+  // Result for orientation="vertical md:horizontal": 
+  // { 'vertical': true, 'horizontal-on-md': true }
+  return classes;
+}
+```
+
+**Example (pfv6-flex - complex with kebab-case conversion)**:
+```typescript
+import { buildResponsiveClasses } from '../../lib/responsive-attributes.js';
+import { toKebabCase } from '../../lib/helpers.js';
+
+#getClasses() {
+  const classes = {
+    ...buildResponsiveClasses(this.alignItems, {
+      classNameBuilder: (value, breakpoint) => {
+        const kebabValue = toKebabCase(value);  // 'alignItemsCenter' → 'align-items-center'
+        return breakpoint ? `${kebabValue}-${breakpoint}` : kebabValue;
+      }
+    })
+  };
+  return classes;
+}
+```
+
+#### Iterating Over Values
+
+**Use Case**: Execute side effects for each breakpoint value (e.g., setting CSS variables).
+
+```typescript
+/**
+ * Execute callback for each defined breakpoint value
+ * @param value ResponsiveValue object
+ * @param callback Function called with (value, breakpoint)
+ */
+export function forEachResponsiveValue<T>(
+  value: ResponsiveValue<T> | undefined,
+  callback: (value: T, breakpoint: 'default' | Breakpoint) => void
+): void
+```
+
+**Example (pfv6-gallery - setting CSS variables)**:
+```typescript
+import { forEachResponsiveValue } from '../../lib/responsive-attributes.js';
+
+#updateBreakpointVariables(): void {
+  // Set min widths
+  forEachResponsiveValue(this.minWidths, (value, breakpoint) => {
+    const varName = breakpoint === 'default'
+      ? '--pf-v6-l-gallery--GridTemplateColumns--min'
+      : `--pf-v6-l-gallery--GridTemplateColumns--min-on-${breakpoint}`;
+    this.style.setProperty(varName, value);
+  });
+  
+  // Set max widths
+  forEachResponsiveValue(this.maxWidths, (value, breakpoint) => {
+    const varName = breakpoint === 'default'
+      ? '--pf-v6-l-gallery--GridTemplateColumns--max'
+      : `--pf-v6-l-gallery--GridTemplateColumns--max-on-${breakpoint}`;
+    this.style.setProperty(varName, value);
+  });
+}
+```
+
+#### Utility Functions
+
+```typescript
+/**
+ * Convert camelCase or PascalCase to kebab-case
+ * @example "alignItemsCenter" → "align-items-center"
+ */
+export function toKebabCase(str: string): string
+```
+
+### Complete Component Example
+
+**pfv6-divider.ts** (simplified):
+
+```typescript
+import { LitElement, html } from 'lit';
+import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators/property.js';
+import { classMap } from 'lit/directives/class-map.js';
+
+import {
+  type ResponsiveValue,
+  createResponsiveConverter,
+  buildResponsiveClasses
+} from '../../lib/responsive-attributes.js';
+
+import styles from './pfv6-divider.css';
+
+@customElement('pfv6-divider')
+export class Pfv6Divider extends LitElement {
+  static readonly styles = styles;
+
+  /**
+   * Inset at various breakpoints
+   * @example inset="md" or inset="md lg:lg xl:xs"
+   */
+  @property({ converter: createResponsiveConverter() })
+  inset?: ResponsiveValue<'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'>;
+
+  /**
+   * Orientation at various breakpoints
+   * @example orientation="vertical" or orientation="vertical md:horizontal"
+   */
+  @property({ converter: createResponsiveConverter() })
+  orientation?: ResponsiveValue<'vertical' | 'horizontal'>;
+
+  render() {
+    return html`
+      <hr class=${classMap(this.#getClasses())} role="separator">
+    `;
+  }
+
+  #getClasses() {
+    return {
+      ...buildResponsiveClasses(this.orientation, {
+        classNameBuilder: (value, breakpoint) =>
+          breakpoint ? `${value}-on-${breakpoint}` : value
+      }),
+      ...buildResponsiveClasses(this.inset, {
+        classNameBuilder: (value, breakpoint) =>
+          breakpoint ? `inset-${value}-on-${breakpoint}` : `inset-${value}`
+      }),
+    };
+  }
+}
+```
+
+**Usage**:
+```html
+<!-- Single value -->
+<pfv6-divider orientation="vertical" inset="md"></pfv6-divider>
+
+<!-- Responsive values -->
+<pfv6-divider 
+  orientation="vertical md:horizontal" 
+  inset="none md:sm lg:lg"
+></pfv6-divider>
+```
+
+### When to Use These Libraries
+
+**Use `lib/helpers.ts` when**:
+- ✅ Converting kebab-case to camelCase
+- ✅ Capitalizing strings
+- ✅ Any string transformation used across multiple components
+
+**Use `lib/responsive-attributes.ts` when**:
+- ✅ Component has attributes that support PatternFly breakpoints (default, sm, md, lg, xl, 2xl)
+- ✅ Need to parse strings like `"md sm:lg xl:2xl"` into structured objects
+- ✅ Need to generate responsive CSS classes for `classMap()`
+- ✅ Need to iterate over breakpoint values (e.g., setting CSS variables)
+
+**Do NOT use these libraries when**:
+- ❌ Component has simple string/boolean/number properties (no breakpoint support)
+- ❌ Custom parsing logic is significantly different from PatternFly patterns
+- ❌ One-off string transformations specific to a single component
+
+### Migration Checklist
+
+When refactoring an existing component to use these libraries:
+
+- [ ] Replace local `capitalize` and `toCamelCase` with imports from `lib/helpers.ts`
+- [ ] Replace local responsive value parsing with `createResponsiveConverter()`
+- [ ] Replace local class generation with `buildResponsiveClasses()`
+- [ ] Update type definitions to use `ResponsiveValue<T>` from library
+- [ ] Remove local `ResponsiveValue` type definitions
+- [ ] Remove local parsing/serialization functions
+- [ ] Verify all tests still pass
+- [ ] Run linter to catch any issues
 
 ## React-to-LitElement API Translation
 
@@ -4854,16 +5231,17 @@ This documentation helps:
 2. [Project Overview](#project-overview) - What we're building and why
 3. [Tech Stack](#tech-stack) - Technologies and tools
 4. [Project Structure](#project-structure) - File organization
-5. [Complete Workflow: Creating a New PatternFly Component](#complete-workflow-creating-a-new-patternfly-component) - **🚨 MANDATORY: Step-by-step process**
-6. [React-to-LitElement API Translation](#react-to-litelement-api-translation) - **CRITICAL: How to convert React to web components**
-7. [Architecture & Design Patterns](#architecture--design-patterns) - Core design principles
-8. [Development Workflow](#development-workflow) - Commands and processes
-9. [Code Conventions](#code-conventions) - Style guides and standards
-10. [CSS Style Guidelines](#css-style-guidelines) - Styling approach
-11. [Testing Strategy](#testing-strategy) - How to test components
-12. [Key Concepts & Domain Knowledge](#key-concepts--domain-knowledge) - PatternFly expertise
-13. [Common Tasks](#common-tasks) - Frequently performed operations
-14. [Known Issues & Gotchas](#known-issues--gotchas) - Things to watch out for
-15. [Resources & References](#resources--references) - External documentation
-16. [AI Assistant Guidelines](#ai-assistant-guidelines) - **Critical reading for AI**
+5. [Shared Libraries & Utilities](#shared-libraries--utilities) - Reusable helpers and responsive attributes
+6. [Complete Workflow: Creating a New PatternFly Component](#complete-workflow-creating-a-new-patternfly-component) - **🚨 MANDATORY: Step-by-step process**
+7. [React-to-LitElement API Translation](#react-to-litelement-api-translation) - **CRITICAL: How to convert React to web components**
+8. [Architecture & Design Patterns](#architecture--design-patterns) - Core design principles
+9. [Development Workflow](#development-workflow) - Commands and processes
+10. [Code Conventions](#code-conventions) - Style guides and standards
+11. [CSS Style Guidelines](#css-style-guidelines) - Styling approach
+12. [Testing Strategy](#testing-strategy) - How to test components
+13. [Key Concepts & Domain Knowledge](#key-concepts--domain-knowledge) - PatternFly expertise
+14. [Common Tasks](#common-tasks) - Frequently performed operations
+15. [Known Issues & Gotchas](#known-issues--gotchas) - Things to watch out for
+16. [Resources & References](#resources--references) - External documentation
+17. [AI Assistant Guidelines](#ai-assistant-guidelines) - **Critical reading for AI**
 

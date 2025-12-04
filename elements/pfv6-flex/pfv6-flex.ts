@@ -6,173 +6,30 @@ import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
+import { 
+  type ResponsiveValue,
+  type TransformOptions,
+  createResponsiveConverter,
+  toKebabCase
+} from '../../lib/responsive-attributes.js';
+
 import './pfv6-flex-item.js';
 
 import styles from './pfv6-flex.css';
 
+// Specialized converter options for different property types
+const gapConverterOptions = (prefix: string): TransformOptions => ({ prefix });
 
-// Type for responsive properties
-type ResponsiveValue<T extends string> = {
-  default?: T;
-  sm?: T;
-  md?: T;
-  lg?: T;
-  xl?: T;
-  '2xl'?: T;
-};
-
-// Helper to capitalize first letter
-function capitalize(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-// Helper to convert kebab-case to camelCase
-function toCamelCase(str: string): string {
-  return str.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
-}
-
-// Parse compound attribute string: "value" or "value sm:otherValue lg:anotherValue"
-function parseCompoundAttribute<T extends string>(
-  value: string | null,
-  options: {
-    prefix?: string;           // e.g., "gap", "spacer"
-    enumMap?: Record<string, string>; // e.g., { "1": "flex_1" }
-  } = {}
-): ResponsiveValue<T> | undefined {
-  if (!value) return undefined;
-  
-  const parts = value.trim().split(/\s+/);
-  const result: Record<string, T> = {};
-  
-  parts.forEach((part) => {
-    let breakpoint: string;
-    let val: string;
-    
-    if (part.includes(':')) {
-      const splitParts = part.split(':', 2);
-      breakpoint = splitParts[0] || 'default';
-      val = splitParts[1] || '';
-    } else {
-      // First value without prefix is 'default'
-      breakpoint = 'default';
-      val = part;
-    }
-    
-    // Apply transformations
-    let finalValue = val;
-    
-    // Apply enum mapping if provided (e.g., "1" -> "flex_1")
-    if (options.enumMap && options.enumMap[val]) {
-      finalValue = options.enumMap[val] || val;
-    } else if (options.prefix) {
-      // Add prefix with hyphen if value starts with number: "2xl" -> "gap-2xl"
-      // Otherwise capitalize: "xs" -> "gapXs" (toKebabCase will convert to "gap-xs")
-      if (/^\d/.test(val)) {
-        finalValue = options.prefix + '-' + val;
-      } else {
-        finalValue = options.prefix + capitalize(val);
-      }
-    } else {
-      // Convert kebab-case to camelCase if needed
-      finalValue = toCamelCase(val);
-    }
-    
-    result[breakpoint] = finalValue as T;
-  });
-  
-  return result as ResponsiveValue<T>;
-}
-
-// Serialize responsive value back to compound string
-function serializeCompoundAttribute<T extends string>(
-  value: ResponsiveValue<T> | undefined,
-  options: {
-    prefix?: string;
-    enumMap?: Record<string, string>;
-  } = {}
-): string | null {
-  if (!value) return null;
-  
-  // If only default is set, return simple value
-  if (value.default && !value.sm && !value.md && !value.lg && !value.xl && !value['2xl']) {
-    let val: string = value.default;
-    
-    // Remove prefix if present
-    if (options.prefix) {
-      val = val.replace(new RegExp(`^${options.prefix}`, 'i'), '');
-      val = val.charAt(0).toLowerCase() + val.slice(1);
-    }
-    
-    // Reverse enum mapping if needed
-    if (options.enumMap) {
-      const reverseMap = Object.fromEntries(
-        Object.entries(options.enumMap).map(([k, v]) => [v, k])
-      );
-      const mapped = reverseMap[val];
-      if (mapped) val = mapped;
-    }
-    
-    return val;
+const flexConverterOptions: TransformOptions = {
+  enumMap: {
+    'default': 'flexDefault',
+    'none': 'flexNone',
+    '1': 'flex_1',
+    '2': 'flex_2',
+    '3': 'flex_3',
+    '4': 'flex_4'
   }
-  
-  // For complex responsive values, don't reflect
-  return null;
-}
-
-// Specialized converters
-const gapConverter = (prefix: string) => ({
-  fromAttribute: (value: string | null) => parseCompoundAttribute(value, { prefix }),
-  toAttribute: (value: ResponsiveValue<string> | undefined) => serializeCompoundAttribute(value, { prefix })
-});
-
-const flexConverter = () => ({
-  fromAttribute: (value: string | null) => parseCompoundAttribute(value, {
-    enumMap: {
-      'default': 'flexDefault',
-      'none': 'flexNone',
-      '1': 'flex_1',
-      '2': 'flex_2',
-      '3': 'flex_3',
-      '4': 'flex_4'
-    }
-  }),
-  toAttribute: (value: ResponsiveValue<string> | undefined) => serializeCompoundAttribute(value, {
-    enumMap: {
-      'default': 'flexDefault',
-      'none': 'flexNone',
-      '1': 'flex_1',
-      '2': 'flex_2',
-      '3': 'flex_3',
-      '4': 'flex_4'
-    }
-  })
-});
-
-const alignmentConverter = () => ({
-  fromAttribute: (value: string | null) => {
-    if (!value) return undefined;
-    const result = parseCompoundAttribute(value);
-    // Additional kebab-case to camelCase for compound words
-    if (result) {
-      const processed: Record<string, string> = {};
-      Object.keys(result).forEach(key => {
-        const k = key as keyof typeof result;
-        const val = result[k];
-        if (val) {
-          processed[key] = toCamelCase(val);
-        }
-      });
-      return processed as typeof result;
-    }
-    return result;
-  },
-  toAttribute: (value: ResponsiveValue<string> | undefined) => serializeCompoundAttribute(value)
-});
-
-const simpleConverter = () => ({
-  fromAttribute: (value: string | null) => parseCompoundAttribute(value),
-  toAttribute: (value: ResponsiveValue<string> | undefined) => serializeCompoundAttribute(value)
-});
+};
 
 /**
  * Flex layout - A flex layout is used to position items in a flexible container.
@@ -204,126 +61,126 @@ export class Pfv6Flex extends LitElement {
    * Spacers at various breakpoints.
    * @example spacer="md" or spacer="md sm:lg xl:none"
    */
-  @property({ type: Object, converter: gapConverter('spacer') })
+  @property({ type: Object, converter: createResponsiveConverter(gapConverterOptions('spacer')) })
   spacer?: ResponsiveValue<'spacerNone' | 'spacerXs' | 'spacerSm' | 'spacerMd' | 'spacerLg' | 'spacerXl' | 'spacer2xl' | 'spacer3xl' | 'spacer4xl'>;
 
   /**
    * Space items at various breakpoints.
    * @example space-items="none" or space-items="md sm:lg"
    */
-  @property({ type: Object, converter: gapConverter('spaceItems'), attribute: 'space-items' })
+  @property({ type: Object, converter: createResponsiveConverter(gapConverterOptions('spaceItems')), attribute: 'space-items' })
   spaceItems?: ResponsiveValue<'spaceItemsNone' | 'spaceItemsXs' | 'spaceItemsSm' | 'spaceItemsMd' | 'spaceItemsLg' | 'spaceItemsXl' | 'spaceItems2xl' | 'spaceItems3xl' | 'spaceItems4xl'>;
 
   /**
    * Gap between items at various breakpoints.
    * @example gap="2xl" or gap="md sm:lg xl:2xl"
    */
-  @property({ type: Object, converter: gapConverter('gap') })
+  @property({ type: Object, converter: createResponsiveConverter(gapConverterOptions('gap')) })
   gap?: ResponsiveValue<'gap' | 'gapNone' | 'gapXs' | 'gapSm' | 'gapMd' | 'gapLg' | 'gapXl' | 'gap2xl' | 'gap3xl' | 'gap4xl'>;
 
   /**
    * Gap between rows at various breakpoints.
    * @example row-gap="2xl" or row-gap="md sm:lg"
    */
-  @property({ type: Object, converter: gapConverter('rowGap'), attribute: 'row-gap' })
+  @property({ type: Object, converter: createResponsiveConverter(gapConverterOptions('rowGap')), attribute: 'row-gap' })
   rowGap?: ResponsiveValue<'rowGap' | 'rowGapNone' | 'rowGapXs' | 'rowGapSm' | 'rowGapMd' | 'rowGapLg' | 'rowGapXl' | 'rowGap2xl' | 'rowGap3xl' | 'rowGap4xl'>;
 
   /**
    * Gap between columns at various breakpoints.
    * @example column-gap="2xl" or column-gap="md sm:lg"
    */
-  @property({ type: Object, converter: gapConverter('columnGap'), attribute: 'column-gap' })
+  @property({ type: Object, converter: createResponsiveConverter(gapConverterOptions('columnGap')), attribute: 'column-gap' })
   columnGap?: ResponsiveValue<'columnGap' | 'columnGapNone' | 'columnGapXs' | 'columnGapSm' | 'columnGapMd' | 'columnGapLg' | 'columnGapXl' | 'columnGap2xl' | 'columnGap3xl' | 'columnGap4xl'>;
 
   /**
    * Whether to add flex: grow at various breakpoints.
    * @example grow="grow" or grow="grow md:grow"
    */
-  @property({ type: Object, converter: simpleConverter() })
+  @property({ type: Object, converter: createResponsiveConverter() })
   grow?: ResponsiveValue<'grow'>;
 
   /**
    * Whether to add flex: shrink at various breakpoints.
    * @example shrink="shrink"
    */
-  @property({ type: Object, converter: simpleConverter() })
+  @property({ type: Object, converter: createResponsiveConverter() })
   shrink?: ResponsiveValue<'shrink'>;
 
   /**
    * Value to add for flex property at various breakpoints.
    * @example flex="1" or flex="1 lg:2"
    */
-  @property({ type: Object, converter: flexConverter() })
+  @property({ type: Object, converter: createResponsiveConverter(flexConverterOptions) })
   flex?: ResponsiveValue<'flexDefault' | 'flexNone' | 'flex_1' | 'flex_2' | 'flex_3' | 'flex_4'>;
 
   /**
    * Value to add for flex-direction property at various breakpoints.
    * @example direction="column" or direction="column lg:row"
    */
-  @property({ type: Object, converter: simpleConverter() })
+  @property({ type: Object, converter: createResponsiveConverter() })
   direction?: ResponsiveValue<'column' | 'columnReverse' | 'row' | 'rowReverse'>;
 
   /**
    * Value to add for align-items property at various breakpoints.
    * @example align-items="center" or align-items="flex-start md:center"
    */
-  @property({ type: Object, converter: alignmentConverter(), attribute: 'align-items' })
+  @property({ type: Object, converter: createResponsiveConverter(), attribute: 'align-items' })
   alignItems?: ResponsiveValue<'alignItemsFlexStart' | 'alignItemsFlexEnd' | 'alignItemsCenter' | 'alignItemsStretch' | 'alignItemsBaseline'>;
 
   /**
    * Value to add for align-content property at various breakpoints.
    * @example align-content="center"
    */
-  @property({ type: Object, converter: alignmentConverter(), attribute: 'align-content' })
+  @property({ type: Object, converter: createResponsiveConverter(), attribute: 'align-content' })
   alignContent?: ResponsiveValue<'alignContentFlexStart' | 'alignContentFlexEnd' | 'alignContentCenter' | 'alignContentStretch' | 'alignContentSpaceBetween' | 'alignContentSpaceAround'>;
 
   /**
    * Value to add for align-self property at various breakpoints.
    * @example align-self="center" or align-self="flex-start md:center"
    */
-  @property({ type: Object, converter: alignmentConverter(), attribute: 'align-self' })
+  @property({ type: Object, converter: createResponsiveConverter(), attribute: 'align-self' })
   alignSelf?: ResponsiveValue<'alignSelfFlexStart' | 'alignSelfFlexEnd' | 'alignSelfCenter' | 'alignSelfStretch' | 'alignSelfBaseline'>;
 
   /**
    * Value to use for margin: auto at various breakpoints.
    * @example align="right"
    */
-  @property({ type: Object, converter: alignmentConverter() })
+  @property({ type: Object, converter: createResponsiveConverter() })
   align?: ResponsiveValue<'alignLeft' | 'alignRight'>;
 
   /**
    * Value to add for justify-content property at various breakpoints.
    * @example justify-content="flex-start" or justify-content="flex-start md:space-between"
    */
-  @property({ type: Object, converter: alignmentConverter(), attribute: 'justify-content' })
+  @property({ type: Object, converter: createResponsiveConverter(), attribute: 'justify-content' })
   justifyContent?: ResponsiveValue<'justifyContentFlexStart' | 'justifyContentFlexEnd' | 'justifyContentCenter' | 'justifyContentSpaceBetween' | 'justifyContentSpaceAround' | 'justifyContentSpaceEvenly'>;
 
   /**
    * Value to set to display property at various breakpoints.
    * @example display="inline-flex"
    */
-  @property({ type: Object, converter: alignmentConverter() })
+  @property({ type: Object, converter: createResponsiveConverter() })
   display?: ResponsiveValue<'flex' | 'inlineFlex'>;
 
   /**
    * Whether to set width: 100% at various breakpoints.
    * @example full-width="full-width"
    */
-  @property({ type: Object, converter: alignmentConverter(), attribute: 'full-width' })
+  @property({ type: Object, converter: createResponsiveConverter(), attribute: 'full-width' })
   fullWidth?: ResponsiveValue<'fullWidth'>;
 
   /**
    * Value to set for flex-wrap property at various breakpoints.
    * @example flex-wrap="nowrap" or flex-wrap="wrap md:nowrap"
    */
-  @property({ type: Object, converter: simpleConverter(), attribute: 'flex-wrap' })
+  @property({ type: Object, converter: createResponsiveConverter(), attribute: 'flex-wrap' })
   flexWrap?: ResponsiveValue<'wrap' | 'wrapReverse' | 'nowrap'>;
 
   /**
    * Modifies the flex layout element order property.
    * @example order="2" or order="2 md:-1 lg:1"
    */
-  @property({ type: Object, converter: simpleConverter() })
+  @property({ type: Object, converter: createResponsiveConverter() })
   order?: ResponsiveValue<string>;
 
   render() {
@@ -365,22 +222,22 @@ export class Pfv6Flex extends LitElement {
       const addPrefix = (value: string) => prefix ? `${prefix}-${value}` : value;
       
       if (property.default) {
-        classes[addPrefix(this.#toKebabCase(property.default))] = true;
+        classes[addPrefix(toKebabCase(property.default))] = true;
       }
       if (property.sm) {
-        classes[`${addPrefix(this.#toKebabCase(property.sm))}-sm`] = true;
+        classes[`${addPrefix(toKebabCase(property.sm))}-sm`] = true;
       }
       if (property.md) {
-        classes[`${addPrefix(this.#toKebabCase(property.md))}-md`] = true;
+        classes[`${addPrefix(toKebabCase(property.md))}-md`] = true;
       }
       if (property.lg) {
-        classes[`${addPrefix(this.#toKebabCase(property.lg))}-lg`] = true;
+        classes[`${addPrefix(toKebabCase(property.lg))}-lg`] = true;
       }
       if (property.xl) {
-        classes[`${addPrefix(this.#toKebabCase(property.xl))}-xl`] = true;
+        classes[`${addPrefix(toKebabCase(property.xl))}-xl`] = true;
       }
       if (property['2xl']) {
-        classes[`${addPrefix(this.#toKebabCase(property['2xl']))}-2xl`] = true;
+        classes[`${addPrefix(toKebabCase(property['2xl']))}-2xl`] = true;
       }
     };
 
@@ -406,10 +263,6 @@ export class Pfv6Flex extends LitElement {
     // Note: order property uses CSS variables, not classes (set in render() method)
 
     return classes;
-  }
-
-  #toKebabCase(str: string): string {
-    return str.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/_/g, '-').toLowerCase();
   }
 }
 

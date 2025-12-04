@@ -6,31 +6,13 @@ import { property } from 'lit/decorators/property.js';
 
 import { classMap } from 'lit/directives/class-map.js';
 
-import styles from './pfv6-divider.css';
+import { 
+  type ResponsiveValue, 
+  parseResponsiveAttribute, 
+  buildResponsiveClasses 
+} from '../../lib/responsive-attributes.js';
 
-/**
- * Responsive value converter for orientation and inset properties
- * Converts "vertical sm:horizontal md:vertical" to { default: 'vertical', sm: 'horizontal', md: 'vertical' }
- */
-function parseResponsiveValue<T extends string>(value: string | null): { default?: T; sm?: T; md?: T; lg?: T; xl?: T; '2xl'?: T } | undefined {
-  if (!value) return undefined;
-  
-  const result: { default?: T; sm?: T; md?: T; lg?: T; xl?: T; '2xl'?: T } = {};
-  const parts = value.trim().split(/\s+/);
-  
-  for (const part of parts) {
-    if (part.includes(':')) {
-      const [breakpoint, val] = part.split(':');
-      if (breakpoint === 'sm' || breakpoint === 'md' || breakpoint === 'lg' || breakpoint === 'xl' || breakpoint === '2xl') {
-        result[breakpoint] = val as T;
-      }
-    } else {
-      result.default = part as T;
-    }
-  }
-  
-  return Object.keys(result).length > 0 ? result : undefined;
-}
+import styles from './pfv6-divider.css';
 
 /**
  * Divider - A divider is a horizontal or vertical line that is used to separate content.
@@ -62,18 +44,11 @@ export class Pfv6Divider extends LitElement {
    */
   @property({ 
     converter: {
-      fromAttribute: (value) => parseResponsiveValue<'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'>(value),
-      toAttribute: (value) => value ? JSON.stringify(value) : null
+      fromAttribute: (value) => parseResponsiveAttribute<'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'>(value),
+      toAttribute: () => null // Don't reflect complex responsive values
     }
   })
-  inset?: {
-    default?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
-    sm?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
-    md?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
-    lg?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
-    xl?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
-    '2xl'?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
-  };
+  inset?: ResponsiveValue<'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'>;
 
   /**
    * Indicates how the divider will display at various breakpoints.
@@ -85,18 +60,11 @@ export class Pfv6Divider extends LitElement {
    */
   @property({ 
     converter: {
-      fromAttribute: (value) => parseResponsiveValue<'vertical' | 'horizontal'>(value),
-      toAttribute: (value) => value ? JSON.stringify(value) : null
+      fromAttribute: (value) => parseResponsiveAttribute<'vertical' | 'horizontal'>(value),
+      toAttribute: () => null // Don't reflect complex responsive values
     }
   })
-  orientation?: {
-    default?: 'vertical' | 'horizontal';
-    sm?: 'vertical' | 'horizontal';
-    md?: 'vertical' | 'horizontal';
-    lg?: 'vertical' | 'horizontal';
-    xl?: 'vertical' | 'horizontal';
-    '2xl'?: 'vertical' | 'horizontal';
-  };
+  orientation?: ResponsiveValue<'vertical' | 'horizontal'>;
 
   private internals: ElementInternals;
 
@@ -129,47 +97,23 @@ export class Pfv6Divider extends LitElement {
   }
 
   render() {
-    const classes = this.#getClasses();
+    const classes = {
+      // Orientation classes: "vertical", "horizontal-on-md"
+      ...buildResponsiveClasses(this.orientation, {
+        classNameBuilder: (value, breakpoint) => 
+          breakpoint ? `${value}-on-${breakpoint}` : value
+      }),
+      
+      // Inset classes: "inset-sm", "inset-md-on-lg"
+      ...buildResponsiveClasses(this.inset, {
+        classNameBuilder: (value, breakpoint) => 
+          breakpoint ? `inset-${value}-on-${breakpoint}` : `inset-${value}`
+      })
+    };
     
     return html`
       <div id="container" class=${classMap(classes)}></div>
     `;
-  }
-
-  #getClasses() {
-    const classes: Record<string, boolean> = {};
-    
-    // Orientation classes
-    if (this.orientation?.default === 'vertical') {
-      classes['vertical'] = true;
-    } else if (this.orientation?.default === 'horizontal') {
-      classes['horizontal'] = true;
-    }
-    
-    // Responsive orientation classes
-    ['sm', 'md', 'lg', 'xl', '2xl'].forEach(breakpoint => {
-      const bp = breakpoint as 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-      const value = this.orientation?.[bp];
-      if (value) {
-        classes[`${value}-on-${breakpoint}`] = true;
-      }
-    });
-    
-    // Inset classes
-    if (this.inset?.default) {
-      classes[`inset-${this.inset.default}`] = true;
-    }
-
-    // Responsive inset classes
-    ['sm', 'md', 'lg', 'xl', '2xl'].forEach(breakpoint => {
-      const bp = breakpoint as 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-      const value = this.inset?.[bp];
-      if (value) {
-        classes[`inset-${value}-on-${breakpoint}`] = true;
-      }
-    });
-    
-    return classes;
   }
 }
 

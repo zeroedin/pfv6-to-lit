@@ -27,8 +27,8 @@
 }
 
 #container {
-  /* 
-   * Make container a flex container so slotted flex items (like divider) 
+  /*
+   * Make container a flex container so slotted flex items (like divider)
    * can use align-self: stretch to get their height from the parent flex.
    * align-self: stretch makes this container stretch to fill the parent flex's cross-axis.
    */
