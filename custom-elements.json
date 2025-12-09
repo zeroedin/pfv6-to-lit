@@ -196,6 +196,10 @@
           ],
           "cssProperties": [
             {
+              "name": "--pf-v6-c-card--first-child--PaddingBlockStart",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
               "name": "--pf-v6-c-card--child--PaddingBlockEnd",
               "default": "var(--pf-t--global--spacer--lg)"
             },
@@ -679,6 +683,13 @@
           ],
           "cssProperties": [
             {
+              "name": "--pf-v6-c-card--first-child--PaddingBlockStart",
+              "default": "var(--pf-t--global--spacer--lg)"
+            },
+            {
+              "name": "--pf-t--global--spacer--lg"
+            },
+            {
               "name": "--pf-v6-c-card__header-toggle--MarginBlockStart",
               "default": "calc(var(--pf-t--global--spacer--control--vertical--default) * -1)"
             },
@@ -747,9 +758,6 @@
             },
             {
               "name": "--pf-t--global--spacer--md"
-            },
-            {
-              "name": "--pf-v6-c-card--first-child--PaddingBlockStart"
             },
             {
               "name": "--pf-v6-c-card__title--not--last-child--PaddingBlockEnd"
@@ -2534,7 +2542,7 @@
             }
           ],
           "source": {
-            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/pfv6-divider.ts#L46"
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-divider/pfv6-divider.ts#L28"
           },
           "kind": "class",
           "tagName": "pfv6-divider",
@@ -3494,19 +3502,21 @@
             },
             {
               "name": "minWidths",
-              "description": "Minimum widths at various breakpoints",
+              "description": "Minimum widths at various breakpoints\n\nmin-widths=\"250px\" or min-widths=\"100% md:100px xl:300px\"",
               "type": {
-                "text": "{\n    default?: string;\n    sm?: string;\n    md?: string;\n    lg?: string;\n    xl?: string;\n    '2xl'?: string;\n  }"
+                "text": "ResponsiveValue\u003cstring\u003e"
               },
-              "kind": "field"
+              "kind": "field",
+              "attribute": "min-widths"
             },
             {
               "name": "maxWidths",
-              "description": "Maximum widths at various breakpoints",
+              "description": "Maximum widths at various breakpoints\n\nmax-widths=\"1fr\" or max-widths=\"md:280px lg:320px 2xl:400px\"",
               "type": {
-                "text": "{\n    default?: string;\n    sm?: string;\n    md?: string;\n    lg?: string;\n    xl?: string;\n    '2xl'?: string;\n  }"
+                "text": "ResponsiveValue\u003cstring\u003e"
               },
-              "kind": "field"
+              "kind": "field",
+              "attribute": "max-widths"
             },
             {
               "name": "internals",
@@ -3518,7 +3528,7 @@
             }
           ],
           "source": {
-            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/pfv6-gallery.ts#L30"
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/pfv6-gallery.ts#L37"
           },
           "kind": "class",
           "tagName": "pfv6-gallery",
@@ -3531,6 +3541,22 @@
               },
               "default": "false",
               "fieldName": "hasGutter"
+            },
+            {
+              "name": "min-widths",
+              "description": "Minimum widths at various breakpoints\n\nmin-widths=\"250px\" or min-widths=\"100% md:100px xl:300px\"",
+              "type": {
+                "text": "ResponsiveValue\u003cstring\u003e"
+              },
+              "fieldName": "minWidths"
+            },
+            {
+              "name": "max-widths",
+              "description": "Maximum widths at various breakpoints\n\nmax-widths=\"1fr\" or max-widths=\"md:280px lg:320px 2xl:400px\"",
+              "type": {
+                "text": "ResponsiveValue\u003cstring\u003e"
+              },
+              "fieldName": "maxWidths"
             }
           ],
           "slots": [
