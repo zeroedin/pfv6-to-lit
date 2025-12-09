@@ -1,8 +1,6 @@
-import { LitElement, html, type PropertyValues } from 'lit';
+import { LitElement, type PropertyValues } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
-import { classMap } from 'lit/directives/class-map.js';
-import { styleMap } from 'lit/directives/style-map.js';
 
 import { 
   type ResponsiveValue, 
@@ -10,18 +8,31 @@ import {
   forEachResponsiveValue 
 } from '../../lib/responsive-attributes.js';
 
-import styles from './pfv6-gallery.css';
+import './pfv6-gallery-item.js';
 
 /**
- * Gallery is a layout component that displays content in a responsive grid.
+ * Gallery is a lightdom layout component that displays content in a responsive grid.
+ * 
+ * **CRITICAL: Users must manually include `pfv6-gallery-lightdom.css` in their HTML.**
+ * 
+ * This component uses Light DOM (no Shadow DOM) to allow PatternFly's universal child selector
+ * (`.pf-v6-l-gallery > *`) to work with ANY child element, matching React PatternFly's flexibility.
  *
- * @slot - Default slot for gallery items
+ * @example
+ * ```html
+ * <link rel="stylesheet" href="path/to/pfv6-gallery-lightdom.css">
+ * 
+ * <pfv6-gallery has-gutter>
+ *   <pfv6-gallery-item>Item 1</pfv6-gallery-item>
+ *   <div>Arbitrary HTML</div>
+ * </pfv6-gallery>
+ * ```
  *
  * @cssprop --pf-v6-l-gallery--GridTemplateColumns - Grid template columns
  * @cssprop --pf-v6-l-gallery--GridTemplateRows - Grid template rows
  * @cssprop --pf-v6-l-gallery--GridTemplateColumns--min - Minimum width for grid items (default: 250px)
  * @cssprop --pf-v6-l-gallery--GridTemplateColumns--max - Maximum width for grid items (default: 1fr)
- * @cssprop --pf-v6-l-gallery--m-gutter--GridGap - Gap between items when hasGutter is true
+ * @cssprop --pf-v6-l-gallery--m-gutter--GridGap - Gap between items when has-gutter is set
  * @cssprop --pf-v6-l-gallery--GridTemplateColumns--min-on-sm - Minimum width at sm breakpoint
  * @cssprop --pf-v6-l-gallery--GridTemplateColumns--min-on-md - Minimum width at md breakpoint
  * @cssprop --pf-v6-l-gallery--GridTemplateColumns--min-on-lg - Minimum width at lg breakpoint
@@ -35,7 +46,6 @@ import styles from './pfv6-gallery.css';
  */
 @customElement('pfv6-gallery')
 export class Pfv6Gallery extends LitElement {
-  static readonly styles = styles;
   static readonly formAssociated = true;
 
   /**
@@ -73,7 +83,7 @@ export class Pfv6Gallery extends LitElement {
    * - 'article' → role="article"
    * - 'section' → role="region"
    */
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   component: 'div' | 'section' | 'article' | 'ul' | 'ol' = 'div';
 
   private internals: ElementInternals;
@@ -81,6 +91,15 @@ export class Pfv6Gallery extends LitElement {
   constructor() {
     super();
     this.internals = this.attachInternals();
+  }
+
+  /**
+   * Disable Shadow DOM - children exist in Light DOM
+   * This allows CSS to use universal child selector (pfv6-gallery > *)
+   * matching React PatternFly's flexibility
+   */
+  createRenderRoot() {
+    return this;
   }
 
   updated(changed: PropertyValues): void {
@@ -103,40 +122,29 @@ export class Pfv6Gallery extends LitElement {
           this.internals.role = null;
       }
     }
-  }
 
-  render() {
-    return html`
-      <div id="container" 
-           class=${classMap({ 'pf-m-gutter': this.hasGutter })}
-           style=${styleMap(this.#getContainerStyles())}>
-        <slot></slot>
-      </div>
-    `;
-  }
+    // Set CSS variables on the element for responsive min/max widths
+    if (changed.has('minWidths')) {
+      if (this.minWidths) {
+        forEachResponsiveValue(this.minWidths, (value, breakpoint) => {
+          const varName = breakpoint === 'default'
+            ? '--pf-v6-l-gallery--GridTemplateColumns--min'
+            : `--pf-v6-l-gallery--GridTemplateColumns--min-on-${breakpoint}`;
+          this.style.setProperty(varName, value);
+        });
+      }
+    }
 
-  #getContainerStyles(): Record<string, string> {
-    const styles: Record<string, string> = {};
-
-    // Set PUBLIC API variables on #container
-    // The private variables on :host will pick these up via var() and fallback chains
-    // This maintains two-layer pattern: JS sets public API, CSS private vars reference it
-    forEachResponsiveValue(this.minWidths, (value, breakpoint) => {
-      const varName = breakpoint === 'default'
-        ? '--pf-v6-l-gallery--GridTemplateColumns--min'
-        : `--pf-v6-l-gallery--GridTemplateColumns--min-on-${breakpoint}`;
-      styles[varName] = value;
-    });
-
-    // Set PUBLIC API variables on #container
-    forEachResponsiveValue(this.maxWidths, (value, breakpoint) => {
-      const varName = breakpoint === 'default'
-        ? '--pf-v6-l-gallery--GridTemplateColumns--max'
-        : `--pf-v6-l-gallery--GridTemplateColumns--max-on-${breakpoint}`;
-      styles[varName] = value;
-    });
-
-    return styles;
+    if (changed.has('maxWidths')) {
+      if (this.maxWidths) {
+        forEachResponsiveValue(this.maxWidths, (value, breakpoint) => {
+          const varName = breakpoint === 'default'
+            ? '--pf-v6-l-gallery--GridTemplateColumns--max'
+            : `--pf-v6-l-gallery--GridTemplateColumns--max-on-${breakpoint}`;
+          this.style.setProperty(varName, value);
+        });
+      }
+    }
   }
 }
 

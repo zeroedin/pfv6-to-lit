@@ -62,6 +62,7 @@ npm run lint                  # Run all linters (ESLint + Stylelint)
 - **Never modify React demos**: They are immutable - copied directly from PatternFly React GitHub
 - **Always use Wireit scripts**: Never manually run `tsc` or `npx playwright test`
 - **Git workflow**: Work in feature branches, never force push to main
+- **Error correction**: Never use git commands to undo mistakes - use editor undo or file tools instead
 - **Component organization**: Visual tests in `tests/visual/{component}/`, keep organized by component
 - **Documentation**: Update `CLAUDE.md`, `TODO.md`, and `IMPLEMENTATION_PLAN.md` as you work
 
@@ -1646,6 +1647,13 @@ LitElement CSS (`pfv6-checkbox.css`) - CORRECT two-layer pattern:
 1. **In `:host`**: Define private variables that reference public API with fallbacks
 2. **In internal selectors** (`#container`, `#label`, etc.): Use ONLY private variables
 3. **NEVER** use public API variables (`--pf-v6-c-*`) directly in internal CSS
+
+**🚨 CRITICAL RULES**:
+- **NEVER** SET values to `--pf-v6-*` public API variables directly in your CSS
+- **ALWAYS** Only ever REFERENCE public API variables (`--pf-v6-c-*`) when defining private variables
+- **ALWAYS** Create private variables (`--_*`) that reference public API variables (`--pf-v6-c-*`)
+- **ALWAYS** Name private variables in kebab-case: `--_component-name-property-name`
+- **ALWAYS** Use ONLY private variables (`--_*`) in your internal CSS selectors
 
 **Single-line format** (on `:host`):
 ```css
@@ -3785,10 +3793,10 @@ private _someField = 'value';
 
 **Member Ordering** (top to bottom):
 1. Static properties
-2. Public reactive properties (`@property`)
-3. Public fields
-4. Private reactive state (`@state`)
-5. Private fields (`#private`)
+2. Private reactive state (`@state`)
+3. Private fields (`#private`)
+4. Public reactive properties (`@property`)
+5. Public fields
 6. Lifecycle methods (in execution order):
    - `constructor`
    - `connectedCallback`
@@ -3999,6 +4007,19 @@ render() {
 ### Shadow DOM CSS Best Practices
 
 **CRITICAL**: Shadow DOM has different CSS conventions than Light DOM.
+
+#### General CSS Rules (All Components)
+
+**Modern CSS Nesting**:
+- **ALWAYS** use modern CSS nesting including media queries nested per selector
+- **ALWAYS** nest attribute selectors and media queries inside the main selector
+- This applies to both Shadow DOM and Lightdom CSS
+- **NEVER** add CSS comments to the CSS file, only add comments if explicitly requested or used in documentation for CEM.
+
+**CSS Variable Fallbacks**:
+- **ALWAYS** use fallbacks for all CSS variables to a global design token (`--pf-t--global--*`)
+- Never use CSS variables without fallback values
+- Fallbacks ensure graceful degradation when variables are unset
 
 #### Use ID Selectors, Not BEM Classes
 
@@ -4969,6 +4990,42 @@ Before implementing any component or feature:
 - **Why**: User may want to stage other changes first or review before building
 
 **Summary**: If a command affects processes, ports, or takes significant time → **ASK FIRST**.
+
+### 🚨 CRITICAL: Error Correction - Never Use Git Commands
+
+**AI MUST NEVER use git commands to undo mistakes.**
+
+#### The Rule
+
+When you make a mistake (wrong edit, incorrect file change, etc.), **NEVER** run git commands like `git revert`, `git reset`, or `git restore` to undo changes.
+
+**NEVER:**
+- ❌ Run `git revert` to undo a commit
+- ❌ Run `git reset` to reset files
+- ❌ Run `git restore` to restore file state
+- ❌ Run any git command to undo your changes
+
+**ALWAYS:**
+- ✅ Use the code editor's undo functionality
+- ✅ Use the `search_replace` tool to revert specific changes
+- ✅ Use the `write` tool to restore file contents
+- ✅ Ask the user how they'd like to proceed
+
+#### Why This Matters
+
+**Risk of Data Loss**: Git commands like `git revert` or `git reset` can potentially overwrite files that haven't been committed yet. The user may have:
+- Uncommitted changes in other files
+- Work in progress that isn't staged
+- Local modifications they haven't shown you
+
+**Editor History is Safer**: Code editors maintain detailed undo history that won't affect other files or lose uncommitted work.
+
+#### What to Do Instead
+
+1. **For small mistakes**: Use `search_replace` to fix the specific issue
+2. **For file-level mistakes**: Use `write` to restore the correct content
+3. **For complex mistakes**: Explain what went wrong and ask the user how to proceed
+4. **When unsure**: Ask the user - they can use their editor's undo (Cmd+Z / Ctrl+Z) safely
 
 ### 🚨 CRITICAL: React Demo Immutability
 
