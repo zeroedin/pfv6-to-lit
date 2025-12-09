@@ -1,4 +1,13 @@
-<pfv6-gallery has-gutter max-widths="md:280px lg:320px 2xl:400px">
+<link rel="stylesheet" href="/elements/pfv6-gallery/pfv6-gallery-lightdom.css">
+
+<pfv6-gallery 
+  has-gutter
+  style="
+    --pf-v6-l-gallery--GridTemplateColumns--max-on-md: 280px;
+    --pf-v6-l-gallery--GridTemplateColumns--max-on-lg: 320px;
+    --pf-v6-l-gallery--GridTemplateColumns--max-on-2xl: 400px;
+  "
+>
   <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>
   <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>
   <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>
@@ -11,6 +20,5 @@
 
 <script type="module">
   import '@pfv6/elements/pfv6-gallery/pfv6-gallery.js';
-  import '@pfv6/elements/pfv6-gallery/pfv6-gallery-item.js';
 </script>
 

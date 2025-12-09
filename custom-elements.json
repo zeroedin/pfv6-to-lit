@@ -3429,12 +3429,23 @@
       "declarations": [
         {
           "name": "Pfv6GalleryItem",
-          "description": "Gallery Item is a wrapper component for items within a Gallery layout.",
+          "description": "Gallery Item is a wrapper component for items within a Gallery layout.\n\nThis component uses Light DOM (no Shadow DOM) to participate naturally\nin the parent gallery's grid layout, matching React PatternFly behavior.\n\n**Note**: Styles are defined in `pfv6-gallery-lightdom.css` (same file as parent gallery).",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
           },
           "members": [
+            {
+              "name": "component",
+              "description": "Sets the semantic role of the gallery item (e.g., 'listitem' when used in a list gallery)",
+              "type": {
+                "text": "'div' | 'li'"
+              },
+              "default": "'div'",
+              "kind": "field",
+              "attribute": "component",
+              "reflects": true
+            },
             {
               "name": "internals",
               "type": {
@@ -3442,17 +3453,27 @@
               },
               "kind": "field",
               "privacy": "private"
+            },
+            {
+              "name": "createRenderRoot",
+              "description": "Disable Shadow DOM - children exist in Light DOM\nThis allows the gallery item to participate directly in parent's grid layout",
+              "kind": "method"
             }
           ],
           "source": {
-            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/pfv6-gallery-item.ts#L13"
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/pfv6-gallery-item.ts#L14"
           },
           "kind": "class",
           "tagName": "pfv6-gallery-item",
-          "slots": [
+          "attributes": [
             {
-              "name": "",
-              "description": "Default slot for item content"
+              "name": "component",
+              "description": "Sets the semantic role of the gallery item (e.g., 'listitem' when used in a list gallery)",
+              "type": {
+                "text": "'div' | 'li'"
+              },
+              "default": "'div'",
+              "fieldName": "component"
             }
           ],
           "customElement": true
@@ -3483,7 +3504,7 @@
       "declarations": [
         {
           "name": "Pfv6Gallery",
-          "description": "Gallery is a layout component that displays content in a responsive grid.",
+          "description": "Gallery is a lightdom layout component that displays content in a responsive grid.\n\n**CRITICAL: Users must manually include `pfv6-gallery-lightdom.css` in their HTML.**\n\nThis component uses Light DOM (no Shadow DOM) to allow PatternFly's universal child selector\n(`.pf-v6-l-gallery \u003e *`) to work with ANY child element, matching React PatternFly's flexibility.\n\n```html\n\u003clink rel=\"stylesheet\" href=\"path/to/pfv6-gallery-lightdom.css\"\u003e\n\n\u003cpfv6-gallery has-gutter\u003e\n\u003cpfv6-gallery-item\u003eItem 1\u003c/pfv6-gallery-item\u003e\n\u003cdiv\u003eArbitrary HTML\u003c/div\u003e\n\u003c/pfv6-gallery\u003e\n```",
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -3519,16 +3540,32 @@
               "attribute": "max-widths"
             },
             {
+              "name": "component",
+              "description": "Sets the base component to render (defaults to div)\nSets appropriate ARIA role via ElementInternals:\n- 'ul' or 'ol' → role=\"list\"\n- 'article' → role=\"article\"\n- 'section' → role=\"region\"",
+              "type": {
+                "text": "'div' | 'section' | 'article' | 'ul' | 'ol'"
+              },
+              "default": "'div'",
+              "kind": "field",
+              "attribute": "component",
+              "reflects": true
+            },
+            {
               "name": "internals",
               "type": {
                 "text": "ElementInternals"
               },
               "kind": "field",
               "privacy": "private"
+            },
+            {
+              "name": "createRenderRoot",
+              "description": "Disable Shadow DOM - children exist in Light DOM\nThis allows CSS to use universal child selector (pfv6-gallery \u003e *)\nmatching React PatternFly's flexibility",
+              "kind": "method"
             }
           ],
           "source": {
-            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/pfv6-gallery.ts#L37"
+            "href": "https://github.com/zeroedin/pfv6-to-lit/tree/main/elements/pfv6-gallery/pfv6-gallery.ts#L48"
           },
           "kind": "class",
           "tagName": "pfv6-gallery",
@@ -3557,12 +3594,15 @@
                 "text": "ResponsiveValue\u003cstring\u003e"
               },
               "fieldName": "maxWidths"
-            }
-          ],
-          "slots": [
+            },
             {
-              "name": "",
-              "description": "Default slot for gallery items"
+              "name": "component",
+              "description": "Sets the base component to render (defaults to div)\nSets appropriate ARIA role via ElementInternals:\n- 'ul' or 'ol' → role=\"list\"\n- 'article' → role=\"article\"\n- 'section' → role=\"region\"",
+              "type": {
+                "text": "'div' | 'section' | 'article' | 'ul' | 'ol'"
+              },
+              "default": "'div'",
+              "fieldName": "component"
             }
           ],
           "cssProperties": [
@@ -3584,7 +3624,7 @@
             },
             {
               "name": "--pf-v6-l-gallery--m-gutter--GridGap",
-              "description": "Gap between items when hasGutter is true"
+              "description": "Gap between items when has-gutter is set"
             },
             {
               "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-sm",
@@ -3625,65 +3665,6 @@
             {
               "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-2xl",
               "description": "Maximum width at 2xl breakpoint"
-            },
-            {
-              "name": "--pf-v6-l-gallery--m-gutter--GridGap",
-              "default": "var(--pf-t--global--spacer--gutter--default)"
-            },
-            {
-              "name": "--pf-t--global--spacer--gutter--default"
-            },
-            {
-              "name": "--pf-v6-l-gallery--GridTemplateRows",
-              "default": "auto"
-            },
-            {
-              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-2xl",
-              "default": "var(\n          --pf-v6-l-gallery--GridTemplateColumns--min-on-xl,\n          var(\n            --pf-v6-l-gallery--GridTemplateColumns--min-on-lg,\n            var(\n              --pf-v6-l-gallery--GridTemplateColumns--min-on-md,\n              var(\n                --pf-v6-l-gallery--GridTemplateColumns--min-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)\n              )\n            )\n          )\n        )"
-            },
-            {
-              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-xl",
-              "default": "var(\n            --pf-v6-l-gallery--GridTemplateColumns--min-on-lg,\n            var(\n              --pf-v6-l-gallery--GridTemplateColumns--min-on-md,\n              var(\n                --pf-v6-l-gallery--GridTemplateColumns--min-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)\n              )\n            )\n          )"
-            },
-            {
-              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-lg",
-              "default": "var(\n              --pf-v6-l-gallery--GridTemplateColumns--min-on-md,\n              var(\n                --pf-v6-l-gallery--GridTemplateColumns--min-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)\n              )\n            )"
-            },
-            {
-              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-md",
-              "default": "var(\n                --pf-v6-l-gallery--GridTemplateColumns--min-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)\n              )"
-            },
-            {
-              "name": "--pf-v6-l-gallery--GridTemplateColumns--min-on-sm",
-              "default": "var(--pf-v6-l-gallery--GridTemplateColumns--min, 250px)"
-            },
-            {
-              "name": "--pf-v6-l-gallery--GridTemplateColumns--min",
-              "default": "250px"
-            },
-            {
-              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-2xl",
-              "default": "var(\n          --pf-v6-l-gallery--GridTemplateColumns--max-on-xl,\n          var(\n            --pf-v6-l-gallery--GridTemplateColumns--max-on-lg,\n            var(\n              --pf-v6-l-gallery--GridTemplateColumns--max-on-md,\n              var(\n                --pf-v6-l-gallery--GridTemplateColumns--max-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)\n              )\n            )\n          )\n        )"
-            },
-            {
-              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-xl",
-              "default": "var(\n            --pf-v6-l-gallery--GridTemplateColumns--max-on-lg,\n            var(\n              --pf-v6-l-gallery--GridTemplateColumns--max-on-md,\n              var(\n                --pf-v6-l-gallery--GridTemplateColumns--max-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)\n              )\n            )\n          )"
-            },
-            {
-              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-lg",
-              "default": "var(\n              --pf-v6-l-gallery--GridTemplateColumns--max-on-md,\n              var(\n                --pf-v6-l-gallery--GridTemplateColumns--max-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)\n              )\n            )"
-            },
-            {
-              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-md",
-              "default": "var(\n                --pf-v6-l-gallery--GridTemplateColumns--max-on-sm,\n                var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)\n              )"
-            },
-            {
-              "name": "--pf-v6-l-gallery--GridTemplateColumns--max-on-sm",
-              "default": "var(--pf-v6-l-gallery--GridTemplateColumns--max, 1fr)"
-            },
-            {
-              "name": "--pf-v6-l-gallery--GridTemplateColumns--max",
-              "default": "1fr"
             }
           ],
           "demos": [

@@ -26,9 +26,7 @@ describe('pfv6-gallery', () => {
     `);
     
     expect(el.hasGutter).to.be.true;
-    
-    const container = el.shadowRoot!.querySelector('#container');
-    expect(container).to.have.class('pf-m-gutter');
+    expect(el.hasAttribute('has-gutter')).to.be.true;
   });
 
   it('should set minWidths property', async () => {
@@ -73,9 +71,7 @@ describe('pfv6-gallery', () => {
     `);
     
     expect(el.component).to.equal('section');
-    
-    const container = el.shadowRoot!.querySelector('section#container');
-    expect(container).to.exist;
+    expect(el.getAttribute('component')).to.equal('section');
   });
 
   it('should render slotted content', async () => {
@@ -119,9 +115,7 @@ describe('pfv6-gallery-item', () => {
     `);
     
     expect(el.component).to.equal('li');
-    
-    const container = el.shadowRoot!.querySelector('li');
-    expect(container).to.exist;
+    expect(el.getAttribute('component')).to.equal('li');
   });
 
   it('should render slotted content', async () => {
