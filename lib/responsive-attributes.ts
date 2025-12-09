@@ -5,7 +5,7 @@
  * across breakpoints (default, sm, md, lg, xl, 2xl).
  */
 
-import { capitalize, toCamelCase, toKebabCase } from './helpers.js';
+import { capitalize, toCamelCase } from './helpers.js';
 
 /**
  * Responsive value structure for properties that vary by breakpoint
