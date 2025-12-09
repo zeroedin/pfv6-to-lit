@@ -83,7 +83,7 @@ export class Pfv6Gallery extends LitElement {
    * - 'article' → role="article"
    * - 'section' → role="region"
    */
-  @property({ type: String, reflect: true })
+  @property({ reflect: true })
   component: 'div' | 'section' | 'article' | 'ul' | 'ol' = 'div';
 
   private internals: ElementInternals;
