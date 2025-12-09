@@ -11,6 +11,7 @@
   display: contents;
 
   /* Private implementation variables - reference public API from parent card */
+  --_pfv6-card-c-first-child-padding-block-start: var(--pf-v6-c-card--first-child--PaddingBlockStart, var(--pf-t--global--spacer--lg));
   --_pfv6-card-c-child-padding-block-end: var(--pf-v6-c-card--child--PaddingBlockEnd, var(--pf-t--global--spacer--lg));
   --_pfv6-card-c-child-padding-inline-start: var(--pf-v6-c-card--child--PaddingInlineStart, var(--pf-t--global--spacer--lg));
   --_pfv6-card-c-child-padding-inline-end: var(--pf-v6-c-card--child--PaddingInlineEnd, var(--pf-t--global--spacer--lg));
@@ -19,8 +20,18 @@
 }
 
 #footer {
-  padding-block: 0 var(--_pfv6-card-c-child-padding-block-end);
+  padding-block-end: var(--_pfv6-card-c-child-padding-block-end);
   padding-inline: var(--_pfv6-card-c-child-padding-inline-start) var(--_pfv6-card-c-child-padding-inline-end);
   font-size: var(--_pfv6-card-c-footer-font-size);
   color: var(--_pfv6-card-c-footer-color);
+}
+
+/* First child footer gets top padding from private variable */
+:host(:first-child) #footer {
+  padding-block-start: var(--_pfv6-card-c-first-child-padding-block-start);
+}
+
+/* Divider siblings get padding from marker variable (ONLY set by lightdom CSS) */
+#footer {
+  padding-block-start: var(--_card-has-divider-sibling);
 }

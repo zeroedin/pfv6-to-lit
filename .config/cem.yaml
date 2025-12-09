@@ -1,0 +1,32 @@
+# Custom Elements Manifest Configuration
+# Documentation: https://bennypowers.dev/cem/docs/configuration/
+
+# The canonical public source control URL for your repository root.
+sourceControlRootUrl: "https://github.com/zeroedin/pfv6-to-lit/tree/main/"
+
+# Configuration for the `generate` command.
+generate:
+  # A list of glob patterns for files to include in the analysis.
+  files:
+    - "elements/pfv6-*/pfv6-*.ts"
+
+  # The path to write the final custom-elements.json manifest.
+  output: "custom-elements.json"
+
+  # Configuration for discovering element demos.
+  demoDiscovery:
+    # Glob pattern to find demo files.
+    # Matches all HTML files in any component's demo/ folder.
+    fileGlob: "elements/**/demo/*.html"
+    
+    # URLPattern for extracting parameters from demo file paths.
+    # Pattern: elements/pfv6-{component}/demo/{demo}.html
+    # Captures:
+    # - :element - Component name (e.g., "pfv6-card", "pfv6-button")
+    # - :demo - Demo name (e.g., "basic", "with-dividers")
+    urlPattern: "/elements/:element/demo/:demo.html"
+    
+    # Template for generating canonical demo URLs.
+    # Result: /elements/pfv6-card/demo/basic
+    urlTemplate: "/elements/{{.element}}/demo/{{.demo}}"
+

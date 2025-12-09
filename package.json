@@ -26,6 +26,7 @@
       "dependencies": [
         "clean:plugins",
         "clean:react-demos",
+        "compile:cem",
         "copy:pf-assets",
         "compile:pfv6-elements",
         "compile:react-demos"
@@ -37,8 +38,7 @@
       "description": "Watch and rebuild React comparison demos",
       "files": [
         "patternfly-react/**/*.tsx"
-      ],
-      "output": []
+      ]
     },
     "clean:plugins": {
       "command": "rm -f dev-server/plugins/*.js dev-server/plugins/*.js.map dev-server/plugins/*.d.ts dev-server/plugins/*.d.ts.map"
@@ -83,15 +83,15 @@
       "output": []
     },
     "compile:cem": {
-      "command": "cem generate 'elements/pfv6-*/pfv6-*.ts' --output custom-elements.json && node dev-server/plugins/add-demo-paths.js",
-      "description": "Generate Custom Elements Manifest and add demo paths",
+      "command": "cem generate",
+      "description": "Generate Custom Elements Manifest with demo discovery",
       "dependencies": [
         "compile:tsc"
       ],
       "files": [
         "elements/**/*.ts",
         "elements/**/*.html",
-        "dev-server/plugins/add-demo-paths.ts"
+        ".config/cem.yaml"
       ],
       "output": [
         "custom-elements.json"

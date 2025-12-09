@@ -9,7 +9,9 @@
   "rules": {
     "custom-property-pattern": null,
     "selector-class-pattern": null,
-    "selector-id-pattern": null
+    "selector-id-pattern": null,
+    "@stylistic/block-opening-brace-newline-after": "always",
+    "@stylistic/block-closing-brace-newline-before": "always"
   }
 }
 

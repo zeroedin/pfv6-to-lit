@@ -2844,6 +2844,387 @@ Shadow DOM is a fundamental principle of web components that provides:
 
 **AI Directive**: If you ever consider disabling Shadow DOM, STOP. Find an alternative solution that preserves Shadow DOM encapsulation. This is a non-negotiable requirement.
 
+**EXCEPTION**: Layout components (see below).
+
+### Layout Component Exception - Lightdom CSS Approach
+
+**Exception to Shadow DOM Rule**: Layout components (Flex, Grid, Stack, Level, Split, Bullseye) do NOT use Shadow DOM.
+
+**Why This Exception Exists**:
+
+React PatternFly's layout components use universal child selectors (e.g., `.pf-v6-l-flex > *`) to style ALL direct children - not just specific sub-components. This design allows ANY element to participate in the layout:
+- Sub-components (FlexItem, GridItem)
+- Other components (Divider, Button, Card)
+- Arbitrary HTML (div, span, hr)
+
+Shadow DOM makes this impossible without complex workarounds because:
+1. `::slotted()` cannot be combined with pseudo-classes like `:last-child`
+2. Styling arbitrary slotted children requires separate lightdom CSS files
+3. Cannot achieve 1:1 parity with React's simple `.pf-v6-l-flex > *` selector
+
+**Layout Components Location**: These components are documented and may be found in the `@layouts` directory in node_modules or PatternFly documentation.
+
+**Layout Components Without Shadow DOM**:
+- pfv6-flex / pfv6-flex-item
+- pfv6-grid / pfv6-grid-item (when implemented)
+- pfv6-stack / pfv6-stack-item (when implemented)  
+- pfv6-level / pfv6-level-item (when implemented)
+- pfv6-split / pfv6-split-item (when implemented)
+- pfv6-bullseye (when implemented)
+
+**Implementation Pattern** (based on rhx-grid):
+
+```typescript
+import { LitElement } from 'lit';
+import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators/property.js';
+
+import './pfv6-flex-item.js'; // Import sub-component
+
+// NO CSS import - styles live in -lightdom.css file
+
+@customElement('pfv6-flex')
+export class Pfv6Flex extends LitElement {
+  // Use reflect: true for all properties - attributes drive CSS selectors
+  @property({ reflect: true }) spacer?: string;
+  @property({ reflect: true }) gap?: string;
+  
+  // Disable Shadow DOM - children exist naturally in Light DOM
+  createRenderRoot() {
+    return this;
+  }
+  
+  // NO render() method needed - children exist naturally
+  // NO classMap(), styleMap(), or class manipulation
+}
+```
+
+**Practical CSS Example** (from `pfv6-flex-lightdom.css`):
+
+```css
+/* Base CSS variables - set defaults */
+pfv6-flex {
+  --pf-v6-l-flex--spacer--column--base: var(--pf-t--global--spacer--gutter--default);
+  --pf-v6-l-flex--spacer--row--base: var(--pf-t--global--spacer--sm);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--pf-v6-l-flex--RowGap) var(--pf-v6-l-flex--ColumnGap);
+  
+  /* Universal child selector - styles ALL children */
+  & > * {
+    order: var(--pf-v6-l-flex--item--Order, 0);
+    max-width: 100%;
+    margin-inline-end: var(--pf-v6-l-flex--spacer--column);
+    
+    /* Responsive order - nested media queries */
+    @media (width >= 36rem) {
+      order: var(--pf-v6-l-flex--item--Order-on-sm, var(--pf-v6-l-flex--item--Order, 0));
+    }
+    
+    /* :last-child works naturally */
+    &:last-child {
+      --pf-v6-l-flex--spacer: 0;
+    }
+  }
+  
+  /* Attribute selector sets CSS variable */
+  &[spacer~="md"] {
+    --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+  }
+  
+  /* Direction modifiers with nested media queries */
+  &[direction~="column"] {
+    flex-direction: column;
+    align-items: normal;
+    
+    & > * {
+      margin-block: 0 var(--pf-v6-l-flex--spacer--row);
+      margin-inline: 0;
+    }
+  }
+}
+```
+
+**CSS Pattern** (all styles in `-lightdom.css` file):
+
+The lightdom CSS approach uses three key patterns:
+
+1. **Attribute selectors** - Set CSS custom properties based on attributes
+2. **Universal child selectors** - Style ALL direct children (matches React)
+3. **Pseudo-class selectors** - `:last-child`, `:first-child`, etc. work naturally in Light DOM
+
+```css
+/* Pattern 1: Attribute selectors set PatternFly CSS variables */
+pfv6-flex[spacer~="md"] {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+}
+
+/* Pattern 2: Container styles use attribute selectors */
+pfv6-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pf-v6-l-flex--RowGap) var(--pf-v6-l-flex--ColumnGap);
+}
+
+/* Pattern 3: Universal child selector reads PatternFly CSS variables (matches React) */
+pfv6-flex > * {
+  order: var(--pf-v6-l-flex--item--Order, 0);
+  max-width: 100%;
+  margin-inline-end: var(--pf-v6-l-flex--spacer--column);
+}
+
+/* Pseudo-classes work naturally in Light DOM - this is WHY we avoid Shadow DOM for layouts */
+pfv6-flex > *:last-child {
+  --pf-v6-l-flex--spacer: 0;
+}
+
+/* Special case: Nested layout components can be targeted with :is() */
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item):last-child {
+  --_l-flex-spacer: 0;
+  --_flex-item-spacer: 0;
+}
+```
+
+**Key Principles of Lightdom CSS for Layouts**:
+
+1. **CSS Custom Properties Bridge** - Attributes set CSS variables, which control layout
+2. **Universal Child Selector** - `component > *` styles ANY child element
+3. **Natural Pseudo-classes** - `:last-child`, `:nth-child()`, `:first-child` work without workarounds
+4. **1:1 React Parity** - Direct translation of PatternFly React's lightdom CSS
+
+**Hybrid Pattern: Attributes → CSS Variables → Styles**
+
+This three-layer approach supports both usage patterns:
+
+```html
+<!-- Pattern 1: Attribute sets CSS variable (sub-components) -->
+<pfv6-flex-item order="1">Item</pfv6-flex-item>
+
+<!-- Pattern 2: Inline style sets CSS variable (arbitrary children) -->
+<pfv6-divider style="--pf-v6-l-flex--item--Order: 1;"></pfv6-divider>
+
+<!-- Both work because CSS reads: order: var(--pf-v6-l-flex--item--Order, 0) -->
+```
+
+**Why This Hybrid Matters**: It allows layout components to style both their dedicated sub-components (FlexItem) AND arbitrary children (Divider, Card, div, span) with the same CSS variables - matching React PatternFly's flexibility.
+
+**Practical Comparison - Shadow DOM vs Lightdom CSS**:
+
+```html
+<!-- Shadow DOM Component (pfv6-card) -->
+<pfv6-card>
+  <pfv6-card-title>Title</pfv6-card-title>  <!-- Must use sub-component -->
+  <hr>  <!-- Arbitrary HTML - limited styling options -->
+</pfv6-card>
+
+<!-- Shadow DOM CSS - CANNOT style arbitrary <hr> easily -->
+```
+
+```html
+<!-- Lightdom Layout Component (pfv6-flex) -->
+<pfv6-flex gap="md">
+  <pfv6-flex-item>Item 1</pfv6-flex-item>  <!-- Sub-component works -->
+  <pfv6-divider orientation="vertical"></pfv6-divider>  <!-- Component works -->
+  <div>Arbitrary HTML</div>  <!-- Arbitrary HTML WORKS! -->
+  <hr>  <!-- Even <hr> gets layout styles! -->
+</pfv6-flex>
+
+<!-- Lightdom CSS - Styles ALL children with > * selector -->
+```
+
+**The Critical Difference**: Shadow DOM requires components to enumerate and style specific child types. Lightdom CSS naturally styles ANY child element, matching React PatternFly's flexibility.
+
+**Key Differences from Shadow DOM Components**:
+
+| Aspect | Shadow DOM Components | Layout Components (No Shadow DOM) |
+|--------|----------------------|-----------------------------------|
+| CSS Import | `import styles from './component.css'` | NO CSS import in TypeScript |
+| Styles Location | Inside component (Shadow DOM) | Separate `-lightdom.css` file (users include in HTML) |
+| render() Method | Required | NOT needed (children exist naturally) |
+| Child Selector | `::slotted(*)` (limited) | `component-name > *` (universal) |
+| Style Encapsulation | Yes | No (page CSS can override) |
+| Arbitrary Children | Requires complex workarounds | Works naturally |
+
+**Trade-offs Accepted**:
+- ❌ No style encapsulation - page CSS can override component styles
+- ❌ Component internals visible in Light DOM  
+- ❌ Users must manually include `-lightdom.css` in their HTML
+- ✅ 1:1 API parity with React PatternFly's universal child selector
+- ✅ ANY element works as layout child (Divider, div, span, etc.)
+- ✅ Dramatically simpler TypeScript (no render logic, ~50 lines vs ~400 lines)
+- ✅ Natural CSS selectors `:last-child`, `:nth-child()` work without workarounds
+- ✅ Inline CSS variables work for arbitrary children
+
+### Lightdom CSS Approach for Layouts
+
+**Philosophy**: Layout components are custom elements that use CSS custom properties for configuration, but ALL styling exists in separate `-lightdom.css` files that operate in Light DOM.
+
+**Core Pattern**: Attributes → CSS Variables → Light DOM Styles
+
+```typescript
+// Layout component TypeScript (MINIMAL - no render, no Shadow DOM)
+@customElement('pfv6-flex')
+export class Pfv6Flex extends LitElement {
+  // Properties with reflect: true - attributes drive CSS
+  @property({ reflect: true }) spacer?: string;
+  @property({ reflect: true }) gap?: string;
+  @property({ reflect: true }) direction?: string;
+  
+  // Disable Shadow DOM - children exist in Light DOM
+  createRenderRoot() {
+    return this;
+  }
+  
+  // NO render() method - children render naturally
+  // NO CSS import - styles are in -lightdom.css
+}
+```
+
+**Lightdom CSS File Pattern** (`pfv6-flex-lightdom.css`):
+
+```css
+/* Step 1: Attribute selectors define CSS variables */
+pfv6-flex[spacer~="md"] {
+  --pf-v6-l-flex--spacer: var(--pf-v6-l-flex--spacer--md);
+}
+
+pfv6-flex[gap~="lg"] {
+  --pf-v6-l-flex--RowGap: var(--pf-v6-l-flex--spacer--lg);
+  --pf-v6-l-flex--ColumnGap: var(--pf-v6-l-flex--spacer--lg);
+}
+
+/* Step 2: Base styles on component selector */
+pfv6-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pf-v6-l-flex--RowGap) var(--pf-v6-l-flex--ColumnGap);
+}
+
+/* Step 3: Universal child selector for ALL children */
+pfv6-flex > * {
+  order: var(--pf-v6-l-flex--item--Order, 0);
+  max-width: 100%;
+  margin-inline-end: var(--pf-v6-l-flex--spacer--column);
+}
+
+/* Step 4: Pseudo-classes work naturally (WHY we use Light DOM) */
+pfv6-flex > *:last-child {
+  --pf-v6-l-flex--spacer: 0;
+  margin-inline-end: 0;
+}
+
+/* Step 5: Nested layout components with :is() selector */
+pfv6-flex > :is(pfv6-flex, pfv6-flex-item):last-child {
+  --_l-flex-spacer: 0;
+  --_flex-item-spacer: 0;
+}
+```
+
+**Key Techniques**:
+
+1. **Attribute Selector Matching** (`~=`):
+   - Allows space-separated responsive values: `spacer="md lg:xl"`
+   - Each value matches independently: `[spacer~="md"]`, `[spacer~="lg:xl"]`
+   - Supports multiple modifiers on single attribute
+
+2. **CSS Variable Cascading**:
+   - Parent sets variables: `--pf-v6-l-flex--spacer`
+   - Children inherit and use them: `var(--pf-v6-l-flex--spacer)`
+   - Inline styles can override: `style="--pf-v6-l-flex--item--Order: 2;"`
+
+3. **Universal Child Selector** (`> *`):
+   - Matches ANY direct child element
+   - No need to enumerate specific components
+   - Arbitrary HTML elements work automatically
+
+4. **Pseudo-class Selectors**:
+   - `:last-child` - Remove spacing from last item
+   - `:first-child` - Special styling for first item
+   - `:nth-child()` - Pattern-based selection
+   - **Why this matters**: These DON'T work with `::slotted()` in Shadow DOM
+
+5. **Nested Layout Detection** (`:is()` selector):
+   - Target specific child components: `> :is(pfv6-flex, pfv6-flex-item)`
+   - Override internal variables for proper composition
+   - Example: Reset spacer for nested layout components
+
+**File Organization**:
+- `pfv6-{layout}.ts` - Component logic (minimal, no render)
+- `pfv6-{layout}-lightdom.css` - ALL styles (published separately)
+- `pfv6-{layout}-item.ts` - Sub-component logic (if applicable)
+- Users manually include CSS: `<link rel="stylesheet" href="pfv6-flex-lightdom.css">`
+
+**AI Implementation Checklist for Lightdom Layouts**:
+
+When implementing a new layout component, follow these steps:
+
+1. ✅ **Verify it's a layout** - Check if React component is in `layouts/` folder
+2. ✅ **Verify universal child selector** - Check if React CSS uses `.pf-v6-l-{layout} > *`
+3. ✅ **Create TypeScript file** - Minimal component with `createRenderRoot() { return this; }`
+4. ✅ **NO CSS import** - Do NOT import CSS in TypeScript file
+5. ✅ **Create `-lightdom.css` file** - All styles go here
+6. ✅ **Use CSS nesting** - Nest attribute selectors and media queries
+7. ✅ **Universal child selector** - Use `pfv6-{layout} > *` for all children
+8. ✅ **CSS variables bridge** - Attributes → CSS variables → styles
+9. ✅ **Document CSS requirement** - README must state users need to include CSS manually
+10. ✅ **Test arbitrary children** - Verify `<div>`, `<span>`, `<hr>` work as children
+
+**When to Use Lightdom CSS for Layouts**:
+
+✅ **USE Lightdom CSS when**:
+- Component is a layout container (Flex, Grid, Stack, Level, Split, Bullseye)
+- React uses universal child selector (`.pf-v6-l-{layout} > *`)
+- Arbitrary children must participate in layout
+- Need `:last-child`, `:first-child`, `:nth-child()` selectors
+- PatternFly React component has NO Shadow DOM equivalent
+
+❌ **DON'T USE Lightdom CSS when**:
+- Component is a UI element (Button, Card, Badge, Checkbox, etc.)
+- Component has encapsulated internal structure
+- Shadow DOM `::slotted()` is sufficient
+- Component benefits from style encapsulation
+- Component has defined sub-components only (CardTitle, CardBody, CardFooter)
+- React uses BEM selectors for specific elements (`.pf-v6-c-card__title`)
+
+**AI Decision Rule**: If the PatternFly React component folder is in `node_modules/@patternfly/react-core/dist/js/layouts/`, use the lightdom CSS approach. If it's in `components/`, use Shadow DOM.
+
+**Decision Tree**:
+
+```
+Is this a layout component?
+├─ YES → Check React CSS in node_modules/@patternfly/react-styles/css/
+│   └─ Does React use `.pf-v6-l-{layout} > *`?
+│       ├─ YES → Use Lightdom CSS (pfv6-flex, pfv6-grid)
+│       └─ NO → Use Shadow DOM
+└─ NO → Use Shadow DOM (pfv6-card, pfv6-button, pfv6-checkbox)
+```
+
+**Usage Requirements**:
+
+**CRITICAL**: Users must manually include the `-lightdom.css` file in their HTML. This is NOT bundled with the component.
+
+```html
+<!-- REQUIRED: Include the lightdom CSS file -->
+<link rel="stylesheet" href="path/to/pfv6-flex-lightdom.css">
+
+<pfv6-flex>
+  <pfv6-flex-item>Item 1</pfv6-flex-item>
+  <pfv6-divider orientation="vertical"></pfv6-divider>
+  <pfv6-flex-item>Item 2</pfv6-flex-item>
+</pfv6-flex>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-flex/pfv6-flex.js';
+</script>
+```
+
+**Why Separate CSS File**:
+- Layout styles must exist in Light DOM to target arbitrary children
+- Cannot be bundled in Shadow DOM styles (there is no Shadow DOM!)
+- Users have control over when/how layout styles are loaded
+- Allows CSS to be cached separately from JavaScript
+
 ### API Design Principles
 **Priority order**:
 1. **PatternFly v6 parity**: Maintain 1:1 functional parity with PatternFly v6 capabilities
