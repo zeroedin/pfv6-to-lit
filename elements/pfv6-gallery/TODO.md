@@ -1,167 +1,82 @@
 # pfv6-gallery TODO
 
-**Status**: ✅ Refactored to Lightdom CSS (Previously: 100% Visual Parity Achieved)
-**Last Updated**: 2025-01-21
-**Implementation**: Lightdom CSS Layout Component (No Shadow DOM)
+## Tasks
 
----
+### 1. Remove `minWidths` / `maxWidths` Properties from TypeScript
 
-## 🔄 Recent Refactor: Shadow DOM → Lightdom CSS
+**Tasks**:
+- [ ] Remove `minWidths` and `maxWidths` `@property()` declarations from `pfv6-gallery.ts`
+- [ ] Remove responsive value converter logic (`createResponsiveConverter`, `forEachResponsiveValue`)
+- [ ] Remove `this.style.setProperty()` calls in `updated()` lifecycle (lines 126-147)
+- [ ] Update JSDoc to document CSS variable approach instead
+- [ ] Update `lib/responsive-attributes.ts` usage (may no longer be needed for Gallery)
 
-**Why**: Gallery is a layout component that should use PatternFly's universal child selector pattern (`.pf-v6-l-gallery > *`) to style ANY child element, matching React PatternFly's flexibility.
+### 2. Re-test Visual Parity
 
-**Changes Made**:
-- ✅ Removed Shadow DOM (`createRenderRoot()` returns `this`)
-- ✅ Removed `render()` method - children exist naturally in Light DOM
-- ✅ Created `pfv6-gallery-lightdom.css` - all styles moved to separate CSS file
-- ✅ Removed CSS imports from TypeScript files
-- ✅ Properties now use `reflect: true` - attributes drive CSS selectors
-- ✅ CSS variables set directly on element style (not internal container)
-- ✅ Updated all demo files to include lightdom CSS link
-- ✅ Updated unit tests to work with Light DOM
-
-**Previous Status** (Shadow DOM implementation):
-- ✅ 100% Visual Parity Achieved (18/18 tests passing)
-- All 6 demos passing across chromium, firefox, webkit
-
----
-
-## ✅ Completed Implementation Tasks
-
-### Phase 1-9: Original Shadow DOM Implementation (Completed 2025-11-25)
-- [x] Created `pfv6-gallery` and `pfv6-gallery-item` components with Shadow DOM
-- [x] Implemented all 6 Lit demos mirroring React demos
-- [x] Applied two-layer CSS variable pattern
-- [x] Achieved 100% visual parity (18/18 tests passing)
-- [x] Implemented `ElementInternals` for semantic roles (`role="list"`, `role="listitem"`)
-
-### Phase 10: Lightdom CSS Refactor (Completed 2025-01-21)
-- [x] Removed Shadow DOM from both `pfv6-gallery` and `pfv6-gallery-item`
-- [x] Created `pfv6-gallery-lightdom.css` - all styles in single file
-- [x] Removed CSS imports from TypeScript files
-- [x] Added `reflect: true` to all properties
-- [x] CSS variables now set on element style in `updated()` lifecycle
-- [x] Updated all 6 demo HTML files to include lightdom CSS link
-- [x] Updated unit tests to work with Light DOM (removed `shadowRoot` references)
-- [x] Deleted old Shadow DOM CSS files
-
----
-
-## 🔍 Next Steps: Re-test Visual Parity
-
-### ⚠️ Visual Parity Tests Need Re-running
-
-After the lightdom refactor, visual parity tests need to be re-run to ensure:
+**After removing properties, visual parity tests need re-running to ensure**:
 - ✅ Layout behavior matches React (universal child selector works)
-- ✅ Responsive breakpoints still function correctly
+- ✅ Responsive breakpoints still function correctly (via CSS only)
 - ✅ Gutter spacing matches React
 - ✅ CSS variable customization still works
 
 **Expected Results**:
 - All 6 demos should still achieve 100% visual parity
-- No visual regressions from Shadow DOM → Lightdom CSS transition
-
-### ⚠️ Known Limitation: Automated A11y Tools & ElementInternals
-
-**Still Applies**: ElementInternals for semantic roles (`role="list"`, `role="listitem"`) is preserved in the lightdom refactor.
-
-**Issue**: Most automated accessibility testing tools (e.g., axe-core, Lighthouse, WAVE) **cannot yet read from ElementInternals**. This will cause **false positives** in automated audits even though the component is correctly exposing ARIA roles via the accessibility tree.
-
-**What This Means**:
-- ✅ **Screen readers WILL work correctly** - ElementInternals properly exposes roles to the browser's accessibility tree
-- ❌ **Automated tools WILL report false positives** - They check the DOM, not the accessibility tree
-- ⚠️ **Manual verification required** - Use browser DevTools accessibility inspector or actual screen readers
-
-### 📋 Future Documentation Needs
-
-When creating comparative documentation for "PatternFly LitElements vs React PatternFly", document these key differences:
-
-1. **Semantic HTML vs ElementInternals**:
-   - **React**: Renders semantic HTML directly (`<ul>`, `<li>`, `<article>`, etc.)
-   - **LitElement**: Uses `ElementInternals.role` to expose semantic meaning without rendering specific tags
-   - **Why**: Shadow DOM encapsulation prevents nested Light DOM semantics
-   - **Result**: Identical accessibility tree, different DOM structure
-
-2. **Automated Testing Differences**:
-   - **React**: Automated a11y tools work perfectly (can read semantic HTML)
-   - **LitElement**: Automated a11y tools report false positives (can't read ElementInternals yet)
-   - **Recommendation**: Use manual verification with browser DevTools accessibility inspector or real screen readers
-
-3. **CSS Variable Resilience**:
-   - **React**: CSS variables reset to transparent if unset (loses default styling)
-   - **LitElement**: Two-layer pattern maintains token fallbacks even when variables are unset
-   - **Result**: LitElement components are MORE resilient to dynamic CSS manipulation
-
-4. **Shadow DOM vs Light DOM**:
-   - **React**: Global styles, Light DOM, direct CSS targeting
-   - **LitElement**: Encapsulated styles, Shadow DOM, `::slotted()` limitations
-   - **Trade-off**: Better encapsulation vs more complex CSS for deeply nested content
+- No visual regressions from property removal
+- CSS-only responsive behavior works identically to React's JavaScript approach
 
 ---
 
-## 🧠 Key Learnings Applied
+## ⚠️ API Differences from React PatternFly
 
-### ElementInternals for Semantic Roles
-- **When to use**: Component accepts `component` prop for alternative semantics (e.g., `ul`, `ol`, `article`)
-- **Implementation**: `this.internals = this.attachInternals()` + `this.internals.role = 'list'`
-- **Benefits**: 
-  - No extra DOM elements (just `<div>` with role)
-  - Proper accessibility tree representation
-  - Matches React's semantic meaning without rendering specific tags
-- **Limitation**: Automated a11y tools can't detect it (false positives expected)
+### Removed: `minWidths` and `maxWidths` Properties
 
-### Lightdom CSS Pattern (Replaces Shadow DOM)
-- **Pattern**: Layout components use Light DOM to allow universal child selector (`.pf-v6-l-gallery > *`)
-- **CSS File**: All styles in `pfv6-gallery-lightdom.css` (users must include manually)
-- **No render() method**: Children exist naturally in Light DOM
-- **CSS Variables**: Set on element style via `this.style.setProperty()` in `updated()`
-- **Benefits**:
-  - ANY child element can participate in layout (matches React flexibility)
-  - Natural pseudo-classes (`:last-child`, `:first-child`) work without workarounds
-  - Simpler TypeScript (no `classMap()`, `styleMap()`, or render logic)
+**React Gallery API**:
+```tsx
+<Gallery 
+  minWidths={{ md: '200px', lg: '300px' }}
+  maxWidths={{ md: '400px', xl: '600px' }}
+/>
+```
 
-### Attribute/Property Count Parity
-- **Critical**: Count React props, count Lit attributes - numbers must match
-- **Example**: React `<Gallery component="ul">` (1 prop) = Lit `<pfv6-gallery component="ul">` (1 attribute)
-- **Why**: Extra/missing attributes cause visual differences (spacing, layout)
+**Our Implementation**: ❌ Properties removed
 
-### Two-Layer CSS Variable Pattern
-- **Rule**: ALL internal CSS must use ONLY private variables (`--_*`)
-- **Pattern**: Private vars in `:host` reference public API with fallbacks
-- **Responsive**: Private vars redefined in `#container` within media queries
-- **Benefit**: Maintains API parity while supporting dynamic re-evaluation
+**Why This Deviation**:
+1. **Lightdom CSS Principle**: Setting `this.style.setProperty()` in `updated()` modifies Light DOM HTML via JavaScript
+2. **Web Component Best Practice**: Lightdom layout components should be pure CSS-driven, not JS-driven
+3. **Follows `pfv6-flex` Pattern**: Flex layout uses attribute selectors for predefined tokens, not custom values
 
----
+**How Users Achieve the Same Result**:
 
-## 📊 Test Results
+Users can still set responsive breakpoint widths using standard CSS:
 
-### Previous Shadow DOM Implementation (2025-11-25)
-| Demo | chromium | firefox | webkit |
-|------|----------|---------|--------|
-| **basic** | ✅ | ✅ | ✅ |
-| **with-gutters** | ✅ | ✅ | ✅ |
-| **adjusting-min-widths** | ✅ | ✅ | ✅ |
-| **adjusting-max-widths** | ✅ | ✅ | ✅ |
-| **adjusting-min-and-max-widths** | ✅ | ✅ | ✅ |
-| **alternative-components** | ✅ | ✅ | ✅ |
+**Option 1: Inline Style Attribute**
+```html
+<pfv6-gallery 
+  style="
+    --pf-v6-l-gallery--GridTemplateColumns--min-on-md: 200px;
+    --pf-v6-l-gallery--GridTemplateColumns--min-on-lg: 300px;
+    --pf-v6-l-gallery--GridTemplateColumns--max-on-xl: 600px;
+  "
+>
+```
 
-**Score**: 100% visual parity (18/18 tests passing)
+**Option 2: Page CSS**
+```css
+.my-gallery {
+  --pf-v6-l-gallery--GridTemplateColumns--min-on-md: 280px;
+  --pf-v6-l-gallery--GridTemplateColumns--max-on-xl: 400px;
+}
+```
 
-### Post-Refactor Lightdom CSS Implementation (2025-01-21)
-⚠️ **Tests need to be re-run** after lightdom refactor to verify:
-- Layout still matches React
-- Responsive behavior preserved
-- Gutter spacing correct
-- CSS variable customization works
+**Benefits of This Approach**:
+- ✅ Pure CSS control (no JavaScript setting inline styles)
+- ✅ Respects lightdom CSS architecture
+- ✅ Users have full flexibility via CSS variables
+- ✅ Maintains declarative styling approach
 
----
+**Trade-off**:
+- ❌ Less ergonomic than React's object-based API
+- ❌ Requires knowledge of PatternFly CSS variable naming
 
-## 🔗 Related Documentation
+**Documentation Note**: When creating comparative docs for "PatternFly LitElements vs React PatternFly", document this as a conscious architectural choice for lightdom layout components.
 
-- `CLAUDE.md` - See "Layout Component Exception - Lightdom CSS Approach" section
-- `ELEMENTINTERNALS_ACCESSIBILITY_NOTES.md` - Complete guide to ElementInternals and automated a11y tool limitations
-- `pfv6-gallery.ts` - Lightdom implementation (no Shadow DOM, no render method)
-- `pfv6-gallery-item.ts` - Lightdom item component (no Shadow DOM, no render method)
-- `pfv6-gallery-lightdom.css` - All styles in single CSS file (users must include manually)
-- `elements/pfv6-flex/` - Reference implementation for lightdom CSS pattern
-- `tests/visual/gallery/gallery-visual-parity.spec.ts` - Visual parity test suite (needs re-run)

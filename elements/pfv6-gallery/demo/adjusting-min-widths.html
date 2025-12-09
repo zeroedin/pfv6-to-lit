@@ -1,6 +1,14 @@
 <link rel="stylesheet" href="/elements/pfv6-gallery/pfv6-gallery-lightdom.css">
 
-<pfv6-gallery has-gutter min-widths="md:100px lg:150px xl:200px 2xl:300px">
+<pfv6-gallery 
+  has-gutter
+  style="
+    --pf-v6-l-gallery--GridTemplateColumns--min-on-md: 100px;
+    --pf-v6-l-gallery--GridTemplateColumns--min-on-lg: 150px;
+    --pf-v6-l-gallery--GridTemplateColumns--min-on-xl: 200px;
+    --pf-v6-l-gallery--GridTemplateColumns--min-on-2xl: 300px;
+  "
+>
   <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>
   <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>
   <pfv6-gallery-item>Gallery Item</pfv6-gallery-item>

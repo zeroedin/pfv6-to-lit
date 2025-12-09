@@ -31,6 +31,7 @@ npm run lint                  # Run all linters (ESLint + Stylelint)
 - **ALWAYS** use `npm run dev` (never manual `tsc` commands) - Wireit handles all compilation
 - **ALWAYS** use `npm run e2e:parity` (never `npx playwright test` directly) - npm scripts ensure dev server is running
 - **ALWAYS** prompt user before running `killall node` or test suites - these commands are disruptive (see AI Guidelines)
+- **ALWAYS** keep TODO.md files about what NEEDS to be done - remove completed tasks immediately
 - **NEVER** gitignore `package-lock.json` - it ensures deterministic builds and must be committed
 
 ---
@@ -65,6 +66,7 @@ npm run lint                  # Run all linters (ESLint + Stylelint)
 - **Error correction**: Never use git commands to undo mistakes - use editor undo or file tools instead
 - **Component organization**: Visual tests in `tests/visual/{component}/`, keep organized by component
 - **Documentation**: Update `CLAUDE.md`, `TODO.md`, and `IMPLEMENTATION_PLAN.md` as you work
+- **TODO.md files**: ALWAYS about what NEEDS to be done, NEVER about what has been completed - remove completed tasks immediately
 
 ---
 
