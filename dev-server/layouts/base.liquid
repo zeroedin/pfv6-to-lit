@@ -1,7 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>{% block title %}PatternFly Elements v6{% endblock %}</title>
+  <title>
+    {%- if templateName == "test.html" -%}
+      {%- if isReactDemo -%}
+        {{ componentName }} - {{ demoName }} - PatternFly Elements v6
+      {%- else -%}
+        {{ componentName }} {{ demoName }} - PatternFly Elements v6
+      {%- endif -%}
+    {%- elsif isReactDemo -%}
+      {%- if isIndex -%}
+        {{ componentName }} - React Demos - PatternFly Elements v6
+      {%- else -%}
+        {{ componentName }} - {{ demoName }} - React Comparison - PatternFly Elements v6
+      {%- endif -%}
+    {%- else -%}
+      {%- if isIndex -%}
+        {{ componentName }} - PatternFly Elements v6
+      {%- else -%}
+        {{ componentName }} {{ demoName }} - PatternFly Elements v6
+      {%- endif -%}
+    {%- endif -%}
+  </title>
 
   {% include 'partials/head-meta.liquid' %}
   {% block styles %}{% endblock %}

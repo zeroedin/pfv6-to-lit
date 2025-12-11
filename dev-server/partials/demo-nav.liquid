@@ -3,14 +3,23 @@
   
   {% unless isIndex %}
     {% if isReactDemo %}
-      | <a href="/elements/{{ componentName }}/react">React - {{ componentName }} Index</a>
+      | <a href="{{ componentName | demoIndexUrl: true }}">React - {{ componentName | titleCase }} Index</a>
     {% else %}
-      | <a href="/elements/{{ componentName }}/demo">Lit - {{ componentName }} Index</a>  
+      | <a href="{{ componentName | demoIndexUrl: false }}">Lit - {{ componentName | titleCase }} Index</a>  
     {% endif %}
   {% endunless %}
-  {% if isReactDemo and webComponentDemoUrl %}
-    | <a href="{{ webComponentDemoUrl }}">Lit {% if isIndex %}Demos{% else %}demo{% endif %}</a>
-  {% elsif hasReactDemo and reactDemoUrl %}
-    | <a href="{{ reactDemoUrl }}">React {% if isIndex %}Demos{% else %}demo{% endif %}</a>
+  
+  {% if isReactDemo %}
+    {% if webComponentDemoExists %}
+      | <a href="{{ componentName | demoUrl: demoName, false }}">Lit {% if isIndex %}Demos{% else %}demo{% endif %}</a>
+    {% elsif not isIndex %}
+      | <a href="{{ componentName | demoIndexUrl: false }}">Lit Demos</a>
+    {% endif %}
+  {% elsif hasReactDemos %}
+    {% if reactDemoExists %}
+      | <a href="{{ componentName | demoUrl: demoName, true }}">React {% if isIndex %}Demos{% else %}demo{% endif %}</a>
+    {% elsif not isIndex %}
+      | <a href="{{ componentName | demoIndexUrl: true }}">React Demos</a>
+    {% endif %}
   {% endif %}
 </nav>
