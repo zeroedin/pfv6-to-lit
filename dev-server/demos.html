@@ -2,12 +2,14 @@
 
 {% block title %}{{ componentTitle }} Demos - PatternFly Elements v6{% endblock %}
 
+
 {% block styles %}
   <link rel="stylesheet" href="/dev-server/styles/patternfly/base.css">
   <link rel="stylesheet" href="/dev-server/styles/styles.css">
   {% if isReactDemo %}
     <link rel="stylesheet" href="/patternfly-react/dist/patternfly.css">
   {% endif %}
+  <link rel="stylesheet" href="/elements/pfv6-card/pfv6-card-lightdom.css">
 {% endblock %}
 
 {% block navigation %}

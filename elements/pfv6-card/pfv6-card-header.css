@@ -1,10 +1,3 @@
-/*
- * CRITICAL: Shadow DOM box-sizing reset
- * PatternFly base.css sets: *, *::before, *::after { box-sizing: border-box; }
- * box-sizing is NOT inherited, so Shadow DOM elements default to content-box
- * This causes layout differences vs React PatternFly
- * MUST be included in EVERY component's CSS
- */
 *,
 *::before,
 *::after {
@@ -12,167 +5,190 @@
 }
 
 :host {
-  /* Two-layer pattern: private variables reference public API with fallbacks */
-  --_pfv6-card-c-first-child-padding-block-start: var(--pf-v6-c-card--first-child--PaddingBlockStart, var(--pf-t--global--spacer--lg));
-  --_header-toggle-margin-block-start: var(--pf-v6-c-card__header-toggle--MarginBlockStart, calc(var(--pf-t--global--spacer--control--vertical--default) * -1));
-  --_header-toggle-margin-inline-end: var(--pf-v6-c-card__header-toggle--MarginInlineEnd, var(--pf-t--global--spacer--gap--text-to-element--default));
-  --_header-toggle-margin-block-end: var(--pf-v6-c-card__header-toggle--MarginBlockEnd, calc(var(--pf-t--global--spacer--control--vertical--default) * -1));
-  --_header-toggle-margin-inline-start: var(--pf-v6-c-card__header-toggle--MarginInlineStart, calc(var(--pf-t--global--spacer--action--horizontal--plain--default) * -1));
-  --_header-toggle-icon-transition-timing-function: var(--pf-v6-c-card__header-toggle-icon--TransitionTimingFunction, var(--pf-t--global--motion--timing-function--default));
-  --_header-toggle-icon-transition-duration: var(--pf-v6-c-card__header-toggle-icon--TransitionDuration, var(--pf-t--global--motion--duration--icon--default));
-  --_header-toggle-icon-rotate: var(--pf-v6-c-card--m-expanded__header-toggle-icon--Rotate, 90deg);
-  --_actions-padding-inline-start: var(--pf-v6-c-card__actions--PaddingInlineStart, var(--pf-t--global--spacer--md));
-  --_actions-gap: var(--pf-v6-c-card__actions--Gap, var(--pf-t--global--spacer--gap--action-to-action--default));
-  --_actions-margin-block-start: var(--pf-v6-c-card__actions--MarginBlockStart, calc(var(--pf-t--global--spacer--control--vertical--default) * -1));
-  --_actions-margin-block-end: var(--pf-v6-c-card__actions--MarginBlockEnd, calc(var(--pf-t--global--spacer--control--vertical--default) * -1));
-  --_header-wrap-row-gap: var(--pf-v6-c-card__header--m-wrap--RowGap, var(--pf-t--global--spacer--sm));
-  --_header-wrap-column-gap: var(--pf-v6-c-card__header--m-wrap--ColumnGap, var(--pf-t--global--spacer--md));
+  --_c-card-title-not-last-child-padding-block-end:
+    var(
+      --pf-v6-c-card__title--not--last-child--PaddingBlockEnd,
+      var(--pf-t--global--spacer--md)
+    );
+  --_c-card-child-padding-inline-start: var(--pf-v6-c-card--child--PaddingInlineStart, var(--pf-t--global--spacer--lg));
+  --_c-card-child-padding-inline-end: var(--pf-v6-c-card--child--PaddingInlineEnd, var(--pf-t--global--spacer--lg));
+  --_c-card-header-toggle-margin-block-start:
+    var(
+      --pf-v6-c-card__header-toggle--MarginBlockStart,
+      calc(var(--pf-t--global--spacer--control--vertical--default) * -1)
+    );
+  --_c-card-header-toggle-margin-inline-end:
+    var(
+      --pf-v6-c-card__header-toggle--MarginInlineEnd,
+      var(--pf-t--global--spacer--gap--text-to-element--default)
+    );
+  --_c-card-header-toggle-margin-block-end:
+    var(
+      --pf-v6-c-card__header-toggle--MarginBlockEnd,
+      calc(var(--pf-t--global--spacer--control--vertical--default) * -1)
+    );
+  --_c-card-header-toggle-margin-inline-start:
+    var(
+      --pf-v6-c-card__header-toggle--MarginInlineStart,
+      calc(var(--pf-t--global--spacer--action--horizontal--plain--default) * -1)
+    );
+  --_c-card-header-toggle-icon-transition-timing-function:
+    var(
+      --pf-v6-c-card__header-toggle-icon--TransitionTimingFunction,
+      var(--pf-t--global--motion--timing-function--default)
+    );
+  --_c-card-header-toggle-icon-transition-duration:
+    var(
+      --pf-v6-c-card__header-toggle-icon--TransitionDuration,
+      var(--pf-t--global--motion--duration--icon--default)
+    );
+  --_c-card-header-toggle-icon-rotate: var(--pf-v6-c-card--m-expanded__header-toggle-icon--Rotate, 90deg);
+  --_c-card-actions-padding-inline-start:
+    var(
+      --pf-v6-c-card__actions--PaddingInlineStart,
+      var(--pf-t--global--spacer--md)
+    );
+  --_c-card-actions-gap: var(--pf-v6-c-card__actions--Gap, var(--pf-t--global--spacer--gap--action-to-action--default));
+  --_c-card-actions-margin-block-start:
+    var(
+      --pf-v6-c-card__actions--MarginBlockStart,
+      calc(var(--pf-t--global--spacer--control--vertical--default) * -1)
+    );
+  --_c-card-actions-margin-block-end:
+    var(
+      --pf-v6-c-card__actions--MarginBlockEnd,
+      calc(var(--pf-t--global--spacer--control--vertical--default) * -1)
+    );
+  --_c-card-header-wrap-row-gap: var(--pf-v6-c-card__header--m-wrap--RowGap, var(--pf-t--global--spacer--sm));
+  --_c-card-header-wrap-column-gap: var(--pf-v6-c-card__header--m-wrap--ColumnGap, var(--pf-t--global--spacer--md));
 
   display: contents;
+}
+
+.header-toggle-icon {
+  display: inline-block;
+  transition-timing-function: var(--_c-card-header-toggle-icon-transition-timing-function);
+  transition-duration: var(--_c-card-header-toggle-icon-transition-duration);
+  transition-property: transform;
+
+  &:dir(rtl) {
+    scale: -1 1;
+  }
 }
 
 #header {
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding-block:
+    var(--_c-card-c-divider-child-padding-block-start, var(--_c-card-first-child-padding-block-start, 0))
+    var(--_c-card-title-not-last-child-padding-block-end);
+  padding-inline: var(--_c-card-child-padding-inline-start) var(--_c-card-child-padding-inline-end);
 
-  /* Header controls padding when it contains title */
-  padding-block-end: var(--pf-v6-c-card__title--not--last-child--PaddingBlockEnd);
-  padding-inline:
-    var(--pf-v6-c-card--child--PaddingInlineStart)
-    var(--pf-v6-c-card--child--PaddingInlineEnd);
-}
+  & ::slotted(pfv6-card-title) {
+    --pf-v6-c-card--first-child--PaddingBlockStart: 0;
+    --pf-v6-c-card__title--not--last-child--PaddingBlockEnd: 0;
+    --pf-v6-c-card--child--PaddingInlineStart: 0;
+    --pf-v6-c-card--child--PaddingInlineEnd: 0;
+  }
 
-/* First child header gets top padding from private variable */
-:host(:first-child) #header {
-  padding-block-start: var(--_pfv6-card-c-first-child-padding-block-start);
-}
+  &.expanded {
+    & .header-toggle-icon {
+      transform: rotate(var(--_c-card-header-toggle-icon-rotate));
+    }
+  }
 
-/* Divider siblings get padding from marker variable (ONLY set by lightdom CSS) */
-#header {
-  padding-block-start: var(--_card-has-divider-sibling);
-}
+  & .header-toggle {
+    align-self: flex-start;
+    margin-block: var(--_c-card-header-toggle-margin-block-start) var(--_c-card-header-toggle-margin-block-end);
+    margin-inline: var(--_c-card-header-toggle-margin-inline-start) var(--_c-card-header-toggle-margin-inline-end);
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    color: inherit;
+  }
 
-/* Remove padding from slotted title - header controls it */
-#header ::slotted(pfv6-card-title) {
-  --pf-v6-c-card--first-child--PaddingBlockStart: 0;
-  --pf-v6-c-card__title--not--last-child--PaddingBlockEnd: 0;
-  --pf-v6-c-card--child--PaddingInlineStart: 0;
-  --pf-v6-c-card--child--PaddingInlineEnd: 0;
-}
+  &.toggle-right {
+    --_c-card-header-toggle-margin-inline-end:
+      calc(
+        var(--pf-t--global--spacer--action--horizontal--plain--default, 0.5rem) * -1
+      );
+    --_c-card-header-toggle-margin-inline-start: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
 
-#header.toggle-right {
-  --_header-toggle-margin-inline-end: calc(var(--pf-t--global--spacer--action--horizontal--plain--default, 0.5rem) * -1);
-  --_header-toggle-margin-inline-start: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
-}
+    & .header-toggle {
+      order: 2;
+    }
+  }
 
-#header.toggle-right .header-toggle {
-  order: 2;
-}
+  & #actions {
+    display: flex;
+    gap: var(--_c-card-actions-gap);
+    align-items: center;
+    align-self: flex-start;
+    order: 1;
+    padding-inline-start: var(--_c-card-actions-padding-inline-start);
+    margin-block: var(--_c-card-actions-margin-block-start) var(--_c-card-actions-margin-block-end);
+    margin-inline-start: auto;
 
-#header.wrap {
-  --_actions-padding-inline-start: 0;
+    &.no-offset {
+      --_c-card-actions-margin-block-start: 0;
+      --_c-card-actions-margin-block-end: 0;
+    }
+  }
 
-  gap: var(--_header-wrap-row-gap) var(--_header-wrap-column-gap);
-  flex-wrap: wrap;
-}
+  &.wrap {
+    --_c-card-actions-padding-inline-start: 0;
 
-#header.wrap #actions {
-  flex-wrap: wrap;
-  row-gap: var(--_header-wrap-row-gap);
-  margin-inline-start: 0;
-}
+    gap: var(--_c-card-header-wrap-row-gap) var(--_c-card-header-wrap-column-gap);
+    flex-wrap: wrap;
 
-#header.wrap #actions + * {
-  margin-inline-end: auto;
-}
+    & #actions {
+      flex-wrap: wrap;
+      row-gap: var(--_c-card-header-wrap-row-gap);
+      margin-inline-start: 0;
 
-.header-main {
-  flex-grow: 1;
-}
+      & + * {
+        margin-inline-end: auto;
+      }
+    }
+  }
 
-.header-toggle {
-  align-self: flex-start;
-  margin-block: var(--_header-toggle-margin-block-start) var(--_header-toggle-margin-block-end);
-  margin-inline: var(--_header-toggle-margin-inline-start) var(--_header-toggle-margin-inline-end);
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  color: inherit;
-}
+  & .header-main {
+    flex-grow: 1;
+  }
 
-.header-toggle-icon {
-  display: inline-block;
-  transition-timing-function: var(--_header-toggle-icon-transition-timing-function);
-  transition-duration: var(--_header-toggle-icon-transition-duration);
-  transition-property: transform;
-}
+  & #selectable-actions {
+    & pfv6-checkbox {
+      --_grid-gap: 0;
+    }
 
-/* Expanded state - rotate icon */
-:host([expanded]) .header-toggle-icon {
-  transform: rotate(var(--_header-toggle-icon-rotate));
-}
+    &.hidden {
+      display: none;
+    }
+  }
 
-/* RTL support */
-:where(:host-context([dir="rtl"])) .header-toggle-icon {
-  scale: -1 1;
-}
+  & #clickable-action {
+    position: absolute;
+    inset: 0;
+    justify-self: auto;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    outline: 0;
+    text-decoration: none;
+    color: inherit;
+  }
 
-#actions {
-  display: flex;
-  gap: var(--_actions-gap);
-  align-items: center;
-  align-self: flex-start;
-  order: 1;
-  padding-inline-start: var(--_actions-padding-inline-start);
-  margin-block: var(--_actions-margin-block-start) var(--_actions-margin-block-end);
-  margin-inline-start: auto;
-}
-
-#actions.no-offset {
-  --_actions-margin-block-start: 0;
-  --_actions-margin-block-end: 0;
-}
-
-/*
- * Selectable actions container (nested inside #actions)
- * React: .pf-v6-c-card__selectable-actions has no direct styles
- * All styling is handled by descendants (checkbox/radio)
- */
-
-/* Match React's checkbox gap override for selectable cards */
-#selectable-actions pfv6-checkbox {
-  /* React: .pf-v6-c-card.pf-m-selectable .pf-v6-c-card__selectable-actions :is(.pf-v6-c-check) { gap: 0; } */
-  --_grid-gap: 0;
-}
-
-#selectable-actions.hidden {
-  display: none;
-}
-
-/* Clickable action button/link overlay */
-#clickable-action {
-  position: absolute;
-  inset: 0;
-  justify-self: auto;
-  cursor: pointer;
-  background: none;
-  border: 0;
-  outline: 0;
-  text-decoration: none;
-  color: inherit;
-}
-
-/* Visually hidden label (utility class - can be reused) */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+  & .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
 }

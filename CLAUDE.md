@@ -3174,7 +3174,7 @@ When implementing a new layout component, follow these steps:
 3. ✅ **Create TypeScript file** - Minimal component with `createRenderRoot() { return this; }`
 4. ✅ **NO CSS import** - Do NOT import CSS in TypeScript file
 5. ✅ **Create `-lightdom.css` file** - All styles go here
-6. ✅ **Use CSS nesting** - Nest attribute selectors and media queries
+6. ✅ **Use CSS nesting** - Nest attribute selectors and media queries, use the & ampersand pattern for nesting.
 7. ✅ **Universal child selector** - Use `pfv6-{layout} > *` for all children
 8. ✅ **CSS variables bridge** - Attributes → CSS variables → styles
 9. ✅ **Document CSS requirement** - README must state users need to include CSS manually
@@ -4013,15 +4013,47 @@ render() {
 #### General CSS Rules (All Components)
 
 **Modern CSS Nesting**:
-- **ALWAYS** use modern CSS nesting including media queries nested per selector
+- **ALWAYS** use modern CSS nesting including media queries nested per selector, with the & ampersand pattern for nesting.
 - **ALWAYS** nest attribute selectors and media queries inside the main selector
 - This applies to both Shadow DOM and Lightdom CSS
 - **NEVER** add CSS comments to the CSS file, only add comments if explicitly requested or used in documentation for CEM.
+- **ALWAYS** set css variables before declaring rules for a selector.
 
 **CSS Variable Fallbacks**:
 - **ALWAYS** use fallbacks for all CSS variables to a global design token (`--pf-t--global--*`)
 - Never use CSS variables without fallback values
 - Fallbacks ensure graceful degradation when variables are unset
+
+**🚨 CRITICAL: Use Only Baseline CSS Selectors**:
+- **NEVER** use `:host-context()` - Not cross-browser compatible (Safari, Firefox lack support)
+- **NEVER** use non-baseline pseudo-classes or selectors that aren't universally supported
+- **ONLY** use standard CSS selectors that work across all modern browsers
+- **ALWAYS** verify selector compatibility at [caniuse.com](https://caniuse.com) before using
+- ❌ **Forbidden selectors**: `:host-context()`, experimental pseudo-classes
+- ✅ **Allowed selectors**: `:host`, `:host()`, `::slotted()`, `:dir()`, standard pseudo-classes (`:hover`, `:focus`, `:active`, etc.)
+- ✅ **RTL/LTR directionality**: Use `:host(:dir(rtl))` and `:host(:dir(ltr))` for directional styling
+
+**Why this matters**:
+- Cross-browser compatibility is non-negotiable
+- Non-baseline selectors will fail silently in unsupported browsers
+- Users expect components to work consistently across all browsers
+
+**Example - RTL Support**:
+```css
+/* GOOD - Use :dir() for directional styling */
+:host(:dir(rtl)) {
+  & .icon {
+    scale: -1 1;  /* Flip icon horizontally for RTL */
+  }
+}
+
+/* BAD - Don't use :host-context() */
+:where(:host-context([dir="rtl"])) {
+  & .icon {
+    scale: -1 1;
+  }
+}
+```
 
 #### Use ID Selectors, Not BEM Classes
 
