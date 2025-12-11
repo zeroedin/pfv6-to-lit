@@ -116,7 +116,7 @@
       );
     --_c-card-header-toggle-margin-inline-start: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
 
-    .header-toggle {
+    & .header-toggle {
       order: 2;
     }
   }
@@ -143,7 +143,7 @@
     gap: var(--_c-card-header-wrap-row-gap) var(--_c-card-header-wrap-column-gap);
     flex-wrap: wrap;
 
-    #actions {
+    & #actions {
       flex-wrap: wrap;
       row-gap: var(--_c-card-header-wrap-row-gap);
       margin-inline-start: 0;
@@ -159,7 +159,7 @@
   }
 
   & #selectable-actions {
-    pfv6-checkbox {
+    & pfv6-checkbox {
       --_grid-gap: 0;
     }
 
