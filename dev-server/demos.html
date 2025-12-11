@@ -1,8 +1,5 @@
 {% layout 'base.liquid' %}
 
-{% block title %}{{ componentTitle }} Demos - PatternFly Elements v6{% endblock %}
-
-
 {% block styles %}
   <link rel="stylesheet" href="/dev-server/styles/patternfly/base.css">
   <link rel="stylesheet" href="/dev-server/styles/styles.css">
@@ -17,9 +14,9 @@
     <a href="/">Component Index</a>
     
     {% if isReactDemo %}
-      | <a href="/elements/{{ componentName }}/demo">Lit - {{ componentName }} Demos</a>
+      | <a href="{{ componentName | demoIndexUrl: false }}">Lit - {{ componentName | titleCase }} Demos</a>
     {% elsif hasReactDemos %}
-      | <a href="/elements/{{ componentName }}/react">React - {{ componentName }} Demos</a>
+      | <a href="{{ componentName | demoIndexUrl: true }}">React - {{ componentName | titleCase }} Demos</a>
     {% endif %}
   </nav>
 {% endblock %}
