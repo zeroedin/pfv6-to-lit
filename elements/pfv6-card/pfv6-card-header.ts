@@ -230,121 +230,6 @@ export class Pfv6CardHeader extends LitElement {
     this.dispatchEvent(event);
   };
 
-  #renderExpandToggle(): TemplateResult | string {
-    if (!this.expandable) return '';
-
-    return html`
-      <button
-        id="expand-toggle"
-        part="header-toggle"
-        class="header-toggle"
-        aria-expanded=${this.expanded ? 'true' : 'false'}
-        aria-label=${this.expanded ? 'Collapse card' : 'Expand card'}
-        @click=${this.#handleExpandToggle}
-      >
-        <svg
-          class="header-toggle-icon"
-          fill="currentColor"
-          height="1em"
-          width="1em"
-          viewBox="0 0 320 512"
-          aria-hidden="true"
-        >
-          <path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/>
-        </svg>
-      </button>
-    `;
-  }
-
-  #renderSelectableActions(): TemplateResult | string {
-    // Clickable-only cards render a button or link overlay
-    if (this.clickableOnly) {
-      if (this.clickableHref) {
-        return html`
-          <div id="selectable-actions">
-            <a
-              id="clickable-action"
-              href=${this.clickableHref}
-              target=${ifDefined(this.clickableExternal ? '_blank' : undefined)}
-              rel=${ifDefined(this.clickableExternal ? 'noopener noreferrer' : undefined)}
-              aria-label=${ifDefined(this.selectableAriaLabel)}
-              aria-labelledby=${ifDefined(this.selectableAriaLabelledby)}
-              @click=${this.#handleClickableClick}
-            ></a>
-          </div>
-        `;
-      }
-
-      return html`
-        <div id="selectable-actions">
-          <button
-            id="clickable-action"
-            aria-label=${ifDefined(this.selectableAriaLabel)}
-            aria-labelledby=${ifDefined(this.selectableAriaLabelledby)}
-            @click=${this.#handleClickableClick}
-          ></button>
-        </div>
-      `;
-    }
-
-    // Selectable cards with checkbox/radio
-    if (!this.selectableVariant) return '';
-
-    const inputType = this.selectableVariant === 'single' ? 'radio' : 'checkbox';
-    const inputId = this.selectableId || `card-selectable-${Math.random().toString(36).substring(2, 11)}`;
-
-    // For checkboxes, use pfv6-checkbox component
-    if (inputType === 'checkbox') {
-      return html`
-        <div 
-          id="selectable-actions"
-          class=${classMap({ 
-            hidden: this.selectableHidden
-          })}
-        >
-          <pfv6-checkbox
-            id=${inputId}
-            name=${ifDefined(this.selectableName)}
-            .checked=${this.selectableChecked}
-            ?disabled=${this.selectableDisabled}
-            accessible-label=${ifDefined(this.selectableAriaLabel || 'Select card')}
-            @change=${this.#handleSelectableChange}
-          ></pfv6-checkbox>
-        </div>
-      `;
-    }
-
-    // For radio buttons, use native input until pfv6-radio is implemented
-    return html`
-      <div 
-        id="selectable-actions"
-        class=${classMap({ 
-          hidden: this.selectableHidden
-        })}
-      >
-        <input
-          type="radio"
-          id=${inputId}
-          name=${ifDefined(this.selectableName)}
-          .checked=${this.selectableChecked}
-          ?disabled=${this.selectableDisabled}
-          aria-label=${ifDefined(this.selectableAriaLabel)}
-          aria-labelledby=${ifDefined(this.selectableAriaLabelledby)}
-          @change=${this.#handleSelectableChange}
-        />
-        <label for=${inputId} class="visually-hidden">
-          ${this.selectableAriaLabel || 'Select card'}
-        </label>
-      </div>
-    `;
-  }
-
-  #hasActions(): boolean {
-    const actionsSlot = this.querySelector('[slot="actions"]');
-    const hasSelectableActions = !!this.selectableVariant || this.clickableOnly;
-    return !!actionsSlot || hasSelectableActions;
-  }
-
   render(): TemplateResult {
     const headerClasses = {
       'toggle-right': this.toggleRightAligned,
@@ -355,7 +240,11 @@ export class Pfv6CardHeader extends LitElement {
       'no-offset': this.actionsNoOffset || this.selectableActionsNoOffset,
     };
 
-    const hasActions = this.#hasActions();
+    const actionsSlot = this.querySelector('[slot="actions"]');
+    const hasSelectableActions = !!this.selectableVariant || this.clickableOnly;
+    const hasActions = !!actionsSlot || hasSelectableActions;
+
+    const inputId = this.selectableId || `card-selectable-${Math.random().toString(36).substring(2, 11)}`;
 
     return html`
       <div 
@@ -363,7 +252,27 @@ export class Pfv6CardHeader extends LitElement {
         part="header"
         class=${classMap(headerClasses)}
       >
-        ${this.#renderExpandToggle()}
+        ${this.expandable ? html`
+          <button
+            id="expand-toggle"
+            part="header-toggle"
+            class="header-toggle"
+            aria-expanded=${this.expanded ? 'true' : 'false'}
+            aria-label=${this.expanded ? 'Collapse card' : 'Expand card'}
+            @click=${this.#handleExpandToggle}
+          >
+            <svg
+              class="header-toggle-icon"
+              fill="currentColor"
+              height="1em"
+              width="1em"
+              viewBox="0 0 320 512"
+              aria-hidden="true"
+            >
+              <path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/>
+            </svg>
+          </button>
+        ` : ''}
         
         <div id="header-main" part="header-main" class="header-main">
           <slot></slot>
@@ -375,7 +284,71 @@ export class Pfv6CardHeader extends LitElement {
             part="actions" 
             class=${classMap(actionsClasses)}
           >
-            ${this.#renderSelectableActions()}
+            ${this.clickableOnly ? (
+              this.clickableHref ? html`
+                <div id="selectable-actions">
+                  <a
+                    id="clickable-action"
+                    href=${this.clickableHref}
+                    target=${ifDefined(this.clickableExternal ? '_blank' : undefined)}
+                    rel=${ifDefined(this.clickableExternal ? 'noopener noreferrer' : undefined)}
+                    aria-label=${ifDefined(this.selectableAriaLabel)}
+                    aria-labelledby=${ifDefined(this.selectableAriaLabelledby)}
+                    @click=${this.#handleClickableClick}
+                  ></a>
+                </div>
+              ` : html`
+                <div id="selectable-actions">
+                  <button
+                    id="clickable-action"
+                    aria-label=${ifDefined(this.selectableAriaLabel)}
+                    aria-labelledby=${ifDefined(this.selectableAriaLabelledby)}
+                    @click=${this.#handleClickableClick}
+                  ></button>
+                </div>
+              `
+            ) : (
+              this.selectableVariant ? (
+                this.selectableVariant === 'single' ? html`
+                  <div 
+                    id="selectable-actions"
+                    class=${classMap({ 
+                      hidden: this.selectableHidden
+                    })}
+                  >
+                    <input
+                      type="radio"
+                      id=${inputId}
+                      name=${ifDefined(this.selectableName)}
+                      .checked=${this.selectableChecked}
+                      ?disabled=${this.selectableDisabled}
+                      aria-label=${ifDefined(this.selectableAriaLabel)}
+                      aria-labelledby=${ifDefined(this.selectableAriaLabelledby)}
+                      @change=${this.#handleSelectableChange}
+                    />
+                    <label for=${inputId} class="visually-hidden">
+                      ${this.selectableAriaLabel || 'Select card'}
+                    </label>
+                  </div>
+                ` : html`
+                  <div 
+                    id="selectable-actions"
+                    class=${classMap({ 
+                      hidden: this.selectableHidden
+                    })}
+                  >
+                    <pfv6-checkbox
+                      id=${inputId}
+                      name=${ifDefined(this.selectableName)}
+                      .checked=${this.selectableChecked}
+                      ?disabled=${this.selectableDisabled}
+                      accessible-label=${ifDefined(this.selectableAriaLabel || 'Select card')}
+                      @change=${this.#handleSelectableChange}
+                    ></pfv6-checkbox>
+                  </div>
+                `
+              ) : ''
+            )}
             <slot name="actions"></slot>
           </div>
         ` : ''}

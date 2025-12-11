@@ -54,7 +54,7 @@ export class Pfv6CardBody extends LitElement {
    * @type {'true' | 'false'}
    * @default 'true'
    */
-  @property({ type: String, reflect: true })
+  @property()
   filled: 'true' | 'false' = 'true';
 
   render(): TemplateResult {
