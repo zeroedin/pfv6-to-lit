@@ -315,6 +315,15 @@ export function routerPlugin(): Plugin {
         }
         await next();
       });
+
+      // Handle /assets/ paths - map to dev-server/assets/patternfly/assets/
+      app.use(async (ctx, next) => {
+        if (ctx.path.startsWith('/assets/')) {
+          // Map /assets/* to dev-server/assets/patternfly/assets/*
+          ctx.path = ctx.path.replace('/assets/', 'dev-server/assets/patternfly/assets/');
+        }
+        await next();
+      });
     },
   };
 }

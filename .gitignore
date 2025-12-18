@@ -55,4 +55,6 @@ dev-server/assets/patternfly/
 # Copied React demos (generated from PatternFly React repository)
 /patternfly-react
 
+react-dependency-tree.json
 
+.claude/settings.local.json

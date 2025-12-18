@@ -68,7 +68,10 @@ async function generateComparisonTableHTML(): Promise<string> {
     const reactManifest = JSON.parse(reactManifestContent);
 
     for (const [componentName, componentData] of Object.entries<any>(reactManifest.components)) {
-      const componentKey = componentName.toLowerCase();
+      // Convert PascalCase to kebab-case (e.g., "AboutModal" -> "about-modal")
+      const componentKey = componentName
+        .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+        .toLowerCase();
       
       if (!components.has(componentKey)) {
         components.set(componentKey, {

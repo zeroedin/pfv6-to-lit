@@ -85,15 +85,22 @@ export default defineConfig({
         alias: [
             // Map React demo asset imports to our copied PatternFly assets
             // These assets are copied by scripts/copy-patternfly-assets.ts
-            // NOTE: Only 2 patterns actually exist in PatternFly React demos:
+            // NOTE: Patterns found in PatternFly React demos:
             //   1. ../../PF-IconLogo.svg (CardExpandableWithIcon.tsx)
-            //   2. ../../assets/*.svg (all other demos)
+            //   2. ../../assets/PF-IconLogo.svg (AboutModal, LoginPage)
+            //   3. ../../assets/PF-IconLogo-*.svg (Brand variants)
+            //   4. ../../assets/*.svg (all other assets)
             
-            // Direct logo import (specific file, must come first)
-            { find: '../../PF-IconLogo.svg', replacement: resolve('dev-server/assets/patternfly/images/PF-IconLogo.svg') },
-            
-            // Assets folder imports (regex captures filename)
-            { find: /^\.\.\/\.\.\/assets\/(.*)$/, replacement: resolve('dev-server/assets/patternfly/images/$1') },
+            // Direct logo imports (no assets/ prefix) - must come first
+            { find: '../../PF-IconLogo.svg', replacement: resolve('dev-server/assets/patternfly/assets/images/PF-IconLogo.svg') },
+
+            // Specific logo file imports (with assets/ prefix)
+            { find: '../../assets/PF-IconLogo.svg', replacement: resolve('dev-server/assets/patternfly/assets/images/PF-IconLogo.svg') },
+            { find: '../../assets/PF-IconLogo-color.svg', replacement: resolve('dev-server/assets/patternfly/assets/images/PF-IconLogo-color.svg') },
+            { find: '../../assets/PF-IconLogo-Reverse.svg', replacement: resolve('dev-server/assets/patternfly/assets/images/PF-IconLogo-Reverse.svg') },
+
+            // Generic assets folder imports (regex captures filename)
+            { find: /^\.\.\/\.\.\/assets\/(.*)$/, replacement: resolve('dev-server/assets/patternfly/assets/images/$1') },
         ]
     },
     // Pre-bundle PatternFly for performance, keep React external

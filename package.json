@@ -9,27 +9,62 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "postinstall": "npx tsx scripts/copy-patternfly-react-demos.ts && npx tsx scripts/extract-layout-demos.ts",
+    "postinstall": "wireit",
     "test": "wireit",
-    "dev": "wireit",
+    "start": "wireit",
     "compile": "wireit",
     "compile:react-demos": "wireit",
     "lint": "wireit",
     "e2e": "wireit",
-    "e2e:parity": "wireit"
+    "e2e:parity": "wireit",
+    "patternfly-cache": "wireit",
+    "analyze-dependencies": "wireit",
+    "copy-demos": "wireit"
   },
   "wireit": {
-    "dev": {
+    "clean:cache": {
+      "command": "rm -rf .cache",
+      "files": [],
+      "output": ["./.cache"]
+    },
+    "patternfly-cache": {
+      "command": "npx tsx scripts/patternfly-cache.js",
+      "files": [],
+      "output": ["./.cache/patternfly-react", "./.cache/patternfly"],
+      "dependencies": [
+        "clean:cache"
+      ]
+    },
+    "analyze-dependencies": {
+      "command": "npx tsx scripts/generate-dependency-tree.js",
+      "files": ["elements/*/"],
+      "output": ["./react-dependency-tree.json"],
+      "dependencies": [
+        "patternfly-cache"
+      ]
+    },
+    "copy-demos": {
+      "command": "npx tsx scripts/copy-patternfly-react-demos.ts",
+      "files": [],
+      "output": ["./patternfly-react/**"],
+      "dependencies": [
+        "clean:demos-source",
+        "analyze-dependencies"
+      ]
+    },
+    "postinstall": {
+      "dependencies": [
+        "copy-demos"
+      ]
+    },
+    "start": {
       "service": true,
       "command": "web-dev-server --watch --open",
       "description": "Start the development server (web components only)",
       "dependencies": [
         "clean:plugins",
         "clean:react-demos",
-        "compile:cem",
-        "copy:pf-assets",
-        "compile:pfv6-elements",
-        "compile:react-demos"
+        "compile"
       ]
     },
     "watch:react-demos": {
@@ -47,6 +82,10 @@
       "command": "rm -rf patternfly-react/dist",
       "description": "Clean React demo build output"
     },
+    "clean:demos-source": {
+      "command": "rm -rf patternfly-react && mkdir -p patternfly-react",
+      "description": "Clean React demo source files (before copying from cache)"
+    },
     "copy:pf-assets": {
       "command": "npx tsx scripts/copy-patternfly-assets.ts",
       "description": "Copy PatternFly base CSS, fonts, and images to dev-server",
@@ -59,14 +98,8 @@
       "output": [
         "dev-server/styles/patternfly/base.css",
         "dev-server/styles/assets/fonts/**/*",
-        "dev-server/assets/patternfly/images/**/*"
+        "dev-server/assets/patternfly/assets/images/**/*"
       ]
-    },
-    "compile:pfv6-elements": {
-      "service": true,
-      "command": "tsc --watch",
-      "description": "Compile and watch PatternFly v6 elements",
-      "files": []
     },
     "compile": {
       "dependencies": [
@@ -79,11 +112,17 @@
     "compile:tsc": {
       "command": "tsc",
       "description": "Compile TypeScript",
-      "files": [],
-      "output": []
+      "output": [
+        "elements/**/*.js",
+        "elements/**/*.js.map",
+        "lib/**/*.js",
+        "lib/**/*.js.map",
+        "dev-server/**/*.js",
+        "dev-server/**/*.js.map"
+      ]
     },
     "compile:cem": {
-      "command": "cem generate",
+      "command": "if [ -d elements ] && [ \"$(find elements -name '*.ts' -not -name '*.spec.ts' 2>/dev/null)\" ]; then cem generate; else echo 'ℹ️  No elements found, skipping CEM generation'; fi",
       "description": "Generate Custom Elements Manifest with demo discovery",
       "dependencies": [
         "compile:tsc"
@@ -98,7 +137,7 @@
       ]
     },
     "compile:react-demos": {
-      "command": "vite build --config vite.config.react-demos.js",
+      "command": "vite build --config vite.config.react-demos.ts",
       "description": "Build React comparison demos with bundled PatternFly dependencies",
       "dependencies": [
         "clean:react-demos"
