@@ -86,6 +86,8 @@ Lit:   (missing)                             ❌ MISSING DEMO
 
 **Validation Rule**: Every `.tsx` file in `patternfly-react/{Component}/` MUST have a corresponding `.html` file in `elements/pfv6-{component}/demo/` with matching URL path.
 
+**CRITICAL**: NEVER suggest creating `index.html` - this breaks URL parity. Each React demo (e.g., `BackgroundImageBasic.tsx`) maps to a specific descriptor (e.g., `basic.html`), not to `index.html`.
+
 ## Step 3: Static Asset Path Validation (CRITICAL)
 
 ### Understand Demo Server URLs
@@ -713,7 +715,8 @@ After fixing all issues, re-run audit to verify:
 - Allow absolute paths for static assets
 - Allow incorrect relative path depth
 - Allow `../` for static assets (always require `../../` for all demos)
-- Accept `index.html` file (breaks URL parity - use `basic.html` instead)
+- Accept `index.html` file (breaks URL parity - every React demo maps to a specific descriptor)
+- Suggest creating `index.html` (NEVER - breaks 1:1 URL parity with React demos)
 - Approximate prop counts ("about the same")
 - Ignore text casing differences
 - Accept "close enough" property values
