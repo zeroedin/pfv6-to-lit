@@ -1,0 +1,39 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /**
+   * Width of the brand image.
+   * Can be set at various breakpoints using responsive properties.
+   * @cssprop {<length> | auto} --pf-v6-c-brand--Width - Default: auto
+   */
+  --pf-v6-c-brand--Width: auto;
+
+  /**
+   * Height of the brand image.
+   * Can be set at various breakpoints using responsive properties.
+   * @cssprop {<length> | auto} --pf-v6-c-brand--Height - Default: auto
+   */
+  --pf-v6-c-brand--Height: auto;
+
+  display: inline-block;
+}
+
+#container {
+  width: var(--pf-v6-c-brand--Width--base, var(--pf-v6-c-brand--Width, auto));
+  height: var(--pf-v6-c-brand--Height--base, var(--pf-v6-c-brand--Height, auto));
+
+  &.picture {
+    display: inline-flex;
+    max-width: 100%;
+  }
+
+  & > img {
+    width: inherit;
+    height: inherit;
+  }
+}
+
