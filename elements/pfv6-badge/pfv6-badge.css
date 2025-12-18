@@ -1,0 +1,89 @@
+/* Box-sizing reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Component base variables */
+  --pf-v6-c-badge--BorderColor: transparent;
+  --pf-v6-c-badge--BorderWidth: var(--pf-t--global--border--width--regular, 1px);
+  --pf-v6-c-badge--BorderRadius: var(--pf-t--global--border--radius--pill, 999px);
+  --pf-v6-c-badge--FontSize: var(--pf-t--global--font--size--body--sm, 0.75rem);
+  --pf-v6-c-badge--FontWeight: var(--pf-t--global--font--weight--body--bold, 500);
+  --pf-v6-c-badge--PaddingInlineEnd: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-badge--PaddingInlineStart: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-badge--Color: var(--pf-t--global--text--color--nonstatus--on-gray--default, #151515);
+  --pf-v6-c-badge--MinWidth: var(--pf-t--global--spacer--xl, 2rem);
+
+  /* Read modifier variables */
+  --pf-v6-c-badge--m-read--BackgroundColor: var(--pf-t--global--color--nonstatus--gray--default, #e0e0e0);
+  --pf-v6-c-badge--m-read--Color: var(--pf-t--global--text--color--nonstatus--on-gray--default, #151515);
+  --pf-v6-c-badge--m-read--BorderColor: var(--pf-t--global--border--color--high-contrast, rgba(255, 255, 255, 0));
+
+  /* Unread modifier variables */
+  --pf-v6-c-badge--m-unread--BackgroundColor: var(--pf-t--global--color--brand--default, #0066cc);
+  --pf-v6-c-badge--m-unread--Color: var(--pf-t--global--text--color--on-brand--default, #ffffff);
+
+  /* Disabled modifier variables */
+  --pf-v6-c-badge--m-disabled--Color: var(--pf-t--global--text--color--on-disabled, #4d4d4d);
+  --pf-v6-c-badge--m-disabled--BorderColor: var(--pf-t--global--border--color--disabled, #a3a3a3);
+  --pf-v6-c-badge--m-disabled--BackgroundColor: var(--pf-t--global--background--color--disabled--default, #c7c7c7);
+}
+
+#badge {
+  position: relative;
+  display: inline-block;
+  min-width: var(--pf-v6-c-badge--MinWidth);
+  padding-inline-start: var(--pf-v6-c-badge--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-badge--PaddingInlineEnd);
+  font-size: var(--pf-v6-c-badge--FontSize);
+  font-weight: var(--pf-v6-c-badge--FontWeight);
+  color: var(--pf-v6-c-badge--Color);
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--pf-v6-c-badge--BackgroundColor);
+  border-radius: var(--pf-v6-c-badge--BorderRadius);
+}
+
+#badge::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  border: var(--pf-v6-c-badge--BorderWidth) solid var(--pf-v6-c-badge--BorderColor);
+  border-radius: inherit;
+}
+
+#badge.read {
+  --pf-v6-c-badge--BorderColor: var(--pf-v6-c-badge--m-read--BorderColor);
+  --pf-v6-c-badge--Color: var(--pf-v6-c-badge--m-read--Color);
+  --pf-v6-c-badge--BackgroundColor: var(--pf-v6-c-badge--m-read--BackgroundColor);
+}
+
+#badge.unread {
+  --pf-v6-c-badge--Color: var(--pf-v6-c-badge--m-unread--Color);
+  --pf-v6-c-badge--BackgroundColor: var(--pf-v6-c-badge--m-unread--BackgroundColor);
+}
+
+#badge.disabled {
+  --pf-v6-c-badge--Color: var(--pf-v6-c-badge--m-disabled--Color);
+  --pf-v6-c-badge--BackgroundColor: var(--pf-v6-c-badge--m-disabled--BackgroundColor);
+}
+
+#badge.disabled::after {
+  border-color: var(--pf-v6-c-badge--m-disabled--BorderColor);
+}
+
+#screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
