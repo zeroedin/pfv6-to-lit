@@ -156,10 +156,62 @@ demo/
 
 ### Rules for Static Assets
 
-1. **Always use relative paths** (never absolute)
+1. **Always use relative paths for component-specific assets** (never absolute for component files)
 2. **Static assets in demo/ folder** (images, SVGs): Use `../` prefix (one level up from virtual directory)
 3. **Lightdom CSS files** (in component root): Use `../../` prefix (two levels up from virtual directory)
    - All demos: `<link rel="stylesheet" href="../../pfv6-{component}-lightdom.css">`
+4. **Shared PatternFly assets**: Use absolute `/assets/images/` path (see Step 3.5 below)
+
+## Step 3.5: Handling React Asset Imports (CRITICAL)
+
+React demos often import static assets like images, SVGs, and CSS files:
+
+```tsx
+import pfLogo from '../../assets/PF-HorizontalLogo-Color.svg';
+import avatarImg from './avatarImg.svg';
+```
+
+**Required Process:**
+
+1. **Identify all React asset imports** in the demo file
+2. **Resolve the actual file path** in React source:
+   - `../../assets/Foo.svg` → `src/components/assets/Foo.svg`
+   - `../../../assets/Bar.png` → `src/assets/Bar.png`
+3. **Check if asset exists in PatternFly shared images**:
+   - `dev-server/assets/patternfly/assets/images/`
+   - These are available via `/assets/images/` route (router maps `/assets/` → `dev-server/assets/patternfly/assets/`)
+4. **Determine the path strategy**:
+   - **If in `/assets/images/`**: Use absolute path `/assets/images/filename.svg`
+   - **If component-specific**: Copy to demo folder, use relative `../filename.svg`
+
+**Common PatternFly Shared Assets (use `/assets/images/` path):**
+
+- Logo files: `PF-HorizontalLogo-Color.svg`, `PF-HorizontalLogo-Reverse.svg`, `PF-IconLogo.svg`, `PF-IconLogo-Reverse.svg`
+- Avatar: `avatarImg.svg`, `img_avatar-light.svg`
+- Background: `pf-background.svg`, `PF-Backdrop.svg`
+- Icons: Various PNG and SVG icons (see `dev-server/assets/patternfly/assets/images/`)
+
+**Example Conversion:**
+
+React:
+```tsx
+import pfLogo from '../../assets/PF-HorizontalLogo-Color.svg';
+<Brand src={pfLogo} alt="PatternFly" />
+```
+
+Lit HTML:
+```html
+<!-- Asset available at /assets/images/ - use absolute path -->
+<pfv6-brand src="/assets/images/PF-HorizontalLogo-Color.svg" alt="PatternFly"></pfv6-brand>
+```
+
+**Rules:**
+- ✅ Use `/assets/images/` for PatternFly shared assets (logos, common icons, backgrounds)
+- ✅ Copy component-specific assets to demo folder, use `../filename.svg`
+- ✅ Preserve exact filenames from React imports (case-sensitive, with hyphens)
+- ❌ Don't create placeholder/fake assets
+- ❌ Don't copy shared PatternFly assets to demo folders
+- ❌ Don't change filenames (e.g., `PF-HorizontalLogo-Color.svg` not `logo.svg`)
 
 ## Step 4: Demo Structure (CRITICAL)
 

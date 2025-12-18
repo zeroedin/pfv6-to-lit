@@ -133,7 +133,7 @@ The demo server converts file paths to pretty URLs with trailing slashes:
 
 **Common Mistakes**:
 ```html
-<!-- ❌ WRONG - Absolute path -->
+<!-- ❌ WRONG - Absolute path for component-specific asset -->
 <img src="/elements/pfv6-avatar/demo/avatar.svg" alt="avatar">
 
 <!-- ❌ WRONG - Using ./ for assets in demo/ folder -->
@@ -141,6 +141,62 @@ The demo server converts file paths to pretty URLs with trailing slashes:
 
 <!-- ❌ WRONG - Using ../../ for assets in demo/ folder -->
 <img src="../../avatar.svg" alt="avatar">
+```
+
+### Validate Asset File Parity (React Asset Imports)
+
+React demos import static assets that must be properly converted to Lit demos.
+
+**Validation Process:**
+
+1. **Check React imports**: Read all React demo files in `.cache/patternfly-react/.../examples/`, identify asset imports:
+   ```tsx
+   import pfLogo from '../../assets/PF-HorizontalLogo-Color.svg';
+   import avatarImg from './avatarImg.svg';
+   ```
+
+2. **Verify path correctness**:
+   - **Shared PatternFly assets**: Should use `/assets/images/` absolute path
+   - **Component-specific assets**: Should use `../` relative path and exist in demo folder
+
+3. **Verify filename match**: Asset filename must exactly match React import (case-sensitive, preserve hyphens)
+
+4. **Verify asset availability**:
+   - For `/assets/images/` paths: Check file exists in `dev-server/assets/patternfly/assets/images/`
+   - For `../` paths: Check file exists in component's `demo/` folder
+
+**Common PatternFly Shared Assets (must use `/assets/images/`):**
+
+- Logo files: `PF-HorizontalLogo-Color.svg`, `PF-HorizontalLogo-Reverse.svg`, `PF-IconLogo.svg`, `PF-IconLogo-Reverse.svg`
+- Avatar: `avatarImg.svg`, `img_avatar-light.svg`
+- Background: `pf-background.svg`, `PF-Backdrop.svg`
+
+**Common Failures:**
+
+- ❌ Using placeholder images (e.g., `logo.svg`) instead of actual filenames (`PF-HorizontalLogo-Color.svg`)
+- ❌ Using `../logo.svg` when should be `/assets/images/PF-HorizontalLogo-Color.svg`
+- ❌ Incorrect filenames or wrong asset variants (Color vs Reverse)
+- ❌ Copying shared PatternFly assets to demo folder instead of using `/assets/images/`
+- ❌ Missing component-specific assets that should be copied to demo folder
+- ❌ Changed filenames that don't match React imports
+
+**Example Validation:**
+
+React:
+```tsx
+import pfLogo from '../../assets/PF-HorizontalLogo-Color.svg';
+<Brand src={pfLogo} alt="PatternFly" />
+```
+
+Lit HTML (✅ CORRECT):
+```html
+<pfv6-brand src="/assets/images/PF-HorizontalLogo-Color.svg" alt="PatternFly"></pfv6-brand>
+```
+
+Lit HTML (❌ WRONG):
+```html
+<!-- Wrong: placeholder filename instead of actual asset -->
+<pfv6-brand src="../logo.svg" alt="PatternFly"></pfv6-brand>
 ```
 
 ## Step 4: Demo Structure Validation (CRITICAL)
