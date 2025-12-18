@@ -6,7 +6,7 @@
  * This script copies:
  * - @patternfly/react-core/dist/styles/base.css → dev-server/styles/patternfly/base.css
  * - @patternfly/patternfly/assets/fonts/** → dev-server/styles/assets/fonts/
- * - @patternfly/react-styles/css/assets/images/** → dev-server/assets/patternfly/images/
+ * - @patternfly/react-styles/css/assets/images/** → dev-server/assets/patternfly/assets/images/
  * 
  * Note: This also serves as the asset source for React demo builds (via Vite aliases)
  */
@@ -26,7 +26,7 @@ async function copyPatternFlyAssets() {
     // Create output directories
     const patternflyStylesDir = join(projectRoot, 'dev-server/styles/patternfly');
     const patternflyFontsDir = join(projectRoot, 'dev-server/styles/patternfly/assets/fonts');
-    const imagesDir = join(projectRoot, 'dev-server/assets/patternfly/images');
+    const imagesDir = join(projectRoot, 'dev-server/assets/patternfly/assets/images');
 
     await mkdir(patternflyStylesDir, { recursive: true });
     await mkdir(patternflyFontsDir, { recursive: true });

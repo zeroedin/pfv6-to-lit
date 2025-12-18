@@ -1,9 +1,0 @@
-:host {
-  display: contents;
-
-  --pf-v6-c-card--first-child--PaddingBlockStart: 0;
-}
-
-#expandable-content {
-  display: contents;
-}

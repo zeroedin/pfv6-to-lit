@@ -49,6 +49,7 @@ export function routerPlugin(): Plugin {
     async serverStart({ app, fileWatcher }) {
       const router = new Router();
 
+
       // Route: / - serves dev-server/index.html (processed through LiquidJS)
       router.get('/', async (ctx) => {
         try {
@@ -106,10 +107,15 @@ export function routerPlugin(): Plugin {
       });
 
       // Route: /elements/:componentName/react/:demoName - Individual React comparison demos
-      router.get('/elements/:componentName/react/:demoName', async (ctx) => {
+      router.get('/elements/:componentName/react/:demoName', async (ctx, next) => {
         const { componentName, demoName } = ctx.params;
         
-        if (!componentName || !demoName || componentName.includes('.') || demoName.includes('.')) {
+        // If demoName contains a file extension, skip this route handler
+        if (demoName && demoName.includes('.')) {
+          return next();
+        }
+        
+        if (!componentName || !demoName) {
           ctx.status = 404;
           return;
         }
@@ -197,10 +203,16 @@ export function routerPlugin(): Plugin {
       });
 
       // Route: /elements/:componentName/demo/:demoName
-      router.get('/elements/:componentName/demo/:demoName', async (ctx) => {
+      router.get('/elements/:componentName/demo/:demoName', async (ctx, next) => {
         const { componentName, demoName } = ctx.params;
         
-        if (!componentName || !demoName || componentName.includes('.') || demoName.includes('.')) {
+        // If demoName contains a file extension, skip this route handler
+        // Let the static file server handle it
+        if (demoName && demoName.includes('.')) {
+          return next();
+        }
+        
+        if (!componentName || !demoName) {
           ctx.status = 404;
           return;
         }
@@ -228,10 +240,15 @@ export function routerPlugin(): Plugin {
       });
 
       // Route: /elements/:componentName/test/:demoName
-      router.get('/elements/:componentName/test/:demoName', async (ctx) => {
+      router.get('/elements/:componentName/test/:demoName', async (ctx, next) => {
         const { componentName, demoName } = ctx.params;
         
-        if (!componentName || !demoName || componentName.includes('.') || demoName.includes('.')) {
+        // If demoName contains a file extension, skip this route handler
+        if (demoName && demoName.includes('.')) {
+          return next();
+        }
+        
+        if (!componentName || !demoName) {
           ctx.status = 404;
           return;
         }
@@ -257,10 +274,15 @@ export function routerPlugin(): Plugin {
       });
 
       // Route: /elements/:componentName/react/test/:demoName
-      router.get('/elements/:componentName/react/test/:demoName', async (ctx) => {
+      router.get('/elements/:componentName/react/test/:demoName', async (ctx, next) => {
         const { componentName, demoName } = ctx.params;
         
-        if (!componentName || !demoName || componentName.includes('.') || demoName.includes('.')) {
+        // If demoName contains a file extension, skip this route handler
+        if (demoName && demoName.includes('.')) {
+          return next();
+        }
+        
+        if (!componentName || !demoName) {
           ctx.status = 404;
           return;
         }
@@ -304,6 +326,64 @@ export function routerPlugin(): Plugin {
         });
       });
 
+
+      // Serve static files from demo directories BEFORE router processes them
+      // This prevents the router from matching and redirecting file requests
+      app.use(async (ctx, next) => {
+        const segments = ctx.path.split('/').filter(s => s);
+        const lastSegment = segments[segments.length - 1] || '';
+        
+        // Check if this looks like a file request (has extension)
+        if (lastSegment && lastSegment.includes('.') && !ctx.path.endsWith('/')) {
+          // Check if it's in a demo or react directory
+          if (ctx.path.includes('/demo/') || ctx.path.includes('/react/')) {
+            // Try to read and serve the file from the filesystem
+            const filePath = join(process.cwd(), ctx.path);
+            const fileContent = await readFileOrNull(filePath);
+            
+            if (fileContent) {
+              // Determine content type based on extension
+              const ext = lastSegment.split('.').pop()?.toLowerCase();
+              const contentTypes: Record<string, string> = {
+                'svg': 'image/svg+xml',
+                'png': 'image/png',
+                'jpg': 'image/jpeg',
+                'jpeg': 'image/jpeg',
+                'gif': 'image/gif',
+                'webp': 'image/webp',
+                'css': 'text/css',
+                'js': 'text/javascript',
+              };
+              
+              ctx.type = contentTypes[ext || ''] || 'application/octet-stream';
+              ctx.body = fileContent;
+              return; // Don't call next() - we've handled this request
+            }
+          }
+        }
+        
+        await next();
+      });
+
+      // Redirect demo URLs without trailing slashes to versions with trailing slashes
+      // Excludes paths with file extensions (static assets)
+      app.use(async (ctx, next) => {
+        const segments = ctx.path.split('/').filter(s => s);
+        const lastSegment = segments[segments.length - 1] || '';
+        const hasFileExtension = lastSegment.includes('.');
+        const demoPathPattern = /^\/elements\/[^/]+\/demo\/[^/]+$/;
+        const reactDemoPathPattern = /^\/elements\/[^/]+\/react\/[^/]+$/;
+        
+        // Only redirect if it's a demo path AND doesn't have a file extension
+        if (!hasFileExtension && (demoPathPattern.test(ctx.path) || reactDemoPathPattern.test(ctx.path))) {
+          ctx.status = 301;
+          ctx.redirect(ctx.path + '/');
+          return;
+        }
+        
+        await next();
+      });
+
       app.use(router.routes());
       app.use(router.allowedMethods());
 
@@ -312,6 +392,15 @@ export function routerPlugin(): Plugin {
         if (ctx.path.startsWith('/dev-server/')) {
           // Remove leading slash and serve from project root
           ctx.path = ctx.path.substring(1);
+        }
+        await next();
+      });
+
+      // Handle /assets/ paths - map to dev-server/assets/patternfly/assets/
+      app.use(async (ctx, next) => {
+        if (ctx.path.startsWith('/assets/')) {
+          // Map /assets/* to dev-server/assets/patternfly/assets/*
+          ctx.path = ctx.path.replace('/assets/', 'dev-server/assets/patternfly/assets/');
         }
         await next();
       });

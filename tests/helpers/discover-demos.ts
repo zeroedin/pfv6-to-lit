@@ -36,7 +36,8 @@ export function discoverDemos(componentName: string): string[] {
     
     return demos;
   } catch (error) {
-    throw new Error(`Failed to discover demos for ${componentName}: ${error.message}`);
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to discover demos for ${componentName}: ${message}`);
   }
 }
 

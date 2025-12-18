@@ -49,7 +49,9 @@
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
-    "tests/**/*"
+    "tests/**/*",
+    "scripts/**/*",
+    "vite.config.*.ts"
   ]
 }
 
