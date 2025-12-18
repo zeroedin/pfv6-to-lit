@@ -222,6 +222,121 @@ padding: var(--pf-t--global--spacer--sm, 0.5rem);
 
 **Always verify** the complete chain in token files.
 
+## Step 3.5: Responsive CSS Variable Cascades
+
+### Identifying the Pattern in React
+
+When React SCSS uses the `pf-v6-build-css-variable-stack` mixin, it creates a responsive cascade:
+
+```scss
+// React SCSS
+.pf-v6-c-{component} {
+  width: var(--pf-v6-c-{component}--Width--base);
+  
+  @include pf-v6-build-css-variable-stack(
+    "--pf-v6-c-{component}--Width--base",
+    "--pf-v6-c-{component}--Width",
+    $breakpoint-map
+  );
+}
+```
+
+**What the mixin generates:**
+- Redefines `--{property}--base` at each breakpoint with progressive fallbacks
+- Each breakpoint checks its own `-on-{breakpoint}` variable first
+- Falls back through all previous breakpoints in order
+- Finally falls back to the base variable (no breakpoint suffix)
+
+### How to Translate to Lit CSS
+
+**The Pattern:**
+
+1. **Element uses `--{property}--base` variable:**
+   ```css
+   #container {
+     width: var(--pf-v6-c-brand--Width--base);
+   }
+   ```
+
+2. **Define cascade with media queries:**
+   ```css
+   #container {
+     width: var(--pf-v6-c-brand--Width--base);
+     
+     /* Base: just default */
+     --pf-v6-c-brand--Width--base: var(--pf-v6-c-brand--Width, auto);
+     
+     /* sm: check -on-sm, fallback to default */
+     @media (min-width: 576px) {
+       --pf-v6-c-brand--Width--base: var(--pf-v6-c-brand--Width-on-sm, var(--pf-v6-c-brand--Width, auto));
+     }
+     
+     /* md: check -on-md, -on-sm, default */
+     @media (min-width: 768px) {
+       --pf-v6-c-brand--Width--base: var(--pf-v6-c-brand--Width-on-md, var(--pf-v6-c-brand--Width-on-sm, var(--pf-v6-c-brand--Width, auto)));
+     }
+     
+     /* lg: add -on-lg to the chain */
+     @media (min-width: 992px) {
+       --pf-v6-c-brand--Width--base: var(--pf-v6-c-brand--Width-on-lg, var(--pf-v6-c-brand--Width-on-md, var(--pf-v6-c-brand--Width-on-sm, var(--pf-v6-c-brand--Width, auto))));
+     }
+     
+     /* xl: add -on-xl to the chain */
+     @media (min-width: 1200px) {
+       --pf-v6-c-brand--Width--base: var(--pf-v6-c-brand--Width-on-xl, var(--pf-v6-c-brand--Width-on-lg, var(--pf-v6-c-brand--Width-on-md, var(--pf-v6-c-brand--Width-on-sm, var(--pf-v6-c-brand--Width, auto)))));
+     }
+     
+     /* 2xl: add -on-2xl to the chain */
+     @media (min-width: 1450px) {
+       --pf-v6-c-brand--Width--base: var(--pf-v6-c-brand--Width-on-2xl, var(--pf-v6-c-brand--Width-on-xl, var(--pf-v6-c-brand--Width-on-lg, var(--pf-v6-c-brand--Width-on-md, var(--pf-v6-c-brand--Width-on-sm, var(--pf-v6-c-brand--Width, auto))))));
+     }
+   }
+   ```
+
+### PatternFly Breakpoints
+
+**Standard breakpoints (use these exact values):**
+- **sm**: `576px`
+- **md**: `768px`
+- **lg**: `992px`
+- **xl**: `1200px`
+- **2xl**: `1450px`
+
+### Variable Naming Convention
+
+When React uses this pattern, the TypeScript component will set these variables:
+- `--pf-v6-c-{component}--{Property}` - Default value (no breakpoint)
+- `--pf-v6-c-{component}--{Property}-on-sm` - Value at sm breakpoint
+- `--pf-v6-c-{component}--{Property}-on-md` - Value at md breakpoint
+- `--pf-v6-c-{component}--{Property}-on-lg` - Value at lg breakpoint
+- `--pf-v6-c-{component}--{Property}-on-xl` - Value at xl breakpoint
+- `--pf-v6-c-{component}--{Property}-on-2xl` - Value at 2xl breakpoint
+
+**Your CSS must check these in the correct cascade order.**
+
+### When to Use This Pattern
+
+Use this pattern when:
+1. React SCSS contains `@include pf-v6-build-css-variable-stack`
+2. The component TypeScript uses `responsivePropertyConverter`
+3. Properties like `widths`, `heights`, or other responsive sizing are involved
+
+### Common Properties Using This Pattern
+
+- `Width` / `Height` (Brand, Avatar)
+- `MinWidth` / `MaxWidth` (Toolbar)
+- `GridTemplateColumns--min` / `GridTemplateColumns--max` (Gallery, DescriptionList)
+- Custom size modifiers at different breakpoints
+
+### Rules
+
+- ✅ Always include full cascade chain at each breakpoint
+- ✅ Use exact PatternFly breakpoint values
+- ✅ Follow mobile-first approach (base → sm → md → lg → xl → 2xl)
+- ✅ Include final fallback value (e.g., `auto`, `0`, etc.) at the end
+- ❌ Don't skip breakpoints in the cascade
+- ❌ Don't use custom breakpoint values
+
 ## Step 4: Baseline Compliance (CRITICAL)
 
 **All CSS features MUST be Baseline 2024 or earlier.**
