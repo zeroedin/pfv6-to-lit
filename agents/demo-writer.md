@@ -131,8 +131,8 @@ demo/
 
 **For ALL demo files** (e.g., `basic.html` served at `/elements/pfv6-{component}/demo/basic/`):
 ```html
-<!-- ✅ CORRECT - Static assets in same demo/ folder -->
-<img src="./avatar.svg" alt="avatar">
+<!-- ✅ CORRECT - Static assets in demo/ folder (one level up) -->
+<img src="../avatar.svg" alt="avatar">
 
 <!-- ✅ CORRECT - Lightdom CSS in component root (two levels up) -->
 <link rel="stylesheet" href="../../pfv6-component-lightdom.css">
@@ -140,8 +140,8 @@ demo/
 
 **Common Mistakes**:
 ```html
-<!-- ❌ WRONG - Using ../ for assets in demo/ folder -->
-<img src="../avatar.svg" alt="avatar">
+<!-- ❌ WRONG - Using ./ for assets (assumes same directory as virtual path) -->
+<img src="./avatar.svg" alt="avatar">
 
 <!-- ❌ WRONG - Using ../../ for assets in demo/ folder -->
 <img src="../../avatar.svg" alt="avatar">
@@ -151,14 +151,14 @@ demo/
 ```
 
 **Why different paths**:
-- Static assets (in `demo/` folder): Use `./` - same directory as HTML file
-- Lightdom CSS (in component root): Use `../../` - go up from `/demo/basic/` to `/demo/` then to component root
+- Static assets (in `demo/` folder): Use `../` - one level up from virtual `/demo/basic/` directory
+- Lightdom CSS (in component root): Use `../../` - two levels up from virtual `/demo/basic/` directory
 
 ### Rules for Static Assets
 
 1. **Always use relative paths** (never absolute)
-2. **Static assets in demo/ folder** (images, SVGs): Use `./` prefix (same directory)
-3. **Lightdom CSS files** (in component root): Use `../../` prefix (two levels up)
+2. **Static assets in demo/ folder** (images, SVGs): Use `../` prefix (one level up from virtual directory)
+3. **Lightdom CSS files** (in component root): Use `../../` prefix (two levels up from virtual directory)
    - All demos: `<link rel="stylesheet" href="../../pfv6-{component}-lightdom.css">`
 
 ## Step 4: Demo Structure (CRITICAL)

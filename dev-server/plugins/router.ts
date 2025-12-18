@@ -304,6 +304,20 @@ export function routerPlugin(): Plugin {
         });
       });
 
+      // Redirect demo URLs without trailing slashes to versions with trailing slashes
+      app.use(async (ctx, next) => {
+        const demoPathPattern = /^\/elements\/[^/]+\/demo\/[^/]+$/;
+        const reactDemoPathPattern = /^\/elements\/[^/]+\/react\/[^/]+$/;
+        
+        if (demoPathPattern.test(ctx.path) || reactDemoPathPattern.test(ctx.path)) {
+          ctx.status = 301;
+          ctx.redirect(ctx.path + '/');
+          return;
+        }
+        
+        await next();
+      });
+
       app.use(router.routes());
       app.use(router.allowedMethods());
 

@@ -92,45 +92,55 @@ Lit:   (missing)                             ❌ MISSING DEMO
 
 ### Understand Demo Server URLs
 
-The demo server converts file paths to pretty URLs:
+The demo server converts file paths to pretty URLs with trailing slashes:
 
-- `basic.html` → served at `/elements/pfv6-{component}/demos/basic/`
-- `size-variations.html` → served at `/elements/pfv6-{component}/demos/size-variations/`
+- `basic.html` → served at `/elements/pfv6-{component}/demo/basic/`
+- `size-variations.html` → served at `/elements/pfv6-{component}/demo/size-variations/`
 
 ### Validate Relative Paths
 
-**For ALL demo files** (served at `/elements/pfv6-{component}/demos/{descriptor}/`):
-- Static assets MUST use `../../` prefix (two levels up) - NO EXCEPTIONS
+**For ALL demo files** (served at `/elements/pfv6-{component}/demo/{descriptor}/`):
+- Static assets in `demo/` folder MUST use `../` prefix (one level up) - NO EXCEPTIONS
+- Lightdom CSS files in component root MUST use `../../` prefix (two levels up)
 - Check: images, SVGs, CSS files
 
 ```html
-<!-- ✅ CORRECT - ALL demos use ../../ -->
-<img src="../../avatar.svg" alt="avatar">
-<link rel="stylesheet" href="../../pfv6-component-lightdom.css">
-
-<!-- ❌ WRONG - one level (../) -->
+<!-- ✅ CORRECT - Static assets in demo/ folder use ../ -->
 <img src="../avatar.svg" alt="avatar">
 
+<!-- ✅ CORRECT - Lightdom CSS in component root uses ../../ -->
+<link rel="stylesheet" href="../../pfv6-component-lightdom.css">
+
+<!-- ❌ WRONG - Using ./ for assets (assumes same directory as virtual path) -->
+<img src="./avatar.svg" alt="avatar">
+
 <!-- ❌ WRONG - Absolute path -->
-<img src="/elements/pfv6-avatar/demos/avatar.svg" alt="avatar">
+<img src="/elements/pfv6-avatar/demo/avatar.svg" alt="avatar">
 ```
 
-**Why two levels**: The demo server routes `/demos/{descriptor}/` to serve `{descriptor}.html`, so all files are served from virtual subdirectories. Assets are at `/demos/` level, requiring two levels up.
+**Why different levels**: 
+- Demo URL with trailing slash: `/elements/pfv6-{component}/demo/basic/` creates a virtual directory
+- Assets in `demo/` folder: Use `../` to go up one level from virtual `/demo/basic/` directory
+- Lightdom CSS in component root: Use `../../` to go up two levels from virtual `/demo/basic/` directory
 
 ### Validation Steps
 
-1. Identify all static assets in `demos/` folder (images, SVGs, CSS files)
+1. Identify all static assets in `demo/` folder (images, SVGs) and component root (lightdom CSS)
 2. Check each demo file for references to these assets
-3. Verify ALL demos use `../../` prefix (no exceptions)
-4. Confirm no absolute paths are used
+3. Verify static assets use `../` prefix (one level up)
+4. Verify lightdom CSS uses `../../` prefix (two levels up)
+5. Confirm no absolute paths are used
 
 **Common Mistakes**:
 ```html
 <!-- ❌ WRONG - Absolute path -->
-<img src="/elements/pfv6-avatar/demos/avatar.svg" alt="avatar">
+<img src="/elements/pfv6-avatar/demo/avatar.svg" alt="avatar">
 
-<!-- ❌ WRONG - Using one level (../) -->
-<img src="../avatar.svg" alt="avatar">
+<!-- ❌ WRONG - Using ./ for assets in demo/ folder -->
+<img src="./avatar.svg" alt="avatar">
+
+<!-- ❌ WRONG - Using ../../ for assets in demo/ folder -->
+<img src="../../avatar.svg" alt="avatar">
 ```
 
 ## Step 4: Demo Structure Validation (CRITICAL)
