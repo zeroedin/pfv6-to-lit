@@ -19,7 +19,8 @@
     "e2e:parity": "wireit",
     "patternfly-cache": "wireit",
     "analyze-dependencies": "wireit",
-    "copy-demos": "wireit"
+    "copy-demos": "wireit",
+    "copy:pf-assets": "wireit"
   },
   "wireit": {
     "clean:cache": {
