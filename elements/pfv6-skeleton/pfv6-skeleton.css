@@ -1,0 +1,181 @@
+/* Box-sizing reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Component variables */
+  --pf-c-skeleton--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f0f0f0);
+  --pf-c-skeleton--Width: auto;
+  --pf-c-skeleton--Height: auto;
+  --pf-c-skeleton--BorderRadius: var(--pf-t--global--spacer--sm, 0.25rem);
+
+  /* Before pseudo-element */
+  --pf-c-skeleton--before--PaddingBlockEnd: 0;
+  --pf-c-skeleton--before--Height: auto;
+  --pf-c-skeleton--before--Content: "\00a0";
+
+  /* After pseudo-element (animation) */
+  --pf-c-skeleton--after--LinearGradientAngle: 90deg;
+  --pf-c-skeleton--after--LinearGradientColorStop1: var(--pf-t--global--background--color--secondary--default, #f0f0f0);
+  --pf-c-skeleton--after--LinearGradientColorStop2: var(--pf-t--global--background--color--secondary--hover, #e0e0e0);
+  --pf-c-skeleton--after--LinearGradientColorStop3: var(--pf-t--global--background--color--secondary--default, #f0f0f0);
+  --pf-c-skeleton--after--TranslateX: 0;
+  --pf-c-skeleton--after--AnimationName: skeleton-loading-reduced-motion;
+  --pf-c-skeleton--after--AnimationDuration: 3s;
+  --pf-c-skeleton--after--AnimationIterationCount: infinite;
+  --pf-c-skeleton--after--AnimationTimingFunction: linear;
+  --pf-c-skeleton--after--AnimationDelay: 0.5s;
+
+  /* Circle modifier */
+  --pf-c-skeleton--m-circle--BorderRadius: var(--pf-t--global--border--radius--pill, 30rem);
+  --pf-c-skeleton--m-circle--before--PaddingBlockEnd: 100%;
+
+  /* Text modifiers */
+  --pf-c-skeleton--m-text-4xl--Height: calc(var(--pf-t--global--font--size--4xl, 2.25rem) * var(--pf-t--global--font--line-height--heading, 1.3));
+  --pf-c-skeleton--m-text-3xl--Height: calc(var(--pf-t--global--font--size--3xl, 1.75rem) * var(--pf-t--global--font--line-height--heading, 1.3));
+  --pf-c-skeleton--m-text-2xl--Height: calc(var(--pf-t--global--font--size--2xl, 1.5rem) * var(--pf-t--global--font--line-height--heading, 1.3));
+  --pf-c-skeleton--m-text-xl--Height: calc(var(--pf-t--global--font--size--xl, 1.25rem) * var(--pf-t--global--font--line-height--heading, 1.3));
+  --pf-c-skeleton--m-text-lg--Height: calc(var(--pf-t--global--font--size--lg, 1.125rem) * var(--pf-t--global--font--line-height--body, 1.5));
+  --pf-c-skeleton--m-text-md--Height: calc(var(--pf-t--global--font--size--md, 1rem) * var(--pf-t--global--font--line-height--body, 1.5));
+  --pf-c-skeleton--m-text-sm--Height: calc(var(--pf-t--global--font--size--sm, 0.875rem) * var(--pf-t--global--font--line-height--body, 1.5));
+
+  display: contents;
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  :host {
+    --pf-c-skeleton--after--LinearGradientColorStop1: var(--pf-t--global--background--color--secondary--default, #f0f0f0);
+    --pf-c-skeleton--after--LinearGradientColorStop2: var(--pf-t--global--background--color--secondary--hover, #e0e0e0);
+    --pf-c-skeleton--after--LinearGradientColorStop3: var(--pf-t--global--background--color--secondary--default, #f0f0f0);
+    --pf-c-skeleton--after--TranslateX: -100%;
+    --pf-c-skeleton--after--AnimationName: skeleton-loading;
+  }
+}
+
+#container {
+  position: relative;
+  width: var(--pf-c-skeleton--Width);
+  height: var(--pf-c-skeleton--Height);
+  overflow: hidden;
+  background-color: var(--pf-c-skeleton--BackgroundColor);
+  border-radius: var(--pf-c-skeleton--BorderRadius);
+  transform: translate(0); /* Creates stacking context necessary for Safari */
+}
+
+#container::before {
+  display: block;
+  height: var(--pf-c-skeleton--before--Height);
+  padding-block-end: var(--pf-c-skeleton--before--PaddingBlockEnd);
+  content: var(--pf-c-skeleton--before--Content);
+}
+
+#container::after {
+  position: absolute;
+  inset: 0;
+  display: block;
+  content: "";
+  background:
+    linear-gradient(
+      var(--pf-c-skeleton--after--LinearGradientAngle),
+      var(--pf-c-skeleton--after--LinearGradientColorStop1),
+      var(--pf-c-skeleton--after--LinearGradientColorStop2),
+      var(--pf-c-skeleton--after--LinearGradientColorStop3)
+    );
+  transform: translate3d(var(--pf-c-skeleton--after--TranslateX), 0, 0);
+  animation:
+    var(--pf-c-skeleton--after--AnimationName)
+    var(--pf-c-skeleton--after--AnimationDuration)
+    var(--pf-c-skeleton--after--AnimationTimingFunction)
+    var(--pf-c-skeleton--after--AnimationDelay)
+    var(--pf-c-skeleton--after--AnimationIterationCount);
+}
+
+/* RTL support for animation */
+:host([dir="rtl"]) #container::after {
+  transform: translate3d(calc(-1 * var(--pf-c-skeleton--after--TranslateX)), 0, 0);
+}
+
+/* Circle modifier */
+.circle {
+  --pf-c-skeleton--BorderRadius: var(--pf-c-skeleton--m-circle--BorderRadius);
+}
+
+.square,
+.circle {
+  --pf-c-skeleton--before--Height: 0;
+  --pf-c-skeleton--before--PaddingBlockEnd: var(--pf-c-skeleton--m-circle--before--PaddingBlockEnd);
+}
+
+/* Text modifiers */
+.text-4xl {
+  --pf-c-skeleton--Height: var(--pf-c-skeleton--m-text-4xl--Height);
+}
+
+.text-3xl {
+  --pf-c-skeleton--Height: var(--pf-c-skeleton--m-text-3xl--Height);
+}
+
+.text-2xl {
+  --pf-c-skeleton--Height: var(--pf-c-skeleton--m-text-2xl--Height);
+}
+
+.text-xl {
+  --pf-c-skeleton--Height: var(--pf-c-skeleton--m-text-xl--Height);
+}
+
+.text-lg {
+  --pf-c-skeleton--Height: var(--pf-c-skeleton--m-text-lg--Height);
+}
+
+.text-md {
+  --pf-c-skeleton--Height: var(--pf-c-skeleton--m-text-md--Height);
+}
+
+.text-sm {
+  --pf-c-skeleton--Height: var(--pf-c-skeleton--m-text-sm--Height);
+}
+
+/* Screen reader text */
+.screen-reader {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Animations */
+@keyframes skeleton-loading {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  60% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes skeleton-loading-reduced-motion {
+  0% {
+    opacity: 0.25;
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.25;
+  }
+}
