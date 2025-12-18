@@ -58,3 +58,4 @@ dev-server/assets/patternfly/
 react-dependency-tree.json
 
 .claude/settings.local.json
+custom-elements.json
