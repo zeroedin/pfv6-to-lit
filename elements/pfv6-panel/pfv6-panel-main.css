@@ -1,0 +1,13 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+#container {
+  --pf-v6-c-panel__main--MaxHeight: none;
+  --pf-v6-c-panel__main--Overflow: visible;
+
+  max-height: var(--pf-v6-c-panel__main--MaxHeight);
+  overflow: var(--pf-v6-c-panel__main--Overflow);
+}

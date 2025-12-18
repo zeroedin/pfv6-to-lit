@@ -1,0 +1,29 @@
+import { LitElement, html } from 'lit';
+import { customElement } from 'lit/decorators/custom-element.js';
+import styles from './pfv6-panel-header.css';
+
+/**
+ * Panel header component - Displays header content at the top of a panel.
+ *
+ * @slot - Default slot for header content
+ *
+ * @csspart container - The container element
+ */
+@customElement('pfv6-panel-header')
+export class Pfv6PanelHeader extends LitElement {
+  static styles = styles;
+
+  render() {
+    return html`
+      <div id="container" part="container">
+        <slot></slot>
+      </div>
+    `;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'pfv6-panel-header': Pfv6PanelHeader;
+  }
+}
