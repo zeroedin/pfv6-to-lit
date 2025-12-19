@@ -24,7 +24,7 @@
   },
   "wireit": {
     "generate-dependency-tree": {
-      "command": "npx tsx scripts/generate-dependency-tree.js",
+      "command": "npx tsx scripts/generate-dependency-tree.ts",
       "files": ["elements/*/"],
       "output": ["./react-dependency-tree.json"],
       "dependencies": [
