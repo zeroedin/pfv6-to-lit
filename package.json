@@ -151,7 +151,7 @@
       "description": "Lint CSS files"
     },
     "cache": {
-      "command": "npx tsx scripts/cache.js",
+      "command": "npx tsx scripts/patternfly-cache.ts",
       "files": [],
       "output": ["./.cache/patternfly-react", "./.cache/patternfly"],
       "dependencies": [
