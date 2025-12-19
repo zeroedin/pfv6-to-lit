@@ -200,16 +200,14 @@ This is the **mandatory pattern** for all visual parity tests. Never use baselin
 #### What It Tests
 1. **CSS variable overrides**: Setting `--pf-v6-c-card--BackgroundColor` changes background in both React and Lit
 2. **Computed style parity**: Same CSS variable values produce identical computed styles
-3. **`unset` behavior**: Verifies Lit's two-layer pattern maintains defaults when variables are reset (Lit advantage!)
-4. **Interactive states**: Hover, focus, active states produce identical styles
+3. **Interactive states**: Hover, focus, active states produce identical styles
 
 #### Success Criteria
 - All computed styles must match between React and Lit
 - CSS variable mutations must produce identical visual results
-- Lit's resilience advantage (two-layer pattern) must be maintained
 
 #### When to Run
-- After changing CSS architecture (e.g., two-layer pattern)
+- After changing CSS architecture or variable implementation
 - After adding new public CSS variables
 - Before marking component as "complete"
 
@@ -479,8 +477,8 @@ tests/
 ### Scenario 4: CSS Variable API Mismatch
 **Symptom**: CSS API test fails - computed styles don't match  
 **Example**: React uses `rgba(0, 0, 0, 0)`, Lit uses `rgb(255, 255, 255)` after `unset`  
-**Root Cause**: Missing or incorrect two-layer CSS variable pattern  
-**Solution**: Implement two-layer pattern in Lit component CSS (see CLAUDE.md)
+**Root Cause**: Incorrect CSS variable cascade or missing fallback values  
+**Solution**: Update Lit component CSS to match React's CSS variable implementation and fallback patterns
 
 ### Scenario 5: Flaky Screenshots
 **Symptom**: Tests pass/fail inconsistently  
@@ -550,7 +548,7 @@ npx playwright show-report
 1. ✅ Copy React demos directly from PatternFly GitHub (never manually create)
 2. ✅ Create corresponding Lit demos with same HTML structure (use kebab-case filenames)
 3. ✅ Expose identical CSS variables as public API
-4. ✅ Use two-layer CSS variable pattern for Shadow DOM
+4. ✅ Ensure CSS variable cascades match React's implementation
 5. ✅ Test locally: `npm run e2e:parity`
 
 **When updating a component**:
