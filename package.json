@@ -9,71 +9,36 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "postinstall": "wireit",
-    "test": "wireit",
-    "start": "wireit",
+    "generate-dependency-tree": "wireit",
     "compile": "wireit",
     "compile:react-demos": "wireit",
-    "lint": "wireit",
+    "copy:assets": "wireit",
+    "copy:demos": "wireit",
     "e2e": "wireit",
     "e2e:parity": "wireit",
-    "patternfly-cache": "wireit",
-    "analyze-dependencies": "wireit",
-    "copy-demos": "wireit"
+    "lint": "wireit",
+    "cache": "wireit",
+    "postinstall": "wireit",
+    "start": "wireit",
+    "test": "wireit"
   },
   "wireit": {
+    "generate-dependency-tree": {
+      "command": "npx tsx scripts/generate-dependency-tree.ts",
+      "files": ["elements/*/"],
+      "output": ["./react-dependency-tree.json"],
+      "dependencies": [
+        "cache"
+      ]
+    },
     "clean:cache": {
       "command": "rm -rf .cache",
       "files": [],
       "output": ["./.cache"]
     },
-    "patternfly-cache": {
-      "command": "npx tsx scripts/patternfly-cache.js",
-      "files": [],
-      "output": ["./.cache/patternfly-react", "./.cache/patternfly"],
-      "dependencies": [
-        "clean:cache"
-      ]
-    },
-    "analyze-dependencies": {
-      "command": "npx tsx scripts/generate-dependency-tree.js",
-      "files": ["elements/*/"],
-      "output": ["./react-dependency-tree.json"],
-      "dependencies": [
-        "patternfly-cache"
-      ]
-    },
-    "copy-demos": {
-      "command": "npx tsx scripts/copy-patternfly-react-demos.ts",
-      "files": [],
-      "output": ["./patternfly-react/**"],
-      "dependencies": [
-        "clean:demos-source",
-        "analyze-dependencies"
-      ]
-    },
-    "postinstall": {
-      "dependencies": [
-        "copy-demos"
-      ]
-    },
-    "start": {
-      "service": true,
-      "command": "web-dev-server --watch --open",
-      "description": "Start the development server (web components only)",
-      "dependencies": [
-        "clean:plugins",
-        "clean:react-demos",
-        "compile"
-      ]
-    },
-    "watch:react-demos": {
-      "service": true,
-      "command": "vite build --watch --config vite.config.react-demos.ts",
-      "description": "Watch and rebuild React comparison demos",
-      "files": [
-        "patternfly-react/**/*.tsx"
-      ]
+    "clean:demos-source": {
+      "command": "rm -rf patternfly-react && mkdir -p patternfly-react",
+      "description": "Clean React demo source files (before copying from cache)"
     },
     "clean:plugins": {
       "command": "rm -f dev-server/plugins/*.js dev-server/plugins/*.js.map dev-server/plugins/*.d.ts dev-server/plugins/*.d.ts.map"
@@ -82,25 +47,6 @@
       "command": "rm -rf patternfly-react/dist",
       "description": "Clean React demo build output"
     },
-    "clean:demos-source": {
-      "command": "rm -rf patternfly-react && mkdir -p patternfly-react",
-      "description": "Clean React demo source files (before copying from cache)"
-    },
-    "copy:pf-assets": {
-      "command": "npx tsx scripts/copy-patternfly-assets.ts",
-      "description": "Copy PatternFly base CSS, fonts, and images to dev-server",
-      "files": [
-        "scripts/copy-patternfly-assets.ts",
-        "node_modules/@patternfly/react-core/dist/styles/base.css",
-        "node_modules/@patternfly/patternfly/assets/fonts/**/*",
-        "node_modules/@patternfly/react-styles/css/assets/images/**/*"
-      ],
-      "output": [
-        "dev-server/styles/patternfly/base.css",
-        "dev-server/styles/assets/fonts/**/*",
-        "dev-server/assets/patternfly/assets/images/**/*"
-      ]
-    },
     "compile": {
       "dependencies": [
         "compile:tsc",
@@ -108,18 +54,6 @@
         "compile:react-demos"
       ],
       "description": "Compile the project (TypeScript + CEM + React demos)"
-    },
-    "compile:tsc": {
-      "command": "tsc",
-      "description": "Compile TypeScript",
-      "output": [
-        "elements/**/*.js",
-        "elements/**/*.js.map",
-        "lib/**/*.js",
-        "lib/**/*.js.map",
-        "dev-server/**/*.js",
-        "dev-server/**/*.js.map"
-      ]
     },
     "compile:cem": {
       "command": "if [ -d elements ] && [ \"$(find elements -name '*.ts' -not -name '*.spec.ts' 2>/dev/null)\" ]; then cem generate; else echo 'ℹ️  No elements found, skipping CEM generation'; fi",
@@ -150,23 +84,41 @@
         "patternfly-react/dist/**"
       ]
     },
-    "lint": {
-      "dependencies": [
-        "lint:eslint",
-        "lint:stylelint"
+    "compile:tsc": {
+      "command": "tsc",
+      "description": "Compile TypeScript",
+      "output": [
+        "elements/**/*.js",
+        "elements/**/*.js.map",
+        "lib/**/*.js",
+        "lib/**/*.js.map",
+        "dev-server/**/*.js",
+        "dev-server/**/*.js.map"
       ]
     },
-    "lint:eslint": {
-      "command": "eslint elements/**/*.ts lib/**/*.ts",
-      "description": "Lint TypeScript files"
+    "copy:assets": {
+      "command": "npx tsx scripts/copy-patternfly-assets.ts",
+      "description": "Copy PatternFly base CSS, fonts, and images to dev-server",
+      "files": [
+        "scripts/copy-patternfly-assets.ts",
+        "node_modules/@patternfly/react-core/dist/styles/base.css",
+        "node_modules/@patternfly/patternfly/assets/fonts/**/*",
+        "node_modules/@patternfly/react-styles/css/assets/images/**/*"
+      ],
+      "output": [
+        "dev-server/styles/patternfly/base.css",
+        "dev-server/styles/assets/fonts/**/*",
+        "dev-server/assets/patternfly/assets/images/**/*"
+      ]
     },
-    "lint:stylelint": {
-      "command": "stylelint elements/**/*.css",
-      "description": "Lint CSS files"
-    },
-    "test": {
-      "command": "wtr",
-      "description": "Run unit tests"
+    "copy:demos": {
+      "command": "npx tsx scripts/copy-patternfly-react-demos.ts",
+      "files": [],
+      "output": ["./patternfly-react/**"],
+      "dependencies": [
+        "clean:demos-source",
+        "generate-dependency-tree"
+      ]
     },
     "e2e": {
       "command": "playwright test",
@@ -182,6 +134,56 @@
       "dependencies": [
         "compile:tsc",
         "compile:react-demos"
+      ]
+    },
+    "lint": {
+      "dependencies": [
+        "lint:eslint",
+        "lint:stylelint"
+      ]
+    },
+    "lint:eslint": {
+      "command": "eslint elements/**/*.ts lib/**/*.ts",
+      "description": "Lint TypeScript files"
+    },
+    "lint:stylelint": {
+      "command": "stylelint elements/**/*.css",
+      "description": "Lint CSS files"
+    },
+    "cache": {
+      "command": "npx tsx scripts/patternfly-cache.ts",
+      "files": [],
+      "output": ["./.cache/patternfly-react", "./.cache/patternfly"],
+      "dependencies": [
+        "clean:cache"
+      ]
+    },
+    "postinstall": {
+      "dependencies": [
+        "copy:demos",
+        "copy:assets"
+      ]
+    },
+    "start": {
+      "service": true,
+      "command": "web-dev-server --watch --open",
+      "description": "Start the development server (web components only)",
+      "dependencies": [
+        "clean:plugins",
+        "clean:react-demos",
+        "compile"
+      ]
+    },
+    "test": {
+      "command": "wtr",
+      "description": "Run unit tests"
+    },
+    "watch:react-demos": {
+      "service": true,
+      "command": "vite build --watch --config vite.config.react-demos.ts",
+      "description": "Watch and rebuild React comparison demos",
+      "files": [
+        "patternfly-react/**/*.tsx"
       ]
     }
   },
