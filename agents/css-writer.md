@@ -80,6 +80,142 @@ Inform user that component has no React CSS and only minimal Shadow DOM CSS is n
 
 **Why**: Shadow DOM defaults to `content-box`, but PatternFly expects `border-box`.
 
+### Element-Specific Resets
+
+**After the box-sizing reset, add resets for HTML elements used in the shadow template.**
+
+**CRITICAL**: Only add resets for elements that exist in PatternFly's base.css resets AND are used in your component's shadow template.
+
+**Step 1**: Analyze the component's TypeScript `render()` method to identify HTML elements in the shadow DOM
+
+**Step 2**: Check if those elements appear in the base.css resets below
+
+**Step 3**: Add ONLY the matching resets for elements present in the template
+
+**Base.css Element Resets** (from `dev-server/styles/patternfly/base.css`):
+
+```css
+/* Block elements - padding/margin reset */
+:where(html, body, p, ol, ul, li, dl, dt, dd, blockquote, figure, fieldset, legend, textarea, pre, iframe, hr, h1, h2, h3, h4, h5, h6) {
+  padding: 0;
+  margin: 0;
+}
+
+/* Headings - font reset */
+:where(h1, h2, h3, h4, h5, h6) {
+  font-size: 100%;
+  font-weight: var(--pf-t--global--font--weight--body--default);
+}
+
+/* Lists */
+:where(ul) {
+  list-style: none;
+}
+
+/* Form controls */
+:where(button, input, optgroup, select, textarea) {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body);
+  color: var(--pf-t--global--text--color--regular);
+}
+
+/* Media elements */
+:where(img, embed, iframe, object, audio, video) {
+  max-width: 100%;
+  height: auto;
+}
+
+:where(iframe) {
+  border: 0;
+}
+
+/* Tables */
+:where(table) {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+:where(td, th) {
+  padding: 0;
+  text-align: start;
+}
+
+/* Code/Pre */
+:where(code, pre) {
+  font-family: var(--pf-t--global--font--family--mono);
+}
+
+/* Links */
+:where(a) {
+  color: var(--pf-t--global--text--color--link--default);
+  text-decoration-line: var(--pf-t--global--text-decoration--link--line--default);
+}
+
+:where(a:hover, a:focus) {
+  color: var(--pf-t--global--text--color--link--hover);
+  text-decoration-line: var(--pf-t--global--text-decoration--link--line--hover);
+}
+
+/* Cursor */
+:where(a, button) {
+  cursor: pointer;
+}
+```
+
+**Elements NOT in base.css** (do NOT add resets for these):
+- `div`, `span`, `svg`, `circle`, `path`, `picture`, and most other elements
+
+**Examples**:
+
+If template has `<hr>`:
+```css
+:where(hr) {
+  padding: 0;
+  margin: 0;
+}
+```
+
+If template has `<img>` or `<picture><img>`:
+```css
+:where(img) {
+  max-width: 100%;
+  height: auto;
+}
+```
+
+If template has `<ul>`:
+```css
+:where(ul) {
+  padding: 0;
+  margin: 0;
+}
+
+:where(ul) {
+  list-style: none;
+}
+```
+
+If template has `<button>`:
+```css
+:where(button) {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body);
+  color: var(--pf-t--global--text--color--regular);
+}
+
+:where(button) {
+  cursor: pointer;
+}
+```
+
+**Why `:where()`**: Zero specificity allows component styles to easily override resets. Matches PatternFly base.css pattern.
+
+**Why these resets**: Shadow DOM doesn't inherit PatternFly base.css resets. Browser defaults leak through without explicit resets.
+
 ### Selector Translation Patterns
 
 Translate BEM classes to Shadow DOM patterns:
@@ -393,6 +529,118 @@ For any CSS feature you're unsure about:
 1. Check MDN for Baseline badge: https://developer.mozilla.org/
 2. Verify on Can I Use: https://caniuse.com/
 3. Use only if Baseline 2024 or earlier
+
+## Step 4.5: Layout Integration for display: contents Components
+
+**CRITICAL**: If your component uses `display: contents` on `:host`, it MUST integrate with PatternFly layout containers.
+
+### When to Use display: contents
+
+Use `display: contents` for components that should be semantically invisible wrappers:
+- **Divider** - Separator element
+- **Backdrop** - Overlay element
+- **Skeleton** - Loading placeholder
+- **BackgroundImage** - Background container
+
+### Required Implementation Steps
+
+#### 1. Registration in styles/layout.css
+
+Component MUST be added to `:is()` selector list in `styles/layout.css` for all 7 layout containers.
+
+**Example registration**:
+```css
+/* Flex Layout */
+.pf-v6-l-flex {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-your-component) {
+    --_layout-order: var(--pf-v6-l-flex--item--Order);
+    --_layout-max-width: 100%;
+    --_layout-margin-block-start: 0;
+    --_layout-margin-block-end: 0;
+    --_layout-margin-inline-start: 0;
+    --_layout-margin-inline-end: 0;
+  }
+}
+
+/* Plus direction-specific rules */
+.pf-v6-l-flex.pf-m-column {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-your-component) {
+    --_layout-margin-block-end: var(--pf-v6-l-flex--spacer--row);
+  }
+}
+
+.pf-v6-l-flex.pf-m-row {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-your-component) {
+    --_layout-margin-inline-end: var(--pf-v6-l-flex--spacer--column);
+  }
+}
+
+/* Repeat for all 7 layouts: Flex, Grid, Gallery, Stack, Level, Split, Bullseye */
+```
+
+#### 2. Variable Consumption in Component CSS
+
+Inner elements (hr, div, span, etc.) MUST consume ALL layout variables:
+
+```css
+hr,
+div {
+  /* ... existing component styles ... */
+
+  /* Layout integration - properties passed through from parent layouts */
+  order: var(--_layout-order);
+  max-width: var(--_layout-max-width);
+  margin-block-start: var(--_layout-margin-block-start);
+  margin-block-end: var(--_layout-margin-block-end);
+  margin-inline-start: var(--_layout-margin-inline-start);
+  margin-inline-end: var(--_layout-margin-inline-end);
+  
+  /* Grid layout properties (if component might be used in Grid) */
+  grid-column-start: var(--_layout-grid-column-start);
+  grid-column-end: var(--_layout-grid-column-end);
+  min-width: var(--_layout-min-width);
+  min-height: var(--_layout-min-height);
+}
+```
+
+**CRITICAL RULES**:
+- ✅ Apply to INNER elements (hr, div, span), NOT `:host`
+- ✅ Include ALL 6 margin directions
+- ✅ Include order and max-width
+- ✅ Include grid properties if component might be used in Grid layout
+- ❌ NEVER apply layout variables to `:host` (won't work with display: contents)
+- ❌ NEVER use hardcoded margins on display: contents components
+
+### Variable Naming Convention
+
+Layout integration uses **private variables** with `--_` prefix:
+- `--_layout-order` - Flex/Grid ordering
+- `--_layout-max-width` - Width constraints
+- `--_layout-margin-block-start` - Top margin (logical)
+- `--_layout-margin-block-end` - Bottom margin (logical)
+- `--_layout-margin-inline-start` - Left margin (logical, RTL-aware)
+- `--_layout-margin-inline-end` - Right margin (logical, RTL-aware)
+- `--_layout-grid-column-start` - Grid column start
+- `--_layout-grid-column-end` - Grid column end
+- `--_layout-min-width` - Grid min-width
+- `--_layout-min-height` - Grid min-height
+
+### Why This Pattern Exists
+
+**Problem**: Custom elements with `display: contents` are invisible to CSS selectors like `.pf-v6-l-flex > *`, causing layout spacing/properties to not apply.
+
+**Solution**: CSS variable contracts bridge the gap:
+1. Light DOM CSS (`styles/layout.css`) sets private variables on custom elements
+2. Shadow DOM CSS consumes these variables on inner elements
+3. Result: Proper spacing and layout properties without wrapper elements
+
+### Verification
+
+Test component in multiple layout contexts:
+- Flex with different directions (`pf-m-column`, `pf-m-row`, `pf-m-column-reverse`, `pf-m-row-reverse`)
+- Grid with column spanning
+- Gallery with gap
+- Compare visual output with React version for parity
 
 ## Step 5: CSS Nesting Structure
 

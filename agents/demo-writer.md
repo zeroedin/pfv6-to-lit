@@ -446,6 +446,24 @@ When layout components are detected:
 </pfv6-panel>
 ```
 
+### Custom Elements with display: contents
+
+✅ **Custom elements with `display: contents` work correctly in layouts via CSS variable integration.**
+
+Components like `pfv6-divider`, `pfv6-skeleton`, `pfv6-backdrop`, and `pfv6-background-image` use `display: contents` and integrate with layout containers through the CSS variable pattern defined in `styles/layout.css`.
+
+**No special handling needed in demos**:
+```html
+<!-- ✅ display: contents components work directly in layouts -->
+<div class="pf-v6-l-flex pf-m-row">
+  <div>First item</div>
+  <pfv6-divider orientation="vertical"></pfv6-divider>
+  <div>Second item</div>
+</div>
+```
+
+The `styles/layout.css` file is automatically loaded in all demos via the `demo.html` template, so layout integration happens automatically - no special handling needed.
+
 **Invalid Usage**:
 ```typescript
 // ❌ FAIL: Component's shadow DOM cannot use layout classes

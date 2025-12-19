@@ -395,6 +395,24 @@ Before returning output, verify:
 </pfv6-panel>
 ```
 
+### Custom Elements with display: contents
+
+✅ **Custom elements with `display: contents` work correctly in layouts via CSS variable integration.**
+
+Components like `pfv6-divider`, `pfv6-skeleton`, `pfv6-backdrop`, and `pfv6-background-image` use `display: contents` and integrate with layout containers through the CSS variable pattern defined in `styles/layout.css`.
+
+**No HTML wrapper needed**:
+```html
+<!-- ✅ display: contents components work directly in layouts -->
+<div class="pf-v6-l-flex pf-m-row">
+  <div>First item</div>
+  <pfv6-divider orientation="vertical"></pfv6-divider>
+  <div>Second item</div>
+</div>
+```
+
+The layout integration happens automatically through CSS variables - no special handling needed in demos or translation.
+
 **Invalid Usage**:
 ```typescript
 // ❌ Component shadow DOM cannot use layout classes
@@ -534,6 +552,9 @@ When translating a React layout component:
 9. **Return** HTML with PatternFly CSS classes
 
 This ensures accurate, maintainable translations that stay synchronized with PatternFly's layout system.
+
+
+
 
 
 
