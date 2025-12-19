@@ -17,38 +17,34 @@ Find the next non-layout component to convert by analyzing `react-dependency-tre
 
 ## Analysis Workflow
 
-### Step 1: Read Cached Dependency Tree
+### Step 1: Generate Fresh Dependency Tree
 
-**Always** rerun `npm run analyze-dependencies` before analyzing the dependency tree.
+**Always** regenerate the dependency tree before analyzing:
 
-Read `react-dependency-tree.json` from the project root.
-
-
-### Step 2: Filter Components
-
-Filter the components array to find eligible candidates:
-
-```typescript
-const candidates = components.filter(c =>
-  c.type === 'component' &&     // Skip layouts
-  c.converted !== true           // Skip already converted
-);
+```bash
+npm run generate-dependency-tree
 ```
 
-### Step 3: Calculate Blocker Counts
+This ensures you're working with the latest component conversion status.
 
-For each candidate, calculate how many components depend on it:
-- Check all components' `dependencies.patternfly` arrays
-- Check all components' `demoDependencies.patternfly` arrays
-- Count unique references
+### Step 2: Run Blocker Analysis
 
-### Step 4: Rank Candidates
+Execute the blocker analysis script:
 
-Sort by:
-1. **Primary**: `totalDependencies` (ascending - fewer is better)
-2. **Secondary**: Blocker count (descending - more impact is better)
+```bash
+npx tsx scripts/find-blockers.ts
+```
 
-### Step 5: Generate Recommendation
+This script:
+1. Reads `react-dependency-tree.json`
+2. Filters to non-layout, non-converted components
+3. Calculates blocker counts (how many components depend on each)
+4. Ranks candidates by:
+   - **Primary**: `totalDependencies` (ascending - fewer is better)
+   - **Secondary**: Blocker count (descending - more impact is better)
+5. Outputs top 6 candidates as JSON
+
+### Step 3: Generate Recommendation
 
 Output format:
 
@@ -95,41 +91,7 @@ These components block many others but have dependencies themselves:
 
 **Use TypeScript via Bash tool** for analysis:
 ```bash
-npx tsx -e "
-const tree = require('./react-dependency-tree.json');
-
-// Filter to non-layout, non-converted components
-const candidates = tree.components.filter(c =>
-  c.type === 'component' && c.converted !== true
-);
-
-// Calculate blocker counts
-const blockedBy = {};
-tree.components.forEach(comp => {
-  [...(comp.dependencies.patternfly || []),
-   ...(comp.demoDependencies.patternfly || [])]
-    .forEach(dep => {
-      blockedBy[dep] = (blockedBy[dep] || 0) + 1;
-    });
-});
-
-// Add blocker counts and sort
-const ranked = candidates
-  .map(c => ({
-    ...c,
-    blocks: blockedBy[c.name] || 0,
-    impact: (blockedBy[c.name] || 0) / (c.totalDependencies + 1)
-  }))
-  .sort((a, b) => {
-    if (a.totalDependencies !== b.totalDependencies) {
-      return a.totalDependencies - b.totalDependencies;
-    }
-    return b.blocks - a.blocks;
-  });
-
-// Output recommendation
-console.log(JSON.stringify(ranked.slice(0, 6), null, 2));
-"
+npx tsx scripts/find-blockers.ts
 ```
 
 ## Important Rules
