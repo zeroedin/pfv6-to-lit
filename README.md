@@ -106,7 +106,9 @@ npx tsx scripts/find-blockers.ts
 - **`/elements/pfv6-{name}/react/`** - React component demo index (comparison demos)
 - **`/elements/pfv6-{name}/react/{page}/`** - Individual React component demo pages
 
-## Component Conversion Workflow
+## Getting Started
+
+### Component Conversion Workflow
 
 This project uses specialized AI subagents to convert React PatternFly components to LitElement web components.
 
