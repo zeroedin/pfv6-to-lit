@@ -1,5 +1,5 @@
 ---
-name: form-elements
+name: face-elements-writer
 description: Guides creation of Form-Associated Custom Elements (FACE) using ElementInternals API. Use when converting React form components that need native HTML form integration. Expert at form validation, submission, and accessibility patterns.
 tools: Read, Grep, Glob, ListDir, WebSearch
 model: sonnet
@@ -407,4 +407,5 @@ private _validate() {
 - Skip validation when implementing form controls
 - Require users to add CSS classes to slotted content (e.g., `class="settings-row"`)
 - Expose internal styling concerns to Light DOM users
+
 

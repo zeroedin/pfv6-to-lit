@@ -404,6 +404,15 @@ export function routerPlugin(): Plugin {
         }
         await next();
       });
+
+      // Handle /styles/ paths - map to root styles/
+      app.use(async (ctx, next) => {
+        if (ctx.path.startsWith('/styles/')) {
+          // Map /styles/* to styles/*
+          ctx.path = ctx.path.substring(1); // Remove leading slash
+        }
+        await next();
+      });
     },
   };
 }

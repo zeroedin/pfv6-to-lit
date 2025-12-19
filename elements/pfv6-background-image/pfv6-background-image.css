@@ -33,6 +33,19 @@
   background-repeat: no-repeat;
   background-position: var(--pf-v6-c-background-image--BackgroundPosition);
   background-size: var(--pf-v6-c-background-image--BackgroundSize);
+
+  /* Layout integration - properties passed through from parent layouts */
+  order: var(--_layout-order);
+  max-width: var(--_layout-max-width);
+  margin-block-start: var(--_layout-margin-block-start);
+  margin-block-end: var(--_layout-margin-block-end);
+  margin-inline-start: var(--_layout-margin-inline-start);
+  margin-inline-end: var(--_layout-margin-inline-end);
+  /* Grid layout properties */
+  grid-column-start: var(--_layout-grid-column-start);
+  grid-column-end: var(--_layout-grid-column-end);
+  min-width: var(--_layout-min-width);
+  min-height: var(--_layout-min-height);
 }
 
 /* RTL support */

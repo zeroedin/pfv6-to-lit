@@ -20,8 +20,8 @@ export default {
       tsconfig: fileURLToPath(new URL('./tsconfig.json', import.meta.url)),
     }),
     litCss({
-      // Exclude dev-server styles, patternfly-react CSS, and lightdom CSS from Lit CSS transformation
-      exclude: /dev-server\/styles\/.*\.css$|patternfly-react\/dist\/.*\.css$|.*-lightdom\.css$/,
+      // Exclude dev-server styles, patternfly-react CSS, lightdom CSS, and /styles/ directory from Lit CSS transformation
+      exclude: /dev-server\/styles\/.*\.css$|patternfly-react\/dist\/.*\.css$|.*-lightdom\.css$|^styles\/.*\.css$/,
     }),
     routerPlugin(),
     injectImportMapPlugin(),

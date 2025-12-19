@@ -429,19 +429,19 @@ this.dispatchEvent(new CustomEvent('expand', {
 
 ### If YES (Form Control)
 
-**DELEGATE to `form-elements` subagent** (MANDATORY):
+**DELEGATE to `face-elements-writer` subagent** (MANDATORY):
 
 ```
-Use the Agent tool with subagent_type='form-elements'
+Use the Agent tool with subagent_type='face-elements-writer'
 ```
 
-**Provide to form-elements**:
+**Provide to face-elements-writer**:
 - Component name
 - React source location
 - List of React props (value, name, onChange, etc.)
 - Request complete FACE API design
 
-**WAIT for form-elements to return**:
+**WAIT for face-elements-writer to return**:
 - Complete ElementInternals setup pattern
 - Required form properties (name, value, disabled, required)
 - Form callbacks (formResetCallback, formDisabledCallback)
@@ -449,7 +449,7 @@ Use the Agent tool with subagent_type='form-elements'
 - Validation patterns (setValidity)
 - Form state restoration patterns
 
-**Incorporate form-elements response into your API design output**:
+**Incorporate face-elements-writer response into your API design output**:
 
 ```markdown
 ### Form Integration
@@ -458,19 +458,19 @@ Use the Agent tool with subagent_type='form-elements'
 
 **Form-Associated Custom Element (FACE)**: This component requires `static formAssociated = true`
 
-**FACE Patterns** (from `form-elements` subagent):
-[Include complete patterns provided by form-elements subagent]
+**FACE Patterns** (from `face-elements-writer` subagent):
+[Include complete patterns provided by face-elements-writer subagent]
 
 **Required Properties**:
 - `name: string` - Form field name
 - `value: string` - Form field value  
 - `disabled: boolean` - Disabled state
 - `required: boolean` - Required validation
-- [Additional properties from form-elements]
+- [Additional properties from face-elements-writer]
 
 **Form Callbacks**:
-- `formResetCallback()` - [Pattern from form-elements]
-- `formDisabledCallback(disabled: boolean)` - [Pattern from form-elements]
+- `formResetCallback()` - [Pattern from face-elements-writer]
+- `formDisabledCallback(disabled: boolean)` - [Pattern from face-elements-writer]
 
 **NOTE**: The `accessibility-auditor` subagent will validate proper FACE implementation in Phase 6.
 ```
@@ -613,7 +613,7 @@ render() {
 
 ## Step 9: ElementInternals for Accessibility (Non-Form Use Cases Only)
 
-**CRITICAL**: This section is for NON-FORM components only. If Step 7 determined this is a form control, you already delegated to `form-elements` for complete ElementInternals patterns.
+**CRITICAL**: This section is for NON-FORM components only. If Step 7 determined this is a form control, you already delegated to `face-elements-writer` for complete ElementInternals patterns.
 
 **This section covers**: ElementInternals for accessibility (aria-label, role) on `:host` element.
 
@@ -871,7 +871,7 @@ updated(changedProperties: PropertyValues) {
 }
 ```
 
-**Patterns provided by `form-elements` subagent**.
+**Patterns provided by `face-elements-writer` subagent**.
 
 **If NO**:
 - Component does not participate in form submission
@@ -960,8 +960,8 @@ elements/pfv6-{component}/
 **ALWAYS**:
 - Read TypeScript source directly (NEVER guess)
 - Check if component is a form control (Step 7)
-- **Delegate to `form-elements`** if form control detected
-- **Wait for `form-elements` response** before completing API design
+- **Delegate to `face-elements-writer`** if form control detected
+- **Wait for `face-elements-writer` response** before completing API design
 - Match React prop names exactly for component API
 - Use individual imports from specific paths
 - **Use type-only imports** (`import type { PropertyValues }`) for types

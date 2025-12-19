@@ -363,6 +363,144 @@ Check for `::slotted()` overrides:
 - Must override PRIVATE variables (`--_*`), NOT public API (`--pf-v6-c-*`)
 - Only when needed for layout integration
 
+### Step 7.5: Layout Integration Validation for display: contents Components
+
+**CRITICAL**: If component uses `display: contents` on `:host`, validate layout integration.
+
+#### Check 1: Detect display: contents Usage
+
+Read component CSS and check if `:host` has `display: contents`:
+
+```css
+:host {
+  display: contents;  /* ← TRIGGERS LAYOUT INTEGRATION VALIDATION */
+}
+```
+
+**If display: contents is NOT used**: Skip this validation section.
+
+**If display: contents IS used**: Proceed with all checks below.
+
+#### Check 2: Registration in styles/layout.css
+
+Component MUST be registered in `styles/layout.css` for all 7 layout containers.
+
+**Read `styles/layout.css` and verify**:
+
+1. ✅ Component appears in `:is()` selector for `.pf-v6-l-flex`
+2. ✅ Component appears in `:is()` selector for `.pf-v6-l-grid`
+3. ✅ Component appears in `:is()` selector for `.pf-v6-l-gallery`
+4. ✅ Component appears in `:is()` selector for `.pf-v6-l-stack`
+5. ✅ Component appears in `:is()` selector for `.pf-v6-l-level`
+6. ✅ Component appears in `:is()` selector for `.pf-v6-l-split`
+7. ✅ Component appears in `:is()` selector for `.pf-v6-l-bullseye`
+
+**Expected pattern in styles/layout.css**:
+```css
+.pf-v6-l-flex {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-{component}) {
+    --_layout-order: var(--pf-v6-l-flex--item--Order);
+    --_layout-max-width: 100%;
+    /* ... more variables ... */
+  }
+}
+```
+
+**Error if missing**: "Component uses display: contents but is not registered in styles/layout.css for all 7 layout containers"
+
+#### Check 3: Variable Consumption in Component CSS
+
+Inner elements (hr, div, span, etc.) MUST consume ALL layout variables.
+
+**Required variables to check for**:
+- `order: var(--_layout-order);`
+- `max-width: var(--_layout-max-width);`
+- `margin-block-start: var(--_layout-margin-block-start);`
+- `margin-block-end: var(--_layout-margin-block-end);`
+- `margin-inline-start: var(--_layout-margin-inline-start);`
+- `margin-inline-end: var(--_layout-margin-inline-end);`
+- `grid-column-start: var(--_layout-grid-column-start);` (for Grid support)
+- `grid-column-end: var(--_layout-grid-column-end);` (for Grid support)
+- `min-width: var(--_layout-min-width);` (for Grid support)
+- `min-height: var(--_layout-min-height);` (for Grid support)
+
+**Where to check**: Inner element selectors (hr, div, span, #container, etc.), NOT `:host`
+
+**Example valid pattern**:
+```css
+hr,
+div {
+  /* ... existing styles ... */
+  
+  /* Layout integration */
+  order: var(--_layout-order);
+  max-width: var(--_layout-max-width);
+  margin-block-start: var(--_layout-margin-block-start);
+  margin-block-end: var(--_layout-margin-block-end);
+  margin-inline-start: var(--_layout-margin-inline-start);
+  margin-inline-end: var(--_layout-margin-inline-end);
+  grid-column-start: var(--_layout-grid-column-start);
+  grid-column-end: var(--_layout-grid-column-end);
+  min-width: var(--_layout-min-width);
+  min-height: var(--_layout-min-height);
+}
+```
+
+**Validation checks**:
+- ✅ All 10 layout variables are consumed
+- ✅ Variables applied to inner elements, NOT `:host`
+- ✅ Variables use exact names (e.g., `--_layout-order`, not `--layout-order`)
+- ❌ Error if variables applied to `:host` (won't work with display: contents)
+- ❌ Error if any required variable is missing
+- ❌ Error if variables have wrong names
+
+#### Check 4: No Hardcoded Layout Spacing
+
+Components with `display: contents` should NOT have hardcoded margins.
+
+**Check for problematic patterns**:
+```css
+/* ❌ WRONG - Hardcoded margins on display: contents component */
+hr {
+  margin-inline-end: 1rem;  /* Should use var(--_layout-margin-inline-end) */
+}
+```
+
+**Exception**: Component-specific spacing (e.g., inset modifiers) is allowed:
+```css
+/* ✅ OK - Component-specific spacing, not layout spacing */
+hr.insetSm {
+  --pf-v6-c-divider--before--FlexBasis: calc(100% - 0.5rem * 2);
+}
+```
+
+**Error if found**: "Component has hardcoded margins. Should use layout variables for spacing in layout contexts."
+
+#### Check 5: Comprehensive Layout Testing Recommendation
+
+If component uses `display: contents`, recommend testing in multiple layout contexts:
+
+**Suggested test scenarios**:
+- Flex with `pf-m-column` modifier
+- Flex with `pf-m-row` modifier
+- Flex with `pf-m-column-reverse` modifier
+- Flex with `pf-m-row-reverse` modifier
+- Grid with column spanning
+- Gallery with gap
+- Stack with gap
+
+**Output in report**: "⚠️ Component uses display: contents - verify spacing in Flex, Grid, and Gallery layouts"
+
+#### Summary Error Messages
+
+Use these exact error messages for consistency:
+
+- **Missing registration**: "Component uses display: contents but is not registered in styles/layout.css :is() selectors for all 7 layout containers"
+- **Missing variables**: "Component uses display: contents but does not consume all required layout variables (missing: {list})"
+- **Wrong location**: "Layout variables applied to :host instead of inner element. Variables must be on rendered elements (hr, div, span, etc.)"
+- **Hardcoded margins**: "Component has hardcoded margins instead of using layout variables"
+- **Wrong variable names**: "Layout variable names incorrect. Expected --_layout-* prefix (e.g., --_layout-order, not --layout-order)"
+
 ## Output Format
 
 Provide a structured audit report:

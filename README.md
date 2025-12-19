@@ -225,6 +225,99 @@ While Lit components use Shadow DOM with scoped styles, we still need `patternfl
 
 This approach maintains pixel-perfect parity with React while leveraging PatternFly's battle-tested layout system.
 
+### Layout Integration for `display: contents` Components
+
+**Problem**: Some components use `display: contents` to act as semantically invisible wrappers (e.g., `pfv6-divider`, `pfv6-skeleton`, `pfv6-backdrop`, `pfv6-background-image`). However, elements with `display: contents` become invisible to CSS child selectors like `.pf-v6-l-flex > *`, causing layout spacing and properties to not apply correctly.
+
+**Solution**: We use a **CSS variable contract pattern** to bridge layout containers and `display: contents` components:
+
+1. **Light DOM CSS** (`styles/layout.css`) sets private CSS variables on custom elements inside layout containers
+2. **Shadow DOM CSS** (component styles) consumes these variables to apply spacing
+
+**Architecture:**
+
+```
+Layout Container (.pf-v6-l-flex)
+  ↓ sets --_layout-* variables
+Custom Element (pfv6-divider)
+  ↓ consumes variables
+Shadow DOM (inner <hr>)
+  ✓ spacing applied
+```
+
+**Usage in Your Project:**
+
+Include the layout integration CSS in your HTML:
+
+```html
+<link rel="stylesheet" href="/styles/layout.css">
+```
+
+This CSS file is distributed with the component library (not dev-server only) and should be included alongside PatternFly CSS.
+
+**How It Works:**
+
+The `styles/layout.css` file explicitly targets components with `display: contents` and passes through layout properties:
+
+```css
+/* Flex layout integration */
+.pf-v6-l-flex {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-backdrop, pfv6-background-image) {
+    --_layout-order: var(--pf-v6-l-flex--item--Order);
+    --_layout-max-width: 100%;
+    --_layout-margin-block-start: 0;
+    --_layout-margin-block-end: 0;
+    --_layout-margin-inline-start: 0;
+    --_layout-margin-inline-end: 0;
+  }
+}
+
+/* Direction-specific rules */
+.pf-v6-l-flex.pf-m-column {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-backdrop, pfv6-background-image) {
+    --_layout-margin-block-end: var(--pf-v6-l-flex--spacer--row);
+  }
+}
+```
+
+Components then consume these variables in their shadow DOM:
+
+```css
+/* In pfv6-divider.css */
+hr, div {
+  order: var(--_layout-order);
+  max-width: var(--_layout-max-width);
+  margin-block: var(--_layout-margin-block-start) var(--_layout-margin-block-end);
+  margin-inline: var(--_layout-margin-inline-start) var(--_layout-margin-inline-end);
+}
+```
+
+**Supported Layouts:**
+
+Layout integration is implemented for all 7 PatternFly layout systems:
+- **Flex** - Full margin control for all direction modifiers (`pf-m-row`, `pf-m-column`, `pf-m-row-reverse`, `pf-m-column-reverse`)
+- **Grid** - Column placement and grid-specific properties
+- **Gallery** - Works automatically via CSS `gap`
+- **Stack** - Works automatically via CSS `gap`
+- **Level** - Works automatically via CSS `gap`
+- **Split** - Works automatically via CSS `gap`
+- **Bullseye** - Uses container padding (no child spacing needed)
+
+**Adding New Components:**
+
+When creating a new component with `display: contents`:
+
+1. Add component to `:is()` selector lists in `styles/layout.css`
+2. Consume layout variables in component shadow DOM CSS
+3. Test in Flex, Grid, and Gallery layouts to verify spacing
+
+**Variable Naming Convention:**
+
+- Use `--_` prefix for "private" variables (internal contract between layout CSS and components)
+- Standard layout variables: `--_layout-order`, `--_layout-max-width`, `--_layout-margin-*`, `--_layout-grid-*`
+
+This pattern ensures visual parity with React components while maintaining the encapsulation benefits of Shadow DOM.
+
 ## Documentation
 
 - See `CLAUDE.md` for comprehensive development guidelines

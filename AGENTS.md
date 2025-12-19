@@ -9,9 +9,21 @@
 If Cursor, use the following subagents: (`.cursor/agents/`)
 If Claude Code, use the following subagents: (`.claude/agents/`)
 
+Listed in typical workflow order:
+
+### Planning Phase
+
+**Dependency analysis** → `find`
+- Analyzes React components to find zero-dependency or blocker components
+- Use: "Use find to plan conversion order"
+
+### Orchestration
+
 **Full component conversion** → `create`
 - Orchestrates API → Demos → CSS → Accessibility → Tests workflow
 - Use: "Use create to convert [Component]"
+
+### API Phase
 
 **API design** → `api-writer`
 - Designs LitElement API from React component source
@@ -21,13 +33,22 @@ If Claude Code, use the following subagents: (`.claude/agents/`)
 - Validates LitElement API follows best practices
 - Use: "Use api-auditor to validate [Component] API"
 
+### Demo Phase
+
 **Demo creation** → `demo-writer`
 - Creates HTML demos from React examples
 - Use: "Use demo-writer to create demos for [Component]"
 
+**Layout translation** → `layout-translator`
+- Translates React layout components to HTML+CSS classes
+- Used by demo-writer for layout components in demos
+- Use: "Use layout-translator to convert [Layout JSX] to HTML"
+
 **Demo validation** → `demo-auditor`
 - Validates 1:1 parity with React examples
 - Use: "Use demo-auditor to validate [Component] demos"
+
+### CSS Phase
 
 **CSS creation** → `css-writer`
 - Translates React CSS to Shadow DOM CSS with proper fallback values
@@ -37,9 +58,31 @@ If Claude Code, use the following subagents: (`.claude/agents/`)
 - Validates CSS against React source and PatternFly tokens
 - Use: "Use css-auditor to validate [Component] styles"
 
+### Accessibility Phase
+
 **Accessibility validation** → `accessibility-auditor`
 - Validates accessibility patterns in LitElement components
 - Use: "Use accessibility-auditor to validate [Component] accessibility"
+
+**ARIA validation** → `aria-auditor`
+- Validates ARIA patterns and semantics
+- Use: "Use aria-auditor to validate [Component] ARIA patterns"
+
+**ElementInternals validation** → `element-internals-auditor`
+- Validates ElementInternals usage and patterns
+- Use: "Use element-internals-auditor to validate [Component] ElementInternals"
+
+### Form Integration Phase
+
+**Form integration** → `face-elements-writer`
+- ElementInternals patterns for form-associated custom elements (FACE)
+- Use: "Use face-elements-writer for form integration"
+
+**Form validation** → `face-elements-auditor`
+- Validates form-associated custom element implementation
+- Use: "Use face-elements-auditor to validate [Component] form integration"
+
+### Testing Phase
 
 **Spec test creation** → `test-spec-writer`
 - Creates web-test-runner unit tests for component API
@@ -57,34 +100,33 @@ If Claude Code, use the following subagents: (`.claude/agents/`)
 - Diagnoses visual test failures
 - Use: "Use test-runner to debug test failures"
 
-**Dependency analysis** → `find`
-- Analyzes React components to find zero-dependency or blocker components
-- Use: "Use find to plan conversion order"
-
-**Form integration** → `form-elements`
-- ElementInternals patterns for form-associated elements
-- Use: "Use form-elements for form integration"
-
-**Layout translation** → `layout-translator`
-- Translates React layout components to HTML+CSS classes
-- Use: "Use layout-translator to convert [Layout JSX] to HTML"
-
 ### Quick Routing
-- **Plan conversion order**: Use `find` (find which component to convert first)
-- **New component**: Use `create` (orchestrates everything)
+
+**Planning:**
+- **Plan conversion order**: Use `find`
+
+**Full Workflow:**
+- **New component**: Use `create` (orchestrates all phases)
+
+**Individual Phases:**
 - **Design API**: Use `api-writer`
 - **Validate API**: Use `api-auditor`
 - **Create demos**: Use `demo-writer`
 - **Validate demos**: Use `demo-auditor`
+- **Translate layouts**: Use `layout-translator`
 - **Create CSS**: Use `css-writer`
 - **Validate CSS**: Use `css-auditor`
 - **Validate accessibility**: Use `accessibility-auditor`
+- **Validate ARIA**: Use `aria-auditor`
+- **Validate ElementInternals**: Use `element-internals-auditor`
+- **Add form integration**: Use `face-elements-writer`
+- **Validate form integration**: Use `face-elements-auditor`
 - **Write unit tests**: Use `test-spec-writer`
 - **Write visual tests**: Use `test-visual-writer`
 - **Write CSS API tests**: Use `test-css-api-writer`
 - **Debug tests**: Use `test-runner`
-- **Translate layouts**: Use `layout-translator`
-- **Unsure?** Ask: "What agent should I use for [task]?"
+
+**Unsure?** Ask: "What agent should I use for [task]?"
 
 ---
 
