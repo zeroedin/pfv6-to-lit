@@ -20,16 +20,58 @@ PatternFly Elements v6 is a web component library built with LitElement that imp
 - Node.js 24.x (LTS) - See `.nvmrc` for version
 - npm 10+
 
-If using nvm:
+#### Using Node Version Manager (nvm)
+
+This project uses Node.js 24.x. We recommend using [nvm](https://github.com/nvm-sh/nvm) for Node.js version management.
+
+**Install nvm:**
+
+**macOS/Linux:**
+
 ```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+```
+
+Or with wget:
+
+```bash
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+```
+
+**Windows:**
+
+Download and install [nvm-windows](https://github.com/coreybutler/nvm-windows/releases)
+
+**After installation:**
+
+```bash
+# Install the project's Node.js version (reads from .nvmrc)
+nvm install
+
+# Use the project's Node.js version
 nvm use
 ```
+
+The `.nvmrc` file in the project root specifies the exact Node.js version. Running `nvm use` automatically switches to this version.
 
 ### Installation
 
 ```bash
-npm install
+npm ci
 ```
+
+**What happens on postinstall:**
+
+1. **Cache PatternFly sources** - Clones React PatternFly and core PatternFly to `.cache/`
+2. **Analyze dependencies** - Generates `react-dependency-tree.json` mapping component dependencies
+3. **Copy React demos** - Extracts React demo files to `patternfly-react/` for comparison testing
+4. **Copy PatternFly assets** - Copies base CSS, fonts, and images to `dev-server/`
+
+These steps ensure:
+
+- React component sources are available for conversion reference
+- Dependency analysis enables optimal component conversion order
+- Side-by-side React comparison demos for visual parity validation
 
 ### Development
 
@@ -49,12 +91,76 @@ npm run test
 
 # Run E2E tests
 npm run e2e
+
+# Analyze component dependencies
+npm run analyze-dependencies
+
+# Find next component to convert (after running analyze-dependencies)
+npx tsx scripts/find-blockers.ts
 ```
 
 **Development Pages:**
 - **`/`** - Main development index with auto-generated component list
-- **`/elements/pfv6-{name}/demo/index`** - Component primary demo
-- **`/elements/pfv6-{name}/demo/{page}`** - Additional component demo pages
+- **`/elements/pfv6-{name}/demo/`** - Lit component demo index (lists all demos for the component)
+- **`/elements/pfv6-{name}/demo/{page}/`** - Individual Lit component demo pages
+- **`/elements/pfv6-{name}/react/`** - React component demo index (comparison demos)
+- **`/elements/pfv6-{name}/react/{page}/`** - Individual React component demo pages
+
+## Component Conversion Workflow
+
+This project uses specialized AI subagents to convert React PatternFly components to LitElement web components.
+
+### Finding the Next Component to Convert
+
+Use the `find` subagent to identify the optimal next component based on dependency analysis:
+
+**Prompt:**
+
+```
+Use the find.md sub agent to locate the next component we should build
+```
+
+The `find` subagent:
+- Analyzes the dependency tree in `react-dependency-tree.json`
+- Identifies components with fewest dependencies (easier to convert)
+- Prioritizes components that unblock the most other components
+- Recommends the next best candidate with reasoning
+
+### Converting a Component
+
+Once you have a component recommendation, use the `create` subagent to perform the conversion:
+
+**Prompt:**
+
+```
+Use the create.md sub agent following strict delegation rules, convert {{ Component Name }}
+```
+
+Replace `{{ Component Name }}` with the component name from the `find` recommendation (e.g., "Brand", "Spinner", "Divider").
+
+The `create` subagent orchestrates the full conversion workflow:
+1. **API Design** - Translates React props to LitElement properties
+2. **Implementation** - Creates the component TypeScript file
+3. **Demos** - Converts React examples to HTML demos
+4. **CSS** - Translates React SCSS to Shadow DOM CSS
+5. **Accessibility** - Validates ARIA patterns and keyboard interactions
+6. **Tests** - Generates unit tests, visual parity tests, and CSS API tests
+
+**Example workflow:**
+
+```bash
+# Step 1: Find next component
+> Use the find.md sub agent to locate the next component we should build
+
+# Agent responds: "Next Component: Spinner (0 dependencies, blocks 6 components)"
+
+# Step 2: Convert the component
+> Use the create.md sub agent following strict delegation rules, convert Spinner
+
+# Agent performs full conversion with automated validation
+```
+
+For more details on the conversion process, see the subagent documentation in [`agents/`](agents/).
 
 ## Project Structure
 
@@ -91,58 +197,31 @@ All components use the `pfv6-` prefix:
 
 ## Architecture Decisions
 
-### Two-Layer CSS Variable Pattern
-
-**Key Innovation**: Our components use a two-layer CSS variable pattern that makes them **MORE RESILIENT than React PatternFly**.
-
-#### The Pattern
-
-```css
-:host {
-  /* Private variable with fallback chain */
-  --_pfv6-card-background-color: var(
-    --pf-v6-c-card--BackgroundColor,
-    var(--pf-t--global--background--color--primary--default)
-  );
-}
-
-#container {
-  background-color: var(--_pfv6-card-background-color);
-}
-```
-
-#### Why This Matters
-
-**React PatternFly** uses direct variable references without fallbacks:
-```css
-.pf-v6-c-card {
-  background-color: var(--pf-v6-c-card--BackgroundColor);
-}
-```
-
-When `--pf-v6-c-card--BackgroundColor` is unset or removed:
-- ❌ **React**: Becomes **transparent** - loses default styling
-- ✅ **Our components**: Maintain **white background** - fall back to design tokens
-
-#### Real-World Benefits
-
-This pattern provides resilience in scenarios where:
-- CSS is dynamically modified by JavaScript
-- Theming systems reset variables
-- Third-party libraries manipulate styles
-- User overrides are removed/reverted
-
-**Validation**: See `tests/css-api/card-api.spec.ts` - "CSS variable reset: unset removes custom value" for proof that our implementation maintains styling when React's implementation fails.
-
 ### PatternFly CSS Strategy
 
-**Current Approach**: PatternFly base CSS is copied from `node_modules` to `dev-server/styles/` during development. This provides global CSS tokens for demo pages.
+**Demo CSS Files:**
 
-**Long-term Consideration**: We need to decide whether to:
-1. **Global CSS** (current): Require users to include PatternFly CSS in their projects
-2. **Component CSS with fallbacks**: Use CSS variable fallbacks in each component for more modularity
+Our demos use two PatternFly CSS files:
 
-Option 2 would make components more self-contained but may increase CSS duplication. This decision will be made as we develop more components and understand usage patterns.
+- **`base.css`** - Core PatternFly design tokens and base styles
+  - Copied from `@patternfly/react-core/dist/styles/base.css`
+  - Used by all demos (Lit and React)
+  - Location: `/dev-server/styles/patternfly/base.css`
+
+- **`patternfly.css`** - Full PatternFly CSS (includes component styles and layout utilities)
+  - Copied from `@patternfly/patternfly/patternfly.css`
+  - Used by all demos (Lit and React)
+  - Location: `/dev-server/styles/patternfly/patternfly.css`
+
+**Why patternfly.css for Lit demos?**
+
+While Lit components use Shadow DOM with scoped styles, we still need `patternfly.css` for **layout utility classes** like `pf-v6-l-flex`, `pf-v6-l-gallery`, and `pf-v6-l-grid`.
+
+**Layout components are NOT converted to custom elements.** Instead, demos use raw HTML with PatternFly layout CSS classes:
+- ✅ Component demos: Use custom elements (`<pfv6-card>`, `<pfv6-button>`)
+- ✅ Layout usage: Use HTML + CSS classes (`<div class="pf-v6-l-flex pf-m-row">`)
+
+This approach maintains pixel-perfect parity with React while leveraging PatternFly's battle-tested layout system.
 
 ## Documentation
 
