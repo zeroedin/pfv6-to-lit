@@ -22,7 +22,6 @@ import styles from './pfv6-divider.css';
 @customElement('pfv6-divider')
 export class Pfv6Divider extends LitElement {
   static readonly styles = styles;
-  static readonly formAssociated = true;
 
   private internals: ElementInternals;
 
