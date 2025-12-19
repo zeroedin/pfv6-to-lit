@@ -17,4 +17,17 @@
   width: 100%;
   height: 100%;
   background-color: var(--pf-v6-c-backdrop--BackgroundColor, var(--pf-t--global--background--color--backdrop--default, rgba(21, 21, 21, 0.2)));
+
+  /* Layout integration - properties passed through from parent layouts */
+  order: var(--_layout-order);
+  max-width: var(--_layout-max-width);
+  margin-block-start: var(--_layout-margin-block-start);
+  margin-block-end: var(--_layout-margin-block-end);
+  margin-inline-start: var(--_layout-margin-inline-start);
+  margin-inline-end: var(--_layout-margin-inline-end);
+  /* Grid layout properties */
+  grid-column-start: var(--_layout-grid-column-start);
+  grid-column-end: var(--_layout-grid-column-end);
+  min-width: var(--_layout-min-width);
+  min-height: var(--_layout-min-height);
 }
