@@ -1,0 +1,118 @@
+/**
+ * Spinner CSS - Shadow DOM styles
+ * 
+ * Translates PatternFly React Spinner CSS to LitElement Shadow DOM patterns.
+ * Variable names and values derived from:
+ * - .cache/patternfly/src/patternfly/components/Spinner/spinner.scss
+ * - .cache/patternfly/src/patternfly/base/tokens/tokens-default.scss
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: inline-block;
+}
+
+/* Main spinner SVG element */
+#spinner {
+  /* CSS Variables - copied exactly from React source */
+  --pf-v6-c-spinner--diameter: var(--pf-t--global--icon--size--2xl, 3.5rem);
+  --pf-v6-c-spinner--Width: var(--pf-v6-c-spinner--diameter);
+  --pf-v6-c-spinner--Height: var(--pf-v6-c-spinner--diameter);
+  --pf-v6-c-spinner--Color: var(--pf-t--global--icon--color--brand--default, #0066cc);
+  --pf-v6-c-spinner--AnimationDuration: 1.4s;
+  --pf-v6-c-spinner--AnimationTimingFunction: linear;
+  --pf-v6-c-spinner--StrokeWidth: 10;
+
+  /* Path variables */
+  --pf-v6-c-spinner__path--StrokeWidth: var(--pf-v6-c-spinner--StrokeWidth);
+  --pf-v6-c-spinner__path--AnimationTimingFunction: ease-in-out;
+
+  /* Size modifier variables */
+  --pf-v6-c-spinner--m-sm--diameter: var(--pf-t--global--icon--size--md, 0.875rem);
+  --pf-v6-c-spinner--m-md--diameter: var(--pf-t--global--icon--size--lg, 1rem);
+  --pf-v6-c-spinner--m-lg--diameter: var(--pf-t--global--icon--size--xl, 1.5rem);
+  --pf-v6-c-spinner--m-xl--diameter: var(--pf-t--global--icon--size--2xl, 3.5rem);
+
+  /* Inline modifier variable */
+  --pf-v6-c-spinner--m-inline--diameter: 1em;
+
+  /* Display properties */
+  display: block;
+  width: var(--pf-v6-c-spinner--Width);
+  height: var(--pf-v6-c-spinner--Height);
+  overflow: hidden;
+  animation: pf-v6-c-spinner-animation-rotate calc(var(--pf-v6-c-spinner--AnimationDuration) * 2) var(--pf-v6-c-spinner--AnimationTimingFunction) infinite;
+
+  /* Size modifiers - use simple class names from classMap() */
+  &.inline {
+    --pf-v6-c-spinner--diameter: var(--pf-v6-c-spinner--m-inline--diameter);
+  }
+
+  &.sm {
+    --pf-v6-c-spinner--diameter: var(--pf-v6-c-spinner--m-sm--diameter);
+  }
+
+  &.md {
+    --pf-v6-c-spinner--diameter: var(--pf-v6-c-spinner--m-md--diameter);
+  }
+
+  &.lg {
+    --pf-v6-c-spinner--diameter: var(--pf-v6-c-spinner--m-lg--diameter);
+  }
+
+  &.xl {
+    --pf-v6-c-spinner--diameter: var(--pf-v6-c-spinner--m-xl--diameter);
+  }
+}
+
+/* Spinner path (the animated circle) */
+#path {
+  width: 100%;
+  height: 100%;
+  stroke: var(--pf-v6-c-spinner--Color);
+  stroke-dasharray: 283;
+  stroke-dashoffset: 280;
+  stroke-linecap: round;
+  stroke-width: var(--pf-v6-c-spinner--StrokeWidth);
+  transform-origin: 50% 50%;
+  animation: pf-v6-c-spinner-animation-dash var(--pf-v6-c-spinner--AnimationDuration) var(--pf-v6-c-spinner__path--AnimationTimingFunction) infinite;
+}
+
+/* Rotation animation for the spinner container */
+@keyframes pf-v6-c-spinner-animation-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dash animation for the spinner path */
+@keyframes pf-v6-c-spinner-animation-dash {
+  0% {
+    stroke-dashoffset: 280;
+    transform: rotate(0);
+  }
+
+  15% {
+    stroke-width: calc(var(--pf-v6-c-spinner__path--StrokeWidth) - 4);
+  }
+
+  40% {
+    stroke-dasharray: 220;
+    stroke-dashoffset: 150;
+  }
+
+  100% {
+    stroke-dashoffset: 280;
+    transform: rotate(720deg);
+  }
+}
+
