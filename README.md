@@ -119,7 +119,7 @@ Use the `find` subagent to identify the optimal next component based on dependen
 **Prompt:**
 
 ```
-Use the find.md sub agent to locate the next component we should build
+Use the find.md subagent to locate the next component we should build
 ```
 
 The `find` subagent:
@@ -135,7 +135,7 @@ Once you have a component recommendation, use the `create` subagent to perform t
 **Prompt:**
 
 ```
-Use the create.md sub agent following strict delegation rules, convert {{ Component Name }}
+Use the create.md subagent following strict delegation rules, convert {{ Component Name }}
 ```
 
 Replace `{{ Component Name }}` with the component name from the `find` recommendation (e.g., "Brand", "Spinner", "Divider").
@@ -152,12 +152,12 @@ The `create` subagent orchestrates the full conversion workflow:
 
 ```bash
 # Step 1: Find next component
-> Use the find.md sub agent to locate the next component we should build
+> Use the find.md subagent to locate the next component we should build
 
 # Agent responds: "Next Component: Spinner (0 dependencies, blocks 6 components)"
 
 # Step 2: Convert the component
-> Use the create.md sub agent following strict delegation rules, convert Spinner
+> Use the create.md subagent following strict delegation rules, convert Spinner
 
 # Agent performs full conversion with automated validation
 ```
