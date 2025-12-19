@@ -1,0 +1,141 @@
+/**
+ * Layout Integration for Custom Elements with display: contents
+ *
+ * Custom elements with display: contents are invisible to layout selectors.
+ * We explicitly target components that use display: contents and set private
+ * CSS variables that they consume in their shadow DOM.
+ *
+ * Using :is() and nesting for cleaner syntax. When adding new components with
+ * display: contents, add them to the :is() selector list below.
+ */
+
+/* ============================================================================
+   Flex Layout
+   ============================================================================ */
+
+/* Base flex properties - applied to all flex children */
+.pf-v6-l-flex {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-backdrop, pfv6-background-image) {
+    /* Properties applied to all flex children */
+    --_layout-order: var(--pf-v6-l-flex--item--Order);
+    --_layout-max-width: 100%;
+
+    /* Default: row direction (inline spacing) - PatternFly default without modifier */
+    --_layout-margin-block-start: 0;
+    --_layout-margin-block-end: 0;
+    --_layout-margin-inline-start: 0;
+    --_layout-margin-inline-end: var(--pf-v6-l-flex--spacer--column);
+  }
+}
+
+/* Flex column direction - margins on block axis */
+.pf-v6-l-flex.pf-m-column {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-backdrop, pfv6-background-image) {
+    --_layout-margin-block-end: var(--pf-v6-l-flex--spacer--row);
+    --_layout-margin-inline-end: 0; /* Reset default row spacing */
+  }
+}
+
+/* Flex row direction - margins on inline axis */
+.pf-v6-l-flex.pf-m-row {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-backdrop, pfv6-background-image) {
+    --_layout-margin-inline-end: var(--pf-v6-l-flex--spacer--column);
+  }
+}
+
+/* Flex column-reverse direction */
+.pf-v6-l-flex.pf-m-column-reverse {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-backdrop, pfv6-background-image) {
+    --_layout-margin-block-start: var(--pf-v6-l-flex--spacer--row);
+    --_layout-margin-block-end: 0;
+  }
+}
+
+/* Flex row-reverse direction */
+.pf-v6-l-flex.pf-m-row-reverse {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-backdrop, pfv6-background-image) {
+    --_layout-margin-inline-start: var(--pf-v6-l-flex--spacer--column);
+    --_layout-margin-inline-end: 0; /* Reset default row spacing */
+  }
+}
+
+/* ============================================================================
+   Gallery Layout
+   ============================================================================ */
+
+/* Gallery uses CSS Grid with gap - gap works with display: contents */
+.pf-v6-l-gallery {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-backdrop, pfv6-background-image) {
+    /* Gallery uses grid-gap which works automatically with display: contents */
+
+    /* No additional variables needed */
+  }
+}
+
+/* ============================================================================
+   Grid Layout
+   ============================================================================ */
+
+/* Grid uses CSS Grid with gap and explicit column placement */
+.pf-v6-l-grid {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-backdrop, pfv6-background-image) {
+    /* Grid properties that need to pass through */
+    --_layout-order: var(--pf-v6-l-grid--item--Order);
+    --_layout-grid-column-start: var(--pf-v6-l-grid__item--GridColumnStart);
+    --_layout-grid-column-end: var(--pf-v6-l-grid__item--GridColumnEnd);
+    --_layout-min-width: 0;
+    --_layout-min-height: 0;
+  }
+}
+
+/* ============================================================================
+   Stack Layout
+   ============================================================================ */
+
+/* Stack uses flexbox column with gap - gap works with display: contents */
+.pf-v6-l-stack {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-backdrop, pfv6-background-image) {
+    /* Stack uses gap which works automatically with display: contents */
+
+    /* No additional variables needed */
+  }
+}
+
+/* ============================================================================
+   Level Layout
+   ============================================================================ */
+
+/* Level uses flexbox with gap - gap works with display: contents */
+.pf-v6-l-level {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-backdrop, pfv6-background-image) {
+    /* Level uses gap which works automatically with display: contents */
+
+    /* No additional variables needed */
+  }
+}
+
+/* ============================================================================
+   Split Layout
+   ============================================================================ */
+
+/* Split uses flexbox with gap - gap works with display: contents */
+.pf-v6-l-split {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-backdrop, pfv6-background-image) {
+    /* Split uses gap which works automatically with display: contents */
+
+    /* No additional variables needed */
+  }
+}
+
+/* ============================================================================
+   Bullseye Layout
+   ============================================================================ */
+
+/* Bullseye rarely contains multiple children, uses padding on container */
+.pf-v6-l-bullseye {
+  & > :is(pfv6-divider, pfv6-skeleton, pfv6-backdrop, pfv6-background-image) {
+    /* Bullseye uses padding on container, not spacing between children */
+
+    /* No variables needed */
+  }
+}
