@@ -21,6 +21,7 @@ Achieve **1:1 visual parity** between Lit web components and PatternFly React co
 import { test, expect, Page } from '@playwright/test';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
+import { discoverDemos } from '../../../tests/helpers/discover-demos.js';
 
 // Helper to wait for full page load including main thread idle
 async function waitForFullLoad(page: Page): Promise<void> {
@@ -52,7 +53,11 @@ async function waitForFullLoad(page: Page): Promise<void> {
   });
 }
 
-const litDemos = ['demo1', 'demo2', 'demo3']; // Your component's demos
+// NOTE: Replace {component} with actual component name (e.g., pfv6-badge)
+// This example shows the standardized pattern all components should follow.
+
+// Dynamically discover all demos from the filesystem
+const litDemos = discoverDemos('component-name'); // e.g., discoverDemos('badge')
 
 test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
   litDemos.forEach(demoName => {
@@ -146,11 +151,38 @@ test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
 
 ---
 
+## 🔍 Demo Discovery Pattern
+
+**All visual tests use dynamic demo discovery** rather than hardcoded demo lists.
+
+### How It Works
+
+```typescript
+import { discoverDemos } from '../../../tests/helpers/discover-demos.js';
+
+// Automatically finds all demo HTML files for the component
+const litDemos = discoverDemos('badge');
+// Returns: ['basic', 'with-border', 'size-variations', etc.]
+```
+
+### Why Dynamic Discovery?
+
+✅ **Automatic detection** - New demos are automatically included in tests  
+✅ **Rename-safe** - Renaming demo files updates tests automatically  
+✅ **No maintenance** - No need to manually sync test file with demo list  
+✅ **Prevents drift** - Impossible to forget to test a demo  
+
+### Helper Location
+
+The `discoverDemos()` helper is located at `tests/helpers/discover-demos.ts` and scans the component's `demo/` directory for HTML files.
+
+---
+
 ## 📋 Test Suite Overview
 
 ### 1. Visual Parity Tests ⭐ **CRITICAL**
-**Files**: `tests/visual/{component}/{component}-visual-parity.spec.ts`  
-**Example**: `tests/visual/card/card-visual-parity.spec.ts`  
+**Files**: `elements/pfv6-{component}/test/pfv6-{component}.visual.ts`  
+**Example**: `elements/pfv6-badge/test/pfv6-badge.visual.ts`  
 **Purpose**: Validate 1:1 visual matching between Lit and React  
 **Command**: `npm run e2e:parity`
 
@@ -168,13 +200,13 @@ This is the **mandatory pattern** for all visual parity tests. Never use baselin
 7. Asserts `numDiffPixels === 0` for pixel-perfect match
 
 #### Test Coverage
-- **22 demos × 3 browsers = 66 tests per run**
+- **All demos × 3 browsers** (chromium, firefox, webkit)
 - All demos use dedicated `/test/` routes (no page style interference)
-- Examples: basic-cards, secondary-cards, with-modifiers, expandable, selectable, etc.
+- Demos are automatically discovered from component `demo/` directories
 
 #### Success Criteria
 - `numDiffPixels === 0` (pixel-perfect match)
-- **Goal: 100% passing** (all 66 tests passing across 3 browsers)
+- **Goal: 100% passing** (all visual tests passing across all 3 browsers)
 
 #### When to Run
 - After changing Lit component CSS
@@ -193,23 +225,22 @@ This is the **mandatory pattern** for all visual parity tests. Never use baselin
 ---
 
 ### 2. CSS API Parity Tests
-**File**: `tests/css-api/card-api.spec.ts`  
+**Files**: `elements/pfv6-{component}/test/pfv6-{component}.css-api.ts`  
+**Example**: `elements/pfv6-avatar/test/pfv6-avatar.css-api.ts`  
 **Purpose**: Validate CSS custom property API works identically in React and Lit  
 **Command**: `npm run e2e` (runs all tests)
 
 #### What It Tests
 1. **CSS variable overrides**: Setting `--pf-v6-c-card--BackgroundColor` changes background in both React and Lit
 2. **Computed style parity**: Same CSS variable values produce identical computed styles
-3. **`unset` behavior**: Verifies Lit's two-layer pattern maintains defaults when variables are reset (Lit advantage!)
-4. **Interactive states**: Hover, focus, active states produce identical styles
+3. **Interactive states**: Hover, focus, active states produce identical styles
 
 #### Success Criteria
 - All computed styles must match between React and Lit
 - CSS variable mutations must produce identical visual results
-- Lit's resilience advantage (two-layer pattern) must be maintained
 
 #### When to Run
-- After changing CSS architecture (e.g., two-layer pattern)
+- After changing CSS architecture or variable implementation
 - After adding new public CSS variables
 - Before marking component as "complete"
 
@@ -231,9 +262,11 @@ With the standardized visual testing pattern, we compare live React vs live Lit 
 ## 🚀 Workflow
 
 ### Initial Setup (First Time)
+
+**Note:** E2E tests require the dev server running on port 8000. Ensure no other process is using this port before starting tests.
+
 ```bash
-# 1. Start dev server
-killall node
+# 1. Start dev server (runs on port 8000)
 npm run dev &
 sleep 10
 
@@ -402,30 +435,34 @@ When tests run, Playwright generates an HTML report with:
 
 ### Test File Structure
 
-Tests are organized by component for scalability:
+Tests are co-located with component source code:
 
 ```
+elements/
+  ├── pfv6-badge/
+  │   ├── pfv6-badge.ts           # Component implementation
+  │   ├── pfv6-badge.css          # Component styles
+  │   ├── demo/                    # Component demos
+  │   └── test/
+  │       ├── pfv6-badge.spec.ts      # Unit tests (web-test-runner)
+  │       ├── pfv6-badge.visual.ts    # Visual parity tests (Playwright)
+  │       └── pfv6-badge.css-api.ts   # CSS API tests (Playwright)
+  ├── pfv6-avatar/
+  │   └── test/
+  │       ├── pfv6-avatar.spec.ts
+  │       ├── pfv6-avatar.visual.ts
+  │       └── pfv6-avatar.css-api.ts
 tests/
-  ├── visual/
-  │   ├── card/
-  │   │   ├── card-visual-parity.spec.ts       ⭐ ONLY FILE NEEDED
-  │   │   └── card-visual-parity.spec.ts-snapshots/  (auto-generated, gitignored)
-  │   ├── checkbox/
-  │   │   ├── checkbox-visual-parity.spec.ts   ⭐ ONLY FILE NEEDED
-  │   │   └── checkbox-visual-parity.spec.ts-snapshots/  (auto-generated, gitignored)
-  │   └── README.md
-  ├── css-api/
-  │   ├── card-api.spec.ts
-  │   └── card-api.spec.ts-snapshots/  (auto-generated, gitignored)
-  └── diagnostics/
-      └── check-lit-console.spec.ts
+  └── helpers/
+      └── discover-demos.ts        # Demo discovery helper for visual tests
 ```
 
 **Key Points:**
-- ⭐ **Each component needs ONLY ONE test file**: `{component}-visual-parity.spec.ts`
-- 🗑️ **No baseline test files needed** - direct comparison eliminates them
+- ⭐ **Tests are co-located** with component source in `elements/pfv6-{component}/test/`
+- 🧪 **Three test types**: `.spec.ts` (unit), `.visual.ts` (parity), `.css-api.ts` (CSS API)
 - 📁 **Snapshot directories are auto-generated** by Playwright but not used for comparison
 - 🚫 **All `*-snapshots/` directories are gitignored** - pixelmatch does comparison in-memory
+- 🔍 **Demo discovery** is automated via `tests/helpers/discover-demos.ts`
 
 ---
 
@@ -438,7 +475,7 @@ tests/
 ✅ Parity: basic-cards (Lit vs React) - webkit
 ✅ Parity: secondary-cards (Lit vs React) - chromium
 ...
-✅ 66/66 tests passing (100%)
+✅ All tests passing (100%)
 ```
 
 ### CSS API Tests
@@ -479,8 +516,8 @@ tests/
 ### Scenario 4: CSS Variable API Mismatch
 **Symptom**: CSS API test fails - computed styles don't match  
 **Example**: React uses `rgba(0, 0, 0, 0)`, Lit uses `rgb(255, 255, 255)` after `unset`  
-**Root Cause**: Missing or incorrect two-layer CSS variable pattern  
-**Solution**: Implement two-layer pattern in Lit component CSS (see CLAUDE.md)
+**Root Cause**: Incorrect CSS variable cascade or missing fallback values  
+**Solution**: Update Lit component CSS to match React's CSS variable implementation and fallback patterns
 
 ### Scenario 5: Flaky Screenshots
 **Symptom**: Tests pass/fail inconsistently  
@@ -488,7 +525,7 @@ tests/
 **Solution**:
 - ✅ Always use `waitForFullLoad()` helper
 - ✅ Ensure `requestIdleCallback` is working (check for Safari fallback)
-- ✅ Run `killall node` before tests to clean hanging processes
+- ✅ Ensure port 8000 is available (stop any existing dev server before running tests)
 
 ---
 
@@ -506,11 +543,10 @@ tests/
 
 ## 🛠️ Common Commands
 
-```bash
-# Kill hanging processes
-killall node
+**Note:** Ensure port 8000 is available before starting the dev server.
 
-# Start dev server
+```bash
+# Start dev server (runs on port 8000)
 npm run dev &
 sleep 10
 
@@ -519,9 +555,6 @@ npm run e2e
 
 # Run only parity tests
 npm run e2e:parity
-
-# Run only React baseline (debugging)
-npm run e2e:react-baseline
 
 # Run specific component tests
 npx playwright test tests/visual/card/ --project=chromium
@@ -550,7 +583,7 @@ npx playwright show-report
 1. ✅ Copy React demos directly from PatternFly GitHub (never manually create)
 2. ✅ Create corresponding Lit demos with same HTML structure (use kebab-case filenames)
 3. ✅ Expose identical CSS variables as public API
-4. ✅ Use two-layer CSS variable pattern for Shadow DOM
+4. ✅ Ensure CSS variable cascades match React's implementation
 5. ✅ Test locally: `npm run e2e:parity`
 
 **When updating a component**:
@@ -584,7 +617,7 @@ npx playwright show-report
 **Visual parity is achieved when**:
 
 1. ✅ **`numDiffPixels === 0`**: Pixelmatch reports zero different pixels
-2. ✅ **100% pass rate**: All 66 visual tests passing (22 demos × 3 browsers)
+2. ✅ **100% pass rate**: All visual tests passing across all 3 browsers
 3. ✅ **All demos covered**: Every React demo has corresponding Lit demo
 4. ✅ **CSS variables work**: Overrides produce identical visual results
 5. ✅ **Interactive states match**: Hover, focus, expanded states identical
