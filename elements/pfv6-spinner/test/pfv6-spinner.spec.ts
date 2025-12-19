@@ -4,7 +4,7 @@
  * Tests validate 1:1 API parity with PatternFly React Spinner component.
  * React source: .cache/patternfly-react/packages/react-core/src/components/Spinner/Spinner.tsx
  */
-import { html, fixture } from '@open-wc/testing-helpers';
+import { html, fixture } from '@open-wc/testing';
 import { Pfv6Spinner } from '../pfv6-spinner.js';
 import '../pfv6-spinner.js';
 
