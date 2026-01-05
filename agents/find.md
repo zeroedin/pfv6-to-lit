@@ -85,6 +85,18 @@ These components block many others but have dependencies themselves:
 1. **ComponentName** - Blocks XX components (YY deps)
 2. **ComponentName** - Blocks XX components (YY deps)
 3. **ComponentName** - Blocks XX components (YY deps)
+
+---
+
+## Next Steps
+
+To proceed with the conversion, use this prompt:
+
+\`\`\`
+Use the create.md subagent following strict delegation rules, convert [ComponentName]
+\`\`\`
+
+Replace `[ComponentName]` with the recommended component name.
 ```
 
 ## Implementation Notes
@@ -118,5 +130,6 @@ Your response must include:
 3. **Dependency breakdown** - implementation vs demo
 4. **Alternative candidates** - next 5 options
 5. **Top blockers** - high-impact components for context
+6. **Next steps** - exact prompt to use for conversion with create agent
 
 Be concise but thorough. Focus on actionable recommendations.
