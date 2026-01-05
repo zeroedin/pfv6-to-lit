@@ -21,7 +21,7 @@ export default {
     }),
     litCss({
       // Exclude dev-server styles, patternfly-react CSS, lightdom CSS, and /styles/ directory from Lit CSS transformation
-      exclude: /dev-server\/styles\/.*\.css$|patternfly-react\/dist\/.*\.css$|.*-lightdom\.css$|^styles\/.*\.css$/,
+      exclude: /dev-server\/styles\/.*\.css$|patternfly-react\/dist\/.*\.css$|.*-lightdom\.css$|styles\/.*\.css$/,
     }),
     routerPlugin(),
     injectImportMapPlugin(),
