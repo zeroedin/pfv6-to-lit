@@ -31,13 +31,11 @@ div {
   justify-content: center;
   border: 0;
 
-  /* Layout integration - properties passed through from parent layouts */
+  /* Layout integration - longhand properties used to support partial configuration from parent layouts */
   order: var(--_layout-order);
   max-width: var(--_layout-max-width);
   margin-block: var(--_layout-margin-block-start) var(--_layout-margin-block-end);
   margin-inline: var(--_layout-margin-inline-start) var(--_layout-margin-inline-end);
-
-  /* Grid layout properties - longhand used to support partial configuration */
   grid-column: var(--_layout-grid-column-start) / var(--_layout-grid-column-end);
   min-width: var(--_layout-min-width);
   min-height: var(--_layout-min-height);
