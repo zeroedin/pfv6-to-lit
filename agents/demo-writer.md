@@ -484,6 +484,120 @@ class Pfv6Card extends LitElement {
 
 Demos using layout classes must load the PatternFly CSS in the dev-server configuration (already included in project setup).
 
+## Step 6.5: Detect and Translate Content Components (CRITICAL)
+
+**Content is a styling component** that follows the same CSS-only pattern as layouts.
+
+### Content Component Detection
+
+Identify Content components in React demos:
+```bash
+grep -E "<Content" {ReactDemoFile}.tsx
+```
+
+**React patterns to detect**:
+```tsx
+<Content>...</Content>                          // Wrapper mode
+<Content component="h1">...</Content>            // Specific element
+<Content isEditorial component="p">...</Content> // With modifiers
+```
+
+### Translation Rules
+
+**ALWAYS delegate Content translation to `layout-translator` agent**, just like layouts.
+
+**Why**: Content requires careful handling of:
+- Wrapper mode vs specific element mode
+- Semantic element selection (h1, h2, p, a, ul, ol, dl, etc.)
+- Modifier classes (pf-m-editorial, pf-m-plain, pf-m-visited)
+- Attribute preservation (href for links)
+
+### Content Translation Patterns
+
+#### Pattern 1: Wrapper Mode
+**React**: `<Content>{children}</Content>`
+**Delegate to**: `layout-translator`
+**Result**: `<div class="pf-v6-c-content">{children}</div>`
+
+#### Pattern 2: Specific Element
+**React**: `<Content component="h1">Text</Content>`
+**Delegate to**: `layout-translator`
+**Result**: `<h1 class="pf-v6-c-content--h1">Text</h1>`
+
+#### Pattern 3: With Modifiers
+**React**: `<Content isEditorial component="p">Text</Content>`
+**Delegate to**: `layout-translator`
+**Result**: `<p class="pf-v6-c-content--p pf-m-editorial">Text</p>`
+
+### Delegation Example
+
+When encountering Content in React demos:
+
+```typescript
+// React demo contains:
+<Content component="h1">Hello World</Content>
+<Content component="p">Body text with <Content component="a" href="#">link</Content></Content>
+
+// Invoke layout-translator with prompt:
+"Translate this React Content usage to HTML+CSS:
+<Content component="h1">Hello World</Content>
+<Content component="p">Body text with <Content component="a" href="#">link</Content></Content>"
+
+// Expected response from layout-translator:
+<h1 class="pf-v6-c-content--h1">Hello World</h1>
+<p class="pf-v6-c-content--p">Body text with <a class="pf-v6-c-content--a" href="#">link</a></p>
+```
+
+### Validation After Translation
+
+After delegating to layout-translator, verify:
+- ✅ Semantic HTML element matches React `component` prop
+- ✅ `.pf-v6-c-content--{element}` class applied (or `.pf-v6-c-content` for wrapper)
+- ✅ Modifiers translated to `.pf-m-{modifier}` classes
+- ✅ Attributes preserved (e.g., `href` on links)
+- ✅ **NO `<pfv6-content>` custom element** - Content is CSS-only
+
+### Common Content Errors to Avoid
+
+❌ **WRONG**: Creating a custom element
+```html
+<pfv6-content component="h1">Title</pfv6-content>
+```
+
+✅ **CORRECT**: Using semantic HTML + CSS classes
+```html
+<h1 class="pf-v6-c-content--h1">Title</h1>
+```
+
+---
+
+❌ **WRONG**: Missing Content class
+```html
+<!-- React: <Content component="p"> -->
+<p>Missing class</p>
+```
+
+✅ **CORRECT**: With proper CSS class
+```html
+<p class="pf-v6-c-content--p">With class</p>
+```
+
+---
+
+❌ **WRONG**: Using layout prefix
+```html
+<h1 class="pf-v6-l-content--h1">Wrong prefix</h1>
+```
+
+✅ **CORRECT**: Using component prefix
+```html
+<h1 class="pf-v6-c-content--h1">Correct prefix</h1>
+```
+
+### PatternFly Content CSS Loading
+
+Content styles are part of PatternFly's core CSS (already included in project setup). No additional CSS files needed.
+
 ## Step 7: React-to-Lit Conversion Rules
 
 ### Conversion Patterns

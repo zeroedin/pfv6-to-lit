@@ -449,6 +449,141 @@ OR
 
 **Note**: Focus on critical structural correctness. For exhaustive modifier class validation, delegate to `layout-translator` agent.
 
+## Step 6.5: Content Component Validation (CRITICAL)
+
+**Validate correct Content CSS class usage** in demos.
+
+### Validation Rules
+
+#### Rule 1: NO Custom Element Usage
+
+**NEVER allow `<pfv6-content>` in demos** - Content is CSS-only.
+
+**Detection**:
+```bash
+grep -E "<pfv6-content" elements/pfv6-{component}/demo/*.html
+```
+
+**If found**: FAIL with error:
+```markdown
+❌ FAILURE: Custom element <pfv6-content> detected
+- File: {demo-file}.html (line {X})
+- Found: <pfv6-content component="h1">
+- Fix: Use semantic HTML with CSS class instead:
+  <h1 class="pf-v6-c-content--h1">...</h1>
+```
+
+#### Rule 2: Wrapper Class Validation
+
+When using wrapper mode, verify `.pf-v6-c-content` class:
+
+**React**:
+```tsx
+<Content>
+  <h1>Hello</h1>
+</Content>
+```
+
+**Correct Lit**:
+```html
+<div class="pf-v6-c-content">
+  <h1>Hello</h1>
+</div>
+```
+
+**Wrong**:
+```html
+<!-- ❌ Missing class -->
+<div>
+  <h1>Hello</h1>
+</div>
+
+<!-- ❌ Using custom element -->
+<pfv6-content>
+  <h1>Hello</h1>
+</pfv6-content>
+```
+
+#### Rule 3: Specific Element Class Validation
+
+When using specific element mode, verify correct class:
+
+**React**: `<Content component="h1">Text</Content>`
+**Correct**: `<h1 class="pf-v6-c-content--h1">Text</h1>`
+**Wrong**: `<h1>Text</h1>` (missing class)
+
+#### Rule 4: Modifier Class Validation
+
+**React**: `<Content isEditorial>...</Content>`
+**Correct**: `<div class="pf-v6-c-content pf-m-editorial">...</div>`
+**Wrong**: `<div class="pf-v6-c-content">...</div>` (missing modifier)
+
+### Validation Process
+
+For each demo file:
+
+1. **Check for Content in React source**:
+   ```bash
+   grep -E "<Content" .cache/patternfly-react/.../examples/{ReactDemo}.tsx
+   ```
+
+2. **If Content found**, verify Lit demo uses correct CSS approach:
+   - **NO `<pfv6-content>` elements**
+   - Wrapper mode: `<div class="pf-v6-c-content">`
+   - Specific element: `<{element} class="pf-v6-c-content--{element}">`
+   - Modifiers: `.pf-m-editorial`, `.pf-m-plain`, `.pf-m-visited`
+
+3. **Report violations**:
+   ```markdown
+   ### Content CSS Validation
+
+   ❌ FAILURE: Incorrect Content usage
+   - File: body.html (line 8)
+   - React: <Content component="h1">Hello</Content>
+   - Found: <h1>Hello</h1>
+   - Expected: <h1 class="pf-v6-c-content--h1">Hello</h1>
+   ```
+
+### Complex Content Validation
+
+For complex Content validations (nested components, modifiers, multiple props), you may optionally:
+
+1. **Extract** the React Content JSX from the original demo
+2. **Delegate** to the `layout-translator` agent to get expected translation
+3. **Compare** the expected translation with actual Lit demo implementation
+
+**Example**:
+- React has `<Content isEditorial component="p">Text with <Content component="a" href="#">link</Content></Content>`
+- Ask layout-translator: "What should this translate to?"
+- Verify Lit demo matches expected output
+
+### Content Validation Report Format
+
+For each demo containing Content, report:
+
+```markdown
+### Demo: {demo-name}.html
+
+**Content Components Found**:
+- React: 5 Content instances (3 specific elements, 2 wrapper mode)
+
+**Translation Validation**:
+✅ All Content → CSS class conversions correct
+✅ No custom element usage (<pfv6-content>)
+✅ Semantic elements match component prop
+✅ Modifiers applied correctly
+✅ Attributes preserved (href, etc.)
+
+OR
+
+❌ Found custom element <pfv6-content> instead of CSS classes
+❌ Missing .pf-v6-c-content--h1 class on <h1>
+❌ Missing .pf-m-editorial modifier
+❌ Wrong class prefix: .pf-v6-l-content (should be .pf-v6-c-content)
+```
+
+**Note**: Content is CSS-only - there should be ZERO custom elements for Content in any demo.
+
 ## Step 7: HTML Validity Validation (CRITICAL)
 
 ### Web Component Structural Constraints
