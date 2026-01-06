@@ -362,10 +362,9 @@ function main(): void {
     }
     stats.totalDependencySum += analysis.totalDependencies;
 
-    // Clear the analysis object to free memory
-    (analysis as any).dependencies = null;
-    (analysis as any).demoDependencies = null;
-    (analysis as any).files = null;
+    // Note: analysis object will be garbage collected after this function returns
+    // Memory savings come from streaming (processing one component at a time)
+    // rather than accumulating all components in memory
   };
 
   // Analyze PatternFly React Core components
