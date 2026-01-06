@@ -1,7 +1,6 @@
 import { html, fixture, expect } from '@open-wc/testing';
 import { userEvent } from '@testing-library/user-event';
-import { Pfv6Radio } from '../pfv6-radio.js';
-import { Pfv6RadioChangeEvent } from '../Pfv6RadioChangeEvent.js';
+import { Pfv6Radio, Pfv6RadioChangeEvent } from '../pfv6-radio.js';
 import '../pfv6-radio.js';
 
 describe('<pfv6-radio>', function() {
@@ -102,36 +101,35 @@ describe('<pfv6-radio>', function() {
   });
 
   describe('checked property', function() {
-    it('defaults to "false"', async function() {
+    it('defaults to false', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
-      expect(el.checked).to.equal('false');
+      expect(el.checked).to.be.false;
     });
 
-    it('accepts "true" value', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" checked="true"></pfv6-radio>`);
-      expect(el.checked).to.equal('true');
+    it('accepts true value', async function() {
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" checked></pfv6-radio>`);
+      expect(el.checked).to.be.true;
     });
 
     it('reflects to attribute', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" checked="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" checked></pfv6-radio>`);
       expect(el.hasAttribute('checked')).to.be.true;
-      expect(el.getAttribute('checked')).to.equal('true');
     });
 
     it('is reflected to the internal input element', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" checked="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" checked></pfv6-radio>`);
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       expect(input.checked).to.be.true;
     });
 
     it('can be changed dynamically', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
-      expect(el.checked).to.equal('false');
+      expect(el.checked).to.be.false;
 
-      el.checked = 'true';
+      el.checked = true;
       await el.updateComplete;
 
-      expect(el.checked).to.equal('true');
+      expect(el.checked).to.be.true;
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       expect(input.checked).to.be.true;
     });
@@ -139,128 +137,130 @@ describe('<pfv6-radio>', function() {
     it('updates attribute when changed', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
 
-      el.checked = 'true';
+      el.checked = true;
       await el.updateComplete;
 
-      expect(el.getAttribute('checked')).to.equal('true');
+      expect(el.hasAttribute('checked')).to.be.true;
     });
   });
 
   describe('disabled property', function() {
-    it('defaults to "false"', async function() {
+    it('defaults to false', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
-      expect(el.disabled).to.equal('false');
+      expect(el.disabled).to.be.false;
     });
 
-    it('accepts "true" value', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" disabled="true"></pfv6-radio>`);
-      expect(el.disabled).to.equal('true');
+    it('accepts true value', async function() {
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" disabled></pfv6-radio>`);
+      expect(el.disabled).to.be.true;
     });
 
     it('reflects to attribute', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" disabled="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" disabled></pfv6-radio>`);
       expect(el.hasAttribute('disabled')).to.be.true;
-      expect(el.getAttribute('disabled')).to.equal('true');
     });
 
     it('is reflected to the internal input element', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" disabled="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" disabled></pfv6-radio>`);
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       expect(input.disabled).to.be.true;
     });
 
     it('can be changed dynamically', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
-      expect(el.disabled).to.equal('false');
+      expect(el.disabled).to.be.false;
 
-      el.disabled = 'true';
+      el.disabled = true;
       await el.updateComplete;
 
-      expect(el.disabled).to.equal('true');
+      expect(el.disabled).to.be.true;
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       expect(input.disabled).to.be.true;
     });
 
     it('applies disabled class to wrapper', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" disabled="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" disabled></pfv6-radio>`);
       const wrapper = el.shadowRoot!.querySelector('#container');
       expect(wrapper!.classList.contains('disabled')).to.be.true;
     });
 
     it('applies disabled class to label', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" label="Test" disabled="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" label="Test" disabled></pfv6-radio>`);
       const label = el.shadowRoot!.querySelector('label');
       expect(label!.classList.contains('disabled')).to.be.true;
     });
   });
 
   describe('required property', function() {
-    it('defaults to "false"', async function() {
+    it('defaults to false', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
-      expect(el.required).to.equal('false');
+      expect(el.required).to.be.false;
     });
 
-    it('accepts "true" value', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" required="true"></pfv6-radio>`);
-      expect(el.required).to.equal('true');
+    it('accepts true value', async function() {
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" required></pfv6-radio>`);
+      expect(el.required).to.be.true;
     });
 
     it('reflects to attribute', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" required="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" required></pfv6-radio>`);
       expect(el.hasAttribute('required')).to.be.true;
-      expect(el.getAttribute('required')).to.equal('true');
     });
 
     it('is reflected to the internal input element', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" required="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" required></pfv6-radio>`);
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       expect(input.required).to.be.true;
     });
 
     it('can be changed dynamically', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
-      expect(el.required).to.equal('false');
+      expect(el.required).to.be.false;
 
-      el.required = 'true';
+      el.required = true;
       await el.updateComplete;
 
-      expect(el.required).to.equal('true');
+      expect(el.required).to.be.true;
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       expect(input.required).to.be.true;
     });
   });
 
   describe('isValid property', function() {
-    it('defaults to "true"', async function() {
+    it('defaults to true', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
-      expect(el.isValid).to.equal('true');
+      expect(el.isValid).to.be.true;
     });
 
-    it('accepts "false" value', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" is-valid="false"></pfv6-radio>`);
-      expect(el.isValid).to.equal('false');
+    it('accepts false value', async function() {
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
+      el.isValid = false;
+      await el.updateComplete;
+      expect(el.isValid).to.be.false;
     });
 
     it('sets aria-invalid when false', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" is-valid="false"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
+      el.isValid = false;
+      await el.updateComplete;
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       expect(input.getAttribute('aria-invalid')).to.equal('true');
     });
 
     it('sets aria-invalid to false when true', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" is-valid="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       expect(input.getAttribute('aria-invalid')).to.equal('false');
     });
 
     it('can be changed dynamically', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
-      expect(el.isValid).to.equal('true');
+      expect(el.isValid).to.be.true;
 
-      el.isValid = 'false';
+      el.isValid = false;
       await el.updateComplete;
 
-      expect(el.isValid).to.equal('false');
+      expect(el.isValid).to.be.false;
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       expect(input.getAttribute('aria-invalid')).to.equal('true');
     });
@@ -446,14 +446,14 @@ describe('<pfv6-radio>', function() {
   });
 
   describe('isLabelWrapped property', function() {
-    it('defaults to "false"', async function() {
+    it('defaults to false', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
-      expect(el.isLabelWrapped).to.equal('false');
+      expect(el.isLabelWrapped).to.be.false;
     });
 
-    it('accepts "true" value', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" is-label-wrapped="true"></pfv6-radio>`);
-      expect(el.isLabelWrapped).to.equal('true');
+    it('accepts true value', async function() {
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" is-label-wrapped></pfv6-radio>`);
+      expect(el.isLabelWrapped).to.be.true;
     });
 
     it('renders div wrapper when false', async function() {
@@ -463,13 +463,13 @@ describe('<pfv6-radio>', function() {
     });
 
     it('renders label wrapper when true', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" label="Test" is-label-wrapped="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" label="Test" is-label-wrapped></pfv6-radio>`);
       const wrapper = el.shadowRoot!.querySelector('#container');
       expect(wrapper!.tagName).to.equal('LABEL');
     });
 
     it('label wrapper has correct for attribute', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" label="Test" is-label-wrapped="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" label="Test" is-label-wrapped></pfv6-radio>`);
       const wrapper = el.shadowRoot!.querySelector('#container') as HTMLLabelElement;
       expect(wrapper.getAttribute('for')).to.equal('radio1');
     });
@@ -478,10 +478,10 @@ describe('<pfv6-radio>', function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" label="Test"></pfv6-radio>`);
       expect(el.shadowRoot!.querySelector('#container')!.tagName).to.equal('DIV');
 
-      el.isLabelWrapped = 'true';
+      el.isLabelWrapped = true;
       await el.updateComplete;
 
-      expect(el.isLabelWrapped).to.equal('true');
+      expect(el.isLabelWrapped).to.be.true;
       expect(el.shadowRoot!.querySelector('#container')!.tagName).to.equal('LABEL');
     });
   });
@@ -593,14 +593,14 @@ describe('<pfv6-radio>', function() {
         eventCount++;
       });
 
-      el.checked = 'true';
+      el.checked = true;
       await el.updateComplete;
 
       expect(eventCount).to.equal(1);
     });
 
     it('does not dispatch when disabled', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" disabled="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" disabled></pfv6-radio>`);
 
       let eventFired = false;
       el.addEventListener('change', () => {
@@ -627,7 +627,7 @@ describe('<pfv6-radio>', function() {
     });
 
     it('sets form value when checked', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" value="option1" checked="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" value="option1" checked></pfv6-radio>`);
       const internals = (el as any).internals as ElementInternals;
       expect(internals.form).to.be.null; // Not in a form
     });
@@ -635,17 +635,17 @@ describe('<pfv6-radio>', function() {
     it('updates form value when checked changes', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" value="option1"></pfv6-radio>`);
 
-      el.checked = 'true';
+      el.checked = true;
       await el.updateComplete;
 
       // Form value should be set to the radio's value
-      expect(el.checked).to.equal('true');
+      expect(el.checked).to.be.true;
     });
 
     it('sets validity when isValid changes', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
 
-      el.isValid = 'false';
+      el.isValid = false;
       await el.updateComplete;
 
       const internals = (el as any).internals as ElementInternals;
@@ -653,9 +653,11 @@ describe('<pfv6-radio>', function() {
     });
 
     it('clears validity when isValid is true', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" is-valid="false"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
+      el.isValid = false;
+      await el.updateComplete;
 
-      el.isValid = 'true';
+      el.isValid = true;
       await el.updateComplete;
 
       const internals = (el as any).internals as ElementInternals;
@@ -697,10 +699,10 @@ describe('<pfv6-radio>', function() {
 
   describe('combined properties', function() {
     it('can be checked and disabled', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" checked="true" disabled="true"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" checked disabled></pfv6-radio>`);
 
-      expect(el.checked).to.equal('true');
-      expect(el.disabled).to.equal('true');
+      expect(el.checked).to.be.true;
+      expect(el.disabled).to.be.true;
 
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       expect(input.checked).to.be.true;
@@ -731,10 +733,12 @@ describe('<pfv6-radio>', function() {
     });
 
     it('can be required and invalid', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" required="true" is-valid="false"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" required></pfv6-radio>`);
+      el.isValid = false;
+      await el.updateComplete;
 
-      expect(el.required).to.equal('true');
-      expect(el.isValid).to.equal('false');
+      expect(el.required).to.be.true;
+      expect(el.isValid).to.be.false;
 
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       expect(input.required).to.be.true;
@@ -756,7 +760,9 @@ describe('<pfv6-radio>', function() {
     });
 
     it('sets aria-invalid when isValid is false', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" is-valid="false"></pfv6-radio>`);
+      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
+      el.isValid = false;
+      await el.updateComplete;
       const input = el.shadowRoot!.querySelector('input');
       expect(input!.getAttribute('aria-invalid')).to.equal('true');
     });

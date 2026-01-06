@@ -18,78 +18,76 @@ describe('<pfv6-badge>', function() {
   });
 
   describe('isRead property', function() {
-    it('defaults to "false" (unread)', async function() {
+    it('defaults to false (unread)', async function() {
       const el = await fixture<Pfv6Badge>(html`<pfv6-badge></pfv6-badge>`);
-      expect(el.isRead).to.equal('false');
+      expect(el.isRead).to.be.false;
     });
 
-    it('accepts "true" value for read state', async function() {
-      const el = await fixture<Pfv6Badge>(html`<pfv6-badge is-read="true"></pfv6-badge>`);
-      expect(el.isRead).to.equal('true');
+    it('accepts true value for read state', async function() {
+      const el = await fixture<Pfv6Badge>(html`<pfv6-badge is-read></pfv6-badge>`);
+      expect(el.isRead).to.be.true;
     });
 
     it('reflects to attribute', async function() {
-      const el = await fixture<Pfv6Badge>(html`<pfv6-badge is-read="true"></pfv6-badge>`);
+      const el = await fixture<Pfv6Badge>(html`<pfv6-badge is-read></pfv6-badge>`);
       expect(el.hasAttribute('is-read')).to.be.true;
-      expect(el.getAttribute('is-read')).to.equal('true');
     });
 
     it('applies read class when true', async function() {
-      const el = await fixture<Pfv6Badge>(html`<pfv6-badge is-read="true">7</pfv6-badge>`);
+      const el = await fixture<Pfv6Badge>(html`<pfv6-badge is-read>7</pfv6-badge>`);
       const badge = el.shadowRoot!.querySelector('#badge');
       expect(badge!.classList.contains('read')).to.be.true;
     });
 
     it('applies unread class when false', async function() {
-      const el = await fixture<Pfv6Badge>(html`<pfv6-badge is-read="false">7</pfv6-badge>`);
+      const el = await fixture<Pfv6Badge>(html`<pfv6-badge>7</pfv6-badge>`);
       const badge = el.shadowRoot!.querySelector('#badge');
       expect(badge!.classList.contains('unread')).to.be.true;
     });
 
     it('can be changed dynamically', async function() {
       const el = await fixture<Pfv6Badge>(html`<pfv6-badge>7</pfv6-badge>`);
-      expect(el.isRead).to.equal('false');
+      expect(el.isRead).to.be.false;
 
-      el.isRead = 'true';
+      el.isRead = true;
       await el.updateComplete;
 
-      expect(el.isRead).to.equal('true');
+      expect(el.isRead).to.be.true;
       const badge = el.shadowRoot!.querySelector('#badge');
       expect(badge!.classList.contains('read')).to.be.true;
     });
   });
 
   describe('isDisabled property', function() {
-    it('defaults to "false"', async function() {
+    it('defaults to false', async function() {
       const el = await fixture<Pfv6Badge>(html`<pfv6-badge></pfv6-badge>`);
-      expect(el.isDisabled).to.equal('false');
+      expect(el.isDisabled).to.be.false;
     });
 
-    it('accepts "true" value', async function() {
-      const el = await fixture<Pfv6Badge>(html`<pfv6-badge is-disabled="true"></pfv6-badge>`);
-      expect(el.isDisabled).to.equal('true');
+    it('accepts true value', async function() {
+      const el = await fixture<Pfv6Badge>(html`<pfv6-badge is-disabled></pfv6-badge>`);
+      expect(el.isDisabled).to.be.true;
     });
 
     it('reflects to attribute', async function() {
-      const el = await fixture<Pfv6Badge>(html`<pfv6-badge is-disabled="true"></pfv6-badge>`);
+      const el = await fixture<Pfv6Badge>(html`<pfv6-badge is-disabled></pfv6-badge>`);
       expect(el.hasAttribute('is-disabled')).to.be.true;
-      expect(el.getAttribute('is-disabled')).to.equal('true');
     });
 
     it('applies disabled class when true', async function() {
-      const el = await fixture<Pfv6Badge>(html`<pfv6-badge is-disabled="true">7</pfv6-badge>`);
+      const el = await fixture<Pfv6Badge>(html`<pfv6-badge is-disabled>7</pfv6-badge>`);
       const badge = el.shadowRoot!.querySelector('#badge');
       expect(badge!.classList.contains('disabled')).to.be.true;
     });
 
     it('can be changed dynamically', async function() {
       const el = await fixture<Pfv6Badge>(html`<pfv6-badge>7</pfv6-badge>`);
-      expect(el.isDisabled).to.equal('false');
+      expect(el.isDisabled).to.be.false;
 
-      el.isDisabled = 'true';
+      el.isDisabled = true;
       await el.updateComplete;
 
-      expect(el.isDisabled).to.equal('true');
+      expect(el.isDisabled).to.be.true;
       const badge = el.shadowRoot!.querySelector('#badge');
       expect(badge!.classList.contains('disabled')).to.be.true;
     });
@@ -162,10 +160,10 @@ describe('<pfv6-badge>', function() {
   describe('combined properties', function() {
     it('can be both read and disabled', async function() {
       const el = await fixture<Pfv6Badge>(
-        html`<pfv6-badge is-read="true" is-disabled="true">7</pfv6-badge>`
+        html`<pfv6-badge is-read is-disabled>7</pfv6-badge>`
       );
-      expect(el.isRead).to.equal('true');
-      expect(el.isDisabled).to.equal('true');
+      expect(el.isRead).to.be.true;
+      expect(el.isDisabled).to.be.true;
 
       const badge = el.shadowRoot!.querySelector('#badge');
       expect(badge!.classList.contains('read')).to.be.true;
@@ -174,10 +172,10 @@ describe('<pfv6-badge>', function() {
 
     it('can be unread and disabled', async function() {
       const el = await fixture<Pfv6Badge>(
-        html`<pfv6-badge is-read="false" is-disabled="true">24</pfv6-badge>`
+        html`<pfv6-badge is-disabled>24</pfv6-badge>`
       );
-      expect(el.isRead).to.equal('false');
-      expect(el.isDisabled).to.equal('true');
+      expect(el.isRead).to.be.false;
+      expect(el.isDisabled).to.be.true;
 
       const badge = el.shadowRoot!.querySelector('#badge');
       expect(badge!.classList.contains('unread')).to.be.true;
@@ -186,9 +184,9 @@ describe('<pfv6-badge>', function() {
 
     it('screen reader text works with read state', async function() {
       const el = await fixture<Pfv6Badge>(
-        html`<pfv6-badge is-read="true" screen-reader-text="Read Messages">5</pfv6-badge>`
+        html`<pfv6-badge is-read screen-reader-text="Read Messages">5</pfv6-badge>`
       );
-      expect(el.isRead).to.equal('true');
+      expect(el.isRead).to.be.true;
 
       const srText = el.shadowRoot!.querySelector('#screen-reader-text');
       expect(srText).to.exist;

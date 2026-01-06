@@ -49,19 +49,19 @@ describe('<pfv6-panel>', function() {
   });
 
   describe('is-scrollable property', function() {
-    it('defaults to "false"', async function() {
+    it('defaults to false', async function() {
       const el = await fixture<Pfv6Panel>(html`<pfv6-panel></pfv6-panel>`);
-      expect(el.isScrollable).to.equal('false');
+      expect(el.isScrollable).to.be.false;
     });
 
-    it('accepts "true" value', async function() {
-      const el = await fixture<Pfv6Panel>(html`<pfv6-panel is-scrollable="true"></pfv6-panel>`);
-      expect(el.isScrollable).to.equal('true');
+    it('accepts true value', async function() {
+      const el = await fixture<Pfv6Panel>(html`<pfv6-panel is-scrollable></pfv6-panel>`);
+      expect(el.isScrollable).to.be.true;
     });
 
     it('reflects to attribute', async function() {
-      const el = await fixture<Pfv6Panel>(html`<pfv6-panel is-scrollable="true"></pfv6-panel>`);
-      expect(el.getAttribute('is-scrollable')).to.equal('true');
+      const el = await fixture<Pfv6Panel>(html`<pfv6-panel is-scrollable></pfv6-panel>`);
+      expect(el.hasAttribute('is-scrollable')).to.be.true;
     });
   });
 
