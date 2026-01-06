@@ -4,12 +4,34 @@
   box-sizing: border-box;
 }
 
-#container {
-  --pf-v6-c-panel__header--PaddingBlockStart: var(--pf-t--global--spacer--md, 1rem);
-  --pf-v6-c-panel__header--PaddingInlineEnd: var(--pf-t--global--spacer--lg, 1.5rem);
-  --pf-v6-c-panel__header--PaddingBlockEnd: var(--pf-t--global--spacer--md, 1rem);
-  --pf-v6-c-panel__header--PaddingInlineStart: var(--pf-t--global--spacer--lg, 1.5rem);
+:host {
+  display: block;
 
+  /* Public CSS API - All overrideable from outside */
+  --pf-v6-c-panel__header--PaddingBlockStart:
+    var(
+      --pf-t--global--spacer--md,
+      1rem
+    );
+  --pf-v6-c-panel__header--PaddingInlineEnd:
+    var(
+      --pf-t--global--spacer--lg,
+      1.5rem
+    );
+  --pf-v6-c-panel__header--PaddingBlockEnd:
+    var(
+      --pf-t--global--spacer--md,
+      1rem
+    );
+  --pf-v6-c-panel__header--PaddingInlineStart:
+    var(
+      --pf-t--global--spacer--lg,
+      1.5rem
+    );
+}
+
+#container {
+  /* Consume public API from :host */
   padding-block-start: var(--pf-v6-c-panel__header--PaddingBlockStart);
   padding-block-end: var(--pf-v6-c-panel__header--PaddingBlockEnd);
   padding-inline-start: var(--pf-v6-c-panel__header--PaddingInlineStart);

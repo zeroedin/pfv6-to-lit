@@ -7,20 +7,32 @@
 
 :host {
   display: contents;
-}
 
-#container {
-  --pf-v6-c-background-image--BackgroundColor: var(--pf-t--global--background--color--primary--default, #ffffff);
+  /* Public CSS API - All overrideable from outside */
+  --pf-v6-c-background-image--BackgroundColor:
+    var(
+      --pf-t--global--background--color--primary--default,
+      #ffffff
+    );
   --pf-v6-c-background-image--BackgroundImage: none;
   --pf-v6-c-background-image--BackgroundSize--min-width: 200px;
   --pf-v6-c-background-image--BackgroundSize--width: 60%;
   --pf-v6-c-background-image--BackgroundSize--max-width: 600px;
-  --pf-v6-c-background-image--BackgroundSize: clamp(
-    var(--pf-v6-c-background-image--BackgroundSize--min-width),
-    var(--pf-v6-c-background-image--BackgroundSize--width),
-    var(--pf-v6-c-background-image--BackgroundSize--max-width)
-  );
+  --pf-v6-c-background-image--BackgroundSize:
+    clamp(
+      var(--pf-v6-c-background-image--BackgroundSize--min-width),
+      var(--pf-v6-c-background-image--BackgroundSize--width),
+      var(--pf-v6-c-background-image--BackgroundSize--max-width)
+    );
   --pf-v6-c-background-image--BackgroundPosition: bottom right;
+
+  /* RTL support */
+  &:dir(rtl) {
+    --pf-v6-c-background-image--BackgroundPosition: bottom left;
+  }
+}
+
+#container {
 
   position: fixed;
   inset-block-start: 0;
@@ -46,9 +58,4 @@
   grid-column-end: var(--_layout-grid-column-end);
   min-width: var(--_layout-min-width);
   min-height: var(--_layout-min-height);
-}
-
-/* RTL support */
-:host([dir="rtl"]) #container {
-  --pf-v6-c-background-image--BackgroundPosition: bottom left;
 }

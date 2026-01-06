@@ -19,52 +19,152 @@
 
   /**
    * Height of the brand image.
-   * Can be set at various breakpoints using responsive properties.
+   * Can be set at various breakpoint using responsive properties.
    * @cssprop {<length> | auto} --pf-v6-c-brand--Height - Default: auto
    */
   --pf-v6-c-brand--Height: auto;
 
-  display: inline-block;
-}
-
-#container {
-  /* Element always uses --Width--base and --Height--base */
-  width: var(--pf-v6-c-brand--Width--base);
-  height: var(--pf-v6-c-brand--Height--base);
-
-  /* Base (mobile-first): just use default */
+  /* Responsive cascade - base values computed from breakpoint-specific overrides */
   --pf-v6-c-brand--Width--base: var(--pf-v6-c-brand--Width, auto);
   --pf-v6-c-brand--Height--base: var(--pf-v6-c-brand--Height, auto);
 
   /* sm: check -on-sm, fallback to default */
   @media (width >= 576px) {
-    --pf-v6-c-brand--Width--base: var(--pf-v6-c-brand--Width-on-sm, var(--pf-v6-c-brand--Width, auto));
-    --pf-v6-c-brand--Height--base: var(--pf-v6-c-brand--Height-on-sm, var(--pf-v6-c-brand--Height, auto));
+    --pf-v6-c-brand--Width--base:
+      var(
+        --pf-v6-c-brand--Width-on-sm,
+        var(--pf-v6-c-brand--Width, auto)
+      );
+    --pf-v6-c-brand--Height--base:
+      var(
+        --pf-v6-c-brand--Height-on-sm,
+        var(--pf-v6-c-brand--Height, auto)
+      );
   }
 
   /* md: check -on-md, -on-sm, default */
   @media (width >= 768px) {
-    --pf-v6-c-brand--Width--base: var(--pf-v6-c-brand--Width-on-md, var(--pf-v6-c-brand--Width-on-sm, var(--pf-v6-c-brand--Width, auto)));
-    --pf-v6-c-brand--Height--base: var(--pf-v6-c-brand--Height-on-md, var(--pf-v6-c-brand--Height-on-sm, var(--pf-v6-c-brand--Height, auto)));
+    --pf-v6-c-brand--Width--base:
+      var(
+        --pf-v6-c-brand--Width-on-md,
+        var(
+          --pf-v6-c-brand--Width-on-sm,
+          var(--pf-v6-c-brand--Width, auto)
+        )
+      );
+    --pf-v6-c-brand--Height--base:
+      var(
+        --pf-v6-c-brand--Height-on-md,
+        var(
+          --pf-v6-c-brand--Height-on-sm,
+          var(--pf-v6-c-brand--Height, auto)
+        )
+      );
   }
 
   /* lg: check -on-lg, -on-md, -on-sm, default */
   @media (width >= 992px) {
-    --pf-v6-c-brand--Width--base: var(--pf-v6-c-brand--Width-on-lg, var(--pf-v6-c-brand--Width-on-md, var(--pf-v6-c-brand--Width-on-sm, var(--pf-v6-c-brand--Width, auto))));
-    --pf-v6-c-brand--Height--base: var(--pf-v6-c-brand--Height-on-lg, var(--pf-v6-c-brand--Height-on-md, var(--pf-v6-c-brand--Height-on-sm, var(--pf-v6-c-brand--Height, auto))));
+    --pf-v6-c-brand--Width--base:
+      var(
+        --pf-v6-c-brand--Width-on-lg,
+        var(
+          --pf-v6-c-brand--Width-on-md,
+          var(
+            --pf-v6-c-brand--Width-on-sm,
+            var(--pf-v6-c-brand--Width, auto)
+          )
+        )
+      );
+    --pf-v6-c-brand--Height--base:
+      var(
+        --pf-v6-c-brand--Height-on-lg,
+        var(
+          --pf-v6-c-brand--Height-on-md,
+          var(
+            --pf-v6-c-brand--Height-on-sm,
+            var(--pf-v6-c-brand--Height, auto)
+          )
+        )
+      );
   }
 
   /* xl: check -on-xl, -on-lg, -on-md, -on-sm, default */
   @media (width >= 1200px) {
-    --pf-v6-c-brand--Width--base: var(--pf-v6-c-brand--Width-on-xl, var(--pf-v6-c-brand--Width-on-lg, var(--pf-v6-c-brand--Width-on-md, var(--pf-v6-c-brand--Width-on-sm, var(--pf-v6-c-brand--Width, auto)))));
-    --pf-v6-c-brand--Height--base: var(--pf-v6-c-brand--Height-on-xl, var(--pf-v6-c-brand--Height-on-lg, var(--pf-v6-c-brand--Height-on-md, var(--pf-v6-c-brand--Height-on-sm, var(--pf-v6-c-brand--Height, auto)))));
+    --pf-v6-c-brand--Width--base:
+      var(
+        --pf-v6-c-brand--Width-on-xl,
+        var(
+          --pf-v6-c-brand--Width-on-lg,
+          var(
+            --pf-v6-c-brand--Width-on-md,
+            var(
+              --pf-v6-c-brand--Width-on-sm,
+              var(--pf-v6-c-brand--Width, auto)
+            )
+          )
+        )
+      );
+    --pf-v6-c-brand--Height--base:
+      var(
+        --pf-v6-c-brand--Height-on-xl,
+        var(
+          --pf-v6-c-brand--Height-on-lg,
+          var(
+            --pf-v6-c-brand--Height-on-md,
+            var(
+              --pf-v6-c-brand--Height-on-sm,
+              var(--pf-v6-c-brand--Height, auto)
+            )
+          )
+        )
+      );
   }
 
   /* 2xl: check -on-2xl, -on-xl, -on-lg, -on-md, -on-sm, default */
   @media (width >= 1450px) {
-    --pf-v6-c-brand--Width--base: var(--pf-v6-c-brand--Width-on-2xl, var(--pf-v6-c-brand--Width-on-xl, var(--pf-v6-c-brand--Width-on-lg, var(--pf-v6-c-brand--Width-on-md, var(--pf-v6-c-brand--Width-on-sm, var(--pf-v6-c-brand--Width, auto))))));
-    --pf-v6-c-brand--Height--base: var(--pf-v6-c-brand--Height-on-2xl, var(--pf-v6-c-brand--Height-on-xl, var(--pf-v6-c-brand--Height-on-lg, var(--pf-v6-c-brand--Height-on-md, var(--pf-v6-c-brand--Height-on-sm, var(--pf-v6-c-brand--Height, auto))))));
+    --pf-v6-c-brand--Width--base:
+      var(
+        --pf-v6-c-brand--Width-on-2xl,
+        var(
+          --pf-v6-c-brand--Width-on-xl,
+          var(
+            --pf-v6-c-brand--Width-on-lg,
+            var(
+              --pf-v6-c-brand--Width-on-md,
+              var(
+                --pf-v6-c-brand--Width-on-sm,
+                var(--pf-v6-c-brand--Width, auto)
+              )
+            )
+          )
+        )
+      );
+    --pf-v6-c-brand--Height--base:
+      var(
+        --pf-v6-c-brand--Height-on-2xl,
+        var(
+          --pf-v6-c-brand--Height-on-xl,
+          var(
+            --pf-v6-c-brand--Height-on-lg,
+            var(
+              --pf-v6-c-brand--Height-on-md,
+              var(
+                --pf-v6-c-brand--Height-on-sm,
+                var(--pf-v6-c-brand--Height, auto)
+              )
+            )
+          )
+        )
+      );
   }
+
+  display: inline-block;
+}
+
+#container {
+  /* Consume public API from :host */
+  width: var(--pf-v6-c-brand--Width--base);
+  height: var(--pf-v6-c-brand--Height--base);
 
   &.picture {
     display: inline-flex;
