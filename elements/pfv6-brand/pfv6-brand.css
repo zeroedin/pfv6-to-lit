@@ -19,7 +19,7 @@
 
   /**
    * Height of the brand image.
-   * Can be set at various breakpoint using responsive properties.
+   * Can be set at various breakpoints using responsive properties.
    * @cssprop {<length> | auto} --pf-v6-c-brand--Height - Default: auto
    */
   --pf-v6-c-brand--Height: auto;
