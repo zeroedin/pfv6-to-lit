@@ -311,6 +311,67 @@ classMap({
 
 ## Step 3: CSS Variable Translation
 
+### CRITICAL: CSS Variable Placement (Public vs Private)
+
+**This is the MOST IMPORTANT rule for Shadow DOM CSS architecture.**
+
+**Public CSS variables** (`--pf-v6-c-{component}--*`) **MUST be placed on `:host`**:
+- These form the component's **CSS API**
+- Users can override them from outside the component
+- Pattern: `<pfv6-card style="--pf-v6-c-card--BorderRadius: 16px;">`
+- If placed on `#container` or other internal selectors, they are **UNREACHABLE** from outside
+
+**Private CSS variables** (`--_{component}-*`) go on internal selectors:
+- Used for parent-child communication via `::slotted()`
+- Internal implementation details
+- Not part of public API
+
+✅ **CORRECT - Public variables on :host**:
+```css
+:host {
+  /* PUBLIC CSS API - overrideable from outside */
+  --pf-v6-c-card--BorderRadius: var(--pf-t--global--border--radius--md, 8px);
+  --pf-v6-c-card--Padding: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-card--BackgroundColor: var(--pf-t--global--background--color--primary, #ffffff);
+}
+
+#container {
+  /* Consume public variables from :host */
+  border-radius: var(--pf-v6-c-card--BorderRadius);
+  padding: var(--pf-v6-c-card--Padding);
+  background-color: var(--pf-v6-c-card--BackgroundColor);
+}
+
+::slotted(pfv6-card-header) {
+  /* Set private variables for child communication */
+  --_card-header-padding: var(--pf-v6-c-card--Padding);
+}
+```
+
+❌ **WRONG - Public variables buried in shadow DOM**:
+```css
+:host {
+  display: block;
+}
+
+#container {
+  /* Public variables NOT accessible from outside! */
+  --pf-v6-c-card--BorderRadius: var(--pf-t--global--border--radius--md, 8px);
+  border-radius: var(--pf-v6-c-card--BorderRadius);
+}
+```
+
+**Why this matters**:
+- Users MUST be able to: `<pfv6-card style="--pf-v6-c-card--Padding: 2rem;">`
+- Variables on `#container` are in shadow DOM - CSS cascade cannot reach them
+- This breaks the entire CSS API contract
+
+**Implementation checklist**:
+1. Read React CSS and identify all `--pf-v6-c-{component}--*` variables
+2. Place ALL public variables in `:host` block
+3. Internal selectors (`#container`, etc.) only CONSUME these variables
+4. Private variables (`--_*`) go on internal selectors as needed
+
 ### Public CSS Variables (From React)
 
 **Copy variable names EXACTLY from React source**:

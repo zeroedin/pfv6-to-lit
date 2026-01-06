@@ -40,9 +40,15 @@ Listed in typical workflow order:
 - Use: "Use demo-writer to create demos for [Component]"
 
 **Layout translation** → `layout-translator`
-- Translates React layout components to HTML+CSS classes
+- Translates React layout components (Flex, Gallery, Grid, Stack, etc.) to HTML+CSS classes
 - Used by demo-writer for layout components in demos
 - Use: "Use layout-translator to convert [Layout JSX] to HTML"
+
+**Styling components translation** → `style-components`
+- Translates React styling components (Content, Title) to semantic HTML+CSS
+- Used by demo-writer when Content or Title components are found in demos
+- Handles translation independently (does not delegate)
+- Use: "Use style-components to translate Content/Title in [React demo code]"
 
 **Demo validation** → `demo-auditor`
 - Validates 1:1 parity with React examples
@@ -139,13 +145,14 @@ Listed in typical workflow order:
 
 **Styling Components:**
 - Content
+- Title
 
 **Why No Custom Elements:**
 - Layout components work as standalone CSS classes (`.pf-v6-l-flex`, `.pf-v6-l-gallery`, etc.)
-- Content styles semantic HTML that users should use directly
+- Styling components (Content, Title) style semantic HTML that users should use directly
 - React components are just convenience wrappers around these CSS classes
 - Custom elements cannot achieve true parity:
-  - Cannot implement `component` prop (can't change element type)
+  - Cannot implement `component` or `headingLevel` props (can't change element type)
   - Light DOM CSS selectors break with semantic wrappers
   - Semantic HTML elements shouldn't be replaced with custom elements
   - Adds complexity without benefit
@@ -154,6 +161,7 @@ Listed in typical workflow order:
 - **Component demos**: Use custom elements (`<pfv6-card>`, `<pfv6-button>`)
 - **Layout usage**: Use raw HTML + CSS classes (`<div class="pf-v6-l-flex pf-m-row">`)
 - **Content usage**: Use semantic HTML + CSS classes (`<h1 class="pf-v6-c-content--h1">` or `<div class="pf-v6-c-content"><h1>...</h1></div>`)
+- **Title usage**: Use semantic HTML + CSS classes (`<h1 class="pf-v6-c-title pf-m-4xl">`)
 - **Result**: Pixel-perfect parity with identical HTML structure
 
 **When create agent encounters a layout or styling component:**
@@ -162,18 +170,20 @@ Listed in typical workflow order:
 3. **DOCUMENT** - Create minimal README.md with usage instructions
 4. **EXIT** - No TypeScript, no CSS files, no tests created
 
-**How demo-writer handles layouts and Content:**
-- Detects React layout and Content components in demos
-- Delegates to `layout-translator` agent for accurate translation
+**How demo-writer handles layouts and styling components:**
+- Detects React layout components in demos → delegates to `layout-translator`
+- Detects React styling components (Content, Title) in demos → delegates to `style-components`
+- Each agent works independently on their respective component types
 - Examples:
-  - `<Flex direction="row">` → delegated → `<div class="pf-v6-l-flex pf-m-row">`
-  - `<Content component="h1">` → delegated → `<h1 class="pf-v6-c-content--h1">`
-  - `<Content>` → delegated → `<div class="pf-v6-c-content">`
-- See `agents/demo-writer.md` Step 6 and `agents/layout-translator.md`
+  - `<Flex direction="row">` → `layout-translator` → `<div class="pf-v6-l-flex pf-m-row">`
+  - `<Content component="h1">` → `style-components` → `<h1 class="pf-v6-c-content--h1">`
+  - `<Content>` → `style-components` → `<div class="pf-v6-c-content">`
+  - `<Title headingLevel="h2" size="xl">` → `style-components` → `<h2 class="pf-v6-c-title pf-m-xl">`
+- See `agents/demo-writer.md` Step 6, `agents/layout-translator.md`, and `agents/style-components.md`
 
-**How demo-auditor validates layouts and Content:**
+**How demo-auditor validates layouts and styling components:**
 - Verifies correct HTML + CSS class translation
-- Ensures NO custom element usage for layouts or Content
+- Ensures NO custom element usage for layouts or styling components (Content, Title)
 - May delegate to `layout-translator` for complex validations
 - See `agents/demo-auditor.md` Step 6 for validation rules
 
