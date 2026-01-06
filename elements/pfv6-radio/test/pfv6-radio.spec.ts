@@ -1,5 +1,4 @@
 import { html, fixture, expect } from '@open-wc/testing';
-import { userEvent } from '@testing-library/user-event';
 import { Pfv6Radio, Pfv6RadioChangeEvent } from '../pfv6-radio.js';
 import '../pfv6-radio.js';
 
