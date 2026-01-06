@@ -64,35 +64,87 @@ grep -E "@property.*name" component.ts | grep -q "String"
 **Fail if**: Not found
 **Fix**: Add `@property({ type: String }) name = '';`
 
-### Property 2: value (or checked, selectedIndex)
+### Property 2: value
 
+**For text-based inputs**:
 ```bash
-grep -E "@property.*(value|checked|selectedIndex)" component.ts
+grep -E "@property.*value" component.ts | grep -q "String"
 ```
 
 **Fail if**: Not found
-**Fix**: Add appropriate property for form control type:
-- Text inputs: `@property({ type: String }) value = '';`
-- Checkboxes: `@property({ type: Boolean }) checked = false;`
-- Select-like: `@property({ type: Number }) selectedIndex = -1;`
+**Fix**: Add `@property({ type: String }) value = '';`
 
-### Property 3: disabled
+### Property 3: HTML-Specified Attributes (CRITICAL)
 
-```bash
-grep -E "@property.*disabled" component.ts | grep -q "reflect.*true"
+**HTML-specified attributes (disabled, checked, required, readonly) MUST use @property({ type: Boolean, reflect: true }) in FACE components.**
+
+**Why**:
+- Browser manages these via form callbacks (`formDisabledCallback`, etc.)
+- The disabled attribute IS reflected to the host element (standard FACE pattern)
+- MUST use actual Boolean type, NOT string enum ('true' | 'false')
+- HTML boolean attributes work on PRESENCE: `<element disabled>` or absent
+- String enums like `disabled="false"` set attribute = element is disabled
+- Boolean type with reflect handles this correctly (attribute present/absent)
+
+**Correct pattern**:
+```typescript
+@property({ type: Boolean, reflect: true })
+disabled = false;
+
+@property({ type: Boolean, reflect: true })
+checked = false;
+
+@property({ type: Boolean, reflect: true })
+required = false;
+
+@property({ type: Boolean, reflect: true })
+readonly = false;
 ```
 
-**Fail if**: Not found or doesn't have `reflect: true`
-**Fix**: Add `@property({ type: Boolean, reflect: true }) disabled = false;`
-
-### Property 4: required
+**Validation**: Check for disabled (most common)
 
 ```bash
-grep -E "@property.*required" component.ts | grep -q "reflect.*true"
+# MUST use @property with type: Boolean and reflect: true
+grep -E "@property.*disabled" component.ts | grep -q "type: Boolean"
+grep -E "@property.*disabled" component.ts | grep -q "reflect: true"
 ```
 
-**Fail if**: Not found or doesn't have `reflect: true`
-**Fix**: Add `@property({ type: Boolean, reflect: true }) required = false;`
+**Fail if**: Uses string enum type or missing reflect
+**Fix**: Change from:
+```typescript
+// WRONG - String enum
+@property({ type: String, reflect: true })
+disabled: 'true' | 'false' = 'false';
+
+// WRONG - @state
+@state()
+disabled = false;
+```
+To:
+```typescript
+// CORRECT - Boolean with reflect
+@property({ type: Boolean, reflect: true })
+disabled = false;
+```
+
+**Additional checks**:
+```bash
+# CRITICAL: Ensure using Boolean type, NOT string enum
+if grep -E "@property.*disabled.*String" component.ts; then
+  echo "❌ CRITICAL: disabled must use Boolean type, not String enum"
+  exit 1
+fi
+
+if grep -E "@property.*checked.*String" component.ts; then
+  echo "❌ CRITICAL: checked must use Boolean type, not String enum"
+  exit 1
+fi
+
+if grep -E "@property.*required.*String" component.ts; then
+  echo "❌ CRITICAL: required must use Boolean type, not String enum"
+  exit 1
+fi
+```
 
 ## Required Callbacks Validation
 
@@ -146,13 +198,21 @@ grep "formDisabledCallback" component.ts | grep -q "disabled.*boolean"
 ```typescript
 formDisabledCallback(disabled: boolean) {
   this.disabled = disabled;
+  this.internals.ariaDisabled = disabled ? 'true' : 'false';
 }
 ```
+
+**Why setting ariaDisabled**:
+- Provides accessibility semantics for assistive technologies
+- Reflects the disabled state via ARIA
+- Standard pattern from MDN ElementInternals documentation
+- No need for `requestUpdate()` because @property handles that automatically
 
 **Fix if missing**:
 ```typescript
 formDisabledCallback(disabled: boolean) {
   this.disabled = disabled;
+  this.internals.ariaDisabled = disabled ? 'true' : 'false';
 }
 ```
 
@@ -284,15 +344,35 @@ grep -q "this.internals = this.attachInternals()" component.ts
 
 # 3. Properties
 grep -E "@property.*name.*String" component.ts
-grep -E "@property.*(value|checked|selectedIndex)" component.ts
-grep -E "@property.*disabled.*reflect.*true" component.ts
-grep -E "@property.*required.*reflect.*true" component.ts
+grep -E "@property.*value.*String" component.ts
+
+# 3b. HTML-Specified Attributes (CRITICAL)
+# MUST use @property with type: Boolean and reflect: true
+grep -E "@property.*disabled" component.ts | grep -q "type: Boolean"
+grep -E "@property.*disabled" component.ts | grep -q "reflect: true"
+
+# CRITICAL: Ensure NOT using string enum type for HTML-specified attributes
+if grep -E "@property.*disabled.*String" component.ts; then
+  echo "❌ CRITICAL: disabled must use Boolean type, not String enum"
+  exit 1
+fi
+if grep -E "@property.*checked.*String" component.ts; then
+  echo "❌ CRITICAL: checked must use Boolean type, not String enum"
+  exit 1
+fi
+if grep -E "@property.*required.*String" component.ts; then
+  echo "❌ CRITICAL: required must use Boolean type, not String enum"
+  exit 1
+fi
 
 # 4. Callbacks
 grep -q "formResetCallback()" component.ts
 grep -A 5 "formResetCallback" component.ts | grep -q "setFormValue"
 grep -q "formDisabledCallback" component.ts
 grep "formDisabledCallback" component.ts | grep -q "disabled.*boolean"
+
+# Check for ariaDisabled in formDisabledCallback (accessibility best practice)
+grep -A 3 "formDisabledCallback" component.ts | grep -q "ariaDisabled"
 
 # 5. Form value sync
 grep -A 10 "updated.*changedProperties" component.ts | grep -q "setFormValue"
@@ -323,15 +403,29 @@ This combined validation ensures BOTH accessibility and FACE implementation are 
 
 **ALWAYS**:
 - Validate setup (formAssociated, internals)
-- Validate all required properties (name, value, disabled, required)
+- Validate all required properties (name, value)
+- **CRITICAL**: Validate HTML-specified attributes (disabled, checked, required) use `@property({ type: Boolean, reflect: true })` NOT string enums
 - Validate all required callbacks (formResetCallback, formDisabledCallback)
+- Validate `ariaDisabled` is set in formDisabledCallback for accessibility
 - Validate form value synchronization in updated()
 - Check for setValidity usage (warn if missing)
 
 **NEVER**:
+- Allow string enum types (`'true' | 'false'`) for HTML-specified attributes in FACE components
+- Allow `@state()` for HTML-specified attributes (disabled, checked, required, readonly)
 - Skip validation of any required property or callback
 - Allow missing setFormValue in updated() lifecycle
+- Allow missing `this.internals.ariaDisabled` in formDisabledCallback
 - Proceed to testing if FACE validation fails
+
+**HTML-Specified Attributes Rule** (CRITICAL):
+- This pattern is **ONLY for FACE components** (components with `static formAssociated = true`)
+- FACE components MUST use `@property({ type: Boolean, reflect: true })` for disabled/checked/required/readonly
+- MUST use actual Boolean type, NOT string enums (`'true' | 'false'`)
+- String enums cause bugs: `disabled="false"` (attribute present) = element is disabled
+- Boolean type handles HTML boolean attributes correctly (attribute present/absent)
+- The disabled attribute IS reflected to the host element (standard FACE behavior)
+- Regular (non-FACE) components can use string enums if needed
 
 ## Reference
 

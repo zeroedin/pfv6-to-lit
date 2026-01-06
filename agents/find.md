@@ -1,6 +1,6 @@
 ---
 name: find
-description: Analyzes PatternFly React components (excluding layouts) to find unconverted components with the fewest dependencies. Recommends the next component to convert based on minimal dependencies and maximum impact.
+description: Analyzes PatternFly React components (excluding layouts and styling components) to find unconverted components with the fewest dependencies. Recommends the next component to convert based on minimal dependencies and maximum impact.
 tools: Read, Bash
 model: sonnet
 ---
@@ -19,13 +19,18 @@ Find the next non-layout component to convert by analyzing `react-dependency-tre
 
 ### Step 1: Generate Fresh Dependency Tree
 
-**Always** regenerate the dependency tree before analyzing:
+Check if dependency tree needs regeneration:
 
 ```bash
-npm run generate-dependency-tree
+# Only regenerate if tree doesn't exist or elements/ changed since last run
+if [ ! -f react-dependency-tree.json ] || [ elements/ -nt react-dependency-tree.json ]; then
+  npm run generate-dependency-tree
+else
+  echo "✓ Dependency tree is up to date, skipping regeneration"
+fi
 ```
 
-This ensures you're working with the latest component conversion status.
+This avoids unnecessary memory-intensive regeneration when nothing changed.
 
 ### Step 2: Run Blocker Analysis
 
@@ -37,7 +42,7 @@ npx tsx scripts/find-blockers.ts
 
 This script:
 1. Reads `react-dependency-tree.json`
-2. Filters to non-layout, non-converted components
+2. Filters to non-layout, non-styling (Content), non-converted components
 3. Calculates blocker counts (how many components depend on each)
 4. Ranks candidates by:
    - **Primary**: `totalDependencies` (ascending - fewer is better)
@@ -99,6 +104,28 @@ Use the create.md subagent following strict delegation rules, convert [Component
 Replace `[ComponentName]` with the recommended component name.
 ```
 
+## Excluded Components
+
+The following React components are **not compatible with web components** and must be excluded from conversion recommendations:
+
+### Layout Components
+- **Flex** / **FlexItem**
+- **Gallery** / **GalleryItem**
+- **Grid** / **GridItem**
+- **Stack** / **StackItem**
+- **Bullseye**
+- **Level** / **LevelItem**
+- **Split** / **SplitItem**
+
+**Reason**: Layouts use CSS classes (`.pf-v6-l-*`) and cannot be converted to custom elements. Already handled via CSS in demos.
+
+### Styling Components
+- **Content**
+
+**Reason**: Content is a CSS-only styling component that uses component classes (`.pf-v6-c-content`, `.pf-v6-c-content--{element}`). It wraps or styles semantic HTML elements and is not compatible with custom element encapsulation. Content provides styling for typography and is already available via PatternFly CSS.
+
+**Detection**: The `find-blockers.ts` script filters these out based on `type === 'layout'` or `name === 'Content'`.
+
 ## Implementation Notes
 
 **Use TypeScript via Bash tool** for analysis:
@@ -111,6 +138,7 @@ npx tsx scripts/find-blockers.ts
 **ALWAYS**:
 - Use the cached `react-dependency-tree.json` file
 - Filter out layouts (`type === 'layout'`)
+- Filter out styling components (`name === 'Content'`)
 - Filter out converted components (`converted === true`)
 - Calculate blocker counts accurately
 - Provide clear reasoning for the recommendation
@@ -118,6 +146,7 @@ npx tsx scripts/find-blockers.ts
 
 **NEVER**:
 - Recommend layout components
+- Recommend styling components (Content)
 - Recommend already-converted components
 - Guess at dependencies - use the cached data
 - Skip calculating impact scores

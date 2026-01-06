@@ -37,8 +37,8 @@ export class Pfv6Avatar extends LitElement {
   /**
    * Adds a border to the avatar
    */
-  @property({ type: String, reflect: true, attribute: 'is-bordered' })
-  isBordered: 'true' | 'false' = 'false';
+  @property({ type: Boolean, reflect: true, attribute: 'is-bordered' })
+  isBordered = false;
 
   /**
    * Size variant of the avatar
@@ -56,7 +56,7 @@ export class Pfv6Avatar extends LitElement {
       md: this.size === 'md',
       lg: this.size === 'lg',
       xl: this.size === 'xl',
-      bordered: this.isBordered === 'true'
+      bordered: this.isBordered
     };
 
     return html`

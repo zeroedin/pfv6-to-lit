@@ -22,7 +22,7 @@ export class Pfv6Spinner extends LitElement {
 
   /**
    * Size variant of the spinner.
-   * Ignored when isInline is 'true'.
+   * Ignored when isInline is true.
    */
   @property({ type: String, reflect: true })
   size: 'sm' | 'md' | 'lg' | 'xl' = 'xl';
@@ -46,8 +46,8 @@ export class Pfv6Spinner extends LitElement {
    * When true, spinner displays inline and inherits text font size.
    * This overrides the size property.
    */
-  @property({ type: String, reflect: true, attribute: 'is-inline' })
-  isInline: 'true' | 'false' = 'false';
+  @property({ type: Boolean, reflect: true, attribute: 'is-inline' })
+  isInline = false;
 
   /**
    * Accessible label describing what is loading.
@@ -65,13 +65,12 @@ export class Pfv6Spinner extends LitElement {
 
   render() {
     // Build class map for size/inline modifiers
-    const isInline = this.isInline === 'true';
     const classes = {
-      inline: isInline,
-      sm: this.size === 'sm' && !isInline,
-      md: this.size === 'md' && !isInline,
-      lg: this.size === 'lg' && !isInline,
-      xl: this.size === 'xl' && !isInline
+      inline: this.isInline,
+      sm: this.size === 'sm' && !this.isInline,
+      md: this.size === 'md' && !this.isInline,
+      lg: this.size === 'lg' && !this.isInline,
+      xl: this.size === 'xl' && !this.isInline
     };
 
     // Determine effective aria-label:

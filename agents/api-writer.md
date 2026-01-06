@@ -45,13 +45,16 @@ A comprehensive API design document specifying:
 **Create component directory structure**:
 ```
 elements/pfv6-{component}/
-  pfv6-{component}.ts
+  pfv6-{component}.ts              # Component AND event classes
   pfv6-{component}.css
   demo/
   test/
 ```
 
-**NEVER create `index.ts` export files** - unnecessary indirection
+**File structure rules**:
+- **NEVER create `index.ts` export files** - unnecessary indirection
+- **NEVER create separate event class files** (e.g., `Pfv6CardExpandEvent.ts`) - events belong in the main component file
+- **NEVER create separate types files** - types belong with the component
 
 ## Step 2: Import Patterns (MANDATORY)
 
@@ -157,27 +160,176 @@ export class Pfv6Panel extends LitElement {
 **Primitive Types**:
 - `string` → `@property({ type: String })`
 - `number` → `@property({ type: Number })`
-- `boolean` (default false) → `@property({ type: Boolean, reflect: true })`
-- `boolean` (default true) → `@property({ type: String }) filled: 'true' | 'false'` (use string enum)
+- `boolean` → See below (depends on if HTML-specified or custom)
 
-**Example**:
+### HTML-Specified Attributes (CRITICAL)
+
+**IMPORTANT**: This rule applies **ONLY to form-associated custom elements (FACE)** that have `static formAssociated = true`. Regular components can use standard boolean patterns.
+
+**For form-associated custom elements (`static formAssociated = true`), HTML-specified attributes MUST use `@property({ type: Boolean, reflect: true })`.**
+
+**NOTE**: Complete FACE patterns including HTML-specified attributes are provided by the `face-elements-writer` subagent (see Step 7). This section is for reference during API design.
+
+**HTML-specified boolean attributes** (use `@property({ type: Boolean, reflect: true })`):
+- `disabled` - Managed by browser via `formDisabledCallback`
+- `checked` - Form control checked state
+- `required` - Form validation
+- `readonly` - Form control read-only state
+
+**Why Boolean type is critical**:
+1. Browser manages these via form callbacks (`formDisabledCallback`, etc.)
+2. The disabled attribute IS reflected to the host element (standard FACE pattern)
+3. MUST use actual Boolean type, NOT string enum ('true' | 'false')
+4. HTML boolean attributes work on PRESENCE: `<element disabled>` or absent
+5. String enums like `disabled="false"` set attribute = element is disabled
+6. Boolean type with reflect handles this correctly (attribute present/absent)
+
+**Pattern for HTML-specified attributes**:
+```typescript
+// ✅ CORRECT - For form-associated elements
+@property({ type: Boolean, reflect: true })
+disabled = false;
+
+@property({ type: Boolean, reflect: true })
+checked = false;
+
+@property({ type: Boolean, reflect: true })
+required = false;
+
+// Browser manages disabled via this callback
+formDisabledCallback(disabled: boolean) {
+  this.disabled = disabled;
+  this.internals.ariaDisabled = disabled ? 'true' : 'false';
+}
+
+// In template - apply to internal input
+render() {
+  return html`
+    <input
+      type="radio"
+      ?disabled=${this.disabled}
+      ?checked=${this.checked}
+      ?required=${this.required}
+    />
+  `;
+}
+```
+
+**React Naming Exception**:
+- React may use: `isDisabled`, `isChecked`, `isRequired`
+- Lit MUST use: `disabled`, `checked`, `required` (HTML spec names)
+- This breaks 1:1 React parity but is REQUIRED for HTML compliance
+- Document deviation in README.md
+
+### Boolean Properties - When to Use Boolean vs String Enum (CRITICAL)
+
+**Decision tree for boolean properties**:
+
+1. **HTML-specified attributes in FACE components** (disabled, checked, required, readonly)
+   - ✅ Use `@property({ type: Boolean, reflect: true })`
+   - See "HTML-Specified Attributes" section above
+
+2. **React uses boolean type** (e.g., `isSelectable?: boolean`)
+   - ✅ Use `@property({ type: Boolean, reflect: true })`
+   - Most common case - just use Boolean
+
+3. **React uses string literal** (e.g., `variant: 'true' | 'false'`)
+   - ✅ Use string enum with converter
+   - Rare case - match React's type exactly
+
+**Default pattern for boolean properties**:
+```typescript
+// React: isSelectable?: boolean
+// Lit: Use Boolean type (simple and idiomatic)
+@property({ type: Boolean, reflect: true, attribute: 'is-selectable' })
+isSelectable = false;
+```
+
+**Why Boolean is preferred**:
+- Simple and idiomatic
+- Works with HTML boolean attribute syntax: `<element is-selectable>`
+- Reflects properly (attribute present/absent)
+- No custom converter needed
+- Type-safe in JavaScript: `element.isSelectable = true`
+
+**String enum pattern (ONLY if React uses string literals)**:
+
+This pattern should ONLY be used when React's type is explicitly `'true' | 'false'` (rare):
+
+```typescript
+// React (rare): someFlag: 'true' | 'false'
+// Lit: Match the string literal type
+@property({
+  type: String,
+  reflect: true,
+  attribute: 'some-flag',
+  converter: {
+    fromAttribute: (value: string | null) => {
+      if (value === null) return 'false';
+      if (value === '' || value === 'true') return 'true';
+      return 'false';
+    }
+  }
+})
+someFlag: 'true' | 'false' = 'false';
+```
+
+**Why the converter is needed for string enums**:
+- Allows HTML boolean attribute syntax: `<element some-flag>` → `someFlag = 'true'`
+- Handles `<element some-flag="false">` → `someFlag = 'false'`
+- Handles absence → `someFlag = 'false'`
+
+**Full Example** (typical card component):
 ```typescript
 // React
 interface CardProps {
-  variant?: 'default' | 'compact';  // default: 'default'
-  isSelectable?: boolean;            // default: false
-  isSelected?: boolean;              // default: false
+  variant?: 'default' | 'compact';  // String union (not boolean)
+  isSelectable?: boolean;            // Boolean
+  isSelected?: boolean;              // Boolean
+  disabled?: boolean;                // Boolean (HTML-specified, FACE only)
 }
 
-// Lit
+// Lit (non-FACE component)
 @property({ type: String, reflect: true })
 variant: 'default' | 'compact' = 'default';
 
-@property({ type: String, reflect: true, attribute: 'is-selectable' })
-isSelectable: 'true' | 'false' = 'false';
+@property({ type: Boolean, reflect: true, attribute: 'is-selectable' })
+isSelectable = false;
 
-@property({ type: String, reflect: true, attribute: 'is-selected' })
-isSelected: 'true' | 'false' = 'false';
+@property({ type: Boolean, reflect: true, attribute: 'is-selected' })
+isSelected = false;
+
+// Note: 'disabled' would only be on FACE components with Boolean type
+
+// Lit (FACE component - if this were a form control)
+@property({ type: Boolean, reflect: true })
+disabled = false;
+```
+
+**Usage in template with Boolean properties**:
+```typescript
+render() {
+  return html`
+    <div class=${classMap({ selectable: this.isSelectable })}>
+      <input
+        ?disabled=${this.disabled}
+        ?checked=${this.isSelected}
+      />
+    </div>
+  `;
+}
+```
+
+**Usage in template with string enum properties** (rare):
+```typescript
+// Only if property is 'true' | 'false' type
+render() {
+  return html`
+    <input
+      ?disabled=${this.someFlag === 'true'}
+    />
+  `;
+}
 ```
 
 ### Property Naming Convention
@@ -368,6 +520,49 @@ render() {
 - React `onClick` → Event name `click`
 - React `onChange` → Event name `change`
 
+### Event Class Location (CRITICAL)
+
+**ALWAYS export event classes from the main component file** - NEVER create separate event files.
+
+```typescript
+// ✅ CORRECT - Event class in same file as component
+// File: pfv6-card.ts
+import { LitElement, html } from 'lit';
+// ... other imports ...
+import styles from './pfv6-card.css';
+
+/**
+ * Event fired when card is expanded.
+ */
+export class Pfv6CardExpandEvent extends Event {
+  constructor(
+    public expanded: boolean,
+    public id?: string
+  ) {
+    super('expand', { bubbles: true, composed: true });
+  }
+}
+
+@customElement('pfv6-card')
+export class Pfv6Card extends LitElement {
+  // Component implementation
+}
+
+// ❌ WRONG - Separate event file
+// File: Pfv6CardExpandEvent.ts
+export class Pfv6CardExpandEvent extends Event { ... }
+
+// File: pfv6-card.ts
+import { Pfv6CardExpandEvent } from './Pfv6CardExpandEvent.js';  // ❌ NO!
+```
+
+**Why event classes stay in the main file**:
+- Simpler file structure (fewer files to navigate)
+- Single source of truth for component's public API
+- Events are part of the component's interface, not separate entities
+- Reduces unnecessary imports and file proliferation
+- Follows Lit community best practices
+
 **Event Class Pattern**:
 ```typescript
 // ✅ CORRECT - Extends Event, data as class fields
@@ -499,6 +694,43 @@ Component does not participate in form submission. ElementInternals may be used 
 **Properties**: `.value=${this.value}`
 **Event listeners**: `@click=${this.handleClick}`
 
+### HTML Attributes vs React Property Names (CRITICAL)
+
+**ALWAYS use HTML attribute names in Lit templates, NOT React/JSX property names**:
+
+```typescript
+// ❌ WRONG - React/JSX property names
+render() {
+  return html`
+    <label htmlFor=${this.id}>Label</label>
+    <div className="container"></div>
+  `;
+}
+
+// ✅ CORRECT - HTML attribute names
+render() {
+  return html`
+    <label for=${this.id}>Label</label>
+    <div class="container"></div>
+  `;
+}
+```
+
+**Common React → HTML Mappings**:
+- `htmlFor` → `for`
+- `className` → `class`
+- All other HTML attributes use their standard names
+
+**Why**:
+- Lit uses actual HTML, not JSX
+- React uses `htmlFor` because `for` is a JavaScript reserved keyword
+- React uses `className` because `class` is a JavaScript reserved keyword
+- Lit templates are string literals, so no keyword conflicts
+
+**When converting from React**:
+- ✅ Look at React component props (use those names for component API)
+- ❌ Don't copy JSX template syntax (convert to HTML attribute names)
+
 ### Optional Attributes - Use ifDefined()
 
 **ALWAYS use `ifDefined()` for optional attributes**:
@@ -556,6 +788,95 @@ render() {
 
 ### Conditional Rendering
 
+**ALWAYS use ternaries directly in render() - NEVER fragment across helper methods**:
+
+```typescript
+// ✅ CORRECT - Ternaries in render()
+render() {
+  const classes = {
+    standalone: !this.label,
+    disabled: this.disabled === 'true'
+  };
+
+  return html`
+    <div id="container" class=${classMap(classes)}>
+      <input type="radio" />
+      ${this.label ? html`
+        <label>${this.label}</label>
+      ` : null}
+      ${this.description ? html`
+        <span class="description">${this.description}</span>
+      ` : null}
+      ${this.body ? html`
+        <span class="body">${this.body}</span>
+      ` : null}
+    </div>
+  `;
+}
+
+// ❌ WRONG - Helper methods fragment render logic
+private _renderLabel() {
+  if (!this.label) return null;
+  return html`<label>${this.label}</label>`;
+}
+
+private _renderDescription() {
+  if (!this.description) return null;
+  return html`<span>${this.description}</span>`;
+}
+
+render() {
+  return html`
+    <div id="container">
+      ${this._renderLabel()}
+      ${this._renderDescription()}
+    </div>
+  `;
+}
+```
+
+**Why ternaries are required**:
+- Keeps all template logic in one place
+- Easier to understand data flow
+- Simpler to maintain and debug
+- No need to jump between methods
+- Lit templates are already concise
+
+**NEVER use dynamic tag names - use ternaries instead**:
+
+```typescript
+// ❌ WRONG - Dynamic tag names
+render() {
+  const Container = this.isWrapped ? 'label' : 'div';
+  return html`
+    <${Container} class="wrapper">
+      <slot></slot>
+    </${Container}>
+  `;
+}
+
+// ✅ CORRECT - Ternary at top level
+render() {
+  const content = html`<slot></slot>`;
+
+  return this.isWrapped ? html`
+    <label class="wrapper">
+      ${content}
+    </label>
+  ` : html`
+    <div class="wrapper">
+      ${content}
+    </div>
+  `;
+}
+```
+
+**Why dynamic tag names are wrong**:
+- Not idiomatic Lit
+- Harder to read and understand
+- Can cause issues with static analysis
+- Ternaries are clearer about intent
+
 **Simple**: Use ternary or `when()` directive
 ```typescript
 ${this.show ? html`<p>Content</p>` : html`<p>Fallback</p>`}
@@ -574,6 +895,48 @@ ${repeat(items, (i) => i.id, (i) => html`<li>${i.name}</li>`)}
 ```
 
 **Use `.map()`** only for static lists that never reorder
+
+### Shadow DOM Parts (CRITICAL - Avoid Unless Necessary)
+
+**NEVER add `part` attributes unless absolutely necessary**:
+
+```typescript
+// ❌ WRONG - Unnecessary parts
+render() {
+  return html`
+    <div id="container" part="container">
+      <slot></slot>
+    </div>
+  `;
+}
+
+// ✅ CORRECT - No parts (default)
+render() {
+  return html`
+    <div id="container">
+      <slot></slot>
+    </div>
+  `;
+}
+```
+
+**Why parts should be avoided**:
+- Breaks shadow DOM encapsulation
+- Exposes internal implementation details
+- Creates maintenance burden (users depend on internal structure)
+- Most components don't need external styling of internals
+- CSS custom properties are the proper API for styling
+
+**ONLY use parts when**:
+- User explicitly requests ability to style internal elements
+- No reasonable alternative with CSS custom properties
+- Component has complex internal structure that legitimately needs external styling
+- You can document a clear use case for the part
+
+**If you must use parts**:
+- Document each part in JSDoc with `@csspart`
+- Provide clear explanation of when/why to use it
+- Consider if CSS custom properties could solve it instead
 
 ### Shadow DOM Wrapper Pattern (MANDATORY)
 

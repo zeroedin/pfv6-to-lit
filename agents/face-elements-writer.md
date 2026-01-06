@@ -80,6 +80,7 @@ export class Pfv6FormContainer extends LitElement {
 ```typescript
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
+import { state } from 'lit/decorators/state.js';
 
 @customElement('pfv6-text-field')
 export class Pfv6TextField extends LitElement {
@@ -93,11 +94,35 @@ export class Pfv6TextField extends LitElement {
   @property({ type: String })
   value = '';
 
+  /**
+   * CRITICAL: HTML-specified attributes (disabled, checked, required, readonly)
+   * MUST use @property({ type: Boolean, reflect: true }) in FACE components.
+   *
+   * WHY:
+   * - Browser manages these via form callbacks (formDisabledCallback, etc.)
+   * - The disabled attribute is reflected to the host element (standard FACE pattern)
+   * - MUST use actual Boolean type, NOT string enum ('true' | 'false')
+   * - HTML boolean attributes work on PRESENCE: <element disabled> or absent
+   * - String enums like disabled="false" set attribute = element is disabled
+   * - Boolean type with reflect handles this correctly (attribute present/absent)
+   *
+   * CORRECT PATTERN:
+   * - Use @property({ type: Boolean, reflect: true })
+   * - Use actual boolean type (not 'true' | 'false' string enum)
+   * - Attribute is reflected to host element (standard FACE behavior)
+   * - Browser manages disabled state via formDisabledCallback
+   */
   @property({ type: Boolean, reflect: true })
   disabled = false;
 
   @property({ type: Boolean, reflect: true })
+  checked = false;
+
+  @property({ type: Boolean, reflect: true })
   required = false;
+
+  @property({ type: Boolean, reflect: true })
+  readonly = false;
 
   constructor() {
     super();
@@ -107,10 +132,12 @@ export class Pfv6TextField extends LitElement {
   // Form-associated callbacks
   formResetCallback() {
     this.value = '';
+    this.checked = false;
   }
 
   formDisabledCallback(disabled: boolean) {
     this.disabled = disabled;
+    this.internals.ariaDisabled = disabled ? 'true' : 'false';
   }
 
   // Update form value when component value changes
@@ -118,13 +145,16 @@ export class Pfv6TextField extends LitElement {
     if (changedProps.has('value')) {
       this.internals.setFormValue(this.value);
     }
+    if (changedProps.has('checked')) {
+      this.internals.setFormValue(this.checked ? this.value : null);
+    }
   }
 
   private _handleInput(e: Event) {
     const input = e.target as HTMLInputElement;
     this.value = input.value;
     this.internals.setFormValue(this.value);
-    
+
     // Validation
     if (this.required && !this.value) {
       this.internals.setValidity(
@@ -141,7 +171,9 @@ export class Pfv6TextField extends LitElement {
       <input
         .value=${this.value}
         ?disabled=${this.disabled}
+        ?checked=${this.checked}
         ?required=${this.required}
+        ?readonly=${this.readonly}
         @input=${this._handleInput}
       />
     `;
@@ -393,8 +425,10 @@ private _validate() {
 - Use Pattern 1 (Container) for presentational form wrappers
 - Use Pattern 2 (FACE) for actual form controls
 - Set `static formAssociated = true` for form controls
+- **CRITICAL**: Use `@property({ type: Boolean, reflect: true })` for HTML-specified attributes (disabled, checked, required, readonly)
 - Call `this.internals.setFormValue()` when value changes
 - Implement `formResetCallback` and `formDisabledCallback`
+- Set `this.internals.ariaDisabled` in formDisabledCallback for accessibility
 - Style slotted forms with `::slotted(form)` in Shadow DOM CSS
 - Create sub-components for structure (e.g., `pfv6-settings-form-row`)
 - Style sub-components in Light DOM CSS
@@ -403,9 +437,20 @@ private _validate() {
 **NEVER**:
 - Put `<form>` in Shadow DOM for simple presentational containers
 - Create form controls without implementing FACE API
+- Use string enum types (`'true' | 'false'`) for HTML-specified attributes in FACE components
 - Forget to update form value via `setFormValue()`
 - Skip validation when implementing form controls
+- Forget to set `this.internals.ariaDisabled` in formDisabledCallback
 - Require users to add CSS classes to slotted content (e.g., `class="settings-row"`)
 - Expose internal styling concerns to Light DOM users
+
+**HTML-Specified Attributes Rule** (CRITICAL):
+- FACE components MUST use `@property({ type: Boolean, reflect: true })` for disabled/checked/required/readonly
+- MUST use actual Boolean type, NOT string enums (`'true' | 'false'`)
+- String enums cause bugs: `disabled="false"` (attribute present) = element is disabled
+- Boolean type handles HTML boolean attributes correctly (attribute present/absent)
+- Browser manages disabled state via formDisabledCallback
+- The disabled attribute IS reflected to the host element (this is standard FACE behavior)
+- Regular (non-FACE) components can use string enums if needed, but FACE components must use Boolean
 
 
