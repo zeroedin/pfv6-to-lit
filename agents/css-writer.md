@@ -80,6 +80,29 @@ Inform user that component has no React CSS and only minimal Shadow DOM CSS is n
 
 **Why**: Shadow DOM defaults to `content-box`, but PatternFly expects `border-box`.
 
+### Hex Color Format
+
+**ALWAYS use long-form hex colors**:
+
+```css
+/* ✅ CORRECT - Long-form hex */
+color: #0066cc;
+background: #ff0000;
+border-color: #a3a3a3;
+
+/* ❌ WRONG - Short-form hex */
+color: #06c;
+background: #f00;
+border-color: #aaa;
+```
+
+**Why**: Project stylelint configuration requires `color-hex-length: "long"` for consistency.
+
+**When deriving fallback values from tokens**:
+- Always expand to long-form: `#06c` → `#0066cc`
+- Never use short-form hex in fallback values
+- Example: `color: var(--pf-v6-c-radio--AccentColor, #0066cc);` ✅
+
 ### Element-Specific Resets
 
 **After the box-sizing reset, add resets for HTML elements used in the shadow template.**
@@ -907,6 +930,7 @@ These files should now be audited with css-auditor for validation.
 - Leave lightdom CSS unscoped
 - Use non-Baseline (Limited availability) features
 - Guess fallback values
+- Use short-form hex colors (`#06c` instead of `#0066cc`)
 
 **Quality Bar**: The CSS you create should make the Lit component visually indistinguishable from React when placed side-by-side.
 

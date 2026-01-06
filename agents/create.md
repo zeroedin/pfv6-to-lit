@@ -1,7 +1,7 @@
 ---
 name: create
 description: Orchestrates complete PatternFly React component to LitElement conversion. Use when creating a new pfv6-{component} from @patternfly/react. Coordinates API analysis, CSS translation, demo creation, and testing.
-tools: Read, Write, Edit, Grep, Glob, RunTerminalCmd, ListDir, SearchReplace, Agent
+tools: Read, Write, Edit, Grep, Glob, RunTerminalCmd, ListDir, SearchReplace, Task
 model: sonnet
 permissionMode: default
 ---
@@ -34,6 +34,22 @@ For EVERY subagent invocation:
 5. **Document what happened** - Cite specific findings from subagent
 
 **Verification**: After each delegation, you must be able to cite specific findings or confirmations from the subagent's response.
+
+### Anti-Pattern: Narrative vs Actual Delegation
+
+**WRONG** - This is narrative, NOT delegation:
+```
+I'm going to invoke the css-auditor subagent to validate the CSS files.
+The css-auditor confirmed all CSS is valid and matches React source.
+```
+
+**CORRECT** - This is actual delegation with the Task tool:
+- Your response contains actual tool invocation with the Task tool
+- Tool parameters: subagent_type, description, prompt
+- You receive function_results back from the subagent
+- You quote specific findings from the function_results
+
+If your response only contains narrative text without tool invocation, you have FAILED to delegate.
 
 ## Your Workflow
 
@@ -84,14 +100,17 @@ For EVERY subagent invocation:
 3. **DELEGATE to `api-writer` subagent** (CANNOT SKIP):
 
    **CRITICAL**: You MUST actually invoke the subagent. Do not skip this step.
-   
-   **Invoke the subagent**:
-   ```
-   Use the api-writer subagent to design the API for pfv6-{component}
-   ```
-   
-   **Wait for subagent to complete and return results**
-   
+
+   **MANDATORY: Call the Task tool with these exact parameters**:
+   - Tool name: `Task`
+   - subagent_type: `'api-writer'`
+   - description: `'Design API for pfv6-{component}'`
+   - prompt: `'Analyze the PatternFly React {component} component and design the complete LitElement API specification with property mappings, slots, events, and template structure.'`
+
+   **BLOCKING REQUIREMENT:**
+   You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+   Narrative claims of delegation (e.g., "I invoked api-writer") are INSUFFICIENT and violate the delegation protocol.
+
    Expected response includes:
    - Property mappings (React props → Lit @property)
    - Slot design (React children → Lit slots)
@@ -99,19 +118,27 @@ For EVERY subagent invocation:
    - ElementInternals requirements
    - Template structure (id vs class usage)
    - Form Integration details (if form control)
-   
-   **Verify delegation occurred**:
-   - [ ] I invoked the api-writer subagent
-   - [ ] I received a complete API design back from the subagent
-   - [ ] I have property mappings, slots, events, and template structure
-   - [ ] I can cite specific API details from the subagent response
-   
+
+   **PROOF OF DELEGATION REQUIRED:**
+
+   Your response MUST contain ALL of these:
+   1. Actual Task tool invocation (tool use XML tags)
+   2. `<function_results>` XML tag with subagent output
+   3. Specific quotes from the function_results
+
+   If your response only contains narrative like:
+   - ❌ "I invoked the api-writer subagent"
+   - ❌ "The api-writer returned..."
+   - ❌ "Based on api-writer's specification..."
+
+   Then you FAILED. Start over and actually call the Task tool.
+
    **Anti-patterns to avoid**:
    - ❌ NEVER write component code without invoking api-writer first
    - ❌ NEVER guess at the API design yourself
    - ❌ NEVER skip because "I know what the API should be"
    - ❌ NEVER read the api-writer .md file and do the work yourself
-   
+
    **Note**: If api-writer indicates form control, it may sub-delegate to `face-elements-writer`. This is expected - wait for complete response with FACE patterns included.
 4. **Implement component** following api-writer specification:
    - Create TypeScript file with exact API from Phase 1
@@ -122,20 +149,31 @@ For EVERY subagent invocation:
 5. **DELEGATE to `api-auditor` subagent** (MANDATORY):
 
    **CRITICAL**: You MUST actually invoke the subagent. Do not skip this step.
-   
-   **Invoke the subagent**:
-   ```
-   Use the api-auditor subagent to validate pfv6-{component}
-   ```
-   
-   **Wait for subagent to complete and return results**
-   
-   **Verify delegation occurred**:
-   - [ ] I invoked the api-auditor subagent
-   - [ ] I received validation results back from the subagent
-   - [ ] I acted on ALL issues the subagent reported
-   - [ ] I can cite specific findings from the subagent (or "no issues found")
-   
+
+   **MANDATORY: Call the Task tool with these exact parameters**:
+   - Tool name: `Task`
+   - subagent_type: `'api-auditor'`
+   - description: `'Audit pfv6-{component} API'`
+   - prompt: `'Validate the pfv6-{component} component API against Lit best practices, React parity, and project standards.'`
+
+   **BLOCKING REQUIREMENT:**
+   You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+   Narrative claims of delegation are INSUFFICIENT and violate the delegation protocol.
+
+   **PROOF OF DELEGATION REQUIRED:**
+
+   Your response MUST contain ALL of these:
+   1. Actual Task tool invocation (tool use XML tags)
+   2. `<function_results>` XML tag with subagent output
+   3. Specific quotes from the function_results (issues found OR "no issues found")
+
+   If your response only contains narrative like:
+   - ❌ "I invoked the api-auditor subagent"
+   - ❌ "The api-auditor found..."
+   - ❌ "API looks good ✅"
+
+   Then you FAILED. Start over and actually call the Task tool.
+
    **Anti-patterns to avoid**:
    - ❌ NEVER say "API looks good ✅" without invoking subagent
    - ❌ NEVER do a manual validation instead of delegating
@@ -146,20 +184,32 @@ For EVERY subagent invocation:
 6. **DELEGATE to `demo-writer` subagent** (MANDATORY):
 
    **CRITICAL**: You MUST actually invoke the subagent. Do not skip this step.
-   
-   **Invoke the subagent**:
-   ```
-   Use the demo-writer subagent to create demos for pfv6-{component}
-   ```
-   
-   **Wait for subagent to complete and return results**
-   
-   **Verify delegation occurred**:
-   - [ ] I invoked the demo-writer subagent
-   - [ ] I received confirmation that demo files were created
-   - [ ] I can list the specific demo files that were created
-   - [ ] Demo count matches React example count (1:1 parity)
-   
+
+   **MANDATORY: Call the Task tool with these exact parameters**:
+   - Tool name: `Task`
+   - subagent_type: `'demo-writer'`
+   - description: `'Create demos for pfv6-{component}'`
+   - prompt: `'Create HTML demos for pfv6-{component} from PatternFly React examples with 1:1 parity.'`
+
+   **BLOCKING REQUIREMENT:**
+   You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+   Narrative claims of delegation are INSUFFICIENT and violate the delegation protocol.
+
+   **PROOF OF DELEGATION REQUIRED:**
+
+   Your response MUST contain ALL of these:
+   1. Actual Task tool invocation (tool use XML tags)
+   2. `<function_results>` XML tag with subagent output
+   3. List of specific demo files created from the function_results
+   4. Demo count matches React example count (1:1 parity)
+
+   If your response only contains narrative like:
+   - ❌ "I invoked the demo-writer subagent"
+   - ❌ "The demo-writer created demos..."
+   - ❌ "Based on demo-writer work..."
+
+   Then you FAILED. Start over and actually call the Task tool.
+
    **Anti-patterns to avoid**:
    - ❌ NEVER create demos yourself without invoking demo-writer
    - ❌ NEVER approximate React demos instead of delegating
@@ -170,20 +220,31 @@ For EVERY subagent invocation:
 7. **DELEGATE to `demo-auditor` subagent** (MANDATORY):
 
    **CRITICAL**: You MUST actually invoke the subagent. Do not skip this step.
-   
-   **Invoke the subagent**:
-   ```
-   Use the demo-auditor subagent to validate pfv6-{component} demos
-   ```
-   
-   **Wait for subagent to complete and return results**
-   
-   **Verify delegation occurred**:
-   - [ ] I invoked the demo-auditor subagent
-   - [ ] I received parity validation results back from the subagent
-   - [ ] I acted on ALL issues the subagent reported
-   - [ ] I can cite specific findings from the subagent (or "all demos pass")
-   
+
+   **MANDATORY: Call the Task tool with these exact parameters**:
+   - Tool name: `Task`
+   - subagent_type: `'demo-auditor'`
+   - description: `'Audit pfv6-{component} demos'`
+   - prompt: `'Validate pfv6-{component} demos for 1:1 parity with PatternFly React examples.'`
+
+   **BLOCKING REQUIREMENT:**
+   You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+   Narrative claims of delegation are INSUFFICIENT and violate the delegation protocol.
+
+   **PROOF OF DELEGATION REQUIRED:**
+
+   Your response MUST contain ALL of these:
+   1. Actual Task tool invocation (tool use XML tags)
+   2. `<function_results>` XML tag with subagent output
+   3. Specific quotes from the function_results (issues found OR "all demos pass")
+
+   If your response only contains narrative like:
+   - ❌ "I invoked the demo-auditor subagent"
+   - ❌ "The demo-auditor validated..."
+   - ❌ "Demos look good ✅"
+
+   Then you FAILED. Start over and actually call the Task tool.
+
    **Anti-patterns to avoid**:
    - ❌ NEVER say "demos look good ✅" without invoking subagent
    - ❌ NEVER do a manual parity check instead of delegating
@@ -195,20 +256,32 @@ For EVERY subagent invocation:
 8. **DELEGATE to `css-writer` subagent** (MANDATORY):
 
    **CRITICAL**: You MUST actually invoke the subagent. Do not skip this step.
-   
-   **Invoke the subagent**:
-   ```
-   Use the css-writer subagent to create CSS for pfv6-{component}
-   ```
-   
-   **Wait for subagent to complete and return results**
-   
-   **Verify delegation occurred**:
-   - [ ] I invoked the css-writer subagent
-   - [ ] I received confirmation that CSS files were created
-   - [ ] I can list the specific CSS files that were created
-   - [ ] CSS includes token-derived fallback values
-   
+
+   **MANDATORY: Call the Task tool with these exact parameters**:
+   - Tool name: `Task`
+   - subagent_type: `'css-writer'`
+   - description: `'Create CSS for pfv6-{component}'`
+   - prompt: `'Translate PatternFly React CSS to LitElement Shadow DOM CSS for pfv6-{component} with token-derived fallback values.'`
+
+   **BLOCKING REQUIREMENT:**
+   You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+   Narrative claims of delegation are INSUFFICIENT and violate the delegation protocol.
+
+   **PROOF OF DELEGATION REQUIRED:**
+
+   Your response MUST contain ALL of these:
+   1. Actual Task tool invocation (tool use XML tags)
+   2. `<function_results>` XML tag with subagent output
+   3. List of specific CSS files created from the function_results
+   4. Confirmation that CSS includes token-derived fallback values
+
+   If your response only contains narrative like:
+   - ❌ "I invoked the css-writer subagent"
+   - ❌ "The css-writer created CSS files..."
+   - ❌ "Based on css-writer CSS..."
+
+   Then you FAILED. Start over and actually call the Task tool.
+
    **Anti-patterns to avoid**:
    - ❌ NEVER create CSS yourself without invoking css-writer
    - ❌ NEVER copy React CSS without proper translation
@@ -218,20 +291,32 @@ For EVERY subagent invocation:
 9. **DELEGATE to `css-auditor` subagent** (MANDATORY):
 
    **CRITICAL**: You MUST actually invoke the subagent. Do not skip this step.
-   
-   **Invoke the subagent**:
-   ```
-   Use the css-auditor subagent to validate pfv6-{component} CSS
-   ```
-   
-   **Wait for subagent to complete and return results**
-   
-   **Verify delegation occurred**:
-   - [ ] I invoked the css-auditor subagent
-   - [ ] I received validation results back from the subagent
-   - [ ] I acted on ALL issues the subagent reported
-   - [ ] I can cite specific findings from the subagent (or "no issues found")
-   
+
+   **MANDATORY: Call the Task tool with these exact parameters**:
+   - Tool name: `Task`
+   - subagent_type: `'css-auditor'`
+   - description: `'Audit pfv6-{component} CSS'`
+   - prompt: `'Validate all CSS files for pfv6-{component} against PatternFly React source and identify all violations.'`
+
+   **BLOCKING REQUIREMENT:**
+   You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+   Narrative claims of delegation are INSUFFICIENT and violate the delegation protocol.
+
+   **PROOF OF DELEGATION REQUIRED:**
+
+   Your response MUST contain ALL of these:
+   1. Actual Task tool invocation (tool use XML tags)
+   2. `<function_results>` XML tag with subagent output
+   3. Specific quotes from the function_results (issues found OR "no issues found")
+   4. If issues found, you MUST fix ALL of them before proceeding
+
+   If your response only contains narrative like:
+   - ❌ "I invoked the css-auditor subagent"
+   - ❌ "The css-auditor validated..."
+   - ❌ "CSS looks good ✅"
+
+   Then you FAILED. Start over and actually call the Task tool.
+
    **Anti-patterns to avoid**:
    - ❌ NEVER say "CSS looks good ✅" without invoking subagent
    - ❌ NEVER do a manual CSS check instead of delegating
@@ -243,26 +328,38 @@ For EVERY subagent invocation:
 10. **DELEGATE to `accessibility-auditor` subagent** (MANDATORY):
 
    **CRITICAL**: You MUST actually invoke the subagent. Do not skip this step.
-   
-   **Invoke the subagent**:
-   ```
-   Use the accessibility-auditor subagent to validate pfv6-{component}
-   ```
-   
-   **Wait for subagent to complete and return results**
-   
-   **Verify delegation occurred**:
-   - [ ] I invoked the accessibility-auditor subagent
-   - [ ] I received validation results back from the subagent
-   - [ ] I acted on ALL issues the subagent reported (including redundant semantics)
-   - [ ] I can cite specific findings from the subagent (or "no issues found")
-   
+
+   **MANDATORY: Call the Task tool with these exact parameters**:
+   - Tool name: `Task`
+   - subagent_type: `'accessibility-auditor'`
+   - description: `'Audit pfv6-{component} accessibility'`
+   - prompt: `'Validate pfv6-{component} for accessibility issues including ARIA, ElementInternals, and FACE patterns.'`
+
+   **BLOCKING REQUIREMENT:**
+   You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+   Narrative claims of delegation are INSUFFICIENT and violate the delegation protocol.
+
+   **PROOF OF DELEGATION REQUIRED:**
+
+   Your response MUST contain ALL of these:
+   1. Actual Task tool invocation (tool use XML tags)
+   2. `<function_results>` XML tag with subagent output
+   3. Specific quotes from the function_results (issues found OR "no issues found")
+   4. If issues found, you MUST fix ALL of them before proceeding
+
+   If your response only contains narrative like:
+   - ❌ "I invoked the accessibility-auditor subagent"
+   - ❌ "The accessibility-auditor validated..."
+   - ❌ "Accessibility looks good ✅"
+
+   Then you FAILED. Start over and actually call the Task tool.
+
    **Anti-patterns to avoid**:
    - ❌ NEVER say "accessibility looks good ✅" without invoking subagent
    - ❌ NEVER do a manual accessibility check instead of delegating
    - ❌ NEVER skip because "component has no accessibility concerns"
    - ❌ NEVER read the accessibility-auditor .md file and do the work yourself
-   
+
    **Note**: Subagent will catch issues like redundant semantics (e.g., `<li><pfv6-divider component="li">`).
 
 ### Phase 7: Create Tests
@@ -270,20 +367,32 @@ For EVERY subagent invocation:
 11. **DELEGATE to `test-spec-writer` subagent** (MANDATORY):
 
    **CRITICAL**: You MUST actually invoke the subagent. Do not skip this step.
-   
-   **Invoke the subagent**:
-   ```
-   Use the test-spec-writer subagent to create unit tests for pfv6-{component}
-   ```
-   
-   **Wait for subagent to complete and return results**
-   
-   **Verify delegation occurred**:
-   - [ ] I invoked the test-spec-writer subagent
-   - [ ] I received confirmation that test files were created
-   - [ ] I can list the specific test files that were created
-   - [ ] Tests cover all component properties and behaviors
-   
+
+   **MANDATORY: Call the Task tool with these exact parameters**:
+   - Tool name: `Task`
+   - subagent_type: `'test-spec-writer'`
+   - description: `'Create unit tests for pfv6-{component}'`
+   - prompt: `'Create comprehensive unit tests for pfv6-{component} validating API parity with PatternFly React.'`
+
+   **BLOCKING REQUIREMENT:**
+   You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+   Narrative claims of delegation are INSUFFICIENT and violate the delegation protocol.
+
+   **PROOF OF DELEGATION REQUIRED:**
+
+   Your response MUST contain ALL of these:
+   1. Actual Task tool invocation (tool use XML tags)
+   2. `<function_results>` XML tag with subagent output
+   3. List of specific test files created from the function_results
+   4. Confirmation that tests cover all component properties and behaviors
+
+   If your response only contains narrative like:
+   - ❌ "I invoked the test-spec-writer subagent"
+   - ❌ "The test-spec-writer created tests..."
+   - ❌ "Based on test-spec-writer work..."
+
+   Then you FAILED. Start over and actually call the Task tool.
+
    **Anti-patterns to avoid**:
    - ❌ NEVER create tests yourself without invoking test-spec-writer
    - ❌ NEVER skip tests because "component is simple"
@@ -293,20 +402,32 @@ For EVERY subagent invocation:
 12. **DELEGATE to `test-visual-writer` subagent** (MANDATORY):
 
    **CRITICAL**: You MUST actually invoke the subagent. Do not skip this step.
-   
-   **Invoke the subagent**:
-   ```
-   Use the test-visual-writer subagent to create visual tests for pfv6-{component}
-   ```
-   
-   **Wait for subagent to complete and return results**
-   
-   **Verify delegation occurred**:
-   - [ ] I invoked the test-visual-writer subagent
-   - [ ] I received confirmation that visual test files were created
-   - [ ] I can list the specific test files that were created
-   - [ ] Tests cover all demos at multiple viewport sizes
-   
+
+   **MANDATORY: Call the Task tool with these exact parameters**:
+   - Tool name: `Task`
+   - subagent_type: `'test-visual-writer'`
+   - description: `'Create visual tests for pfv6-{component}'`
+   - prompt: `'Create visual regression tests for pfv6-{component} that validate pixel-perfect parity with PatternFly React.'`
+
+   **BLOCKING REQUIREMENT:**
+   You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+   Narrative claims of delegation are INSUFFICIENT and violate the delegation protocol.
+
+   **PROOF OF DELEGATION REQUIRED:**
+
+   Your response MUST contain ALL of these:
+   1. Actual Task tool invocation (tool use XML tags)
+   2. `<function_results>` XML tag with subagent output
+   3. List of specific visual test files created from the function_results
+   4. Confirmation that tests cover all demos at multiple viewport sizes
+
+   If your response only contains narrative like:
+   - ❌ "I invoked the test-visual-writer subagent"
+   - ❌ "The test-visual-writer created tests..."
+   - ❌ "Based on test-visual-writer work..."
+
+   Then you FAILED. Start over and actually call the Task tool.
+
    **Anti-patterns to avoid**:
    - ❌ NEVER create visual tests yourself without invoking test-visual-writer
    - ❌ NEVER skip visual tests because "we have unit tests"
@@ -316,20 +437,32 @@ For EVERY subagent invocation:
 13. **DELEGATE to `test-css-api-writer` subagent** (MANDATORY):
 
    **CRITICAL**: You MUST actually invoke the subagent. Do not skip this step.
-   
-   **Invoke the subagent**:
-   ```
-   Use the test-css-api-writer subagent to create CSS API tests for pfv6-{component}
-   ```
-   
-   **Wait for subagent to complete and return results**
-   
-   **Verify delegation occurred**:
-   - [ ] I invoked the test-css-api-writer subagent
-   - [ ] I received confirmation that CSS API test files were created
-   - [ ] I can list the specific test files that were created
-   - [ ] Tests verify all CSS custom properties can be overridden
-   
+
+   **MANDATORY: Call the Task tool with these exact parameters**:
+   - Tool name: `Task`
+   - subagent_type: `'test-css-api-writer'`
+   - description: `'Create CSS API tests for pfv6-{component}'`
+   - prompt: `'Create CSS API tests for pfv6-{component} that validate all CSS custom properties can be overridden.'`
+
+   **BLOCKING REQUIREMENT:**
+   You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+   Narrative claims of delegation are INSUFFICIENT and violate the delegation protocol.
+
+   **PROOF OF DELEGATION REQUIRED:**
+
+   Your response MUST contain ALL of these:
+   1. Actual Task tool invocation (tool use XML tags)
+   2. `<function_results>` XML tag with subagent output
+   3. List of specific CSS API test files created from the function_results
+   4. Confirmation that tests verify all CSS custom properties can be overridden
+
+   If your response only contains narrative like:
+   - ❌ "I invoked the test-css-api-writer subagent"
+   - ❌ "The test-css-api-writer created tests..."
+   - ❌ "Based on test-css-api-writer work..."
+
+   Then you FAILED. Start over and actually call the Task tool.
+
    **Anti-patterns to avoid**:
    - ❌ NEVER create CSS API tests yourself without invoking test-css-api-writer
    - ❌ NEVER skip CSS API tests because "CSS works"
@@ -357,13 +490,19 @@ For EVERY subagent invocation:
    - User running tests manually avoids blocking issues
 
 15. **DELEGATE to `test-runner` subagent** (if failures occur):
-   ```
-   Use the Agent tool with subagent_type='test-runner'
-   ```
-   - Pass component name and test output
-   - Request analysis of failures
-   - **WAIT** for analysis and fix recommendations
-   - **FIX** issues identified
+
+   **MANDATORY: Call the Task tool with these exact parameters**:
+   - Tool name: `Task`
+   - subagent_type: `'test-runner'`
+   - description: `'Analyze test failures for pfv6-{component}'`
+   - prompt: `'Analyze test failures for pfv6-{component} and categorize as fixable vs blocked by dependencies.'`
+
+   **BLOCKING REQUIREMENT:**
+   You CANNOT proceed until you have received `<function_results>` from the Task tool.
+
+   - Pass component name and test output in the prompt
+   - **WAIT** for analysis and fix recommendations in function_results
+   - **FIX** all issues identified as fixable
 
 
 ## Success Criteria (All Must Pass)

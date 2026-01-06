@@ -1,0 +1,16 @@
+<pfv6-radio
+  name="radio-1"
+  label="Controlled Radio"
+  id="radio-controlled">
+</pfv6-radio>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-radio/pfv6-radio.js';
+
+  await customElements.whenDefined('pfv6-radio');
+
+  const radio = document.getElementById('radio-controlled');
+  radio.addEventListener('change', () => {
+    radio.checked = true;
+  });
+</script>

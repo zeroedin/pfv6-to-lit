@@ -14,7 +14,7 @@ describe('pfv6-avatar', () => {
 
     expect(el.src).to.equal('/test.svg');
     expect(el.alt).to.equal('test avatar');
-    expect(el.isBordered).to.equal('false');
+    expect(el.isBordered).to.be.false;
     expect(el.size).to.be.undefined;
   });
 
@@ -39,10 +39,10 @@ describe('pfv6-avatar', () => {
 
   it('should apply bordered class when is-bordered is true', async () => {
     const el = await fixture<Pfv6Avatar>(html`
-      <pfv6-avatar src="/test.svg" alt="avatar" is-bordered="true"></pfv6-avatar>
+      <pfv6-avatar src="/test.svg" alt="avatar" is-bordered></pfv6-avatar>
     `);
 
-    expect(el.isBordered).to.equal('true');
+    expect(el.isBordered).to.be.true;
     const img = el.shadowRoot?.querySelector('img');
     expect(img?.classList.contains('bordered')).to.be.true;
   });
@@ -52,7 +52,7 @@ describe('pfv6-avatar', () => {
       <pfv6-avatar src="/test.svg" alt="avatar"></pfv6-avatar>
     `);
 
-    expect(el.isBordered).to.equal('false');
+    expect(el.isBordered).to.be.false;
     const img = el.shadowRoot?.querySelector('img');
     expect(img?.classList.contains('bordered')).to.be.false;
   });
@@ -139,7 +139,7 @@ describe('pfv6-avatar', () => {
       <pfv6-avatar src="/test.svg" alt="avatar"></pfv6-avatar>
     `);
 
-    el.isBordered = 'true';
+    el.isBordered = true;
     await el.updateComplete;
 
     const img = el.shadowRoot?.querySelector('img');
@@ -161,15 +161,15 @@ describe('pfv6-avatar', () => {
 
   it('should reflect is-bordered attribute', async () => {
     const el = await fixture<Pfv6Avatar>(html`
-      <pfv6-avatar src="/test.svg" alt="avatar" is-bordered="true"></pfv6-avatar>
+      <pfv6-avatar src="/test.svg" alt="avatar" is-bordered></pfv6-avatar>
     `);
 
-    expect(el.getAttribute('is-bordered')).to.equal('true');
+    expect(el.hasAttribute('is-bordered')).to.be.true;
 
-    el.isBordered = 'false';
+    el.isBordered = false;
     await el.updateComplete;
 
-    expect(el.getAttribute('is-bordered')).to.equal('false');
+    expect(el.hasAttribute('is-bordered')).to.be.false;
   });
 
   it('should reflect size attribute', async () => {
@@ -197,7 +197,7 @@ describe('pfv6-avatar', () => {
 
   it('should handle combined size and bordered modifiers', async () => {
     const el = await fixture<Pfv6Avatar>(html`
-      <pfv6-avatar src="/test.svg" alt="avatar" size="lg" is-bordered="true"></pfv6-avatar>
+      <pfv6-avatar src="/test.svg" alt="avatar" size="lg" is-bordered></pfv6-avatar>
     `);
 
     const img = el.shadowRoot?.querySelector('img');

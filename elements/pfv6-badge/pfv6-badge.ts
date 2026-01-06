@@ -29,15 +29,15 @@ export class Pfv6Badge extends LitElement {
    * When true, badge uses read styling (typically muted colors).
    * When false, badge uses unread styling (typically bold/prominent colors).
    */
-  @property({ type: String, reflect: true, attribute: 'is-read' })
-  isRead: 'true' | 'false' = 'false';
+  @property({ type: Boolean, reflect: true, attribute: 'is-read' })
+  isRead = false;
 
   /**
    * Adds styling to the badge to indicate it is disabled.
    * Disabled badges appear visually muted and non-interactive.
    */
-  @property({ type: String, reflect: true, attribute: 'is-disabled' })
-  isDisabled: 'true' | 'false' = 'false';
+  @property({ type: Boolean, reflect: true, attribute: 'is-disabled' })
+  isDisabled = false;
 
   /**
    * Text announced by screen readers to provide context about the badge.
@@ -48,9 +48,9 @@ export class Pfv6Badge extends LitElement {
 
   render() {
     const classes = {
-      read: this.isRead === 'true',
-      unread: this.isRead === 'false',
-      disabled: this.isDisabled === 'true'
+      read: this.isRead,
+      unread: !this.isRead,
+      disabled: this.isDisabled
     };
 
     return html`

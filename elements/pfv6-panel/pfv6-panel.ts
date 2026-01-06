@@ -31,15 +31,15 @@ export class Pfv6Panel extends LitElement {
   /**
    * Flag to add scrollable styling to the panel
    */
-  @property({ type: String, reflect: true, attribute: 'is-scrollable' })
-  isScrollable: 'true' | 'false' = 'false';
+  @property({ type: Boolean, reflect: true, attribute: 'is-scrollable' })
+  isScrollable = false;
 
   render() {
     const classes = {
       raised: this.variant === 'raised',
       bordered: this.variant === 'bordered',
       secondary: this.variant === 'secondary',
-      scrollable: this.isScrollable === 'true'
+      scrollable: this.isScrollable
     };
 
     return html`

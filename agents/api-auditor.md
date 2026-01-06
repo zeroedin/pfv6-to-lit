@@ -70,29 +70,124 @@ import './pfv6-panel-footer.js';
 variant: 'default' | 'compact' = 'default';
 ```
 
-**Boolean props (default false)**:
+### HTML-Specified Attributes (CRITICAL)
+
+**IMPORTANT**: This rule applies **ONLY to form-associated custom elements (FACE)** that have `static formAssociated = true`. Regular components can use standard boolean patterns.
+
+**For form-associated custom elements (`static formAssociated = true`), HTML-specified attributes MUST use `@property({ type: Boolean, reflect: true })`.**
+
+**NOTE**: Complete FACE validation is performed by the `accessibility-auditor` → `face-elements-auditor` subagent in Phase 6. This section validates API design compliance early.
+
+**HTML-specified boolean attributes** that MUST use `@property({ type: Boolean, reflect: true })`:
+- `disabled` - Managed by browser via `formDisabledCallback`
+- `checked` - Form control checked state
+- `required` - Form validation
+- `readonly` - Form control read-only state
+
+**Why Boolean type is critical**:
+1. Browser manages these via form callbacks (`formDisabledCallback`, etc.)
+2. The disabled attribute IS reflected to the host element (standard FACE pattern)
+3. MUST use actual Boolean type, NOT string enum ('true' | 'false')
+4. HTML boolean attributes work on PRESENCE: `<element disabled>` or absent
+5. String enums like `disabled="false"` set attribute = element is disabled
+6. Boolean type with reflect handles this correctly (attribute present/absent)
+
+**Pattern for form-associated elements**:
+```typescript
+// ✅ CORRECT - Use @property with Boolean type
+@property({ type: Boolean, reflect: true })
+disabled = false;
+
+@property({ type: Boolean, reflect: true })
+checked = false;
+
+@property({ type: Boolean, reflect: true })
+required = false;
+
+// Browser manages via formDisabledCallback
+formDisabledCallback(disabled: boolean) {
+  this.disabled = disabled;
+  this.internals.ariaDisabled = disabled ? 'true' : 'false';
+}
+```
+
+**In template, apply to internal input**:
+```typescript
+render() {
+  return html`
+    <input
+      type="radio"
+      ?disabled=${this.disabled}
+      ?checked=${this.checked}
+      ?required=${this.required}
+    />
+  `;
+}
+```
+
+**Validation steps**:
+1. Check if component has `static formAssociated = true`
+2. Look for `disabled`, `checked`, `required`, `readonly` properties
+3. Verify they use `@state()` and actual `boolean` type
+4. Verify they do NOT use `@property({ reflect: true })`
+5. Verify they do NOT use string enums like `'true' | 'false'`
+6. Flag as **CRITICAL** if using `@property` or string enums
+
+**React Parity Exception**:
+- React: `isDisabled?: boolean`
+- Lit: `disabled: boolean` (standard HTML attribute name)
+- This breaks 1:1 naming but follows HTML spec (REQUIRED)
+- Document in README.md: "Uses `disabled` (HTML spec) instead of `isDisabled`"
+
+**Boolean props (non-HTML-specified) - Use Boolean by default**:
+
+**Decision tree**:
+1. **React uses boolean** (e.g., `isSelectable?: boolean`)
+   - ✅ Use `@property({ type: Boolean, reflect: true })`
+   - Most common case
+
+2. **React uses string literal** (e.g., `someFlag: 'true' | 'false'`)
+   - ✅ Use string enum with converter
+   - Rare case - match React's type
+
+**Default pattern** (React uses boolean):
 ```typescript
 // React: isSelectable?: boolean (default: false)
-// ✅ CORRECT
-@property({ type: String, reflect: true, attribute: 'is-selectable' })
-isSelectable: 'true' | 'false' = 'false';
-
-// ❌ WRONG - Using Boolean type
-@property({ type: Boolean, reflect: true })
+// ✅ CORRECT - Boolean type (simple and idiomatic)
+@property({ type: Boolean, reflect: true, attribute: 'is-selectable' })
 isSelectable = false;
 ```
 
-**Boolean props (default true)**:
+**String enum pattern** (ONLY if React uses string literals):
 ```typescript
-// React: filled?: boolean (default: true)
-// ✅ CORRECT - String enum
-@property({ type: String, reflect: true })
-filled: 'true' | 'false' = 'true';
-
-// ❌ WRONG - Boolean type can't default to true
-@property({ type: Boolean, reflect: true })
-filled = true;
+// React (rare): someFlag: 'true' | 'false'
+// ✅ CORRECT - String enum with custom converter
+@property({
+  type: String,
+  reflect: true,
+  attribute: 'some-flag',
+  converter: {
+    fromAttribute: (value: string | null) => {
+      if (value === null) return 'false';
+      if (value === '' || value === 'true') return 'true';
+      return 'false';
+    }
+  }
+})
+someFlag: 'true' | 'false' = 'false';
 ```
+
+**Validation steps**:
+1. Check React source for the property type
+2. If React uses `boolean`, verify Lit uses `@property({ type: Boolean, reflect: true })`
+3. If React uses `'true' | 'false'`, verify Lit uses string enum with converter
+4. Flag as **WARNING** if using string enum when React uses boolean
+
+**Validation for HTML-specified attributes in FACE components**:
+1. Check if component has `static formAssociated = true`
+2. If FACE component, verify disabled/checked/required use `@property({ type: Boolean, reflect: true })`
+3. Flag as **CRITICAL** if using String enum type
+4. Flag as **CRITICAL** if using `@state()`
 
 ### Check Attribute Names Match React Props
 
@@ -252,6 +347,42 @@ render() {
 }
 ```
 
+### Check No React/JSX Property Names in Templates
+
+**Flag any React/JSX property names instead of HTML attributes**:
+
+```typescript
+// ❌ WRONG - React/JSX property names
+render() {
+  return html`
+    <label htmlFor=${this.id}>Label</label>
+    <div className="container"></div>
+  `;
+}
+
+// ✅ CORRECT - HTML attribute names
+render() {
+  return html`
+    <label for=${this.id}>Label</label>
+    <div class="container"></div>
+  `;
+}
+```
+
+**Common violations to detect**:
+- `htmlFor` → Should be `for`
+- `className` → Should be `class`
+
+**Why this is wrong**:
+- Lit uses actual HTML, not JSX
+- React needs `htmlFor`/`className` to avoid JavaScript keyword conflicts
+- Lit templates are string literals with no keyword conflicts
+
+**Detection Pattern**:
+- Search for `htmlFor=` in template strings
+- Search for `className=` in template strings
+- Flag each occurrence as a violation
+
 ### Check Static Wrapper Uses ID (Not Class)
 
 ```typescript
@@ -272,6 +403,77 @@ render() {
   };
   return html`<div id="container" class=${classMap(classes)}><slot></slot></div>`;
 }
+```
+
+### Check No Unnecessary Parts
+
+**Flag any `part` attributes unless justified**:
+
+```typescript
+// ❌ WRONG - Unnecessary parts on simple wrapper
+render() {
+  return html`
+    <div id="container" part="container">
+      <slot></slot>
+    </div>
+  `;
+}
+
+// ❌ WRONG - Parts on every internal element
+render() {
+  return html`
+    <div id="container" part="container">
+      <input part="input" />
+      <label part="label">${this.label}</label>
+      <span part="description">${this.description}</span>
+    </div>
+  `;
+}
+
+// ✅ CORRECT - No parts (default case)
+render() {
+  return html`
+    <div id="container">
+      <slot></slot>
+    </div>
+  `;
+}
+
+// ✅ ACCEPTABLE - Part with documented use case
+/**
+ * @csspart filter - The SVG filter element (for advanced filter customization)
+ */
+render() {
+  return html`
+    <svg>
+      <filter part="filter" id="custom-filter">
+        <!-- Complex SVG filter that users might need to customize -->
+      </filter>
+    </svg>
+  `;
+}
+```
+
+**Why parts are problematic**:
+- Breaks shadow DOM encapsulation
+- Exposes internal implementation details
+- Creates maintenance burden
+- Usually CSS custom properties are better
+
+**Validation steps**:
+1. Search for `part=` in template
+2. For each part found:
+   - Check if there's a `@csspart` JSDoc comment
+   - Check if there's a documented use case
+   - Verify CSS custom properties couldn't solve it
+3. Flag parts without strong justification
+
+**Report format**:
+```
+❌ Unnecessary part: part="container" at line 45
+  - No @csspart documentation
+  - No clear use case for external styling
+  - Recommendation: Remove part attribute
 ```
 
 ### Check Lists Use repeat() for Dynamic Content
@@ -297,6 +499,111 @@ render() {
   `;
 }
 ```
+
+### Check render() Uses Ternaries (Not Helper Methods)
+
+**Flag any private _render*() helper methods**:
+
+```typescript
+// ❌ WRONG - Fragmenting render across helper methods
+private _renderLabel() {
+  if (!this.label) return null;
+  return html`<label>${this.label}</label>`;
+}
+
+private _renderDescription() {
+  if (!this.description) return null;
+  return html`<span>${this.description}</span>`;
+}
+
+render() {
+  return html`
+    <div id="container">
+      ${this._renderLabel()}
+      ${this._renderDescription()}
+    </div>
+  `;
+}
+
+// ✅ CORRECT - Ternaries in render()
+render() {
+  return html`
+    <div id="container">
+      ${this.label ? html`
+        <label>${this.label}</label>
+      ` : null}
+      ${this.description ? html`
+        <span>${this.description}</span>
+      ` : null}
+    </div>
+  `;
+}
+```
+
+**Why this is an anti-pattern**:
+- Fragments template logic across multiple methods
+- Harder to understand complete template structure
+- Forces jumping between methods during debugging
+- Adds unnecessary indirection
+- Lit templates are already concise enough
+
+**Detection Pattern**:
+- Search for methods named `_render*()` or `render*()` (excluding main `render()`)
+- Flag any private methods that return `TemplateResult` or `TemplateResult | null`
+- Report each helper method as a violation
+
+### Check No Dynamic Tag Names
+
+**Flag any usage of `<${variable}>` syntax**:
+
+```typescript
+// ❌ WRONG - Dynamic tag names
+render() {
+  const Container = this.isWrapped ? 'label' : 'div';
+  return html`
+    <${Container} class="wrapper">
+      <slot></slot>
+    </${Container}>
+  `;
+}
+
+// ❌ WRONG - Multiple dynamic tags
+render() {
+  const Wrapper = this.variant === 'section' ? 'section' : 'div';
+  const Label = this.hasLabel ? 'label' : 'span';
+  return html`
+    <${Wrapper}>
+      <${Label}>${this.text}</${Label}>
+    </${Wrapper}>
+  `;
+}
+
+// ✅ CORRECT - Ternary at top level
+render() {
+  const content = html`<slot></slot>`;
+
+  return this.isWrapped ? html`
+    <label class="wrapper">
+      ${content}
+    </label>
+  ` : html`
+    <div class="wrapper">
+      ${content}
+    </div>
+  `;
+}
+```
+
+**Why this is wrong**:
+- Not idiomatic Lit pattern
+- Makes templates harder to read
+- Can cause static analysis issues
+- Ternaries are more explicit and clearer
+
+**Detection Pattern**:
+- Search for `<${` in template strings
+- Search for variable assignments like `const Container = ... ? '...' : '...'`
+- Flag any dynamic tag name usage
 
 ## Step 4: ElementInternals Validation
 
@@ -472,6 +779,64 @@ export class Pfv6ExpandEvent extends Event {
 }
 // Access: event.expanded
 ```
+
+### Check Event Classes in Same File (CRITICAL)
+
+**ALWAYS verify event classes are exported from the main component file**, NOT separate files.
+
+**How to check**:
+1. Read the component file (e.g., `elements/pfv6-card/pfv6-card.ts`)
+2. Search for `export class.*Event extends Event`
+3. If event classes exist, verify they're in the SAME file as the component
+4. Check for separate event files (e.g., `Pfv6CardExpandEvent.ts`) - these are WRONG
+
+**Validation**:
+```typescript
+// ✅ CORRECT - Event class in same file as component
+// File: elements/pfv6-card/pfv6-card.ts
+import { LitElement, html } from 'lit';
+import styles from './pfv6-card.css';
+
+export class Pfv6CardExpandEvent extends Event {
+  constructor(public expanded: boolean) {
+    super('expand', { bubbles: true, composed: true });
+  }
+}
+
+@customElement('pfv6-card')
+export class Pfv6Card extends LitElement {
+  // Component implementation
+}
+
+// ❌ WRONG - Separate event file
+// File: elements/pfv6-card/Pfv6CardExpandEvent.ts
+export class Pfv6CardExpandEvent extends Event { ... }
+
+// File: elements/pfv6-card/pfv6-card.ts
+import { Pfv6CardExpandEvent } from './Pfv6CardExpandEvent.js';  // ❌ CRITICAL VIOLATION
+```
+
+**Detection strategy**:
+```bash
+# Check for separate event files
+ls elements/pfv6-card/*Event.ts  # Should return "No such file"
+
+# Check for event imports in component file
+grep "import.*Event.*from.*\./" elements/pfv6-card/pfv6-card.ts  # Should be empty
+```
+
+**If violation found**:
+- Mark as **CRITICAL** issue
+- Provide file paths for both the separate event file and the import
+- Instruct to merge event class into main component file
+- Instruct to delete the separate event file
+
+**Why this matters**:
+- Event classes are part of the component's public API
+- Separating them adds unnecessary file complexity
+- Creates extra import dependencies
+- Violates Lit community best practices
+- Makes codebase harder to navigate
 
 ## Step 7: HTML Structural Validity
 

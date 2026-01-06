@@ -3,11 +3,11 @@
 /**
  * Generates a dependency tree JSON file for React components
  * This caches the dependency analysis for faster lookups
- * 
+ *
  * Run: npm run analyze-dependencies
  */
 
-import { readFileSync, writeFileSync, readdirSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync, createWriteStream } from 'fs';
 import { join, dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -281,19 +281,92 @@ function analyzeComponent(
 }
 
 /**
- * Main execution
+ * Lightweight stats tracking to avoid keeping full components in memory
+ */
+interface StatsTracker {
+  totalComponents: number;
+  componentCount: number;
+  layoutCount: number;
+  convertedCount: number;
+  zeroDependencies: number;
+  withDemoDependencies: number;
+  totalDependencySum: number;
+  zeroDepsComponents: Array<{ name: string; source: string; converted: boolean }>;
+  convertedComponents: Array<{ name: string }>;
+}
+
+/**
+ * Main execution with streaming JSON output
  */
 function main(): void {
   console.log('🔍 Analyzing React component dependencies...\n');
-  
-  const dependencyTree: DependencyTree = {
-    generatedAt: new Date().toISOString(),
-    sources: {
-      patternflyReact: toRelativePath(REACT_COMPONENTS_PATH)
-    },
-    components: []
+
+  const outputPath = join(rootDir, 'react-dependency-tree.json');
+  const stream = createWriteStream(outputPath, { encoding: 'utf-8' });
+
+  // Stats tracker (minimal memory)
+  const stats: StatsTracker = {
+    totalComponents: 0,
+    componentCount: 0,
+    layoutCount: 0,
+    convertedCount: 0,
+    zeroDependencies: 0,
+    withDemoDependencies: 0,
+    totalDependencySum: 0,
+    zeroDepsComponents: [],
+    convertedComponents: []
   };
-  
+
+  // Write opening JSON structure
+  stream.write('{\n');
+  stream.write(`  "generatedAt": "${new Date().toISOString()}",\n`);
+  stream.write('  "sources": {\n');
+  stream.write(`    "patternflyReact": "${toRelativePath(REACT_COMPONENTS_PATH)}"\n`);
+  stream.write('  },\n');
+  stream.write('  "components": [\n');
+
+  let isFirstComponent = true;
+
+  // Helper to write a component
+  const writeComponent = (analysis: ComponentAnalysis): void => {
+    // Write comma before all but first component
+    if (!isFirstComponent) {
+      stream.write(',\n');
+    }
+    isFirstComponent = false;
+
+    // Stringify and write this component (indent by 4 spaces)
+    const json = JSON.stringify(analysis, null, 2);
+    const indented = json.split('\n').map(line => '    ' + line).join('\n');
+    stream.write(indented);
+
+    // Update stats (minimal memory footprint)
+    stats.totalComponents++;
+    if (analysis.type === 'component') stats.componentCount++;
+    if (analysis.type === 'layout') stats.layoutCount++;
+    if (analysis.converted) {
+      stats.convertedCount++;
+      stats.convertedComponents.push({ name: analysis.name });
+    }
+    if (analysis.totalDependencies === 0) {
+      stats.zeroDependencies++;
+      stats.zeroDepsComponents.push({
+        name: analysis.name,
+        source: analysis.source,
+        converted: analysis.converted
+      });
+    }
+    if (analysis.demoDependencies.patternfly.length > 0 ||
+        analysis.demoDependencies.relative.length > 0) {
+      stats.withDemoDependencies++;
+    }
+    stats.totalDependencySum += analysis.totalDependencies;
+
+    // Note: analysis object will be garbage collected after this function returns
+    // Memory savings come from streaming (processing one component at a time)
+    // rather than accumulating all components in memory
+  };
+
   // Analyze PatternFly React Core components
   if (existsSync(REACT_COMPONENTS_PATH)) {
     console.log('📦 Analyzing @patternfly/react-core components...');
@@ -301,19 +374,26 @@ function main(): void {
       const fullPath = join(REACT_COMPONENTS_PATH, dir);
       return existsSync(join(fullPath, `${dir}.tsx`));
     });
-    
-    reactComponents.forEach(comp => {
+
+    // Process one at a time and stream immediately
+    reactComponents.forEach((comp, index) => {
       console.log(`  - ${comp}`);
       const analysis = analyzeComponent(comp, REACT_COMPONENTS_PATH, 'component');
-      dependencyTree.components.push(analysis);
+      writeComponent(analysis);
+
+      // Periodic GC hint
+      if (global.gc && index % 10 === 9) {
+        global.gc();
+      }
     });
     console.log(`✅ Analyzed ${reactComponents.length} PatternFly React components\n`);
   } else {
     console.error('❌ PatternFly React components not found!');
     console.error('   Please run: npm run patternfly-cache');
+    stream.end();
     process.exit(1);
   }
-  
+
   // Analyze PatternFly React Layout components
   if (existsSync(REACT_LAYOUTS_PATH)) {
     console.log('📦 Analyzing @patternfly/react-core layouts...');
@@ -321,63 +401,58 @@ function main(): void {
       const fullPath = join(REACT_LAYOUTS_PATH, dir);
       return existsSync(join(fullPath, `${dir}.tsx`));
     });
-    
-    reactLayouts.forEach(layout => {
+
+    // Process one at a time and stream immediately
+    reactLayouts.forEach((layout, index) => {
       console.log(`  - ${layout}`);
       const analysis = analyzeComponent(layout, REACT_LAYOUTS_PATH, 'layout');
-      dependencyTree.components.push(analysis);
+      writeComponent(analysis);
+
+      // Periodic GC hint
+      if (global.gc && index % 10 === 9) {
+        global.gc();
+      }
     });
     console.log(`✅ Analyzed ${reactLayouts.length} PatternFly React layouts\n`);
   } else {
     console.warn('⚠️  PatternFly React layouts not found (optional)');
   }
-  
-  // Calculate statistics
-  const componentCount = dependencyTree.components.filter(c => c.type === 'component').length;
-  const layoutCount = dependencyTree.components.filter(c => c.type === 'layout').length;
-  const convertedCount = dependencyTree.components.filter(c => c.converted).length;
-  const stats: Statistics = {
-    totalComponents: dependencyTree.components.length,
-    zeroDependencies: dependencyTree.components.filter(c => c.totalDependencies === 0).length,
-    withDemoDependencies: dependencyTree.components.filter(c => 
-      c.demoDependencies.patternfly.length > 0 ||
-      c.demoDependencies.relative.length > 0
-    ).length,
-    averageDependencies: (
-      dependencyTree.components.reduce((sum, c) => sum + c.totalDependencies, 0) / 
-      dependencyTree.components.length
-    ).toFixed(2)
-  };
-  
-  dependencyTree.statistics = stats;
-  
-  // Write to file
-  const outputPath = join(rootDir, 'react-dependency-tree.json');
-  writeFileSync(outputPath, JSON.stringify(dependencyTree, null, 2));
-  
+
+  // Close components array and write statistics
+  stream.write('\n  ],\n');
+  stream.write('  "statistics": {\n');
+  stream.write(`    "totalComponents": ${stats.totalComponents},\n`);
+  stream.write(`    "zeroDependencies": ${stats.zeroDependencies},\n`);
+  stream.write(`    "withDemoDependencies": ${stats.withDemoDependencies},\n`);
+  const avgDeps = stats.totalComponents > 0
+    ? (stats.totalDependencySum / stats.totalComponents).toFixed(2)
+    : '0.00';
+  stream.write(`    "averageDependencies": "${avgDeps}"\n`);
+  stream.write('  }\n');
+  stream.write('}\n');
+  stream.end();
+
   console.log('📊 Statistics:');
-  console.log(`   Total: ${stats.totalComponents} (${componentCount} components + ${layoutCount} layouts)`);
-  console.log(`   Converted: ${convertedCount}`);
+  console.log(`   Total: ${stats.totalComponents} (${stats.componentCount} components + ${stats.layoutCount} layouts)`);
+  console.log(`   Converted: ${stats.convertedCount}`);
   console.log(`   Zero dependencies: ${stats.zeroDependencies}`);
   console.log(`   With demo dependencies: ${stats.withDemoDependencies}`);
-  console.log(`   Average dependencies: ${stats.averageDependencies}`);
+  console.log(`   Average dependencies: ${avgDeps}`);
   console.log(`\n✅ Dependency tree written to: react-dependency-tree.json`);
-  
+
   // Show zero-dependency components
-  const zeroDeps = dependencyTree.components.filter(c => c.totalDependencies === 0);
-  if (zeroDeps.length > 0) {
+  if (stats.zeroDepsComponents.length > 0) {
     console.log('\n🎯 Components with zero dependencies:');
-    zeroDeps.forEach(c => {
+    stats.zeroDepsComponents.forEach(c => {
       const status = c.converted ? '✅' : '⬜';
       console.log(`   ${status} ${c.name} (${c.source})`);
     });
   }
-  
+
   // Show converted components
-  const converted = dependencyTree.components.filter(c => c.converted);
-  if (converted.length > 0) {
+  if (stats.convertedComponents.length > 0) {
     console.log('\n✅ Converted components:');
-    converted.forEach(c => {
+    stats.convertedComponents.forEach(c => {
       console.log(`   - ${c.name}`);
     });
   }

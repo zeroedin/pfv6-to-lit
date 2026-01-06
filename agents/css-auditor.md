@@ -246,21 +246,135 @@ Reference: https://web.dev/baseline
 
 ### Step 4: CSS Nesting Validation
 
-Check nesting order:
+**CRITICAL: All CSS MUST use CSS nesting with `&` ampersand**
+
+#### Check for Flat (Non-Nested) Selectors
+
+**Flag any flat selectors that should be nested**:
+
+```css
+/* ❌ WRONG - Flat selectors */
+#container {
+  display: contents;
+}
+
+#container.standalone {
+  display: inline-grid;
+}
+
+#container.standalone input[type="radio"] {
+  align-self: center;
+}
+
+input[type="radio"]:first-child {
+  margin-inline-start: 0.0625rem;
+}
+
+input[type="radio"]:disabled {
+  cursor: not-allowed;
+}
+
+#label.disabled {
+  color: #a3a3a3;
+}
+
+/* ✅ CORRECT - Properly nested */
+#container {
+  display: contents;
+
+  &.standalone {
+    display: inline-grid;
+
+    & input[type="radio"] {
+      align-self: center;
+    }
+  }
+}
+
+input[type="radio"] {
+  &:first-child {
+    margin-inline-start: 0.0625rem;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+#label {
+  &.disabled {
+    color: #a3a3a3;
+  }
+}
+```
+
+**Detection Pattern**:
+- Search for selectors like `#id.class`, `#id:pseudo-class`, `.class.modifier`, `element:pseudo`
+- Check if parent selector exists separately
+- If parent exists without nesting → Flag as violation
+
+**Nesting Order** (within each selector block):
 1. CSS variables first
 2. Display properties
 3. Layout properties
 4. Visual properties
-5. Pseudo-elements (`&::before`)
-6. State variants (`&.compact`)
-7. Nested selectors (`& #child`)
-8. Media queries
+5. Pseudo-elements (`&::before`, `&::after`)
+6. Pseudo-classes (`&:hover`, `&:disabled`, `&:first-child`)
+7. State variants (`&.compact`, `&.disabled`)
+8. Nested selectors (`& #child`, `& input`)
+9. Media queries (`@media`)
 
-Verify:
-- Uses `&` ampersand pattern for nesting
-- Media queries nested inside selectors (not global)
+**Verify**:
+- ✅ Uses `&` ampersand pattern for all nesting
+- ✅ Pseudo-classes nested (`&:hover`, `&:disabled`, `&:first-child`)
+- ✅ State classes nested (`&.compact`, `&.standalone`)
+- ✅ Child selectors nested (`& input`, `& #label`)
+- ✅ Media queries nested inside selectors (not global)
+- ❌ No flat selectors that could be nested
 
-### Step 5: Lightdom CSS Assessment
+### Step 5: Stylelint Validation
+
+**CRITICAL: All CSS MUST pass stylelint without errors or warnings**
+
+Run stylelint on the CSS file and report results:
+
+```bash
+npx stylelint elements/pfv6-{component}/pfv6-{component}.css
+```
+
+**Report Format**:
+
+```markdown
+### Stylelint Validation
+
+**Status**: ✅ PASS / ❌ FAIL
+
+**Command**: `npx stylelint elements/pfv6-{component}/pfv6-{component}.css`
+
+**Result**:
+[If PASS]
+✅ No errors or warnings
+
+[If FAIL]
+❌ X errors, Y warnings found:
+
+<Copy exact stylelint output here>
+
+**Required Actions**:
+- Fix all stylelint errors before proceeding
+- Address all warnings
+- Re-run stylelint to verify fixes
+```
+
+**Key Stylelint Rules** (configured in `.stylelintrc.json`):
+- `no-descending-specificity` - Selector specificity must be ascending
+- `color-hex-length: "long"` - Use long-form hex colors (#0066cc not #06c)
+- `declaration-block-no-duplicate-properties` - No duplicate properties
+- Plus all rules from `stylelint-config-standard` and `@stylistic/stylelint-config`
+
+**Do NOT manually check individual stylelint rules** - just run stylelint and report the output
+
+### Step 6: Lightdom CSS Assessment
 
 **Purpose**: Determine if a `pfv6-{component}-lightdom.css` file is needed for this component.
 
@@ -316,7 +430,7 @@ Verify:
 - Report as ❌ CRITICAL ERROR: Missing lightdom CSS file
 - List specific React CSS patterns that require lightdom translation
 
-### Step 6: Display Contents Pattern Validation (CRITICAL)
+### Step 7: Display Contents Pattern Validation (CRITICAL)
 
 **When a component uses `:host { display: contents; }`, validate**:
 
@@ -356,7 +470,7 @@ Verify:
    - ❌ WARNING: Missing fallback values for private variables
    - ❌ WARNING: Private variables not consumed in shadow CSS
 
-### Step 7: Slotted Component Integration
+### Step 8: Slotted Component Integration
 
 Check for `::slotted()` overrides:
 - Pattern: `::slotted(pfv6-checkbox) { --_grid-gap: ... }`
@@ -640,9 +754,11 @@ Provide a structured audit report:
 
 **MUST CHECK**:
 - [ ] Every CSS file starts with box-sizing reset
+- [ ] Stylelint passes with no errors or warnings
 - [ ] No elaborate CSS for components that have no React CSS
 - [ ] Simple class names used (`compact`, not `pf-m-compact`)
 - [ ] Variable names match React CSS exactly
+- [ ] CSS nesting uses `&` ampersand pattern
 - [ ] Lightdom CSS properly scoped to component tag
 - [ ] RTL uses `:dir()` selector (not `:host-context()`)
 - [ ] All CSS features are Baseline 2024 or earlier
@@ -650,6 +766,8 @@ Provide a structured audit report:
 
 **REPORT AS ERROR**:
 - ❌ Missing box-sizing reset
+- ❌ Stylelint errors or warnings
+- ❌ Flat selectors (not using CSS nesting with `&`)
 - ❌ `:host([attribute])` selectors found
 - ❌ `:host-context()` found anywhere
 - ❌ Made-up CSS variable names (not in PatternFly source)

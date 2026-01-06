@@ -144,28 +144,28 @@ describe('<pfv6-spinner>', function() {
     it('defaults to "false"', async function() {
       // React default: isInline = false
       const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner></pfv6-spinner>`);
-      expect(el.isInline).to.equal('false');
+      expect(el.isInline).to.be.false;
     });
 
-    it('accepts "true" value', async function() {
-      const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner is-inline="true"></pfv6-spinner>`);
-      expect(el.isInline).to.equal('true');
+    it('accepts true value', async function() {
+      const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner is-inline></pfv6-spinner>`);
+      expect(el.isInline).to.be.true;
     });
 
     it('reflects to attribute', async function() {
-      const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner is-inline="true"></pfv6-spinner>`);
-      expect(el.getAttribute('is-inline')).to.equal('true');
+      const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner is-inline></pfv6-spinner>`);
+      expect(el.hasAttribute('is-inline')).to.be.true;
     });
 
     it('applies inline class to SVG when true', async function() {
-      const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner is-inline="true"></pfv6-spinner>`);
+      const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner is-inline></pfv6-spinner>`);
       const svg = el.shadowRoot?.querySelector('svg');
       expect(svg?.classList.contains('inline')).to.be.true;
     });
 
     it('does not apply size class when inline is true', async function() {
       // When isInline is true, size modifier should be ignored
-      const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner is-inline="true" size="sm"></pfv6-spinner>`);
+      const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner is-inline size="sm"></pfv6-spinner>`);
       const svg = el.shadowRoot?.querySelector('svg');
       expect(svg?.classList.contains('inline')).to.be.true;
       expect(svg?.classList.contains('sm')).to.be.false;

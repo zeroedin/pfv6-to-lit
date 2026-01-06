@@ -19,10 +19,10 @@ npm install @pfv6/elements
 <pfv6-badge screen-reader-text="Unread Messages">7</pfv6-badge>
 
 <!-- Read badge -->
-<pfv6-badge is-read="true">24</pfv6-badge>
+<pfv6-badge is-read>24</pfv6-badge>
 
 <!-- Disabled badge -->
-<pfv6-badge is-disabled="true">999+</pfv6-badge>
+<pfv6-badge is-disabled>999+</pfv6-badge>
 ```
 
 ## API
@@ -31,8 +31,8 @@ npm install @pfv6/elements
 
 | Property | Attribute | Type | Default | Description |
 |----------|-----------|------|---------|-------------|
-| `isRead` | `is-read` | `'true' \| 'false'` | `'false'` | Adds styling to indicate badge has been read (muted colors) |
-| `isDisabled` | `is-disabled` | `'true' \| 'false'` | `'false'` | Adds styling to indicate badge is disabled |
+| `isRead` | `is-read` | `boolean` | `false` | Adds styling to indicate badge has been read (muted colors) |
+| `isDisabled` | `is-disabled` | `boolean` | `false` | Adds styling to indicate badge is disabled |
 | `screenReaderText` | `screen-reader-text` | `string \| undefined` | `undefined` | Text announced by screen readers to provide context |
 
 ### Slots
