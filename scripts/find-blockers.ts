@@ -37,9 +37,9 @@ interface RankedComponent extends Component {
 const treePath = resolve(process.cwd(), 'react-dependency-tree.json');
 const tree: DependencyTree = JSON.parse(readFileSync(treePath, 'utf-8'));
 
-// Filter to non-layout, non-converted components
+// Filter to non-layout, non-styling (Content), non-converted components
 const candidates = tree.components.filter(c =>
-  c.type === 'component' && c.converted !== true
+  c.type === 'component' && c.converted !== true && c.name !== 'Content'
 );
 
 // Calculate blocker counts (how many components depend on each component)
