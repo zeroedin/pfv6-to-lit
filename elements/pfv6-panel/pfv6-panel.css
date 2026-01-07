@@ -5,8 +5,6 @@
 }
 
 :host {
-  display: block;
-
   /* Public CSS API - All overrideable from outside */
   --pf-v6-c-panel--Width: auto;
   --pf-v6-c-panel--MinWidth: auto;
@@ -26,7 +24,7 @@
   --pf-v6-c-panel--before--BorderColor:
     var(
       --pf-t--global--border--color--high-contrast,
-      rgba(255, 255, 255, 0)
+      rgb(255 255 255 / 0%)
     );
   --pf-v6-c-panel--m-secondary--BackgroundColor:
     var(
@@ -78,13 +76,15 @@
   --pf-v6-c-panel--m-scrollable__footer--BorderColor:
     var(
       --pf-t--global--border--color--high-contrast,
-      rgba(255, 255, 255, 0)
+      rgb(255 255 255 / 0%)
     );
   --pf-v6-c-panel--m-scrollable__footer--BorderWidth:
     var(
       --pf-t--global--border--width--high-contrast--regular,
       0px
     );
+
+  display: block;
 
   /* Modifier classes - public variable overrides */
   &.bordered {
@@ -136,5 +136,3 @@
     border-radius: var(--pf-v6-c-panel--BorderRadius);
   }
 }
-
-

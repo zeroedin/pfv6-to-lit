@@ -1,6 +1,6 @@
 /**
  * Spinner CSS - Shadow DOM styles
- * 
+ *
  * Translates PatternFly React Spinner CSS to LitElement Shadow DOM patterns.
  * Variable names and values derived from:
  * - .cache/patternfly/src/patternfly/components/Spinner/spinner.scss
@@ -14,8 +14,6 @@
 }
 
 :host {
-  display: inline-block;
-
   /* Public CSS API - All overrideable from outside */
   --pf-v6-c-spinner--diameter:
     var(
@@ -55,6 +53,8 @@
       3.5rem
     );
   --pf-v6-c-spinner--m-inline--diameter: 1em;
+
+  display: inline-block;
 }
 
 /* Main spinner SVG element */
@@ -137,4 +137,3 @@
     transform: rotate(720deg);
   }
 }
-

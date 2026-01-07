@@ -5,10 +5,10 @@
 }
 
 :host {
-  display: contents;
-
   /* Public CSS API - Width responsive cascade */
   --pf-v6-c-sidebar__panel--FlexBasis--base: var(--pf-v6-c-sidebar__panel--FlexBasis, auto);
+
+  display: contents;
 
   @media (width >= 576px) {
     --pf-v6-c-sidebar__panel--FlexBasis--base:

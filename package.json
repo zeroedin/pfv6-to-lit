@@ -25,8 +25,12 @@
   "wireit": {
     "generate-dependency-tree": {
       "command": "npx tsx scripts/generate-dependency-tree.ts",
-      "files": ["elements/*/"],
-      "output": ["./react-dependency-tree.json"],
+      "files": [
+        "elements/*/"
+      ],
+      "output": [
+        "./react-dependency-tree.json"
+      ],
       "dependencies": [
         "cache"
       ]
@@ -34,7 +38,9 @@
     "clean:cache": {
       "command": "rm -rf .cache",
       "files": [],
-      "output": ["./.cache"]
+      "output": [
+        "./.cache"
+      ]
     },
     "clean:demos-source": {
       "command": "rm -rf patternfly-react && mkdir -p patternfly-react",
@@ -114,7 +120,9 @@
     "copy:demos": {
       "command": "npx tsx scripts/copy-patternfly-react-demos.ts",
       "files": [],
-      "output": ["./patternfly-react/**"],
+      "output": [
+        "./patternfly-react/**"
+      ],
       "dependencies": [
         "clean:demos-source",
         "generate-dependency-tree"
@@ -153,7 +161,10 @@
     "cache": {
       "command": "npx tsx scripts/patternfly-cache.ts",
       "files": [],
-      "output": ["./.cache/patternfly-react", "./.cache/patternfly"],
+      "output": [
+        "./.cache/patternfly-react",
+        "./.cache/patternfly"
+      ],
       "dependencies": [
         "clean:cache"
       ]
@@ -231,6 +242,7 @@
     "react-dom": "^19.2.0",
     "stylelint": "^16.0.0",
     "stylelint-config-standard": "^39.0.1",
+    "stylelint-order": "^7.0.1",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.2",

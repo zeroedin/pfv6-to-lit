@@ -453,7 +453,46 @@ npx stylelint elements/pfv6-{component}/pfv6-{component}.css
 - `no-descending-specificity` - Selector specificity must be ascending
 - `color-hex-length: "long"` - Use long-form hex colors (#0066cc not #06c)
 - `declaration-block-no-duplicate-properties` - No duplicate properties
+- `order/order: ["custom-properties", "declarations"]` - **CSS custom properties MUST appear before style declarations**
 - Plus all rules from `stylelint-config-standard` and `@stylistic/stylelint-config`
+
+**CRITICAL: CSS Variable Ordering** (enforced by stylelint-order plugin):
+
+Custom properties (`--*` variables) MUST be declared BEFORE style declarations within each selector block.
+
+✅ **CORRECT** - Variables before declarations:
+```css
+:host {
+  /* Custom properties first */
+  --pf-v6-c-card--BorderRadius: 8px;
+  --pf-v6-c-card--Padding: 1rem;
+
+  /* Style declarations after */
+  display: block;
+  position: relative;
+}
+```
+
+❌ **WRONG** - Declarations before variables:
+```css
+:host {
+  /* Style declarations */
+  display: block;
+  position: relative;
+
+  /* Custom properties - WRONG ORDER! */
+  --pf-v6-c-card--BorderRadius: 8px;
+  --pf-v6-c-card--Padding: 1rem;
+}
+```
+
+**Why this matters**:
+- Consistent code style across all components
+- Makes CSS variables easy to find (always at top of block)
+- Enforced by `stylelint-order` plugin with `order/order` rule
+- Auto-fixable with `stylelint --fix`
+
+**Detection**: Stylelint will report `order/order` errors if variables appear after declarations
 
 **Do NOT manually check individual stylelint rules** - just run stylelint and report the output
 

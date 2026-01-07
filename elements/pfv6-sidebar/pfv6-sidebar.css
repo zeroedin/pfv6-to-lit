@@ -5,9 +5,6 @@
 }
 
 :host {
-  display: block;
-  height: 100%;
-
   /* Public CSS API - All overrideable from outside */
   --pf-v6-c-sidebar--inset: var(--pf-t--global--spacer--md, 1rem);
   --pf-v6-c-sidebar--xl--inset: var(--pf-t--global--spacer--lg, 1.5rem);
@@ -137,6 +134,9 @@
   /* Sticky */
   --pf-v6-c-sidebar__panel--m-sticky--InsetBlockStart: 0;
   --pf-v6-c-sidebar__panel--m-sticky--Position: sticky;
+
+  display: block;
+  height: 100%;
 
   /* Responsive breakpoint adjustments */
   @media (width >= 768px) {

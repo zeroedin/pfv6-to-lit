@@ -5,11 +5,11 @@
 }
 
 :host {
-  display: block;
-
   /* Public CSS API - All overrideable from outside */
   --pf-v6-c-panel__main--MaxHeight: none;
   --pf-v6-c-panel__main--Overflow: visible;
+
+  display: block;
 }
 
 #container {

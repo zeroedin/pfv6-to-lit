@@ -71,6 +71,7 @@
   margin-block-end: var(--_layout-margin-block-end);
   margin-inline-start: var(--_layout-margin-inline-start);
   margin-inline-end: var(--_layout-margin-inline-end);
+
   /* Grid layout properties */
   grid-column-start: var(--_layout-grid-column-start);
   grid-column-end: var(--_layout-grid-column-end);

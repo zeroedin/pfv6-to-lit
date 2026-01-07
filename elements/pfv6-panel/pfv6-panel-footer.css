@@ -5,8 +5,6 @@
 }
 
 :host {
-  display: block;
-
   /* Public CSS API - All overrideable from outside */
   --pf-v6-c-panel__footer--PaddingBlockStart:
     var(
@@ -31,6 +29,8 @@
   --pf-v6-c-panel__footer--BoxShadow: none;
   --pf-v6-c-panel__footer--BorderColor: transparent;
   --pf-v6-c-panel__footer--BorderWidth: 0;
+
+  display: block;
 }
 
 #container {
