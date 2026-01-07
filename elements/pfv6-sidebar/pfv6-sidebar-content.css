@@ -1,0 +1,63 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+#container {
+  flex-grow: 1;
+  order: var(--_sidebar-content-order, 1);
+  padding-block:
+    var(--_sidebar-content-padding-block-start, 0)
+    var(--_sidebar-content-padding-block-end, 0);
+  padding-inline:
+    var(--_sidebar-content-padding-inline-start, 0)
+    var(--_sidebar-content-padding-inline-end, 0);
+  background-color:
+    var(
+      --_sidebar-content-background-color,
+      var(--pf-t--global--background--color--primary--default, #ffffff)
+    );
+
+  /* Padding modifier */
+  &.padding {
+    --_sidebar-content-padding-block-start:
+      var(
+        --_sidebar-content-m-padding-padding-block-start,
+        var(--pf-t--global--spacer--md, 1rem)
+      );
+    --_sidebar-content-padding-inline-end:
+      var(
+        --_sidebar-content-m-padding-padding-inline-end,
+        var(--pf-t--global--spacer--md, 1rem)
+      );
+    --_sidebar-content-padding-block-end:
+      var(
+        --_sidebar-content-m-padding-padding-block-end,
+        var(--pf-t--global--spacer--md, 1rem)
+      );
+    --_sidebar-content-padding-inline-start:
+      var(
+        --_sidebar-content-m-padding-padding-inline-start,
+        var(--pf-t--global--spacer--md, 1rem)
+      );
+  }
+
+  /* No background modifier */
+  &.no-background {
+    --_sidebar-content-background-color: transparent;
+  }
+
+  /* Secondary background variant */
+  &.secondary {
+    --_sidebar-content-background-color:
+      var(
+        --_sidebar-content-m-secondary-background-color,
+        var(--pf-t--global--background--color--secondary--default, #f5f5f5)
+      );
+  }
+}

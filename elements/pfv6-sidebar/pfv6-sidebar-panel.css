@@ -1,0 +1,383 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Public CSS API - Width responsive cascade */
+  --pf-v6-c-sidebar__panel--FlexBasis--base: var(--pf-v6-c-sidebar__panel--FlexBasis, auto);
+
+  display: contents;
+
+  @media (width >= 576px) {
+    --pf-v6-c-sidebar__panel--FlexBasis--base:
+      var(
+        --pf-v6-c-sidebar__panel--FlexBasis-on-sm,
+        var(--pf-v6-c-sidebar__panel--FlexBasis, auto)
+      );
+  }
+
+  @media (width >= 768px) {
+    --pf-v6-c-sidebar__panel--FlexBasis--base:
+      var(
+        --pf-v6-c-sidebar__panel--FlexBasis-on-md,
+        var(
+          --pf-v6-c-sidebar__panel--FlexBasis-on-sm,
+          var(--pf-v6-c-sidebar__panel--FlexBasis, auto)
+        )
+      );
+  }
+
+  @media (width >= 992px) {
+    --pf-v6-c-sidebar__panel--FlexBasis--base:
+      var(
+        --pf-v6-c-sidebar__panel--FlexBasis-on-lg,
+        var(
+          --pf-v6-c-sidebar__panel--FlexBasis-on-md,
+          var(
+            --pf-v6-c-sidebar__panel--FlexBasis-on-sm,
+            var(--pf-v6-c-sidebar__panel--FlexBasis, auto)
+          )
+        )
+      );
+  }
+
+  @media (width >= 1200px) {
+    --pf-v6-c-sidebar__panel--FlexBasis--base:
+      var(
+        --pf-v6-c-sidebar__panel--FlexBasis-on-xl,
+        var(
+          --pf-v6-c-sidebar__panel--FlexBasis-on-lg,
+          var(
+            --pf-v6-c-sidebar__panel--FlexBasis-on-md,
+            var(
+              --pf-v6-c-sidebar__panel--FlexBasis-on-sm,
+              var(--pf-v6-c-sidebar__panel--FlexBasis, auto)
+            )
+          )
+        )
+      );
+  }
+
+  @media (width >= 1450px) {
+    --pf-v6-c-sidebar__panel--FlexBasis--base:
+      var(
+        --pf-v6-c-sidebar__panel--FlexBasis-on-2xl,
+        var(
+          --pf-v6-c-sidebar__panel--FlexBasis-on-xl,
+          var(
+            --pf-v6-c-sidebar__panel--FlexBasis-on-lg,
+            var(
+              --pf-v6-c-sidebar__panel--FlexBasis-on-md,
+              var(
+                --pf-v6-c-sidebar__panel--FlexBasis-on-sm,
+                var(--pf-v6-c-sidebar__panel--FlexBasis, auto)
+              )
+            )
+          )
+        )
+      );
+  }
+
+  /* Width modifier classes - public CSS API */
+  &.width_default {
+    --pf-v6-c-sidebar__panel--FlexBasis: auto;
+  }
+
+  &.width_25 {
+    --pf-v6-c-sidebar__panel--FlexBasis: 25%;
+  }
+
+  &.width_33 {
+    --pf-v6-c-sidebar__panel--FlexBasis: 33.3333%;
+  }
+
+  &.width_50 {
+    --pf-v6-c-sidebar__panel--FlexBasis: 50%;
+  }
+
+  &.width_66 {
+    --pf-v6-c-sidebar__panel--FlexBasis: 66.6667%;
+  }
+
+  &.width_75 {
+    --pf-v6-c-sidebar__panel--FlexBasis: 75%;
+  }
+
+  &.width_100 {
+    --pf-v6-c-sidebar__panel--FlexBasis: 100%;
+  }
+
+  /* Responsive width modifiers */
+  &.width_default-on-sm {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-sm: auto;
+  }
+
+  &.width_25-on-sm {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-sm: 25%;
+  }
+
+  &.width_33-on-sm {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-sm: 33.3333%;
+  }
+
+  &.width_50-on-sm {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-sm: 50%;
+  }
+
+  &.width_66-on-sm {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-sm: 66.6667%;
+  }
+
+  &.width_75-on-sm {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-sm: 75%;
+  }
+
+  &.width_100-on-sm {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-sm: 100%;
+  }
+
+  &.width_default-on-md {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-md: auto;
+  }
+
+  &.width_25-on-md {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-md: 25%;
+  }
+
+  &.width_33-on-md {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-md: 33.3333%;
+  }
+
+  &.width_50-on-md {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-md: 50%;
+  }
+
+  &.width_66-on-md {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-md: 66.6667%;
+  }
+
+  &.width_75-on-md {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-md: 75%;
+  }
+
+  &.width_100-on-md {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-md: 100%;
+  }
+
+  &.width_default-on-lg {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-lg: auto;
+  }
+
+  &.width_25-on-lg {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-lg: 25%;
+  }
+
+  &.width_33-on-lg {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-lg: 33.3333%;
+  }
+
+  &.width_50-on-lg {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-lg: 50%;
+  }
+
+  &.width_66-on-lg {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-lg: 66.6667%;
+  }
+
+  &.width_75-on-lg {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-lg: 75%;
+  }
+
+  &.width_100-on-lg {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-lg: 100%;
+  }
+
+  &.width_default-on-xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-xl: auto;
+  }
+
+  &.width_25-on-xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-xl: 25%;
+  }
+
+  &.width_33-on-xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-xl: 33.3333%;
+  }
+
+  &.width_50-on-xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-xl: 50%;
+  }
+
+  &.width_66-on-xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-xl: 66.6667%;
+  }
+
+  &.width_75-on-xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-xl: 75%;
+  }
+
+  &.width_100-on-xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-xl: 100%;
+  }
+
+  &.width_default-on-2xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-2xl: auto;
+  }
+
+  &.width_25-on-2xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-2xl: 25%;
+  }
+
+  &.width_33-on-2xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-2xl: 33.3333%;
+  }
+
+  &.width_50-on-2xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-2xl: 50%;
+  }
+
+  &.width_66-on-2xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-2xl: 66.6667%;
+  }
+
+  &.width_75-on-2xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-2xl: 75%;
+  }
+
+  &.width_100-on-2xl {
+    --pf-v6-c-sidebar__panel--FlexBasis-on-2xl: 100%;
+  }
+}
+
+#container {
+  position: var(--_sidebar-panel-position, sticky);
+  inset-block-start: var(--_sidebar-panel-inset-block-start, 0);
+  z-index: var(--_sidebar-panel-z-index, var(--pf-t--global--z-index--xs, 100));
+  flex-basis: var(--_sidebar-panel-flex-basis, auto);
+  flex-shrink: 0;
+  order: var(--_sidebar-panel-order, -1);
+  padding-block:
+    var(--_sidebar-panel-padding-block-start, 0)
+    var(--_sidebar-panel-padding-block-end, 0);
+  padding-inline:
+    var(--_sidebar-panel-padding-inline-start, 0)
+    var(--_sidebar-panel-padding-inline-end, 0);
+  background-color:
+    var(
+      --_sidebar-panel-background-color,
+      var(--pf-t--global--background--color--primary--default, #ffffff)
+    );
+  border-block-end:
+    var(
+      --_sidebar-panel-border-block-end-width,
+      var(--pf-t--global--border--width--high-contrast--regular, 0)
+    )
+    solid
+    var(
+      --_sidebar-panel-border-block-end-color,
+      var(--pf-t--global--border--color--high-contrast, rgb(255 255 255 / 0%))
+    );
+  box-shadow:
+    var(
+      --_sidebar-panel-box-shadow,
+      var(--pf-t--global--box-shadow--md--bottom, 0 4px 9px 0 rgb(41 41 41 / 15%))
+    );
+
+  /* Padding modifier */
+  &.padding {
+    --_sidebar-panel-padding-block-start:
+      var(
+        --_sidebar-panel-m-padding-padding-block-start,
+        var(--pf-t--global--spacer--md, 1rem)
+      );
+    --_sidebar-panel-padding-inline-end:
+      var(
+        --_sidebar-panel-m-padding-padding-inline-end,
+        var(--pf-t--global--spacer--md, 1rem)
+      );
+    --_sidebar-panel-padding-block-end:
+      var(
+        --_sidebar-panel-m-padding-padding-block-end,
+        var(--pf-t--global--spacer--md, 1rem)
+      );
+    --_sidebar-panel-padding-inline-start:
+      var(
+        --_sidebar-panel-m-padding-padding-inline-start,
+        var(--pf-t--global--spacer--md, 1rem)
+      );
+  }
+
+  /* Sticky modifier */
+  &.sticky {
+    --_sidebar-panel-position: var(--_sidebar-panel-m-sticky-position, sticky);
+    --_sidebar-panel-inset-block-start: var(--_sidebar-panel-m-sticky-inset-block-start, 0);
+  }
+
+  /* Static modifier */
+  &.static {
+    --_sidebar-panel-position: static;
+    --_sidebar-panel-inset-block-start: auto;
+  }
+
+  /* No background modifier */
+  &.no-background {
+    background-color: transparent;
+  }
+
+  /* Secondary background variant */
+  &.secondary {
+    --_sidebar-panel-background-color:
+      var(
+        --_sidebar-panel-m-secondary-background-color,
+        var(--pf-t--global--background--color--secondary--default, #f5f5f5)
+      );
+  }
+
+  /* Width modifier classes - consume from :host public API */
+  &.width_default,
+  &.width_25,
+  &.width_33,
+  &.width_50,
+  &.width_66,
+  &.width_75,
+  &.width_100,
+  &.width_default-on-sm,
+  &.width_25-on-sm,
+  &.width_33-on-sm,
+  &.width_50-on-sm,
+  &.width_66-on-sm,
+  &.width_75-on-sm,
+  &.width_100-on-sm,
+  &.width_default-on-md,
+  &.width_25-on-md,
+  &.width_33-on-md,
+  &.width_50-on-md,
+  &.width_66-on-md,
+  &.width_75-on-md,
+  &.width_100-on-md,
+  &.width_default-on-lg,
+  &.width_25-on-lg,
+  &.width_33-on-lg,
+  &.width_50-on-lg,
+  &.width_66-on-lg,
+  &.width_75-on-lg,
+  &.width_100-on-lg,
+  &.width_default-on-xl,
+  &.width_25-on-xl,
+  &.width_33-on-xl,
+  &.width_50-on-xl,
+  &.width_66-on-xl,
+  &.width_75-on-xl,
+  &.width_100-on-xl,
+  &.width_default-on-2xl,
+  &.width_25-on-2xl,
+  &.width_33-on-2xl,
+  &.width_50-on-2xl,
+  &.width_66-on-2xl,
+  &.width_75-on-2xl,
+  &.width_100-on-2xl {
+    --_sidebar-panel-flex-basis: var(--pf-v6-c-sidebar__panel--FlexBasis--base);
+  }
+}

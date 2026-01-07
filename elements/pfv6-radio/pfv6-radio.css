@@ -14,30 +14,84 @@
 }
 
 :host {
+  /* Public CSS API - All overrideable from outside */
+  --pf-v6-c-radio--GridGap:
+    var(
+      --pf-t--global--spacer--sm,
+      0.5rem
+    )
+    var(
+      --pf-t--global--spacer--sm,
+      0.5rem
+    );
+  --pf-v6-c-radio--AccentColor:
+    var(
+      --pf-t--global--icon--color--brand--default,
+      #0066cc
+    );
+  --pf-v6-c-radio--m-standalone--MinHeight:
+    calc(
+      var(--pf-v6-c-radio__label--FontSize, 0.875rem) *
+      var(--pf-v6-c-radio__label--LineHeight, 1.5)
+    );
+  --pf-v6-c-radio__label--disabled--Color:
+    var(
+      --pf-t--global--text--color--disabled,
+      #a3a3a3
+    );
+  --pf-v6-c-radio__label--Color:
+    var(
+      --pf-t--global--text--color--regular,
+      #151515
+    );
+  --pf-v6-c-radio__label--FontWeight:
+    var(
+      --pf-t--global--font--weight--body--default,
+      400
+    );
+  --pf-v6-c-radio__label--FontSize:
+    var(
+      --pf-t--global--font--size--body--default,
+      0.875rem
+    );
+  --pf-v6-c-radio__label--LineHeight:
+    var(
+      --pf-t--global--font--line-height--body,
+      1.5
+    );
+  --pf-v6-c-radio__description--FontSize:
+    var(
+      --pf-t--global--font--size--body--sm,
+      0.75rem
+    );
+  --pf-v6-c-radio__description--Color:
+    var(
+      --pf-t--global--text--color--subtle,
+      #4d4d4d
+    );
+  --pf-v6-c-radio__input--first-child--MarginInlineStart: 0.0625rem;
+  --pf-v6-c-radio__input--last-child--MarginInlineEnd: 0.0625rem;
+  --pf-v6-c-radio__body--MarginBlockStart:
+    var(
+      --pf-t--global--spacer--sm,
+      0.5rem
+    );
+  --pf-v6-c-radio__input--TranslateY:
+    calc(
+      (
+        var(--pf-v6-c-radio__label--LineHeight, 1.5) *
+        var(--pf-v6-c-radio__label--FontSize, 0.875rem) / 2
+      ) - 50%
+    );
+
   display: block;
 }
 
 #container {
-  /* CSS Variables - public API (exact match from React) */
-  --pf-v6-c-radio--GridGap: var(--pf-t--global--spacer--sm, 0.5rem) var(--pf-t--global--spacer--sm, 0.5rem);
-  --pf-v6-c-radio--AccentColor: var(--pf-t--global--icon--color--brand--default, #0066cc);
-  --pf-v6-c-radio--m-standalone--MinHeight: calc(var(--pf-v6-c-radio__label--FontSize, 0.875rem) * var(--pf-v6-c-radio__label--LineHeight, 1.5));
-  --pf-v6-c-radio__label--disabled--Color: var(--pf-t--global--text--color--disabled, #a3a3a3);
-  --pf-v6-c-radio__label--Color: var(--pf-t--global--text--color--regular, #151515);
-  --pf-v6-c-radio__label--FontWeight: var(--pf-t--global--font--weight--body--default, 400);
-  --pf-v6-c-radio__label--FontSize: var(--pf-t--global--font--size--body--default, 0.875rem);
-  --pf-v6-c-radio__label--LineHeight: var(--pf-t--global--font--line-height--body, 1.5);
-  --pf-v6-c-radio__description--FontSize: var(--pf-t--global--font--size--body--sm, 0.75rem);
-  --pf-v6-c-radio__description--Color: var(--pf-t--global--text--color--subtle, #4d4d4d);
-  --pf-v6-c-radio__input--first-child--MarginInlineStart: 0.0625rem;
-  --pf-v6-c-radio__input--last-child--MarginInlineEnd: 0.0625rem;
-  --pf-v6-c-radio__body--MarginBlockStart: var(--pf-t--global--spacer--sm, 0.5rem);
-  --pf-v6-c-radio__input--TranslateY: calc((var(--pf-v6-c-radio__label--LineHeight, 1.5) * var(--pf-v6-c-radio__label--FontSize, 0.875rem) / 2 ) - 50%);
-
-  /* Display and layout */
+  /* Consume public API from :host */
   display: grid;
   grid-template-columns: auto 1fr;
-  grid-gap: var(--pf-v6-c-radio--GridGap);
+  gap: var(--pf-v6-c-radio--GridGap);
   align-items: baseline;
   accent-color: var(--pf-v6-c-radio--AccentColor);
 
@@ -79,7 +133,7 @@
 
 /* Label element (label or span depending on isLabelWrapped) */
 label,
-span:not(.description):not(.body) {
+span:not(.description, .body) {
   font-size: var(--pf-v6-c-radio__label--FontSize);
   font-weight: var(--pf-v6-c-radio__label--FontWeight);
   line-height: var(--pf-v6-c-radio__label--LineHeight);
@@ -89,6 +143,7 @@ span:not(.description):not(.body) {
 
   &.disabled {
     --pf-v6-c-radio__label--Color: var(--pf-v6-c-radio__label--disabled--Color);
+
     cursor: not-allowed;
   }
 }

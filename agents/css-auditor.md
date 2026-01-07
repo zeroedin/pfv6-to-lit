@@ -93,6 +93,89 @@ When invoked with a component name, perform comprehensive validation of all CSS 
 - NO `:host-context()` anywhere (not cross-browser)
 - RTL must use `:dir(rtl)`, not `:host-context([dir="rtl"])`
 
+### Step 2a: Public CSS Variable Placement Validation (CRITICAL)
+
+**This is a CRITICAL architectural rule that affects the entire CSS API.**
+
+**Validation Rule**: All public CSS variables (`--pf-v6-c-{component}--*`) MUST be declared on `:host`.
+
+**Why this matters**:
+- Public CSS variables form the component's CSS API
+- Users override them: `<pfv6-card style="--pf-v6-c-card--BorderRadius: 16px;">`
+- Variables placed on `#container` or other internal selectors are in shadow DOM - unreachable from outside
+- This breaks the CSS API contract and makes components uncustomizable
+
+**Validation steps**:
+1. Scan the CSS file for all `--pf-v6-c-{component}--*` variable declarations
+2. For each public variable found:
+   - Check which selector block contains it
+   - If NOT in `:host` block → **CRITICAL ERROR**
+3. Verify private variables (`--_{component}-*`) are NOT on `:host` (should be on internal selectors)
+
+**Detection pattern**:
+
+✅ **CORRECT - Public variable on :host**:
+```css
+:host {
+  /* Public CSS API - accessible from outside */
+  --pf-v6-c-sidebar--inset: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-sidebar--BorderWidth--base: var(--pf-t--global--border--width--regular, 1px);
+}
+
+#container {
+  /* Consume public variables from :host */
+  padding: var(--pf-v6-c-sidebar--inset);
+  border-width: var(--pf-v6-c-sidebar--BorderWidth--base);
+}
+```
+
+❌ **CRITICAL ERROR - Public variable on internal selector**:
+```css
+:host {
+  display: block;
+}
+
+#container {
+  /* Public variable buried in shadow DOM - NOT accessible! */
+  --pf-v6-c-sidebar--inset: var(--pf-t--global--spacer--md, 1rem);
+  padding: var(--pf-v6-c-sidebar--inset);
+}
+```
+
+**Report format for violations**:
+```
+❌ CRITICAL: Public CSS variable not on :host
+
+Variable: --pf-v6-c-sidebar--inset
+Current location: #container (line 14)
+Problem: Public CSS variables MUST be on :host for user overrideability
+
+Fix: Move to :host block:
+  :host {
+    --pf-v6-c-sidebar--inset: var(--pf-t--global--spacer--md, 1rem);
+  }
+
+  #container {
+    /* Consume the variable instead of declaring it */
+    padding: var(--pf-v6-c-sidebar--inset);
+  }
+
+Why this breaks: Users cannot override this variable from outside:
+  <pfv6-sidebar style="--pf-v6-c-sidebar--inset: 2rem;">
+  This will NOT work because the variable is in shadow DOM.
+```
+
+**Common violations**:
+- All public variables in `#container` block (most common mistake)
+- Public variables scattered across multiple internal selectors
+- Responsive public variables in `@media` blocks within `#container`
+
+**How to fix**:
+1. Identify all `--pf-v6-c-{component}--*` variables
+2. Move ALL of them to `:host` block
+3. Internal selectors should only CONSUME these variables via `var()`
+4. Keep private variables (`--_*`) on internal selectors where they're used
+
 ### Step 3: CSS Variable Validation (Line-by-Line)
 
 Compare React CSS variables with Lit CSS:
@@ -370,9 +453,106 @@ npx stylelint elements/pfv6-{component}/pfv6-{component}.css
 - `no-descending-specificity` - Selector specificity must be ascending
 - `color-hex-length: "long"` - Use long-form hex colors (#0066cc not #06c)
 - `declaration-block-no-duplicate-properties` - No duplicate properties
+- `order/order: ["custom-properties", "declarations"]` - **CSS custom properties MUST appear before style declarations**
 - Plus all rules from `stylelint-config-standard` and `@stylistic/stylelint-config`
 
+**CRITICAL: CSS Variable Ordering** (enforced by stylelint-order plugin):
+
+Custom properties (`--*` variables) MUST be declared BEFORE style declarations within each selector block.
+
+✅ **CORRECT** - Variables before declarations:
+```css
+:host {
+  /* Custom properties first */
+  --pf-v6-c-card--BorderRadius: 8px;
+  --pf-v6-c-card--Padding: 1rem;
+
+  /* Style declarations after */
+  display: block;
+  position: relative;
+}
+```
+
+❌ **WRONG** - Declarations before variables:
+```css
+:host {
+  /* Style declarations */
+  display: block;
+  position: relative;
+
+  /* Custom properties - WRONG ORDER! */
+  --pf-v6-c-card--BorderRadius: 8px;
+  --pf-v6-c-card--Padding: 1rem;
+}
+```
+
+**Why this matters**:
+- Consistent code style across all components
+- Makes CSS variables easy to find (always at top of block)
+- Enforced by `stylelint-order` plugin with `order/order` rule
+- Auto-fixable with `stylelint --fix`
+
+**Detection**: Stylelint will report `order/order` errors if variables appear after declarations
+
 **Do NOT manually check individual stylelint rules** - just run stylelint and report the output
+
+**CRITICAL RULE: No Stylelint Disable Comments**:
+- ❌ **FORBIDDEN**: `/* stylelint-disable-next-line */` comments
+- ❌ **FORBIDDEN**: `/* stylelint-disable */` / `/* stylelint-enable */` blocks
+- ✅ **REQUIRED**: Format CSS on multiple lines to satisfy stylelint rules naturally
+- **Rationale**: We want stylelint rules to apply and format our CSS as expected. If a line is too long, break it into multiple lines instead of disabling the rule.
+
+**Example of WRONG approach**:
+```css
+/* ❌ DO NOT DO THIS */
+/* stylelint-disable-next-line @stylistic/max-line-length */
+--pf-v6-c-sidebar__panel--m-secondary--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f5f5f5);
+```
+
+**Example of CORRECT approach**:
+```css
+/* ✅ DO THIS - Break long lines */
+--pf-v6-c-sidebar__panel--m-secondary--BackgroundColor: var(
+  --pf-t--global--background--color--secondary--default,
+  #f5f5f5
+);
+```
+
+**If stylelint fails with disable comments present**:
+- Report as CRITICAL ERROR
+- Require removal of all disable comments
+- Require reformatting CSS to satisfy rules naturally
+
+**CRITICAL RULE: Multi-line CSS Variable Formatting**:
+When CSS variable declarations with `var()` fallbacks span multiple lines, follow stylelint's `@stylistic/declaration-colon-newline-after` rule: place newline AFTER the colon, before `var(`.
+
+❌ **WRONG** (var on same line as property name):
+```css
+--property-name: var(
+  --css-variable-reference,
+  fallback-value
+);
+```
+
+✅ **CORRECT** (newline after colon):
+```css
+--property-name:
+  var(
+    --css-variable-reference,
+    fallback-value
+  );
+```
+
+**Key formatting rules**:
+1. Property name + `:` + newline (NOT space + `var(`)
+2. `var(` starts on next line, indented 2 spaces
+3. Each parameter indented 4 spaces from property start (2 spaces from `var(`)
+4. Closing `)` and `;` aligned with `var(` indentation
+5. For nested `var()` calls, if the full nested call fits on one line within 120 char limit, keep it on one line
+
+**This rule is enforced by stylelint** - running `npx stylelint --fix` will auto-format to this pattern
+
+**Detection**: stylelint will report `@stylistic/declaration-colon-newline-after` errors if this rule is violated
 
 ### Step 6: Lightdom CSS Assessment
 

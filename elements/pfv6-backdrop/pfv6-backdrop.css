@@ -6,17 +6,31 @@
 }
 
 :host {
+  /* Public CSS API - All overrideable from outside */
+  --pf-v6-c-backdrop--Position: fixed;
+  --pf-v6-c-backdrop--ZIndex:
+    var(
+      --pf-t--global--z-index--lg,
+      400
+    );
+  --pf-v6-c-backdrop--BackgroundColor:
+    var(
+      --pf-t--global--background--color--backdrop--default,
+      rgb(21 21 21 / 20%)
+    );
+
   display: contents;
 }
 
 #backdrop {
-  position: var(--pf-v6-c-backdrop--Position, fixed);
+  /* Consume public API from :host */
+  position: var(--pf-v6-c-backdrop--Position);
   inset-block-start: 0;
   inset-inline-start: 0;
-  z-index: var(--pf-v6-c-backdrop--ZIndex, var(--pf-t--global--z-index--lg, 400));
+  z-index: var(--pf-v6-c-backdrop--ZIndex);
   width: 100%;
   height: 100%;
-  background-color: var(--pf-v6-c-backdrop--BackgroundColor, var(--pf-t--global--background--color--backdrop--default, rgba(21, 21, 21, 0.2)));
+  background-color: var(--pf-v6-c-backdrop--BackgroundColor);
 
   /* Layout integration - properties passed through from parent layouts */
   order: var(--_layout-order);
@@ -25,6 +39,7 @@
   margin-block-end: var(--_layout-margin-block-end);
   margin-inline-start: var(--_layout-margin-inline-start);
   margin-inline-end: var(--_layout-margin-inline-end);
+
   /* Grid layout properties */
   grid-column-start: var(--_layout-grid-column-start);
   grid-column-end: var(--_layout-grid-column-end);

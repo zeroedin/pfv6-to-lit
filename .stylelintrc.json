@@ -4,15 +4,21 @@
     "@stylistic/stylelint-config"
   ],
   "plugins": [
-    "@stylistic/stylelint-plugin"
+    "@stylistic/stylelint-plugin",
+    "stylelint-order"
   ],
   "rules": {
     "custom-property-pattern": null,
     "selector-class-pattern": null,
     "selector-id-pattern": null,
     "color-hex-length": "long",
+    "declaration-block-no-redundant-longhand-properties": null,
     "@stylistic/block-opening-brace-newline-after": "always",
-    "@stylistic/block-closing-brace-newline-before": "always"
+    "@stylistic/block-closing-brace-newline-before": "always",
+    "order/order": [
+      "custom-properties",
+      "declarations"
+    ]
   }
 }
 

@@ -20,7 +20,7 @@
   /* Read modifier variables */
   --pf-v6-c-badge--m-read--BackgroundColor: var(--pf-t--global--color--nonstatus--gray--default, #e0e0e0);
   --pf-v6-c-badge--m-read--Color: var(--pf-t--global--text--color--nonstatus--on-gray--default, #151515);
-  --pf-v6-c-badge--m-read--BorderColor: var(--pf-t--global--border--color--high-contrast, rgba(255, 255, 255, 0));
+  --pf-v6-c-badge--m-read--BorderColor: var(--pf-t--global--border--color--high-contrast, rgb(255 255 255 / 0%));
 
   /* Unread modifier variables */
   --pf-v6-c-badge--m-unread--BackgroundColor: var(--pf-t--global--color--brand--default, #0066cc);

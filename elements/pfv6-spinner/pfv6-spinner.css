@@ -1,6 +1,6 @@
 /**
  * Spinner CSS - Shadow DOM styles
- * 
+ *
  * Translates PatternFly React Spinner CSS to LitElement Shadow DOM patterns.
  * Variable names and values derived from:
  * - .cache/patternfly/src/patternfly/components/Spinner/spinner.scss
@@ -14,41 +14,63 @@
 }
 
 :host {
+  /* Public CSS API - All overrideable from outside */
+  --pf-v6-c-spinner--diameter:
+    var(
+      --pf-t--global--icon--size--2xl,
+      3.5rem
+    );
+  --pf-v6-c-spinner--Width: var(--pf-v6-c-spinner--diameter);
+  --pf-v6-c-spinner--Height: var(--pf-v6-c-spinner--diameter);
+  --pf-v6-c-spinner--Color:
+    var(
+      --pf-t--global--icon--color--brand--default,
+      #0066cc
+    );
+  --pf-v6-c-spinner--AnimationDuration: 1.4s;
+  --pf-v6-c-spinner--AnimationTimingFunction: linear;
+  --pf-v6-c-spinner--StrokeWidth: 10;
+  --pf-v6-c-spinner__path--StrokeWidth: var(--pf-v6-c-spinner--StrokeWidth);
+  --pf-v6-c-spinner__path--AnimationTimingFunction: ease-in-out;
+  --pf-v6-c-spinner--m-sm--diameter:
+    var(
+      --pf-t--global--icon--size--md,
+      0.875rem
+    );
+  --pf-v6-c-spinner--m-md--diameter:
+    var(
+      --pf-t--global--icon--size--lg,
+      1rem
+    );
+  --pf-v6-c-spinner--m-lg--diameter:
+    var(
+      --pf-t--global--icon--size--xl,
+      1.5rem
+    );
+  --pf-v6-c-spinner--m-xl--diameter:
+    var(
+      --pf-t--global--icon--size--2xl,
+      3.5rem
+    );
+  --pf-v6-c-spinner--m-inline--diameter: 1em;
+
   display: inline-block;
 }
 
 /* Main spinner SVG element */
 #spinner {
-  /* CSS Variables - copied exactly from React source */
-  --pf-v6-c-spinner--diameter: var(--pf-t--global--icon--size--2xl, 3.5rem);
-  --pf-v6-c-spinner--Width: var(--pf-v6-c-spinner--diameter);
-  --pf-v6-c-spinner--Height: var(--pf-v6-c-spinner--diameter);
-  --pf-v6-c-spinner--Color: var(--pf-t--global--icon--color--brand--default, #0066cc);
-  --pf-v6-c-spinner--AnimationDuration: 1.4s;
-  --pf-v6-c-spinner--AnimationTimingFunction: linear;
-  --pf-v6-c-spinner--StrokeWidth: 10;
-
-  /* Path variables */
-  --pf-v6-c-spinner__path--StrokeWidth: var(--pf-v6-c-spinner--StrokeWidth);
-  --pf-v6-c-spinner__path--AnimationTimingFunction: ease-in-out;
-
-  /* Size modifier variables */
-  --pf-v6-c-spinner--m-sm--diameter: var(--pf-t--global--icon--size--md, 0.875rem);
-  --pf-v6-c-spinner--m-md--diameter: var(--pf-t--global--icon--size--lg, 1rem);
-  --pf-v6-c-spinner--m-lg--diameter: var(--pf-t--global--icon--size--xl, 1.5rem);
-  --pf-v6-c-spinner--m-xl--diameter: var(--pf-t--global--icon--size--2xl, 3.5rem);
-
-  /* Inline modifier variable */
-  --pf-v6-c-spinner--m-inline--diameter: 1em;
-
-  /* Display properties */
+  /* Consume public API from :host */
   display: block;
   width: var(--pf-v6-c-spinner--Width);
   height: var(--pf-v6-c-spinner--Height);
   overflow: hidden;
-  animation: pf-v6-c-spinner-animation-rotate calc(var(--pf-v6-c-spinner--AnimationDuration) * 2) var(--pf-v6-c-spinner--AnimationTimingFunction) infinite;
+  animation:
+    pf-v6-c-spinner-animation-rotate
+    calc(var(--pf-v6-c-spinner--AnimationDuration) * 2)
+    var(--pf-v6-c-spinner--AnimationTimingFunction)
+    infinite;
 
-  /* Size modifiers - use simple class names from classMap() */
+  /* Modifier classes - public variable overrides */
   &.inline {
     --pf-v6-c-spinner--diameter: var(--pf-v6-c-spinner--m-inline--diameter);
   }
@@ -115,4 +137,3 @@
     transform: rotate(720deg);
   }
 }
-

@@ -121,10 +121,15 @@ The following React components are **not compatible with web components** and mu
 
 ### Styling Components
 - **Content**
+- **Title**
 
-**Reason**: Content is a CSS-only styling component that uses component classes (`.pf-v6-c-content`, `.pf-v6-c-content--{element}`). It wraps or styles semantic HTML elements and is not compatible with custom element encapsulation. Content provides styling for typography and is already available via PatternFly CSS.
+**Reason**: Styling components use CSS classes to style semantic HTML elements and are not compatible with custom element encapsulation.
+- **Content**: Uses `.pf-v6-c-content` and `.pf-v6-c-content--{element}` classes to style typography (headings, paragraphs, lists, etc.)
+- **Title**: Uses `.pf-v6-c-title` with size modifiers (`.pf-m-md`, `.pf-m-xl`, etc.) to style heading elements while allowing semantic/visual decoupling
 
-**Detection**: The `find-blockers.ts` script filters these out based on `type === 'layout'` or `name === 'Content'`.
+These are already available via PatternFly CSS and should be used as semantic HTML with CSS classes.
+
+**Detection**: The `find-blockers.ts` script filters these out based on `type === 'layout'` or `name === 'Content'` or `name === 'Title'`.
 
 ## Implementation Notes
 
@@ -138,7 +143,7 @@ npx tsx scripts/find-blockers.ts
 **ALWAYS**:
 - Use the cached `react-dependency-tree.json` file
 - Filter out layouts (`type === 'layout'`)
-- Filter out styling components (`name === 'Content'`)
+- Filter out styling components (`name === 'Content'` or `name === 'Title'`)
 - Filter out converted components (`converted === true`)
 - Calculate blocker counts accurately
 - Provide clear reasoning for the recommendation
@@ -146,7 +151,7 @@ npx tsx scripts/find-blockers.ts
 
 **NEVER**:
 - Recommend layout components
-- Recommend styling components (Content)
+- Recommend styling components (Content, Title)
 - Recommend already-converted components
 - Guess at dependencies - use the cached data
 - Skip calculating impact scores

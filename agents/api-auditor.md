@@ -192,14 +192,14 @@ someFlag: 'true' | 'false' = 'false';
 ### Check Attribute Names Match React Props
 
 ```typescript
-// React: isCompact
-// ✅ CORRECT
-@property({ type: String, attribute: 'is-compact' })
-isCompact: 'true' | 'false' = 'false';
+// React: isCompact?: boolean
+// ✅ CORRECT - Boolean type for boolean React prop
+@property({ type: Boolean, reflect: true, attribute: 'is-compact' })
+isCompact = false;
 
 // ❌ WRONG - Using BEM naming
-@property({ type: String, attribute: 'pf-m-compact' })
-pfMCompact: 'true' | 'false' = 'false';
+@property({ type: Boolean, reflect: true, attribute: 'pf-m-compact' })
+pfMCompact = false;
 ```
 
 ### Check for Array/Object Properties (Anti-Pattern)
@@ -920,17 +920,17 @@ render() {
 
 ```typescript
 // ❌ WRONG - BEM naming in component API
-@property({ type: String, attribute: 'pf-m-compact' })
-pfMCompact: 'true' | 'false' = 'false';
+@property({ type: Boolean, reflect: true, attribute: 'pf-m-compact' })
+pfMCompact = false;
 
 // ✅ CORRECT - React prop name in component API
-@property({ type: String, attribute: 'is-compact' })
-isCompact: 'true' | 'false' = 'false';
+@property({ type: Boolean, reflect: true, attribute: 'is-compact' })
+isCompact = false;
 
 // ❌ WRONG - BEM class in CSS API
 render() {
   const classes = {
-    'pf-m-compact': this.isCompact === 'true'
+    'pf-m-compact': this.isCompact
   };
   return html`<div class=${classMap(classes)}></div>`;
 }
@@ -938,7 +938,7 @@ render() {
 // ✅ CORRECT - Simple class name in CSS API
 render() {
   const classes = {
-    compact: this.isCompact === 'true'
+    compact: this.isCompact
   };
   return html`<div class=${classMap(classes)}></div>`;
 }
