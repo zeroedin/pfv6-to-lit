@@ -48,6 +48,8 @@ When invoked with a component name, perform comprehensive validation of all CSS 
 
 ## Your Audit Process
 
+Execute ALL steps in order. Do not skip Step 3.7 (JSDoc CSS API Validation).
+
 ### Step 1: Locate and Read Files
 
 **React Source Files**:
@@ -280,6 +282,201 @@ Lit:    padding: var(--pf-t--global--spacer--sm, 8px);
 React:  --pf-v6-c-card--BackgroundColor: var(--pf-t--global--background--color--primary--default);
 Lit:    --pf-v6-c-card--BackgroundColor: var(--pf-t--global--background--color--primary--default);
 ✅ MATCH - No fallback needed (already a token)
+```
+
+### Step 3.7: JSDoc CSS API Validation (CRITICAL)
+
+**Validate that JSDoc `@cssprop` and `@csspart` annotations match the actual CSS.**
+
+This check runs AFTER css-writer creates CSS files, ensuring TypeScript JSDoc stays in sync with CSS.
+
+#### Process
+
+1. **Read TypeScript component files**:
+   - Main: `elements/pfv6-{component}/pfv6-{component}.ts`
+   - Sub-components: `elements/pfv6-{component}/pfv6-{component}-*.ts`
+
+2. **Extract JSDoc annotations**:
+   - Find all `@cssprop` declarations (e.g., `@cssprop --pf-v6-c-card--BorderRadius - Card border radius`)
+   - Find all `@csspart` declarations (e.g., `@csspart header - Card header element`)
+
+3. **Read corresponding CSS files**:
+   - Main: `elements/pfv6-{component}/pfv6-{component}.css`
+   - Sub-components: `elements/pfv6-{component}/pfv6-{component}-*.css`
+
+4. **Extract actual CSS variables and parts**:
+   - CSS variables: All `--pf-v6-c-{component}--*` declarations in `:host` blocks
+   - CSS parts: All `part="..."` attributes in component templates (requires reading render() method)
+
+5. **Compare and validate**:
+
+**For `@cssprop` validation**:
+- ✅ Every CSS variable in `:host` has matching `@cssprop` in JSDoc
+- ✅ Every `@cssprop` in JSDoc has matching CSS variable in `:host`
+- ✅ Variable names match EXACTLY (character-for-character)
+- ❌ ERROR: `@cssprop` with wrong variable name pattern
+- ❌ ERROR: `@cssprop` for non-existent CSS variable
+- ❌ ERROR: CSS variable missing `@cssprop` documentation
+
+**Common mistakes to detect**:
+
+```typescript
+// ❌ WRONG - Modifier placement incorrect
+/**
+ * @cssprop --pf-v6-c-helper-text__item--m-warning__icon--Color - Warning icon color
+ */
+
+// Actual CSS variable is:
+// --pf-v6-c-helper-text__item-icon--m-warning--Color
+
+// ✅ CORRECT - Matches CSS exactly
+/**
+ * @cssprop --pf-v6-c-helper-text__item-icon--m-warning--Color - Warning icon color
+ */
+```
+
+**Pattern variations to check**:
+- BEM element + modifier: `__element--m-modifier--Property` (modifier AFTER element)
+- NOT: `__element--m-modifier__sub--Property` (modifier should not break element chain)
+- NOT: `--m-modifier__element--Property` (modifier should not come before element)
+
+**For `@csspart` validation** (if applicable):
+- ✅ Every `part="..."` in template has matching `@csspart` in JSDoc
+- ✅ Every `@csspart` in JSDoc has matching `part="..."` in template
+- ✅ Part names match EXACTLY
+- ❌ ERROR: `@csspart` for non-existent part
+- ❌ ERROR: Template part missing `@csspart` documentation
+
+#### Validation Algorithm
+
+**Pseudo-code**:
+```
+1. For each TypeScript file:
+   a. Extract @cssprop names from JSDoc
+   b. Read corresponding CSS file
+   c. Extract --pf-v6-c-{component}--* variables from :host block
+
+   d. For each @cssprop:
+      - Check if matching CSS variable exists
+      - If not found: ERROR "JSDoc @cssprop documents non-existent variable"
+
+   e. For each CSS variable in :host:
+      - Check if matching @cssprop exists
+      - If not found: ERROR "CSS variable missing @cssprop documentation"
+
+   f. Compare each matching pair:
+      - If names don't match exactly: ERROR "Variable name mismatch"
+
+2. For each TypeScript file (if component uses parts):
+   a. Extract @csspart names from JSDoc
+   b. Parse render() method for part="..." attributes
+   c. Extract part names from template
+
+   d. For each @csspart:
+      - Check if matching part exists in template
+      - If not found: ERROR "JSDoc @csspart documents non-existent part"
+
+   e. For each part in template:
+      - Check if matching @csspart exists
+      - If not found: ERROR "Template part missing @csspart documentation"
+```
+
+#### Report Format
+
+```markdown
+### 🔍 JSDoc CSS API Validation
+
+**Files Checked**:
+- `elements/pfv6-{component}/pfv6-{component}.ts`
+- `elements/pfv6-{component}/pfv6-{component}.css`
+
+**@cssprop Validation**:
+
+✅ **PASS** - All CSS variables documented correctly
+- 12 CSS variables in :host
+- 12 @cssprop annotations in JSDoc
+- All names match exactly
+
+OR
+
+❌ **FAIL** - JSDoc CSS variable mismatches found
+
+**Issues**:
+
+1. **Variable name mismatch** in `pfv6-helper-text-item.ts`
+   - JSDoc: `--pf-v6-c-helper-text__item--m-warning__icon--Color`
+   - CSS: `--pf-v6-c-helper-text__item-icon--m-warning--Color`
+   - Line: 24
+   - Fix: Update JSDoc to match CSS exactly (modifier placement)
+
+2. **Undocumented CSS variable** in `pfv6-{component}.css`
+   - Variable: `--pf-v6-c-card--BoxShadow`
+   - Location: `:host` block, line 15
+   - Fix: Add `@cssprop --pf-v6-c-card--BoxShadow - Card box shadow` to JSDoc
+
+3. **Non-existent variable documented** in `pfv6-{component}.ts`
+   - JSDoc: `--pf-v6-c-card--OldVariable`
+   - Line: 18
+   - Fix: Remove this @cssprop or add variable to CSS
+
+**@csspart Validation**:
+
+✅ **PASS** - All CSS parts documented correctly
+- 3 parts in template
+- 3 @csspart annotations in JSDoc
+- All names match exactly
+
+OR
+
+❌ **FAIL** - CSS parts not used by this component
+- No `part="..."` attributes found in template
+- No validation needed
+
+OR
+
+❌ **FAIL** - JSDoc CSS part mismatches found
+
+**Issues**:
+
+1. **Undocumented part** in template
+   - Part: `header`
+   - Location: render() method
+   - Fix: Add `@csspart header - Card header element` to JSDoc
+
+2. **Non-existent part documented** in JSDoc
+   - JSDoc: `@csspart footer - Card footer`
+   - Line: 22
+   - Fix: Remove this @csspart or add `part="footer"` to template
+```
+
+#### Key Validation Points
+
+**MUST CHECK**:
+- [ ] All CSS variables in `:host` have `@cssprop` documentation
+- [ ] All `@cssprop` annotations reference existing CSS variables
+- [ ] Variable names match EXACTLY (including BEM modifier placement)
+- [ ] Common pattern mistakes detected (e.g., `__item--m-variant__sub` vs `__item-sub--m-variant`)
+- [ ] All template `part="..."` attributes have `@csspart` documentation
+- [ ] All `@csspart` annotations reference existing parts
+
+**REPORT AS ERROR**:
+- ❌ `@cssprop` with wrong variable name pattern
+- ❌ `@cssprop` for non-existent CSS variable
+- ❌ CSS variable missing `@cssprop` documentation
+- ❌ Variable name mismatch between JSDoc and CSS
+- ❌ `@csspart` for non-existent template part
+- ❌ Template part missing `@csspart` documentation
+
+**Common Pattern Mistakes**:
+```
+❌ WRONG: --pf-v6-c-helper-text__item--m-warning__icon--Color
+✅ RIGHT: --pf-v6-c-helper-text__item-icon--m-warning--Color
+
+❌ WRONG: --pf-v6-c-card__body--m-compact__padding--Top
+✅ RIGHT: --pf-v6-c-card__body--m-compact--padding--Top
+
+Pattern: __element-sub--m-modifier--Property
+         NOT __element--m-modifier__sub--Property
 ```
 
 ### Step 3.5: Baseline Feature Validation (CRITICAL)
@@ -902,6 +1099,8 @@ Provide a structured audit report:
 ### ✅ Passed Checks
 - Box-sizing reset present in all CSS files
 - All variable names match React CSS exactly
+- JSDoc @cssprop annotations match CSS variables exactly
+- JSDoc @csspart annotations match template parts exactly
 - No forbidden selectors detected
 - CSS nesting follows recommended order
 - Lightdom CSS properly scoped
@@ -919,8 +1118,14 @@ Provide a structured audit report:
    - Line: 8
    - Action: Change to match React exactly
 
+3. **JSDoc CSS variable mismatch** in `pfv6-{component}.ts`
+   - JSDoc: `--pf-v6-c-helper-text__item--m-warning__icon--Color`
+   - CSS: `--pf-v6-c-helper-text__item-icon--m-warning--Color`
+   - Line: 24
+   - Action: Update JSDoc to match CSS exactly (modifier placement)
+
 #### Warnings (Should Fix)
-3. **Forbidden selector** in `pfv6-{component}.css`
+4. **Forbidden selector** in `pfv6-{component}.css`
    - Found: `:host([compact])`
    - Use: `classMap({ compact: this.compact })` instead
    - Line: 45
@@ -1021,8 +1226,9 @@ Provide a structured audit report:
 - Baseline info: https://web.dev/baseline
 
 ### Summary
-- Critical Issues: 2
+- Critical Issues: 3
 - Warnings: 1
+- JSDoc Validation: ❌ FAIL (1 variable name mismatch)
 - Lightdom CSS: Required but missing (2 patterns require it)
 - Baseline Compliance: ✅ PASS (All features Baseline 2024 or earlier)
 ```
@@ -1035,6 +1241,8 @@ Provide a structured audit report:
 - [ ] No elaborate CSS for components that have no React CSS
 - [ ] Simple class names used (`compact`, not `pf-m-compact`)
 - [ ] Variable names match React CSS exactly
+- [ ] JSDoc `@cssprop` annotations match CSS variables exactly
+- [ ] JSDoc `@csspart` annotations match template parts exactly
 - [ ] CSS nesting uses `&` ampersand pattern
 - [ ] Lightdom CSS properly scoped to component tag
 - [ ] RTL uses `:dir()` selector (not `:host-context()`)
@@ -1052,7 +1260,11 @@ Provide a structured audit report:
 - ❌ CSS rules for components with no React CSS
 - ❌ BEM classes in code (`.pf-m-*`)
 - ❌ Unscoped lightdom CSS selectors
-- ❌ `@cssprop` JSDoc for non-existent variables
+- ❌ JSDoc `@cssprop` for non-existent variables
+- ❌ JSDoc `@cssprop` with wrong variable name pattern
+- ❌ CSS variable missing `@cssprop` documentation
+- ❌ JSDoc `@csspart` for non-existent parts
+- ❌ Template part missing `@csspart` documentation
 - ❌ Non-Baseline (Limited availability) features
 - ❌ Guessed fallback values (not from tokens)
 

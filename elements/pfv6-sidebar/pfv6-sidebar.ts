@@ -12,6 +12,8 @@ import styles from './pfv6-sidebar.css';
 /**
  * Sidebar component - A layout component for displaying content alongside a panel.
  *
+ * @alias Sidebar
+ *
  * @slot - Default slot for sidebar content (typically pfv6-sidebar-content and pfv6-sidebar-panel)
  */
 @customElement('pfv6-sidebar')

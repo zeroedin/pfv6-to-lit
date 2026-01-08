@@ -12,6 +12,8 @@ import styles from './pfv6-brand.css';
  * Brand component for displaying logos and brand imagery.
  * Supports both simple images and responsive picture elements with source elements.
  *
+ * @alias Brand
+ *
  * @example
  * ```html
  * <!-- Simple image -->

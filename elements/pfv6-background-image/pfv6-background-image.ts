@@ -8,6 +8,8 @@ import styles from './pfv6-background-image.css';
  *
  * A component for displaying a fixed background image with PatternFly styling.
  *
+ * @alias Background Image
+ *
  * @slot - Not used (component does not accept children)
  *
  * @csspart container - The background image container element

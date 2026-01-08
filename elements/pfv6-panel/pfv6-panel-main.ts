@@ -7,9 +7,13 @@ import styles from './pfv6-panel-main.css';
 /**
  * Panel main component - Contains the main content area of a panel.
  *
+ * @alias Panel Main
  * @slot - Default slot for main content (typically PanelMainBody)
  *
  * @csspart container - The container element
+ *
+ * @cssprop --pf-v6-c-panel__main--MaxHeight - Maximum height of the main area
+ * @cssprop --pf-v6-c-panel__main--Overflow - Overflow behavior of the main area
  */
 @customElement('pfv6-panel-main')
 export class Pfv6PanelMain extends LitElement {

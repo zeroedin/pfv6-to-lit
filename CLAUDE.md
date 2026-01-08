@@ -173,7 +173,7 @@ Expected response includes:
 - Tool name: `Task`
 - subagent_type: `'style-components'`
 - description: `'Translate styling components in pfv6-{component} demos'`
-- prompt: `'Translate all React styling components (Content, Title) in pfv6-{component} demo files to semantic HTML with PatternFly CSS classes. Replace TODO placeholders with proper semantic elements and .pf-v6-c-* classes.'`
+- prompt: `'Translate all React styling components (Content, Title, Form, DescriptionList) in pfv6-{component} demo files to semantic HTML with PatternFly CSS classes. Replace TODO placeholders with proper semantic elements and .pf-v6-c-* classes.'`
 
 **If styling components NOT detected**, skip this step and proceed to Step 9.
 

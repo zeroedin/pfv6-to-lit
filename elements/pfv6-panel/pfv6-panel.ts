@@ -14,9 +14,34 @@ import styles from './pfv6-panel.css';
 /**
  * Panel component - A container that provides structured content with optional header, main content area, and footer.
  *
+ * @alias Panel
+ *
  * @slot - Default slot for panel content (typically PanelHeader, PanelMain, PanelFooter)
  *
  * @csspart container - The container element
+ *
+ * @cssprop --pf-v6-c-panel--Width - Width of the panel
+ * @cssprop --pf-v6-c-panel--MinWidth - Minimum width of the panel
+ * @cssprop --pf-v6-c-panel--MaxWidth - Maximum width of the panel
+ * @cssprop --pf-v6-c-panel--BackgroundColor - Background color of the panel
+ * @cssprop --pf-v6-c-panel--BoxShadow - Box shadow of the panel
+ * @cssprop --pf-v6-c-panel--BorderRadius - Border radius of the panel
+ * @cssprop --pf-v6-c-panel--before--BorderWidth - Border width of the ::before pseudo-element
+ * @cssprop --pf-v6-c-panel--before--BorderColor - Border color of the ::before pseudo-element
+ * @cssprop --pf-v6-c-panel--m-secondary--BackgroundColor - Background color for secondary variant
+ * @cssprop --pf-v6-c-panel--m-secondary--before--BorderWidth - Border width for secondary variant
+ * @cssprop --pf-v6-c-panel--m-bordered--before--BorderWidth - Border width for bordered variant
+ * @cssprop --pf-v6-c-panel--m-bordered--before--BorderColor - Border color for bordered variant
+ * @cssprop --pf-v6-c-panel--m-raised--BoxShadow - Box shadow for raised variant
+ * @cssprop --pf-v6-c-panel--m-raised--BackgroundColor - Background color for raised variant
+ * @cssprop --pf-v6-c-panel--m-raised--before--BorderWidth - Border width for raised variant
+ * @cssprop --pf-v6-c-panel--m-scrollable__main--MaxHeight - Maximum height for scrollable main area
+ * @cssprop --pf-v6-c-panel--m-scrollable__main--Overflow - Overflow behavior for scrollable main area
+ * @cssprop --pf-v6-c-panel--m-scrollable__footer--BoxShadow - Box shadow for scrollable footer
+ * @cssprop --pf-v6-c-panel--m-scrollable__footer--PaddingBlockStart - Block start padding for scrollable footer
+ * @cssprop --pf-v6-c-panel--m-scrollable__footer--PaddingBlockEnd - Block end padding for scrollable footer
+ * @cssprop --pf-v6-c-panel--m-scrollable__footer--BorderColor - Border color for scrollable footer
+ * @cssprop --pf-v6-c-panel--m-scrollable__footer--BorderWidth - Border width for scrollable footer
  */
 @customElement('pfv6-panel')
 export class Pfv6Panel extends LitElement {

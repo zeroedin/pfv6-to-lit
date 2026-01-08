@@ -87,27 +87,6 @@
   display: block;
 }
 
-#container {
-  /* Consume public API from :host */
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--pf-v6-c-radio--GridGap);
-  align-items: baseline;
-  accent-color: var(--pf-v6-c-radio--AccentColor);
-
-  /* Standalone modifier - no label */
-  &.standalone {
-    display: inline-grid;
-    grid-template-columns: auto;
-    min-height: var(--pf-v6-c-radio--m-standalone--MinHeight);
-
-    & .input {
-      align-self: center;
-      transform: none;
-    }
-  }
-}
-
 /* Radio input element */
 .input {
   align-self: start;
@@ -131,6 +110,36 @@
   }
 }
 
+#container {
+  /* Consume public API from :host */
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--pf-v6-c-radio--GridGap);
+  align-items: baseline;
+  accent-color: var(--pf-v6-c-radio--AccentColor);
+
+  /* Standalone modifier - no label */
+  &.standalone {
+    display: inline-grid;
+    grid-template-columns: auto;
+    min-height: var(--pf-v6-c-radio--m-standalone--MinHeight);
+
+    & .input {
+      align-self: center;
+      transform: none;
+    }
+  }
+
+  /* Label wrapper behavior when container is a label element */
+  &:is(label) {
+    cursor: pointer;
+
+    &.disabled {
+      cursor: not-allowed;
+    }
+  }
+}
+
 /* Label element (label or span depending on isLabelWrapped) */
 label,
 span:not(.description, .body) {
@@ -145,17 +154,6 @@ span:not(.description, .body) {
     --pf-v6-c-radio__label--Color: var(--pf-v6-c-radio__label--disabled--Color);
 
     cursor: not-allowed;
-  }
-}
-
-/* Label wrapper behavior when container is a label element */
-#container {
-  &:is(label) {
-    cursor: pointer;
-
-    &.disabled {
-      cursor: not-allowed;
-    }
   }
 }
 

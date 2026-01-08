@@ -1,0 +1,21 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* CSS variables */
+  --pf-v6-c-helper-text--Gap: var(--pf-t--global--spacer--xs, 0.25rem);
+  --pf-v6-c-helper-text--FontSize: var(--pf-t--global--font--size--body--sm, 0.75rem);
+
+  /* Layout moved to host for ElementInternals ARIA support */
+  display: grid;
+  gap: var(--pf-v6-c-helper-text--Gap);
+  font-size: var(--pf-v6-c-helper-text--FontSize);
+}
+
+#container {
+  /* Use display: contents to pass through grid layout */
+  display: contents;
+}

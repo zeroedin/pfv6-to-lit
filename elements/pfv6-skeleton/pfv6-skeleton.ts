@@ -10,7 +10,7 @@ import styles from './pfv6-skeleton.css';
  * Skeleton is a type of loading state that allows you to expose content incrementally.
  * For content that may take a long time to load, use a progress bar in place of a skeleton.
  *
- * @element pfv6-skeleton
+ * @alias Skeleton
  *
  * @cssprop --pf-c-skeleton--BackgroundColor - Background color of the skeleton
  * @cssprop --pf-c-skeleton--Width - Width of the skeleton

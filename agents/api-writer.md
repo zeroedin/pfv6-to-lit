@@ -1215,6 +1215,14 @@ Use the Write tool to create the complete TypeScript component file with:
    - `render()` method with complete template
 
 4. **JSDoc comments** for all public API
+   - Use `@alias` for component name without the tag name prefix (e.g., `pfv6-card` -> `Card`)
+   - Use `@summary` for a short description of the component
+   - Use `@slot` for slots
+   - Use `@cssprop` for CSS properties
+   - Use `@csspart` for CSS parts
+   - Use `@fires` for events
+   - DO NOT use non-existent JSDoc tags
+
 
 **Example structure**:
 ```typescript

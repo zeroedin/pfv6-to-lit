@@ -9,14 +9,25 @@ import styles from './pfv6-avatar.css';
 /**
  * An avatar is a visual representation of a user or object.
  *
- * @element pfv6-avatar
+ * @alias Avatar
  *
  * @slot - Not applicable (renders an img element)
  *
  * @cssprop --pf-v6-c-avatar--Width - Width of the avatar
+ * @cssprop --pf-v6-c-avatar--Height - Height of the avatar
  * @cssprop --pf-v6-c-avatar--BorderRadius - Border radius of the avatar
  * @cssprop --pf-v6-c-avatar--BorderWidth - Border width when bordered
  * @cssprop --pf-v6-c-avatar--BorderColor - Border color when bordered
+ * @cssprop --pf-v6-c-avatar--m-sm--Width - Width of small avatar
+ * @cssprop --pf-v6-c-avatar--m-sm--Height - Height of small avatar
+ * @cssprop --pf-v6-c-avatar--m-md--Width - Width of medium avatar
+ * @cssprop --pf-v6-c-avatar--m-md--Height - Height of medium avatar
+ * @cssprop --pf-v6-c-avatar--m-lg--Width - Width of large avatar
+ * @cssprop --pf-v6-c-avatar--m-lg--Height - Height of large avatar
+ * @cssprop --pf-v6-c-avatar--m-xl--Width - Width of extra-large avatar
+ * @cssprop --pf-v6-c-avatar--m-xl--Height - Height of extra-large avatar
+ * @cssprop --pf-v6-c-avatar--m-bordered--BorderColor - Border color modifier
+ * @cssprop --pf-v6-c-avatar--m-bordered--BorderWidth - Border width modifier
  */
 @customElement('pfv6-avatar')
 export class Pfv6Avatar extends LitElement {

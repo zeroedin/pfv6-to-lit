@@ -8,13 +8,26 @@ import styles from './pfv6-spinner.css';
 /**
  * Spinner component for indicating loading state.
  *
+ * @alias Spinner
+ *
  * A visual loading indicator that displays an animated circular spinner.
  * Supports preset sizes (sm, md, lg, xl) or custom diameter via CSS variable.
  * When inline, the spinner inherits the current text font size.
  *
  * @cssprop --pf-v6-c-spinner--diameter - Custom diameter of the spinner
+ * @cssprop --pf-v6-c-spinner--Width - Width of the spinner (defaults to diameter)
+ * @cssprop --pf-v6-c-spinner--Height - Height of the spinner (defaults to diameter)
  * @cssprop --pf-v6-c-spinner--Color - Color of the spinner stroke
  * @cssprop --pf-v6-c-spinner--AnimationDuration - Duration of one animation cycle
+ * @cssprop --pf-v6-c-spinner--AnimationTimingFunction - Timing function for rotation animation
+ * @cssprop --pf-v6-c-spinner--StrokeWidth - Stroke width of the spinner circle
+ * @cssprop --pf-v6-c-spinner__path--StrokeWidth - Stroke width of the spinner path
+ * @cssprop --pf-v6-c-spinner__path--AnimationTimingFunction - Timing function for path animation
+ * @cssprop --pf-v6-c-spinner--m-sm--diameter - Diameter for small spinner
+ * @cssprop --pf-v6-c-spinner--m-md--diameter - Diameter for medium spinner
+ * @cssprop --pf-v6-c-spinner--m-lg--diameter - Diameter for large spinner
+ * @cssprop --pf-v6-c-spinner--m-xl--diameter - Diameter for extra-large spinner
+ * @cssprop --pf-v6-c-spinner--m-inline--diameter - Diameter for inline spinner
  */
 @customElement('pfv6-spinner')
 export class Pfv6Spinner extends LitElement {
