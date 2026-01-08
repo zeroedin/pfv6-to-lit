@@ -20,8 +20,10 @@ async function waitForFullLoad(page: Page): Promise<void> {
   await page.evaluate(() => {
     const images = Array.from(document.images);
     return Promise.all(
-      images.map(img => img.complete ? Promise.resolve() :
-        new Promise(resolve => { img.onload = img.onerror = resolve; })
+      images.map(img => img.complete ? Promise.resolve()
+        : new Promise(resolve => {
+          img.addEventListener('load', img.onerror = resolve);
+        })
       )
     );
   });
@@ -47,7 +49,7 @@ async function applyCssOverride(
   value: string
 ): Promise<void> {
   await page.addStyleTag({
-    content: `${selector} { ${cssVar}: ${value}; }`
+    content: `${selector} { ${cssVar}: ${value}; }`,
   });
 }
 
@@ -61,7 +63,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'basic',
-    description: 'Base inset spacing for sidebar'
+    description: 'Base inset spacing for sidebar',
   },
   {
     name: '--pf-v6-c-sidebar--xl--inset',
@@ -70,7 +72,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'basic',
-    description: 'XL breakpoint inset spacing'
+    description: 'XL breakpoint inset spacing',
   },
 
   // Border properties
@@ -81,7 +83,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '10px',
     demo: 'border',
-    description: 'Base border width'
+    description: 'Base border width',
   },
   {
     name: '--pf-v6-c-sidebar--BorderColor--base',
@@ -90,7 +92,7 @@ const cssApiTests = [
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
     demo: 'border',
-    description: 'Base border color'
+    description: 'Base border color',
   },
 
   // Panel padding properties
@@ -101,7 +103,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'basic',
-    description: 'Panel padding block start'
+    description: 'Panel padding block start',
   },
   {
     name: '--pf-v6-c-sidebar__panel--PaddingInlineEnd',
@@ -110,7 +112,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'basic',
-    description: 'Panel padding inline end'
+    description: 'Panel padding inline end',
   },
   {
     name: '--pf-v6-c-sidebar__panel--PaddingBlockEnd',
@@ -119,7 +121,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'basic',
-    description: 'Panel padding block end'
+    description: 'Panel padding block end',
   },
   {
     name: '--pf-v6-c-sidebar__panel--PaddingInlineStart',
@@ -128,7 +130,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'basic',
-    description: 'Panel padding inline start'
+    description: 'Panel padding inline start',
   },
 
   // Panel order
@@ -139,7 +141,7 @@ const cssApiTests = [
     type: 'number',
     testValue: '999',
     demo: 'basic',
-    description: 'Panel flex order'
+    description: 'Panel flex order',
   },
 
   // Panel padding modifier
@@ -150,7 +152,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'padding-panel',
-    description: 'Panel padding modifier block start'
+    description: 'Panel padding modifier block start',
   },
   {
     name: '--pf-v6-c-sidebar__panel--m-padding--PaddingInlineEnd',
@@ -159,7 +161,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'padding-panel',
-    description: 'Panel padding modifier inline end'
+    description: 'Panel padding modifier inline end',
   },
   {
     name: '--pf-v6-c-sidebar__panel--m-padding--PaddingBlockEnd',
@@ -168,7 +170,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'padding-panel',
-    description: 'Panel padding modifier block end'
+    description: 'Panel padding modifier block end',
   },
   {
     name: '--pf-v6-c-sidebar__panel--m-padding--PaddingInlineStart',
@@ -177,7 +179,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'padding-panel',
-    description: 'Panel padding modifier inline start'
+    description: 'Panel padding modifier inline start',
   },
 
   // Content padding properties
@@ -188,7 +190,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'basic',
-    description: 'Content padding block start'
+    description: 'Content padding block start',
   },
   {
     name: '--pf-v6-c-sidebar__content--PaddingInlineEnd',
@@ -197,7 +199,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'basic',
-    description: 'Content padding inline end'
+    description: 'Content padding inline end',
   },
   {
     name: '--pf-v6-c-sidebar__content--PaddingBlockEnd',
@@ -206,7 +208,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'basic',
-    description: 'Content padding block end'
+    description: 'Content padding block end',
   },
   {
     name: '--pf-v6-c-sidebar__content--PaddingInlineStart',
@@ -215,7 +217,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'basic',
-    description: 'Content padding inline start'
+    description: 'Content padding inline start',
   },
 
   // Content order
@@ -226,7 +228,7 @@ const cssApiTests = [
     type: 'number',
     testValue: '999',
     demo: 'basic',
-    description: 'Content flex order'
+    description: 'Content flex order',
   },
 
   // Content padding modifier
@@ -237,7 +239,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'padding-content',
-    description: 'Content padding modifier block start'
+    description: 'Content padding modifier block start',
   },
   {
     name: '--pf-v6-c-sidebar__content--m-padding--PaddingInlineEnd',
@@ -246,7 +248,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'padding-content',
-    description: 'Content padding modifier inline end'
+    description: 'Content padding modifier inline end',
   },
   {
     name: '--pf-v6-c-sidebar__content--m-padding--PaddingBlockEnd',
@@ -255,7 +257,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'padding-content',
-    description: 'Content padding modifier block end'
+    description: 'Content padding modifier block end',
   },
   {
     name: '--pf-v6-c-sidebar__content--m-padding--PaddingInlineStart',
@@ -264,7 +266,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'padding-content',
-    description: 'Content padding modifier inline start'
+    description: 'Content padding modifier inline start',
   },
 
   // Main flex properties
@@ -275,7 +277,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'row',
     demo: 'basic',
-    description: 'Main flex direction'
+    description: 'Main flex direction',
   },
   {
     name: '--pf-v6-c-sidebar__main--md--FlexDirection',
@@ -284,7 +286,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'column',
     demo: 'basic',
-    description: 'Main flex direction at md breakpoint'
+    description: 'Main flex direction at md breakpoint',
   },
   {
     name: '--pf-v6-c-sidebar__main--AlignItems',
@@ -293,7 +295,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'flex-start',
     demo: 'basic',
-    description: 'Main align items'
+    description: 'Main align items',
   },
   {
     name: '--pf-v6-c-sidebar__main--md--AlignItems',
@@ -302,7 +304,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'stretch',
     demo: 'basic',
-    description: 'Main align items at md breakpoint'
+    description: 'Main align items at md breakpoint',
   },
   {
     name: '--pf-v6-c-sidebar__main--child--MarginBlockStart',
@@ -311,7 +313,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'basic',
-    description: 'Main child margin block start'
+    description: 'Main child margin block start',
   },
 
   // Gutter
@@ -322,7 +324,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'panel-right-gutter',
-    description: 'Gutter gap'
+    description: 'Gutter gap',
   },
 
   // Border modifier
@@ -333,7 +335,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'block',
     demo: 'border',
-    description: 'Border before display'
+    description: 'Border before display',
   },
   {
     name: '--pf-v6-c-sidebar__main--m-border--before--md--Display',
@@ -342,7 +344,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'none',
     demo: 'border',
-    description: 'Border before display at md breakpoint'
+    description: 'Border before display at md breakpoint',
   },
   {
     name: '--pf-v6-c-sidebar__main--m-border--before--BorderWidth',
@@ -351,7 +353,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '10px',
     demo: 'border',
-    description: 'Border before width'
+    description: 'Border before width',
   },
   {
     name: '--pf-v6-c-sidebar__main--m-border--before--BorderColor',
@@ -360,7 +362,7 @@ const cssApiTests = [
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
     demo: 'border',
-    description: 'Border before color'
+    description: 'Border before color',
   },
 
   // Panel right modifier
@@ -371,7 +373,7 @@ const cssApiTests = [
     type: 'number',
     testValue: '999',
     demo: 'panel-right-gutter',
-    description: 'Panel right order'
+    description: 'Panel right order',
   },
   {
     name: '--pf-v6-c-sidebar--m-panel-right__panel--md--Order',
@@ -380,7 +382,7 @@ const cssApiTests = [
     type: 'number',
     testValue: '999',
     demo: 'panel-right-gutter',
-    description: 'Panel right order at md breakpoint'
+    description: 'Panel right order at md breakpoint',
   },
   {
     name: '--pf-v6-c-sidebar--m-panel-right__content--md--Order',
@@ -389,7 +391,7 @@ const cssApiTests = [
     type: 'number',
     testValue: '999',
     demo: 'panel-right-gutter',
-    description: 'Panel right content order at md breakpoint'
+    description: 'Panel right content order at md breakpoint',
   },
 
   // Stack modifier
@@ -400,7 +402,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'row',
     demo: 'stack',
-    description: 'Stack main flex direction'
+    description: 'Stack main flex direction',
   },
   {
     name: '--pf-v6-c-sidebar--m-stack__main--AlignItems',
@@ -409,7 +411,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'flex-start',
     demo: 'stack',
-    description: 'Stack main align items'
+    description: 'Stack main align items',
   },
   {
     name: '--pf-v6-c-sidebar--m-stack__panel--Position',
@@ -418,7 +420,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'static',
     demo: 'stack',
-    description: 'Stack panel position'
+    description: 'Stack panel position',
   },
   {
     name: '--pf-v6-c-sidebar--m-stack__panel--InsetBlockStart',
@@ -427,7 +429,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'stack',
-    description: 'Stack panel inset block start'
+    description: 'Stack panel inset block start',
   },
   {
     name: '--pf-v6-c-sidebar--m-stack__panel--BoxShadow',
@@ -436,7 +438,7 @@ const cssApiTests = [
     type: 'shadow',
     testValue: '0 0 20px 10px rgba(255, 0, 0, 0.8)',
     demo: 'stack',
-    description: 'Stack panel box shadow'
+    description: 'Stack panel box shadow',
   },
   {
     name: '--pf-v6-c-sidebar--m-stack__panel--BorderBlockEndWidth',
@@ -445,7 +447,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '10px',
     demo: 'stack',
-    description: 'Stack panel border block end width'
+    description: 'Stack panel border block end width',
   },
   {
     name: '--pf-v6-c-sidebar--m-stack--m-panel-right__panel--Order',
@@ -454,7 +456,7 @@ const cssApiTests = [
     type: 'number',
     testValue: '999',
     demo: 'stack',
-    description: 'Stack panel right order'
+    description: 'Stack panel right order',
   },
 
   // Split modifier
@@ -465,7 +467,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'stretch',
     demo: 'basic',
-    description: 'Split main align items'
+    description: 'Split main align items',
   },
   {
     name: '--pf-v6-c-sidebar--m-split__main--FlexDirection',
@@ -474,7 +476,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'column',
     demo: 'basic',
-    description: 'Split main flex direction'
+    description: 'Split main flex direction',
   },
   {
     name: '--pf-v6-c-sidebar--m-split__panel--Position',
@@ -483,7 +485,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'sticky',
     demo: 'basic',
-    description: 'Split panel position'
+    description: 'Split panel position',
   },
   {
     name: '--pf-v6-c-sidebar--m-split__panel--InsetBlockStart',
@@ -492,7 +494,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: '50px',
     demo: 'basic',
-    description: 'Split panel inset block start'
+    description: 'Split panel inset block start',
   },
   {
     name: '--pf-v6-c-sidebar--m-split--m-panel-right__panel--Order',
@@ -501,7 +503,7 @@ const cssApiTests = [
     type: 'number',
     testValue: '999',
     demo: 'basic',
-    description: 'Split panel right order'
+    description: 'Split panel right order',
   },
   {
     name: '--pf-v6-c-sidebar--m-split__main--m-border--before--Display',
@@ -510,7 +512,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'none',
     demo: 'border',
-    description: 'Split main border before display'
+    description: 'Split main border before display',
   },
 
   // Panel properties
@@ -521,7 +523,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: '300px',
     demo: 'basic',
-    description: 'Panel flex basis base'
+    description: 'Panel flex basis base',
   },
   {
     name: '--pf-v6-c-sidebar__panel--BorderBlockEndColor',
@@ -530,7 +532,7 @@ const cssApiTests = [
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
     demo: 'basic',
-    description: 'Panel border block end color'
+    description: 'Panel border block end color',
   },
   {
     name: '--pf-v6-c-sidebar__panel--BorderBlockEndWidth',
@@ -539,7 +541,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '10px',
     demo: 'basic',
-    description: 'Panel border block end width'
+    description: 'Panel border block end width',
   },
   {
     name: '--pf-v6-c-sidebar__panel--BoxShadow--base',
@@ -548,7 +550,7 @@ const cssApiTests = [
     type: 'shadow',
     testValue: '0 0 20px 10px rgba(255, 0, 0, 0.8)',
     demo: 'basic',
-    description: 'Panel box shadow base'
+    description: 'Panel box shadow base',
   },
   {
     name: '--pf-v6-c-sidebar__panel--BoxShadow',
@@ -557,7 +559,7 @@ const cssApiTests = [
     type: 'shadow',
     testValue: '0 0 20px 10px rgba(255, 0, 0, 0.8)',
     demo: 'basic',
-    description: 'Panel box shadow'
+    description: 'Panel box shadow',
   },
   {
     name: '--pf-v6-c-sidebar__panel--InsetBlockStart',
@@ -566,7 +568,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'basic',
-    description: 'Panel inset block start'
+    description: 'Panel inset block start',
   },
   {
     name: '--pf-v6-c-sidebar__panel--md--InsetBlockStart',
@@ -575,7 +577,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: '50px',
     demo: 'basic',
-    description: 'Panel inset block start at md breakpoint'
+    description: 'Panel inset block start at md breakpoint',
   },
   {
     name: '--pf-v6-c-sidebar__panel--Position',
@@ -584,7 +586,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'static',
     demo: 'basic',
-    description: 'Panel position'
+    description: 'Panel position',
   },
   {
     name: '--pf-v6-c-sidebar__panel--md--Position',
@@ -593,7 +595,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'sticky',
     demo: 'basic',
-    description: 'Panel position at md breakpoint'
+    description: 'Panel position at md breakpoint',
   },
   {
     name: '--pf-v6-c-sidebar__panel--FlexBasis-base',
@@ -602,7 +604,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: '300px',
     demo: 'basic',
-    description: 'Panel flex basis base (legacy)'
+    description: 'Panel flex basis base (legacy)',
   },
   {
     name: '--pf-v6-c-sidebar__panel--FlexBasis',
@@ -611,7 +613,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: '300px',
     demo: 'basic',
-    description: 'Panel flex basis'
+    description: 'Panel flex basis',
   },
   {
     name: '--pf-v6-c-sidebar__panel--md--FlexBasis',
@@ -620,7 +622,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '300px',
     demo: 'responsive-panel',
-    description: 'Panel flex basis at md breakpoint'
+    description: 'Panel flex basis at md breakpoint',
   },
   {
     name: '--pf-v6-c-sidebar__panel--m-split--FlexBasis',
@@ -629,7 +631,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '300px',
     demo: 'basic',
-    description: 'Panel flex basis in split mode'
+    description: 'Panel flex basis in split mode',
   },
   {
     name: '--pf-v6-c-sidebar__panel--m-stack--FlexBasis',
@@ -638,7 +640,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: '300px',
     demo: 'stack',
-    description: 'Panel flex basis in stack mode'
+    description: 'Panel flex basis in stack mode',
   },
   {
     name: '--pf-v6-c-sidebar__panel--ZIndex',
@@ -647,7 +649,7 @@ const cssApiTests = [
     type: 'number',
     testValue: '999',
     demo: 'basic',
-    description: 'Panel z-index'
+    description: 'Panel z-index',
   },
   {
     name: '--pf-v6-c-sidebar__panel--BackgroundColor',
@@ -656,7 +658,7 @@ const cssApiTests = [
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
     demo: 'basic',
-    description: 'Panel background color'
+    description: 'Panel background color',
   },
   {
     name: '--pf-v6-c-sidebar__panel--m-secondary--BackgroundColor',
@@ -665,7 +667,7 @@ const cssApiTests = [
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
     demo: 'basic',
-    description: 'Panel secondary background color'
+    description: 'Panel secondary background color',
   },
 
   // Content properties
@@ -676,7 +678,7 @@ const cssApiTests = [
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
     demo: 'basic',
-    description: 'Content background color'
+    description: 'Content background color',
   },
   {
     name: '--pf-v6-c-sidebar__content--m-secondary--BackgroundColor',
@@ -685,7 +687,7 @@ const cssApiTests = [
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
     demo: 'basic',
-    description: 'Content secondary background color'
+    description: 'Content secondary background color',
   },
 
   // Sticky modifier
@@ -696,7 +698,7 @@ const cssApiTests = [
     type: 'size',
     testValue: '50px',
     demo: 'sticky-panel',
-    description: 'Sticky panel inset block start'
+    description: 'Sticky panel inset block start',
   },
   {
     name: '--pf-v6-c-sidebar__panel--m-sticky--Position',
@@ -705,7 +707,7 @@ const cssApiTests = [
     type: 'keyword',
     testValue: 'static',
     demo: 'sticky-panel',
-    description: 'Sticky panel position'
+    description: 'Sticky panel position',
   },
 ];
 
@@ -721,8 +723,8 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
           `Test value: ${testValue}`,
-          `Demo: ${demo}`
-        ].join('\n')
+          `Demo: ${demo}`,
+        ].join('\n'),
       });
 
       // Set consistent viewport
@@ -746,12 +748,12 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare
@@ -769,23 +771,23 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 }  // Pixel-perfect
+          { threshold: 0 } // Pixel-perfect
         );
 
         // Attach images to report
         await test.info().attach('React with CSS override (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit with CSS override (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match

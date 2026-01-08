@@ -18,8 +18,10 @@ async function waitForFullLoad(page: Page): Promise<void> {
   await page.evaluate(() => {
     const images = Array.from(document.images);
     return Promise.all(
-      images.map(img => img.complete ? Promise.resolve() :
-        new Promise(resolve => { img.onload = img.onerror = resolve; })
+      images.map(img => img.complete ? Promise.resolve()
+        : new Promise(resolve => {
+          img.addEventListener('load', img.onerror = resolve);
+        })
       )
     );
   });
@@ -69,13 +71,13 @@ test.describe('CSS API - Custom Property Overrides', () => {
 
       await reactPage.goto('/elements/pfv6-backdrop/react/test/basic');
       await reactPage.addStyleTag({
-        content: `.pf-v6-c-backdrop { ${cssOverride} }`
+        content: `.pf-v6-c-backdrop { ${cssOverride} }`,
       });
       await waitForFullLoad(reactPage);
 
       await page.goto('/elements/pfv6-backdrop/test/basic');
       await page.addStyleTag({
-        content: `pfv6-backdrop { ${cssOverride} }`
+        content: `pfv6-backdrop { ${cssOverride} }`,
       });
       await waitForFullLoad(page);
 
@@ -120,13 +122,13 @@ test.describe('CSS API - Custom Property Overrides', () => {
 
       await reactPage.goto('/elements/pfv6-backdrop/react/test/basic');
       await reactPage.addStyleTag({
-        content: `.pf-v6-c-backdrop { ${cssOverride} }`
+        content: `.pf-v6-c-backdrop { ${cssOverride} }`,
       });
       await waitForFullLoad(reactPage);
 
       await page.goto('/elements/pfv6-backdrop/test/basic');
       await page.addStyleTag({
-        content: `pfv6-backdrop { ${cssOverride} }`
+        content: `pfv6-backdrop { ${cssOverride} }`,
       });
       await waitForFullLoad(page);
 
@@ -171,13 +173,13 @@ test.describe('CSS API - Custom Property Overrides', () => {
 
       await reactPage.goto('/elements/pfv6-backdrop/react/test/basic');
       await reactPage.addStyleTag({
-        content: `.pf-v6-c-backdrop { ${cssOverride} }`
+        content: `.pf-v6-c-backdrop { ${cssOverride} }`,
       });
       await waitForFullLoad(reactPage);
 
       await page.goto('/elements/pfv6-backdrop/test/basic');
       await page.addStyleTag({
-        content: `pfv6-backdrop { ${cssOverride} }`
+        content: `pfv6-backdrop { ${cssOverride} }`,
       });
       await waitForFullLoad(page);
 
@@ -226,13 +228,13 @@ test.describe('CSS API - Custom Property Overrides', () => {
 
       await reactPage.goto('/elements/pfv6-backdrop/react/test/basic');
       await reactPage.addStyleTag({
-        content: `.pf-v6-c-backdrop { ${cssOverrides} }`
+        content: `.pf-v6-c-backdrop { ${cssOverrides} }`,
       });
       await waitForFullLoad(reactPage);
 
       await page.goto('/elements/pfv6-backdrop/test/basic');
       await page.addStyleTag({
-        content: `pfv6-backdrop { ${cssOverrides} }`
+        content: `pfv6-backdrop { ${cssOverrides} }`,
       });
       await waitForFullLoad(page);
 

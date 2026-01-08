@@ -15,7 +15,7 @@ test.describe('Avatar CSS API Tests', () => {
     });
 
     const img = avatar.locator('img');
-    const width = await img.evaluate((el) => getComputedStyle(el).width);
+    const width = await img.evaluate(el => getComputedStyle(el).width);
     expect(width).toBe('100px');
   });
 
@@ -31,7 +31,7 @@ test.describe('Avatar CSS API Tests', () => {
     });
 
     const img = avatar.locator('img');
-    const height = await img.evaluate((el) => getComputedStyle(el).height);
+    const height = await img.evaluate(el => getComputedStyle(el).height);
     expect(height).toBe('100px');
   });
 
@@ -47,7 +47,7 @@ test.describe('Avatar CSS API Tests', () => {
     });
 
     const img = avatar.locator('img');
-    const borderRadius = await img.evaluate((el) => getComputedStyle(el).borderRadius);
+    const borderRadius = await img.evaluate(el => getComputedStyle(el).borderRadius);
     expect(borderRadius).toBe('8px');
   });
 
@@ -63,7 +63,7 @@ test.describe('Avatar CSS API Tests', () => {
     });
 
     const img = avatar.locator('img');
-    const borderColor = await img.evaluate((el) => getComputedStyle(el).borderColor);
+    const borderColor = await img.evaluate(el => getComputedStyle(el).borderColor);
     expect(borderColor).toBe('rgb(255, 0, 0)');
   });
 
@@ -79,7 +79,7 @@ test.describe('Avatar CSS API Tests', () => {
     });
 
     const img = avatar.locator('img');
-    const borderWidth = await img.evaluate((el) => getComputedStyle(el).borderWidth);
+    const borderWidth = await img.evaluate(el => getComputedStyle(el).borderWidth);
     expect(borderWidth).toBe('4px');
   });
 
@@ -96,7 +96,7 @@ test.describe('Avatar CSS API Tests', () => {
     });
 
     const img = smAvatar.locator('img');
-    const width = await img.evaluate((el) => getComputedStyle(el).width);
+    const width = await img.evaluate(el => getComputedStyle(el).width);
     expect(width).toBe('50px');
   });
 
@@ -113,7 +113,7 @@ test.describe('Avatar CSS API Tests', () => {
     });
 
     const img = mdAvatar.locator('img');
-    const width = await img.evaluate((el) => getComputedStyle(el).width);
+    const width = await img.evaluate(el => getComputedStyle(el).width);
     expect(width).toBe('60px');
   });
 
@@ -130,7 +130,7 @@ test.describe('Avatar CSS API Tests', () => {
     });
 
     const img = lgAvatar.locator('img');
-    const width = await img.evaluate((el) => getComputedStyle(el).width);
+    const width = await img.evaluate(el => getComputedStyle(el).width);
     expect(width).toBe('100px');
   });
 
@@ -147,7 +147,7 @@ test.describe('Avatar CSS API Tests', () => {
     });
 
     const img = xlAvatar.locator('img');
-    const width = await img.evaluate((el) => getComputedStyle(el).width);
+    const width = await img.evaluate(el => getComputedStyle(el).width);
     expect(width).toBe('150px');
   });
 
@@ -168,8 +168,8 @@ test.describe('Avatar CSS API Tests', () => {
     const avatar = page.locator(COMPONENT);
     const img = avatar.locator('img');
 
-    const width = await img.evaluate((el) => getComputedStyle(el).width);
-    const height = await img.evaluate((el) => getComputedStyle(el).height);
+    const width = await img.evaluate(el => getComputedStyle(el).width);
+    const height = await img.evaluate(el => getComputedStyle(el).height);
 
     expect(width).toBe('80px');
     expect(height).toBe('80px');
@@ -187,11 +187,11 @@ test.describe('Avatar CSS API Tests', () => {
         * {
           --pf-t--global--border--radius--pill: initial !important;
         }
-      `
+      `,
     });
 
     const img = avatar.locator('img');
-    const borderRadius = await img.evaluate((el) => getComputedStyle(el).borderRadius);
+    const borderRadius = await img.evaluate(el => getComputedStyle(el).borderRadius);
 
     // Should use fallback value of 999px
     expect(borderRadius).toBe('999px');

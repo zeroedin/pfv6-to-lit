@@ -15,11 +15,11 @@ test.describe('Brand CSS API Tests', () => {
     });
 
     // Get computed width from shadow DOM img
-    const width = await brand.evaluate((el) => {
+    const width = await brand.evaluate(el => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).width : null;
     });
-    
+
     expect(width).toBe('300px');
   });
 
@@ -35,11 +35,11 @@ test.describe('Brand CSS API Tests', () => {
     });
 
     // Get computed height from shadow DOM img
-    const height = await brand.evaluate((el) => {
+    const height = await brand.evaluate(el => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).height : null;
     });
-    
+
     expect(height).toBe('100px');
   });
 
@@ -56,16 +56,18 @@ test.describe('Brand CSS API Tests', () => {
     });
 
     // Get computed dimensions from shadow DOM img
-    const dimensions = await brand.evaluate((el) => {
+    const dimensions = await brand.evaluate(el => {
       const img = el.shadowRoot?.querySelector('img');
-      if (!img) return null;
+      if (!img) {
+        return null;
+      }
       const styles = getComputedStyle(img);
       return {
         width: styles.width,
-        height: styles.height
+        height: styles.height,
       };
     });
-    
+
     expect(dimensions?.width).toBe('250px');
     expect(dimensions?.height).toBe('80px');
   });
@@ -82,11 +84,11 @@ test.describe('Brand CSS API Tests', () => {
     });
 
     // Get computed width from shadow DOM img
-    const width = await brand.evaluate((el) => {
+    const width = await brand.evaluate(el => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).width : null;
     });
-    
+
     expect(width).toBe('400px');
   });
 
@@ -102,11 +104,11 @@ test.describe('Brand CSS API Tests', () => {
     });
 
     // Get computed height from shadow DOM img
-    const height = await brand.evaluate((el) => {
+    const height = await brand.evaluate(el => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).height : null;
     });
-    
+
     expect(height).toBe('120px');
   });
 
@@ -123,11 +125,11 @@ test.describe('Brand CSS API Tests', () => {
     });
 
     // Get computed width from shadow DOM img
-    const width = await brand.evaluate((el) => {
+    const width = await brand.evaluate(el => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).width : null;
     });
-    
+
     // --base variable should take precedence
     expect(width).toBe('350px');
   });
@@ -139,11 +141,11 @@ test.describe('Brand CSS API Tests', () => {
     await expect(brand).toBeVisible();
 
     // Get computed max-width from shadow DOM picture element
-    const maxWidth = await brand.evaluate((el) => {
+    const maxWidth = await brand.evaluate(el => {
       const picture = el.shadowRoot?.querySelector('picture');
       return picture ? getComputedStyle(picture).maxWidth : null;
     });
-    
+
     // Picture element should have max-width: 100%
     expect(maxWidth).toBe('100%');
   });
@@ -163,11 +165,11 @@ test.describe('Brand CSS API Tests', () => {
     await page.setViewportSize({ width: 992, height: 768 });
 
     // Get computed width from shadow DOM img
-    const width = await brand.evaluate((el) => {
+    const width = await brand.evaluate(el => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).width : null;
     });
-    
+
     // Width should be affected by md breakpoint variable
     expect(width).not.toBeNull();
   });
@@ -187,11 +189,11 @@ test.describe('Brand CSS API Tests', () => {
     await page.setViewportSize({ width: 1200, height: 800 });
 
     // Get computed height from shadow DOM img
-    const height = await brand.evaluate((el) => {
+    const height = await brand.evaluate(el => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).height : null;
     });
-    
+
     // Height should be affected by lg breakpoint variable
     expect(height).not.toBeNull();
   });
@@ -208,19 +210,20 @@ test.describe('Brand CSS API Tests', () => {
     });
 
     // Get computed width from both picture and img
-    const dimensions = await brand.evaluate((el) => {
+    const dimensions = await brand.evaluate(el => {
       const picture = el.shadowRoot?.querySelector('picture');
       const img = picture?.querySelector('img');
-      if (!picture || !img) return null;
+      if (!picture || !img) {
+        return null;
+      }
       return {
         pictureWidth: getComputedStyle(picture).width,
-        imgWidth: getComputedStyle(img).width
+        imgWidth: getComputedStyle(img).width,
       };
     });
-    
+
     // Img should inherit width from picture
     expect(dimensions?.pictureWidth).toBe('450px');
     expect(dimensions?.imgWidth).toBe('450px');
   });
 });
-

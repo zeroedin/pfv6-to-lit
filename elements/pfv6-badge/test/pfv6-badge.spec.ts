@@ -11,9 +11,9 @@ describe('<pfv6-badge>', function() {
     it('should upgrade', async function() {
       const el = await fixture<Pfv6Badge>(html`<pfv6-badge></pfv6-badge>`);
       expect(el)
-        .to.be.an.instanceOf(customElements.get('pfv6-badge'))
-        .and
-        .to.be.an.instanceOf(Pfv6Badge);
+          .to.be.an.instanceOf(customElements.get('pfv6-badge'))
+          .and
+          .to.be.an.instanceOf(Pfv6Badge);
     });
   });
 

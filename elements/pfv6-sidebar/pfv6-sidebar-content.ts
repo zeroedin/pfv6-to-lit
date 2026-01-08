@@ -15,22 +15,21 @@ export class Pfv6SidebarContent extends LitElement {
   static readonly styles = styles;
 
   /**
-   * Removes the background color
-   */
+  * Removes the background color
+  */
   @property({ type: Boolean, reflect: true, attribute: 'has-no-background' })
   hasNoBackground = false;
 
   /**
-   * Adds padding to the content
-   */
+  * Adds padding to the content
+  */
   @property({ type: Boolean, reflect: true, attribute: 'has-padding' })
   hasPadding = false;
 
   /**
-   * Variant of the sidebar content background
-   * @type {'default' | 'secondary'}
-   * @default 'default'
-   */
+  * Variant of the sidebar content background
+  * @default 'default'
+  */
   @property({ type: String, reflect: true, attribute: 'background-variant' })
   backgroundVariant: 'default' | 'secondary' = 'default';
 
@@ -38,7 +37,7 @@ export class Pfv6SidebarContent extends LitElement {
     const classes = {
       'no-background': this.hasNoBackground,
       'padding': this.hasPadding,
-      'secondary': this.backgroundVariant === 'secondary'
+      'secondary': this.backgroundVariant === 'secondary',
     };
 
     return html`

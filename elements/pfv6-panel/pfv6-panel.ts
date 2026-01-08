@@ -23,14 +23,14 @@ export class Pfv6Panel extends LitElement {
   static styles = styles;
 
   /**
-   * Adds panel variant styles
-   */
+  * Adds panel variant styles
+  */
   @property({ type: String, reflect: true })
   variant?: 'raised' | 'bordered' | 'secondary';
 
   /**
-   * Flag to add scrollable styling to the panel
-   */
+  * Flag to add scrollable styling to the panel
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-scrollable' })
   isScrollable = false;
 
@@ -39,7 +39,7 @@ export class Pfv6Panel extends LitElement {
       raised: this.variant === 'raised',
       bordered: this.variant === 'bordered',
       secondary: this.variant === 'secondary',
-      scrollable: this.isScrollable
+      scrollable: this.isScrollable,
     };
 
     return html`
@@ -55,5 +55,3 @@ declare global {
     'pfv6-panel': Pfv6Panel;
   }
 }
-
-

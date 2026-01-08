@@ -19,35 +19,34 @@ export class Pfv6Sidebar extends LitElement {
   static readonly styles = styles;
 
   /**
-   * Indicates the direction of the layout.
-   * Default orientation is stack on small screens, and split on medium screens and above.
-   *
-   * @type {'stack' | 'split'}
-   */
+  * Indicates the direction of the layout.
+  * Default orientation is stack on small screens, and split on medium screens and above.
+  *
+  */
   @property({ type: String, reflect: true })
   orientation?: 'stack' | 'split';
 
   /**
-   * Indicates that the panel is displayed to the right of the content when the orientation is split
-   */
+  * Indicates that the panel is displayed to the right of the content when the orientation is split
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-panel-right' })
   isPanelRight = false;
 
   /**
-   * Adds space between the panel and content
-   */
+  * Adds space between the panel and content
+  */
   @property({ type: Boolean, reflect: true, attribute: 'has-gutter' })
   hasGutter = false;
 
   /**
-   * Removes the background color
-   */
+  * Removes the background color
+  */
   @property({ type: Boolean, reflect: true, attribute: 'has-no-background' })
   hasNoBackground = false;
 
   /**
-   * Adds a border between the panel and content
-   */
+  * Adds a border between the panel and content
+  */
   @property({ type: Boolean, reflect: true, attribute: 'has-border' })
   hasBorder = false;
 
@@ -58,12 +57,12 @@ export class Pfv6Sidebar extends LitElement {
       'no-background': this.hasNoBackground,
       'panel-right': this.isPanelRight,
       'stack': this.orientation === 'stack',
-      'split': this.orientation === 'split'
+      'split': this.orientation === 'split',
     };
 
     // Classes for the inner main element
     const mainClasses = {
-      'border': this.hasBorder
+      'border': this.hasBorder,
     };
 
     return html`

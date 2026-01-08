@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /**
  * PatternFly Cache Setup Script
- * 
+ *
  * Downloads PatternFly v6.4.0 release archives to .cache/ for component conversion reference.
  * These repositories are used by AI agents to analyze React component APIs and CSS
  * when converting PatternFly React components to LitElement web components.
- * 
+ *
  * Exits early if repositories already exist.
- * 
+ *
  * Usage: npm run patternfly-cache
- * 
+ *
  * Note: This is a development-only script. Not needed for CI/CD or production builds.
  * Only run this when you need to convert PatternFly components.
  */
@@ -50,17 +50,17 @@ function log(message: string): void {
 }
 
 function checkIfReposExist(): boolean {
-  return REPOS.every((repo) => existsSync(repo.path));
+  return REPOS.every(repo => existsSync(repo.path));
 }
 
 function downloadAndExtract(repo: Repository): void {
   log(`Downloading ${repo.name} v${repo.version}...`);
-  
+
   const zipUrl = `https://github.com/${repo.repo}/archive/refs/tags/v${repo.version}.tar.gz`;
   const tempFile = join(CACHE_DIR, `${repo.name}-${repo.version}.tar.gz`);
   const extractedName = `${repo.name}-${repo.version}`;
   const extractedPath = join(CACHE_DIR, extractedName);
-  
+
   try {
     // Download the release tarball
     log(`Downloading from ${zipUrl}...`);
@@ -68,26 +68,26 @@ function downloadAndExtract(repo: Repository): void {
       stdio: 'inherit',
       cwd: CACHE_DIR,
     });
-    
+
     // Extract the tarball
     log(`Extracting ${repo.name}...`);
     execSync(`tar -xzf "${tempFile}" -C "${CACHE_DIR}"`, {
       stdio: 'inherit',
       cwd: CACHE_DIR,
     });
-    
+
     // Rename extracted folder to expected name (removes version suffix)
     if (existsSync(extractedPath)) {
       renameSync(extractedPath, repo.path);
     }
-    
+
     // Clean up downloaded tarball
     rmSync(tempFile);
-    
+
     log(`✅ Successfully downloaded and extracted ${repo.name}`);
   } catch (error) {
     console.error(`❌ Failed to download ${repo.name}:`, error);
-    
+
     // Clean up on failure
     if (existsSync(tempFile)) {
       rmSync(tempFile);
@@ -95,7 +95,7 @@ function downloadAndExtract(repo: Repository): void {
     if (existsSync(extractedPath)) {
       rmSync(extractedPath, { recursive: true, force: true });
     }
-    
+
     process.exit(1);
   }
 }
@@ -128,4 +128,3 @@ function main(): void {
 }
 
 main();
-

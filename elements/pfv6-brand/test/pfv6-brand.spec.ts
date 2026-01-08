@@ -39,8 +39,8 @@ describe('pfv6-brand', () => {
 
   it('should parse responsive widths property', async () => {
     const el = await fixture<Pfv6Brand>(html`
-      <pfv6-brand 
-        src="/logo.svg" 
+      <pfv6-brand
+        src="/logo.svg"
         alt="logo"
         widths="200px md:400px xl:600px">
       </pfv6-brand>
@@ -49,14 +49,14 @@ describe('pfv6-brand', () => {
     expect(el.widths).to.deep.equal({
       default: '200px',
       md: '400px',
-      xl: '600px'
+      xl: '600px',
     });
   });
 
   it('should parse responsive heights property', async () => {
     const el = await fixture<Pfv6Brand>(html`
-      <pfv6-brand 
-        src="/logo.svg" 
+      <pfv6-brand
+        src="/logo.svg"
         alt="logo"
         heights="40px md:60px lg:80px">
       </pfv6-brand>
@@ -65,7 +65,7 @@ describe('pfv6-brand', () => {
     expect(el.heights).to.deep.equal({
       default: '40px',
       md: '60px',
-      lg: '80px'
+      lg: '80px',
     });
   });
 
@@ -76,7 +76,7 @@ describe('pfv6-brand', () => {
 
     const img = el.shadowRoot?.querySelector('#container');
     expect(img?.tagName).to.equal('IMG');
-    
+
     const picture = el.shadowRoot?.querySelector('picture');
     expect(picture).to.not.exist;
   });
@@ -89,7 +89,7 @@ describe('pfv6-brand', () => {
     `);
 
     await el.updateComplete;
-    
+
     const picture = el.shadowRoot?.querySelector('picture');
     expect(picture).to.exist;
     expect(picture?.id).to.equal('container');
@@ -103,7 +103,7 @@ describe('pfv6-brand', () => {
     `);
 
     await el.updateComplete;
-    
+
     const picture = el.shadowRoot?.querySelector('picture');
     expect(picture?.classList.contains('picture')).to.be.true;
   });
@@ -116,7 +116,7 @@ describe('pfv6-brand', () => {
     `);
 
     await el.updateComplete;
-    
+
     const picture = el.shadowRoot?.querySelector('picture');
     const img = picture?.querySelector('img');
     expect(img).to.exist;
@@ -126,8 +126,8 @@ describe('pfv6-brand', () => {
 
   it('should apply responsive width CSS variables', async () => {
     const el = await fixture<Pfv6Brand>(html`
-      <pfv6-brand 
-        src="/logo.svg" 
+      <pfv6-brand
+        src="/logo.svg"
         alt="logo"
         widths="200px md:400px">
       </pfv6-brand>
@@ -135,15 +135,15 @@ describe('pfv6-brand', () => {
 
     const container = el.shadowRoot?.querySelector('#container') as HTMLElement;
     const style = container?.getAttribute('style');
-    
+
     expect(style).to.include('--pf-v6-c-brand--Width: 200px');
     expect(style).to.include('--pf-v6-c-brand--Width-on-md: 400px');
   });
 
   it('should apply responsive height CSS variables', async () => {
     const el = await fixture<Pfv6Brand>(html`
-      <pfv6-brand 
-        src="/logo.svg" 
+      <pfv6-brand
+        src="/logo.svg"
         alt="logo"
         heights="40px md:60px">
       </pfv6-brand>
@@ -151,7 +151,7 @@ describe('pfv6-brand', () => {
 
     const container = el.shadowRoot?.querySelector('#container') as HTMLElement;
     const style = container?.getAttribute('style');
-    
+
     expect(style).to.include('--pf-v6-c-brand--Height: 40px');
     expect(style).to.include('--pf-v6-c-brand--Height-on-md: 60px');
   });
@@ -193,7 +193,7 @@ describe('pfv6-brand', () => {
     const source = document.createElement('source');
     source.setAttribute('srcset', '/logo-mobile.svg');
     el.appendChild(source);
-    
+
     await el.updateComplete;
     await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -202,4 +202,3 @@ describe('pfv6-brand', () => {
     expect(container?.tagName).to.equal('PICTURE');
   });
 });
-

@@ -22,8 +22,10 @@ async function waitForFullLoad(page: Page): Promise<void> {
   await page.evaluate(() => {
     const images = Array.from(document.images);
     return Promise.all(
-      images.map(img => img.complete ? Promise.resolve() :
-        new Promise(resolve => { img.onload = img.onerror = resolve; })
+      images.map(img => img.complete ? Promise.resolve()
+        : new Promise(resolve => {
+          img.addEventListener('load', img.onerror = resolve);
+        })
       )
     );
   });
@@ -53,61 +55,61 @@ const cssVariables = [
     name: '--pf-v6-c-badge--BorderColor',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    description: 'Border color of the badge'
+    description: 'Border color of the badge',
   },
   {
     name: '--pf-v6-c-badge--BorderWidth',
     type: 'size',
     testValue: '5px',
-    description: 'Border width of the badge'
+    description: 'Border width of the badge',
   },
   {
     name: '--pf-v6-c-badge--BorderRadius',
     type: 'size',
     testValue: '10px',
-    description: 'Border radius of the badge'
+    description: 'Border radius of the badge',
   },
   {
     name: '--pf-v6-c-badge--FontSize',
     type: 'size',
     testValue: '24px',
-    description: 'Font size of the badge text'
+    description: 'Font size of the badge text',
   },
   {
     name: '--pf-v6-c-badge--FontWeight',
     type: 'font-weight',
     testValue: '900',
-    description: 'Font weight of the badge text'
+    description: 'Font weight of the badge text',
   },
   {
     name: '--pf-v6-c-badge--PaddingInlineEnd',
     type: 'size',
     testValue: '30px',
-    description: 'Right padding of the badge'
+    description: 'Right padding of the badge',
   },
   {
     name: '--pf-v6-c-badge--PaddingInlineStart',
     type: 'size',
     testValue: '30px',
-    description: 'Left padding of the badge'
+    description: 'Left padding of the badge',
   },
   {
     name: '--pf-v6-c-badge--Color',
     type: 'color',
     testValue: 'rgb(0, 255, 0)',
-    description: 'Text color of the badge'
+    description: 'Text color of the badge',
   },
   {
     name: '--pf-v6-c-badge--MinWidth',
     type: 'size',
     testValue: '100px',
-    description: 'Minimum width of the badge'
+    description: 'Minimum width of the badge',
   },
   {
     name: '--pf-v6-c-badge--BackgroundColor',
     type: 'color',
     testValue: 'rgb(0, 0, 255)',
-    description: 'Background color of the badge'
+    description: 'Background color of the badge',
   },
 
   // Read modifier variables
@@ -115,19 +117,19 @@ const cssVariables = [
     name: '--pf-v6-c-badge--m-read--BackgroundColor',
     type: 'color',
     testValue: 'rgb(255, 165, 0)',
-    description: 'Background color when badge is read'
+    description: 'Background color when badge is read',
   },
   {
     name: '--pf-v6-c-badge--m-read--Color',
     type: 'color',
     testValue: 'rgb(128, 0, 128)',
-    description: 'Text color when badge is read'
+    description: 'Text color when badge is read',
   },
   {
     name: '--pf-v6-c-badge--m-read--BorderColor',
     type: 'color',
     testValue: 'rgb(0, 255, 255)',
-    description: 'Border color when badge is read'
+    description: 'Border color when badge is read',
   },
 
   // Unread modifier variables
@@ -135,13 +137,13 @@ const cssVariables = [
     name: '--pf-v6-c-badge--m-unread--BackgroundColor',
     type: 'color',
     testValue: 'rgb(255, 255, 0)',
-    description: 'Background color when badge is unread'
+    description: 'Background color when badge is unread',
   },
   {
     name: '--pf-v6-c-badge--m-unread--Color',
     type: 'color',
     testValue: 'rgb(255, 0, 255)',
-    description: 'Text color when badge is unread'
+    description: 'Text color when badge is unread',
   },
 
   // Disabled modifier variables
@@ -149,19 +151,19 @@ const cssVariables = [
     name: '--pf-v6-c-badge--m-disabled--Color',
     type: 'color',
     testValue: 'rgb(100, 100, 100)',
-    description: 'Text color when badge is disabled'
+    description: 'Text color when badge is disabled',
   },
   {
     name: '--pf-v6-c-badge--m-disabled--BorderColor',
     type: 'color',
     testValue: 'rgb(200, 200, 0)',
-    description: 'Border color when badge is disabled'
+    description: 'Border color when badge is disabled',
   },
   {
     name: '--pf-v6-c-badge--m-disabled--BackgroundColor',
     type: 'color',
     testValue: 'rgb(150, 150, 150)',
-    description: 'Background color when badge is disabled'
+    description: 'Background color when badge is disabled',
   },
 ];
 
@@ -202,12 +204,12 @@ test.describe('CSS API Tests - Custom Property Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Compare pixel-by-pixel
@@ -231,18 +233,18 @@ test.describe('CSS API Tests - Custom Property Overrides', () => {
         // Attach images to report
         await test.info().attach('React (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         if (numDiffPixels > 0) {
           await test.info().attach('Diff (red = different pixels)', {
             body: PNG.sync.write(diff),
-            contentType: 'image/png'
+            contentType: 'image/png',
           });
         }
 

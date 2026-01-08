@@ -1,13 +1,13 @@
 /**
  * CSS API Tests for pfv6-spinner
- * 
+ *
  * Validates that CSS custom properties can be overridden identically
  * in both React and Lit implementations.
- * 
+ *
  * CSS variables discovered from:
  * - elements/pfv6-spinner/pfv6-spinner.css
  * - .cache/patternfly/src/patternfly/components/Spinner/spinner.scss
- * 
+ *
  * Token resolution from:
  * - .cache/patternfly/src/patternfly/base/tokens/tokens-default.scss
  * - .cache/patternfly/src/patternfly/base/tokens/tokens-palette.scss
@@ -20,16 +20,18 @@ import { PNG } from 'pngjs';
 async function waitForFullLoad(page: Page): Promise<void> {
   await page.waitForLoadState('networkidle');
   await page.evaluate(() => document.fonts.ready);
-  
+
   await page.evaluate(() => {
     const images = Array.from(document.images);
     return Promise.all(
-      images.map(img => img.complete ? Promise.resolve() : 
-        new Promise(resolve => { img.onload = img.onerror = resolve; })
+      images.map(img => img.complete ? Promise.resolve()
+        : new Promise(resolve => {
+          img.addEventListener('load', img.onerror = resolve);
+        })
       )
     );
   });
-  
+
   await page.evaluate(() => {
     return new Promise<void>(resolve => {
       if (typeof requestIdleCallback !== 'undefined') {
@@ -51,13 +53,13 @@ async function applyCssOverride(
   value: string
 ): Promise<void> {
   await page.addStyleTag({
-    content: `${selector} { ${cssVar}: ${value}; }`
+    content: `${selector} { ${cssVar}: ${value}; }`,
   });
 }
 
 /**
  * CSS variables discovered from spinner CSS
- * 
+ *
  * Resolution chain:
  * --pf-v6-c-spinner--diameter → var(--pf-t--global--icon--size--2xl) → var(--pf-t--global--icon--size--400) → 3.5rem
  * --pf-v6-c-spinner--Color → var(--pf-t--global--icon--color--brand--default) → var(--pf-t--global--color--brand--default) → var(--pf-t--global--color--brand--200) → var(--pf-t--color--blue--50) → #0066cc
@@ -76,7 +78,7 @@ const cssApiTests = [
     resolvedValue: '3.5rem',
     type: 'size',
     testValue: '100px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-spinner--Color',
@@ -84,7 +86,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-spinner--AnimationDuration',
@@ -92,7 +94,7 @@ const cssApiTests = [
     resolvedValue: '1.4s',
     type: 'time',
     testValue: '5s',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-spinner--StrokeWidth',
@@ -100,7 +102,7 @@ const cssApiTests = [
     resolvedValue: '10',
     type: 'number',
     testValue: '25',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-spinner--m-sm--diameter',
@@ -108,7 +110,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50px',
-    demo: 'size-variations'
+    demo: 'size-variations',
   },
   {
     name: '--pf-v6-c-spinner--m-md--diameter',
@@ -116,7 +118,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '60px',
-    demo: 'size-variations'
+    demo: 'size-variations',
   },
   {
     name: '--pf-v6-c-spinner--m-lg--diameter',
@@ -124,7 +126,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '70px',
-    demo: 'size-variations'
+    demo: 'size-variations',
   },
   {
     name: '--pf-v6-c-spinner--m-xl--diameter',
@@ -132,7 +134,7 @@ const cssApiTests = [
     resolvedValue: '3.5rem',
     type: 'size',
     testValue: '120px',
-    demo: 'size-variations'
+    demo: 'size-variations',
   },
   {
     name: '--pf-v6-c-spinner--m-inline--diameter',
@@ -140,8 +142,8 @@ const cssApiTests = [
     resolvedValue: '1em',
     type: 'size',
     testValue: '2em',
-    demo: 'inline'
-  }
+    demo: 'inline',
+  },
 ];
 
 test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
@@ -154,73 +156,73 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Variable: ${name}`,
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
-          `Test value: ${testValue}`
-        ].join('\n')
+          `Test value: ${testValue}`,
+        ].join('\n'),
       });
-      
+
       // Set consistent viewport
       await page.setViewportSize({ width: 1280, height: 720 });
-      
+
       // Open second page for React
       const reactPage = await browser.newPage();
       await reactPage.setViewportSize({ width: 1280, height: 720 });
-      
+
       try {
         // Load React demo with CSS override
         await reactPage.goto(`/elements/pfv6-spinner/react/test/${demo}`);
         await applyCssOverride(reactPage, '.pf-v6-c-spinner', name, testValue);
         await waitForFullLoad(reactPage);
-        
+
         // Load Lit demo with CSS override
         await page.goto(`/elements/pfv6-spinner/test/${demo}`);
         await applyCssOverride(page, 'pfv6-spinner', name, testValue);
         await waitForFullLoad(page);
-        
+
         // Take screenshots (animations disabled to ensure consistent state)
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
-        
+
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
-        
+
         // Decode and compare
         const reactPng = PNG.sync.read(reactBuffer);
         const litPng = PNG.sync.read(litBuffer);
-        
+
         expect(reactPng.width).toBe(litPng.width);
         expect(reactPng.height).toBe(litPng.height);
-        
+
         const diff = new PNG({ width: reactPng.width, height: reactPng.height });
-        
+
         const numDiffPixels = pixelmatch(
           reactPng.data,
           litPng.data,
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 }  // Pixel-perfect
+          { threshold: 0 } // Pixel-perfect
         );
-        
+
         // Attach images to report
         await test.info().attach('React with CSS override (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
-        
+
         await test.info().attach('Lit with CSS override (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
-        
+
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
-        
+
         // Assert pixel-perfect match
         expect(numDiffPixels).toBe(0);
       } finally {
@@ -229,4 +231,3 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
     });
   });
 });
-

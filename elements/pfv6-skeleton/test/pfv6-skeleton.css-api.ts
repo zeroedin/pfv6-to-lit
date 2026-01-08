@@ -22,8 +22,10 @@ async function waitForFullLoad(page: Page): Promise<void> {
   await page.evaluate(() => {
     const images = Array.from(document.images);
     return Promise.all(
-      images.map(img => img.complete ? Promise.resolve() :
-        new Promise(resolve => { img.onload = img.onerror = resolve; })
+      images.map(img => img.complete ? Promise.resolve()
+        : new Promise(resolve => {
+          img.addEventListener('load', img.onerror = resolve);
+        })
       )
     );
   });
@@ -53,25 +55,25 @@ const cssVariables = [
     name: '--pf-c-skeleton--BackgroundColor',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    description: 'Background color of the skeleton'
+    description: 'Background color of the skeleton',
   },
   {
     name: '--pf-c-skeleton--Width',
     type: 'size',
     testValue: '300px',
-    description: 'Width of the skeleton'
+    description: 'Width of the skeleton',
   },
   {
     name: '--pf-c-skeleton--Height',
     type: 'size',
     testValue: '100px',
-    description: 'Height of the skeleton'
+    description: 'Height of the skeleton',
   },
   {
     name: '--pf-c-skeleton--BorderRadius',
     type: 'size',
     testValue: '20px',
-    description: 'Border radius of the skeleton'
+    description: 'Border radius of the skeleton',
   },
 
   // Before pseudo-element variables
@@ -79,13 +81,13 @@ const cssVariables = [
     name: '--pf-c-skeleton--before--PaddingBlockEnd',
     type: 'size',
     testValue: '50%',
-    description: 'Padding block end for the ::before pseudo-element'
+    description: 'Padding block end for the ::before pseudo-element',
   },
   {
     name: '--pf-c-skeleton--before--Height',
     type: 'size',
     testValue: '50px',
-    description: 'Height of the ::before pseudo-element'
+    description: 'Height of the ::before pseudo-element',
   },
 
   // After pseudo-element (animation) variables
@@ -93,37 +95,37 @@ const cssVariables = [
     name: '--pf-c-skeleton--after--LinearGradientAngle',
     type: 'angle',
     testValue: '45deg',
-    description: 'Angle of the gradient animation'
+    description: 'Angle of the gradient animation',
   },
   {
     name: '--pf-c-skeleton--after--LinearGradientColorStop1',
     type: 'color',
     testValue: 'rgb(200, 200, 200)',
-    description: 'First color stop of the gradient'
+    description: 'First color stop of the gradient',
   },
   {
     name: '--pf-c-skeleton--after--LinearGradientColorStop2',
     type: 'color',
     testValue: 'rgb(150, 150, 150)',
-    description: 'Second color stop of the gradient'
+    description: 'Second color stop of the gradient',
   },
   {
     name: '--pf-c-skeleton--after--LinearGradientColorStop3',
     type: 'color',
     testValue: 'rgb(200, 200, 200)',
-    description: 'Third color stop of the gradient'
+    description: 'Third color stop of the gradient',
   },
   {
     name: '--pf-c-skeleton--after--AnimationDuration',
     type: 'time',
     testValue: '1s',
-    description: 'Duration of the animation'
+    description: 'Duration of the animation',
   },
   {
     name: '--pf-c-skeleton--after--AnimationDelay',
     type: 'time',
     testValue: '0s',
-    description: 'Delay of the animation'
+    description: 'Delay of the animation',
   },
 
   // Circle modifier variables
@@ -131,13 +133,13 @@ const cssVariables = [
     name: '--pf-c-skeleton--m-circle--BorderRadius',
     type: 'size',
     testValue: '50%',
-    description: 'Border radius for circle shape'
+    description: 'Border radius for circle shape',
   },
   {
     name: '--pf-c-skeleton--m-circle--before--PaddingBlockEnd',
     type: 'size',
     testValue: '80%',
-    description: 'Padding for circle shape'
+    description: 'Padding for circle shape',
   },
 
   // Text modifier variables
@@ -145,43 +147,43 @@ const cssVariables = [
     name: '--pf-c-skeleton--m-text-4xl--Height',
     type: 'size',
     testValue: '60px',
-    description: 'Height for 4xl text size'
+    description: 'Height for 4xl text size',
   },
   {
     name: '--pf-c-skeleton--m-text-3xl--Height',
     type: 'size',
     testValue: '50px',
-    description: 'Height for 3xl text size'
+    description: 'Height for 3xl text size',
   },
   {
     name: '--pf-c-skeleton--m-text-2xl--Height',
     type: 'size',
     testValue: '40px',
-    description: 'Height for 2xl text size'
+    description: 'Height for 2xl text size',
   },
   {
     name: '--pf-c-skeleton--m-text-xl--Height',
     type: 'size',
     testValue: '35px',
-    description: 'Height for xl text size'
+    description: 'Height for xl text size',
   },
   {
     name: '--pf-c-skeleton--m-text-lg--Height',
     type: 'size',
     testValue: '30px',
-    description: 'Height for lg text size'
+    description: 'Height for lg text size',
   },
   {
     name: '--pf-c-skeleton--m-text-md--Height',
     type: 'size',
     testValue: '25px',
-    description: 'Height for md text size'
+    description: 'Height for md text size',
   },
   {
     name: '--pf-c-skeleton--m-text-sm--Height',
     type: 'size',
     testValue: '20px',
-    description: 'Height for sm text size'
+    description: 'Height for sm text size',
   },
 ];
 
@@ -222,12 +224,12 @@ test.describe('CSS API Tests - Custom Property Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Compare pixel-by-pixel
@@ -251,18 +253,18 @@ test.describe('CSS API Tests - Custom Property Overrides', () => {
         // Attach images to report
         await test.info().attach('React (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         if (numDiffPixels > 0) {
           await test.info().attach('Diff (red = different pixels)', {
             body: PNG.sync.write(diff),
-            contentType: 'image/png'
+            contentType: 'image/png',
           });
         }
 

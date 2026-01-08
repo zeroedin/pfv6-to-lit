@@ -11,9 +11,9 @@ describe('<pfv6-radio>', function() {
     it('should upgrade', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="test" name="test"></pfv6-radio>`);
       expect(el)
-        .to.be.an.instanceOf(customElements.get('pfv6-radio'))
-        .and
-        .to.be.an.instanceOf(Pfv6Radio);
+          .to.be.an.instanceOf(customElements.get('pfv6-radio'))
+          .and
+          .to.be.an.instanceOf(Pfv6Radio);
     });
   });
 
@@ -505,7 +505,7 @@ describe('<pfv6-radio>', function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
 
       let capturedEvent: Event | null = null;
-      el.addEventListener('change', (e) => {
+      el.addEventListener('change', e => {
         capturedEvent = e;
       });
 
@@ -520,7 +520,7 @@ describe('<pfv6-radio>', function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
 
       let capturedEvent: Pfv6RadioChangeEvent | null = null;
-      el.addEventListener('change', (e) => {
+      el.addEventListener('change', e => {
         capturedEvent = e as Pfv6RadioChangeEvent;
       });
 
@@ -536,7 +536,7 @@ describe('<pfv6-radio>', function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" value="option1"></pfv6-radio>`);
 
       let capturedEvent: Pfv6RadioChangeEvent | null = null;
-      el.addEventListener('change', (e) => {
+      el.addEventListener('change', e => {
         capturedEvent = e as Pfv6RadioChangeEvent;
       });
 
@@ -572,7 +572,7 @@ describe('<pfv6-radio>', function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
 
       let capturedEvent: Event | null = null;
-      el.addEventListener('change', (e) => {
+      el.addEventListener('change', e => {
         capturedEvent = e;
       });
 

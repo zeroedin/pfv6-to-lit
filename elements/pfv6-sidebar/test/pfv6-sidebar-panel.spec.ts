@@ -11,9 +11,9 @@ describe('<pfv6-sidebar-panel>', function() {
     it('should upgrade', async function() {
       const el = await fixture<Pfv6SidebarPanel>(html`<pfv6-sidebar-panel></pfv6-sidebar-panel>`);
       expect(el)
-        .to.be.an.instanceOf(customElements.get('pfv6-sidebar-panel'))
-        .and
-        .to.be.an.instanceOf(Pfv6SidebarPanel);
+          .to.be.an.instanceOf(customElements.get('pfv6-sidebar-panel'))
+          .and
+          .to.be.an.instanceOf(Pfv6SidebarPanel);
     });
   });
 
@@ -207,7 +207,7 @@ describe('<pfv6-sidebar-panel>', function() {
         <pfv6-sidebar-panel width="width_25"></pfv6-sidebar-panel>
       `);
       expect(el.width).to.deep.equal({
-        default: 'width_25'
+        default: 'width_25',
       });
     });
 
@@ -218,7 +218,7 @@ describe('<pfv6-sidebar-panel>', function() {
       expect(el.width).to.deep.equal({
         default: 'width_25',
         md: 'width_50',
-        lg: 'width_33'
+        lg: 'width_33',
       });
     });
 
@@ -227,12 +227,12 @@ describe('<pfv6-sidebar-panel>', function() {
         <pfv6-sidebar-panel width="width_25 sm:width_33 md:width_50 lg:width_66 xl:width_75 2xl:width_100"></pfv6-sidebar-panel>
       `);
       expect(el.width).to.deep.equal({
-        default: 'width_25',
-        sm: 'width_33',
-        md: 'width_50',
-        lg: 'width_66',
-        xl: 'width_75',
-        '2xl': 'width_100'
+        'default': 'width_25',
+        'sm': 'width_33',
+        'md': 'width_50',
+        'lg': 'width_66',
+        'xl': 'width_75',
+        '2xl': 'width_100',
       });
     });
 
@@ -275,7 +275,7 @@ describe('<pfv6-sidebar-panel>', function() {
 
       expect(el.width).to.deep.equal({
         default: 'width_50',
-        md: 'width_75'
+        md: 'width_75',
       });
       const container = el.shadowRoot!.querySelector('#container');
       expect(container!.classList.contains('width_50')).to.be.true;
