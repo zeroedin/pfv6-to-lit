@@ -11,9 +11,9 @@ describe('<pfv6-sidebar-content>', function() {
     it('should upgrade', async function() {
       const el = await fixture<Pfv6SidebarContent>(html`<pfv6-sidebar-content></pfv6-sidebar-content>`);
       expect(el)
-        .to.be.an.instanceOf(customElements.get('pfv6-sidebar-content'))
-        .and
-        .to.be.an.instanceOf(Pfv6SidebarContent);
+          .to.be.an.instanceOf(customElements.get('pfv6-sidebar-content'))
+          .and
+          .to.be.an.instanceOf(Pfv6SidebarContent);
     });
   });
 

@@ -50,7 +50,7 @@ function log(message: string): void {
 }
 
 function checkIfReposExist(): boolean {
-  return REPOS.every((repo) => existsSync(repo.path));
+  return REPOS.every(repo => existsSync(repo.path));
 }
 
 function downloadAndExtract(repo: Repository): void {

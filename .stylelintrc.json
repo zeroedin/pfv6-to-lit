@@ -13,6 +13,7 @@
     "selector-id-pattern": null,
     "color-hex-length": "long",
     "declaration-block-no-redundant-longhand-properties": null,
+    "property-no-deprecated": null,
     "@stylistic/block-opening-brace-newline-after": "always",
     "@stylistic/block-closing-brace-newline-before": "always",
     "order/order": [

@@ -17,8 +17,10 @@ async function waitForFullLoad(page: Page): Promise<void> {
   await page.evaluate(() => {
     const images = Array.from(document.images);
     return Promise.all(
-      images.map(img => img.complete ? Promise.resolve() :
-        new Promise(resolve => { img.onload = img.onerror = resolve; })
+      images.map(img => img.complete ? Promise.resolve()
+        : new Promise(resolve => {
+          img.addEventListener('load', img.onerror = resolve);
+        })
       )
     );
   });
@@ -62,12 +64,12 @@ test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
         // Take FRESH screenshots (no baseline files)
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare pixel-by-pixel
@@ -91,17 +93,17 @@ test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
         // Attach all 3 images to report
         await test.info().attach('React (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match
@@ -117,10 +119,10 @@ test.describe('Responsive Panel Width Tests - Lit vs React', () => {
   // Test responsive-panel demo at multiple viewport sizes
   // This validates that panel width behavior matches React across breakpoints
   const viewports = [
-    { name: 'mobile', width: 375, height: 667 },      // Mobile - should use default width
-    { name: 'tablet', width: 768, height: 1024 },     // Tablet - lg breakpoint (width_50)
-    { name: 'desktop', width: 992, height: 768 },     // Desktop - lg breakpoint (width_33)
-    { name: 'wide', width: 1440, height: 900 }        // Wide - xl breakpoint (width_75)
+    { name: 'mobile', width: 375, height: 667 }, // Mobile - should use default width
+    { name: 'tablet', width: 768, height: 1024 }, // Tablet - lg breakpoint (width_50)
+    { name: 'desktop', width: 992, height: 768 }, // Desktop - lg breakpoint (width_33)
+    { name: 'wide', width: 1440, height: 900 }, // Wide - xl breakpoint (width_75)
   ];
 
   viewports.forEach(viewport => {
@@ -143,12 +145,12 @@ test.describe('Responsive Panel Width Tests - Lit vs React', () => {
         // Take FRESH screenshots (no baseline files)
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare pixel-by-pixel
@@ -172,17 +174,17 @@ test.describe('Responsive Panel Width Tests - Lit vs React', () => {
         // Attach all 3 images to report
         await test.info().attach(`React ${viewport.name} (expected)`, {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach(`Lit ${viewport.name} (actual)`, {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach(`Diff ${viewport.name} (red = different pixels)`, {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match
@@ -198,7 +200,7 @@ test.describe('Panel Positioning Tests - Lit vs React', () => {
   // Test panel positioning variants to ensure sticky and static behavior matches React
   const positioningDemos = [
     { name: 'sticky-panel', description: 'sticky panel with overflow scrolling' },
-    { name: 'static-panel', description: 'static panel positioning' }
+    { name: 'static-panel', description: 'static panel positioning' },
   ];
 
   positioningDemos.forEach(demo => {
@@ -221,12 +223,12 @@ test.describe('Panel Positioning Tests - Lit vs React', () => {
         // Take FRESH screenshots (no baseline files)
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare pixel-by-pixel
@@ -250,17 +252,17 @@ test.describe('Panel Positioning Tests - Lit vs React', () => {
         // Attach all 3 images to report
         await test.info().attach('React (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match
@@ -293,12 +295,12 @@ test.describe('Layout Orientation Tests - Lit vs React', () => {
       // Take FRESH screenshots (no baseline files)
       const reactBuffer = await reactPage.screenshot({
         fullPage: true,
-        animations: 'disabled'
+        animations: 'disabled',
       });
 
       const litBuffer = await page.screenshot({
         fullPage: true,
-        animations: 'disabled'
+        animations: 'disabled',
       });
 
       // Decode and compare pixel-by-pixel
@@ -322,17 +324,17 @@ test.describe('Layout Orientation Tests - Lit vs React', () => {
       // Attach all 3 images to report
       await test.info().attach('React (expected)', {
         body: reactBuffer,
-        contentType: 'image/png'
+        contentType: 'image/png',
       });
 
       await test.info().attach('Lit (actual)', {
         body: litBuffer,
-        contentType: 'image/png'
+        contentType: 'image/png',
       });
 
       await test.info().attach('Diff (red = different pixels)', {
         body: PNG.sync.write(diff),
-        contentType: 'image/png'
+        contentType: 'image/png',
       });
 
       // Assert pixel-perfect match
@@ -349,7 +351,7 @@ test.describe('Visual Styling Tests - Lit vs React', () => {
     { name: 'border', description: 'border visual styling' },
     { name: 'padding-content', description: 'content padding' },
     { name: 'padding-panel', description: 'panel padding' },
-    { name: 'panel-right-gutter', description: 'panel right positioning with gutter' }
+    { name: 'panel-right-gutter', description: 'panel right positioning with gutter' },
   ];
 
   stylingDemos.forEach(demo => {
@@ -372,12 +374,12 @@ test.describe('Visual Styling Tests - Lit vs React', () => {
         // Take FRESH screenshots (no baseline files)
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare pixel-by-pixel
@@ -401,17 +403,17 @@ test.describe('Visual Styling Tests - Lit vs React', () => {
         // Attach all 3 images to report
         await test.info().attach('React (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match

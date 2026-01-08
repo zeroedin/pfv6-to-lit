@@ -50,7 +50,7 @@ export class Pfv6Badge extends LitElement {
     const classes = {
       read: this.isRead,
       unread: !this.isRead,
-      disabled: this.isDisabled
+      disabled: this.isDisabled,
     };
 
     return html`

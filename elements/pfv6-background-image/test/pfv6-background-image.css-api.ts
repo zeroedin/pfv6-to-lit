@@ -22,8 +22,10 @@ async function waitForFullLoad(page: Page): Promise<void> {
   await page.evaluate(() => {
     const images = Array.from(document.images);
     return Promise.all(
-      images.map(img => img.complete ? Promise.resolve() :
-        new Promise(resolve => { img.onload = img.onerror = resolve; })
+      images.map(img => img.complete ? Promise.resolve()
+        : new Promise(resolve => {
+          img.addEventListener('load', img.onerror = resolve);
+        })
       )
     );
   });
@@ -52,31 +54,31 @@ const cssVariables = [
     name: '--pf-v6-c-background-image--BackgroundColor',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    description: 'Background color behind the image'
+    description: 'Background color behind the image',
   },
   {
     name: '--pf-v6-c-background-image--BackgroundSize--min-width',
     type: 'size',
     testValue: '100px',
-    description: 'Minimum width for background image size'
+    description: 'Minimum width for background image size',
   },
   {
     name: '--pf-v6-c-background-image--BackgroundSize--width',
     type: 'size',
     testValue: '80%',
-    description: 'Width for background image size'
+    description: 'Width for background image size',
   },
   {
     name: '--pf-v6-c-background-image--BackgroundSize--max-width',
     type: 'size',
     testValue: '800px',
-    description: 'Maximum width for background image size'
+    description: 'Maximum width for background image size',
   },
   {
     name: '--pf-v6-c-background-image--BackgroundPosition',
     type: 'position',
     testValue: 'top left',
-    description: 'Background image position'
+    description: 'Background image position',
   },
 ];
 
@@ -117,12 +119,12 @@ test.describe('CSS API Tests - Custom Property Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Compare pixel-by-pixel
@@ -146,18 +148,18 @@ test.describe('CSS API Tests - Custom Property Overrides', () => {
         // Attach images to report
         await test.info().attach('React (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         if (numDiffPixels > 0) {
           await test.info().attach('Diff (red = different pixels)', {
             body: PNG.sync.write(diff),
-            contentType: 'image/png'
+            contentType: 'image/png',
           });
         }
 

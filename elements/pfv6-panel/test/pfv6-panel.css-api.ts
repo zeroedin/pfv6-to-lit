@@ -20,8 +20,10 @@ async function waitForFullLoad(page: Page): Promise<void> {
   await page.evaluate(() => {
     const images = Array.from(document.images);
     return Promise.all(
-      images.map(img => img.complete ? Promise.resolve() :
-        new Promise(resolve => { img.onload = img.onerror = resolve; })
+      images.map(img => img.complete ? Promise.resolve()
+        : new Promise(resolve => {
+          img.addEventListener('load', img.onerror = resolve);
+        })
       )
     );
   });
@@ -47,7 +49,7 @@ async function applyCssOverride(
   value: string
 ): Promise<void> {
   await page.addStyleTag({
-    content: `${selector} { ${cssVar}: ${value}; }`
+    content: `${selector} { ${cssVar}: ${value}; }`,
   });
 }
 
@@ -60,7 +62,7 @@ const cssApiTests = [
     resolvedValue: 'auto',
     type: 'size',
     testValue: '500px',
-    demo: 'index'
+    demo: 'index',
   },
   {
     name: '--pf-v6-c-panel--BackgroundColor',
@@ -68,7 +70,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'index'
+    demo: 'index',
   },
   {
     name: '--pf-v6-c-panel--BorderRadius',
@@ -76,7 +78,7 @@ const cssApiTests = [
     resolvedValue: '6px',
     type: 'size',
     testValue: '20px',
-    demo: 'index'
+    demo: 'index',
   },
   {
     name: '--pf-v6-c-panel--BoxShadow',
@@ -84,7 +86,7 @@ const cssApiTests = [
     resolvedValue: 'none',
     type: 'shadow',
     testValue: '0 0 20px 10px rgba(255, 0, 0, 0.8)',
-    demo: 'index'
+    demo: 'index',
   },
 
   // Border variables
@@ -94,7 +96,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'size',
     testValue: '5px',
-    demo: 'bordered'
+    demo: 'bordered',
   },
   {
     name: '--pf-v6-c-panel--before--BorderColor',
@@ -102,7 +104,7 @@ const cssApiTests = [
     resolvedValue: 'rgba(255, 255, 255, 0)',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'bordered'
+    demo: 'bordered',
   },
 
   // Bordered variant
@@ -112,7 +114,7 @@ const cssApiTests = [
     resolvedValue: '1px',
     type: 'size',
     testValue: '10px',
-    demo: 'bordered'
+    demo: 'bordered',
   },
   {
     name: '--pf-v6-c-panel--m-bordered--before--BorderColor',
@@ -120,7 +122,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'bordered'
+    demo: 'bordered',
   },
 
   // Secondary variant
@@ -130,7 +132,7 @@ const cssApiTests = [
     resolvedValue: '#f2f2f2',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'secondary'
+    demo: 'secondary',
   },
 
   // Raised variant
@@ -140,7 +142,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'raised'
+    demo: 'raised',
   },
 
   // Header padding
@@ -150,7 +152,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '3rem',
-    demo: 'header'
+    demo: 'header',
   },
   {
     name: '--pf-v6-c-panel__header--PaddingInlineEnd',
@@ -158,7 +160,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '3rem',
-    demo: 'header'
+    demo: 'header',
   },
 
   // Main section
@@ -168,7 +170,7 @@ const cssApiTests = [
     resolvedValue: 'none',
     type: 'size',
     testValue: '200px',
-    demo: 'scrollable'
+    demo: 'scrollable',
   },
   {
     name: '--pf-v6-c-panel--m-scrollable__main--MaxHeight',
@@ -176,7 +178,7 @@ const cssApiTests = [
     resolvedValue: '18.75rem',
     type: 'size',
     testValue: '100px',
-    demo: 'scrollable'
+    demo: 'scrollable',
   },
 
   // Main body padding
@@ -186,7 +188,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '3rem',
-    demo: 'index'
+    demo: 'index',
   },
   {
     name: '--pf-v6-c-panel__main-body--PaddingInlineEnd',
@@ -194,7 +196,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '3rem',
-    demo: 'index'
+    demo: 'index',
   },
 
   // Footer padding
@@ -204,7 +206,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '2rem',
-    demo: 'footer'
+    demo: 'footer',
   },
   {
     name: '--pf-v6-c-panel__footer--PaddingInlineEnd',
@@ -212,7 +214,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '3rem',
-    demo: 'footer'
+    demo: 'footer',
   },
   {
     name: '--pf-v6-c-panel__footer--BorderColor',
@@ -220,7 +222,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'scrollable-with-header-and-footer'
+    demo: 'scrollable-with-header-and-footer',
   },
   {
     name: '--pf-v6-c-panel__footer--BorderWidth',
@@ -228,8 +230,8 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'size',
     testValue: '5px',
-    demo: 'scrollable-with-header-and-footer'
-  }
+    demo: 'scrollable-with-header-and-footer',
+  },
 ];
 
 test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
@@ -243,8 +245,8 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
           `Test value: ${testValue}`,
-          `Demo: ${demo}`
-        ].join('\n')
+          `Demo: ${demo}`,
+        ].join('\n'),
       });
 
       // Set consistent viewport
@@ -268,12 +270,12 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare
@@ -291,23 +293,23 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 }  // Pixel-perfect
+          { threshold: 0 } // Pixel-perfect
         );
 
         // Attach images to report
         await test.info().attach('React with CSS override (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit with CSS override (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match

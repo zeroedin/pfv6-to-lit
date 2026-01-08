@@ -39,7 +39,7 @@ export class Pfv6Panel extends LitElement {
       raised: this.variant === 'raised',
       bordered: this.variant === 'bordered',
       secondary: this.variant === 'secondary',
-      scrollable: this.isScrollable
+      scrollable: this.isScrollable,
     };
 
     return html`

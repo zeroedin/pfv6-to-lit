@@ -70,19 +70,19 @@ export class Pfv6Spinner extends LitElement {
       sm: this.size === 'sm' && !this.isInline,
       md: this.size === 'md' && !this.isInline,
       lg: this.size === 'lg' && !this.isInline,
-      xl: this.size === 'xl' && !this.isInline
+      xl: this.size === 'xl' && !this.isInline,
     };
 
     // Determine effective aria-label:
     // 1. Use explicit accessibleLabel if provided
     // 2. If accessibleLabelledby is set, don't set aria-label (let labelledby handle it)
     // 3. Fall back to 'Contents' as default (matches React behavior)
-    const effectiveAriaLabel = this.accessibleLabel ||
-      (!this.accessibleLabelledby ? 'Contents' : undefined);
+    const effectiveAriaLabel = this.accessibleLabel
+      || (!this.accessibleLabelledby ? 'Contents' : undefined);
 
     // Build inline style for custom diameter
-    const customStyle = this.diameter
-      ? `--pf-v6-c-spinner--diameter: ${this.diameter}`
+    const customStyle = this.diameter ?
+      `--pf-v6-c-spinner--diameter: ${this.diameter}`
       : undefined;
 
     return html`

@@ -91,13 +91,13 @@ export class Pfv6Brand extends LitElement {
 
   render() {
     const classes = {
-      picture: this.hasSlottedContent
+      picture: this.hasSlottedContent,
     };
 
     const inlineStyles = this.buildResponsiveStyles();
 
-    return this.hasSlottedContent
-      ? html`
+    return this.hasSlottedContent ?
+      html`
           <picture
             id="container"
             class=${classMap(classes)}
@@ -126,8 +126,8 @@ export class Pfv6Brand extends LitElement {
 
     if (this.widths) {
       Object.entries(this.widths).forEach(([breakpoint, value]) => {
-        const varName = breakpoint === 'default'
-          ? '--pf-v6-c-brand--Width'
+        const varName = breakpoint === 'default' ?
+          '--pf-v6-c-brand--Width'
           : `--pf-v6-c-brand--Width-on-${breakpoint}`;
         inlineStyles[varName] = value;
       });
@@ -135,8 +135,8 @@ export class Pfv6Brand extends LitElement {
 
     if (this.heights) {
       Object.entries(this.heights).forEach(([breakpoint, value]) => {
-        const varName = breakpoint === 'default'
-          ? '--pf-v6-c-brand--Height'
+        const varName = breakpoint === 'default' ?
+          '--pf-v6-c-brand--Height'
           : `--pf-v6-c-brand--Height-on-${breakpoint}`;
         inlineStyles[varName] = value;
       });

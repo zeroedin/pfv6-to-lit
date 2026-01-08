@@ -156,7 +156,7 @@
       "description": "Auto-fix files to conform to .editorconfig rules"
     },
     "lint:eslint": {
-      "command": "eslint elements/**/*.ts lib/**/*.ts",
+      "command": "eslint elements lib scripts",
       "description": "Lint TypeScript files"
     },
     "lint:stylelint": {

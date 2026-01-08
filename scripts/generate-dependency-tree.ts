@@ -90,7 +90,9 @@ function toRelativePath(absolutePath: string): string {
  * Extract imports from a TypeScript file
  */
 function extractImports(filePath: string): ImportItem[] {
-  if (!existsSync(filePath)) return [];
+  if (!existsSync(filePath)) {
+    return [];
+  }
 
   const content = readFileSync(filePath, 'utf-8');
   const imports: ImportItem[] = [];
@@ -105,7 +107,7 @@ function extractImports(filePath: string): ImportItem[] {
     const source = match[3];
 
     const allImports = [...namedImports, ...defaultImport]
-      .filter((name): name is string => !!name && /^[A-Z]/.test(name)); // PascalCase (likely components)
+        .filter((name): name is string => !!name && /^[A-Z]/.test(name)); // PascalCase (likely components)
 
     allImports.forEach(name => {
       imports.push({ name, source });
@@ -120,7 +122,9 @@ function extractImports(filePath: string): ImportItem[] {
  * Parses inline code examples in markdown files to find component dependencies
  */
 function extractImportsFromMarkdown(mdPath: string): ImportItem[] {
-  if (!existsSync(mdPath)) return [];
+  if (!existsSync(mdPath)) {
+    return [];
+  }
 
   const content = readFileSync(mdPath, 'utf-8');
   const imports: ImportItem[] = [];
@@ -131,11 +135,15 @@ function extractImportsFromMarkdown(mdPath: string): ImportItem[] {
   for (const section of sections) {
     // Find inline code blocks (not file references)
     const codeMatch = section.match(/```(?:js|jsx|tsx)\n([\s\S]*?)```/);
-    if (!codeMatch) continue;
+    if (!codeMatch) {
+      continue;
+    }
 
     // Skip if it's a file reference
     const firstLine = codeMatch[1].trim().split('\n')[0];
-    if (firstLine.includes('file=')) continue;
+    if (firstLine.includes('file=')) {
+      continue;
+    }
 
     const code = codeMatch[1].trim();
 
@@ -149,7 +157,7 @@ function extractImportsFromMarkdown(mdPath: string): ImportItem[] {
       const source = match[3];
 
       const allImports = [...namedImports, ...defaultImport]
-        .filter((name): name is string => !!name && /^[A-Z]/.test(name)); // PascalCase (likely components)
+          .filter((name): name is string => !!name && /^[A-Z]/.test(name)); // PascalCase (likely components)
 
       allImports.forEach(name => {
         imports.push({ name, source });
@@ -166,9 +174,9 @@ function extractImportsFromMarkdown(mdPath: string): ImportItem[] {
 function categorizeImport(importItem: ImportItem): ImportCategory {
   const { source } = importItem;
 
-  if (source.startsWith('@patternfly/react-core') ||
-      source.startsWith('@patternfly/react-icons') ||
-      source.startsWith('@patternfly/react-table')) {
+  if (source.startsWith('@patternfly/react-core')
+      || source.startsWith('@patternfly/react-icons')
+      || source.startsWith('@patternfly/react-table')) {
     return 'patternfly';
   } else if (source.startsWith('../') || source.startsWith('./')) {
     return 'relative';
@@ -206,17 +214,17 @@ function analyzeComponent(
     converted: isComponentConverted(componentName),
     files: {
       implementation: toRelativePath(componentFile),
-      demos: []
+      demos: [],
     },
     dependencies: {
       patternfly: [],
-      relative: []
+      relative: [],
     },
     demoDependencies: {
       patternfly: [],
-      relative: []
+      relative: [],
     },
-    totalDependencies: 0
+    totalDependencies: 0,
   };
 
   // Analyze implementation file
@@ -272,10 +280,10 @@ function analyzeComponent(
 
   // Calculate totals
   result.totalDependencies =
-    result.dependencies.patternfly.length +
-    result.dependencies.relative.length +
-    result.demoDependencies.patternfly.length +
-    result.demoDependencies.relative.length;
+    result.dependencies.patternfly.length
+    + result.dependencies.relative.length
+    + result.demoDependencies.patternfly.length
+    + result.demoDependencies.relative.length;
 
   return result;
 }
@@ -291,8 +299,8 @@ interface StatsTracker {
   zeroDependencies: number;
   withDemoDependencies: number;
   totalDependencySum: number;
-  zeroDepsComponents: Array<{ name: string; source: string; converted: boolean }>;
-  convertedComponents: Array<{ name: string }>;
+  zeroDepsComponents: { name: string; source: string; converted: boolean }[];
+  convertedComponents: { name: string }[];
 }
 
 /**
@@ -314,7 +322,7 @@ function main(): void {
     withDemoDependencies: 0,
     totalDependencySum: 0,
     zeroDepsComponents: [],
-    convertedComponents: []
+    convertedComponents: [],
   };
 
   // Write opening JSON structure
@@ -337,13 +345,17 @@ function main(): void {
 
     // Stringify and write this component (indent by 4 spaces)
     const json = JSON.stringify(analysis, null, 2);
-    const indented = json.split('\n').map(line => '    ' + line).join('\n');
+    const indented = json.split('\n').map(line => `    ${line}`).join('\n');
     stream.write(indented);
 
     // Update stats (minimal memory footprint)
     stats.totalComponents++;
-    if (analysis.type === 'component') stats.componentCount++;
-    if (analysis.type === 'layout') stats.layoutCount++;
+    if (analysis.type === 'component') {
+      stats.componentCount++;
+    }
+    if (analysis.type === 'layout') {
+      stats.layoutCount++;
+    }
     if (analysis.converted) {
       stats.convertedCount++;
       stats.convertedComponents.push({ name: analysis.name });
@@ -353,11 +365,11 @@ function main(): void {
       stats.zeroDepsComponents.push({
         name: analysis.name,
         source: analysis.source,
-        converted: analysis.converted
+        converted: analysis.converted,
       });
     }
-    if (analysis.demoDependencies.patternfly.length > 0 ||
-        analysis.demoDependencies.relative.length > 0) {
+    if (analysis.demoDependencies.patternfly.length > 0
+        || analysis.demoDependencies.relative.length > 0) {
       stats.withDemoDependencies++;
     }
     stats.totalDependencySum += analysis.totalDependencies;
@@ -424,8 +436,8 @@ function main(): void {
   stream.write(`    "totalComponents": ${stats.totalComponents},\n`);
   stream.write(`    "zeroDependencies": ${stats.zeroDependencies},\n`);
   stream.write(`    "withDemoDependencies": ${stats.withDemoDependencies},\n`);
-  const avgDeps = stats.totalComponents > 0
-    ? (stats.totalDependencySum / stats.totalComponents).toFixed(2)
+  const avgDeps = stats.totalComponents > 0 ?
+    (stats.totalDependencySum / stats.totalComponents).toFixed(2)
     : '0.00';
   stream.write(`    "averageDependencies": "${avgDeps}"\n`);
   stream.write('  }\n');

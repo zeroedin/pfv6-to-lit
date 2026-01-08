@@ -11,9 +11,9 @@ describe('<pfv6-background-image>', function() {
     it('should upgrade', async function() {
       const el = await fixture<Pfv6BackgroundImage>(html`<pfv6-background-image></pfv6-background-image>`);
       expect(el)
-        .to.be.an.instanceOf(customElements.get('pfv6-background-image'))
-        .and
-        .to.be.an.instanceOf(Pfv6BackgroundImage);
+          .to.be.an.instanceOf(customElements.get('pfv6-background-image'))
+          .and
+          .to.be.an.instanceOf(Pfv6BackgroundImage);
     });
   });
 

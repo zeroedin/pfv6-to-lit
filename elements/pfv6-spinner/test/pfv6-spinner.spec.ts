@@ -9,7 +9,6 @@ import { Pfv6Spinner } from '../pfv6-spinner.js';
 import '../pfv6-spinner.js';
 
 describe('<pfv6-spinner>', function() {
-
   // ============================================
   // Component Instantiation
   // ============================================

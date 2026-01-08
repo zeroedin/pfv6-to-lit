@@ -234,11 +234,11 @@ export class Pfv6Radio extends LitElement {
   render() {
     const wrapperClasses = {
       standalone: !this.label,
-      disabled: this.disabled
+      disabled: this.disabled,
     };
 
     const labelClasses = {
-      disabled: this.disabled
+      disabled: this.disabled,
     };
 
     const isLabelWrapper = this.isLabelWrapped;

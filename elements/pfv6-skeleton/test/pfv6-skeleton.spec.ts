@@ -11,9 +11,9 @@ describe('<pfv6-skeleton>', function() {
     it('should upgrade', async function() {
       const el = await fixture<Pfv6Skeleton>(html`<pfv6-skeleton></pfv6-skeleton>`);
       expect(el)
-        .to.be.an.instanceOf(customElements.get('pfv6-skeleton'))
-        .and
-        .to.be.an.instanceOf(Pfv6Skeleton);
+          .to.be.an.instanceOf(customElements.get('pfv6-skeleton'))
+          .and
+          .to.be.an.instanceOf(Pfv6Skeleton);
     });
   });
 

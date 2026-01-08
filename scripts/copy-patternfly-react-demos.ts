@@ -36,14 +36,14 @@ const projectRoot = join(__dirname, '..');
 const cacheDir = join(projectRoot, '.cache/patternfly-react');
 
 interface DemoMapping {
-  source: string;      // Original file name: "CardBasic.tsx"
-  kebabCase: string;   // URL-friendly name: "basic-cards"
-  exportName: string;  // React export name: "CardBasic"
+  source: string; // Original file name: "CardBasic.tsx"
+  kebabCase: string; // URL-friendly name: "basic-cards"
+  exportName: string; // React export name: "CardBasic"
 }
 
 interface ComponentDemos {
-  sourceComponent: string;  // Original component name: "Card"
-  demos: Record<string, string>;  // kebab-case → source file mapping
+  sourceComponent: string; // Original component name: "Card"
+  demos: Record<string, string>; // kebab-case → source file mapping
 }
 
 interface Manifest {
@@ -100,9 +100,9 @@ function toKebabCase(pascalCase: string, componentName: string): string {
 
   // Convert to kebab-case
   const kebab = withoutPrefix
-    .replace(/([A-Z])/g, '-$1')
-    .toLowerCase()
-    .replace(/^-/, '');
+      .replace(/([A-Z])/g, '-$1')
+      .toLowerCase()
+      .replace(/^-/, '');
 
   return kebab;
 }
@@ -156,9 +156,9 @@ function extractImportedNames(code: string): Set<string> {
 function isBareJsx(code: string): boolean {
   // Remove comments and whitespace
   const cleaned = code
-    .replace(/\/\*[\s\S]*?\*\//g, '')
-    .replace(/\/\/.*/g, '')
-    .trim();
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/\/\/.*/g, '')
+      .trim();
 
   // Split into lines
   const lines = cleaned.split('\n').filter(line => line.trim());
@@ -228,7 +228,7 @@ function transformBareJsx(code: string, exportName: string): string {
 
   // Indent JSX (2 spaces)
   const indentedJsx = jsx.split('\n').map(line =>
-    line ? '  ' + line : line
+    line ? `  ${line}` : line
   ).join('\n');
 
   // Build transformed code
@@ -251,7 +251,7 @@ ${indentedJsx}
 function transformInlineCode(
   code: string,
   exportName: string,
-  shouldRename: boolean = true
+  shouldRename = true
 ): { code: string; exportName: string } {
   // Extract the original component name from the code
   // Match patterns like: const ComponentName = () => (
@@ -316,11 +316,15 @@ async function extractInlineCodeFromMd(
 
     // Find inline code blocks (not file references)
     const codeMatch = section.match(/```(?:js|jsx|tsx)\n([\s\S]*?)```/);
-    if (!codeMatch) continue;
+    if (!codeMatch) {
+      continue;
+    }
 
     // Skip if it's a file reference
     const firstLine = codeMatch[1].trim().split('\n')[0];
-    if (firstLine.includes('file=')) continue;
+    if (firstLine.includes('file=')) {
+      continue;
+    }
 
     const code = codeMatch[1].trim();
 
@@ -328,9 +332,9 @@ async function extractInlineCodeFromMd(
     // "Basic" → "PanelBasic"
     // "Header and footer" → "PanelHeaderAndFooter"
     let fileName = title
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join('');
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join('');
 
     if (!fileName.startsWith(componentName)) {
       fileName = componentName + fileName;
@@ -342,19 +346,19 @@ async function extractInlineCodeFromMd(
     const { code: transformedCode, exportName: finalExportName } = transformInlineCode(code, fileName, false);
 
     // Use filename (without "Example" suffix) for file creation
-    const finalFileName = fileName + '.tsx';
+    const finalFileName = `${fileName}.tsx`;
 
     // Write to patternfly-react/ (NOT .cache)
     await mkdir(targetDir, { recursive: true });
     const filePath = join(targetDir, finalFileName);
-    await writeFile(filePath, transformedCode + '\n', 'utf-8');
+    await writeFile(filePath, `${transformedCode}\n`, 'utf-8');
 
     // Generate URL from filename (clean, no "Example")
     const kebabCase = toKebabCase(fileName, componentName);
     demos.push({
       source: finalFileName,
       kebabCase,
-      exportName: finalExportName
+      exportName: finalExportName,
     });
   }
 
@@ -501,7 +505,9 @@ async function* streamComponents(treeFile: string): AsyncGenerator<DependencyTre
       continue;
     }
 
-    if (!inComponentsArray) continue;
+    if (!inComponentsArray) {
+      continue;
+    }
 
     // Detect components array end (only at top level, braceDepth must be 0)
     if (braceDepth === 0 && (trimmed === '],' || trimmed === ']')) {
@@ -524,7 +530,7 @@ async function* streamComponents(treeFile: string): AsyncGenerator<DependencyTre
 
     // Accumulate component JSON
     if (braceDepth > 0 || trimmed.endsWith('}') || trimmed.endsWith('},')) {
-      currentComponent += line + '\n';
+      currentComponent += `${line}\n`;
     }
 
     // When braces balance and we have content, we have a complete component
@@ -652,7 +658,6 @@ async function main() {
     console.log(`   Components with demos: ${componentsWithDemos}`);
     console.log(`   Total component demos copied: ${totalDemos}`);
     console.log(`   Location: ${join(projectRoot, 'patternfly-react')}`);
-
   } catch (error) {
     console.error('\n❌ Error:', error);
     process.exit(1);

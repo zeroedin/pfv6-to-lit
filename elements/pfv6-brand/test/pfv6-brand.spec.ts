@@ -49,7 +49,7 @@ describe('pfv6-brand', () => {
     expect(el.widths).to.deep.equal({
       default: '200px',
       md: '400px',
-      xl: '600px'
+      xl: '600px',
     });
   });
 
@@ -65,7 +65,7 @@ describe('pfv6-brand', () => {
     expect(el.heights).to.deep.equal({
       default: '40px',
       md: '60px',
-      lg: '80px'
+      lg: '80px',
     });
   });
 

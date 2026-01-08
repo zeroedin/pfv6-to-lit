@@ -56,7 +56,7 @@ export class Pfv6Avatar extends LitElement {
       md: this.size === 'md',
       lg: this.size === 'lg',
       xl: this.size === 'xl',
-      bordered: this.isBordered
+      bordered: this.isBordered,
     };
 
     return html`

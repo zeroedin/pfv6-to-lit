@@ -24,8 +24,10 @@ async function waitForFullLoad(page: Page): Promise<void> {
   await page.evaluate(() => {
     const images = Array.from(document.images);
     return Promise.all(
-      images.map(img => img.complete ? Promise.resolve() :
-        new Promise(resolve => { img.onload = img.onerror = resolve; })
+      images.map(img => img.complete ? Promise.resolve()
+        : new Promise(resolve => {
+          img.addEventListener('load', img.onerror = resolve);
+        })
       )
     );
   });
@@ -51,7 +53,7 @@ async function applyCssOverride(
   value: string
 ): Promise<void> {
   await page.addStyleTag({
-    content: `${selector} { ${cssVar}: ${value}; }`
+    content: `${selector} { ${cssVar}: ${value}; }`,
   });
 }
 
@@ -76,7 +78,7 @@ const cssApiTests = [
     resolvedValue: '3.5rem',
     type: 'size',
     testValue: '100px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-spinner--Color',
@@ -84,7 +86,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-spinner--AnimationDuration',
@@ -92,7 +94,7 @@ const cssApiTests = [
     resolvedValue: '1.4s',
     type: 'time',
     testValue: '5s',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-spinner--StrokeWidth',
@@ -100,7 +102,7 @@ const cssApiTests = [
     resolvedValue: '10',
     type: 'number',
     testValue: '25',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-spinner--m-sm--diameter',
@@ -108,7 +110,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50px',
-    demo: 'size-variations'
+    demo: 'size-variations',
   },
   {
     name: '--pf-v6-c-spinner--m-md--diameter',
@@ -116,7 +118,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '60px',
-    demo: 'size-variations'
+    demo: 'size-variations',
   },
   {
     name: '--pf-v6-c-spinner--m-lg--diameter',
@@ -124,7 +126,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '70px',
-    demo: 'size-variations'
+    demo: 'size-variations',
   },
   {
     name: '--pf-v6-c-spinner--m-xl--diameter',
@@ -132,7 +134,7 @@ const cssApiTests = [
     resolvedValue: '3.5rem',
     type: 'size',
     testValue: '120px',
-    demo: 'size-variations'
+    demo: 'size-variations',
   },
   {
     name: '--pf-v6-c-spinner--m-inline--diameter',
@@ -140,8 +142,8 @@ const cssApiTests = [
     resolvedValue: '1em',
     type: 'size',
     testValue: '2em',
-    demo: 'inline'
-  }
+    demo: 'inline',
+  },
 ];
 
 test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
@@ -154,8 +156,8 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Variable: ${name}`,
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
-          `Test value: ${testValue}`
-        ].join('\n')
+          `Test value: ${testValue}`,
+        ].join('\n'),
       });
 
       // Set consistent viewport
@@ -179,12 +181,12 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         // Take screenshots (animations disabled to ensure consistent state)
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare
@@ -202,23 +204,23 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 }  // Pixel-perfect
+          { threshold: 0 } // Pixel-perfect
         );
 
         // Attach images to report
         await test.info().attach('React with CSS override (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit with CSS override (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match

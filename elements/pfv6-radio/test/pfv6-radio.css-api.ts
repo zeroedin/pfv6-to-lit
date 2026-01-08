@@ -20,8 +20,10 @@ async function waitForFullLoad(page: Page): Promise<void> {
   await page.evaluate(() => {
     const images = Array.from(document.images);
     return Promise.all(
-      images.map(img => img.complete ? Promise.resolve() :
-        new Promise(resolve => { img.onload = img.onerror = resolve; })
+      images.map(img => img.complete ? Promise.resolve()
+        : new Promise(resolve => {
+          img.addEventListener('load', img.onerror = resolve);
+        })
       )
     );
   });
@@ -47,7 +49,7 @@ async function applyCssOverride(
   value: string
 ): Promise<void> {
   await page.addStyleTag({
-    content: `${selector} { ${cssVar}: ${value}; }`
+    content: `${selector} { ${cssVar}: ${value}; }`,
   });
 }
 
@@ -59,7 +61,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem 0.5rem',
     type: 'size',
     testValue: '2rem 2rem',
-    demo: 'with-description'
+    demo: 'with-description',
   },
   {
     name: '--pf-v6-c-radio--AccentColor',
@@ -67,7 +69,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'uncontrolled'
+    demo: 'uncontrolled',
   },
   {
     name: '--pf-v6-c-radio--m-standalone--MinHeight',
@@ -75,7 +77,7 @@ const cssApiTests = [
     resolvedValue: 'calc(0.875rem * 1.5)',
     type: 'size',
     testValue: '50px',
-    demo: 'standalone-input'
+    demo: 'standalone-input',
   },
   {
     name: '--pf-v6-c-radio__label--disabled--Color',
@@ -83,7 +85,7 @@ const cssApiTests = [
     resolvedValue: '#a3a3a3',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'disabled'
+    demo: 'disabled',
   },
   {
     name: '--pf-v6-c-radio__label--Color',
@@ -91,7 +93,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'uncontrolled'
+    demo: 'uncontrolled',
   },
   {
     name: '--pf-v6-c-radio__label--FontWeight',
@@ -99,7 +101,7 @@ const cssApiTests = [
     resolvedValue: '400',
     type: 'font-weight',
     testValue: '900',
-    demo: 'uncontrolled'
+    demo: 'uncontrolled',
   },
   {
     name: '--pf-v6-c-radio__label--FontSize',
@@ -107,7 +109,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '2rem',
-    demo: 'uncontrolled'
+    demo: 'uncontrolled',
   },
   {
     name: '--pf-v6-c-radio__label--LineHeight',
@@ -115,7 +117,7 @@ const cssApiTests = [
     resolvedValue: '1.5',
     type: 'number',
     testValue: '2.5',
-    demo: 'uncontrolled'
+    demo: 'uncontrolled',
   },
   {
     name: '--pf-v6-c-radio__description--FontSize',
@@ -123,7 +125,7 @@ const cssApiTests = [
     resolvedValue: '0.75rem',
     type: 'size',
     testValue: '1.5rem',
-    demo: 'with-description'
+    demo: 'with-description',
   },
   {
     name: '--pf-v6-c-radio__description--Color',
@@ -131,7 +133,7 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'with-description'
+    demo: 'with-description',
   },
   {
     name: '--pf-v6-c-radio__input--first-child--MarginInlineStart',
@@ -139,7 +141,7 @@ const cssApiTests = [
     resolvedValue: '0.0625rem',
     type: 'size',
     testValue: '20px',
-    demo: 'uncontrolled'
+    demo: 'uncontrolled',
   },
   {
     name: '--pf-v6-c-radio__input--last-child--MarginInlineEnd',
@@ -147,7 +149,7 @@ const cssApiTests = [
     resolvedValue: '0.0625rem',
     type: 'size',
     testValue: '20px',
-    demo: 'reversed'
+    demo: 'reversed',
   },
   {
     name: '--pf-v6-c-radio__body--MarginBlockStart',
@@ -155,7 +157,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '2rem',
-    demo: 'with-body'
+    demo: 'with-body',
   },
   {
     name: '--pf-v6-c-radio__input--TranslateY',
@@ -163,8 +165,8 @@ const cssApiTests = [
     resolvedValue: 'calc((1.5 * 0.875rem / 2 ) - 50%)',
     type: 'size',
     testValue: '10px',
-    demo: 'uncontrolled'
-  }
+    demo: 'uncontrolled',
+  },
 ];
 
 test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
@@ -178,8 +180,8 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
           `Test value: ${testValue}`,
-          `Demo: ${demo}`
-        ].join('\n')
+          `Demo: ${demo}`,
+        ].join('\n'),
       });
 
       // Set consistent viewport
@@ -203,12 +205,12 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare
@@ -226,23 +228,23 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 }  // Pixel-perfect
+          { threshold: 0 } // Pixel-perfect
         );
 
         // Attach images to report
         await test.info().attach('React with CSS override (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit with CSS override (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match

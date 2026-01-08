@@ -84,35 +84,35 @@ const candidates = tree.components.filter(c =>
 const blockedBy: Record<string, number> = {};
 tree.components.forEach(comp => {
   [...(comp.dependencies.patternfly || []),
-  ...(comp.demoDependencies.patternfly || [])]
-    .forEach(dep => {
-      blockedBy[dep] = (blockedBy[dep] || 0) + 1;
-    });
+    ...(comp.demoDependencies.patternfly || [])]
+      .forEach(dep => {
+        blockedBy[dep] = (blockedBy[dep] || 0) + 1;
+      });
 });
 
 // Add blocker counts and sort
 const ranked: RankedComponent[] = candidates
-  .map(c => {
-    const unconvertedDeps = getUnconvertedDependencyCount(c, tree.components);
-    return {
-      ...c,
-      blocks: blockedBy[c.name] || 0,
-      impact: (blockedBy[c.name] || 0) / (unconvertedDeps + 1),
-      // Store unconverted count for debugging
-      unconvertedDependencies: unconvertedDeps
-    };
-  })
-  .sort((a, b) => {
+    .map(c => {
+      const unconvertedDeps = getUnconvertedDependencyCount(c, tree.components);
+      return {
+        ...c,
+        blocks: blockedBy[c.name] || 0,
+        impact: (blockedBy[c.name] || 0) / (unconvertedDeps + 1),
+        // Store unconverted count for debugging
+        unconvertedDependencies: unconvertedDeps,
+      };
+    })
+    .sort((a, b) => {
     // Primary sort: fewest unconverted dependencies first
-    const aUnconverted = getUnconvertedDependencyCount(a, tree.components);
-    const bUnconverted = getUnconvertedDependencyCount(b, tree.components);
+      const aUnconverted = getUnconvertedDependencyCount(a, tree.components);
+      const bUnconverted = getUnconvertedDependencyCount(b, tree.components);
 
-    if (aUnconverted !== bUnconverted) {
-      return aUnconverted - bUnconverted;
-    }
-    // Tiebreaker: most blocking components first
-    return b.blocks - a.blocks;
-  });
+      if (aUnconverted !== bUnconverted) {
+        return aUnconverted - bUnconverted;
+      }
+      // Tiebreaker: most blocking components first
+      return b.blocks - a.blocks;
+    });
 
 // Output top 6 candidates
 console.log(JSON.stringify(ranked.slice(0, 6), null, 2));

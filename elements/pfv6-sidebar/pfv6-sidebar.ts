@@ -22,7 +22,6 @@ export class Pfv6Sidebar extends LitElement {
   * Indicates the direction of the layout.
   * Default orientation is stack on small screens, and split on medium screens and above.
   *
-  * @type {'stack' | 'split'}
   */
   @property({ type: String, reflect: true })
   orientation?: 'stack' | 'split';
@@ -58,12 +57,12 @@ export class Pfv6Sidebar extends LitElement {
       'no-background': this.hasNoBackground,
       'panel-right': this.isPanelRight,
       'stack': this.orientation === 'stack',
-      'split': this.orientation === 'split'
+      'split': this.orientation === 'split',
     };
 
     // Classes for the inner main element
     const mainClasses = {
-      'border': this.hasBorder
+      'border': this.hasBorder,
     };
 
     return html`

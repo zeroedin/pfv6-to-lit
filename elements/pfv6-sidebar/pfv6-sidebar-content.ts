@@ -28,7 +28,6 @@ export class Pfv6SidebarContent extends LitElement {
 
   /**
   * Variant of the sidebar content background
-  * @type {'default' | 'secondary'}
   * @default 'default'
   */
   @property({ type: String, reflect: true, attribute: 'background-variant' })
@@ -38,7 +37,7 @@ export class Pfv6SidebarContent extends LitElement {
     const classes = {
       'no-background': this.hasNoBackground,
       'padding': this.hasPadding,
-      'secondary': this.backgroundVariant === 'secondary'
+      'secondary': this.backgroundVariant === 'secondary',
     };
 
     return html`

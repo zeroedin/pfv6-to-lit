@@ -21,7 +21,6 @@ export class Pfv6SidebarPanel extends LitElement {
   * Default is sticky on small screens when the orientation is stack, and static
   * on medium and above screens when the orientation is split.
   *
-  * @type {'default' | 'sticky' | 'static'}
   * @default 'default'
   */
   @property({ type: String, reflect: true })
@@ -53,7 +52,6 @@ export class Pfv6SidebarPanel extends LitElement {
 
   /**
   * Variant of the sidebar panel background
-  * @type {'default' | 'secondary'}
   * @default 'default'
   */
   @property({ type: String, reflect: true, attribute: 'background-variant' })
@@ -65,7 +63,7 @@ export class Pfv6SidebarPanel extends LitElement {
       'static': this.variant === 'static',
       'no-background': this.hasNoBackground,
       'padding': this.hasPadding,
-      'secondary': this.backgroundVariant === 'secondary'
+      'secondary': this.backgroundVariant === 'secondary',
     };
 
     // Add width modifier classes
