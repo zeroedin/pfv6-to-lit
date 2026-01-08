@@ -30,11 +30,10 @@ import styles from './pfv6-divider.css';
  *
  * @element pfv6-divider
  *
- * @cssprop --pf-v6-c-divider--Height - Height of the divider
- * @cssprop --pf-v6-c-divider--BackgroundColor - Background color of the divider
- * @cssprop --pf-v6-c-divider--m-vertical--Width - Width of vertical divider
- * @cssprop --pf-v6-c-divider--m-vertical--MaxHeight - Max height of vertical divider
- * @cssprop --pf-v6-c-divider--m-inset-* - Inset spacing values
+ * @cssprop --pf-v6-c-divider--Color - Color of the divider line
+ * @cssprop --pf-v6-c-divider--Size - Width/height of the divider line (thickness)
+ * @cssprop --pf-v6-c-divider--Display - Display property (default: flex)
+ * @cssprop --pf-v6-c-divider--before--FlexBasis - Flex basis of divider line (spacing)
  */
 @customElement('pfv6-divider')
 export class Pfv6Divider extends LitElement {

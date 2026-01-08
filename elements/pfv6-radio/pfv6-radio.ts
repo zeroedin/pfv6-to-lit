@@ -29,10 +29,20 @@ export class Pfv6RadioChangeEvent extends Event {
  *
  * @fires {Pfv6RadioChangeEvent} change - Fires when the radio's checked state changes
  *
- * @cssprop --pf-v6-c-radio__label--FontSize - Font size of the label
+ * @cssprop --pf-v6-c-radio--GridGap - Gap between grid items in the radio layout
+ * @cssprop --pf-v6-c-radio--AccentColor - Accent color for the radio input
+ * @cssprop --pf-v6-c-radio--m-standalone--MinHeight - Minimum height for standalone radio (no label)
+ * @cssprop --pf-v6-c-radio__label--disabled--Color - Color of the label when disabled
  * @cssprop --pf-v6-c-radio__label--Color - Color of the label text
+ * @cssprop --pf-v6-c-radio__label--FontWeight - Font weight of the label
+ * @cssprop --pf-v6-c-radio__label--FontSize - Font size of the label
+ * @cssprop --pf-v6-c-radio__label--LineHeight - Line height of the label
  * @cssprop --pf-v6-c-radio__description--FontSize - Font size of the description
  * @cssprop --pf-v6-c-radio__description--Color - Color of the description text
+ * @cssprop --pf-v6-c-radio__input--first-child--MarginInlineStart - Inline start margin for first-child input
+ * @cssprop --pf-v6-c-radio__input--last-child--MarginInlineEnd - Inline end margin for last-child input
+ * @cssprop --pf-v6-c-radio__body--MarginBlockStart - Block start margin for body text
+ * @cssprop --pf-v6-c-radio__input--TranslateY - Vertical translation for input alignment
  */
 @customElement('pfv6-radio')
 export class Pfv6Radio extends LitElement {

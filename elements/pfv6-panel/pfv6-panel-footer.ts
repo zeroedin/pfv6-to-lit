@@ -10,6 +10,14 @@ import styles from './pfv6-panel-footer.css';
  * @slot - Default slot for footer content
  *
  * @csspart container - The container element
+ *
+ * @cssprop --pf-v6-c-panel__footer--PaddingBlockStart - Block start padding of the footer
+ * @cssprop --pf-v6-c-panel__footer--PaddingInlineEnd - Inline end padding of the footer
+ * @cssprop --pf-v6-c-panel__footer--PaddingBlockEnd - Block end padding of the footer
+ * @cssprop --pf-v6-c-panel__footer--PaddingInlineStart - Inline start padding of the footer
+ * @cssprop --pf-v6-c-panel__footer--BoxShadow - Box shadow of the footer
+ * @cssprop --pf-v6-c-panel__footer--BorderColor - Border color of the footer
+ * @cssprop --pf-v6-c-panel__footer--BorderWidth - Border width of the footer
  */
 @customElement('pfv6-panel-footer')
 export class Pfv6PanelFooter extends LitElement {

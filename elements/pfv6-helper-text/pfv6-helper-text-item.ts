@@ -18,13 +18,27 @@ import styles from './pfv6-helper-text-item.css';
  *
  * @slot - Default slot for helper text content
  * @slot icon - Custom icon (overrides default variant icon)
- * @cssprop --pf-v6-c-helper-text__item--Gap - Gap between icon and text
  * @cssprop --pf-v6-c-helper-text__item-icon--Color - Icon color
- * @cssprop --pf-v6-c-helper-text__item-icon--FontSize - Icon size
- * @cssprop --pf-v6-c-helper-text__item--m-warning__icon--Color - Warning icon color
- * @cssprop --pf-v6-c-helper-text__item--m-success__icon--Color - Success icon color
- * @cssprop --pf-v6-c-helper-text__item--m-error__icon--Color - Error icon color
- * @cssprop --pf-v6-c-helper-text__item--m-indeterminate__icon--Color - Indeterminate icon color
+ * @cssprop --pf-v6-c-helper-text__item-text--Color - Text color
+ * @cssprop --pf-v6-c-helper-text__item-text--FontWeight - Text font weight
+ * @cssprop --pf-v6-c-helper-text__item-icon--m-indeterminate--Color - Indeterminate icon color
+ * @cssprop --pf-v6-c-helper-text__item-text--m-indeterminate--Color - Indeterminate text color
+ * @cssprop --pf-v6-c-helper-text__item-icon--m-warning--Color - Warning icon color
+ * @cssprop --pf-v6-c-helper-text__item-text--m-warning--FontWeight - Warning text font weight
+ * @cssprop --pf-v6-c-helper-text__item-icon--m-success--Color - Success icon color
+ * @cssprop --pf-v6-c-helper-text__item-text--m-success--FontWeight - Success text font weight
+ * @cssprop --pf-v6-c-helper-text__item-icon--m-error--Color - Error icon color
+ * @cssprop --pf-v6-c-helper-text__item-text--m-error--FontWeight - Error text font weight
+ * @cssprop --pf-v6-c-helper-text__item--m-error--TransitionDuration--Opacity - Error fade-in transition duration
+ * @cssprop --pf-v6-c-helper-text__item--m-error--TransitionTimingFunction--Opacity - Error fade-in timing function
+ * @cssprop --pf-v6-c-helper-text--m-dynamic__item-icon--Color - Dynamic mode icon color
+ * @cssprop --pf-v6-c-helper-text--m-dynamic--m-indeterminate__item-icon--Color - Dynamic mode indeterminate icon color
+ * @cssprop --pf-v6-c-helper-text--m-dynamic--m-indeterminate__item-text--Color - Dynamic mode indeterminate text color
+ * @cssprop --pf-v6-c-helper-text--m-dynamic--m-warning__item-icon--Color - Dynamic mode warning icon color
+ * @cssprop --pf-v6-c-helper-text--m-dynamic--m-warning__item-text--FontWeight - Dynamic mode warning text font weight
+ * @cssprop --pf-v6-c-helper-text--m-dynamic--m-success__item-icon--Color - Dynamic mode success icon color
+ * @cssprop --pf-v6-c-helper-text--m-dynamic--m-error__item-icon--Color - Dynamic mode error icon color
+ * @cssprop --pf-v6-c-helper-text__item-icon--MarginInlineEnd - Icon inline end margin
  */
 @customElement('pfv6-helper-text-item')
 export class Pfv6HelperTextItem extends LitElement {

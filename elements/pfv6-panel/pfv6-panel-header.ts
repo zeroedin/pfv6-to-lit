@@ -9,6 +9,11 @@ import styles from './pfv6-panel-header.css';
  * @slot - Default slot for header content
  *
  * @csspart container - The container element
+ *
+ * @cssprop --pf-v6-c-panel__header--PaddingBlockStart - Block start padding of the header
+ * @cssprop --pf-v6-c-panel__header--PaddingInlineEnd - Inline end padding of the header
+ * @cssprop --pf-v6-c-panel__header--PaddingBlockEnd - Block end padding of the header
+ * @cssprop --pf-v6-c-panel__header--PaddingInlineStart - Inline start padding of the header
  */
 @customElement('pfv6-panel-header')
 export class Pfv6PanelHeader extends LitElement {

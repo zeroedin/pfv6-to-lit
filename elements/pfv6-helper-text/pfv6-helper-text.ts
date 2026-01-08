@@ -28,6 +28,7 @@ import styles from './pfv6-helper-text.css';
  *
  * @slot - Default slot for helper text items
  * @cssprop --pf-v6-c-helper-text--Gap - Gap between helper text items
+ * @cssprop --pf-v6-c-helper-text--FontSize - Font size for helper text
  */
 @customElement('pfv6-helper-text')
 export class Pfv6HelperText extends LitElement {
