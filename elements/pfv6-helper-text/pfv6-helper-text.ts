@@ -34,6 +34,13 @@ import styles from './pfv6-helper-text.css';
 export class Pfv6HelperText extends LitElement {
   static styles = styles;
 
+  private _internals: ElementInternals;
+
+  constructor() {
+    super();
+    this._internals = this.attachInternals();
+  }
+
   /**
   * Flag for indicating whether the helper text container is a live region.
   * Use this prop when you expect or intend for any helper text items within
@@ -49,13 +56,22 @@ export class Pfv6HelperText extends LitElement {
   @property({ type: String, reflect: true, attribute: 'accessible-label' })
   accessibleLabel?: string;
 
+  updated(changedProperties: Map<PropertyKey, unknown>) {
+    super.updated(changedProperties);
+
+    // Update ARIA via ElementInternals
+    if (changedProperties.has('isLiveRegion')) {
+      this._internals.ariaLive = this.isLiveRegion ? 'polite' : 'off';
+    }
+
+    if (changedProperties.has('accessibleLabel')) {
+      this._internals.ariaLabel = this.accessibleLabel || null;
+    }
+  }
+
   render() {
     return html`
-      <div
-        id="container"
-        aria-live=${this.isLiveRegion ? 'polite' : 'off'}
-        aria-label=${this.accessibleLabel || ''}
-      >
+      <div id="container">
         <slot></slot>
       </div>
     `;
