@@ -2,7 +2,7 @@
 name: accessibility-auditor
 description: Orchestrates accessibility validation by delegating to specialized sub-auditors (ARIA, ElementInternals, FACE). Coordinates validation workflow and aggregates results.
 tools: Read, Grep, Glob
-model: sonnet
+model: haiku
 ---
 
 You are an accessibility validation orchestrator that coordinates specialized sub-auditors to validate web component accessibility.

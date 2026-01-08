@@ -2,12 +2,12 @@
 
 /**
  * Copy PatternFly styles and assets from node_modules to dev-server
- * 
+ *
  * This script copies:
  * - @patternfly/react-core/dist/styles/base.css → dev-server/styles/patternfly/base.css
  * - @patternfly/patternfly/assets/fonts/** → dev-server/styles/assets/fonts/
  * - @patternfly/react-styles/css/assets/images/** → dev-server/assets/patternfly/assets/images/
- * 
+ *
  * Note: This also serves as the asset source for React demo builds (via Vite aliases)
  */
 
@@ -86,4 +86,3 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 }
 
 export { copyPatternFlyAssets };
-

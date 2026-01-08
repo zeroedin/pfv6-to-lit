@@ -1,7 +1,7 @@
 ---
 name: test-spec-writer
 description: Creates comprehensive unit tests for LitElement components that validate API parity with PatternFly React. Primarily tests @patternfly/react-core component conversions. Use when writing tests for a new pfv6-{component}. Expert at TDD and Chai-style assertions.
-tools: Read, Write, Edit, Grep, Glob, ListDir
+tools: Read, Write, Edit, Grep, Glob
 model: sonnet
 ---
 

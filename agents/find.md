@@ -98,10 +98,12 @@ These components block many others but have dependencies themselves:
 To proceed with the conversion, use this prompt:
 
 \`\`\`
-Use the create.md subagent following strict delegation rules, convert [ComponentName]
+Convert [ComponentName] component
 \`\`\`
 
 Replace `[ComponentName]` with the recommended component name.
+
+The main conversation will execute the conversion workflow by delegating to specialized subagents in sequence (api-writer → demo-writer → css-writer → etc).
 ```
 
 ## Excluded Components

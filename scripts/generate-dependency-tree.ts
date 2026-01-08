@@ -91,27 +91,27 @@ function toRelativePath(absolutePath: string): string {
  */
 function extractImports(filePath: string): ImportItem[] {
   if (!existsSync(filePath)) return [];
-  
+
   const content = readFileSync(filePath, 'utf-8');
   const imports: ImportItem[] = [];
-  
+
   // Match import statements
   const importRegex = /import\s+(?:{([^}]+)}|(\w+))\s+from\s+['"]([^'"]+)['"]/g;
   let match: RegExpExecArray | null;
-  
+
   while ((match = importRegex.exec(content)) !== null) {
     const namedImports = match[1] ? match[1].split(',').map(s => s.trim()) : [];
     const defaultImport = match[2] ? [match[2]] : [];
     const source = match[3];
-    
+
     const allImports = [...namedImports, ...defaultImport]
       .filter((name): name is string => !!name && /^[A-Z]/.test(name)); // PascalCase (likely components)
-    
+
     allImports.forEach(name => {
       imports.push({ name, source });
     });
   }
-  
+
   return imports;
 }
 
@@ -165,15 +165,15 @@ function extractImportsFromMarkdown(mdPath: string): ImportItem[] {
  */
 function categorizeImport(importItem: ImportItem): ImportCategory {
   const { source } = importItem;
-  
-  if (source.startsWith('@patternfly/react-core') || 
+
+  if (source.startsWith('@patternfly/react-core') ||
       source.startsWith('@patternfly/react-icons') ||
       source.startsWith('@patternfly/react-table')) {
     return 'patternfly';
   } else if (source.startsWith('../') || source.startsWith('./')) {
     return 'relative';
   }
-  
+
   return 'external';
 }
 
@@ -191,14 +191,14 @@ function isComponentConverted(componentName: string): boolean {
  * Analyze a single component
  */
 function analyzeComponent(
-  componentName: string, 
+  componentName: string,
   basePath: string,
   type: 'component' | 'layout' = 'component'
 ): ComponentAnalysis {
   const componentPath = join(basePath, componentName);
   const componentFile = join(componentPath, `${componentName}.tsx`);
   const examplesPath = join(componentPath, 'examples');
-  
+
   const result: ComponentAnalysis = {
     name: componentName,
     source: 'patternfly-react',
@@ -218,7 +218,7 @@ function analyzeComponent(
     },
     totalDependencies: 0
   };
-  
+
   // Analyze implementation file
   if (existsSync(componentFile)) {
     const imports = extractImports(componentFile);
@@ -229,7 +229,7 @@ function analyzeComponent(
       }
     });
   }
-  
+
   // Analyze demo files (.tsx or .md)
   if (existsSync(examplesPath)) {
     const demoFiles = readdirSync(examplesPath).filter(f => f.endsWith('.tsx') && !f.includes('.test.'));
@@ -269,14 +269,14 @@ function analyzeComponent(
       });
     }
   }
-  
+
   // Calculate totals
-  result.totalDependencies = 
-    result.dependencies.patternfly.length + 
+  result.totalDependencies =
+    result.dependencies.patternfly.length +
     result.dependencies.relative.length +
     result.demoDependencies.patternfly.length +
     result.demoDependencies.relative.length;
-  
+
   return result;
 }
 
@@ -459,4 +459,3 @@ function main(): void {
 }
 
 main();
-

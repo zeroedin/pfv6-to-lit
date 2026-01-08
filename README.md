@@ -130,23 +130,32 @@ The `find` subagent:
 
 ### Converting a Component
 
-Once you have a component recommendation, use the `create` subagent to perform the conversion:
+Once you have a component recommendation, use a simple conversion prompt:
 
 **Prompt:**
 
 ```
-Use the create.md subagent following strict delegation rules, convert {{ Component Name }}
+Convert {{ Component Name }} component
 ```
 
 Replace `{{ Component Name }}` with the component name from the `find` recommendation (e.g., "Brand", "Spinner", "Divider").
 
-The `create` subagent orchestrates the full conversion workflow:
-1. **API Design** - Translates React props to LitElement properties
-2. **Implementation** - Creates the component TypeScript file
-3. **Demos** - Converts React examples to HTML demos
-4. **CSS** - Translates React SCSS to Shadow DOM CSS
-5. **Accessibility** - Validates ARIA patterns and keyboard interactions
-6. **Tests** - Generates unit tests, visual parity tests, and CSS API tests
+**Conversion Workflow:**
+
+The main conversation orchestrates the conversion by delegating to specialized subagents in sequence:
+
+1. **api-writer** - Translates React props to LitElement properties and creates TypeScript component files
+2. **api-auditor** - Validates component API against Lit best practices
+3. **demo-writer** - Converts React examples to HTML demos
+4. **demo-auditor** - Validates 1:1 parity with React demos
+5. **css-writer** - Translates React CSS to Shadow DOM CSS with token-derived fallbacks
+6. **css-auditor** - Validates CSS against React source
+7. **accessibility-auditor** - Validates ARIA patterns and accessibility
+8. **test-spec-writer** - Generates comprehensive unit tests
+9. **test-visual-writer** - Creates visual regression tests
+10. **test-css-api-writer** - Generates CSS API override tests
+
+Each subagent runs in isolation and reports back to the main conversation, which manages the overall workflow.
 
 **Example workflow:**
 
@@ -157,12 +166,20 @@ The `create` subagent orchestrates the full conversion workflow:
 # Agent responds: "Next Component: Spinner (0 dependencies, blocks 6 components)"
 
 # Step 2: Convert the component
-> Use the create.md subagent following strict delegation rules, convert Spinner
+> Convert Spinner component
 
-# Agent performs full conversion with automated validation
+# Main conversation delegates to each subagent in sequence:
+#   - api-writer creates component files
+#   - api-auditor validates API
+#   - demo-writer creates demos
+#   - ... (continues through all phases)
 ```
 
-For more details on the conversion process, see the subagent documentation in [`agents/`](agents/).
+**Architecture Note:**
+
+The conversion workflow is orchestrated **directly from the main conversation** (not from a nested subagent). This architecture prevents memory accumulation and allows each specialized subagent to complete and release resources before the next phase begins.
+
+For more details on the conversion process and individual subagent capabilities, see [`CLAUDE.md`](CLAUDE.md) and the subagent documentation in [`agents/`](agents/).
 
 ## Project Structure
 
