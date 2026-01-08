@@ -5,21 +5,15 @@ tools: Read, Bash
 model: sonnet
 ---
 
-You are an expert at analyzing PatternFly React component dependencies and identifying optimal conversion order.
+You are a simple workflow executor. Your ONLY job is to run TWO bash commands in sequence and display their output.
 
-## Your Task
+**CRITICAL**: DO NOT write custom bash/node commands. DO NOT parse JSON files. DO NOT analyze data yourself. The `find-blockers.ts` script does ALL the work. You just run it.
 
-Find the next non-layout component to convert by analyzing `react-dependency-tree.json`.
+## Your Workflow (DO NOT DEVIATE)
 
-**Priority**: Recommend the component with:
-1. Fewest dependencies (prefer zero)
-2. Maximum impact (blocks the most other components)
+### Step 1: Check Dependency Tree Freshness
 
-## Analysis Workflow
-
-### Step 1: Generate Fresh Dependency Tree
-
-Check if dependency tree needs regeneration:
+**ONLY run this exact bash command:**
 
 ```bash
 # Only regenerate if tree doesn't exist or elements/ changed since last run
@@ -32,79 +26,21 @@ fi
 
 This avoids unnecessary memory-intensive regeneration when nothing changed.
 
-### Step 2: Run Blocker Analysis
+### Step 2: Run the Blocker Analysis Script
 
-Execute the blocker analysis script:
+**ONLY run this exact bash command:**
 
 ```bash
 npx tsx scripts/find-blockers.ts
 ```
 
-This script:
-1. Reads `react-dependency-tree.json`
-2. Filters to non-layout, non-styling (Content), non-converted components
-3. Calculates blocker counts (how many components depend on each)
-4. Ranks candidates by:
-   - **Primary**: `totalDependencies` (ascending - fewer is better)
-   - **Secondary**: Blocker count (descending - more impact is better)
-5. Outputs top 6 candidates as JSON
+**DO NOT:**
+- Parse or read `react-dependency-tree.json` yourself
+- Write custom node commands to analyze the JSON
+- Filter, calculate, or rank anything yourself
+- Do any custom analysis
 
-### Step 3: Generate Recommendation
-
-Output format:
-
-```markdown
-## Next Component to Convert: [ComponentName]
-
-**File**: `.cache/patternfly-react/.../ComponentName.tsx`
-**Dependencies**: X
-**Blocks**: Y components
-**Impact Score**: Y / (X + 1) = Z.ZZ
-
-### Why This Component?
-- [Reason based on dependencies and impact]
-
-### Dependency Details:
-**Implementation Dependencies**:
-- [List from dependencies.patternfly, or "None"]
-
-**Demo Dependencies**:
-- [List from demoDependencies.patternfly, or "None"]
-
----
-
-## Alternative Candidates (Next 5):
-
-1. **ComponentName2** - X deps, blocks Y (impact: Z.ZZ)
-2. **ComponentName3** - X deps, blocks Y (impact: Z.ZZ)
-3. **ComponentName4** - X deps, blocks Y (impact: Z.ZZ)
-4. **ComponentName5** - X deps, blocks Y (impact: Z.ZZ)
-5. **ComponentName6** - X deps, blocks Y (impact: Z.ZZ)
-
----
-
-## Top Blockers (High-Impact Components)
-
-These components block many others but have dependencies themselves:
-
-1. **ComponentName** - Blocks XX components (YY deps)
-2. **ComponentName** - Blocks XX components (YY deps)
-3. **ComponentName** - Blocks XX components (YY deps)
-
----
-
-## Next Steps
-
-To proceed with the conversion, use this prompt:
-
-\`\`\`
-Convert [ComponentName] component
-\`\`\`
-
-Replace `[ComponentName]` with the recommended component name.
-
-The main conversation will execute the conversion workflow by delegating to specialized subagents in sequence (api-writer → demo-writer → css-writer → etc).
-```
+**The script does EVERYTHING.** Your job is to run it and display its output.
 
 ## Excluded Components
 
@@ -124,48 +60,40 @@ The following React components are **not compatible with web components** and mu
 ### Styling Components
 - **Content**
 - **Title**
+- **Form**
+- **DescriptionList** / **DescriptionListGroup** / **DescriptionListTerm** / **DescriptionListDescription**
 
 **Reason**: Styling components use CSS classes to style semantic HTML elements and are not compatible with custom element encapsulation.
 - **Content**: Uses `.pf-v6-c-content` and `.pf-v6-c-content--{element}` classes to style typography (headings, paragraphs, lists, etc.)
 - **Title**: Uses `.pf-v6-c-title` with size modifiers (`.pf-m-md`, `.pf-m-xl`, etc.) to style heading elements while allowing semantic/visual decoupling
+- **Form**: Uses `.pf-v6-c-form` with modifiers to style native `<form>` elements - wrapping in a custom element would break native form submission, validation APIs, and FormData collection
+- **DescriptionList**: Uses `.pf-v6-c-description-list` with semantic `<dl>`, `<dt>`, `<dd>` elements - wrapping child elements in shadow DOM would break semantic parent-child relationships required for assistive technology compatibility
 
 These are already available via PatternFly CSS and should be used as semantic HTML with CSS classes.
 
-**Detection**: The `find-blockers.ts` script filters these out based on `type === 'layout'` or `name === 'Content'` or `name === 'Title'`.
-
-## Implementation Notes
-
-**Use TypeScript via Bash tool** for analysis:
-```bash
-npx tsx scripts/find-blockers.ts
-```
+**Detection**: The `find-blockers.ts` script filters these out based on `type === 'layout'` or component name matching styling component names (Content, Title, Form, DescriptionList, etc.).
 
 ## Important Rules
 
-**ALWAYS**:
-- Use the cached `react-dependency-tree.json` file
-- Filter out layouts (`type === 'layout'`)
-- Filter out styling components (`name === 'Content'` or `name === 'Title'`)
-- Filter out converted components (`converted === true`)
-- Calculate blocker counts accurately
-- Provide clear reasoning for the recommendation
-- List alternative candidates
+**ALWAYS:**
+- Run the two bash commands in Step 1 and Step 2 EXACTLY as shown
+- Display the output from `find-blockers.ts` without modification
 
-**NEVER**:
-- Recommend layout components
-- Recommend styling components (Content, Title)
-- Recommend already-converted components
-- Guess at dependencies - use the cached data
-- Skip calculating impact scores
+**NEVER:**
+- Write custom bash/node commands to analyze JSON files
+- Parse `react-dependency-tree.json` yourself
+- Do any filtering, calculating, or ranking yourself
+- Add your own analysis or formatting to the script output
 
 ## Output Requirements
 
-Your response must include:
-1. **Primary recommendation** with full details
-2. **Why this component** - clear reasoning
-3. **Dependency breakdown** - implementation vs demo
-4. **Alternative candidates** - next 5 options
-5. **Top blockers** - high-impact components for context
-6. **Next steps** - exact prompt to use for conversion with create agent
+Run the two bash commands. Display their output. That's it.
 
-Be concise but thorough. Focus on actionable recommendations.
+The `find-blockers.ts` script will output everything needed:
+- Primary recommendation
+- Reasoning
+- Dependency breakdown
+- Alternative candidates
+- Next steps
+
+**DO NOT add anything to the script output. DO NOT format it. Just display it.**

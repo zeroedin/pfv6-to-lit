@@ -70,13 +70,18 @@ function getUnconvertedDependencyCount(component: Component, allComponents: Comp
 const treePath = resolve(process.cwd(), 'react-dependency-tree.json');
 const tree: DependencyTree = JSON.parse(readFileSync(treePath, 'utf-8'));
 
-// Filter to non-layout, non-styling (Content, Title), non-converted components
+// Filter to non-layout, non-styling (Content, Title, Form, DescriptionList), non-converted components
 // AND components whose relative dependencies are all satisfied
 const candidates = tree.components.filter(c =>
   c.type === 'component'
   && c.converted !== true
   && c.name !== 'Content'
   && c.name !== 'Title'
+  && c.name !== 'Form'
+  && c.name !== 'DescriptionList'
+  && c.name !== 'DescriptionListGroup'
+  && c.name !== 'DescriptionListTerm'
+  && c.name !== 'DescriptionListDescription'
   && hasSatisfiedDependencies(c, tree.components)
 );
 
@@ -114,5 +119,68 @@ const ranked: RankedComponent[] = candidates
       return b.blocks - a.blocks;
     });
 
-// Output top 6 candidates
-console.log(JSON.stringify(ranked.slice(0, 6), null, 2));
+// Output formatted markdown recommendation
+const top = ranked[0];
+const unconvertedDeps = getUnconvertedDependencyCount(top, tree.components);
+
+console.log(`## Next Component to Convert: ${top.name}
+
+**Dependencies**: ${unconvertedDeps}
+**Blocks**: ${top.blocks} components
+**Impact Score**: ${top.blocks} / (${unconvertedDeps} + 1) = ${top.impact.toFixed(2)}
+
+### Why This Component?
+${unconvertedDeps === 0
+  ? '- Has zero unconverted dependencies - ready to build immediately'
+  : `- Has only ${unconvertedDeps} unconverted dependencies - minimal blockers`}
+${top.blocks > 0
+  ? `- Blocks ${top.blocks} other components - high impact on unblocking future work`
+  : '- Leaf component (blocks no others) - good for learning the workflow'}
+- Impact score of ${top.impact.toFixed(2)} provides good balance of ease and value
+
+### Dependency Details:
+**Implementation Dependencies**:
+${top.dependencies?.patternfly?.length
+  ? top.dependencies.patternfly.map(d => `- ${d}`).join('\n')
+  : '- None'}
+
+**Demo Dependencies**:
+${top.demoDependencies?.patternfly?.length
+  ? top.demoDependencies.patternfly.map(d => `- ${d}`).join('\n')
+  : '- None'}
+
+---
+
+## Alternative Candidates (Next 5):
+
+${ranked.slice(1, 6).map((c, i) => {
+  const deps = getUnconvertedDependencyCount(c, tree.components);
+  return `${i + 1}. **${c.name}** - ${deps} deps, blocks ${c.blocks} (impact: ${c.impact.toFixed(2)})`;
+}).join('\n')}
+
+---
+
+## Top Blockers (High-Impact Components)
+
+These components block many others but have dependencies themselves:
+
+${[...ranked]
+  .sort((a, b) => b.blocks - a.blocks)
+  .slice(0, 5)
+  .map((c, i) => {
+    const deps = getUnconvertedDependencyCount(c, tree.components);
+    return `${i + 1}. **${c.name}** - Blocks ${c.blocks} components (${deps} deps)`;
+  }).join('\n')}
+
+---
+
+## Next Steps
+
+To proceed with the conversion, use this prompt:
+
+\`\`\`
+Convert ${top.name} component
+\`\`\`
+
+The main conversation will execute the conversion workflow by delegating to specialized subagents in sequence (api-writer → demo-writer → css-writer → etc).
+`);

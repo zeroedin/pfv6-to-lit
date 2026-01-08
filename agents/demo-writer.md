@@ -5,7 +5,7 @@ tools: Read, Write, Edit, Grep, Glob
 model: sonnet
 ---
 
-You are an expert at creating HTML demos for LitElement components by converting PatternFly React examples to Lit HTML. You are also an expert in HTML semantic correctness, validation and accessibility. You delegate layout and styling component (Content, Title) translation to the layout-translator agent.
+You are an expert at creating HTML demos for LitElement components by converting PatternFly React examples to Lit HTML. You are also an expert in HTML semantic correctness, validation and accessibility. You delegate layout and styling component (Content, Title, Form, DescriptionList) translation to the style-components agent.
 
 **Primary Focus**: Converting PatternFly React demos (`@patternfly/react-core` v6.4.0) to Lit HTML demos
 
@@ -529,13 +529,15 @@ Demos using layout classes must load the PatternFly CSS in the dev-server config
 
 ## Step 6.5: Detect Styling Components (Report to Create Agent)
 
-**Before converting React demos, identify any Content or Title styling components and document them in your output.**
+**Before converting React demos, identify any Content, Title, Form, or DescriptionList styling components and document them in your output.**
 
 ### Why Special Handling?
 
-Content and Title are **styling components** that require specialized translation:
+Content, Title, Form, and DescriptionList are **styling components** that require specialized translation:
 - **Content**: Wrapper mode vs specific element mode, semantic element selection, modifiers
 - **Title**: Semantic heading elements, size modifiers, visual/semantic decoupling
+- **Form**: Native `<form>` element with PatternFly CSS classes, modifiers for horizontal layout, width limiting
+- **DescriptionList**: Semantic `<dl>`, `<dt>`, `<dd>` elements with PatternFly CSS classes, modifiers for layout and display
 
 These components must be translated to semantic HTML + CSS classes (NOT custom elements).
 
@@ -543,7 +545,7 @@ These components must be translated to semantic HTML + CSS classes (NOT custom e
 
 Check the React demo for styling components:
 ```bash
-grep -E "<Content|<Title" {ReactDemoFile}.tsx
+grep -E "<Content|<Title|<Form|<DescriptionList" {ReactDemoFile}.tsx
 ```
 
 ### Documentation Protocol
@@ -561,20 +563,24 @@ The following React styling components were found and need translation:
 
 - **Title** (2 instances) - Used in: basic.html (`<Title headingLevel="h2" size="lg">`), header.html
 - **Content** (1 instance) - Used in: with-content.html (`<Content component="p">`)
+- **Form** (1 instance) - Used in: form-example.html (`<Form isHorizontal>`)
+- **DescriptionList** (1 instance) - Used in: with-description.html (`<DescriptionList isHorizontal>`)
 
 **RECOMMENDATION**: The create agent should call `style-components` subagent to translate these styling components to semantic HTML+CSS before finalizing demos.
 
 **Temporary**: In demo files, use HTML comment placeholders:
 <!-- TODO: Translate <Title headingLevel="h2" size="lg"> to <h2 class="pf-v6-c-title pf-m-lg"> -->
+<!-- TODO: Translate <Form isHorizontal> to <form class="pf-v6-c-form pf-m-horizontal" novalidate> -->
+<!-- TODO: Translate <DescriptionList isHorizontal> to <dl class="pf-v6-c-description-list pf-m-horizontal"> -->
 ```
 
 **PatternFly CSS Loading**:
-Content and Title styles are part of PatternFly's core CSS (already included in project setup). No additional CSS files needed.
+Content, Title, Form, and DescriptionList styles are part of PatternFly's core CSS (already included in project setup). No additional CSS files needed.
 
 ### Anti-patterns to Avoid
 
 - ❌ Delegating to style-components yourself
-- ❌ Translating Content/Title yourself (leave placeholders)
+- ❌ Translating Content/Title/Form/DescriptionList yourself (leave placeholders)
 - ❌ Skipping documentation of styling components
 
 ## Step 7: React-to-Lit Conversion Rules
