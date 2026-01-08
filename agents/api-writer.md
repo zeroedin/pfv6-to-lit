@@ -1221,7 +1221,7 @@ Use the Write tool to create the complete TypeScript component file with:
    - Use `@cssprop` for CSS properties
    - Use `@csspart` for CSS parts
    - Use `@fires` for events
-   - DO NOT use non-existant JSDoc tags
+   - DO NOT use non-existent JSDoc tags
 
 
 **Example structure**:
