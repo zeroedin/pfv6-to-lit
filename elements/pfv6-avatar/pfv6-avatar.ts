@@ -9,7 +9,7 @@ import styles from './pfv6-avatar.css';
 /**
  * An avatar is a visual representation of a user or object.
  *
- * @element pfv6-avatar
+ * @alias Avatar
  *
  * @slot - Not applicable (renders an img element)
  *

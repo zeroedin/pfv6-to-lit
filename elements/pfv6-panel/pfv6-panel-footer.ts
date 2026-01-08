@@ -5,6 +5,8 @@ import styles from './pfv6-panel-footer.css';
 /**
  * Panel footer component - Displays footer content at the bottom of a panel.
  *
+ * @alias Panel Footer
+ *
  * @slot - Default slot for footer content
  *
  * @csspart container - The container element

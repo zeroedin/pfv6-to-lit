@@ -8,6 +8,8 @@ import styles from './pfv6-spinner.css';
 /**
  * Spinner component for indicating loading state.
  *
+ * @alias Spinner
+ *
  * A visual loading indicator that displays an animated circular spinner.
  * Supports preset sizes (sm, md, lg, xl) or custom diameter via CSS variable.
  * When inline, the spinner inherits the current text font size.

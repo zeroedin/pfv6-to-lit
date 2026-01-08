@@ -7,6 +7,8 @@ import styles from './pfv6-badge.css';
 /**
  * Badge component for displaying counts or status indicators.
  *
+ * @alias Badge
+ *
  * @slot - Default slot for badge content (typically numbers or short text)
  *
  * @cssprop --pf-v6-c-badge--BackgroundColor - Background color of the badge

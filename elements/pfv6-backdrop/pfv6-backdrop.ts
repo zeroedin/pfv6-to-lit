@@ -6,6 +6,8 @@ import styles from './pfv6-backdrop.css';
 /**
  * A backdrop component that renders a semi-transparent overlay, typically used behind modals and other overlays to darken/obscure background content.
  *
+ * @alias Backdrop
+ *
  * @slot - Optional content rendered inside the backdrop
  *
  * @example

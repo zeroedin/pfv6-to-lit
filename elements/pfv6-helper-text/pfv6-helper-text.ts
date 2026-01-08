@@ -7,6 +7,8 @@ import styles from './pfv6-helper-text.css';
 /**
  * Helper text component for displaying informational, error, or warning text.
  *
+ * @alias Helper Text
+ *
  * For list semantics with multiple items, wrap in `<ul>`:
  * ```html
  * <pfv6-helper-text is-live-region>

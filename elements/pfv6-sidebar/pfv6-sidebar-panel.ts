@@ -10,6 +10,8 @@ import styles from './pfv6-sidebar-panel.css';
 /**
  * Sidebar panel component - A panel that can be positioned on the side of the content.
  *
+ * @alias Sidebar Panel
+ *
  * @slot - Default slot for panel content
  */
 @customElement('pfv6-sidebar-panel')

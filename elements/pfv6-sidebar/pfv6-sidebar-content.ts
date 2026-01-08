@@ -8,6 +8,8 @@ import styles from './pfv6-sidebar-content.css';
 /**
  * Sidebar content component - Contains the main content area of a sidebar.
  *
+ * @alias Sidebar Content
+ *
  * @slot - Default slot for content
  */
 @customElement('pfv6-sidebar-content')

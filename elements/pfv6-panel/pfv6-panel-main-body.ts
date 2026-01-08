@@ -5,6 +5,8 @@ import styles from './pfv6-panel-main-body.css';
 /**
  * Panel main body component - Displays body content within the panel main area.
  *
+ * @alias Panel Main Body
+ *
  * @slot - Default slot for body content
  *
  * @csspart container - The container element

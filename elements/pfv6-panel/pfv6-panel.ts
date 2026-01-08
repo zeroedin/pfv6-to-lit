@@ -14,6 +14,8 @@ import styles from './pfv6-panel.css';
 /**
  * Panel component - A container that provides structured content with optional header, main content area, and footer.
  *
+ * @alias Panel
+ *
  * @slot - Default slot for panel content (typically PanelHeader, PanelMain, PanelFooter)
  *
  * @csspart container - The container element

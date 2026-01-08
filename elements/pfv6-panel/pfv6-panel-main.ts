@@ -7,6 +7,7 @@ import styles from './pfv6-panel-main.css';
 /**
  * Panel main component - Contains the main content area of a panel.
  *
+ * @alias Panel Main
  * @slot - Default slot for main content (typically PanelMainBody)
  *
  * @csspart container - The container element

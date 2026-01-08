@@ -5,6 +5,7 @@ import styles from './pfv6-panel-header.css';
 /**
  * Panel header component - Displays header content at the top of a panel.
  *
+ * @alias Panel Header
  * @slot - Default slot for header content
  *
  * @csspart container - The container element

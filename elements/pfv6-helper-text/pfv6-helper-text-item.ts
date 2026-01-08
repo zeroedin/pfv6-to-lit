@@ -8,6 +8,8 @@ import styles from './pfv6-helper-text-item.css';
 /**
  * Helper text item component for displaying individual help, error, or warning messages.
  *
+ * @alias Helper Text Item
+ *
  * Variants include default icons:
  * - `indeterminate`: Minus icon
  * - `warning`: Exclamation triangle icon

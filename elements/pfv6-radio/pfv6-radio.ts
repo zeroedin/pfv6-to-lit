@@ -25,6 +25,8 @@ export class Pfv6RadioChangeEvent extends Event {
 /**
  * Radio component for selecting a single option from a group.
  *
+ * @alias Radio
+ *
  * @fires {Pfv6RadioChangeEvent} change - Fires when the radio's checked state changes
  *
  * @cssprop --pf-v6-c-radio__label--FontSize - Font size of the label
