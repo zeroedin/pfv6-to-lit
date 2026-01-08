@@ -19,6 +19,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const projectRoot = join(__dirname, '..');
 
+/**
+ * Copy PatternFly styles and assets from node_modules to dev-server
+ */
 async function copyPatternFlyAssets() {
   console.log('📦 Copying PatternFly styles and assets...');
 
