@@ -13,9 +13,4 @@
   display: grid;
   gap: var(--pf-v6-c-helper-text--Gap);
   font-size: var(--pf-v6-c-helper-text--FontSize);
-
-  &.hidden {
-    visibility: hidden;
-    opacity: 0;
-  }
 }
