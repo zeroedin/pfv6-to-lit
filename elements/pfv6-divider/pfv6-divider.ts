@@ -73,7 +73,7 @@ export class Pfv6Divider extends LitElement {
   * <pfv6-divider role="presentation"></pfv6-divider>
   */
   @property({ type: String })
-  declare role: string | null;
+  role: string | null = null;
 
   override render(): TemplateResult {
     // Build class map from responsive properties
