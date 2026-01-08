@@ -1,6 +1,6 @@
 /**
  * Unit tests for pfv6-spinner component
- * 
+ *
  * Tests validate 1:1 API parity with PatternFly React Spinner component.
  * React source: .cache/patternfly-react/packages/react-core/src/components/Spinner/Spinner.tsx
  */
@@ -9,7 +9,7 @@ import { Pfv6Spinner } from '../pfv6-spinner.js';
 import '../pfv6-spinner.js';
 
 describe('<pfv6-spinner>', function() {
-  
+
   // ============================================
   // Component Instantiation
   // ============================================
@@ -270,4 +270,3 @@ describe('<pfv6-spinner>', function() {
     });
   });
 });
-

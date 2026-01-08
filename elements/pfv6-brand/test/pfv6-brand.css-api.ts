@@ -19,7 +19,7 @@ test.describe('Brand CSS API Tests', () => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).width : null;
     });
-    
+
     expect(width).toBe('300px');
   });
 
@@ -39,7 +39,7 @@ test.describe('Brand CSS API Tests', () => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).height : null;
     });
-    
+
     expect(height).toBe('100px');
   });
 
@@ -65,7 +65,7 @@ test.describe('Brand CSS API Tests', () => {
         height: styles.height
       };
     });
-    
+
     expect(dimensions?.width).toBe('250px');
     expect(dimensions?.height).toBe('80px');
   });
@@ -86,7 +86,7 @@ test.describe('Brand CSS API Tests', () => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).width : null;
     });
-    
+
     expect(width).toBe('400px');
   });
 
@@ -106,7 +106,7 @@ test.describe('Brand CSS API Tests', () => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).height : null;
     });
-    
+
     expect(height).toBe('120px');
   });
 
@@ -127,7 +127,7 @@ test.describe('Brand CSS API Tests', () => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).width : null;
     });
-    
+
     // --base variable should take precedence
     expect(width).toBe('350px');
   });
@@ -143,7 +143,7 @@ test.describe('Brand CSS API Tests', () => {
       const picture = el.shadowRoot?.querySelector('picture');
       return picture ? getComputedStyle(picture).maxWidth : null;
     });
-    
+
     // Picture element should have max-width: 100%
     expect(maxWidth).toBe('100%');
   });
@@ -167,7 +167,7 @@ test.describe('Brand CSS API Tests', () => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).width : null;
     });
-    
+
     // Width should be affected by md breakpoint variable
     expect(width).not.toBeNull();
   });
@@ -191,7 +191,7 @@ test.describe('Brand CSS API Tests', () => {
       const img = el.shadowRoot?.querySelector('img');
       return img ? getComputedStyle(img).height : null;
     });
-    
+
     // Height should be affected by lg breakpoint variable
     expect(height).not.toBeNull();
   });
@@ -217,10 +217,9 @@ test.describe('Brand CSS API Tests', () => {
         imgWidth: getComputedStyle(img).width
       };
     });
-    
+
     // Img should inherit width from picture
     expect(dimensions?.pictureWidth).toBe('450px');
     expect(dimensions?.imgWidth).toBe('450px');
   });
 });
-

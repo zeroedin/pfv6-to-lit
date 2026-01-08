@@ -53,7 +53,7 @@ test.describe('Brand vs React Visual Parity', () => {
 test.describe('Brand Responsive Behavior', () => {
   test('should render different images at different viewport sizes', async ({ page }) => {
     await page.goto(`/elements/${COMPONENT}/demos/responsive/`);
-    
+
     // Desktop viewport
     await page.setViewportSize({ width: 1200, height: 800 });
     await expect(page.locator(COMPONENT)).toBeVisible();
@@ -70,7 +70,7 @@ test.describe('Brand Responsive Behavior', () => {
 
   test('should apply responsive widths at different breakpoints', async ({ page }) => {
     await page.goto(`/elements/${COMPONENT}/demos/basic/`);
-    
+
     const brand = page.locator(COMPONENT).first();
     await expect(brand).toBeVisible();
 
@@ -87,4 +87,3 @@ test.describe('Brand Responsive Behavior', () => {
     await expect(page).toHaveScreenshot(`${COMPONENT}-width-mobile.png`);
   });
 });
-

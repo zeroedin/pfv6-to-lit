@@ -310,5 +310,3 @@ describe('<pfv6-panel-footer>', function() {
     });
   });
 });
-
-

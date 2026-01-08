@@ -41,112 +41,112 @@ export class Pfv6Radio extends LitElement {
   private internals: ElementInternals;
 
   /**
-   * The id attribute for the radio input.
-   * Required for accessibility and form integration.
-   */
+  * The id attribute for the radio input.
+  * Required for accessibility and form integration.
+  */
   @property({ type: String })
   id!: string;
 
   /**
-   * The name attribute for the radio group.
-   * Required for radio button grouping in forms.
-   */
+  * The name attribute for the radio group.
+  * Required for radio button grouping in forms.
+  */
   @property({ type: String })
   name!: string;
 
   /**
-   * The value of the radio input.
-   * This is the value that will be submitted with the form when this radio is checked.
-   */
+  * The value of the radio input.
+  * This is the value that will be submitted with the form when this radio is checked.
+  */
   @property({ type: String })
   value = 'on';
 
   /**
-   * Whether the radio is checked.
-   * Use this for controlled radio buttons.
-   *
-   * NOTE: For form-associated custom elements, the checked attribute is reflected
-   * to the host element. Uses Boolean type (not string enum) for proper HTML
-   * boolean attribute behavior.
-   */
+  * Whether the radio is checked.
+  * Use this for controlled radio buttons.
+  *
+  * NOTE: For form-associated custom elements, the checked attribute is reflected
+  * to the host element. Uses Boolean type (not string enum) for proper HTML
+  * boolean attribute behavior.
+  */
   @property({ type: Boolean, reflect: true })
   checked = false;
 
   /**
-   * Whether the radio is disabled.
-   *
-   * NOTE: For form-associated custom elements, the disabled attribute is reflected
-   * to the host element and managed by the browser via formDisabledCallback.
-   * Uses Boolean type (not string enum) for proper HTML boolean attribute behavior.
-   */
+  * Whether the radio is disabled.
+  *
+  * NOTE: For form-associated custom elements, the disabled attribute is reflected
+  * to the host element and managed by the browser via formDisabledCallback.
+  * Uses Boolean type (not string enum) for proper HTML boolean attribute behavior.
+  */
   @property({ type: Boolean, reflect: true })
   disabled = false;
 
   /**
-   * Whether the radio is required.
-   *
-   * NOTE: For form-associated custom elements, the required attribute is reflected
-   * to the host element. Uses Boolean type (not string enum) for proper HTML
-   * boolean attribute behavior.
-   */
+  * Whether the radio is required.
+  *
+  * NOTE: For form-associated custom elements, the required attribute is reflected
+  * to the host element. Uses Boolean type (not string enum) for proper HTML
+  * boolean attribute behavior.
+  */
   @property({ type: Boolean, reflect: true })
   required = false;
 
   /**
-   * Whether the radio selection is valid.
-   * When false, sets aria-invalid on the input.
-   */
+  * Whether the radio selection is valid.
+  * When false, sets aria-invalid on the input.
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-valid' })
   isValid = true;
 
   /**
-   * Label text for the radio.
-   * Either label or accessible-label must be provided.
-   */
+  * Label text for the radio.
+  * Either label or accessible-label must be provided.
+  */
   @property({ type: String })
   label?: string;
 
   /**
-   * Position of the label relative to the radio input.
-   */
+  * Position of the label relative to the radio input.
+  */
   @property({ type: String, attribute: 'label-position' })
   labelPosition: 'start' | 'end' = 'end';
 
   /**
-   * Description text displayed below the radio.
-   */
+  * Description text displayed below the radio.
+  */
   @property({ type: String })
   description?: string;
 
   /**
-   * Body text displayed below the description.
-   */
+  * Body text displayed below the description.
+  */
   @property({ type: String })
   body?: string;
 
   /**
-   * Accessible label for the radio when no visible label is provided.
-   * Either label or accessible-label must be provided.
-   */
+  * Accessible label for the radio when no visible label is provided.
+  * Either label or accessible-label must be provided.
+  */
   @property({ type: String, attribute: 'accessible-label' })
   accessibleLabel?: string;
 
   /**
-   * Whether the wrapper element should be a label element that wraps the input.
-   * When true, clicking anywhere in the component will toggle the radio.
-   */
+  * Whether the wrapper element should be a label element that wraps the input.
+  * When true, clicking anywhere in the component will toggle the radio.
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-label-wrapped' })
   isLabelWrapped = false;
 
   /**
-   * Internal state for the default checked value (uncontrolled mode).
-   */
+  * Internal state for the default checked value (uncontrolled mode).
+  */
   @state()
   private defaultChecked = false;
 
   /**
-   * Internal reference to the radio input element.
-   */
+  * Internal reference to the radio input element.
+  */
   private inputRef: Ref<HTMLInputElement> = createRef();
 
   constructor() {
@@ -171,8 +171,8 @@ export class Pfv6Radio extends LitElement {
   }
 
   /**
-   * Form callbacks (FACE implementation)
-   */
+  * Form callbacks (FACE implementation)
+  */
   formResetCallback() {
     this.checked = this.defaultChecked;
     this.internals.setFormValue(this.checked ? this.value : null);
@@ -190,8 +190,8 @@ export class Pfv6Radio extends LitElement {
   }
 
   /**
-   * Updates form value when checked state changes
-   */
+  * Updates form value when checked state changes
+  */
   updated(changedProperties: PropertyValues<this>) {
     super.updated(changedProperties);
 
@@ -211,16 +211,16 @@ export class Pfv6Radio extends LitElement {
   }
 
   /**
-   * Handle radio input changes
-   */
+  * Handle radio input changes
+  */
   private handleChange(event: Event) {
     const input = event.target as HTMLInputElement;
     this.checked = input.checked;
   }
 
   /**
-   * Handle clicks on the wrapper when it's a label
-   */
+  * Handle clicks on the wrapper when it's a label
+  */
   private handleWrapperClick(event: Event) {
     if (this.isLabelWrapped && !this.disabled) {
       // Prevent double-toggle from label click

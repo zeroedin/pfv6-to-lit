@@ -25,24 +25,24 @@ export class Pfv6Badge extends LitElement {
   static styles = styles;
 
   /**
-   * Adds styling to the badge to indicate it has been read.
-   * When true, badge uses read styling (typically muted colors).
-   * When false, badge uses unread styling (typically bold/prominent colors).
-   */
+  * Adds styling to the badge to indicate it has been read.
+  * When true, badge uses read styling (typically muted colors).
+  * When false, badge uses unread styling (typically bold/prominent colors).
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-read' })
   isRead = false;
 
   /**
-   * Adds styling to the badge to indicate it is disabled.
-   * Disabled badges appear visually muted and non-interactive.
-   */
+  * Adds styling to the badge to indicate it is disabled.
+  * Disabled badges appear visually muted and non-interactive.
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-disabled' })
   isDisabled = false;
 
   /**
-   * Text announced by screen readers to provide context about the badge.
-   * Example: "Unread Messages" for a notification count badge.
-   */
+  * Text announced by screen readers to provide context about the badge.
+  * Example: "Unread Messages" for a notification count badge.
+  */
   @property({ type: String, attribute: 'screen-reader-text' })
   screenReaderText?: string;
 

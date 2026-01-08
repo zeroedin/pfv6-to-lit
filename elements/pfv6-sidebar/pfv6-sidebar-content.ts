@@ -15,22 +15,22 @@ export class Pfv6SidebarContent extends LitElement {
   static readonly styles = styles;
 
   /**
-   * Removes the background color
-   */
+  * Removes the background color
+  */
   @property({ type: Boolean, reflect: true, attribute: 'has-no-background' })
   hasNoBackground = false;
 
   /**
-   * Adds padding to the content
-   */
+  * Adds padding to the content
+  */
   @property({ type: Boolean, reflect: true, attribute: 'has-padding' })
   hasPadding = false;
 
   /**
-   * Variant of the sidebar content background
-   * @type {'default' | 'secondary'}
-   * @default 'default'
-   */
+  * Variant of the sidebar content background
+  * @type {'default' | 'secondary'}
+  * @default 'default'
+  */
   @property({ type: String, reflect: true, attribute: 'background-variant' })
   backgroundVariant: 'default' | 'secondary' = 'default';
 

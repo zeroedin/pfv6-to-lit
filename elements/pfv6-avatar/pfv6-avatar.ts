@@ -23,30 +23,30 @@ export class Pfv6Avatar extends LitElement {
   static styles = styles;
 
   /**
-   * URL of the avatar image
-   */
+  * URL of the avatar image
+  */
   @property({ type: String })
   src = '';
 
   /**
-   * Alt text for the avatar image (required for accessibility)
-   */
+  * Alt text for the avatar image (required for accessibility)
+  */
   @property({ type: String })
   alt!: string;
 
   /**
-   * Adds a border to the avatar
-   */
+  * Adds a border to the avatar
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-bordered' })
   isBordered = false;
 
   /**
-   * Size variant of the avatar
-   * - sm: Small avatar
-   * - md: Medium avatar
-   * - lg: Large avatar
-   * - xl: Extra large avatar
-   */
+  * Size variant of the avatar
+  * - sm: Small avatar
+  * - md: Medium avatar
+  * - lg: Large avatar
+  * - xl: Extra large avatar
+  */
   @property({ type: String, reflect: true })
   size?: 'sm' | 'md' | 'lg' | 'xl';
 

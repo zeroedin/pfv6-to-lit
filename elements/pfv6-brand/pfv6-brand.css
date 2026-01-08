@@ -11,17 +11,17 @@
 
 :host {
   /**
-   * Width of the brand image.
-   * Can be set at various breakpoints using responsive properties.
-   * @cssprop {<length> | auto} --pf-v6-c-brand--Width - Default: auto
-   */
+  * Width of the brand image.
+  * Can be set at various breakpoints using responsive properties.
+  * @cssprop {<length> | auto} --pf-v6-c-brand--Width - Default: auto
+  */
   --pf-v6-c-brand--Width: auto;
 
   /**
-   * Height of the brand image.
-   * Can be set at various breakpoints using responsive properties.
-   * @cssprop {<length> | auto} --pf-v6-c-brand--Height - Default: auto
-   */
+  * Height of the brand image.
+  * Can be set at various breakpoints using responsive properties.
+  * @cssprop {<length> | auto} --pf-v6-c-brand--Height - Default: auto
+  */
   --pf-v6-c-brand--Height: auto;
 
   /* Responsive cascade - base values computed from breakpoint-specific overrides */

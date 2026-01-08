@@ -21,45 +21,45 @@ export class Pfv6Spinner extends LitElement {
   static styles = styles;
 
   /**
-   * Size variant of the spinner.
-   * Ignored when isInline is true.
-   */
+  * Size variant of the spinner.
+  * Ignored when isInline is true.
+  */
   @property({ type: String, reflect: true })
   size: 'sm' | 'md' | 'lg' | 'xl' = 'xl';
 
   /**
-   * Text describing the current loading status.
-   * Announced by screen readers to provide context.
-   */
+  * Text describing the current loading status.
+  * Announced by screen readers to provide context.
+  */
   @property({ type: String, attribute: 'aria-valuetext' })
   ariaValuetext = 'Loading...';
 
   /**
-   * Custom diameter for the spinner.
-   * Sets the --pf-v6-c-spinner--diameter CSS variable.
-   * Example: "80px", "3rem"
-   */
+  * Custom diameter for the spinner.
+  * Sets the --pf-v6-c-spinner--diameter CSS variable.
+  * Example: "80px", "3rem"
+  */
   @property({ type: String })
   diameter?: string;
 
   /**
-   * When true, spinner displays inline and inherits text font size.
-   * This overrides the size property.
-   */
+  * When true, spinner displays inline and inherits text font size.
+  * This overrides the size property.
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-inline' })
   isInline = false;
 
   /**
-   * Accessible label describing what is loading.
-   * Provides context for screen reader users.
-   */
+  * Accessible label describing what is loading.
+  * Provides context for screen reader users.
+  */
   @property({ type: String, attribute: 'accessible-label' })
   accessibleLabel?: string;
 
   /**
-   * ID of an element that describes what is loading.
-   * Alternative to accessible-label for referencing existing text.
-   */
+  * ID of an element that describes what is loading.
+  * Alternative to accessible-label for referencing existing text.
+  */
   @property({ type: String, attribute: 'accessible-labelledby' })
   accessibleLabelledby?: string;
 
@@ -107,4 +107,3 @@ declare global {
     'pfv6-spinner': Pfv6Spinner;
   }
 }
-

@@ -25,8 +25,8 @@ export class Pfv6BackgroundImage extends LitElement {
   static styles = styles;
 
   /**
-   * The URL or file path of the image for the background
-   */
+  * The URL or file path of the image for the background
+  */
   @property({ type: String })
   src = '';
 
