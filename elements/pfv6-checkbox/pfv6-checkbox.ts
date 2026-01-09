@@ -210,8 +210,8 @@ export class Pfv6Checkbox extends LitElement {
       disabled: this.disabled,
     };
 
-    const labelId = this.label ? `${this.id}-label` : undefined;
-    const descriptionId = this.description ? `${this.id}-description` : undefined;
+    const labelId = this.label ? 'label' : undefined;
+    const descriptionId = this.description ? 'description' : undefined;
     const ariaDescribedBy = descriptionId;
 
     const inputElement = html`
