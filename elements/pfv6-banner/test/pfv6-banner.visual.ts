@@ -1,9 +1,3 @@
-/**
- * Visual parity tests for pfv6-helper-text component
- *
- * Tests validate pixel-perfect parity between LitElement and React implementations.
- * Uses live side-by-side rendering comparison (no baseline files).
- */
 import { test, expect, type Page } from '@playwright/test';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
@@ -53,7 +47,7 @@ async function waitForFullLoad(page: Page): Promise<void> {
 }
 
 // Dynamically discover all demos from the filesystem
-const litDemos = discoverDemos('helper-text');
+const litDemos = discoverDemos('banner');
 
 test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
   litDemos.forEach(demoName => {
@@ -67,10 +61,10 @@ test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
 
       try {
         // Load BOTH demos simultaneously
-        await reactPage.goto(`/elements/pfv6-helper-text/react/test/${demoName}`);
+        await reactPage.goto(`/elements/pfv6-banner/react/test/${demoName}`);
         await waitForFullLoad(reactPage);
 
-        await page.goto(`/elements/pfv6-helper-text/test/${demoName}`);
+        await page.goto(`/elements/pfv6-banner/test/${demoName}`);
         await waitForFullLoad(page);
 
         // Take FRESH screenshots (no baseline files)

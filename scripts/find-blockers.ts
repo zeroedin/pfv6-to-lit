@@ -36,11 +36,52 @@ interface RankedComponent extends Component {
 }
 
 /**
+ * Demo dependencies that are ignored during dependency checking.
+ * - Layout components (Flex, Grid, Stack, etc.) are translated to CSS classes
+ * - ValidatedOptions is an enum/type, not a component
+ */
+const IGNORED_DEMO_DEPS = [
+  'ValidatedOptions',
+  'Flex', 'FlexItem',
+  'Grid', 'GridItem',
+  'Stack', 'StackItem',
+  'Bullseye',
+  'Level',
+  'Split', 'SplitItem',
+  'Gallery', 'GalleryItem'
+];
+
+/**
+ * Check if a demo dependency should be ignored during dependency analysis.
+ * Returns true if the dependency should be skipped (layout component, icon, enum, or self-reference).
+ */
+function shouldIgnoreDemoDependency(depName: string, componentName: string): boolean {
+  // Skip layout components and enums - they're translated to CSS or constants
+  if (IGNORED_DEMO_DEPS.includes(depName)) {
+    return true;
+  }
+  // Skip icon components - they can be inlined as SVG
+  if (depName.endsWith('Icon')) {
+    return true;
+  }
+  // Skip self-references
+  if (depName === componentName ||
+      depName === `${componentName}Main` ||
+      depName === `${componentName}Utilities` ||
+      depName === `${componentName}Icon`) {
+    return true;
+  }
+  return false;
+}
+
+/**
  * Check if all relative dependencies for a component are satisfied (converted).
  * A component can only be converted if all its relative dependencies are already converted.
+ * Also checks demo dependencies since they affect demo creation.
  */
 function hasSatisfiedDependencies(component: Component, allComponents: Component[]): boolean {
   const relativeDeps = component.dependencies?.relative || [];
+  const demoPatternflyDeps = component.demoDependencies?.patternfly || [];
 
   // Check if all relative dependencies are converted
   for (const depName of relativeDeps) {
@@ -50,20 +91,45 @@ function hasSatisfiedDependencies(component: Component, allComponents: Component
     }
   }
 
+  // Check if all demo PatternFly dependencies are converted (or are special cases)
+  for (const depName of demoPatternflyDeps) {
+    if (shouldIgnoreDemoDependency(depName, component.name)) {
+      continue;
+    }
+
+    const dep = allComponents.find(c => c.name === depName);
+    if (!dep || !dep.converted) {
+      return false; // Demo dependency not converted - component is blocked!
+    }
+  }
+
   return true; // All dependencies satisfied
 }
 
 /**
- * Count only unconverted relative dependencies.
+ * Count only unconverted relative dependencies plus unconverted demo dependencies.
  * This gives us the actual number of blockers for a component.
  */
 function getUnconvertedDependencyCount(component: Component, allComponents: Component[]): number {
   const relativeDeps = component.dependencies?.relative || [];
+  const demoPatternflyDeps = component.demoDependencies?.patternfly || [];
 
-  return relativeDeps.filter(depName => {
+  const unconvertedRelativeDeps = relativeDeps.filter(depName => {
     const dep = allComponents.find(c => c.name === depName);
     return !dep || !dep.converted;
   }).length;
+
+  // Count unconverted demo dependencies (excluding special cases)
+  const unconvertedDemoDeps = demoPatternflyDeps.filter(depName => {
+    if (shouldIgnoreDemoDependency(depName, component.name)) {
+      return false;
+    }
+
+    const dep = allComponents.find(c => c.name === depName);
+    return !dep || !dep.converted;
+  }).length;
+
+  return unconvertedRelativeDeps + unconvertedDemoDeps;
 }
 
 // Read dependency tree

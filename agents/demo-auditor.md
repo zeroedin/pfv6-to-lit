@@ -717,6 +717,39 @@ Web components and HTML use boolean attributes without values.
 ✅ **Correct**: {N} demos use proper boolean attribute syntax
 ```
 
+## Step 7.6: Component Dependency API Validation (CRITICAL)
+
+When demos use other pfv6-* components, verify attributes match the component's actual API.
+
+### Validation Steps
+
+1. **Find pfv6-* components** in demo:
+   ```bash
+   grep -oE "<pfv6-[a-z-]+" demo.html | sort -u
+   ```
+
+2. **For each dependency**, read its TypeScript file to extract valid attributes from `@property` decorators
+
+3. **Compare** attributes used in demo against valid properties:
+   - ✅ Valid: `<pfv6-icon status="success">` (status exists)
+   - ❌ Invalid: `<pfv6-icon icon="check">` (icon doesn't exist)
+
+4. **Check slot usage**: If component uses slots, verify demos use slots not attributes
+
+### Report Format
+
+```markdown
+❌ **pfv6-icon** (5 instances):
+- **Line 4**: Invalid attribute `icon="check-circle"`
+  - Property doesn't exist. Use default slot: `<pfv6-icon><svg>...</svg></pfv6-icon>`
+```
+
+### Common Errors
+
+- Hallucinated properties (e.g., `icon`, `name`)
+- Wrong attribute names (e.g., `disabled` vs `is-disabled`)
+- Using attributes when component expects slot content
+
 ## Step 8: Missing Component Identification
 
 Check for HTML comments indicating blockers:
@@ -892,6 +925,22 @@ Provide a detailed parity audit report:
 
 ---
 
+## Component Dependency API Validation
+
+❌ **Hallucinated API Issues Found** (2):
+- `status.html`: pfv6-icon uses invalid attribute `icon="check-circle"` (5 instances)
+  - Property `icon` does not exist on pfv6-icon
+  - Component uses default slot for SVG content
+  - **Fix**: Replace `<pfv6-icon icon="...">` with `<pfv6-icon><svg>...</svg></pfv6-icon>`
+- `actions.html`: pfv6-button uses invalid attribute `disabled="true"` (1 instance)
+  - Property `disabled` does not exist; should be `is-disabled`
+  - **Fix**: Change `disabled="true"` to `is-disabled`
+
+✅ **Correct API Usage** (8):
+- All other component dependencies use valid attributes matching their @property decorators
+
+---
+
 ## Lightdom CSS Validation
 
 ❌ **Lightdom CSS Issues** (3):
@@ -926,22 +975,26 @@ Provide a detailed parity audit report:
 - [ ] Fix lightdom CSS path in `index.html`: `../../` → `../`
 - [ ] Add lightdom CSS link to `compact.html`
 
-### 5. Fix Boolean Attributes ({N} issues)
+### 5. Fix Component Dependency APIs (2 issues)
+- [ ] `status.html`: Replace hallucinated `icon` attribute with slot-based SVG content (5 instances)
+- [ ] `actions.html`: Change `disabled="true"` to `is-disabled` (1 instance)
+
+### 6. Fix Boolean Attributes ({N} issues)
 - [ ] Remove explicit values from boolean attributes (pattern: `attr="true"` → `attr`)
 - [ ] Remove boolean attributes set to false (pattern: `attr="false"` → omit attribute)
 - [ ] Apply fixes across all affected demo files
 
-### 6. Fix HTML Validity (2 issues)
+### 7. Fix HTML Validity (2 issues)
 - [ ] Wrap `<pfv6-divider>` in `<li>` in `with-items.html`
 - [ ] Wrap `<pfv6-divider>` in `<tr><td>` in `table-variant.html`
 
-### 7. Fix Content Parity (2 demos, 4 issues)
+### 8. Fix Content Parity (2 demos, 4 issues)
 - [ ] `with-dividers.html`: Add `has-gutter` attribute
 - [ ] `with-dividers.html`: Add missing `<pfv6-card-body>` element
 - [ ] `with-dividers.html`: Fix text casing "item" → "Item"
 - [ ] `with-gutter.html`: Fix maxWidths object (add missing keys, correct values)
 
-### 7. Document Blocked Demos (1)
+### 9. Document Blocked Demos (1)
 - [ ] Track `expandable.html` blocker (waiting for pfv6-button)
 
 ---
@@ -973,6 +1026,7 @@ After fixing all issues, re-run audit to verify:
 - All static asset paths are correct
 - All demos are minimal fragments
 - All HTML is valid
+- All component dependency APIs are correct (no hallucinated properties)
 - All lightdom CSS links are present and correct
 ```
 
@@ -990,6 +1044,9 @@ After fixing all issues, re-run audit to verify:
 - Verify lightdom CSS link in every demo (if component has lightdom CSS)
 - Check HTML validity (custom elements in valid parent contexts)
 - Validate boolean attributes (no `="true"` or `="false"` values)
+- Validate component dependency APIs (attributes must match @property decorators)
+- Check for hallucinated properties on pfv6-* components
+- Verify slot usage when components use slots instead of properties
 - Identify blocked demos with HTML comments
 - Provide specific line numbers for all issues
 - Categorize issues by type and priority
@@ -1009,6 +1066,9 @@ After fixing all issues, re-run audit to verify:
 - Allow full HTML documents (must be fragments)
 - Allow custom elements in invalid parent contexts
 - Allow boolean attributes with explicit values (e.g., `is-inline="true"`)
+- Allow hallucinated component properties (e.g., `<pfv6-icon icon="...">`)
+- Accept attributes that don't exist in component's @property decorators
+- Allow property instead of slot when component uses slot pattern
 - Skip validation steps
 
 **Quality Bar**: Every Lit demo must have 1:1 parity with its React counterpart - same props, same elements, same text, same values, correct paths, valid HTML.

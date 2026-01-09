@@ -19,7 +19,7 @@ async function waitForFullLoad(page: Page): Promise<void> {
     const images = Array.from(document.images);
     return Promise.all(
       images.map(img => img.complete ? Promise.resolve()
-        : new Promise(resolve => {
+        : new Promise<void>(resolve => {
           const handler = () => {
             img.removeEventListener('load', handler);
             img.removeEventListener('error', handler);
