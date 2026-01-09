@@ -52,6 +52,29 @@ const IGNORED_DEMO_DEPS = [
 ];
 
 /**
+ * Check if a demo dependency should be ignored during dependency analysis.
+ * Returns true if the dependency should be skipped (layout component, icon, enum, or self-reference).
+ */
+function shouldIgnoreDemoDependency(depName: string, componentName: string): boolean {
+  // Skip layout components and enums - they're translated to CSS or constants
+  if (IGNORED_DEMO_DEPS.includes(depName)) {
+    return true;
+  }
+  // Skip icon components - they can be inlined as SVG
+  if (depName.endsWith('Icon')) {
+    return true;
+  }
+  // Skip self-references
+  if (depName === componentName ||
+      depName === `${componentName}Main` ||
+      depName === `${componentName}Utilities` ||
+      depName === `${componentName}Icon`) {
+    return true;
+  }
+  return false;
+}
+
+/**
  * Check if all relative dependencies for a component are satisfied (converted).
  * A component can only be converted if all its relative dependencies are already converted.
  * Also checks demo dependencies since they affect demo creation.
@@ -70,16 +93,7 @@ function hasSatisfiedDependencies(component: Component, allComponents: Component
 
   // Check if all demo PatternFly dependencies are converted (or are special cases)
   for (const depName of demoPatternflyDeps) {
-    // Skip layout components and enums - they're translated to CSS or constants
-    if (IGNORED_DEMO_DEPS.includes(depName)) {
-      continue;
-    }
-    // Skip icon components - they can be inlined as SVG
-    if (depName.endsWith('Icon')) {
-      continue;
-    }
-    // Skip self-references
-    if (depName === component.name || depName === `${component.name}Main` || depName === `${component.name}Utilities` || depName === `${component.name}Icon`) {
+    if (shouldIgnoreDemoDependency(depName, component.name)) {
       continue;
     }
 
@@ -107,16 +121,7 @@ function getUnconvertedDependencyCount(component: Component, allComponents: Comp
 
   // Count unconverted demo dependencies (excluding special cases)
   const unconvertedDemoDeps = demoPatternflyDeps.filter(depName => {
-    // Skip layout components and enums - they're translated to CSS or constants
-    if (IGNORED_DEMO_DEPS.includes(depName)) {
-      return false;
-    }
-    // Skip icon components - they can be inlined as SVG
-    if (depName.endsWith('Icon')) {
-      return false;
-    }
-    // Skip self-references
-    if (depName === component.name || depName === `${component.name}Main` || depName === `${component.name}Utilities` || depName === `${component.name}Icon`) {
+    if (shouldIgnoreDemoDependency(depName, component.name)) {
       return false;
     }
 
