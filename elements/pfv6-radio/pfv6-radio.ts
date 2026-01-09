@@ -50,7 +50,7 @@ export class Pfv6Radio extends LitElement {
 
   // Form-Associated Custom Element
   static readonly formAssociated = true;
-  private internals: ElementInternals;
+  #internals: ElementInternals;
 
   /**
   * The id attribute for the radio input.
@@ -154,16 +154,16 @@ export class Pfv6Radio extends LitElement {
   * Internal state for the default checked value (uncontrolled mode).
   */
   @state()
-  private defaultChecked = false;
+  private _defaultChecked = false;
 
   /**
   * Internal reference to the radio input element.
   */
-  private inputRef: Ref<HTMLInputElement> = createRef();
+  #inputRef: Ref<HTMLInputElement> = createRef();
 
   constructor() {
     super();
-    this.internals = this.attachInternals();
+    this.#internals = this.attachInternals();
   }
 
   connectedCallback() {
@@ -186,13 +186,13 @@ export class Pfv6Radio extends LitElement {
   * Form callbacks (FACE implementation)
   */
   formResetCallback() {
-    this.checked = this.defaultChecked;
-    this.internals.setFormValue(this.checked ? this.value : null);
+    this.checked = this._defaultChecked;
+    this.#internals.setFormValue(this.checked ? this.value : null);
   }
 
   formDisabledCallback(disabled: boolean) {
     this.disabled = disabled;
-    this.internals.ariaDisabled = disabled ? 'true' : 'false';
+    this.#internals.ariaDisabled = disabled ? 'true' : 'false';
   }
 
   formStateRestoreCallback(state: string | File | FormData | null, _mode: 'restore' | 'autocomplete') {
@@ -208,14 +208,14 @@ export class Pfv6Radio extends LitElement {
     super.updated(changedProperties);
 
     if (changedProperties.has('checked')) {
-      this.internals.setFormValue(this.checked ? this.value : null);
+      this.#internals.setFormValue(this.checked ? this.value : null);
 
       // Dispatch change event
       this.dispatchEvent(new Pfv6RadioChangeEvent(this.checked, this.value));
     }
 
     if (changedProperties.has('isValid')) {
-      this.internals.setValidity(
+      this.#internals.setValidity(
         !this.isValid ? { customError: true } : {},
         !this.isValid ? 'Invalid' : ''
       );
@@ -225,7 +225,7 @@ export class Pfv6Radio extends LitElement {
   /**
   * Handle radio input changes
   */
-  private handleChange(event: Event) {
+  #handleChange(event: Event) {
     const input = event.target as HTMLInputElement;
     this.checked = input.checked;
   }
@@ -233,12 +233,12 @@ export class Pfv6Radio extends LitElement {
   /**
   * Handle clicks on the wrapper when it's a label
   */
-  private handleWrapperClick(event: Event) {
+  #handleWrapperClick(event: Event) {
     if (this.isLabelWrapped && !this.disabled) {
       // Prevent double-toggle from label click
-      if (event.target !== this.inputRef.value) {
+      if (event.target !== this.#inputRef.value) {
         event.preventDefault();
-        this.inputRef.value?.click();
+        this.#inputRef.value?.click();
       }
     }
   }
@@ -258,7 +258,7 @@ export class Pfv6Radio extends LitElement {
     // Radio input element
     const inputElement = html`
       <input
-        ${ref(this.inputRef)}
+        ${ref(this.#inputRef)}
         id=${this.id}
         type="radio"
         class="input"
@@ -269,7 +269,7 @@ export class Pfv6Radio extends LitElement {
         ?required=${this.required}
         ?aria-invalid=${!this.isValid}
         aria-label=${ifDefined(!this.label ? this.accessibleLabel : undefined)}
-        @change=${this.handleChange}
+        @change=${this.#handleChange}
       />
     `;
 
@@ -318,7 +318,7 @@ export class Pfv6Radio extends LitElement {
         id="container"
         class=${classMap(wrapperClasses)}
         for=${this.id}
-        @click=${this.handleWrapperClick}
+        @click=${this.#handleWrapperClick}
       >
         ${content}
       </label>

@@ -34,11 +34,11 @@ import styles from './pfv6-helper-text.css';
 export class Pfv6HelperText extends LitElement {
   static styles = styles;
 
-  private _internals: ElementInternals;
+  #internals: ElementInternals;
 
   constructor() {
     super();
-    this._internals = this.attachInternals();
+    this.#internals = this.attachInternals();
   }
 
   /**
@@ -61,11 +61,11 @@ export class Pfv6HelperText extends LitElement {
 
     // Update ARIA via ElementInternals
     if (changedProperties.has('isLiveRegion')) {
-      this._internals.ariaLive = this.isLiveRegion ? 'polite' : 'off';
+      this.#internals.ariaLive = this.isLiveRegion ? 'polite' : 'off';
     }
 
     if (changedProperties.has('accessibleLabel')) {
-      this._internals.ariaLabel = this.accessibleLabel || null;
+      this.#internals.ariaLabel = this.accessibleLabel || null;
     }
   }
 

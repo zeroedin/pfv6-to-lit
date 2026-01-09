@@ -89,22 +89,22 @@ export class Pfv6Brand extends LitElement {
   * When true, renders as picture element; when false, renders as img element.
   */
   @state()
-  private hasSlottedContent = false;
+  private _hasSlottedContent = false;
 
   render() {
     const classes = {
-      picture: this.hasSlottedContent,
+      picture: this._hasSlottedContent,
     };
 
-    const inlineStyles = this.buildResponsiveStyles();
+    const inlineStyles = this.#buildResponsiveStyles();
 
-    return this.hasSlottedContent ?
+    return this._hasSlottedContent ?
       html`
           <picture
             id="container"
             class=${classMap(classes)}
             style=${styleMap(inlineStyles)}>
-            <slot @slotchange=${this.handleSlotChange}></slot>
+            <slot @slotchange=${this.#handleSlotChange}></slot>
             <img src=${this.src} alt=${this.alt} />
           </picture>
         `
@@ -123,7 +123,7 @@ export class Pfv6Brand extends LitElement {
   *
   * @returns Object with CSS custom properties for inline styles
   */
-  private buildResponsiveStyles(): Record<string, string> {
+  #buildResponsiveStyles(): Record<string, string> {
     const inlineStyles: Record<string, string> = {};
 
     if (this.widths) {
@@ -151,12 +151,12 @@ export class Pfv6Brand extends LitElement {
   * Handles slot content changes to determine if component should render as picture or img.
   * Updates internal state to trigger re-render when slot content changes.
   */
-  private handleSlotChange(e: Event) {
+  #handleSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;
     const nodes = slot.assignedNodes({ flatten: true });
     // Filter out text nodes (whitespace) and only count element nodes
     const elements = nodes.filter(node => node.nodeType === Node.ELEMENT_NODE);
-    this.hasSlottedContent = elements.length > 0;
+    this._hasSlottedContent = elements.length > 0;
   }
 
   /**
@@ -170,7 +170,7 @@ export class Pfv6Brand extends LitElement {
     if (slot) {
       const nodes = slot.assignedNodes({ flatten: true });
       const elements = nodes.filter(node => node.nodeType === Node.ELEMENT_NODE);
-      this.hasSlottedContent = elements.length > 0;
+      this._hasSlottedContent = elements.length > 0;
     }
   }
 }

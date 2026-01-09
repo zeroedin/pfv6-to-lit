@@ -736,6 +736,76 @@ render() {
 - Flag any private methods that return `TemplateResult` or `TemplateResult | null`
 - Report each helper method as a violation
 
+### Check Private Fields/Methods Use # Syntax (Not private _)
+
+**CRITICAL**: All private methods and fields that do NOT require decorators MUST use JavaScript's native private field syntax (`#name`) instead of TypeScript's `private _name` convention.
+
+**Why this matters**:
+- `#` provides true runtime privacy (not just compile-time)
+- Cleaner, more idiomatic JavaScript
+- Better encapsulation
+- Decorators cannot be applied to `#` fields, so decorated fields must use `private`
+
+**Detection Pattern**:
+1. Search for `private _` in the component file
+2. For each match, check if the field/method has a decorator (`@property`, `@state`, `@query`, etc.)
+3. If NO decorator is present, flag as violation
+
+**❌ WRONG - Using private _ without decorator**:
+```typescript
+// ❌ WRONG - No decorator, should use #
+private _internals: ElementInternals;
+private _updateFormValue() { ... }
+private _handleChange(event: Event) { ... }
+private _validate() { ... }
+```
+
+**✅ CORRECT - Using # for non-decorated private fields/methods**:
+```typescript
+// ✅ CORRECT - Native private field syntax
+#internals: ElementInternals;
+#updateFormValue() { ... }
+#handleChange(event: Event) { ... }
+#validate() { ... }
+
+// Usage with this.#name
+this.#internals = this.attachInternals();
+this.#updateFormValue();
+@change=${this.#handleChange}
+```
+
+**✅ CORRECT - Using private _ for decorated fields** (decorators require TypeScript private):
+```typescript
+// ✅ CORRECT - Has @query decorator, must use private _
+@query('input[type="checkbox"]')
+private _input!: HTMLInputElement;
+
+// ✅ CORRECT - Has @state decorator, must use private _
+@state()
+private _internalState = false;
+```
+
+**Validation Steps**:
+1. Grep for `private _\w+` in the component file
+2. For each match, check if the preceding line contains a decorator (line starts with `@`)
+3. If no decorator, flag as violation with specific fix:
+   - `private _methodName()` → `#methodName()`
+   - `private _fieldName:` → `#fieldName:`
+4. Also update all usages: `this._name` → `this.#name`
+
+**Report format**:
+```
+❌ Private field uses wrong syntax: private _internals at line 41
+  - No decorator present
+  - Should use: #internals
+  - Also update usages: this._internals → this.#internals
+
+❌ Private method uses wrong syntax: private _handleChange at line 129
+  - No decorator present
+  - Should use: #handleChange
+  - Also update usages: this._handleChange → this.#handleChange
+```
+
 ### Check No Dynamic Tag Names
 
 **Flag any usage of `<${variable}>` syntax**:
@@ -1451,6 +1521,7 @@ After fixing all issues, re-run audit to verify:
 - Detect anti-patterns (:host manipulation, lift and shift)
 - Check event classes extend Event (not CustomEvent)
 - Validate naming conventions (Component API vs CSS API)
+- **Check private fields/methods use `#name` syntax** (not `private _name`) unless decorated
 - Provide specific line numbers for all issues
 - Categorize by severity (Critical, Warning, Best Practice)
 - Create actionable fix instructions
@@ -1463,6 +1534,7 @@ After fixing all issues, re-run audit to verify:
 - Allow BEM classes in component API
 - Allow CustomEvent for component events
 - Allow ElementInternals for internal elements
+- Allow `private _name` for non-decorated fields/methods (use `#name`)
 - Skip validation steps
 
 **Quality Bar**: Every issue must be documented with specific location, explanation of why it's wrong, and exact code to fix it.
