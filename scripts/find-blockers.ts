@@ -36,6 +36,22 @@ interface RankedComponent extends Component {
 }
 
 /**
+ * Demo dependencies that are ignored during dependency checking.
+ * - Layout components (Flex, Grid, Stack, etc.) are translated to CSS classes
+ * - ValidatedOptions is an enum/type, not a component
+ */
+const IGNORED_DEMO_DEPS = [
+  'ValidatedOptions',
+  'Flex', 'FlexItem',
+  'Grid', 'GridItem',
+  'Stack', 'StackItem',
+  'Bullseye',
+  'Level',
+  'Split', 'SplitItem',
+  'Gallery', 'GalleryItem'
+];
+
+/**
  * Check if all relative dependencies for a component are satisfied (converted).
  * A component can only be converted if all its relative dependencies are already converted.
  * Also checks demo dependencies since they affect demo creation.
@@ -53,10 +69,9 @@ function hasSatisfiedDependencies(component: Component, allComponents: Component
   }
 
   // Check if all demo PatternFly dependencies are converted (or are special cases)
-  const ignoredDemoDeps = ['ValidatedOptions', 'Flex', 'FlexItem', 'Grid', 'GridItem', 'Stack', 'StackItem', 'Bullseye', 'Level', 'Split', 'SplitItem', 'Gallery', 'GalleryItem'];
   for (const depName of demoPatternflyDeps) {
     // Skip layout components and enums - they're translated to CSS or constants
-    if (ignoredDemoDeps.includes(depName)) {
+    if (IGNORED_DEMO_DEPS.includes(depName)) {
       continue;
     }
     // Skip icon components - they can be inlined as SVG
@@ -91,10 +106,9 @@ function getUnconvertedDependencyCount(component: Component, allComponents: Comp
   }).length;
 
   // Count unconverted demo dependencies (excluding special cases)
-  const ignoredDemoDeps = ['ValidatedOptions', 'Flex', 'FlexItem', 'Grid', 'GridItem', 'Stack', 'StackItem', 'Bullseye', 'Level', 'Split', 'SplitItem', 'Gallery', 'GalleryItem'];
   const unconvertedDemoDeps = demoPatternflyDeps.filter(depName => {
     // Skip layout components and enums - they're translated to CSS or constants
-    if (ignoredDemoDeps.includes(depName)) {
+    if (IGNORED_DEMO_DEPS.includes(depName)) {
       return false;
     }
     // Skip icon components - they can be inlined as SVG
