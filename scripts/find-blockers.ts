@@ -38,9 +38,11 @@ interface RankedComponent extends Component {
 /**
  * Check if all relative dependencies for a component are satisfied (converted).
  * A component can only be converted if all its relative dependencies are already converted.
+ * Also checks demo dependencies since they affect demo creation.
  */
 function hasSatisfiedDependencies(component: Component, allComponents: Component[]): boolean {
   const relativeDeps = component.dependencies?.relative || [];
+  const demoPatternflyDeps = component.demoDependencies?.patternfly || [];
 
   // Check if all relative dependencies are converted
   for (const depName of relativeDeps) {
@@ -50,20 +52,65 @@ function hasSatisfiedDependencies(component: Component, allComponents: Component
     }
   }
 
+  // Check if all demo PatternFly dependencies are converted (or are special cases)
+  const ignoredDemoDeps = ['ValidatedOptions', 'Flex', 'FlexItem', 'Grid', 'GridItem', 'Stack', 'StackItem', 'Bullseye', 'Level', 'Split', 'SplitItem', 'Gallery', 'GalleryItem'];
+  for (const depName of demoPatternflyDeps) {
+    // Skip layout components and enums - they're translated to CSS or constants
+    if (ignoredDemoDeps.includes(depName)) {
+      continue;
+    }
+    // Skip icon components - they can be inlined as SVG
+    if (depName.endsWith('Icon')) {
+      continue;
+    }
+    // Skip self-references
+    if (depName === component.name || depName === `${component.name}Main` || depName === `${component.name}Utilities` || depName === `${component.name}Icon`) {
+      continue;
+    }
+
+    const dep = allComponents.find(c => c.name === depName);
+    if (!dep || !dep.converted) {
+      return false; // Demo dependency not converted - component is blocked!
+    }
+  }
+
   return true; // All dependencies satisfied
 }
 
 /**
- * Count only unconverted relative dependencies.
+ * Count only unconverted relative dependencies plus unconverted demo dependencies.
  * This gives us the actual number of blockers for a component.
  */
 function getUnconvertedDependencyCount(component: Component, allComponents: Component[]): number {
   const relativeDeps = component.dependencies?.relative || [];
+  const demoPatternflyDeps = component.demoDependencies?.patternfly || [];
 
-  return relativeDeps.filter(depName => {
+  const unconvertedRelativeDeps = relativeDeps.filter(depName => {
     const dep = allComponents.find(c => c.name === depName);
     return !dep || !dep.converted;
   }).length;
+
+  // Count unconverted demo dependencies (excluding special cases)
+  const ignoredDemoDeps = ['ValidatedOptions', 'Flex', 'FlexItem', 'Grid', 'GridItem', 'Stack', 'StackItem', 'Bullseye', 'Level', 'Split', 'SplitItem', 'Gallery', 'GalleryItem'];
+  const unconvertedDemoDeps = demoPatternflyDeps.filter(depName => {
+    // Skip layout components and enums - they're translated to CSS or constants
+    if (ignoredDemoDeps.includes(depName)) {
+      return false;
+    }
+    // Skip icon components - they can be inlined as SVG
+    if (depName.endsWith('Icon')) {
+      return false;
+    }
+    // Skip self-references
+    if (depName === component.name || depName === `${component.name}Main` || depName === `${component.name}Utilities` || depName === `${component.name}Icon`) {
+      return false;
+    }
+
+    const dep = allComponents.find(c => c.name === depName);
+    return !dep || !dep.converted;
+  }).length;
+
+  return unconvertedRelativeDeps + unconvertedDemoDeps;
 }
 
 // Read dependency tree
