@@ -84,4 +84,12 @@
   child2.addEventListener('change', () => {
     updateParent();
   });
+
+  // Fourth checkbox: independent controlled checkbox
+  // Demonstrates that multiple controlled checkboxes can coexist
+  check4.addEventListener('change', () => {
+    // This checkbox is controlled independently
+    // In React, it has its own state (isChecked4)
+    // Here, the native checked property serves the same purpose
+  });
 </script>
