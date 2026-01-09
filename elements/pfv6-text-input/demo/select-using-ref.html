@@ -1,0 +1,13 @@
+<label for="select-input" class="pf-v6-screen-reader">Select all on click</label>
+<pfv6-text-input>
+  <input id="select-input" type="text" value="select all on click">
+</pfv6-text-input>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-text-input/pfv6-text-input.js';
+
+  const input = document.getElementById('select-input');
+  input.addEventListener('focus', () => {
+    input.select();
+  });
+</script>
