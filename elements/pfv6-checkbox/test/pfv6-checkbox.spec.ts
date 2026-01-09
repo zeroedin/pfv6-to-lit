@@ -380,7 +380,7 @@ describe('<pfv6-checkbox>', function() {
     it('sets aria-describedby on input', async function() {
       const el = await fixture<Pfv6Checkbox>(html`<pfv6-checkbox id="test" description="Helper text"></pfv6-checkbox>`);
       const input = el.shadowRoot!.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(input.getAttribute('aria-describedby')).to.equal('test-description');
+      expect(input.getAttribute('aria-describedby')).to.equal('description');
     });
   });
 
@@ -878,19 +878,19 @@ describe('<pfv6-checkbox>', function() {
       const el = await fixture<Pfv6Checkbox>(html`<pfv6-checkbox id="test" description="Helper"></pfv6-checkbox>`);
       const input = el.shadowRoot!.querySelector('input[type="checkbox"]');
       const describedBy = input!.getAttribute('aria-describedby');
-      expect(describedBy).to.equal('test-description');
+      expect(describedBy).to.equal('description');
     });
 
     it('description element has matching id', async function() {
       const el = await fixture<Pfv6Checkbox>(html`<pfv6-checkbox id="test" description="Helper"></pfv6-checkbox>`);
       const description = el.shadowRoot!.querySelector('.description');
-      expect(description!.id).to.equal('test-description');
+      expect(description!.id).to.equal('description');
     });
 
     it('label element has matching id when present', async function() {
       const el = await fixture<Pfv6Checkbox>(html`<pfv6-checkbox id="test" label="Test"></pfv6-checkbox>`);
       const label = el.shadowRoot!.querySelector('label');
-      expect(label!.id).to.equal('test-label');
+      expect(label!.id).to.equal('label');
     });
   });
 });
