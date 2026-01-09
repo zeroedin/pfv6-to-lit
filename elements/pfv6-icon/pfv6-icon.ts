@@ -1,9 +1,7 @@
 import { LitElement, html } from 'lit';
-import type { PropertyValues } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './pfv6-icon.css';
 import '@pfv6/elements/pfv6-spinner/pfv6-spinner.js';
 
