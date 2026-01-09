@@ -150,6 +150,144 @@ Read('.cache/patternfly-react/packages/react-core/src/components/Card/card-body.
 - NO `:host-context()` anywhere (not cross-browser)
 - RTL must use `:dir(rtl)`, not `:host-context([dir="rtl"])`
 
+### Step 2.5: PatternFly Mixin Pattern Validation (CRITICAL)
+
+**When component CSS uses patterns that match PatternFly mixins, validate they are copied EXACTLY from the official PatternFly source.**
+
+**CRITICAL RULE**: Do NOT reimplement PatternFly mixin patterns. Copy them exactly from `.cache/patternfly/src/patternfly/sass-utilities/mixins.scss`.
+
+**Why this matters**: PatternFly mixins are tested patterns for accessibility, browser compatibility, and visual consistency. Custom reimplementations may have subtle bugs or incompatibilities.
+
+#### Common PatternFly Mixin Patterns to Validate
+
+**1. Screen Reader Pattern** (`.screen-reader`):
+
+**Official Pattern** (from `.cache/patternfly/src/patternfly/sass-utilities/mixins.scss`, `@mixin pf-v6-u-screen-reader`):
+```css
+.screen-reader {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+```
+
+**Validation**:
+- ✅ `position: fixed` (NOT `absolute`)
+- ✅ `inset-block-start: 0`
+- ✅ `inset-inline-start: 0`
+- ✅ `overflow: hidden`
+- ✅ `clip: rect(0, 0, 0, 0)` (NOT `clip-path: inset(50%)`)
+- ✅ `white-space: nowrap`
+- ✅ `border: 0` (or `border-width: 0`)
+- ❌ NO extra properties (`width`, `height`, `padding`, `margin`)
+
+**Common violations**:
+```css
+/* ❌ WRONG - Custom reimplementation */
+.screen-reader {
+  position: absolute;  /* Should be fixed */
+  width: 1px;          /* Not in pattern */
+  height: 1px;         /* Not in pattern */
+  padding: 0;          /* Not in pattern */
+  margin: -1px;        /* Not in pattern */
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ✅ CORRECT - Exact copy of PatternFly mixin */
+.screen-reader {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+```
+
+#### Validation Process
+
+1. **Identify mixin-based patterns in component CSS**:
+   - Search for `.screen-reader` class
+   - Check for other patterns that match known PatternFly mixins (truncate, mirror-inline-on-rtl, etc.)
+
+2. **For each pattern found**:
+   - Read the official mixin from `.cache/patternfly/src/patternfly/sass-utilities/mixins.scss`
+   - Compare component CSS against official pattern line-by-line
+   - Flag any deviations as CRITICAL ERRORS
+
+3. **Report violations**:
+
+**Report format**:
+```markdown
+### ❌ PatternFly Mixin Pattern Violation
+
+**File**: `pfv6-{component}.css` (line {X})
+**Pattern**: `.screen-reader` (from `@mixin pf-v6-u-screen-reader`)
+
+**Problem**: Custom reimplementation instead of exact copy of PatternFly mixin
+
+**Found** (custom implementation):
+```css
+.screen-reader {
+  position: absolute;  /* ❌ Should be fixed */
+  width: 1px;          /* ❌ Not in official pattern */
+  height: 1px;         /* ❌ Not in official pattern */
+  padding: 0;          /* ❌ Not in official pattern */
+  margin: -1px;        /* ❌ Not in official pattern */
+  overflow: hidden;    /* ✅ Correct */
+  clip: rect(0, 0, 0, 0); /* ✅ Correct */
+  white-space: nowrap; /* ✅ Correct */
+  border-width: 0;     /* ✅ Correct */
+  /* ❌ Missing inset-block-start */
+  /* ❌ Missing inset-inline-start */
+}
+```
+
+**Expected** (from PatternFly source):
+```css
+.screen-reader {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+```
+
+**Source**: `.cache/patternfly/src/patternfly/sass-utilities/mixins.scss` (`@mixin pf-v6-u-screen-reader`)
+
+**Fix**: Replace with exact copy of PatternFly mixin pattern. Do NOT create custom implementations.
+
+**Why this matters**: PatternFly mixins are tested across browsers and assistive technologies. Custom implementations may have subtle bugs that break accessibility or visual consistency.
+```
+
+#### Other Common Mixin Patterns to Check
+
+If component CSS includes patterns that match these mixins, validate against PatternFly source:
+
+- **`@mixin pf-v6-text-overflow`**: Text truncation with ellipsis
+- **`@mixin pf-v6-mirror-inline-on-rtl`**: RTL mirroring for icons/elements
+- **`@mixin pf-v6-hidden-visible`**: Show/hide utility
+- **`@mixin pf-v6-line-clamp`**: Multi-line text truncation
+
+**Validation method**:
+1. Grep for mixin name in `.cache/patternfly/src/patternfly/sass-utilities/mixins.scss`
+2. Extract exact CSS properties from mixin
+3. Compare against component implementation
+4. Report as ERROR if any deviation found
+
+**CRITICAL**: When PatternFly provides a tested mixin pattern, use it exactly. Do NOT reimplement.
+
 ### Step 2a: Public CSS Variable Placement Validation (CRITICAL)
 
 **This is a CRITICAL architectural rule that affects the entire CSS API.**
@@ -1098,6 +1236,7 @@ Provide a structured audit report:
 
 ### ✅ Passed Checks
 - Box-sizing reset present in all CSS files
+- PatternFly mixin patterns copied exactly from source (screen-reader matches official pattern)
 - All variable names match React CSS exactly
 - JSDoc @cssprop annotations match CSS variables exactly
 - JSDoc @csspart annotations match template parts exactly
@@ -1237,6 +1376,7 @@ Provide a structured audit report:
 
 **MUST CHECK**:
 - [ ] Every CSS file starts with box-sizing reset
+- [ ] All PatternFly mixin patterns copied exactly from source (screen-reader, text-overflow, etc.)
 - [ ] Stylelint passes with no errors or warnings
 - [ ] No elaborate CSS for components that have no React CSS
 - [ ] Simple class names used (`compact`, not `pf-m-compact`)
@@ -1251,6 +1391,7 @@ Provide a structured audit report:
 
 **REPORT AS ERROR**:
 - ❌ Missing box-sizing reset
+- ❌ PatternFly mixin pattern reimplemented instead of copied exactly
 - ❌ Stylelint errors or warnings
 - ❌ Flat selectors (not using CSS nesting with `&`)
 - ❌ `:host([attribute])` selectors found

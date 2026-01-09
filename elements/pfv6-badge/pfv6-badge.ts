@@ -66,7 +66,7 @@ export class Pfv6Badge extends LitElement {
       <span id="badge" class=${classMap(classes)}>
         <slot></slot>
         ${this.screenReaderText ? html`
-          <span id="screen-reader-text">${this.screenReaderText}</span>
+          <span class="screen-reader">${this.screenReaderText}</span>
         ` : ''}
       </span>
     `;
