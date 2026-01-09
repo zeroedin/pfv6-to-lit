@@ -506,11 +506,15 @@ describe('<pfv6-banner>', function() {
 
       expect(srText).to.exist;
 
-      // Check visual hiding styles
+      // Check visual hiding styles match PatternFly's official screen-reader mixin pattern
       const styles = window.getComputedStyle(srText);
-      expect(styles.position).to.equal('absolute');
-      expect(styles.width).to.equal('1px');
-      expect(styles.height).to.equal('1px');
+      expect(styles.position).to.equal('fixed');
+      expect(styles.insetBlockStart).to.equal('0px');
+      expect(styles.insetInlineStart).to.equal('0px');
+      expect(styles.overflow).to.equal('hidden');
+      expect(styles.clip).to.equal('rect(0px, 0px, 0px, 0px)');
+      expect(styles.whiteSpace).to.equal('nowrap');
+      expect(styles.borderWidth).to.equal('0px');
     });
 
     it('screen reader text provides context for status banners', async function() {
