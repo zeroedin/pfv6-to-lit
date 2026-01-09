@@ -684,63 +684,216 @@ this.dispatchEvent(new CustomEvent('expand', {
 }));
 ```
 
-## Step 7: Form-Associated Custom Elements (FACE) Detection
+## Step 7: Form Control Architecture Decision (CRITICAL)
 
-**Before designing the component API, determine if this is a form control.**
+**Before designing the component API, determine if this is a form control AND which pattern to use.**
+
+### The Core Problem: Label Association
+
+Shadow DOM scopes element IDs. This creates a critical limitation:
+- **External `<label for="id">` CANNOT reach shadow DOM inputs**
+- Clicking an external label will NOT focus a shadow DOM input
+- This breaks the standard HTML form pattern
 
 ### Decision Tree
 
-**Question**: Is this component a form control that needs native HTML form integration?
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    IS THIS A FORM CONTROL?                       │
+│     (input, checkbox, radio, select, textarea, switch, etc.)    │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+              ┌───────────────┴───────────────┐
+              ▼                               ▼
+             NO                              YES
+              │                               │
+              ▼                               ▼
+   ┌──────────────────┐      ┌────────────────────────────────────┐
+   │ Standard Shadow  │      │ Does PatternFly React provide a    │
+   │ DOM Component    │      │ built-in `label` prop that renders │
+   │ (no FACE needed) │      │ the label WITH the input?          │
+   └──────────────────┘      └────────────────────────────────────┘
+                                              │
+                         ┌────────────────────┴────────────────────┐
+                         ▼                                         ▼
+                   YES (Built-in Label)                    NO (External Label)
+                         │                                         │
+    ┌────────────────────┴────────────────┐    ┌──────────────────┴──────────────────┐
+    │ Components:                         │    │ Components:                          │
+    │ • Checkbox (label prop)             │    │ • TextInput (uses external label)    │
+    │ • Radio (label prop)                │    │ • TextArea                           │
+    │ • Switch (label prop)               │    │ • Select                             │
+    │                                     │    │ • SearchInput                        │
+    │ Pattern:                            │    │ • NumberInput                        │
+    │ SHADOW DOM + FACE                   │    │                                      │
+    │                                     │    │ Pattern:                             │
+    │ • Input is in shadow DOM            │    │ LIGHT DOM INPUT (SLOTTED)            │
+    │ • Label is in shadow DOM            │    │                                      │
+    │ • Both in same tree = works         │    │ • User slots native <input>          │
+    │ • formAssociated = true             │    │ • User wraps with <label> (preferred)│
+    │ • ElementInternals for form values  │    │ • NO FACE needed                     │
+    │                                     │    │ • Native form behavior               │
+    └─────────────────────────────────────┘    └───────────────────────────────────────┘
+```
 
-**Check React source for these indicators**:
+### Pattern A: Shadow DOM + FACE (Built-in Label)
 
-**YES if** (Form Control):
-- Component represents a form input (text input, checkbox, radio, select, textarea, etc.)
-- React component has `value` + `name` + `onChange` props
-- Component needs to participate in native form submission
-- Component needs form validation
-- Examples: `TextInput`, `Checkbox`, `Select`, `Radio`, `Textarea`
+**Use when**: React component has a `label` prop and renders both label and input.
 
-**NO if** (Not a Form Control):
-- Component is just a wrapper/container for forms
-- Component does NOT handle form submission or validation
-- Component does NOT create form controls itself
-- Examples: `Form`, `FormGroup`, `FormSection`, `FormFieldGroup`
+**Examples**: Checkbox, Radio, Switch
 
-### If YES (Form Control)
+**Implementation**:
+```typescript
+@customElement('pfv6-checkbox')
+export class Pfv6Checkbox extends LitElement {
+  static formAssociated = true;
+  private internals: ElementInternals;
 
-**Document the form control detection** in your output:
+  @property() label = '';
+  @property() name = '';
+  @property({ type: Boolean }) checked = false;
 
+  constructor() {
+    super();
+    this.internals = this.attachInternals();
+  }
+
+  render() {
+    return html`
+      <label>
+        <input type="checkbox" .checked=${this.checked}>
+        <span class="label-text">${this.label}</span>
+      </label>
+    `;
+  }
+}
+```
+
+**Usage**:
+```html
+<pfv6-checkbox name="agree" label="I agree to terms"></pfv6-checkbox>
+```
+
+**Document in output**:
 ```markdown
 ### Form Integration
 
 **Is Form Control**: YES
+**Pattern**: Shadow DOM + FACE (Built-in Label)
 
-**IMPORTANT**: This component requires Form-Associated Custom Element (FACE) patterns:
-- `static formAssociated = true`
-- ElementInternals for form integration
-- Form properties: name, value, disabled, required
-- Form callbacks: formResetCallback, formDisabledCallback
-- Form value synchronization in updated() lifecycle
+**Rationale**: React component has `label` prop and renders label internally with input.
 
-**RECOMMENDATION**: The create agent should call `face-elements-writer` subagent for complete FACE pattern implementation.
-
-**NOTE**: The `accessibility-auditor` subagent will validate proper FACE implementation in Phase 6.
+**RECOMMENDATION**: Call `face-elements-writer` subagent for complete FACE implementation.
 ```
 
-**DO NOT delegate to face-elements-writer** - let the create agent handle this delegation.
+### Pattern B: Light DOM Input (Slotted, No FACE)
 
-### If NO (Not a Form Control)
+**Use when**: React component does NOT have a built-in label prop. Users provide external labels.
 
-Proceed to Step 8 for basic ElementInternals (accessibility only, if needed).
+**Examples**: TextInput, TextArea, Select, SearchInput, NumberInput
 
+**Implementation**:
+```typescript
+@customElement('pfv6-text-input')
+export class Pfv6TextInput extends LitElement {
+  // NO formAssociated - native input handles form
+  // NO ElementInternals for form values
+  // NO form properties (name, value on component)
+
+  @property() validated: 'success' | 'warning' | 'error' | 'default' = 'default';
+
+  render() {
+    return html`
+      <span id="container" class=${classMap({ error: this.validated === 'error' })}>
+        <slot name="input" @slotchange=${this.#handleSlotChange}></slot>
+        ${this.#renderStatusIcon()}
+      </span>
+    `;
+  }
+}
+```
+
+**Usage** (preferred - wrapping label):
+```html
+<label>
+  Email
+  <pfv6-text-input validated="error">
+    <input slot="input" type="email" name="email" required>
+  </pfv6-text-input>
+</label>
+```
+
+**Usage** (also valid - explicit label association):
+```html
+<label for="email">Email</label>
+<pfv6-text-input validated="error">
+  <input id="email" slot="input" type="email" name="email" required>
+</pfv6-text-input>
+```
+
+**Why this works**:
+- Native `<input>` is in light DOM
+- Label association works (wrapping or for/id)
+- Native form submission works (no FACE needed)
+- Component adds styling, validation icons, etc.
+
+**Document in output**:
+```markdown
+### Form Integration
+
+**Is Form Control**: YES
+**Pattern**: Light DOM Input (Slotted)
+
+**Rationale**: React component uses external labels (no built-in `label` prop).
+External `<label for="">` must work, so input must be in light DOM.
+
+**Implementation Notes**:
+- NO `static formAssociated`
+- NO ElementInternals for form values
+- NO form properties (name, value, disabled, required) on the custom element
+- User provides native `<input>` via `<slot name="input">`
+- User wraps with `<label>` (preferred) or uses `<label for="id">`
+- Component adds visual enhancements (validation icons, styling)
+
+**DO NOT call face-elements-writer** - this pattern does not use FACE.
+```
+
+### Pattern C: Not a Form Control
+
+**Use when**: Component is a wrapper/container, not a form control.
+
+**Examples**: Form, FormGroup, FormSection, FormFieldGroup
+
+**Document in output**:
 ```markdown
 ### Form Integration
 
 **Is Form Control**: NO
 
-Component does not participate in form submission. ElementInternals may be used for accessibility only (see Step 8).
+Component does not participate in form submission.
+ElementInternals may be used for accessibility only (see Step 8).
 ```
+
+### Quick Reference
+
+| Component | Has Label Prop? | Pattern | FACE? |
+|-----------|-----------------|---------|-------|
+| Checkbox | ✅ Yes | Shadow DOM + FACE | Yes |
+| Radio | ✅ Yes | Shadow DOM + FACE | Yes |
+| Switch | ✅ Yes | Shadow DOM + FACE | Yes |
+| TextInput | ❌ No | Light DOM Slot | No |
+| TextArea | ❌ No | Light DOM Slot | No |
+| Select | ❌ No | Light DOM Slot | No |
+| SearchInput | ❌ No | Light DOM Slot | No |
+| NumberInput | ❌ No | Light DOM Slot | No |
+
+### Important: No `aria-label` Property
+
+For Light DOM Input components:
+- Do NOT add `accessible-label` or `aria-label` property
+- User controls their native `<input>` directly
+- If they need `aria-label` (last resort), they add it to their input
+- Prefer `<label>` wrapping over any ARIA solution
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: face-elements-auditor
-description: Validates Form-Associated Custom Element (FACE) implementation. Checks ElementInternals setup, form callbacks, properties, and form value synchronization.
+description: Validates Form-Associated Custom Element (FACE) implementation. Checks correct pattern selection (Shadow DOM+FACE vs Light DOM slot), ElementInternals setup, form callbacks, and form value synchronization.
 tools: Read, Grep
 model: sonnet
 ---
@@ -11,17 +11,123 @@ You are a Form-Associated Custom Elements (FACE) validation specialist with expe
 - [Shadow DOM and accessibility: the trouble with ARIA](https://nolanlawson.com/2022/11/28/shadow-dom-and-accessibility-the-trouble-with-aria/)
 - [ElementInternals - MDN](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals)
 - [Form Associated Custom Elements](https://bennypowers.dev/posts/form-associated-custom-elements/)
+- [Can I connect a label in light DOM to an input in shadow DOM?](https://www.matuzo.at/blog/2023/web-components-accessibility-faq/labelling-forms-in-shadow-dom/)
 
 ## Purpose
 
-Validate that FACE API designed by `face-elements-writer` subagent was implemented correctly, including:
-- Architecture decision is documented
-- Shadow DOM accessibility patterns are followed
-- Form integration works correctly
+Validate that the CORRECT form control pattern was selected:
+
+1. **Shadow DOM + FACE** (components with built-in labels: Checkbox, Radio, Switch)
+   - Validate FACE implementation is correct
+
+2. **Light DOM Slot** (components with external labels: TextInput, TextArea, Select)
+   - Validate NO FACE patterns are present
+   - Validate slot for input exists
 
 **Workflow Context**:
-- Phase 1: `api-writer` → `face-elements-writer` (design FACE API)
+- Phase 1: `api-writer` determines pattern (Shadow DOM+FACE vs Light DOM Slot)
+- Phase 1: `face-elements-writer` only called for Shadow DOM+FACE pattern
 - Phase 6: `accessibility-auditor` → `face-elements-auditor` (validate implementation)
+
+---
+
+## CRITICAL: Pattern Selection Validation (FIRST CHECK)
+
+### The Core Problem
+
+Shadow DOM scopes element IDs. External `<label for="id">` CANNOT reach shadow DOM inputs.
+
+### Decision Tree
+
+```
+Does component have built-in label prop (renders label with input)?
+│
+├── YES (Checkbox, Radio, Switch)
+│   └── ✅ Should use Shadow DOM + FACE
+│       - Validate FACE implementation (see below)
+│
+└── NO (TextInput, TextArea, Select, SearchInput, NumberInput)
+    └── ✅ Should use Light DOM Slot
+        - Validate NO formAssociated
+        - Validate NO ElementInternals for form values
+        - Validate slot="input" exists in template
+```
+
+### Check 0a: Identify Component Type
+
+```bash
+# Check if component has built-in label prop
+grep -q '@property.*label' component.ts && echo "HAS_LABEL=true" || echo "HAS_LABEL=false"
+
+# Check component name for known patterns
+basename component.ts | grep -iE '(checkbox|radio|switch)' && echo "BUILT_IN_LABEL_COMPONENT"
+basename component.ts | grep -iE '(text-input|textarea|select|search|number)' && echo "EXTERNAL_LABEL_COMPONENT"
+```
+
+### Check 0b: Validate Correct Pattern Used
+
+**For components WITH built-in label (Checkbox, Radio, Switch)**:
+```bash
+# MUST have formAssociated
+grep -q "static formAssociated = true" component.ts || echo "❌ Missing formAssociated"
+```
+
+**For components WITHOUT built-in label (TextInput, TextArea, Select, etc.)**:
+```bash
+# MUST NOT have formAssociated
+grep -q "static formAssociated = true" component.ts && echo "❌ WRONG PATTERN: Should use Light DOM Slot, not FACE"
+
+# MUST have slot for input
+grep -q 'slot.*name="input"' component.ts || echo "❌ Missing slot for input"
+grep -q '<slot.*input' component.ts || echo "❌ Missing input slot in template"
+```
+
+### Wrong Pattern Detection
+
+**If TextInput/TextArea/Select HAS formAssociated**:
+
+```markdown
+## ❌ CRITICAL: Wrong Pattern Used
+
+**Component**: {ComponentName}
+**Issue**: Using Shadow DOM + FACE pattern, but component requires external labels.
+
+**Problem**:
+- Component has `static formAssociated = true`
+- This means input is in shadow DOM
+- External `<label for="">` CANNOT reach shadow DOM input
+- Clicking label will NOT focus the input
+
+**Required Fix**:
+1. Remove `static formAssociated = true`
+2. Remove `ElementInternals` form value management
+3. Remove form properties (name, value, disabled, required) from component
+4. Add `<slot name="input">` to template
+5. Let user provide native `<input slot="input">` in light DOM
+
+**Correct Usage**:
+```html
+<label>
+  Name
+  <pfv6-text-input>
+    <input slot="input" name="name">
+  </pfv6-text-input>
+</label>
+```
+
+**Why**: External label association only works when input is in light DOM.
+```
+
+**If Checkbox/Radio/Switch MISSING formAssociated**:
+
+```markdown
+## ❌ CRITICAL: Missing FACE Implementation
+
+**Component**: {ComponentName}
+**Issue**: Component has built-in label but missing FACE patterns.
+
+**Required**: Add FACE implementation (see sections below).
+```
 
 ---
 
