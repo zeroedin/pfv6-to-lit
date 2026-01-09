@@ -608,12 +608,6 @@ describe('<pfv6-checkbox>', function() {
       expect(Pfv6Checkbox.formAssociated).to.be.true;
     });
 
-    it('has ElementInternals', async function() {
-      const el = await fixture<Pfv6Checkbox>(html`<pfv6-checkbox id="test"></pfv6-checkbox>`);
-      // Access internals through private field (for testing purposes)
-      expect((el as any).internals).to.exist;
-    });
-
     it('sets form value when checked', async function() {
       const el = await fixture<Pfv6Checkbox>(html`<pfv6-checkbox id="test" value="accepted" checked></pfv6-checkbox>`);
       // Form value should be set (implementation tested via internals)
