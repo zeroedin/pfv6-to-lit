@@ -130,6 +130,20 @@ function isIgnored(depName: string, componentName: string): boolean {
 }
 
 /**
+ * Get all dependencies of a specific type from a component.
+ * @param component - The component to get dependencies from
+ * @param type - 'implementation' for dependencies, 'demo' for demoDependencies
+ * @returns Array of all dependency names (patternfly + relative)
+ */
+function getDeps(component: Component, type: 'implementation' | 'demo'): string[] {
+  const source = type === 'implementation' ? component.dependencies : component.demoDependencies;
+  return [
+    ...(source?.patternfly || []),
+    ...(source?.relative || []),
+  ];
+}
+
+/**
  * Get all blocking dependencies for a component.
  * Returns array of dependency names that are blocking conversion.
  * @param component - The component to check
@@ -138,17 +152,17 @@ function isIgnored(depName: string, componentName: string): boolean {
 function getBlockers(component: Component): string[] {
   const blockers: string[] = [];
 
-  // Check relative (implementation) dependencies
+  // Check implementation dependencies (patternfly + relative)
   // These block if not satisfied
-  for (const dep of component.dependencies?.relative || []) {
+  for (const dep of getDeps(component, 'implementation')) {
     if (!isSatisfied(dep)) {
       blockers.push(dep);
     }
   }
 
-  // Check demo PatternFly dependencies
+  // Check demo dependencies (patternfly + relative)
   // These block if not ignored AND not satisfied
-  for (const dep of component.demoDependencies?.patternfly || []) {
+  for (const dep of getDeps(component, 'demo')) {
     if (!isIgnored(dep, component.name) && !isSatisfied(dep)) {
       blockers.push(dep);
     }
@@ -181,8 +195,8 @@ const candidates = tree.components.filter(c =>
 const blockCount: Record<string, number> = {};
 tree.components.forEach(comp => {
   const allDeps = [
-    ...(comp.dependencies?.patternfly || []),
-    ...(comp.demoDependencies?.patternfly || []),
+    ...getDeps(comp, 'implementation'),
+    ...getDeps(comp, 'demo'),
   ];
   allDeps.forEach(dep => {
     blockCount[dep] = (blockCount[dep] || 0) + 1;
@@ -200,8 +214,8 @@ const ranked: RankedComponent[] = candidates
         blocks,
         impact: blocks / (blockers.length + 1),
         deps: {
-          implementation: c.dependencies?.patternfly || [],
-          demo: c.demoDependencies?.patternfly || [],
+          implementation: getDeps(c, 'implementation'),
+          demo: getDeps(c, 'demo'),
         },
       };
     })
