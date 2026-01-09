@@ -348,17 +348,17 @@ describe('<pfv6-icon>', function() {
     });
   });
 
-  describe('defaultProgressArialabel property', function() {
+  describe('defaultProgressAriaLabel property', function() {
     it('defaults to "Loading..."', async function() {
       const el = await fixture<Pfv6Icon>(html`<pfv6-icon></pfv6-icon>`);
-      expect(el.defaultProgressArialabel).to.equal('Loading...'); // Match React default
+      expect(el.defaultProgressAriaLabel).to.equal('Loading...'); // Match React default
     });
 
     it('accepts custom value', async function() {
       const el = await fixture<Pfv6Icon>(
         html`<pfv6-icon default-progress-aria-label="Please wait"></pfv6-icon>`
       );
-      expect(el.defaultProgressArialabel).to.equal('Please wait');
+      expect(el.defaultProgressAriaLabel).to.equal('Please wait');
     });
 
     it('applies to default progress icon aria-label', async function() {

@@ -148,7 +148,7 @@ export class Pfv6Icon extends LitElement {
   * Only used when no custom progress icon is provided via slot.
   */
   @property({ type: String, attribute: 'default-progress-aria-label' })
-  defaultProgressArialabel = 'Loading...';
+  defaultProgressAriaLabel = 'Loading...';
 
   /**
   * Flag indicating whether the icon should be mirrored for right to left (RTL) languages.
@@ -232,7 +232,7 @@ export class Pfv6Icon extends LitElement {
     return html`
       <pfv6-spinner
         diameter="1em"
-        accessible-label=${this.defaultProgressArialabel}
+        accessible-label=${this.defaultProgressAriaLabel}
       ></pfv6-spinner>
     `;
   }
