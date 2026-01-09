@@ -20,7 +20,13 @@ async function waitForFullLoad(page: Page): Promise<void> {
     return Promise.all(
       images.map(img => img.complete ? Promise.resolve()
         : new Promise(resolve => {
-          img.addEventListener('load', img.onerror = resolve);
+          const handler = () => {
+            img.removeEventListener('load', handler);
+            img.removeEventListener('error', handler);
+            resolve();
+          };
+          img.addEventListener('load', handler);
+          img.addEventListener('error', handler);
         })
       )
     );
