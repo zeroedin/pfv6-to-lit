@@ -3,250 +3,279 @@
  * Find blocker components - identifies the next best component to convert
  * based on dependency count and impact on other components.
  *
- * Outputs top 6 candidates sorted by:
- * 1. Total dependencies (fewest first)
- * 2. Blocker count (most blocking components first, as tiebreaker)
+ * Logic:
+ * 1. Filter to unconverted regular components (not layout/styling)
+ * 2. Exclude components with blocking dependencies
+ * 3. Rank by: fewest blockers → most impact (tiebreaker)
+ *
+ * A dependency is BLOCKING if:
+ *   - Found in component tree (it's a real component)
+ *   - AND not converted (converted !== true)
+ *   - AND pfv6-* doesn't exist on disk
+ *   - AND not ignored (for demo deps: not layout/icon/self-reference)
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CONFIGURATION
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** Components excluded from conversion (styling components) */
+const EXCLUDED = new Set([
+  'Content', 'Title', 'Form', 'DescriptionList',
+  'DescriptionListGroup', 'DescriptionListTerm', 'DescriptionListDescription',
+]);
+
+/** Demo dependencies that don't block (layouts, enums) */
+const IGNORED_DEMO_DEPS = new Set([
+  'ValidatedOptions',
+  'Flex', 'FlexItem', 'Grid', 'GridItem', 'Stack', 'StackItem',
+  'Bullseye', 'Level', 'Split', 'SplitItem', 'Gallery', 'GalleryItem',
+]);
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TYPES
+// ═══════════════════════════════════════════════════════════════════════════
 
 interface Component {
   name: string;
   type: string;
   converted?: boolean;
-  totalDependencies: number;
-  dependencies: {
-    patternfly?: string[];
-    relative?: string[];
-  };
-  demoDependencies: {
-    patternfly?: string[];
-    relative?: string[];
-  };
+  dependencies?: { patternfly?: string[]; relative?: string[] };
+  demoDependencies?: { patternfly?: string[]; relative?: string[] };
 }
 
-interface DependencyTree {
-  components: Component[];
-}
-
-interface RankedComponent extends Component {
+interface RankedComponent {
+  name: string;
+  blockers: string[];
   blocks: number;
   impact: number;
+  deps: { implementation: string[]; demo: string[] };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CORE LOGIC
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** Global component lookup map */
+const componentMap = new Map<string, Component>();
+
+/**
+ * Check if pfv6-{name} directory exists on disk.
+ * Converts PascalCase to kebab-case (e.g., HelperText → helper-text)
+ * @param name - Component name in PascalCase
+ * @returns true if the pfv6-* directory exists
+ */
+function pfv6Exists(name: string): boolean {
+  const kebabName = name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+  return existsSync(resolve(process.cwd(), 'elements', `pfv6-${kebabName}`));
 }
 
 /**
- * Demo dependencies that are ignored during dependency checking.
- * - Layout components (Flex, Grid, Stack, etc.) are translated to CSS classes
- * - ValidatedOptions is an enum/type, not a component
+ * Check if a dependency is satisfied (not blocking).
+ * Satisfied if: not a component OR converted OR pfv6-* exists
+ * @param name - Dependency name
+ * @returns true if the dependency is satisfied
  */
-const IGNORED_DEMO_DEPS = [
-  'ValidatedOptions',
-  'Flex', 'FlexItem',
-  'Grid', 'GridItem',
-  'Stack', 'StackItem',
-  'Bullseye',
-  'Level',
-  'Split', 'SplitItem',
-  'Gallery', 'GalleryItem'
-];
-
-/**
- * Check if a demo dependency should be ignored during dependency analysis.
- * Returns true if the dependency should be skipped (layout component, icon, enum, or self-reference).
- */
-function shouldIgnoreDemoDependency(depName: string, componentName: string): boolean {
-  // Skip layout components and enums - they're translated to CSS or constants
-  if (IGNORED_DEMO_DEPS.includes(depName)) {
+function isSatisfied(name: string): boolean {
+  const dep = componentMap.get(name);
+  // Not in tree = type/utility = satisfied
+  if (!dep) {
     return true;
   }
-  // Skip icon components - they can be inlined as SVG
+  // Marked converted = satisfied
+  if (dep.converted) {
+    return true;
+  }
+  // pfv6-* exists on disk = satisfied
+  if (pfv6Exists(name)) {
+    return true;
+  }
+  // Otherwise not satisfied
+  return false;
+}
+
+/**
+ * Check if a demo dependency should be ignored.
+ * Ignored: layout components, icons, self-references
+ * @param depName - Dependency name
+ * @param componentName - The component being checked
+ * @returns true if the dependency should be ignored
+ */
+function isIgnored(depName: string, componentName: string): boolean {
+  // Layout components and enums
+  if (IGNORED_DEMO_DEPS.has(depName)) {
+    return true;
+  }
+  // Icon components (can be inlined as SVG)
   if (depName.endsWith('Icon')) {
     return true;
   }
-  // Skip self-references
-  if (depName === componentName ||
-      depName === `${componentName}Main` ||
-      depName === `${componentName}Utilities` ||
-      depName === `${componentName}Icon`) {
+  // Self-references
+  if (depName === componentName) {
+    return true;
+  }
+  if (depName === `${componentName}Main`) {
+    return true;
+  }
+  if (depName === `${componentName}Utilities`) {
+    return true;
+  }
+  if (depName === `${componentName}Icon`) {
     return true;
   }
   return false;
 }
 
 /**
- * Check if all relative dependencies for a component are satisfied (converted).
- * A component can only be converted if all its relative dependencies are already converted.
- * Also checks demo dependencies since they affect demo creation.
+ * Get all blocking dependencies for a component.
+ * Returns array of dependency names that are blocking conversion.
+ * @param component - The component to check
+ * @returns Array of blocking dependency names
  */
-function hasSatisfiedDependencies(component: Component, allComponents: Component[]): boolean {
-  const relativeDeps = component.dependencies?.relative || [];
-  const demoPatternflyDeps = component.demoDependencies?.patternfly || [];
+function getBlockers(component: Component): string[] {
+  const blockers: string[] = [];
 
-  // Check if all relative dependencies are converted
-  for (const depName of relativeDeps) {
-    const dep = allComponents.find(c => c.name === depName);
-    if (!dep || !dep.converted) {
-      return false; // Dependency not converted - component is blocked!
+  // Check relative (implementation) dependencies
+  // These block if not satisfied
+  for (const dep of component.dependencies?.relative || []) {
+    if (!isSatisfied(dep)) {
+      blockers.push(dep);
     }
   }
 
-  // Check if all demo PatternFly dependencies are converted (or are special cases)
-  for (const depName of demoPatternflyDeps) {
-    if (shouldIgnoreDemoDependency(depName, component.name)) {
-      continue;
-    }
-
-    const dep = allComponents.find(c => c.name === depName);
-    if (!dep || !dep.converted) {
-      return false; // Demo dependency not converted - component is blocked!
+  // Check demo PatternFly dependencies
+  // These block if not ignored AND not satisfied
+  for (const dep of component.demoDependencies?.patternfly || []) {
+    if (!isIgnored(dep, component.name) && !isSatisfied(dep)) {
+      blockers.push(dep);
     }
   }
 
-  return true; // All dependencies satisfied
+  // Return unique blockers
+  return Array.from(new Set(blockers));
 }
 
-/**
- * Count only unconverted relative dependencies plus unconverted demo dependencies.
- * This gives us the actual number of blockers for a component.
- */
-function getUnconvertedDependencyCount(component: Component, allComponents: Component[]): number {
-  const relativeDeps = component.dependencies?.relative || [];
-  const demoPatternflyDeps = component.demoDependencies?.patternfly || [];
+// ═══════════════════════════════════════════════════════════════════════════
+// MAIN
+// ═══════════════════════════════════════════════════════════════════════════
 
-  const unconvertedRelativeDeps = relativeDeps.filter(depName => {
-    const dep = allComponents.find(c => c.name === depName);
-    return !dep || !dep.converted;
-  }).length;
-
-  // Count unconverted demo dependencies (excluding special cases)
-  const unconvertedDemoDeps = demoPatternflyDeps.filter(depName => {
-    if (shouldIgnoreDemoDependency(depName, component.name)) {
-      return false;
-    }
-
-    const dep = allComponents.find(c => c.name === depName);
-    return !dep || !dep.converted;
-  }).length;
-
-  return unconvertedRelativeDeps + unconvertedDemoDeps;
-}
-
-// Read dependency tree
+// Load component tree
 const treePath = resolve(process.cwd(), 'react-dependency-tree.json');
-const tree: DependencyTree = JSON.parse(readFileSync(treePath, 'utf-8'));
+const tree: { components: Component[] } = JSON.parse(readFileSync(treePath, 'utf-8'));
 
-// Filter to non-layout, non-styling (Content, Title, Form, DescriptionList), non-converted components
-// AND components whose relative dependencies are all satisfied
+// Build lookup map
+tree.components.forEach(c => componentMap.set(c.name, c));
+
+// Find candidates: regular components that can be converted now
 const candidates = tree.components.filter(c =>
   c.type === 'component'
-  && c.converted !== true
-  && c.name !== 'Content'
-  && c.name !== 'Title'
-  && c.name !== 'Form'
-  && c.name !== 'DescriptionList'
-  && c.name !== 'DescriptionListGroup'
-  && c.name !== 'DescriptionListTerm'
-  && c.name !== 'DescriptionListDescription'
-  && hasSatisfiedDependencies(c, tree.components)
+    && !c.converted
+    && !EXCLUDED.has(c.name)
+    && getBlockers(c).length === 0
 );
 
-// Calculate blocker counts (how many components depend on each component)
-const blockedBy: Record<string, number> = {};
+// Calculate how many components each one blocks (for impact scoring)
+const blockCount: Record<string, number> = {};
 tree.components.forEach(comp => {
-  [...(comp.dependencies.patternfly || []),
-    ...(comp.demoDependencies.patternfly || [])]
-      .forEach(dep => {
-        blockedBy[dep] = (blockedBy[dep] || 0) + 1;
-      });
+  const allDeps = [
+    ...(comp.dependencies?.patternfly || []),
+    ...(comp.demoDependencies?.patternfly || []),
+  ];
+  allDeps.forEach(dep => {
+    blockCount[dep] = (blockCount[dep] || 0) + 1;
+  });
 });
 
-// Add blocker counts and sort
+// Rank candidates
 const ranked: RankedComponent[] = candidates
     .map(c => {
-      const unconvertedDeps = getUnconvertedDependencyCount(c, tree.components);
+      const blockers = getBlockers(c);
+      const blocks = blockCount[c.name] || 0;
       return {
-        ...c,
-        blocks: blockedBy[c.name] || 0,
-        impact: (blockedBy[c.name] || 0) / (unconvertedDeps + 1),
-        // Store unconverted count for debugging
-        unconvertedDependencies: unconvertedDeps,
+        name: c.name,
+        blockers,
+        blocks,
+        impact: blocks / (blockers.length + 1),
+        deps: {
+          implementation: c.dependencies?.patternfly || [],
+          demo: c.demoDependencies?.patternfly || [],
+        },
       };
     })
     .sort((a, b) => {
-    // Primary sort: fewest unconverted dependencies first
-      const aUnconverted = getUnconvertedDependencyCount(a, tree.components);
-      const bUnconverted = getUnconvertedDependencyCount(b, tree.components);
-
-      if (aUnconverted !== bUnconverted) {
-        return aUnconverted - bUnconverted;
+      // Primary: fewest blockers first
+      if (a.blockers.length !== b.blockers.length) {
+        return a.blockers.length - b.blockers.length;
       }
-      // Tiebreaker: most blocking components first
+      // Tiebreaker: most blocking (highest impact) first
       return b.blocks - a.blocks;
     });
 
-// Output formatted markdown recommendation
-const top = ranked[0];
-const unconvertedDeps = getUnconvertedDependencyCount(top, tree.components);
+// ═══════════════════════════════════════════════════════════════════════════
+// OUTPUT
+// ═══════════════════════════════════════════════════════════════════════════
 
+if (ranked.length === 0) {
+  // eslint-disable-next-line no-console
+  console.log(`## No Components Available to Convert
+
+All components are either:
+- Already converted
+- Layout/styling components (excluded)
+- Blocked by unconverted dependencies
+
+🎉 If all regular components are converted, the project is complete!
+`);
+  process.exit(0);
+}
+
+const [top] = ranked;
+
+// eslint-disable-next-line no-console
 console.log(`## Next Component to Convert: ${top.name}
 
-**Dependencies**: ${unconvertedDeps}
+**Blockers**: ${top.blockers.length}${top.blockers.length > 0 ? ` (${top.blockers.join(', ')})` : ''}
 **Blocks**: ${top.blocks} components
-**Impact Score**: ${top.blocks} / (${unconvertedDeps} + 1) = ${top.impact.toFixed(2)}
+**Impact**: ${top.impact.toFixed(2)}
 
 ### Why This Component?
-${unconvertedDeps === 0
-  ? '- Has zero unconverted dependencies - ready to build immediately'
-  : `- Has only ${unconvertedDeps} unconverted dependencies - minimal blockers`}
-${top.blocks > 0
-  ? `- Blocks ${top.blocks} other components - high impact on unblocking future work`
-  : '- Leaf component (blocks no others) - good for learning the workflow'}
-- Impact score of ${top.impact.toFixed(2)} provides good balance of ease and value
+${top.blockers.length === 0 ?
+        '- Zero blockers - ready to build immediately'
+        : `- Only ${top.blockers.length} blockers - minimal dependencies`}
+${top.blocks > 0 ?
+        `- Blocks ${top.blocks} other components - high impact`
+        : '- Leaf component (blocks no others)'}
 
-### Dependency Details:
-**Implementation Dependencies**:
-${top.dependencies?.patternfly?.length
-  ? top.dependencies.patternfly.map(d => `- ${d}`).join('\n')
-  : '- None'}
-
-**Demo Dependencies**:
-${top.demoDependencies?.patternfly?.length
-  ? top.demoDependencies.patternfly.map(d => `- ${d}`).join('\n')
-  : '- None'}
+### Dependencies:
+**Implementation**: ${top.deps.implementation.length ? top.deps.implementation.join(', ') : 'None'}
+**Demo**: ${top.deps.demo.length ? top.deps.demo.join(', ') : 'None'}
 
 ---
 
-## Alternative Candidates (Next 5):
+## Alternatives (Next 5):
 
-${ranked.slice(1, 6).map((c, i) => {
-  const deps = getUnconvertedDependencyCount(c, tree.components);
-  return `${i + 1}. **${c.name}** - ${deps} deps, blocks ${c.blocks} (impact: ${c.impact.toFixed(2)})`;
-}).join('\n')}
+${ranked.slice(1, 6).map((c, i) =>
+  `${i + 1}. **${c.name}** - ${c.blockers.length} blockers, blocks ${c.blocks} (impact: ${c.impact.toFixed(2)})`
+).join('\n') || 'None'}
 
 ---
 
-## Top Blockers (High-Impact Components)
-
-These components block many others but have dependencies themselves:
+## Top Blockers (by Impact):
 
 ${[...ranked]
-  .sort((a, b) => b.blocks - a.blocks)
-  .slice(0, 5)
-  .map((c, i) => {
-    const deps = getUnconvertedDependencyCount(c, tree.components);
-    return `${i + 1}. **${c.name}** - Blocks ${c.blocks} components (${deps} deps)`;
-  }).join('\n')}
+    .sort((a, b) => b.blocks - a.blocks)
+    .slice(0, 5)
+    .map((c, i) => `${i + 1}. **${c.name}** - Blocks ${c.blocks} components`)
+    .join('\n')}
 
 ---
 
 ## Next Steps
 
-To proceed with the conversion, use this prompt:
-
 \`\`\`
 Convert ${top.name} component
 \`\`\`
-
-The main conversation will execute the conversion workflow by delegating to specialized subagents in sequence (api-writer → demo-writer → css-writer → etc).
 `);
