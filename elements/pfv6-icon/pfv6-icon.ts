@@ -161,7 +161,7 @@ export class Pfv6Icon extends LitElement {
   * Semantic sizes keep their prefix: headingSm → heading-sm, bodySm → body-sm
   * @param size - Icon size value to convert
   */
-  private _getSizeClass(size?: IconSize): string | undefined {
+  #getSizeClass(size?: IconSize): string | undefined {
     if (!size) return undefined;
 
     // Convert camelCase to kebab-case and handle underscore
@@ -184,7 +184,7 @@ export class Pfv6Icon extends LitElement {
       inline: this.isInline,
       'in-progress': this.isInProgress
     };
-    const sizeClass = this._getSizeClass(this.size);
+    const sizeClass = this.#getSizeClass(this.size);
     if (sizeClass) {
       containerClasses[sizeClass] = true;
     }
@@ -192,7 +192,7 @@ export class Pfv6Icon extends LitElement {
     const contentClasses: Record<string, boolean> = {
       'pf-v6-m-mirror-inline-rtl': this.shouldMirrorRTL
     };
-    const iconSizeClass = this._getSizeClass(this.iconSize);
+    const iconSizeClass = this.#getSizeClass(this.iconSize);
     if (iconSizeClass) {
       contentClasses[iconSizeClass] = true;
     }
@@ -201,7 +201,7 @@ export class Pfv6Icon extends LitElement {
     }
 
     const progressClasses: Record<string, boolean> = {};
-    const progressSizeClass = this._getSizeClass(this.progressIconSize);
+    const progressSizeClass = this.#getSizeClass(this.progressIconSize);
     if (progressSizeClass) {
       progressClasses[progressSizeClass] = true;
     }
@@ -214,7 +214,7 @@ export class Pfv6Icon extends LitElement {
         ${this.isInProgress ? html`
           <span id="progress" class=${classMap(progressClasses)}>
             <slot name="progress-icon">
-              ${this._renderDefaultProgressIcon()}
+              ${this.#renderDefaultProgressIcon()}
             </slot>
           </span>
         ` : null}
@@ -226,7 +226,7 @@ export class Pfv6Icon extends LitElement {
   * Render the default progress icon (1em spinner).
   * This is used when no custom progress icon is provided via slot.
   */
-  private _renderDefaultProgressIcon() {
+  #renderDefaultProgressIcon() {
     return html`
       <pfv6-spinner
         diameter="1em"

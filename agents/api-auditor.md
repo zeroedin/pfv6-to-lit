@@ -391,6 +391,39 @@ config?: { theme: string };
 inset?: string;
 ```
 
+### React Props Category Reference
+
+Use this guide to categorize React props:
+
+**Category A - Framework Internals** (auto-skip, no action needed):
+- `children` - Web Components use slots
+- `className` - Users use `class` attribute
+- `ref` - React-specific DOM reference
+- `key` - React reconciliation
+- Props from generic types: `React.HTMLProps<T>`, `React.AriaAttributes`
+- OUIA props: `ouiaId`, `ouiaSafe` (PatternFly testing framework)
+- Callback props ending in `onChange`, `onClick`, etc. (become events)
+
+**Category B - Meaningful Domain Props** (MUST implement):
+- Structural props: `isLabelWrapped`, `variant`, `position`, etc.
+- Content props: `label`, `description`, `body`, etc.
+- State props: `isExpanded`, `isOpen`, `isDisabled`, etc.
+- Style props: `color`, `size`, `spacing`, etc.
+- ANY prop that changes component behavior or appearance
+
+**Category C - Technically Infeasible** (document in README):
+- `component` - Cannot transform custom element type
+- Props requiring features not available in Web Components
+- RARE - most props should be implementable
+
+**Decision Tree**:
+1. Is it children/className/ref/key/callbacks? → Category A
+2. Is it OUIA (ouiaId, ouiaSafe)? → Category A
+3. Is it from `React.HTMLProps<T>` generic? → Category A
+4. Does it control behavior/appearance? → Category B (implement it!)
+5. Is it technically impossible? → Category C (document it!)
+6. When in doubt → Category B (implement it!)
+
 ### Check for Skipped React Props
 
 **Step 2b: Validate Intentionally Skipped Props**
@@ -427,12 +460,35 @@ When React props are missing from the Lit implementation, verify they're appropr
    - `ref` - React-specific DOM reference
    - `key` - React reconciliation identifier
    - Props from `React.HTMLProps<T>` generic extension
+   - OUIA props: `ouiaId`, `ouiaSafe` (PatternFly testing framework)
+   - Callback props ending in `onChange`, `onClick`, etc. (become events)
 
-   **Category B: Meaningful domain props** (require README.md documentation)
-   - `component` - Changes element type in React
-   - Any other domain-specific prop that has functional meaning in React
+   **Category B: Meaningful domain props** (MUST be implemented)
+   - Structural props: `isLabelWrapped`, `variant`, `position`, etc.
+   - Content props: `label`, `description`, `body`, etc.
+   - State props: `isExpanded`, `isOpen`, `isDisabled`, etc.
+   - Style props: `color`, `size`, `spacing`, etc.
+   - ANY prop that changes component behavior or appearance
 
-3. **For Category B props, verify README.md documentation**:
+   **Category C: Technically infeasible** (require README.md with technical explanation)
+   - `component` - Cannot change custom element type at runtime
+   - Props requiring features not available in Web Components
+   - RARE - most props should be implementable
+
+3. **For Category B props (meaningful domain props)**:
+
+   **CRITICAL**: Category B props MUST be implemented. Missing Category B props are CRITICAL ERRORS.
+
+   If a Category B prop is missing:
+   - ❌ Flag as **CRITICAL ERROR**
+   - Report as "Missing API Parity"
+   - Require implementation before component is complete
+
+   **Only exception**: If prop is reclassified as technically infeasible (Category C)
+   - Must have README.md documenting why implementation is not possible
+   - Must provide alternatives for users
+
+4. **For Category C props (technically infeasible), verify README.md documentation**:
 
    Check if `elements/pfv6-{component}/README.md` exists and documents the omission:
 
@@ -454,13 +510,20 @@ When React props are missing from the Lit implementation, verify they're appropr
    - NEVER suggest PatternFly utility classes as alternatives
    - Context matters - different components have different reasons
 
-4. **Report skipped props**:
+5. **Report skipped props**:
    ```
    ## Skipped Props Analysis
 
-   **Framework props (auto-skipped)**: children, className, ref
-   **Meaningful props requiring docs**: component
+   **Framework props (auto-skipped)**: children, className, ref, ouiaId, ouiaSafe
+   **Meaningful props (MUST implement)**: isLabelWrapped, variant
+   **Technically infeasible props**: component
 
+   ### Category B Props (CRITICAL)
+   ❌ Missing: isLabelWrapped, variant
+   - These props MUST be implemented for API parity
+   - Flag as CRITICAL ERROR
+
+   ### Category C Props
    ✅ README.md exists: elements/pfv6-divider/README.md
    ✅ Documents `component` prop omission with context-specific reasoning
    ✅ Provides semantic HTML alternatives (not utility classes)
@@ -474,7 +537,57 @@ When React props are missing from the Lit implementation, verify they're appropr
 
 **Expected behavior**:
 - Category A props: Silently skipped, no action needed
-- Category B props: Must have README.md with context-specific explanation and semantic HTML alternatives
+- Category B props: MUST be implemented - flag as CRITICAL if missing
+- Category C props: Must have README.md with context-specific explanation and semantic HTML alternatives
+
+### React API Completeness Check (CRITICAL)
+
+**MANDATORY**: Compare every React prop to Lit implementation and ensure completeness.
+
+**Process**:
+1. Read React component interface (use memory-safe patterns)
+2. List ALL props from React interface
+3. List ALL properties from Lit component
+4. For EACH React prop:
+   - Is it Category A (framework)? → Auto-skip
+   - Is it Category B (meaningful)? → MUST be implemented
+   - Is it Category C (infeasible)? → MUST document in README
+5. Report completeness score: `X of Y meaningful props implemented (Z%)`
+
+**Completeness Requirements**:
+- **100%**: All meaningful props implemented → ✅ PASS
+- **<100%**: Missing meaningful props → ❌ CRITICAL FAILURE
+- Exception: Category C props with proper documentation → ✅ PASS
+
+**Report Format**:
+```
+## React API Completeness
+
+**Total Props**: 15
+**Category A (Framework)**: 3 (children, className, ref)
+**Category B (Meaningful)**: 10
+**Category C (Infeasible)**: 2 (component - documented)
+
+**Implementation Status**:
+- ✅ Implemented: 9/10 meaningful props (90%)
+- ❌ Missing: 1 meaningful prop
+
+### Missing Props (CRITICAL)
+
+#### isLabelWrapped (boolean)
+- **React**: `isLabelWrapped?: boolean` - Controls label wrapping structure
+- **Status**: ❌ NOT IMPLEMENTED
+- **Priority**: CRITICAL
+- **Action**: Must implement before component is complete
+```
+
+**Validation steps**:
+1. Extract all props from React `{ComponentName}Props` interface
+2. Categorize each prop using the decision tree above
+3. For Category B props, verify implementation in Lit component
+4. Calculate completeness: `(implemented / total Category B) * 100`
+5. Flag any missing Category B props as CRITICAL
+6. Report completeness score and list missing props
 
 ## Step 3: Template Pattern Validation
 
@@ -735,6 +848,76 @@ render() {
 - Search for methods named `_render*()` or `render*()` (excluding main `render()`)
 - Flag any private methods that return `TemplateResult` or `TemplateResult | null`
 - Report each helper method as a violation
+
+### Check Private Fields/Methods Use # Syntax (Not private _)
+
+**CRITICAL**: All private methods and fields that do NOT require decorators MUST use JavaScript's native private field syntax (`#name`) instead of TypeScript's `private _name` convention.
+
+**Why this matters**:
+- `#` provides true runtime privacy (not just compile-time)
+- Cleaner, more idiomatic JavaScript
+- Better encapsulation
+- Decorators cannot be applied to `#` fields, so decorated fields must use `private`
+
+**Detection Pattern**:
+1. Search for `private _` in the component file
+2. For each match, check if the field/method has a decorator (`@property`, `@state`, `@query`, etc.)
+3. If NO decorator is present, flag as violation
+
+**❌ WRONG - Using private _ without decorator**:
+```typescript
+// ❌ WRONG - No decorator, should use #
+private _internals: ElementInternals;
+private _updateFormValue() { ... }
+private _handleChange(event: Event) { ... }
+private _validate() { ... }
+```
+
+**✅ CORRECT - Using # for non-decorated private fields/methods**:
+```typescript
+// ✅ CORRECT - Native private field syntax
+#internals: ElementInternals;
+#updateFormValue() { ... }
+#handleChange(event: Event) { ... }
+#validate() { ... }
+
+// Usage with this.#name
+this.#internals = this.attachInternals();
+this.#updateFormValue();
+@change=${this.#handleChange}
+```
+
+**✅ CORRECT - Using private _ for decorated fields** (decorators require TypeScript private):
+```typescript
+// ✅ CORRECT - Has @query decorator, must use private _
+@query('input[type="checkbox"]')
+private _input!: HTMLInputElement;
+
+// ✅ CORRECT - Has @state decorator, must use private _
+@state()
+private _internalState = false;
+```
+
+**Validation Steps**:
+1. Grep for `private _\w+` in the component file
+2. For each match, check if the preceding line contains a decorator (line starts with `@`)
+3. If no decorator, flag as violation with specific fix:
+   - `private _methodName()` → `#methodName()`
+   - `private _fieldName:` → `#fieldName:`
+4. Also update all usages: `this._name` → `this.#name`
+
+**Report format**:
+```
+❌ Private field uses wrong syntax: private _internals at line 41
+  - No decorator present
+  - Should use: #internals
+  - Also update usages: this._internals → this.#internals
+
+❌ Private method uses wrong syntax: private _handleChange at line 129
+  - No decorator present
+  - Should use: #handleChange
+  - Also update usages: this._handleChange → this.#handleChange
+```
 
 ### Check No Dynamic Tag Names
 
@@ -1147,6 +1330,21 @@ Provide a comprehensive audit report:
 
 ---
 
+## React API Completeness
+
+**Total Props**: 15
+**Category A (Framework)**: 3 (children, className, ref)
+**Category B (Meaningful)**: 10
+**Category C (Infeasible)**: 2 (component - documented in README)
+
+**Implementation Status**:
+- ✅ Implemented: 10/10 meaningful props (100%)
+- ✅ Category C props documented in README
+
+**Result**: ✅ PASS - Full API parity achieved
+
+---
+
 ## ✅ Passes
 
 ### Import Patterns
@@ -1159,6 +1357,7 @@ Provide a comprehensive audit report:
 - ✅ Attribute names match React prop names
 - ✅ Default values match React defaults
 - ✅ No array/object properties
+- ✅ All meaningful React props implemented (100%)
 
 ### Template Patterns
 - ✅ Uses `ifDefined()` for optional attributes
@@ -1178,7 +1377,63 @@ Provide a comprehensive audit report:
 
 ## ❌ Critical Issues (Must Fix)
 
-### Issue 1: Modifying :host Styles (Anti-Pattern)
+### Issue 1: Missing React API Parity
+**Location**: Component properties missing from implementation
+
+**Problem**:
+React component has meaningful props that are not implemented in Lit version.
+
+**React API Completeness**:
+- Total meaningful props (Category B): 10
+- Implemented: 9/10 (90%)
+- Missing: 1 prop
+
+**Missing Props**:
+
+#### `isLabelWrapped` (boolean)
+- **React Type**: `isLabelWrapped?: boolean`
+- **Description**: Controls whether label wraps input (structural change)
+- **React Behavior**: When `true`, renders `<label>` wrapper with `<span>` label text. When `false`, renders `<div>` wrapper with `<label>` label text.
+- **Status**: ❌ NOT IMPLEMENTED
+- **Priority**: CRITICAL
+- **Category**: B (Meaningful domain prop)
+
+**Why This is Wrong**:
+- Breaks API parity with React component
+- Users migrating from React cannot use this feature
+- Demo file `demo/label-wraps.html` will not work correctly
+- Incomplete conversion violates 1:1 parity requirement
+
+**Fix**:
+```typescript
+/** Whether the label wraps the input (label is container) vs label as sibling */
+@property({ type: Boolean, reflect: true, attribute: 'is-label-wrapped' })
+isLabelWrapped = false;
+
+render() {
+  const content = html`
+    ${this.isLabelWrapped ? html`
+      <span class="label">${this.label}</span>
+    ` : html`
+      <label for=${this.id} class="label">${this.label}</label>
+    `}
+    <input type="checkbox" id=${this.id} />
+  `;
+
+  return this.isLabelWrapped ? html`
+    <label id="container" for=${this.id}>${content}</label>
+  ` : html`
+    <div id="container">${content}</div>
+  `;
+}
+```
+
+**File**: `elements/pfv6-checkbox/pfv6-checkbox.ts`
+**Priority**: Critical - Must implement before component is complete
+
+---
+
+### Issue 2: Modifying :host Styles (Anti-Pattern)
 **Location**: `pfv6-card.ts` line 45
 
 **Problem**:
@@ -1219,7 +1474,7 @@ private _getStyles() {
 
 ---
 
-### Issue 2: "Lift and Shift" Pattern (Anti-Pattern)
+### Issue 3: "Lift and Shift" Pattern (Anti-Pattern)
 **Location**: `pfv6-panel.ts` line 32
 
 **Problem**:
@@ -1398,7 +1653,8 @@ render() {
 
 ## Action Plan (Priority Order)
 
-### 1. Fix Critical Issues (2 issues)
+### 1. Fix Critical Issues (3 issues)
+- [ ] Implement missing React props for API parity
 - [ ] Remove :host style manipulation in `pfv6-card.ts`
 - [ ] Remove "lift and shift" pattern in `pfv6-panel.ts`
 
@@ -1416,6 +1672,7 @@ render() {
 ## Files to Edit
 
 ### Critical Fixes
+- [ ] `elements/pfv6-checkbox/pfv6-checkbox.ts` (implement missing `isLabelWrapped` prop)
 - [ ] `elements/pfv6-card/pfv6-card.ts` (line 45, 89)
 - [ ] `elements/pfv6-panel/pfv6-panel.ts` (line 32-38)
 
@@ -1442,6 +1699,10 @@ After fixing all issues, re-run audit to verify:
 ## Critical Rules
 
 **ALWAYS**:
+- **Perform React API Completeness Check** - Compare ALL React props to Lit implementation
+- **Categorize every React prop** using decision tree (Category A/B/C)
+- **Flag missing Category B props as CRITICAL** - Must be implemented for API parity
+- **Report completeness percentage** - X of Y meaningful props implemented (Z%)
 - Check React source for API parity
 - Verify individual imports (not batched)
 - Validate property decorators match React types
@@ -1451,6 +1712,7 @@ After fixing all issues, re-run audit to verify:
 - Detect anti-patterns (:host manipulation, lift and shift)
 - Check event classes extend Event (not CustomEvent)
 - Validate naming conventions (Component API vs CSS API)
+- **Check private fields/methods use `#name` syntax** (not `private _name`) unless decorated
 - Provide specific line numbers for all issues
 - Categorize by severity (Critical, Warning, Best Practice)
 - Create actionable fix instructions
@@ -1463,6 +1725,7 @@ After fixing all issues, re-run audit to verify:
 - Allow BEM classes in component API
 - Allow CustomEvent for component events
 - Allow ElementInternals for internal elements
+- Allow `private _name` for non-decorated fields/methods (use `#name`)
 - Skip validation steps
 
 **Quality Bar**: Every issue must be documented with specific location, explanation of why it's wrong, and exact code to fix it.

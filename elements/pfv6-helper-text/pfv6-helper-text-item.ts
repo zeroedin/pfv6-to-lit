@@ -59,7 +59,7 @@ export class Pfv6HelperTextItem extends LitElement {
   @property({ type: String, attribute: 'screen-reader-text' })
   screenReaderText?: string;
 
-  private _getDefaultIcon(): TemplateResult | null {
+  #getDefaultIcon(): TemplateResult | null {
     switch (this.variant) {
       case 'indeterminate':
         return html`
@@ -90,7 +90,7 @@ export class Pfv6HelperTextItem extends LitElement {
     }
   }
 
-  private _getScreenReaderText(): string {
+  #getScreenReaderText(): string {
     // Provide default "{variant} status" when variant is not 'default'
     // to match React behavior
     if (this.variant !== 'default') {
@@ -101,8 +101,8 @@ export class Pfv6HelperTextItem extends LitElement {
 
   render() {
     const isNotDefaultVariant = this.variant !== 'default';
-    const defaultIcon = this._getDefaultIcon();
-    const srText = this._getScreenReaderText();
+    const defaultIcon = this.#getDefaultIcon();
+    const srText = this.#getScreenReaderText();
     const shouldRenderSRText = isNotDefaultVariant && srText;
 
     const classes = {

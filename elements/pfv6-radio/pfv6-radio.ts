@@ -27,6 +27,19 @@ export class Pfv6RadioChangeEvent extends Event {
  *
  * @alias Radio
  *
+ * ## Architecture: Shadow DOM + FACE
+ *
+ * **Rationale**:
+ * - React Radio renders input, label, description internally
+ * - All ARIA relationships internal (label→input, description→input)
+ * - Needs form group coordination
+ * - Full styling control required
+ *
+ * **Shadow DOM Patterns**:
+ * - Static internal IDs: `id="input"`, `id="description"`
+ * - Label association: `<label for="input">`
+ * - Cross-root ARIA: Not applicable (all relationships internal)
+ *
  * @fires {Pfv6RadioChangeEvent} change - Fires when the radio's checked state changes
  *
  * @cssprop --pf-v6-c-radio--GridGap - Gap between grid items in the radio layout
@@ -50,14 +63,7 @@ export class Pfv6Radio extends LitElement {
 
   // Form-Associated Custom Element
   static readonly formAssociated = true;
-  private internals: ElementInternals;
-
-  /**
-  * The id attribute for the radio input.
-  * Required for accessibility and form integration.
-  */
-  @property({ type: String })
-  id!: string;
+  #internals: ElementInternals;
 
   /**
   * The name attribute for the radio group.
@@ -154,16 +160,16 @@ export class Pfv6Radio extends LitElement {
   * Internal state for the default checked value (uncontrolled mode).
   */
   @state()
-  private defaultChecked = false;
+  private _defaultChecked = false;
 
   /**
   * Internal reference to the radio input element.
   */
-  private inputRef: Ref<HTMLInputElement> = createRef();
+  #inputRef: Ref<HTMLInputElement> = createRef();
 
   constructor() {
     super();
-    this.internals = this.attachInternals();
+    this.#internals = this.attachInternals();
   }
 
   connectedCallback() {
@@ -173,12 +179,9 @@ export class Pfv6Radio extends LitElement {
     // formDisabledCallback() if the disabled attribute is present in HTML.
     // We don't need to manually check for it here.
 
-    // Validation warnings for accessibility
+    // Validation warning for accessibility
     if (!this.label && !this.accessibleLabel) {
       console.warn('pfv6-radio: Either label or accessible-label must be provided for accessibility');
-    }
-    if (!this.id) {
-      console.warn('pfv6-radio: id is required to make input accessible');
     }
   }
 
@@ -186,13 +189,13 @@ export class Pfv6Radio extends LitElement {
   * Form callbacks (FACE implementation)
   */
   formResetCallback() {
-    this.checked = this.defaultChecked;
-    this.internals.setFormValue(this.checked ? this.value : null);
+    this.checked = this._defaultChecked;
+    this.#internals.setFormValue(this.checked ? this.value : null);
   }
 
   formDisabledCallback(disabled: boolean) {
     this.disabled = disabled;
-    this.internals.ariaDisabled = disabled ? 'true' : 'false';
+    this.#internals.ariaDisabled = disabled ? 'true' : 'false';
   }
 
   formStateRestoreCallback(state: string | File | FormData | null, _mode: 'restore' | 'autocomplete') {
@@ -208,14 +211,14 @@ export class Pfv6Radio extends LitElement {
     super.updated(changedProperties);
 
     if (changedProperties.has('checked')) {
-      this.internals.setFormValue(this.checked ? this.value : null);
+      this.#internals.setFormValue(this.checked ? this.value : null);
 
       // Dispatch change event
       this.dispatchEvent(new Pfv6RadioChangeEvent(this.checked, this.value));
     }
 
     if (changedProperties.has('isValid')) {
-      this.internals.setValidity(
+      this.#internals.setValidity(
         !this.isValid ? { customError: true } : {},
         !this.isValid ? 'Invalid' : ''
       );
@@ -225,7 +228,7 @@ export class Pfv6Radio extends LitElement {
   /**
   * Handle radio input changes
   */
-  private handleChange(event: Event) {
+  #handleChange(event: Event) {
     const input = event.target as HTMLInputElement;
     this.checked = input.checked;
   }
@@ -233,12 +236,12 @@ export class Pfv6Radio extends LitElement {
   /**
   * Handle clicks on the wrapper when it's a label
   */
-  private handleWrapperClick(event: Event) {
+  #handleWrapperClick(event: Event) {
     if (this.isLabelWrapped && !this.disabled) {
       // Prevent double-toggle from label click
-      if (event.target !== this.inputRef.value) {
+      if (event.target !== this.#inputRef.value) {
         event.preventDefault();
-        this.inputRef.value?.click();
+        this.#inputRef.value?.click();
       }
     }
   }
@@ -255,11 +258,11 @@ export class Pfv6Radio extends LitElement {
 
     const isLabelWrapper = this.isLabelWrapped;
 
-    // Radio input element
+    // Radio input element - uses static id="input" (shadow DOM scoped)
     const inputElement = html`
       <input
-        ${ref(this.inputRef)}
-        id=${this.id}
+        ${ref(this.#inputRef)}
+        id="input"
         type="radio"
         class="input"
         name=${this.name}
@@ -269,11 +272,14 @@ export class Pfv6Radio extends LitElement {
         ?required=${this.required}
         ?aria-invalid=${!this.isValid}
         aria-label=${ifDefined(!this.label ? this.accessibleLabel : undefined)}
-        @change=${this.handleChange}
+        aria-describedby=${ifDefined(this.description ? 'description' : undefined)}
+        @change=${this.#handleChange}
       />
     `;
 
     // Label element (only if label text provided)
+    // When isLabelWrapped, label text is in a <span> (wrapper label handles click)
+    // When not wrapped, label has for="input" pointing to static input ID
     const labelElement = this.label ? html`
       ${isLabelWrapper ? html`
         <span class=${classMap(labelClasses)}>
@@ -281,7 +287,7 @@ export class Pfv6Radio extends LitElement {
         </span>
       ` : html`
         <label
-          for=${this.id}
+          for="input"
           class=${classMap(labelClasses)}
         >
           ${this.label}
@@ -289,9 +295,9 @@ export class Pfv6Radio extends LitElement {
       `}
     ` : null;
 
-    // Description element
+    // Description element - uses static id="description" for aria-describedby
     const descriptionElement = this.description ? html`
-      <span class="description">${this.description}</span>
+      <span id="description" class="description">${this.description}</span>
     ` : null;
 
     // Body element
@@ -313,12 +319,13 @@ export class Pfv6Radio extends LitElement {
     `;
 
     // Wrapper element (div or label based on isLabelWrapped)
+    // When isLabelWrapped, wrapper is <label> with for="input" pointing to static input ID
     return isLabelWrapper ? html`
       <label
         id="container"
         class=${classMap(wrapperClasses)}
-        for=${this.id}
-        @click=${this.handleWrapperClick}
+        for="input"
+        @click=${this.#handleWrapperClick}
       >
         ${content}
       </label>

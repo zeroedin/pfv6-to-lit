@@ -619,18 +619,6 @@ describe('<pfv6-radio>', function() {
       expect(Pfv6Radio.formAssociated).to.be.true;
     });
 
-    it('has ElementInternals', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1"></pfv6-radio>`);
-      // Access internals through private field (for testing purposes)
-      expect((el as any).internals).to.exist;
-    });
-
-    it('sets form value when checked', async function() {
-      const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" value="option1" checked></pfv6-radio>`);
-      const internals = (el as any).internals as ElementInternals;
-      expect(internals.form).to.be.null; // Not in a form
-    });
-
     it('updates form value when checked changes', async function() {
       const el = await fixture<Pfv6Radio>(html`<pfv6-radio id="radio1" name="group1" value="option1"></pfv6-radio>`);
 
@@ -647,8 +635,9 @@ describe('<pfv6-radio>', function() {
       el.isValid = false;
       await el.updateComplete;
 
-      const internals = (el as any).internals as ElementInternals;
-      expect(internals.validity.customError).to.be.true;
+      // Verify observable behavior: aria-invalid on input element
+      const input = el.shadowRoot!.querySelector('input[type="radio"]') as HTMLInputElement;
+      expect(input.getAttribute('aria-invalid')).to.equal('true');
     });
 
     it('clears validity when isValid is true', async function() {
@@ -659,8 +648,9 @@ describe('<pfv6-radio>', function() {
       el.isValid = true;
       await el.updateComplete;
 
-      const internals = (el as any).internals as ElementInternals;
-      expect(internals.validity.valid).to.be.true;
+      // Verify observable behavior: aria-invalid cleared on input element
+      const input = el.shadowRoot!.querySelector('input[type="radio"]') as HTMLInputElement;
+      expect(input.hasAttribute('aria-invalid')).to.be.false;
     });
   });
 

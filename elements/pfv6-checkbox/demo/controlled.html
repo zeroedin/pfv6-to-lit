@@ -1,0 +1,95 @@
+<pfv6-checkbox
+  id="controlled-check-1"
+  name="check1"
+  label="Parent CheckBox">
+</pfv6-checkbox>
+
+<div style="margin-left: 1.5rem;">
+  <pfv6-checkbox
+    id="controlled-check-2"
+    name="check2"
+    label="Child CheckBox 1">
+  </pfv6-checkbox>
+  <pfv6-checkbox
+    id="controlled-check-3"
+    name="check3"
+    label="Child CheckBox 2">
+  </pfv6-checkbox>
+</div>
+
+<pfv6-checkbox
+  id="controlled-check-4"
+  name="check4"
+  label="Controlled CheckBox">
+</pfv6-checkbox>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
+
+  // Get references to checkboxes
+  const parent = document.getElementById('controlled-check-1');
+  const child1 = document.getElementById('controlled-check-2');
+  const child2 = document.getElementById('controlled-check-3');
+  const check4 = document.getElementById('controlled-check-4');
+
+  // Track state
+  let isUpdatingParent = false;
+  let isUpdatingChildren = false;
+
+  // Update parent based on children
+  function updateParent() {
+    if (isUpdatingChildren) return;
+    isUpdatingParent = true;
+
+    const bothChecked = child1.checked && child2.checked;
+    const neitherChecked = !child1.checked && !child2.checked;
+
+    if (bothChecked) {
+      parent.checked = true;
+      parent.indeterminate = false;
+    } else if (neitherChecked) {
+      parent.checked = false;
+      parent.indeterminate = false;
+    } else {
+      parent.checked = false;
+      parent.indeterminate = true;
+    }
+
+    isUpdatingParent = false;
+  }
+
+  // Update children based on parent
+  function updateChildren() {
+    if (isUpdatingParent) return;
+    isUpdatingChildren = true;
+
+    if (!parent.indeterminate) {
+      child1.checked = parent.checked;
+      child2.checked = parent.checked;
+    }
+
+    isUpdatingChildren = false;
+  }
+
+  // Listen to parent changes
+  parent.addEventListener('change', () => {
+    updateChildren();
+  });
+
+  // Listen to children changes
+  child1.addEventListener('change', () => {
+    updateParent();
+  });
+
+  child2.addEventListener('change', () => {
+    updateParent();
+  });
+
+  // Fourth checkbox: independent controlled checkbox
+  // Demonstrates that multiple controlled checkboxes can coexist
+  check4.addEventListener('change', () => {
+    // This checkbox is controlled independently
+    // In React, it has its own state (isChecked4)
+    // Here, the native checked property serves the same purpose
+  });
+</script>

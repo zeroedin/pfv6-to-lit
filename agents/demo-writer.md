@@ -301,6 +301,40 @@ Demos MUST be minimal HTML fragments, NOT full documents.
 </script>
 ```
 
+### Light DOM Slot Components (TextInput, TextArea, Select)
+
+**CRITICAL**: For components that use the Light DOM Slot pattern (where users provide native form elements via slot), demos MUST use visually hidden labels for accessibility AND visual parity with React.
+
+**React demos** use `aria-label` only (no visible label):
+```tsx
+<TextInput aria-label="text input example" />
+```
+
+**Lit demos** MUST use explicit `<label for>` with the `.pf-v6-screen-reader` class to:
+1. Maintain accessibility (proper label association)
+2. Achieve visual parity (hidden label doesn't affect layout)
+
+**Pattern**:
+```html
+<label for="input-id" class="pf-v6-screen-reader">Accessible label text</label>
+<pfv6-text-input>
+  <input type="text" id="input-id">
+</pfv6-text-input>
+```
+
+**Rules**:
+- ✅ Use explicit `<label for="id">` (NOT wrapping `<label>`)
+- ✅ Add `class="pf-v6-screen-reader"` to visually hide the label
+- ✅ Give the slotted input a unique `id` attribute
+- ✅ Remove `aria-label` from slotted input (the `<label>` provides the accessible name)
+- ❌ DON'T wrap components with visible `<label>` (breaks visual parity)
+- ❌ DON'T use implicit label association (breaks visual parity)
+
+**Components using Light DOM Slot pattern**:
+- `pfv6-text-input` - Wraps slotted `<input type="text">`
+- `pfv6-text-area` - Wraps slotted `<textarea>`
+- `pfv6-select` - Wraps slotted `<select>` (if implemented this way)
+
 ## Step 5: HTML Validity Rules (CRITICAL)
 
 ### Web Component Structural Constraints
