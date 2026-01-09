@@ -14,7 +14,12 @@
 }
 
 :host {
-  /* Public CSS API - All overrideable from outside */
+  display: inline-block;
+}
+
+/* Main spinner SVG element */
+#spinner {
+  /* Public CSS API - All overrideable from outside via inline styles or :host */
   --pf-v6-c-spinner--diameter:
     var(
       --pf-t--global--icon--size--2xl,
@@ -54,12 +59,6 @@
     );
   --pf-v6-c-spinner--m-inline--diameter: 1em;
 
-  display: inline-block;
-}
-
-/* Main spinner SVG element */
-#spinner {
-  /* Consume public API from :host */
   display: block;
   width: var(--pf-v6-c-spinner--Width);
   height: var(--pf-v6-c-spinner--Height);

@@ -47,7 +47,7 @@ async function waitForFullLoad(page: Page): Promise<void> {
 }
 
 // Dynamically discover all demos from the filesystem
-const litDemos = discoverDemos('panel');
+const litDemos = discoverDemos('icon');
 
 test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
   litDemos.forEach(demoName => {
@@ -61,10 +61,10 @@ test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
 
       try {
         // Load BOTH demos simultaneously
-        await reactPage.goto(`/elements/pfv6-panel/react/test/${demoName}`);
+        await reactPage.goto(`/elements/pfv6-icon/react/test/${demoName}`);
         await waitForFullLoad(reactPage);
 
-        await page.goto(`/elements/pfv6-panel/test/${demoName}`);
+        await page.goto(`/elements/pfv6-icon/test/${demoName}`);
         await waitForFullLoad(page);
 
         // Take FRESH screenshots (no baseline files)

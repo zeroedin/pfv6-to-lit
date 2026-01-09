@@ -668,6 +668,55 @@ Web components CANNOT violate HTML structural rules.
 
 **Flag any usage of `component` attribute in demos as invalid.**
 
+## Step 7.5: Boolean Attribute Validation (CRITICAL)
+
+Web components and HTML use boolean attributes without values.
+
+### Validation Process
+
+1. **Read component TypeScript file** (`elements/pfv6-{component}/pfv6-{component}.ts`)
+2. **Find all boolean properties**:
+   ```typescript
+   @property({ type: Boolean, reflect: true, attribute: 'is-inline' })
+   isInline = false;
+   ```
+3. **Extract attribute names** from `@property()` decorators where `type: Boolean`
+4. **Search demos for those attributes** with explicit values:
+   ```bash
+   grep -E 'attribute-name="(true|false)"' elements/pfv6-{component}/demo/*.html
+   ```
+5. **Report violations**
+
+### Boolean Attribute Convention
+
+**Rules**:
+- Boolean attributes should be present (true) or absent (false)
+- NEVER use `="true"` or `="false"` values
+- Attribute presence indicates `true`, absence indicates `false`
+
+```html
+<!-- ❌ WRONG -->
+<pfv6-component boolean-attr="true">...</pfv6-component>
+<pfv6-component boolean-attr="false">...</pfv6-component>
+
+<!-- ✅ CORRECT -->
+<pfv6-component boolean-attr>...</pfv6-component>
+<pfv6-component>...</pfv6-component>
+```
+
+### Report Format
+
+```markdown
+## Boolean Attribute Issues
+
+❌ **Found** ({N} demos with issues):
+- `{demo-name}.html`: Found {N} boolean attributes with explicit values
+- Pattern: `attr="true"` should be `attr`
+- Pattern: `attr="false"` should omit attribute
+
+✅ **Correct**: {N} demos use proper boolean attribute syntax
+```
+
 ## Step 8: Missing Component Identification
 
 Check for HTML comments indicating blockers:
@@ -830,6 +879,19 @@ Provide a detailed parity audit report:
 
 ---
 
+## Boolean Attribute Issues
+
+❌ **Boolean Attribute Issues Found** (3):
+- `{demo-name}.html`: Found {N} instances of boolean attributes with explicit values
+- `{another-demo}.html`: Found {N} instances of boolean attributes with explicit values
+- Pattern: `attribute-name="true"` should be `attribute-name`
+- Pattern: `attribute-name="false"` should omit the attribute entirely
+
+✅ **Correct** (7):
+- All other demos use proper boolean attribute syntax
+
+---
+
 ## Lightdom CSS Validation
 
 ❌ **Lightdom CSS Issues** (3):
@@ -864,11 +926,16 @@ Provide a detailed parity audit report:
 - [ ] Fix lightdom CSS path in `index.html`: `../../` → `../`
 - [ ] Add lightdom CSS link to `compact.html`
 
-### 5. Fix HTML Validity (2 issues)
+### 5. Fix Boolean Attributes ({N} issues)
+- [ ] Remove explicit values from boolean attributes (pattern: `attr="true"` → `attr`)
+- [ ] Remove boolean attributes set to false (pattern: `attr="false"` → omit attribute)
+- [ ] Apply fixes across all affected demo files
+
+### 6. Fix HTML Validity (2 issues)
 - [ ] Wrap `<pfv6-divider>` in `<li>` in `with-items.html`
 - [ ] Wrap `<pfv6-divider>` in `<tr><td>` in `table-variant.html`
 
-### 6. Fix Content Parity (2 demos, 4 issues)
+### 7. Fix Content Parity (2 demos, 4 issues)
 - [ ] `with-dividers.html`: Add `has-gutter` attribute
 - [ ] `with-dividers.html`: Add missing `<pfv6-card-body>` element
 - [ ] `with-dividers.html`: Fix text casing "item" → "Item"
@@ -922,6 +989,7 @@ After fixing all issues, re-run audit to verify:
 - Validate static asset paths (`../../` for ALL demos - no exceptions)
 - Verify lightdom CSS link in every demo (if component has lightdom CSS)
 - Check HTML validity (custom elements in valid parent contexts)
+- Validate boolean attributes (no `="true"` or `="false"` values)
 - Identify blocked demos with HTML comments
 - Provide specific line numbers for all issues
 - Categorize issues by type and priority
@@ -940,6 +1008,7 @@ After fixing all issues, re-run audit to verify:
 - Accept PascalCase Lit demo filenames
 - Allow full HTML documents (must be fragments)
 - Allow custom elements in invalid parent contexts
+- Allow boolean attributes with explicit values (e.g., `is-inline="true"`)
 - Skip validation steps
 
 **Quality Bar**: Every Lit demo must have 1:1 parity with its React counterpart - same props, same elements, same text, same values, correct paths, valid HTML.
