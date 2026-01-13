@@ -27,7 +27,7 @@ Validate that the CORRECT form control pattern was selected:
 **Workflow Context**:
 - Phase 1: `api-writer` determines pattern (Shadow DOM+FACE vs Light DOM Slot)
 - Phase 1: `face-elements-writer` only called for Shadow DOM+FACE pattern
-- Phase 6: `accessibility-auditor` → `face-elements-auditor` (validate implementation)
+- Phase 6: CLAUDE.md Step 13e → `face-elements-auditor` (validate implementation)
 
 ---
 

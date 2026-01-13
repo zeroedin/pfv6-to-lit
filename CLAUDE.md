@@ -15,7 +15,7 @@ When the user asks to convert a PatternFly React component (e.g., "Convert Check
 3. **Target specific component paths** - always include component name in paths:
    - ✅ GOOD: `.cache/patternfly-react/.../components/Checkbox/...`
    - ❌ BAD: `.cache/patternfly-react/.../components/**/...` (matches all components)
-4. **Trust react-dependency-tree.json** - use grep/node to query it, don't parse manually
+4. **Trust conversion-order.yaml** - use grep/node to query it, don't parse manually
 
 ### Workflow Orchestration
 
@@ -32,15 +32,12 @@ Use TodoWrite to track progress through the workflow.
 **Check if component is a layout component** (CRITICAL FIRST STEP):
 
 - Layout components: **Bullseye, Flex, Gallery, Grid, Level, Split, Stack**
-- Use `grep` or `node` to check component type WITHOUT loading all files:
+- Component exclusions are defined in `.config/component-exclusions.json`
+- Use `grep` to check if a component is excluded:
   ```bash
-  # Efficient check using grep (avoids loading entire JSON into memory)
-  grep -A 1 '"name": "ComponentName"' react-dependency-tree.json | grep '"type"'
-
-  # OR using node (loads JSON but returns only needed data)
-  node -e "const t=require('./react-dependency-tree.json');const c=t.components.find(x=>x.name==='ComponentName');console.log(c?.type||'component');"
+  grep -q "ComponentName" .config/component-exclusions.json && echo "excluded" || echo "not excluded"
   ```
-- **DO NOT use Glob or ListDir tools to find the component** - use grep/node only
+- **DO NOT use Glob or ListDir tools to scan all components**
 
 **IF LAYOUT COMPONENT**:
 - **STOP** - Do not proceed with component creation
@@ -232,18 +229,148 @@ npx stylelint elements/pfv6-{component}/pfv6-{component}.css
 
 ## Phase 6: Accessibility Validation
 
-### Step 13: DELEGATE to accessibility-auditor
+### Step 13a: DELEGATE to aria-auditor (ALWAYS)
+
+**CRITICAL**: You MUST invoke aria-auditor for EVERY component.
 
 **MANDATORY: Call the Task tool with these exact parameters**:
 - Tool name: `Task`
-- subagent_type: `'accessibility-auditor'`
-- description: `'Audit pfv6-{component} accessibility'`
-- prompt: `'Validate pfv6-{component} for accessibility issues including ARIA, ElementInternals, and FACE patterns.'`
+- subagent_type: `'aria-auditor'`
+- description: `'Audit pfv6-{component} ARIA patterns'`
+- prompt: `'Validate pfv6-{component} ARIA usage including property naming, IDREF attributes, React parity, and redundant roles in demos.'`
 
 **BLOCKING REQUIREMENT:**
-You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+You CANNOT proceed until you have received `<function_results>` from the Task tool.
 
-**If issues found**: You MUST fix ALL of them before proceeding.
+**Save to memory**: Store failures, cleanup actions, warnings from aria-auditor output.
+
+### Step 13b: CHECK for ElementInternals Pattern
+
+**Detect ElementInternals usage**:
+
+```bash
+grep -qE "private internals: ElementInternals|#internals: ElementInternals" \
+  elements/pfv6-{component}/pfv6-{component}.ts
+```
+
+**If found**: Proceed to Step 13c
+**If NOT found**: Skip to Step 13d
+
+### Step 13c: DELEGATE to element-internals-auditor (CONDITIONAL)
+
+**Only invoke if Step 13b detected ElementInternals.**
+
+**MANDATORY: Call the Task tool with these exact parameters**:
+- Tool name: `Task`
+- subagent_type: `'element-internals-auditor'`
+- description: `'Audit pfv6-{component} ElementInternals usage'`
+- prompt: `'Validate pfv6-{component} ElementInternals usage for host-level ARIA, duplicative semantics, and shadow DOM patterns.'`
+
+**BLOCKING REQUIREMENT:**
+You CANNOT proceed until you have received `<function_results>` from the Task tool.
+
+**Save to memory**: Store failures, cleanup actions, warnings from element-internals-auditor output.
+
+### Step 13d: CHECK for FACE Pattern
+
+**Detect FACE usage**:
+
+```bash
+grep -q "static formAssociated = true" \
+  elements/pfv6-{component}/pfv6-{component}.ts
+```
+
+**If found**: Proceed to Step 13e
+**If NOT found**: Skip to Step 13f
+
+### Step 13e: DELEGATE to face-elements-auditor (CONDITIONAL)
+
+**Only invoke if Step 13d detected FACE pattern.**
+
+**MANDATORY: Call the Task tool with these exact parameters**:
+- Tool name: `Task`
+- subagent_type: `'face-elements-auditor'`
+- description: `'Audit pfv6-{component} FACE implementation'`
+- prompt: `'Validate pfv6-{component} Form-Associated Custom Element implementation including form callbacks, properties, and value synchronization.'`
+
+**BLOCKING REQUIREMENT:**
+You CANNOT proceed until you have received `<function_results>` from the Task tool.
+
+**Save to memory**: Store failures, cleanup actions, warnings from face-elements-auditor output.
+
+### Step 13f: Aggregate Accessibility Results
+
+**Orchestrator aggregates results from all completed audits**:
+
+1. Collect all failures from each auditor's output (stored in memory)
+2. Collect all cleanup actions from each auditor's output
+3. Collect all warnings from each auditor's output
+4. Determine overall status:
+   - ✅ PASS: Zero failures across all auditors
+   - ❌ FAIL: One or more failures from any auditor
+
+**Present aggregated report**:
+
+```
+## Accessibility Validation: pfv6-{component}
+
+**Audits Performed**:
+- ✅ ARIA patterns (aria-auditor)
+- [✅/➖] ElementInternals usage (element-internals-auditor) [if applicable]
+- [✅/➖] FACE implementation (face-elements-auditor) [if applicable]
+
+---
+
+### Part 1: ARIA Validation
+
+[Summarize key findings from aria-auditor]
+
+**Failures**: [count]
+**Cleanup Actions**: [count]
+**Warnings**: [count]
+
+---
+
+### Part 2: ElementInternals Validation
+
+[If applicable, summarize key findings from element-internals-auditor]
+
+**Failures**: [count]
+**Cleanup Actions**: [count]
+**Warnings**: [count]
+
+---
+
+### Part 3: FACE Validation
+
+[If applicable, summarize key findings from face-elements-auditor]
+
+**Failures**: [count]
+**Cleanup Actions**: [count]
+**Warnings**: [count]
+
+---
+
+## Overall Summary
+
+**Status**: ✅ PASS / ❌ FAIL
+
+**Total Failures**: [X]
+1. [All failures from all auditors]
+
+**Total Cleanup Actions**: [Y]
+1. [All cleanup actions from all auditors]
+
+**Total Warnings**: [Z]
+1. [All warnings from all auditors]
+
+**Next Steps**:
+- [If PASS] Proceeding to test creation (Step 14)
+- [If FAIL] ❌ MUST fix all [X] failures before proceeding
+```
+
+**BLOCKING REQUIREMENT:**
+If status is FAIL, you CANNOT proceed to Step 14 until ALL failures are fixed.
 
 ## Phase 7: Create Tests
 
@@ -329,7 +456,9 @@ You CANNOT proceed until you have received `<function_results>` from the Task to
 - [ ] **css-writer invoked** - CSS files created
 - [ ] **css-auditor invoked** - CSS validated
 - [ ] **stylelint passed** - No CSS syntax errors
-- [ ] **accessibility-auditor invoked** - Accessibility validated
+- [ ] **aria-auditor invoked** - ARIA patterns validated
+- [ ] **element-internals-auditor invoked** (if applicable) - ElementInternals validated
+- [ ] **face-elements-auditor invoked** (if applicable) - FACE validated
 - [ ] **test-spec-writer invoked** - Unit tests created
 - [ ] **test-visual-writer invoked** - Visual tests created
 - [ ] **test-css-api-writer invoked** - CSS API tests created
@@ -345,7 +474,7 @@ You CANNOT proceed until you have received `<function_results>` from the Task to
   - [ ] Form properties (name, value, disabled, required) implemented
   - [ ] Form callbacks (formResetCallback, formDisabledCallback) implemented
   - [ ] `setFormValue()` called in updated() lifecycle
-  - [ ] Validated by accessibility-auditor
+  - [ ] Validated by face-elements-auditor (Step 13e)
 - [ ] CSS variables match React CSS source (not made up)
 - [ ] CSS fallback values derived from PatternFly token source (NEVER guessed)
 - [ ] Box-sizing reset in ALL CSS files
@@ -353,7 +482,7 @@ You CANNOT proceed until you have received `<function_results>` from the Task to
 - [ ] NO `index.ts` export files created
 - [ ] Demos created from React (verified by demo-writer)
 - [ ] Demos match React 1:1 (verified by demo-auditor)
-- [ ] Accessibility validated (verified by accessibility-auditor)
+- [ ] Accessibility validated (verified by aria-auditor, element-internals-auditor, face-elements-auditor)
 - [ ] CSS audit passed (verified by css-auditor)
 - [ ] Tests comprehensive (verified by test-spec-writer)
 - [ ] Code passes linters

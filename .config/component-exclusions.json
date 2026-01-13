@@ -1,0 +1,34 @@
+{
+  "layouts": [
+    "Bullseye",
+    "Flex",
+    "FlexItem",
+    "Gallery",
+    "GalleryItem",
+    "Grid",
+    "GridItem",
+    "Level",
+    "LevelItem",
+    "Split",
+    "SplitItem",
+    "Stack",
+    "StackItem"
+  ],
+  "styling": [
+    "Content",
+    "ContentVariants",
+    "Title",
+    "TitleSizes",
+    "Text",
+    "TextContent",
+    "TextList",
+    "TextListItem",
+    "List",
+    "ListItem",
+    "ListComponent",
+    "DescriptionList",
+    "DescriptionListGroup",
+    "DescriptionListTerm",
+    "DescriptionListDescription"
+  ]
+}

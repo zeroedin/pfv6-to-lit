@@ -63,14 +63,12 @@ npm ci
 **What happens on postinstall:**
 
 1. **Cache PatternFly sources** - Clones React PatternFly and core PatternFly to `.cache/`
-2. **Analyze dependencies** - Generates `react-dependency-tree.json` mapping component dependencies
-3. **Copy React demos** - Extracts React demo files to `patternfly-react/` for comparison testing
-4. **Copy PatternFly assets** - Copies base CSS, fonts, and images to `dev-server/`
+2. **Copy React demos** - Extracts React demo files to `patternfly-react/` for comparison testing
+3. **Copy PatternFly assets** - Copies base CSS, fonts, and images to `dev-server/`
 
 These steps ensure:
 
 - React component sources are available for conversion reference
-- Dependency analysis enables optimal component conversion order
 - Side-by-side React comparison demos for visual parity validation
 
 ### Development
@@ -92,10 +90,11 @@ npm run test
 # Run E2E tests
 npm run e2e
 
-# Analyze component dependencies
-npm run analyze-dependencies
+# Analyze component dependencies and generate conversion order
+npx tsx scripts/extract-component-dependencies.ts > component-dependencies.yaml
+npx tsx scripts/generate-conversion-order.ts 2>/dev/null > conversion-order.yaml
 
-# Find next component to convert (after running analyze-dependencies)
+# Find next component to convert
 npx tsx scripts/find-blockers.ts
 ```
 
@@ -123,10 +122,9 @@ Use the find.md subagent to locate the next component we should build
 ```
 
 The `find` subagent:
-- Analyzes the dependency tree in `react-dependency-tree.json`
-- Identifies components with fewest dependencies (easier to convert)
-- Prioritizes components that unblock the most other components
-- Recommends the next best candidate with reasoning
+- Analyzes the conversion order in `conversion-order.yaml`
+- Recommends the next component to convert based on dependency order
+- Provides reasoning and next steps
 
 ### Converting a Component
 
@@ -150,10 +148,12 @@ The main conversation orchestrates the conversion by delegating to specialized s
 4. **demo-auditor** - Validates 1:1 parity with React demos
 5. **css-writer** - Translates React CSS to Shadow DOM CSS with token-derived fallbacks
 6. **css-auditor** - Validates CSS against React source
-7. **accessibility-auditor** - Validates ARIA patterns and accessibility
-8. **test-spec-writer** - Generates comprehensive unit tests
-9. **test-visual-writer** - Creates visual regression tests
-10. **test-css-api-writer** - Generates CSS API override tests
+7. **aria-auditor** - Validates ARIA patterns (property naming, IDREF, React parity, redundant roles)
+8. **element-internals-auditor** - Validates ElementInternals usage (host-level ARIA, duplicative semantics)
+9. **face-elements-auditor** - Validates Form-Associated Custom Element implementation
+10. **test-spec-writer** - Generates comprehensive unit tests
+11. **test-visual-writer** - Creates visual regression tests
+12. **test-css-api-writer** - Generates CSS API override tests
 
 Each subagent runs in isolation and reports back to the main conversation, which manages the overall workflow.
 

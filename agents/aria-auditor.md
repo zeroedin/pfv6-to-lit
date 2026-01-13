@@ -211,11 +211,118 @@ THEN remove the role attribute
 <pfv6-divider></pfv6-divider>
 ```
 
-**Important**: 
+**Important**:
 - React demos in `.cache/` are **immutable** - never edit them
 - Only edit Lit demos in `elements/pfv6-{component}/demo/`
 - React often includes redundant roles for legacy browser compatibility
 - Modern web components don't need this redundancy
+
+### Rule 9: No Duplicate ARIA Between Host and Internal Elements - CRITICAL
+
+**CRITICAL FAILURE: Components MUST NOT have duplicate ARIA attributes on both `:host` (via ElementInternals) and internal shadow DOM elements.**
+
+**The Problem**: When ElementInternals sets ARIA on `:host`, internal shadow DOM elements should NOT have their own ARIA attributes for the same purpose. This creates confusing duplicate semantics.
+
+**Detection Process**:
+1. Check if component uses ElementInternals to set ARIA on `:host`
+   - Look for: `this.internals.ariaLabel`, `this.internals.ariaChecked`, `this.internals.ariaDisabled`, etc.
+2. Check render() method for internal elements with ARIA attributes
+   - Look for: `aria-label=`, `aria-labelledby=`, `aria-describedby=`, `aria-checked=`, `aria-disabled=`, etc.
+3. **FAIL** if the same ARIA property is set in both places
+
+**Common Antipattern**:
+```typescript
+// Component code
+updated(changedProperties: PropertyValues) {
+  if (changedProperties.has('accessibleLabel')) {
+    this.internals.ariaLabel = this.accessibleLabel; // ✅ Sets ARIA on :host
+  }
+}
+
+render() {
+  return html`
+    <input
+      type="checkbox"
+      aria-label=${ifDefined(this.accessibleLabel)} <!-- ❌ DUPLICATE! -->
+    />
+  `;
+}
+```
+
+**Why This is Wrong**:
+1. **:host represents the component** - ARIA on `:host` describes the entire component to assistive technology
+2. **Internal elements are implementation details** - They should not have their own ARIA if `:host` already has it
+3. **Creates confusion** - Assistive technology sees duplicate ARIA attributes
+4. **Violates accessibility** - Screen readers may announce the same label twice
+
+**When Internal ARIA is Acceptable**:
+- ✅ Decorative elements: `<svg aria-hidden="true" role="img">`
+- ✅ Internal structure not exposed to `:host`: `<label for="input">` inside component
+- ❌ NEVER duplicate the same ARIA that's on `:host`
+
+**Examples**:
+
+**❌ WRONG - Duplicate aria-label**:
+```typescript
+// :host has aria-label via ElementInternals
+this.internals.ariaLabel = this.accessibleLabel;
+
+// Internal input ALSO has aria-label - DUPLICATE!
+html`<input aria-label=${this.accessibleLabel} />`
+```
+
+**❌ WRONG - Duplicate aria-checked**:
+```typescript
+// :host has aria-checked via ElementInternals
+this.internals.ariaChecked = this.checked ? 'true' : 'false';
+
+// Internal input ALSO has aria-checked - DUPLICATE!
+html`<input aria-checked=${this.checked ? 'true' : 'false'} />`
+```
+
+**❌ WRONG - Duplicate aria-labelledby**:
+```typescript
+// :host has aria-labelledby via ElementInternals
+this.internals.ariaLabelledByElements = elements;
+
+// Internal input ALSO has aria-labelledby - DUPLICATE!
+html`<input aria-labelledby="label" />`
+```
+
+**✅ CORRECT - ARIA only on :host**:
+```typescript
+// :host has aria-label via ElementInternals
+this.internals.ariaLabel = this.accessibleLabel;
+this.internals.ariaChecked = this.checked ? 'true' : 'false';
+
+// Internal input has NO ARIA - clean implementation
+html`<input type="checkbox" .checked=${this.checked} />`
+```
+
+**Detection Commands**:
+```bash
+# 1. Find ElementInternals ARIA assignments
+grep -E "this\.(#?internals|_internals)\.aria[A-Z]" pfv6-{component}.ts
+
+# 2. Find ARIA attributes in render()
+grep -A 50 "render()" pfv6-{component}.ts | grep -E "aria-(label|labelledby|describedby|checked|disabled|expanded|pressed|selected)"
+
+# 3. Compare: If same ARIA property appears in both = FAILURE
+```
+
+**Validation Process**:
+1. Extract all `internals.aria*` assignments
+2. Extract all `aria-*` attributes from render() template
+3. For each ARIA property on internals:
+   - Check if same property exists on internal elements
+   - **FAIL** if duplicate found
+4. Report line numbers for both occurrences
+
+**Fix Required**:
+- Remove ARIA attributes from internal shadow DOM elements
+- Keep ARIA only on `:host` via ElementInternals
+
+**This is MANDATORY validation - not optional, not a warning. Always fail if duplicates exist.**
 
 ## Output Format
 
@@ -230,6 +337,13 @@ THEN remove the role attribute
 ### ❌ ARIA - Fails
 - **Line X**: Uses `aria-label` property name
   - **Fix**: Change to `accessible-label`
+
+### 🚨 Rule 9 Violations (Duplicate ARIA on Host and Internal Elements) - CRITICAL
+- **Lines X, Y**: Duplicate ARIA detected
+  - **Host** (line X): `this.internals.ariaLabel = this.accessibleLabel`
+  - **Internal** (line Y): `<input aria-label=${this.accessibleLabel}>`
+  - **Issue**: ARIA is set on both `:host` via ElementInternals AND on internal shadow DOM element
+  - **Fix**: REMOVE `aria-label` from internal `<input>` element - keep only on `:host`
 
 ### 🚨 Rule 7 Violations (Duplicative component attributes)
 - **File**: `demo/example.html` (line Y)
@@ -282,7 +396,15 @@ THEN remove the role attribute
   - **AUTOMATICALLY REMOVE** redundant roles
   - Report: Every removal with file name and line
 
-**🚨 CRITICAL: Rule 7 must ALWAYS run. If duplicative `component` attributes exist in demos, validation FAILS.**
+- [ ] **Rule 9**: No duplicate ARIA between `:host` and internal elements
+  - Command 1: `grep -E "this\.(#?internals|_internals)\.aria[A-Z]" pfv6-{component}.ts`
+  - Command 2: `grep -A 50 "render()" pfv6-{component}.ts | grep -E "aria-(label|labelledby|describedby|checked|disabled)"`
+  - Compare results: If same ARIA property in both = CRITICAL FAILURE
+  - Report: Line numbers for host ARIA and internal ARIA with fix required
+
+**🚨 CRITICAL: Rules 7 and 9 must ALWAYS run.**
+- **Rule 7**: If duplicative `component` attributes exist in demos, validation FAILS
+- **Rule 9**: If duplicate ARIA exists between host and internal elements, validation FAILS
 
 ## Critical Reminders
 
@@ -291,6 +413,7 @@ THEN remove the role attribute
 - Flag IDREF ARIA attributes that cross shadow boundaries
 - Recommend `accessible-label` over `aria-label` property names
 - Document API deviations from React with shadow DOM rationale
+- **CRITICAL: Detect duplicate ARIA between `:host` and internal elements** (Rule 9)
 - **Proactively remove redundant roles from Lit demos** (Rule 8)
 - **Proactively remove duplicative component attributes from Lit demos** (Rule 7)
 - **Ask user for clarification** when uncertain about shadow DOM ARIA patterns
@@ -298,6 +421,7 @@ THEN remove the role attribute
 **NEVER**:
 - Allow `aria-*` property names (except ElementInternals usage)
 - Allow IDREF ARIA attributes that reference across shadow boundaries
+- **Allow duplicate ARIA on both `:host` and internal shadow DOM elements** (Rule 9 - CRITICAL)
 - Edit React demos in `.cache/` (immutable reference)
 - Enforce strict ARIA parity when shadow DOM requires different approach
 

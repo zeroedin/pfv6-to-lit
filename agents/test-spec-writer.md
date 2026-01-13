@@ -22,7 +22,7 @@ When invoked with a component name, create a complete test suite that validates 
 - ✅ Component fully implemented with all properties, slots, events
 - ✅ Demos created (`demo-writer`) and validated (`demo-auditor`)
 - ✅ CSS created (`css-writer`) and validated (`css-auditor`)
-- ✅ Accessibility validated (`accessibility-auditor`)
+- ✅ Accessibility validated (`aria-auditor`, `element-internals-auditor`, `face-elements-auditor`)
 
 **Your task**: Write unit tests for the fully-implemented, validated component
 

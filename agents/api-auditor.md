@@ -205,7 +205,7 @@ variant: 'default' | 'compact' = 'default';
 
 **For form-associated custom elements (`static formAssociated = true`), HTML-specified attributes MUST use `@property({ type: Boolean, reflect: true })`.**
 
-**NOTE**: Complete FACE validation is performed by the `accessibility-auditor` → `face-elements-auditor` subagent in Phase 6. This section validates API design compliance early.
+**NOTE**: Complete FACE validation is performed by `face-elements-auditor` in Phase 6 (CLAUDE.md Step 13e). This section validates API design compliance early.
 
 **HTML-specified boolean attributes** that MUST use `@property({ type: Boolean, reflect: true })`:
 - `disabled` - Managed by browser via `formDisabledCallback`
