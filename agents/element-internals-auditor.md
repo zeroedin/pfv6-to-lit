@@ -54,8 +54,9 @@ updated(changed: PropertyValues) {
 - ✅ Has `static formAssociated = true`
 - ✅ Has `private internals: ElementInternals`
 - ✅ Has `this.internals = this.attachInternals()` in constructor
-- ✅ Updates `this.internals.ariaLabel` (or other ARIA property) in `updated()`
+- ✅ Updates `this.internals.ariaLabel` (or other valid ARIA property) in `updated()`
 - ✅ Uses `accessible-*` property name (not `aria-*`)
+- ✅ Uses only valid ElementInternals ARIA properties (see Rule 7)
 
 ### Rule 5: No Duplicative Semantics (Component Internal)
 
@@ -212,6 +213,116 @@ render() {
 }
 ```
 
+### Rule 7: Valid ElementInternals ARIA Properties Only
+
+**CRITICAL: Only use ARIA properties that actually exist on the ElementInternals interface.**
+
+**Detection**:
+```bash
+# Find all ARIA property assignments on internals
+grep -E "this\.(#?internals|_internals)\.aria[A-Z]" component.ts
+```
+
+**Valid ElementInternals ARIA properties**:
+
+**String properties (direct assignment):**
+- `ariaAtomic`, `ariaAutoComplete`, `ariaBusy`, `ariaChecked`, `ariaColCount`, `ariaColIndex`, `ariaColSpan`, `ariaCurrent`
+- `ariaDescription`, `ariaDisabled`, `ariaExpanded`, `ariaHasPopup`, `ariaHidden`, `ariaInvalid`, `ariaKeyShortcuts`
+- `ariaLabel` ⭐ (most common)
+- `ariaLevel`, `ariaLive`, `ariaModal`, `ariaMultiLine`, `ariaMultiSelectable`, `ariaOrientation`
+- `ariaPlaceholder`, `ariaPosInSet`, `ariaPressed`, `ariaReadOnly`, `ariaRelevant`, `ariaRequired`
+- `ariaRoleDescription`, `ariaRowCount`, `ariaRowIndex`, `ariaRowSpan`, `ariaSelected`, `ariaSetSize`
+- `ariaSort`, `ariaValueMax`, `ariaValueMin`, `ariaValueNow`, `ariaValueText`
+- `role`
+
+**Element reference properties (FrozenArray<Element>):**
+- `ariaActiveDescendantElement` (singular)
+- `ariaControlsElements`, `ariaDescribedByElements`, `ariaDetailsElements`
+- `ariaErrorMessageElements`, `ariaFlowToElements`
+- `ariaLabelledByElements` ⭐ (note: "Elements" suffix, plural)
+- `ariaOwnsElements`
+
+**INVALID properties (common mistakes):**
+- ❌ `ariaLabelledBy` (should be `ariaLabelledByElements`)
+- ❌ `ariaDescribedBy` (should be `ariaDescribedByElements`)
+- ❌ `ariaControls` (should be `ariaControlsElements`)
+- ❌ `ariaOwns` (should be `ariaOwnsElements`)
+
+**Why this matters**:
+- TypeScript will catch these errors: `Property 'ariaLabelledBy' does not exist on type 'ElementInternals'`
+- But we should catch them in validation BEFORE compilation
+- IDREF-based ARIA attributes use element references on ElementInternals, not ID strings
+
+**Common antipattern**:
+```typescript
+// ❌ WRONG - ariaLabelledBy doesn't exist
+updated(changed: PropertyValues) {
+  if (changed.has('accessibleLabelledBy')) {
+    this.internals.ariaLabelledBy = this.accessibleLabelledBy; // ❌ COMPILE ERROR
+  }
+}
+```
+
+**Correct patterns**:
+
+**Option 1: Use element references (preferred for ElementInternals)**
+```typescript
+// ✅ CORRECT - Use ariaLabelledByElements with element references
+@property({ type: String, attribute: 'accessible-labelledby' })
+accessibleLabelledBy?: string;
+
+updated(changed: PropertyValues) {
+  if (changed.has('accessibleLabelledBy')) {
+    if (this.accessibleLabelledBy) {
+      // Query for elements by ID and set as array
+      const elements = this.accessibleLabelledBy
+        .split(' ')
+        .map(id => document.getElementById(id))
+        .filter(Boolean) as Element[];
+      this.internals.ariaLabelledByElements = elements;
+    } else {
+      this.internals.ariaLabelledByElements = null;
+    }
+  }
+}
+```
+
+**Option 2: Set attribute on host (if element references not feasible)**
+```typescript
+// ✅ CORRECT - Set aria-labelledby directly on host element
+@property({ type: String, attribute: 'accessible-labelledby' })
+accessibleLabelledBy?: string;
+
+updated(changed: PropertyValues) {
+  if (changed.has('accessibleLabelledBy')) {
+    if (this.accessibleLabelledBy) {
+      this.setAttribute('aria-labelledby', this.accessibleLabelledBy);
+    } else {
+      this.removeAttribute('aria-labelledby');
+    }
+  }
+}
+```
+
+**Option 3: Just use ariaLabel (simplest)**
+```typescript
+// ✅ CORRECT - Use ariaLabel instead (if label text is available)
+@property({ type: String, attribute: 'accessible-label' })
+accessibleLabel?: string;
+
+updated(changed: PropertyValues) {
+  if (changed.has('accessibleLabel')) {
+    this.internals.ariaLabel = this.accessibleLabel || null;
+  }
+}
+```
+
+**Validation process**:
+1. Extract all `this.internals.aria*` assignments from component
+2. For each property, check if it's in the valid list above
+3. **FAIL** if any invalid ARIA properties are used (will cause TypeScript compile error)
+4. Suggest correct property name or alternative approach
+
 ## Output Format
 
 ```markdown
@@ -228,6 +339,10 @@ render() {
   - `this.internals.role = 'navigation'` (line X)
   - `<nav>` element in render() (line Y)
   - **Fix**: Change `<nav>` to `<div>` in render()
+- **Line Z**: Invalid ElementInternals ARIA property
+  - `this.internals.ariaLabelledBy = value` (line Z)
+  - **Error**: `ariaLabelledBy` does not exist on ElementInternals
+  - **Fix**: Use `ariaLabelledByElements` (element references) OR set `aria-labelledby` attribute on host
 
 ### ⚠️ ElementInternals - Warnings
 - No `delegatesFocus` set (consider if component has focusable elements)
@@ -249,9 +364,11 @@ render() {
 - Check for duplicative semantics (role on :host + semantic element internally)
 - Validate that host-level ARIA uses ElementInternals, not direct attributes
 - Check for proper shadow DOM patterns (focus, roles)
+- **Validate that only valid ElementInternals ARIA properties are used (Rule 7)**
 
 **NEVER**:
 - Allow semantic elements in render() when ElementInternals sets corresponding role on :host
 - Allow direct ARIA attributes on :host (should use ElementInternals)
 - Skip validation of ElementInternals initialization
+- **Allow invalid ARIA properties like `ariaLabelledBy` (should be `ariaLabelledByElements`)**
 
