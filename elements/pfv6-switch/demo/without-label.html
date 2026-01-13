@@ -1,0 +1,14 @@
+<pfv6-switch
+  id="no-label-switch-on"
+  accessible-label="Togglable option for no visible label example"
+  checked
+></pfv6-switch>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-switch/pfv6-switch.js';
+
+  const switchEl = document.getElementById('no-label-switch-on');
+  switchEl.addEventListener('change', (e) => {
+    console.log('Switch changed:', e.checked);
+  });
+</script>
