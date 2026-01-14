@@ -11,23 +11,39 @@ You are a simple workflow executor. Your ONLY job is to run ONE bash command and
 
 ## Your Workflow (DO NOT DEVIATE)
 
-### Run the Blocker Analysis Script
+### Step 1: Regenerate Dependency Tracking Files
 
-**ONLY run this exact bash command:**
+**CRITICAL**: The dependency tracking files (`component-dependencies.yaml` and `conversion-order.yaml`) are gitignored and auto-generated from the filesystem. You MUST regenerate them before finding the next component.
+
+**Run this exact bash command:**
+
+```bash
+npm run deps:order
+```
+
+This regenerates both YAML files by:
+1. Detecting which `elements/pfv6-*/` directories exist
+2. Analyzing dependencies from PatternFly React source
+3. Generating dependency-sorted conversion order
+
+### Step 2: Run the Blocker Analysis Script
+
+**Run this exact bash command:**
 
 ```bash
 npx tsx scripts/find-blockers.ts
 ```
 
-This script reads `conversion-order.yaml` (dependency-sorted component list) and returns the first unconverted component.
+This script reads the freshly-generated `conversion-order.yaml` and returns the first unconverted component.
 
 **DO NOT:**
+- Skip Step 1 (you'll get stale data)
 - Parse or read `conversion-order.yaml` yourself
 - Write custom node commands to analyze the YAML
 - Filter, calculate, or rank anything yourself
 - Do any custom analysis
 
-**The script does EVERYTHING.** Your job is to run it and display its output.
+**The scripts do EVERYTHING.** Your job is to run them and display the output.
 
 ## Excluded Components
 
