@@ -905,6 +905,9 @@ private _internalState = false;
    - `private _methodName()` → `#methodName()`
    - `private _fieldName:` → `#fieldName:`
 4. Also update all usages: `this._name` → `this.#name`
+5. Grep for `@query\|@state` followed by `private [^_]` (decorated field without underscore)
+6. If decorator present but no underscore prefix, flag as violation:
+   - `private input` → `private _input`
 
 **Report format**:
 ```
@@ -917,6 +920,11 @@ private _internalState = false;
   - No decorator present
   - Should use: #handleChange
   - Also update usages: this._handleChange → this.#handleChange
+
+❌ Decorated private field missing underscore: private input at line 50
+  - Has @query decorator, must use underscore prefix
+  - Should use: private _input
+  - Update usages: this.input → this._input
 ```
 
 ### Check No Dynamic Tag Names
