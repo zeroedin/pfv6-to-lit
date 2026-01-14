@@ -717,9 +717,9 @@ Web components and HTML use boolean attributes without values.
 ✅ **Correct**: {N} demos use proper boolean attribute syntax
 ```
 
-## Step 7.6: Component Dependency API Validation (CRITICAL)
+## Step 7.6: Component Dependency Validation (CRITICAL)
 
-When demos use other pfv6-* components, verify attributes match the component's actual API.
+When demos use other pfv6-* components, verify the component exists AND attributes match the component's actual API.
 
 ### Validation Steps
 
@@ -728,13 +728,27 @@ When demos use other pfv6-* components, verify attributes match the component's 
    grep -oE "<pfv6-[a-z-]+" demo.html | sort -u
    ```
 
-2. **For each dependency**, read its TypeScript file to extract valid attributes from `@property` decorators
+2. **Check component existence** (NEW - CRITICAL):
+   ```bash
+   # For each component found (e.g., pfv6-icon), check if it exists:
+   ls -d elements/pfv6-icon/ 2>/dev/null || echo "Component does not exist"
+   ```
 
-3. **Compare** attributes used in demo against valid properties:
-   - ✅ Valid: `<pfv6-icon status="success">` (status exists)
-   - ❌ Invalid: `<pfv6-icon icon="check">` (icon doesn't exist)
+   **If component does NOT exist**:
+   - ❌ **CRITICAL VIOLATION**: Component used but not yet converted
+   - Report as a blocker with HIGH priority
+   - Demo cannot be validated until dependency is converted
+   - **Action Required**: Either:
+     1. Convert the dependency component first (follow dependency-first workflow), OR
+     2. Replace with inline HTML/SVG equivalent (for simple cases like icons)
 
-4. **Check slot usage**: If component uses slots, verify demos use slots not attributes
+3. **For each dependency that exists**, read its TypeScript file to extract valid attributes from `@property` decorators
+
+4. **Compare** attributes used in demo against valid properties:
+   - ✅ Valid: `<pfv6-button variant="primary">` (variant exists)
+   - ❌ Invalid: `<pfv6-button color="blue">` (color doesn't exist)
+
+5. **Check slot usage**: If component uses slots, verify demos use slots not attributes
 
 ### Report Format
 
