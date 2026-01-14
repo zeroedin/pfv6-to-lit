@@ -48,7 +48,7 @@ export class Pfv6Switch extends LitElement {
 
 
   /** Form control name */
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   name = '';
 
   /** Form control value */
