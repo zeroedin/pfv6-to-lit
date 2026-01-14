@@ -1,0 +1,23 @@
+<div style="margin-bottom: 12px;">
+  <pfv6-checkbox id="isPlain" label="Plain read only variant"></pfv6-checkbox>
+</div>
+<label for="text-input-readonly" class="pf-v6-screen-reader">readonly input example</label>
+<pfv6-text-input id="readonly-input" read-only-variant="default">
+  <input type="text" id="text-input-readonly" value="read only text input example" readonly>
+</pfv6-text-input>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-text-input/pfv6-text-input.js';
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
+
+  const checkbox = document.getElementById('isPlain');
+  const textInput = document.getElementById('readonly-input');
+
+  checkbox.addEventListener('change', () => {
+    if (checkbox.checked) {
+      textInput.setAttribute('read-only-variant', 'plain');
+    } else {
+      textInput.setAttribute('read-only-variant', 'default');
+    }
+  });
+</script>

@@ -799,38 +799,44 @@ render() {
 
 ### Check render() Uses Ternaries (Not Helper Methods)
 
-**Flag any private _render*() helper methods**:
+**Flag any private render helper methods** (both `_render*()` and `#render*()` patterns):
 
 ```typescript
-// ❌ WRONG - Fragmenting render across helper methods
+// ❌ WRONG - Fragmenting render across helper methods (old underscore syntax)
 private _renderLabel() {
   if (!this.label) return null;
   return html`<label>${this.label}</label>`;
 }
 
-private _renderDescription() {
-  if (!this.description) return null;
-  return html`<span>${this.description}</span>`;
+// ❌ WRONG - Fragmenting render across helper methods (new # syntax)
+#renderStatusIcon() {
+  const iconMap = { success: 'check', error: 'x' };
+  const iconName = iconMap[this.validated];
+  if (!iconName) return null;
+  return html`<span class="icon">${iconName}</span>`;
 }
 
 render() {
   return html`
     <div id="container">
       ${this._renderLabel()}
-      ${this._renderDescription()}
+      ${this.#renderStatusIcon()}
     </div>
   `;
 }
 
 // ✅ CORRECT - Ternaries in render()
 render() {
+  const iconMap = { success: 'check', error: 'x' };
+  const iconName = iconMap[this.validated];
+
   return html`
     <div id="container">
       ${this.label ? html`
         <label>${this.label}</label>
       ` : null}
-      ${this.description ? html`
-        <span>${this.description}</span>
+      ${iconName ? html`
+        <span class="icon">${iconName}</span>
       ` : null}
     </div>
   `;
@@ -843,10 +849,12 @@ render() {
 - Forces jumping between methods during debugging
 - Adds unnecessary indirection
 - Lit templates are already concise enough
+- Local variables (iconMap, iconName) should be defined in render(), not separate methods
 
 **Detection Pattern**:
-- Search for methods named `_render*()` or `render*()` (excluding main `render()`)
-- Flag any private methods that return `TemplateResult` or `TemplateResult | null`
+- Search for methods named `_render*()`, `#render*()`, or `render*()` (excluding main `render()`)
+- Flag any private methods (underscore OR hash prefix) that return `TemplateResult` or `TemplateResult | null`
+- Search with regex: `(private _render|#render)\w+\(` to catch all variations
 - Report each helper method as a violation
 
 ### Check Private Fields/Methods Use # Syntax (Not private _)
