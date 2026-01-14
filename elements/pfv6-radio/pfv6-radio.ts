@@ -69,7 +69,7 @@ export class Pfv6Radio extends LitElement {
   * The name attribute for the radio group.
   * Required for radio button grouping in forms.
   */
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   name!: string;
 
   /**
