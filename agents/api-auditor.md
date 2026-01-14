@@ -1282,7 +1282,59 @@ render() {
 }
 ```
 
-## Step 8: Naming Convention Validation
+## Step 8: Unused Code Detection (CRITICAL)
+
+### Check for Unused Imports
+
+**Detection Strategy**:
+1. Extract all import names (default and named imports)
+2. Search file content for each import name (excluding import statements)
+3. Flag imports with zero references
+4. Skip side-effect imports (`import './foo.js'`)
+
+**Report Format**:
+```
+❌ Unused import: css at line 1
+❌ Unused import: state at line 4
+❌ Unused import: ifDefined at line 5
+```
+
+### Check for Unused Variables, Functions, and Methods
+
+**Detection Strategy**:
+1. Find all variable/function/method declarations
+2. Search for references (excluding the declaration itself)
+3. Flag any with zero references
+
+**Special Cases** (don't flag):
+- Properties with decorators (may be used implicitly)
+- Lifecycle methods (`updated()`, `connectedCallback()`, etc.)
+- Public methods (may be called externally)
+- Exported classes/functions
+
+### Check for Unused Event Classes
+
+**Detection Strategy**:
+1. Extract all exported event class names
+2. Search for `new EventClassName(` in the file
+3. Flag event classes never instantiated
+
+### Summary Report Section
+
+```markdown
+## Unused Code Detection
+
+**Unused Imports**: 3
+**Unused Variables**: 1
+**Unused Methods**: 1
+**Unused Properties**: 1
+**Unused Event Classes**: 1
+**Total**: 7 issues
+
+[List each with line number]
+```
+
+## Step 9: Naming Convention Validation
 
 ### Check Component API vs CSS API Separation
 
@@ -1327,6 +1379,7 @@ Provide a comprehensive audit report:
 - **Critical Issues**: 0
 - **Warnings**: 2
 - **Best Practice Violations**: 3
+- **Unused Code Issues**: 7
 
 ---
 
@@ -1651,6 +1704,29 @@ render() {
 
 ---
 
+## 🧹 Unused Code Issues
+
+**Total**: 7 issues
+
+### Unused Imports (3)
+- ❌ css (line 1)
+- ❌ state (line 4)
+- ❌ ifDefined (line 5)
+
+### Unused Variables (1)
+- ❌ unusedVariable (line 42)
+
+### Unused Methods (1)
+- ❌ #unusedMethod (line 28)
+
+### Unused Properties (1)
+- ❌ unusedProp (line 15)
+
+### Unused Event Classes (1)
+- ❌ Pfv6UnusedEvent (line 8)
+
+---
+
 ## Action Plan (Priority Order)
 
 ### 1. Fix Critical Issues (3 issues)
@@ -1658,11 +1734,18 @@ render() {
 - [ ] Remove :host style manipulation in `pfv6-card.ts`
 - [ ] Remove "lift and shift" pattern in `pfv6-panel.ts`
 
-### 2. Address Warnings (2 issues)
+### 2. Clean Up Unused Code (7 issues)
+- [ ] Remove 3 unused imports
+- [ ] Remove 1 unused variable
+- [ ] Remove 1 unused method
+- [ ] Remove 1 unused property
+- [ ] Remove 1 unused event class
+
+### 3. Address Warnings (2 issues)
 - [ ] Use `repeat()` with keys in `pfv6-list.ts`
 - [ ] Remove redundant semantic element in `pfv6-nav.ts`
 
-### 3. Improve Best Practices (3 violations)
+### 4. Improve Best Practices (3 violations)
 - [ ] Use `ifDefined()` in `pfv6-image.ts`
 - [ ] Use `classMap()` in `pfv6-button.ts`
 - [ ] Use ID for wrapper in `pfv6-card.ts`
@@ -1705,6 +1788,8 @@ After fixing all issues, re-run audit to verify:
 - **Report completeness percentage** - X of Y meaningful props implemented (Z%)
 - Check React source for API parity
 - Verify individual imports (not batched)
+- **Detect unused imports** - Flag any imports that are never referenced
+- **Detect unused code** - Flag unused variables, functions, methods, properties, and event classes
 - Validate property decorators match React types
 - **Check HTMLElement property compatibility** (especially `id: string`, not `id?: string`)
 - Check template uses Lit directives correctly
@@ -1714,7 +1799,7 @@ After fixing all issues, re-run audit to verify:
 - Validate naming conventions (Component API vs CSS API)
 - **Check private fields/methods use `#name` syntax** (not `private _name`) unless decorated
 - Provide specific line numbers for all issues
-- Categorize by severity (Critical, Warning, Best Practice)
+- Categorize by severity (Critical, Warning, Best Practice, Unused Code)
 - Create actionable fix instructions
 
 **NEVER**:

@@ -4,7 +4,6 @@ import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
 import { query } from 'lit/decorators/query.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './pfv6-switch.css';
 
 /**
@@ -168,7 +167,6 @@ export class Pfv6Switch extends LitElement {
     };
 
     const hasLabel = !!this.label;
-    const labelId = hasLabel ? 'label' : undefined;
 
     return html`
       <label
