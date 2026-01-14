@@ -95,7 +95,7 @@ npx tsx scripts/extract-component-dependencies.ts > component-dependencies.yaml
 npx tsx scripts/generate-conversion-order.ts 2>/dev/null > conversion-order.yaml
 
 # Find next component to convert
-npx tsx scripts/find-blockers.ts
+npx tsx scripts/find-next-component.ts
 ```
 
 **Development Pages:**
