@@ -153,7 +153,7 @@ export class Pfv6TextInput extends LitElement {
    * Internal state tracking if custom icon slot has content
    */
   @state()
-  private hasCustomIcon = false;
+  private _hasCustomIcon = false;
 
   /**
    * Reference to the slotted input element
@@ -196,7 +196,7 @@ export class Pfv6TextInput extends LitElement {
       readonly: !!this.readOnlyVariant,
       plain: this.readOnlyVariant === 'plain',
       expanded: isExpanded,
-      icon: this.hasCustomIcon,
+      icon: this._hasCustomIcon,
       success: this.validated === 'success',
       warning: this.validated === 'warning',
       error: this.validated === 'error',
@@ -280,7 +280,7 @@ export class Pfv6TextInput extends LitElement {
    */
   #handleIconSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;
-    this.hasCustomIcon = slot.assignedElements().length > 0;
+    this._hasCustomIcon = slot.assignedElements().length > 0;
   }
 
   /**
