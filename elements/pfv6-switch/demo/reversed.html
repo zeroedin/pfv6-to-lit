@@ -1,0 +1,15 @@
+<pfv6-switch
+  id="reversed-switch"
+  label="Togglable option for reversed example"
+  checked
+  is-reversed
+></pfv6-switch>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-switch/pfv6-switch.js';
+
+  const switchEl = document.getElementById('reversed-switch');
+  switchEl.addEventListener('change', (e) => {
+    console.log('Switch changed:', e.checked);
+  });
+</script>

@@ -478,11 +478,34 @@ export class Pfv6TextField extends LitElement {
 
   private internals: ElementInternals;
 
-  @property({ type: String })
+  /**
+   * CRITICAL: name property MUST use reflect: true to match native input behavior.
+   *
+   * WHY:
+   * - Native HTMLInputElement.name reflects the name attribute (per HTML spec)
+   * - Setting input.name = "foo" updates the name attribute
+   * - Getting input.name reads from the name attribute
+   * - Used for form submission and form.elements API
+   */
+  @property({ type: String, reflect: true })
   name = '';
 
-  @property({ type: String })
-  value = '';
+  /**
+   * CRITICAL: value property MUST use reflect: true for checkbox/radio/switch controls.
+   *
+   * WHY:
+   * - Native <input type="checkbox"> uses "default/on" mode (HTML spec)
+   * - Setting input.value = "foo" updates the value attribute
+   * - Getting input.value reads from the value attribute (or returns "on")
+   * - Custom elements MUST match this bidirectional synchronization
+   * - Form submission uses: setFormValue(checked ? value : null)
+   *
+   * CORRECT PATTERN:
+   * - Use @property({ type: String, reflect: true })
+   * - Default to 'on' (matches native checkbox behavior)
+   */
+  @property({ type: String, reflect: true })
+  value = 'on';
 
   /**
    * CRITICAL: HTML-specified attributes (disabled, checked, required, readonly)
@@ -815,6 +838,8 @@ private _validate() {
 - Use Pattern 1 (Container) for presentational form wrappers
 - Use Pattern 2 (FACE) for actual form controls
 - Set `static formAssociated = true` for form controls
+- **CRITICAL**: Use `@property({ type: String, reflect: true })` for name property (all form controls)
+- **CRITICAL**: Use `@property({ type: String, reflect: true })` for value property (checkbox/radio/switch)
 - **CRITICAL**: Use `@property({ type: Boolean, reflect: true })` for HTML-specified attributes (disabled, checked, required, readonly)
 - Call `this.internals.setFormValue()` when value changes
 - Implement `formResetCallback` and `formDisabledCallback`
@@ -827,6 +852,8 @@ private _validate() {
 **NEVER**:
 - Put `<form>` in Shadow DOM for simple presentational containers
 - Create form controls without implementing FACE API
+- Omit `reflect: true` on name property (all form controls)
+- Omit `reflect: true` on value property (checkbox/radio/switch controls)
 - Use string enum types (`'true' | 'false'`) for HTML-specified attributes in FACE components
 - Forget to update form value via `setFormValue()`
 - Skip validation when implementing form controls

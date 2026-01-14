@@ -339,24 +339,71 @@ grep -q "this.internals = this.attachInternals()" component.ts
 
 ## Required Properties Validation
 
-### Property 1: name
+### Property 1: name (CRITICAL)
 
-```bash
-grep -E "@property.*name" component.ts | grep -q "String"
+**CRITICAL: name property MUST use reflect: true to match native input behavior**
+
+**Why**:
+- Native HTMLInputElement.name reflects the name attribute (per HTML spec)
+- Setting `input.name = "foo"` updates the name attribute
+- Getting `input.name` reads from the name attribute
+- Used for form submission and form.elements API
+
+**Correct pattern**:
+```typescript
+// ✅ CORRECT - Has reflect: true
+@property({ type: String, reflect: true })
+name = '';
 ```
 
-**Fail if**: Not found
-**Fix**: Add `@property({ type: String }) name = '';`
-
-### Property 2: value
-
-**For text-based inputs**:
-```bash
-grep -E "@property.*value" component.ts | grep -q "String"
+**Wrong patterns**:
+```typescript
+// ❌ WRONG - Missing reflect: true
+@property({ type: String })
+name = '';
 ```
 
-**Fail if**: Not found
-**Fix**: Add `@property({ type: String }) value = '';`
+**Validation**:
+```bash
+# Check if name property has reflect: true
+grep -E "@property.*name" component.ts | grep -q "reflect: true"
+```
+
+**Fail if**: Missing `reflect: true` on name property
+**Fix**: Add `reflect: true` to name property decorator
+
+### Property 2: value (CRITICAL for checkbox/radio/switch)
+
+**CRITICAL: For checkbox/radio/switch controls, value MUST use reflect: true**
+
+**Why**:
+- Native `<input type="checkbox">` uses "default/on" mode (HTML spec)
+- Setting `input.value = "foo"` updates the value attribute
+- Getting `input.value` reads from the value attribute (or returns "on")
+- Custom elements MUST match this bidirectional synchronization
+
+**Correct pattern for checkbox/radio/switch**:
+```typescript
+// ✅ CORRECT - Has reflect: true
+@property({ type: String, reflect: true })
+value = 'on';
+```
+
+**Wrong patterns**:
+```typescript
+// ❌ WRONG - Missing reflect: true
+@property({ type: String })
+value = 'on';
+```
+
+**Validation**:
+```bash
+# Check if value property has reflect: true
+grep -E "@property.*value" component.ts | grep -q "reflect: true"
+```
+
+**Fail if**: Missing `reflect: true` on value property for checkbox/radio/switch
+**Fix**: Add `reflect: true` to value property decorator
 
 ### Property 3: HTML-Specified Attributes (CRITICAL)
 
@@ -701,7 +748,21 @@ grep -q "this.#internals = this.attachInternals()" component.ts || grep -q "this
 grep -E "@property.*name.*String" component.ts
 grep -E "@property.*value.*String" component.ts
 
-# 3b. HTML-Specified Attributes (CRITICAL)
+# 3a. Name Property Reflection (CRITICAL for all form controls)
+# MUST use @property with type: String and reflect: true
+if ! grep -E "@property.*name" component.ts | grep -q "reflect: true"; then
+  echo "❌ CRITICAL: name property must have reflect: true to match native input behavior"
+  exit 1
+fi
+
+# 3b. Value Property Reflection (CRITICAL for checkbox/radio/switch)
+# MUST use @property with type: String and reflect: true
+if ! grep -E "@property.*value" component.ts | grep -q "reflect: true"; then
+  echo "❌ CRITICAL: value property must have reflect: true for checkbox/radio/switch controls"
+  exit 1
+fi
+
+# 3c. HTML-Specified Attributes (CRITICAL)
 # MUST use @property with type: Boolean and reflect: true
 grep -E "@property.*disabled" component.ts | grep -q "type: Boolean"
 grep -E "@property.*disabled" component.ts | grep -q "reflect: true"
@@ -759,6 +820,8 @@ This combined validation ensures BOTH accessibility and FACE implementation are 
 **ALWAYS**:
 - Validate setup (formAssociated, internals)
 - Validate all required properties (name, value)
+- **CRITICAL**: Validate name property uses `@property({ type: String, reflect: true })` for all form controls
+- **CRITICAL**: Validate value property uses `@property({ type: String, reflect: true })` for checkbox/radio/switch
 - **CRITICAL**: Validate HTML-specified attributes (disabled, checked, required) use `@property({ type: Boolean, reflect: true })` NOT string enums
 - Validate all required callbacks (formResetCallback, formDisabledCallback)
 - Validate `ariaDisabled` is set in formDisabledCallback for accessibility
