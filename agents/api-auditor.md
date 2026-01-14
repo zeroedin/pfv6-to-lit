@@ -854,7 +854,7 @@ render() {
 **Detection Pattern**:
 - Search for methods named `_render*()`, `#render*()`, or `render*()` (excluding main `render()`)
 - Flag any private methods (underscore OR hash prefix) that return `TemplateResult` or `TemplateResult | null`
-- Search with regex: `(private _render|#render)[A-Z].*\(` to catch both patterns
+- Search with regex: `(private _render|#render)\w+\(` to catch all variations
 - Report each helper method as a violation
 
 ### Check Private Fields/Methods Use # Syntax (Not private _)

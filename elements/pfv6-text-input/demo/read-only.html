@@ -13,7 +13,7 @@
   const checkbox = document.getElementById('isPlain');
   const textInput = document.getElementById('readonly-input');
 
-  checkbox.addEventListener('change', (e) => {
+  checkbox.addEventListener('change', () => {
     if (checkbox.checked) {
       textInput.setAttribute('read-only-variant', 'plain');
     } else {

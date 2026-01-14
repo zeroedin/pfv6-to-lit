@@ -165,14 +165,8 @@ export class Pfv6TextInput extends LitElement {
    */
   #resizeObserver?: ResizeObserver;
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.addEventListener('slotchange', this.#handleSlotChange);
-  }
-
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('slotchange', this.#handleSlotChange);
     this.#cleanupTruncation();
   }
 
@@ -287,15 +281,6 @@ export class Pfv6TextInput extends LitElement {
   #handleIconSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;
     this.hasCustomIcon = slot.assignedElements().length > 0;
-  }
-
-  /**
-   * Generic slot change handler
-   * @param _e - The slotchange event (currently unused)
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  #handleSlotChange(_e: Event) {
-    // Additional slot handling if needed
   }
 
   /**
