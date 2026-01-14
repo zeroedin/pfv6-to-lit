@@ -453,6 +453,45 @@ You CANNOT proceed until you have received `<function_results>` from the Task to
 - **WAIT** for analysis and fix recommendations in function_results
 - **FIX** all issues identified as fixable
 
+## Phase 9: Final Validation
+
+### Step 19: Run All Tests and Verify Passing
+
+**After creating all tests (Steps 14-16)**, ask the user to run the complete test suite and verify all tests pass:
+
+```
+All tests have been created for pfv6-{component}. Please run the following test suite:
+
+# Unit tests
+npm test -- elements/pfv6-{component}/test/pfv6-{component}.spec.ts
+
+# Visual parity tests
+npm run e2e:parity -- pfv6-{component}.visual.ts
+
+# CSS API tests
+npm run e2e:parity -- pfv6-{component}.css-api.ts
+
+Once all tests pass, the component conversion is complete!
+```
+
+**Completion Criteria (ALL must be true):**
+- ✅ All subagents have run successfully
+- ✅ All linters pass (eslint, stylelint)
+- ✅ All audits pass (api-auditor, demo-auditor, css-auditor, aria-auditor, etc.)
+- ✅ Component files are created (`elements/pfv6-{component}/` exists)
+- ✅ Demos are created and validated
+- ✅ CSS is created and validated
+- ✅ **All tests pass (unit, visual parity, CSS API)**
+
+**Conversion Tracking:**
+
+The dependency tracking files (`component-dependencies.yaml` and `conversion-order.yaml`) are **gitignored and auto-generated** from the filesystem. When the find agent runs next, it will:
+1. Execute `npm run deps:order` to regenerate tracking files
+2. Auto-detect `elements/pfv6-{component}/` exists → mark as completed
+3. Recommend the next unconverted component
+
+**No manual tracking needed** - just ensure all tests pass and the component files exist.
+
 ## Success Criteria (All Must Pass)
 
 **Delegation Requirements:**
