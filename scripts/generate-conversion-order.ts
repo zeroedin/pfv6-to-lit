@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url';
 import { shouldIgnoreComponent } from './lib/patternfly-utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 interface ComponentDependencies {
   implementation: string[];
@@ -40,11 +39,9 @@ function parseYAML(yamlContent: string): Component[] {
   let currentComponent: Component | null = null;
   let currentSection: string | null = null;
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-
+  for (const line of lines) {
     // Component name
-    const componentMatch = line.match(/^  - (\w+):$/);
+    const componentMatch = line.match(/^ {2}- (\w+):$/);
     if (componentMatch) {
       currentComponent = {
         name: componentMatch[1],
@@ -53,9 +50,9 @@ function parseYAML(yamlContent: string): Component[] {
           implementation: [],
           icons: [],
           demo: [],
-          demoIcons: []
+          demoIcons: [],
         },
-        converted: false
+        converted: false,
       };
       components.push(currentComponent);
       currentSection = null;
@@ -63,29 +60,29 @@ function parseYAML(yamlContent: string): Component[] {
     }
 
     // Section headers
-    if (line.match(/^    SubComponents:$/)) {
+    if (line.match(/^ {4}SubComponents:$/)) {
       currentSection = 'subComponents';
       continue;
     }
-    if (line.match(/^      Implementation:$/)) {
+    if (line.match(/^ {6}Implementation:$/)) {
       currentSection = 'implementation';
       continue;
     }
-    if (line.match(/^      Icons:$/)) {
+    if (line.match(/^ {6}Icons:$/)) {
       currentSection = 'icons';
       continue;
     }
-    if (line.match(/^      Demo:$/)) {
+    if (line.match(/^ {6}Demo:$/)) {
       currentSection = 'demo';
       continue;
     }
-    if (line.match(/^      DemoIcons:$/)) {
+    if (line.match(/^ {6}DemoIcons:$/)) {
       currentSection = 'demoIcons';
       continue;
     }
 
     // Converted field
-    const convertedMatch = line.match(/^    Converted:\s*(true|false)$/);
+    const convertedMatch = line.match(/^ {4}Converted:\s*(true|false)$/);
     if (convertedMatch && currentComponent) {
       currentComponent.converted = convertedMatch[1] === 'true';
       currentSection = null;
@@ -93,20 +90,20 @@ function parseYAML(yamlContent: string): Component[] {
     }
 
     // Items in sections
-    if (currentSection === 'subComponents' && line.match(/^      - (.+)$/)) {
-      currentComponent.subComponents.push(line.match(/^      - (.+)$/)[1]);
+    if (currentSection === 'subComponents' && line.match(/^ {6}- (.+)$/)) {
+      currentComponent.subComponents.push(line.match(/^ {6}- (.+)$/)[1]);
     }
-    if (currentSection === 'implementation' && line.match(/^        - (.+)$/)) {
-      currentComponent.dependencies.implementation.push(line.match(/^        - (.+)$/)[1]);
+    if (currentSection === 'implementation' && line.match(/^ {8}- (.+)$/)) {
+      currentComponent.dependencies.implementation.push(line.match(/^ {8}- (.+)$/)[1]);
     }
-    if (currentSection === 'icons' && line.match(/^        - (.+)$/)) {
-      currentComponent.dependencies.icons.push(line.match(/^        - (.+)$/)[1]);
+    if (currentSection === 'icons' && line.match(/^ {8}- (.+)$/)) {
+      currentComponent.dependencies.icons.push(line.match(/^ {8}- (.+)$/)[1]);
     }
-    if (currentSection === 'demo' && line.match(/^        - (.+)$/)) {
-      currentComponent.dependencies.demo.push(line.match(/^        - (.+)$/)[1]);
+    if (currentSection === 'demo' && line.match(/^ {8}- (.+)$/)) {
+      currentComponent.dependencies.demo.push(line.match(/^ {8}- (.+)$/)[1]);
     }
-    if (currentSection === 'demoIcons' && line.match(/^        - (.+)$/)) {
-      currentComponent.dependencies.demoIcons.push(line.match(/^        - (.+)$/)[1]);
+    if (currentSection === 'demoIcons' && line.match(/^ {8}- (.+)$/)) {
+      currentComponent.dependencies.demoIcons.push(line.match(/^ {8}- (.+)$/)[1]);
     }
   }
 
@@ -126,24 +123,17 @@ function getAllDependencies(component: Component): string[] {
   // Filter out layout and styling components (they're just CSS)
   const allDeps = [
     ...component.dependencies.implementation,
-    ...component.dependencies.demo
+    ...component.dependencies.demo,
   ];
 
   return allDeps.filter(dep => !shouldIgnoreComponent(dep));
 }
 
-function getSeparatedDependencies(component: Component): { implementation: string[]; demo: string[] } {
-  // Get dependencies separated by source
-  const implDeps = component.dependencies.implementation.filter(d => !shouldIgnoreComponent(d));
-  const demoDeps = component.dependencies.demo.filter(d => !shouldIgnoreComponent(d));
-
-  return {
-    implementation: implDeps,
-    demo: demoDeps
-  };
-}
-
-function canBeConverted(component: Component, convertedSet: Set<string>, subComponentToParent: Map<string, string>): boolean {
+function canBeConverted(
+  component: Component,
+  convertedSet: Set<string>,
+  subComponentToParent: Map<string, string>
+): boolean {
   const deps = getAllDependencies(component);
 
   // Helper to check if a component is available (either directly or via parent)
@@ -190,24 +180,17 @@ function generateConversionOrder(components: Component[]): ConversionOrder {
     }
   });
 
-  // Helper to check if a component is available (either directly or via parent)
-  function isComponentAvailable(componentName: string, convertedSet: Set<string>): boolean {
-    // Check if component itself is converted
-    if (convertedSet.has(componentName)) {
-      return true;
-    }
-
-    // Check if it's a sub-component whose parent is converted
-    const parent = subComponentToParent.get(componentName);
-    if (parent && convertedSet.has(parent)) {
-      return true;
-    }
-
-    return false;
-  }
-
   // Manual circular dependency breaks
-  const manualBreaks = new Set(['Button', 'Tooltip', 'MenuToggle', 'Dropdown', 'Form', 'TextArea', 'Modal', 'Wizard']);
+  const manualBreaks = new Set([
+    'Button',
+    'Tooltip',
+    'MenuToggle',
+    'Dropdown',
+    'Form',
+    'TextArea',
+    'Modal',
+    'Wizard',
+  ]);
 
   // List 1: Components with no implementation or demo dependencies
   console.warn('\n=== Building List 1: Components with no dependencies ===');
@@ -226,7 +209,7 @@ function generateConversionOrder(components: Component[]): ConversionOrder {
   // List 2: Iteratively add components whose dependencies are satisfied
   console.warn('=== Building List 2: Components with satisfied dependencies ===');
   const converted = new Set(list1);
-  let remaining = components.filter(c => !converted.has(c.name) && !manualBreaks.has(c.name));
+  const remaining = components.filter(c => !converted.has(c.name) && !manualBreaks.has(c.name));
 
   let iterations = 0;
   let addedInIteration = true;
@@ -372,20 +355,6 @@ function generateConversionOrder(components: Component[]): ConversionOrder {
   }
   console.warn(`\nList 8 complete: ${list8.length} components after ${iterations} iterations\n`);
 
-  // Helper to remove sub-components if their parent is also in the list
-  function filterOutSubComponentsWithParent(blockers) {
-    const parentSet = new Set(blockers);
-    return blockers.filter(blocker => {
-      // Check if this blocker is a sub-component
-      const parent = subComponentToParent.get(blocker);
-      // If it has a parent and that parent is also in the blocker list, exclude it
-      if (parent && parentSet.has(parent)) {
-        return false; // Exclude sub-component when parent is present
-      }
-      return true;
-    });
-  }
-
   // List 9: Manual circular dependency break #4 (Modal ↔ Wizard)
   console.warn('=== List 9: Breaking circular dependency #4 ===');
   console.warn('  ⚡ Modal + Wizard (convert together to break cycle)');
@@ -417,13 +386,29 @@ function formatYAML(result: ConversionOrder, componentMap: Map<string, Component
 
   outputList('List1_NoDependencies', result.list1);
   outputList('List2_DependenciesSatisfied', result.list2);
-  outputList('List3_BreakCircularDependency', result.list3, '# Button and Tooltip must be converted together to break circular dependency');
+  outputList(
+    'List3_BreakCircularDependency',
+    result.list3,
+    '# Button and Tooltip must be converted together to break circular dependency'
+  );
   outputList('List4_UnblockedByList3', result.list4);
-  outputList('List5_BreakCircularDependency2', result.list5, '# MenuToggle and Dropdown must be converted together to break circular dependency');
+  outputList(
+    'List5_BreakCircularDependency2',
+    result.list5,
+    '# MenuToggle and Dropdown must be converted together to break circular dependency'
+  );
   outputList('List6_UnblockedByList5', result.list6);
-  outputList('List7_BreakCircularDependency3', result.list7, '# Form and TextArea must be converted together to break circular dependency');
+  outputList(
+    'List7_BreakCircularDependency3',
+    result.list7,
+    '# Form and TextArea must be converted together to break circular dependency'
+  );
   outputList('List8_UnblockedByList7', result.list8);
-  outputList('List9_BreakCircularDependency4', result.list9, '# Modal and Wizard must be converted together to break circular dependency');
+  outputList(
+    'List9_BreakCircularDependency4',
+    result.list9,
+    '# Modal and Wizard must be converted together to break circular dependency'
+  );
 
   return yaml;
 }

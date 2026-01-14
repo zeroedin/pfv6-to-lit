@@ -186,7 +186,9 @@ const cssApiTests = [
   },
   {
     name: '--pf-v6-c-helper-text__item--m-error--TransitionTimingFunction--Opacity',
-    defaultValue: 'var(--pf-t--global--motion--timing-function--default, cubic-bezier(0.4, 0, 0.2, 1))',
+    defaultValue:
+      'var(--pf-t--global--motion--timing-function--default, '
+      + 'cubic-bezier(0.4, 0, 0.2, 1))',
     resolvedValue: 'cubic-bezier(0.4, 0, 0.2, 1)',
     type: 'timing-function',
     testValue: 'linear',

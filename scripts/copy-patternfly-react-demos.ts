@@ -52,6 +52,10 @@ interface Manifest {
  * - CardExpandableWithIcon → expandable-with-icon
  * - CheckboxDisabled → disabled
  * - CheckboxWithDescriptionBody → with-description-body
+ *
+ * @param pascalCase - PascalCase string to convert
+ * @param componentName - Component name to remove from prefix
+ * @returns kebab-case string
  */
 function toKebabCase(pascalCase: string, componentName: string): string {
   // Remove component prefix (e.g., "Card" from "CardBasic")
@@ -77,6 +81,9 @@ function toKebabCase(pascalCase: string, componentName: string): string {
 
 /**
  * Get the installed version from package.json
+ *
+ * @param packageName - Name of the package to get version for
+ * @returns Package version string
  */
 async function getPackageVersion(packageName: string): Promise<string> {
   try {
@@ -92,6 +99,11 @@ async function getPackageVersion(packageName: string): Promise<string> {
 
 /**
  * Copy demo files for a component
+ *
+ * @param componentName - Name of the component
+ * @param examplesDir - Source directory with examples
+ * @param targetDir - Target directory to copy to
+ * @returns Array of demo mappings
  */
 async function copyComponentDemos(
   componentName: string,
@@ -244,7 +256,7 @@ async function main() {
 
     // Write manifest
     const manifestPath = join(projectRoot, 'patternfly-react/demos.json');
-    await writeFile(manifestPath, JSON.stringify(manifest, null, 2) + '\\n', 'utf-8');
+    await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\\n`, 'utf-8');
 
     console.log();
     console.log(`\\n✓ Generated manifest: patternfly-react/demos.json`);

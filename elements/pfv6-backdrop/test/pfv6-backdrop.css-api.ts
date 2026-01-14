@@ -107,9 +107,18 @@ test.describe('CSS API - Custom Property Overrides', () => {
         { threshold: 0 }
       );
 
-      await test.info().attach('React (expected)', { body: reactBuffer, contentType: 'image/png' });
-      await test.info().attach('Lit (actual)', { body: litBuffer, contentType: 'image/png' });
-      await test.info().attach('Diff (red = different pixels)', { body: PNG.sync.write(diff), contentType: 'image/png' });
+      await test.info().attach('React (expected)', {
+        body: reactBuffer,
+        contentType: 'image/png',
+      });
+      await test.info().attach('Lit (actual)', {
+        body: litBuffer,
+        contentType: 'image/png',
+      });
+      await test.info().attach('Diff (red = different pixels)', {
+        body: PNG.sync.write(diff),
+        contentType: 'image/png',
+      });
 
       expect(numDiffPixels).toBe(0);
     } finally {
@@ -158,9 +167,18 @@ test.describe('CSS API - Custom Property Overrides', () => {
         { threshold: 0 }
       );
 
-      await test.info().attach('React (expected)', { body: reactBuffer, contentType: 'image/png' });
-      await test.info().attach('Lit (actual)', { body: litBuffer, contentType: 'image/png' });
-      await test.info().attach('Diff (red = different pixels)', { body: PNG.sync.write(diff), contentType: 'image/png' });
+      await test.info().attach('React (expected)', {
+        body: reactBuffer,
+        contentType: 'image/png',
+      });
+      await test.info().attach('Lit (actual)', {
+        body: litBuffer,
+        contentType: 'image/png',
+      });
+      await test.info().attach('Diff (red = different pixels)', {
+        body: PNG.sync.write(diff),
+        contentType: 'image/png',
+      });
 
       expect(numDiffPixels).toBe(0);
     } finally {
@@ -209,9 +227,18 @@ test.describe('CSS API - Custom Property Overrides', () => {
         { threshold: 0 }
       );
 
-      await test.info().attach('React (expected)', { body: reactBuffer, contentType: 'image/png' });
-      await test.info().attach('Lit (actual)', { body: litBuffer, contentType: 'image/png' });
-      await test.info().attach('Diff (red = different pixels)', { body: PNG.sync.write(diff), contentType: 'image/png' });
+      await test.info().attach('React (expected)', {
+        body: reactBuffer,
+        contentType: 'image/png',
+      });
+      await test.info().attach('Lit (actual)', {
+        body: litBuffer,
+        contentType: 'image/png',
+      });
+      await test.info().attach('Diff (red = different pixels)', {
+        body: PNG.sync.write(diff),
+        contentType: 'image/png',
+      });
 
       expect(numDiffPixels).toBe(0);
     } finally {
@@ -264,9 +291,18 @@ test.describe('CSS API - Custom Property Overrides', () => {
         { threshold: 0 }
       );
 
-      await test.info().attach('React (expected)', { body: reactBuffer, contentType: 'image/png' });
-      await test.info().attach('Lit (actual)', { body: litBuffer, contentType: 'image/png' });
-      await test.info().attach('Diff (red = different pixels)', { body: PNG.sync.write(diff), contentType: 'image/png' });
+      await test.info().attach('React (expected)', {
+        body: reactBuffer,
+        contentType: 'image/png',
+      });
+      await test.info().attach('Lit (actual)', {
+        body: litBuffer,
+        contentType: 'image/png',
+      });
+      await test.info().attach('Diff (red = different pixels)', {
+        body: PNG.sync.write(diff),
+        contentType: 'image/png',
+      });
 
       expect(numDiffPixels).toBe(0);
     } finally {

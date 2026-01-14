@@ -55,7 +55,7 @@ async function applyCssOverride(
   value: string
 ): Promise<void> {
   await page.addStyleTag({
-    content: `${selector} { ${cssVar}: ${value}; }`
+    content: `${selector} { ${cssVar}: ${value}; }`,
   });
 }
 
@@ -67,7 +67,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch--ColumnGap',
@@ -75,7 +75,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle-icon--FontSize',
@@ -83,7 +83,7 @@ const cssApiTests = [
     resolvedValue: 'calc(0.875rem * 0.625)',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle-icon--Color',
@@ -91,7 +91,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle-icon--InsetInlineStart',
@@ -99,7 +99,7 @@ const cssApiTests = [
     resolvedValue: 'calc(0.875rem * 0.4)',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle-icon--Offset',
@@ -107,7 +107,7 @@ const cssApiTests = [
     resolvedValue: '0.125rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__input--disabled__toggle-icon--Color',
@@ -115,7 +115,7 @@ const cssApiTests = [
     resolvedValue: '#a3a3a3',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'disabled'
+    demo: 'disabled',
   },
   {
     name: '--pf-v6-c-switch--LineHeight',
@@ -123,7 +123,7 @@ const cssApiTests = [
     resolvedValue: '1.5',
     type: 'number',
     testValue: '999',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch--Height',
@@ -131,7 +131,7 @@ const cssApiTests = [
     resolvedValue: 'auto',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__input--checked__toggle--BackgroundColor',
@@ -139,7 +139,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'checked-with-label'
+    demo: 'checked-with-label',
   },
   {
     name: '--pf-v6-c-switch__input--checked__toggle--before--TranslateX',
@@ -147,7 +147,7 @@ const cssApiTests = [
     resolvedValue: 'calc(100% + 0.125rem)',
     type: 'size',
     testValue: '50px',
-    demo: 'checked-with-label'
+    demo: 'checked-with-label',
   },
   {
     name: '--pf-v6-c-switch__input--checked__toggle--BorderColor',
@@ -155,7 +155,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'checked-with-label'
+    demo: 'checked-with-label',
   },
   {
     name: '--pf-v6-c-switch__input--checked__toggle--BorderWidth',
@@ -163,7 +163,7 @@ const cssApiTests = [
     resolvedValue: '0px',
     type: 'size',
     testValue: '50px',
-    demo: 'checked-with-label'
+    demo: 'checked-with-label',
   },
   {
     name: '--pf-v6-c-switch__input--checked__label--Color',
@@ -171,7 +171,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'checked-with-label'
+    demo: 'checked-with-label',
   },
   {
     name: '--pf-v6-c-switch__input--not-checked__label--Color',
@@ -179,7 +179,7 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__input--disabled__label--Color',
@@ -187,7 +187,7 @@ const cssApiTests = [
     resolvedValue: '#a3a3a3',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'disabled'
+    demo: 'disabled',
   },
   {
     name: '--pf-v6-c-switch__input--disabled__toggle--BackgroundColor',
@@ -195,7 +195,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'disabled'
+    demo: 'disabled',
   },
   {
     name: '--pf-v6-c-switch__input--disabled__toggle--BorderColor',
@@ -203,7 +203,7 @@ const cssApiTests = [
     resolvedValue: 'rgba(255, 255, 255, 0)',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'disabled'
+    demo: 'disabled',
   },
   {
     name: '--pf-v6-c-switch__input--checked__toggle--before--BackgroundColor',
@@ -211,7 +211,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'checked-with-label'
+    demo: 'checked-with-label',
   },
   {
     name: '--pf-v6-c-switch__input--not-checked__toggle--before--BackgroundColor',
@@ -219,7 +219,7 @@ const cssApiTests = [
     resolvedValue: '#707070',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__input--disabled__toggle--before--BackgroundColor',
@@ -227,7 +227,7 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'disabled'
+    demo: 'disabled',
   },
   {
     name: '--pf-v6-c-switch__input--focus__toggle--OutlineWidth',
@@ -235,7 +235,7 @@ const cssApiTests = [
     resolvedValue: '2px',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__input--focus__toggle--OutlineOffset',
@@ -243,7 +243,7 @@ const cssApiTests = [
     resolvedValue: '0.25rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__input--focus__toggle--OutlineColor',
@@ -251,7 +251,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--Height',
@@ -259,7 +259,7 @@ const cssApiTests = [
     resolvedValue: 'calc(0.875rem * 1.5)',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--BackgroundColor',
@@ -267,7 +267,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--BorderColor',
@@ -275,7 +275,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--BorderWidth',
@@ -283,7 +283,7 @@ const cssApiTests = [
     resolvedValue: '1px',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--BorderRadius',
@@ -291,15 +291,17 @@ const cssApiTests = [
     resolvedValue: '999px',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--before--Width',
-    defaultValue: 'calc(var(--pf-v6-c-switch--FontSize) - var(--pf-v6-c-switch__toggle-icon--Offset))',
+    defaultValue:
+      'calc(var(--pf-v6-c-switch--FontSize) - '
+      + 'var(--pf-v6-c-switch__toggle-icon--Offset))',
     resolvedValue: 'calc(0.875rem - 0.125rem)',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--before--Height',
@@ -307,15 +309,17 @@ const cssApiTests = [
     resolvedValue: 'calc(0.875rem - 0.125rem)',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--before--InsetInlineStart',
-    defaultValue: 'calc((var(--pf-v6-c-switch__toggle--Height) - var(--pf-v6-c-switch__toggle--before--Height)) / 2)',
+    defaultValue:
+      'calc((var(--pf-v6-c-switch__toggle--Height) - '
+      + 'var(--pf-v6-c-switch__toggle--before--Height)) / 2)',
     resolvedValue: 'calc((calc(0.875rem * 1.5) - calc(0.875rem - 0.125rem)) / 2)',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--before--BorderWidth',
@@ -323,7 +327,7 @@ const cssApiTests = [
     resolvedValue: '0px',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--before--BorderRadius',
@@ -331,15 +335,17 @@ const cssApiTests = [
     resolvedValue: '24px',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--before--TransitionTimingFunction',
-    defaultValue: 'var(--pf-t--global--motion--timing-function--default, cubic-bezier(0.4, 0, 0.2, 1))',
+    defaultValue:
+      'var(--pf-t--global--motion--timing-function--default, '
+      + 'cubic-bezier(0.4, 0, 0.2, 1))',
     resolvedValue: 'cubic-bezier(0.4, 0, 0.2, 1)',
     type: 'timing-function',
     testValue: 'linear',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--before--TransitionDuration',
@@ -347,24 +353,37 @@ const cssApiTests = [
     resolvedValue: '200ms',
     type: 'duration',
     testValue: '5000ms',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--before--Transition',
-    defaultValue: 'transform var(--pf-v6-c-switch__toggle--before--TransitionTimingFunction) var(--pf-v6-c-switch__toggle--before--TransitionDuration), background-color var(--pf-v6-c-switch__toggle--before--TransitionTimingFunction) var(--pf-v6-c-switch__toggle--before--TransitionDuration)',
-    resolvedValue: 'transform cubic-bezier(0.4, 0, 0.2, 1) 200ms, background-color cubic-bezier(0.4, 0, 0.2, 1) 200ms',
+    defaultValue:
+      'transform '
+      + 'var(--pf-v6-c-switch__toggle--before--TransitionTimingFunction) '
+      + 'var(--pf-v6-c-switch__toggle--before--TransitionDuration), '
+      + 'background-color '
+      + 'var(--pf-v6-c-switch__toggle--before--TransitionTimingFunction) '
+      + 'var(--pf-v6-c-switch__toggle--before--TransitionDuration)',
+    resolvedValue:
+      'transform cubic-bezier(0.4, 0, 0.2, 1) 200ms, '
+      + 'background-color cubic-bezier(0.4, 0, 0.2, 1) 200ms',
     type: 'transition',
     testValue: 'transform linear 5000ms, background-color linear 5000ms',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-switch__toggle--Width',
-    defaultValue: 'calc(var(--pf-v6-c-switch__toggle--Height) + var(--pf-v6-c-switch__toggle-icon--Offset) + var(--pf-v6-c-switch__toggle--before--Width))',
-    resolvedValue: 'calc(calc(0.875rem * 1.5) + 0.125rem + calc(0.875rem - 0.125rem))',
+    defaultValue:
+      'calc(var(--pf-v6-c-switch__toggle--Height) + '
+      + 'var(--pf-v6-c-switch__toggle-icon--Offset) + '
+      + 'var(--pf-v6-c-switch__toggle--before--Width))',
+    resolvedValue:
+      'calc(calc(0.875rem * 1.5) + 0.125rem + '
+      + 'calc(0.875rem - 0.125rem))',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
-  }
+    demo: 'basic',
+  },
 ];
 
 test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
@@ -377,8 +396,8 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Variable: ${name}`,
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
-          `Test value: ${testValue}`
-        ].join('\n')
+          `Test value: ${testValue}`,
+        ].join('\n'),
       });
 
       // Set consistent viewport
@@ -402,12 +421,12 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare
@@ -425,23 +444,23 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 }  // Pixel-perfect
+          { threshold: 0 } // Pixel-perfect
         );
 
         // Attach images to report
         await test.info().attach('React with CSS override (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit with CSS override (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match

@@ -132,8 +132,8 @@ export class Pfv6Switch extends LitElement {
   }
 
   /**
-   * Form reset callback - resets checked state to default
-   */
+  * Form reset callback - resets checked state to default
+  */
   formResetCallback(): void {
     this.checked = this.defaultChecked ?? false;
     this.#internals.setFormValue(this.checked ? this.value : null);
@@ -141,6 +141,7 @@ export class Pfv6Switch extends LitElement {
 
   /**
    * Form disabled callback - updates disabled state
+   * @param disabled - Whether the form is disabled
    */
   formDisabledCallback(disabled: boolean): void {
     this.disabled = disabled;
@@ -149,6 +150,7 @@ export class Pfv6Switch extends LitElement {
 
   /**
    * Handle input change event
+   * @param event - The change event from the input
    */
   #handleChange = (event: Event): void => {
     const target = event.target as HTMLInputElement;

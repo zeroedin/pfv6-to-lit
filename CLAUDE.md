@@ -129,6 +129,16 @@ Expected response includes:
 **BLOCKING REQUIREMENT:**
 You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
 
+### Step 5.5: Run eslint
+
+**After api-auditor completes**, run eslint to validate TypeScript code quality:
+
+```bash
+npx eslint elements/pfv6-{component}/**/*.ts
+```
+
+**If errors found**: Fix all eslint violations before proceeding to demo creation.
+
 ## Phase 3: Demo Creation
 
 ### Step 6: DELEGATE to demo-writer
@@ -449,6 +459,7 @@ You CANNOT proceed until you have received `<function_results>` from the Task to
 - [ ] **api-writer invoked** - Component API design received and verified
 - [ ] **face-elements-writer invoked** (if form control) - FACE patterns added
 - [ ] **api-auditor invoked** - Component API validated
+- [ ] **eslint passed** - No TypeScript code quality errors
 - [ ] **demo-writer invoked** - Demo files created
 - [ ] **layout-translator invoked** (if layout components detected) - Layouts translated
 - [ ] **style-components invoked** (if styling components detected) - Styling translated

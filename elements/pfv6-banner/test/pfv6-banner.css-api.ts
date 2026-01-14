@@ -55,7 +55,7 @@ async function applyCssOverride(
   value: string
 ): Promise<void> {
   await page.addStyleTag({
-    content: `${selector} { ${cssVar}: ${value}; }`
+    content: `${selector} { ${cssVar}: ${value}; }`,
   });
 }
 
@@ -68,7 +68,7 @@ const cssApiTests = [
     resolvedValue: '0.25rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--PaddingInlineEnd',
@@ -76,7 +76,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--md--PaddingInlineEnd',
@@ -84,7 +84,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--PaddingBlockEnd',
@@ -92,7 +92,7 @@ const cssApiTests = [
     resolvedValue: '0.25rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--PaddingInlineStart',
@@ -100,7 +100,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--md--PaddingInlineStart',
@@ -108,7 +108,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--FontSize',
@@ -116,7 +116,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--Color',
@@ -124,7 +124,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--BackgroundColor',
@@ -132,7 +132,7 @@ const cssApiTests = [
     resolvedValue: '#e0e0e0',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--BorderColor',
@@ -140,7 +140,7 @@ const cssApiTests = [
     resolvedValue: 'rgba(255, 255, 255, 0)',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--BorderWidth',
@@ -148,7 +148,7 @@ const cssApiTests = [
     resolvedValue: '0px',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Link variables
@@ -158,7 +158,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--link--TextDecoration',
@@ -166,7 +166,7 @@ const cssApiTests = [
     resolvedValue: 'underline',
     type: 'text-decoration',
     testValue: 'none',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--link--hover--Color',
@@ -174,7 +174,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--link--disabled--Color',
@@ -182,7 +182,7 @@ const cssApiTests = [
     resolvedValue: '#a3a3a3',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Sticky modifier variables
@@ -192,7 +192,7 @@ const cssApiTests = [
     resolvedValue: '300',
     type: 'number',
     testValue: '999',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--m-sticky--BoxShadow',
@@ -200,7 +200,7 @@ const cssApiTests = [
     resolvedValue: '0px 4px 9px 0px rgba(41, 41, 41, 0.15)',
     type: 'shadow',
     testValue: '0 0 20px 10px rgba(255, 0, 0, 0.8)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Status modifier variables - danger
@@ -210,7 +210,7 @@ const cssApiTests = [
     resolvedValue: '#b1380b',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
   {
     name: '--pf-v6-c-banner--m-danger--Color',
@@ -218,7 +218,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
 
   // Status modifier variables - success
@@ -228,7 +228,7 @@ const cssApiTests = [
     resolvedValue: '#3d7317',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
   {
     name: '--pf-v6-c-banner--m-success--Color',
@@ -236,7 +236,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
 
   // Status modifier variables - warning
@@ -246,7 +246,7 @@ const cssApiTests = [
     resolvedValue: '#ffcc17',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
   {
     name: '--pf-v6-c-banner--m-warning--Color',
@@ -254,7 +254,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
 
   // Status modifier variables - info
@@ -264,7 +264,7 @@ const cssApiTests = [
     resolvedValue: '#5e40be',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
   {
     name: '--pf-v6-c-banner--m-info--Color',
@@ -272,7 +272,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
 
   // Status modifier variables - custom
@@ -282,7 +282,7 @@ const cssApiTests = [
     resolvedValue: '#147878',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
   {
     name: '--pf-v6-c-banner--m-custom--Color',
@@ -290,7 +290,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
 
   // Nonstatus color modifier variables - red
@@ -300,7 +300,7 @@ const cssApiTests = [
     resolvedValue: '#fbc5c5',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--m-red--Color',
@@ -308,7 +308,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Nonstatus color modifier variables - orangered
@@ -318,7 +318,7 @@ const cssApiTests = [
     resolvedValue: '#fbbea8',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--m-orangered--Color',
@@ -326,7 +326,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Nonstatus color modifier variables - orange
@@ -336,7 +336,7 @@ const cssApiTests = [
     resolvedValue: '#ffe8cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--m-orange--Color',
@@ -344,7 +344,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Nonstatus color modifier variables - yellow
@@ -354,7 +354,7 @@ const cssApiTests = [
     resolvedValue: '#fff4cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--m-yellow--Color',
@@ -362,7 +362,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Nonstatus color modifier variables - green
@@ -372,7 +372,7 @@ const cssApiTests = [
     resolvedValue: '#d1f1bb',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--m-green--Color',
@@ -380,7 +380,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Nonstatus color modifier variables - teal
@@ -390,7 +390,7 @@ const cssApiTests = [
     resolvedValue: '#b9e5e5',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--m-teal--Color',
@@ -398,7 +398,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Nonstatus color modifier variables - blue
@@ -408,7 +408,7 @@ const cssApiTests = [
     resolvedValue: '#b9dafc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--m-blue--Color',
@@ -416,7 +416,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Nonstatus color modifier variables - purple
@@ -426,7 +426,7 @@ const cssApiTests = [
     resolvedValue: '#d0c5f4',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-banner--m-purple--Color',
@@ -434,7 +434,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 ];
 
@@ -449,8 +449,8 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
           `Test value: ${testValue}`,
-          `Demo: ${demo}`
-        ].join('\n')
+          `Demo: ${demo}`,
+        ].join('\n'),
       });
 
       // Set consistent viewport
@@ -474,12 +474,12 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare
@@ -497,23 +497,23 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 }  // Pixel-perfect
+          { threshold: 0 } // Pixel-perfect
         );
 
         // Attach images to report
         await test.info().attach('React with CSS override (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit with CSS override (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match

@@ -2,19 +2,15 @@ import type { Plugin } from '@web/dev-server-core';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-interface DemoInfo {
-  componentName: string;
-  tagName: string;
-  demoName: string;
-  url: string;
-  title: string;
+interface ReactComponentData {
+  demos: Record<string, unknown>;
 }
 
 interface ComponentComparison {
   componentName: string;
   displayName: string;
-  litDemos: Array<{ name: string; url: string }>;
-  reactDemos: Array<{ name: string; url: string }>;
+  litDemos: { name: string; url: string }[];
+  reactDemos: { name: string; url: string }[];
 }
 
 /**
@@ -22,7 +18,7 @@ interface ComponentComparison {
  */
 async function generateComparisonTableHTML(): Promise<string> {
   const components = new Map<string, ComponentComparison>();
-  
+
   // Read Lit demos from custom-elements.json
   try {
     const manifestPath = join(process.cwd(), 'custom-elements.json');
@@ -32,21 +28,21 @@ async function generateComparisonTableHTML(): Promise<string> {
     for (const module of manifest.modules || []) {
       for (const declaration of module.declarations || []) {
         if (declaration.customElement && declaration.demos) {
-          const tagName = declaration.tagName;
+          const { tagName } = declaration;
           const componentKey = tagName.replace('pfv6-', '');
-          
+
           if (!components.has(componentKey)) {
             components.set(componentKey, {
               componentName: componentKey,
               displayName: componentKey
-                .split('-')
-                .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
-                .join(' '),
+                  .split('-')
+                  .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+                  .join(' '),
               litDemos: [],
               reactDemos: [],
             });
           }
-          
+
           const component = components.get(componentKey)!;
           for (const demo of declaration.demos) {
             component.litDemos.push({
@@ -58,7 +54,10 @@ async function generateComparisonTableHTML(): Promise<string> {
       }
     }
   } catch (error) {
-    console.warn('[demo-list-plugin] Could not read custom-elements.json:', error instanceof Error ? error.message : error);
+    console.warn(
+      '[demo-list-plugin] Could not read custom-elements.json:',
+      error instanceof Error ? error.message : error
+    );
   }
 
   // Read React demos from patternfly-react/demos.json
@@ -67,12 +66,14 @@ async function generateComparisonTableHTML(): Promise<string> {
     const reactManifestContent = await readFile(reactManifestPath, 'utf-8');
     const reactManifest = JSON.parse(reactManifestContent);
 
-    for (const [componentName, componentData] of Object.entries<any>(reactManifest.components)) {
+    for (const [componentName, componentData] of Object.entries<ReactComponentData>(
+      reactManifest.components
+    )) {
       // Convert PascalCase to kebab-case (e.g., "AboutModal" -> "about-modal")
       const componentKey = componentName
-        .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-        .toLowerCase();
-      
+          .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+          .toLowerCase();
+
       if (!components.has(componentKey)) {
         components.set(componentKey, {
           componentName: componentKey,
@@ -81,7 +82,7 @@ async function generateComparisonTableHTML(): Promise<string> {
           reactDemos: [],
         });
       }
-      
+
       const component = components.get(componentKey)!;
       for (const [demoName] of Object.entries(componentData.demos)) {
         component.reactDemos.push({
@@ -91,7 +92,10 @@ async function generateComparisonTableHTML(): Promise<string> {
       }
     }
   } catch (error) {
-    console.warn('[demo-list-plugin] Could not read patternfly-react/demos.json:', error instanceof Error ? error.message : error);
+    console.warn(
+      '[demo-list-plugin] Could not read patternfly-react/demos.json:',
+      error instanceof Error ? error.message : error
+    );
   }
 
   // Sort components alphabetically
@@ -106,22 +110,22 @@ async function generateComparisonTableHTML(): Promise<string> {
   }
 
   return sortedComponents
-    .map(component => {
-      const litCell = component.litDemos.length > 0
-        ? `<a href="/elements/pfv6-${component.componentName}/demo">View Lit Demos (${component.litDemos.length}) →</a>`
-        : '<span style="color: #999;">N/A</span>';
-      
-      const reactCell = component.reactDemos.length > 0
-        ? `<a href="/elements/pfv6-${component.componentName}/react">View React Demos (${component.reactDemos.length}) →</a>`
+      .map(component => {
+        const litCell = component.litDemos.length > 0 ?
+        `<a href="/elements/pfv6-${component.componentName}/demo">View Lit Demos (${component.litDemos.length}) →</a>`
         : '<span style="color: #999;">N/A</span>';
 
-      return `<tr>
+        const reactCell = component.reactDemos.length > 0 ?
+        `<a href="/elements/pfv6-${component.componentName}/react">View React Demos (${component.reactDemos.length}) →</a>`
+        : '<span style="color: #999;">N/A</span>';
+
+        return `<tr>
             <td><strong>${component.displayName}</strong></td>
             <td>${litCell}</td>
             <td>${reactCell}</td>
           </tr>`;
-    })
-    .join('\n          ');
+      })
+      .join('\n          ');
 }
 
 /**
