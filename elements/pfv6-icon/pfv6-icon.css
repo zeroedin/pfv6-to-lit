@@ -75,7 +75,7 @@
   /* Body content sizes */
   --pf-v6-c-icon--m-body-sm__content--FontSize: var(--pf-t--global--icon--size--font--body--sm, 0.875rem);
   --pf-v6-c-icon--m-body-default__content--FontSize: var(--pf-t--global--icon--size--font--body--default, 1rem);
-  --pf-v6-c-icon--m-body-lg__content--FontSize: var(--pf-t--global--icon--size--lg, 1rem);
+  --pf-v6-c-icon--m-body-lg__content--FontSize: var(--pf-t--global--icon--size--font--body--lg, 1.125rem);
 
   /* Heading content sizes */
   --pf-v6-c-icon--m-heading-sm__content--FontSize: var(--pf-t--global--icon--size--font--heading--h6, 1.125rem);
