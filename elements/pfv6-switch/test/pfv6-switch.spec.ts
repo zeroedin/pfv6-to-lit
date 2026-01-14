@@ -257,34 +257,6 @@ describe('<pfv6-switch>', function() {
     });
   });
 
-  describe('accessibleLabelledBy property', function() {
-    it('defaults to undefined', async function() {
-      const el = await fixture<Pfv6Switch>(html`<pfv6-switch label="Test"></pfv6-switch>`);
-      expect(el.accessibleLabelledBy).to.be.undefined;
-    });
-
-    it('accepts string value', async function() {
-      const el = await fixture<Pfv6Switch>(html`<pfv6-switch accessible-labelledby="external-label"></pfv6-switch>`);
-      expect(el.accessibleLabelledBy).to.equal('external-label');
-    });
-
-    it('can be changed dynamically', async function() {
-      const el = await fixture<Pfv6Switch>(html`<pfv6-switch label="Test"></pfv6-switch>`);
-
-      el.accessibleLabelledBy = 'label-id';
-      await el.updateComplete;
-
-      expect(el.accessibleLabelledBy).to.equal('label-id');
-    });
-
-    it('updates aria-labelledby in ElementInternals', async function() {
-      const el = await fixture<Pfv6Switch>(html`<pfv6-switch accessible-labelledby="label-id"></pfv6-switch>`);
-      await el.updateComplete;
-      // Verify internals.ariaLabelledBy is set (tested via implementation)
-      expect(el.accessibleLabelledBy).to.equal('label-id');
-    });
-  });
-
   describe('defaultChecked property', function() {
     it('defaults to undefined', async function() {
       const el = await fixture<Pfv6Switch>(html`<pfv6-switch label="Test"></pfv6-switch>`);
@@ -624,12 +596,6 @@ describe('<pfv6-switch>', function() {
       await el.updateComplete;
       expect(el.accessibleLabel).to.equal('Toggle feature');
     });
-
-    it('updates aria-labelledby from accessibleLabelledBy', async function() {
-      const el = await fixture<Pfv6Switch>(html`<pfv6-switch accessible-labelledby="label-id"></pfv6-switch>`);
-      await el.updateComplete;
-      expect(el.accessibleLabelledBy).to.equal('label-id');
-    });
   });
 
   describe('Shadow DOM structure', function() {
@@ -808,17 +774,6 @@ describe('<pfv6-switch>', function() {
       console.error = () => { errorCalled = true; };
 
       await fixture<Pfv6Switch>(html`<pfv6-switch accessible-label="Test"></pfv6-switch>`);
-
-      console.error = consoleError;
-      expect(errorCalled).to.be.false;
-    });
-
-    it('does not warn when accessibleLabelledBy provided', async function() {
-      const consoleError = console.error;
-      let errorCalled = false;
-      console.error = () => { errorCalled = true; };
-
-      await fixture<Pfv6Switch>(html`<pfv6-switch accessible-labelledby="label-id"></pfv6-switch>`);
 
       console.error = consoleError;
       expect(errorCalled).to.be.false;
