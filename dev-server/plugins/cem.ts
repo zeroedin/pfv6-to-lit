@@ -34,15 +34,23 @@ export async function loadCEManifest(): Promise<CEManifest | null> {
     const manifestContent = await readFile(manifestPath, 'utf-8');
     return JSON.parse(manifestContent);
   } catch (error) {
-    console.warn('[cem] Could not load custom-elements.json:', error instanceof Error ? error.message : error);
+    console.warn(
+      '[cem] Could not load custom-elements.json:',
+      error instanceof Error ? error.message : error
+    );
     return null;
   }
 }
 
 /**
  * Find a component declaration in the CEM by tag name
+ * @param manifest - The Custom Elements Manifest
+ * @param tagName - The tag name to search for
  */
-export function findComponentDeclaration(manifest: CEManifest, tagName: string): CEMDeclaration | null {
+export function findComponentDeclaration(
+  manifest: CEManifest,
+  tagName: string
+): CEMDeclaration | null {
   for (const module of manifest.modules || []) {
     for (const declaration of module.declarations || []) {
       if (declaration.customElement && declaration.tagName === tagName) {

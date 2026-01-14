@@ -61,29 +61,29 @@ export class Pfv6Banner extends LitElement {
   static styles = styles;
 
   /**
-   * If set to true, the banner sticks to the top of its container
-   */
+  * If set to true, the banner sticks to the top of its container
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-sticky' })
   isSticky = false;
 
   /**
-   * Text announced by screen readers to indicate the type of banner.
-   * This prop should only be passed in when the banner conveys status/severity.
-   */
+  * Text announced by screen readers to indicate the type of banner.
+  * This prop should only be passed in when the banner conveys status/severity.
+  */
   @property({ type: String, attribute: 'screen-reader-text' })
   screenReaderText?: string;
 
   /**
-   * Color options for the banner, will be overwritten by any applied using the status prop.
-   * Valid values: 'red', 'orangered', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple'
-   */
+  * Color options for the banner, will be overwritten by any applied using the status prop.
+  * Valid values: 'red', 'orangered', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple'
+  */
   @property({ type: String, reflect: true })
   color?: 'red' | 'orangered' | 'orange' | 'yellow' | 'green' | 'teal' | 'blue' | 'purple';
 
   /**
-   * Status style options for the banner, will overwrite any color applied using the color prop.
-   * Valid values: 'success', 'warning', 'danger', 'info', 'custom'
-   */
+  * Status style options for the banner, will overwrite any color applied using the color prop.
+  * Valid values: 'success', 'warning', 'danger', 'info', 'custom'
+  */
   @property({ type: String, reflect: true })
   status?: 'success' | 'warning' | 'danger' | 'info' | 'custom';
 

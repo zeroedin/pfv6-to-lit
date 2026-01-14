@@ -31,8 +31,8 @@ export function loadExclusions(): ComponentExclusions {
 
   if (!existsSync(configPath)) {
     throw new Error(
-      `Component exclusions config not found: ${configPath}\n` +
-      'Expected file: .config/component-exclusions.json'
+      `Component exclusions config not found: ${configPath}\n`
+      + 'Expected file: .config/component-exclusions.json'
     );
   }
 
@@ -47,6 +47,7 @@ export function loadExclusions(): ComponentExclusions {
 
 /**
  * Check if a component should be ignored (layout or styling component)
+ * @param name - The component name to check
  */
 export function shouldIgnoreComponent(name: string): boolean {
   const exclusions = loadExclusions();
@@ -55,6 +56,7 @@ export function shouldIgnoreComponent(name: string): boolean {
 
 /**
  * Check if a component is a layout component
+ * @param name - The component name to check
  */
 export function isLayoutComponent(name: string): boolean {
   return loadExclusions().layouts.includes(name);
@@ -62,6 +64,7 @@ export function isLayoutComponent(name: string): boolean {
 
 /**
  * Check if a component is a styling component
+ * @param name - The component name to check
  */
 export function isStylingComponent(name: string): boolean {
   return loadExclusions().styling.includes(name);
@@ -103,8 +106,8 @@ export function extractImports(
   const { separateBySource = false, filterFn = () => true } = options;
 
   if (!existsSync(filePath)) {
-    return separateBySource
-      ? { patternfly: [], relative: [], icons: [] }
+    return separateBySource ?
+      { patternfly: [], relative: [], icons: [] }
       : [];
   }
 
@@ -119,9 +122,9 @@ export function extractImports(
 
   while ((match = patternflyImportRegex.exec(content)) !== null) {
     const importList = match[1]
-      .split(',')
-      .map(item => item.trim().replace(/\s+as\s+\w+/, ''))
-      .filter(item => item && filterFn(item));
+        .split(',')
+        .map(item => item.trim().replace(/\s+as\s+\w+/, ''))
+        .filter(item => item && filterFn(item));
 
     patternflyImports.push(...importList);
   }
@@ -131,9 +134,9 @@ export function extractImports(
 
   while ((match = relativeImportRegex.exec(content)) !== null) {
     const importList = match[1]
-      .split(',')
-      .map(item => item.trim().replace(/\s+as\s+\w+/, ''))
-      .filter(item => item && filterFn(item));
+        .split(',')
+        .map(item => item.trim().replace(/\s+as\s+\w+/, ''))
+        .filter(item => item && filterFn(item));
 
     relativeImports.push(...importList);
   }
@@ -153,7 +156,7 @@ export function extractImports(
   return {
     patternfly: [...new Set(patternflyImports)],
     relative: [...new Set(relativeImports)],
-    icons: [...new Set(iconImports)]
+    icons: [...new Set(iconImports)],
   };
 }
 
@@ -183,7 +186,7 @@ export function extractImportsFromMarkdown(mdPath: string): ImportItem[] {
     }
 
     // Skip if it's a file reference
-    const firstLine = codeMatch[1].trim().split('\n')[0];
+    const [firstLine] = codeMatch[1].trim().split('\n');
     if (firstLine.includes('file=')) {
       continue;
     }
@@ -197,10 +200,10 @@ export function extractImportsFromMarkdown(mdPath: string): ImportItem[] {
     while ((match = importRegex.exec(code)) !== null) {
       const namedImports = match[1] ? match[1].split(',').map(s => s.trim()) : [];
       const defaultImport = match[2] ? [match[2]] : [];
-      const source = match[3];
+      const [, , , source] = match;
 
       const allImports = [...namedImports, ...defaultImport]
-        .filter((name): name is string => !!name && /^[A-Z]/.test(name)); // PascalCase (likely components)
+          .filter((name): name is string => !!name && /^[A-Z]/.test(name)); // PascalCase (likely components)
 
       allImports.forEach(name => {
         imports.push({ name, source });
@@ -244,13 +247,14 @@ export function extractImportedNames(code: string): Set<string> {
  * Example bare JSX:
  *   import { Avatar } from '@patternfly/react-core';
  *   <Avatar src={img} alt="avatar" />;
+ * @param code - The code string to check
  */
 export function isBareJsx(code: string): boolean {
   // Remove comments and whitespace
   const cleaned = code
-    .replace(/\/\*[\s\S]*?\*\//g, '')
-    .replace(/\/\/.*/g, '')
-    .trim();
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/\/\/.*/g, '')
+      .trim();
 
   // Split into lines
   const lines = cleaned.split('\n').filter(line => line.trim());
@@ -293,6 +297,8 @@ export function isBareJsx(code: string): boolean {
  *   export const AvatarBasic: React.FunctionComponent = () => (
  *     <Avatar src={img} alt="avatar" />
  *   );
+ * @param code - The code string to transform
+ * @param exportName - The name for the exported component
  */
 export function transformBareJsx(code: string, exportName: string): string {
   // Split into imports and JSX
@@ -339,6 +345,9 @@ ${indentedJsx}
  * - Optionally renames component to match filename
  *
  * Returns: { code: transformed code, exportName: final export name }
+ * @param code - The code string to transform
+ * @param exportName - The desired export name
+ * @param shouldRename - Whether to rename the component (default: true)
  */
 export function transformInlineCode(
   code: string,
@@ -428,7 +437,7 @@ export function extractInlineCodeFromMd(
     }
 
     // Skip if it's a file reference
-    const firstLine = codeMatch[1].trim().split('\n')[0];
+    const [firstLine] = codeMatch[1].trim().split('\n');
     if (firstLine.includes('file=')) {
       continue;
     }
@@ -439,23 +448,25 @@ export function extractInlineCodeFromMd(
     // "Basic" → "PanelBasic"
     // "Header and footer" → "PanelHeaderAndFooter"
     let fileName = title
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join('');
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join('');
 
     if (!fileName.startsWith(componentName)) {
       fileName = componentName + fileName;
     }
 
     // Transform code but KEEP original const name (don't rename)
-    // This preserves the markdown author's naming choices (e.g., "HeaderPanel" instead of "PanelHeader")
+    // This preserves the markdown author's naming choices
+    // (e.g., "HeaderPanel" instead of "PanelHeader")
     // which avoids import conflicts
-    const { code: transformedCode, exportName: finalExportName } = transformInlineCode(code, fileName, false);
+    const { code: transformedCode, exportName: finalExportName } =
+      transformInlineCode(code, fileName, false);
 
     demos.push({
       filename: `${fileName}.tsx`,
       code: `${transformedCode}\n`,
-      exportName: finalExportName
+      exportName: finalExportName,
     });
   }
 

@@ -28,6 +28,7 @@ registerCustomFilters(liquid);
 
 /**
  * Reads a file and returns its content, or null if not found
+ * @param filePath - The path to the file to read
  */
 async function readFileOrNull(filePath: string): Promise<string | null> {
   try {
@@ -51,7 +52,7 @@ export function routerPlugin(): Plugin {
 
 
       // Route: / - serves dev-server/index.html (processed through LiquidJS)
-      router.get('/', async (ctx) => {
+      router.get('/', async ctx => {
         try {
           ctx.type = 'html';
           ctx.body = await liquid.renderFile('index.html', {});
@@ -70,16 +71,16 @@ export function routerPlugin(): Plugin {
       const templateFiles = [
         join(process.cwd(), 'dev-server', 'demo.html'),
         join(process.cwd(), 'dev-server', 'react-not-built.html'),
-        join(process.cwd(), 'dev-server', 'test.html')
+        join(process.cwd(), 'dev-server', 'test.html'),
       ];
       templateFiles.forEach(file => {
         fileWatcher.add(file);
       });
 
       // Route: /elements/:componentName/react - React demo index page
-      router.get('/elements/:componentName/react', async (ctx) => {
+      router.get('/elements/:componentName/react', async ctx => {
         const { componentName } = ctx.params;
-        
+
         if (!componentName || componentName.includes('.')) {
           ctx.status = 404;
           return;
@@ -109,12 +110,12 @@ export function routerPlugin(): Plugin {
       // Route: /elements/:componentName/react/:demoName - Individual React comparison demos
       router.get('/elements/:componentName/react/:demoName', async (ctx, next) => {
         const { componentName, demoName } = ctx.params;
-        
+
         // If demoName contains a file extension, skip this route handler
         if (demoName && demoName.includes('.')) {
           return next();
         }
-        
+
         if (!componentName || !demoName) {
           ctx.status = 404;
           return;
@@ -124,13 +125,13 @@ export function routerPlugin(): Plugin {
         const manifest = await loadReactManifest();
         const pascalComponentName = getPascalCaseComponentName(componentName);
         const componentData = manifest?.components[pascalComponentName];
-        
+
         if (!componentData || !(demoName in componentData.demos)) {
           ctx.status = 404;
           ctx.body = 'React comparison demo not found';
           return;
         }
-        
+
         // Get PascalCase filename (e.g., 'CardBasic.tsx' → 'CardBasic')
         const demoFile = componentData.demos[demoName];
         if (!demoFile) {
@@ -141,7 +142,7 @@ export function routerPlugin(): Plugin {
         const pascalDemoName = demoFile.replace('.tsx', '');
         const builtFilePath = join(process.cwd(), 'patternfly-react', 'dist', pascalComponentName, `${pascalDemoName}.js`);
         const builtFileExists = await readFileOrNull(builtFilePath) !== null;
-        
+
         if (builtFileExists) {
           ctx.type = 'html';
           ctx.body = await liquid.renderFile('demo.html', {
@@ -166,9 +167,9 @@ export function routerPlugin(): Plugin {
       });
 
       // Route: /elements/:componentName/demo
-      router.get('/elements/:componentName/demo', async (ctx) => {
+      router.get('/elements/:componentName/demo', async ctx => {
         const { componentName } = ctx.params;
-        
+
         if (!componentName || componentName.includes('.')) {
           ctx.status = 404;
           return;
@@ -176,22 +177,28 @@ export function routerPlugin(): Plugin {
 
         // Dynamically generate demo index page
         const demos = await getComponentDemos(componentName);
-        
+
         if (demos.length === 0) {
           ctx.status = 404;
           ctx.body = 'No demos found for this component';
           return;
         }
-        
+
         // Check if React demos exist
         const manifest = await loadReactManifest();
         const pascalComponentName = getPascalCaseComponentName(componentName);
         const hasReactDemos = !!(manifest?.components[pascalComponentName]);
-        
+
+        const componentTitle = componentName
+            .replace('pfv6-', '')
+            .split('-')
+            .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(' ');
+
         ctx.type = 'html';
         ctx.body = await liquid.renderFile('demos.html', {
           componentName,
-          componentTitle: componentName.replace('pfv6-', '').split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+          componentTitle,
           demos,
           demoCount: demos.length,
           hasReactDemos,
@@ -205,13 +212,13 @@ export function routerPlugin(): Plugin {
       // Route: /elements/:componentName/demo/:demoName
       router.get('/elements/:componentName/demo/:demoName', async (ctx, next) => {
         const { componentName, demoName } = ctx.params;
-        
+
         // If demoName contains a file extension, skip this route handler
         // Let the static file server handle it
         if (demoName && demoName.includes('.')) {
           return next();
         }
-        
+
         if (!componentName || !demoName) {
           ctx.status = 404;
           return;
@@ -219,7 +226,7 @@ export function routerPlugin(): Plugin {
 
         const filePath = join(process.cwd(), 'elements', componentName, 'demo', `${demoName}.html`);
         const content = await readFileOrNull(filePath);
-        
+
         if (!content) {
           ctx.status = 404;
           ctx.body = 'Demo not found';
@@ -242,12 +249,12 @@ export function routerPlugin(): Plugin {
       // Route: /elements/:componentName/test/:demoName
       router.get('/elements/:componentName/test/:demoName', async (ctx, next) => {
         const { componentName, demoName } = ctx.params;
-        
+
         // If demoName contains a file extension, skip this route handler
         if (demoName && demoName.includes('.')) {
           return next();
         }
-        
+
         if (!componentName || !demoName) {
           ctx.status = 404;
           return;
@@ -255,7 +262,7 @@ export function routerPlugin(): Plugin {
 
         const filePath = join(process.cwd(), 'elements', componentName, 'demo', `${demoName}.html`);
         const content = await readFileOrNull(filePath);
-        
+
         if (!content) {
           ctx.status = 404;
           ctx.body = 'Test demo not found';
@@ -276,12 +283,12 @@ export function routerPlugin(): Plugin {
       // Route: /elements/:componentName/react/test/:demoName
       router.get('/elements/:componentName/react/test/:demoName', async (ctx, next) => {
         const { componentName, demoName } = ctx.params;
-        
+
         // If demoName contains a file extension, skip this route handler
         if (demoName && demoName.includes('.')) {
           return next();
         }
-        
+
         if (!componentName || !demoName) {
           ctx.status = 404;
           return;
@@ -291,13 +298,13 @@ export function routerPlugin(): Plugin {
         const manifest = await loadReactManifest();
         const pascalComponentName = getPascalCaseComponentName(componentName);
         const componentData = manifest?.components[pascalComponentName];
-        
+
         if (!componentData || !(demoName in componentData.demos)) {
           ctx.status = 404;
           ctx.body = 'React test demo not found';
           return;
         }
-        
+
         // Get PascalCase filename
         const demoFile = componentData.demos[demoName];
         if (!demoFile) {
@@ -308,7 +315,7 @@ export function routerPlugin(): Plugin {
         const pascalDemoName = demoFile.replace('.tsx', '');
         const builtFilePath = join(process.cwd(), 'patternfly-react', 'dist', pascalComponentName, `${pascalDemoName}.js`);
         const builtFileExists = await readFileOrNull(builtFilePath) !== null;
-        
+
         if (!builtFileExists) {
           ctx.status = 404;
           ctx.body = 'React test demo not found';
@@ -332,7 +339,7 @@ export function routerPlugin(): Plugin {
       app.use(async (ctx, next) => {
         const segments = ctx.path.split('/').filter(s => s);
         const lastSegment = segments[segments.length - 1] || '';
-        
+
         // Check if this looks like a file request (has extension)
         if (lastSegment && lastSegment.includes('.') && !ctx.path.endsWith('/')) {
           // Check if it's in a demo or react directory
@@ -340,7 +347,7 @@ export function routerPlugin(): Plugin {
             // Try to read and serve the file from the filesystem
             const filePath = join(process.cwd(), ctx.path);
             const fileContent = await readFileOrNull(filePath);
-            
+
             if (fileContent) {
               // Determine content type based on extension
               const ext = lastSegment.split('.').pop()?.toLowerCase();
@@ -354,14 +361,14 @@ export function routerPlugin(): Plugin {
                 'css': 'text/css',
                 'js': 'text/javascript',
               };
-              
+
               ctx.type = contentTypes[ext || ''] || 'application/octet-stream';
               ctx.body = fileContent;
               return; // Don't call next() - we've handled this request
             }
           }
         }
-        
+
         await next();
       });
 
@@ -373,14 +380,16 @@ export function routerPlugin(): Plugin {
         const hasFileExtension = lastSegment.includes('.');
         const demoPathPattern = /^\/elements\/[^/]+\/demo\/[^/]+$/;
         const reactDemoPathPattern = /^\/elements\/[^/]+\/react\/[^/]+$/;
-        
+
         // Only redirect if it's a demo path AND doesn't have a file extension
-        if (!hasFileExtension && (demoPathPattern.test(ctx.path) || reactDemoPathPattern.test(ctx.path))) {
+        const isDemoPath = demoPathPattern.test(ctx.path)
+          || reactDemoPathPattern.test(ctx.path);
+        if (!hasFileExtension && isDemoPath) {
           ctx.status = 301;
-          ctx.redirect(ctx.path + '/');
+          ctx.redirect(`${ctx.path}/`);
           return;
         }
-        
+
         await next();
       });
 

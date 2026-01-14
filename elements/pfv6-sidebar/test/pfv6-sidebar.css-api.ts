@@ -551,7 +551,9 @@ const cssApiTests = [
   },
   {
     name: '--pf-v6-c-sidebar__panel--BoxShadow--base',
-    defaultValue: 'var(--pf-t--global--box-shadow--md--bottom, 0px 4px 9px 0px rgb(41 41 41 / 15%))',
+    defaultValue:
+      'var(--pf-t--global--box-shadow--md--bottom, '
+      + '0px 4px 9px 0px rgb(41 41 41 / 15%))',
     resolvedValue: '0px 4px 9px 0px rgb(41 41 41 / 15%)',
     type: 'shadow',
     testValue: '0 0 20px 10px rgba(255, 0, 0, 0.8)',
@@ -718,7 +720,15 @@ const cssApiTests = [
 ];
 
 test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
-  cssApiTests.forEach(({ name, defaultValue, resolvedValue, type, testValue, demo, description }) => {
+  cssApiTests.forEach(({
+    name,
+    defaultValue,
+    resolvedValue,
+    type,
+    testValue,
+    demo,
+    description,
+  }) => {
     test(`CSS API: ${name}`, async ({ page, browser }) => {
       // Add metadata to test report
       test.info().annotations.push({

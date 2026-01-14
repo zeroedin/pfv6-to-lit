@@ -21,18 +21,18 @@ function parseYAML(yamlContent: string): Component[] {
 
   for (const line of lines) {
     // Component name
-    const componentMatch = line.match(/^  - (\w+):$/);
+    const componentMatch = line.match(/^ {2}- (\w+):$/);
     if (componentMatch) {
       currentComponent = {
         name: componentMatch[1],
-        completed: false
+        completed: false,
       };
       components.push(currentComponent);
       continue;
     }
 
     // Completed field
-    const completedMatch = line.match(/^      completed:\s*(true|false)$/);
+    const completedMatch = line.match(/^ {6}completed:\s*(true|false)$/);
     if (completedMatch && currentComponent) {
       currentComponent.completed = completedMatch[1] === 'true';
     }
@@ -50,12 +50,11 @@ const components = parseYAML(yamlContent);
 const next = components.find(c => !c.completed);
 
 if (!next) {
-  // eslint-disable-next-line no-console
   console.log('🎉 All components converted!');
   process.exit(0);
 }
 
-// eslint-disable-next-line no-console
+
 console.log(`## Next Component to Convert: ${next.name}
 
 This is the next component in dependency order that hasn't been converted yet.

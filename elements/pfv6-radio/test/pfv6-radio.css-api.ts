@@ -79,7 +79,9 @@ const cssApiTests = [
   },
   {
     name: '--pf-v6-c-radio--m-standalone--MinHeight',
-    defaultValue: 'calc(var(--pf-v6-c-radio__label--FontSize, 0.875rem) * var(--pf-v6-c-radio__label--LineHeight, 1.5))',
+    defaultValue:
+      'calc(var(--pf-v6-c-radio__label--FontSize, 0.875rem) * '
+      + 'var(--pf-v6-c-radio__label--LineHeight, 1.5))',
     resolvedValue: 'calc(0.875rem * 1.5)',
     type: 'size',
     testValue: '50px',
@@ -167,7 +169,9 @@ const cssApiTests = [
   },
   {
     name: '--pf-v6-c-radio__input--TranslateY',
-    defaultValue: 'calc((var(--pf-v6-c-radio__label--LineHeight, 1.5) * var(--pf-v6-c-radio__label--FontSize, 0.875rem) / 2 ) - 50%)',
+    defaultValue:
+      'calc((var(--pf-v6-c-radio__label--LineHeight, 1.5) * '
+      + 'var(--pf-v6-c-radio__label--FontSize, 0.875rem) / 2 ) - 50%)',
     resolvedValue: 'calc((1.5 * 0.875rem / 2 ) - 50%)',
     type: 'size',
     testValue: '10px',

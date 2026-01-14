@@ -6,14 +6,12 @@ import { fileURLToPath } from 'url';
 import {
   shouldIgnoreComponent,
   extractImports,
-  type ImportsBySource
+  type ImportsBySource,
 } from './lib/patternfly-utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const REACT_COMPONENTS_DIR = '.cache/patternfly-react/packages/react-core/src/components';
-const LAYOUTS_DIR = '.cache/patternfly-react/packages/react-core/src/layouts';
 const ELEMENTS_DIR = 'elements';
 
 interface ComponentFiles {
@@ -43,9 +41,9 @@ interface ComponentAnalysis {
 // Convert PascalCase to kebab-case
 function toKebabCase(str: string): string {
   return str
-    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-    .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
-    .toLowerCase();
+      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+      .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+      .toLowerCase();
 }
 
 // Check if a component has been converted (pfv6-{component} directory exists)
@@ -66,10 +64,10 @@ function getAllActualComponents(): Set<string> {
 
   // Get all component directories
   const componentDirs = fs.readdirSync(REACT_COMPONENTS_DIR)
-    .filter(name => {
-      const fullPath = path.join(REACT_COMPONENTS_DIR, name);
-      return fs.statSync(fullPath).isDirectory();
-    });
+      .filter(name => {
+        const fullPath = path.join(REACT_COMPONENTS_DIR, name);
+        return fs.statSync(fullPath).isDirectory();
+      });
 
   // For each component directory, find all .tsx/.ts files
   for (const componentDir of componentDirs) {
@@ -105,11 +103,20 @@ function isIcon(name: string): boolean {
   return name.endsWith('Icon');
 }
 
-// Use shared extractImports function with isActualComponent filter
-function extractImportsFromFile(filePath: string, options: { separateBySource?: boolean } = {}): string[] | ImportsBySource {
+/**
+ * Extract imports from file with isActualComponent filter
+ *
+ * @param filePath - Path to the file to extract imports from
+ * @param options - Options for extraction
+ * @returns Array of import names or object with imports by source
+ */
+function extractImportsFromFile(
+  filePath: string,
+  options: { separateBySource?: boolean } = {}
+): string[] | ImportsBySource {
   return extractImports(filePath, {
     separateBySource: options.separateBySource,
-    filterFn: isActualComponent
+    filterFn: isActualComponent,
   });
 }
 
@@ -124,8 +131,8 @@ function findComponentFiles(componentName: string): ComponentFiles | null {
 
   // Find main component file
   const mainFile = files.find(f =>
-    f === `${componentName}.tsx` ||
-    f === `${componentName}.ts`
+    f === `${componentName}.tsx`
+    || f === `${componentName}.ts`
   );
 
   if (!mainFile) {
@@ -138,56 +145,68 @@ function findComponentFiles(componentName: string): ComponentFiles | null {
 
   if (fs.existsSync(examplesDir)) {
     demoFiles = fs.readdirSync(examplesDir)
-      .filter(f => f.endsWith('.tsx') || f.endsWith('.ts'))
-      .map(f => path.join(examplesDir, f));
+        .filter(f => f.endsWith('.tsx') || f.endsWith('.ts'))
+        .map(f => path.join(examplesDir, f));
   }
 
   return {
     implementation: path.join(componentDir, mainFile),
-    demos: demoFiles
+    demos: demoFiles,
   };
 }
 
 function findSubComponents(componentDir: string, componentName: string): string[] {
-  if (!fs.existsSync(componentDir)) return [];
+  if (!fs.existsSync(componentDir)) {
+    return [];
+  }
 
   const files = fs.readdirSync(componentDir);
 
   // Sub-components typically start with the component name
   // e.g., MenuToggle has MenuToggleCheckbox, MenuToggleAction
   const subComponents = files
-    .filter(f => (f.endsWith('.tsx') || f.endsWith('.ts')) &&
-                 f !== `${componentName}.tsx` &&
-                 f !== `${componentName}.ts` &&
-                 f !== `${componentName}Context.tsx` &&
-                 f !== `${componentName}Context.ts` &&
-                 f.startsWith(componentName))
-    .map(f => f.replace(/\.tsx?$/, ''))
-    .filter(name => isActualComponent(name));
+      .filter(f => (f.endsWith('.tsx') || f.endsWith('.ts'))
+                && f !== `${componentName}.tsx`
+                && f !== `${componentName}.ts`
+                && f !== `${componentName}Context.tsx`
+                && f !== `${componentName}Context.ts`
+                && f.startsWith(componentName))
+      .map(f => f.replace(/\.tsx?$/, ''))
+      .filter(name => isActualComponent(name));
 
   return subComponents;
 }
 
 function findAllSubComponentFiles(componentDir: string, componentName: string): SubComponentFile[] {
-  if (!fs.existsSync(componentDir)) return [];
+  if (!fs.existsSync(componentDir)) {
+    return [];
+  }
 
   const files = fs.readdirSync(componentDir);
 
   // Find all component files (excluding main, context, examples, deprecated, index)
   const subComponentFiles = files
-    .filter(f => {
-      if (!f.endsWith('.tsx') && !f.endsWith('.ts')) return false;
-      if (f === `${componentName}.tsx` || f === `${componentName}.ts`) return false;
-      if (f.endsWith('Context.tsx') || f.endsWith('Context.ts')) return false;
-      if (f === 'index.ts' || f === 'index.tsx') return false;
+      .filter(f => {
+        if (!f.endsWith('.tsx') && !f.endsWith('.ts')) {
+          return false;
+        }
+        if (f === `${componentName}.tsx` || f === `${componentName}.ts`) {
+          return false;
+        }
+        if (f.endsWith('Context.tsx') || f.endsWith('Context.ts')) {
+          return false;
+        }
+        if (f === 'index.ts' || f === 'index.tsx') {
+          return false;
+        }
 
-      const name = f.replace(/\.tsx?$/, '');
-      return isActualComponent(name);
-    })
-    .map(f => ({
-      name: f.replace(/\.tsx?$/, ''),
-      path: path.join(componentDir, f)
-    }));
+        const name = f.replace(/\.tsx?$/, '');
+        return isActualComponent(name);
+      })
+      .map(f => ({
+        name: f.replace(/\.tsx?$/, ''),
+        path: path.join(componentDir, f),
+      }));
 
   return subComponentFiles;
 }
@@ -202,7 +221,9 @@ function categorizeImports(imports, componentName, subComponents) {
   const subComponentSet = new Set(subComponents);
 
   for (const imp of imports) {
-    if (imp === componentName) continue; // Skip self-import
+    if (imp === componentName) {
+      continue;
+    } // Skip self-import
 
     if (isIcon(imp)) {
       categories.Icons.push(imp);
@@ -244,7 +265,10 @@ function analyzeComponent(componentName: string): ComponentAnalysis | null {
   const componentDir = path.join(REACT_COMPONENTS_DIR, componentName);
 
   // Extract imports from main implementation file
-  const implImports = extractImportsFromFile(files.implementation, { separateBySource: true }) as ImportsBySource;
+  const implImports = extractImportsFromFile(
+    files.implementation,
+    { separateBySource: true }
+  ) as ImportsBySource;
 
   // Find all sub-component files in the directory (file system based)
   const allSubComponentFiles = findAllSubComponentFiles(componentDir, componentName);
@@ -258,7 +282,7 @@ function analyzeComponent(componentName: string): ComponentAnalysis | null {
   // Combine main + sub-component imports for implementation and icons
   const allImplementationImports: ImportsBySource[] = [
     implImports,
-    ...subComponentImports
+    ...subComponentImports,
   ];
 
   // Implementation dependencies are PatternFly components (not icons) from main + sub-components
@@ -266,14 +290,14 @@ function analyzeComponent(componentName: string): ComponentAnalysis | null {
   const implementation = [...new Set(
     allImplementationImports.flatMap(imp => [
       ...imp.patternfly.filter(i => !isIcon(i) && i !== componentName),
-      ...imp.relative.filter(i => !isIcon(i) && i !== componentName)
+      ...imp.relative.filter(i => !isIcon(i) && i !== componentName),
     ])
   )];
 
   // Icons from main + sub-components (both from @patternfly/react-icons and relative)
   const allIcons = allImplementationImports.flatMap(imp => [
     ...imp.icons,
-    ...imp.relative.filter(r => isIcon(r))
+    ...imp.relative.filter(r => isIcon(r)),
   ]);
   const icons = [...new Set(allIcons)];
 
@@ -285,7 +309,7 @@ function analyzeComponent(componentName: string): ComponentAnalysis | null {
   // Combine all demo imports (both @patternfly/react-core and relative imports)
   const demoComponents = [...new Set(allDemoImports.flatMap(d => [
     ...d.patternfly,
-    ...d.relative.filter(r => !isIcon(r))
+    ...d.relative.filter(r => !isIcon(r)),
   ]))];
   const demoIcons = [...new Set(allDemoImports.flatMap(d => d.icons))];
 
@@ -294,10 +318,10 @@ function analyzeComponent(componentName: string): ComponentAnalysis | null {
   const implementationSet = new Set(implementation);
 
   const demo = demoComponents.filter(imp =>
-    imp !== componentName &&
-    !isIcon(imp) &&
-    !subComponentSet.has(imp) &&
-    !implementationSet.has(imp)
+    imp !== componentName
+    && !isIcon(imp)
+    && !subComponentSet.has(imp)
+    && !implementationSet.has(imp)
   );
 
   return {
@@ -309,7 +333,7 @@ function analyzeComponent(componentName: string): ComponentAnalysis | null {
       Demo: demo.length > 0 ? demo : null,
       DemoIcons: demoIcons.length > 0 ? demoIcons : null,
     },
-    converted: isComponentConverted(componentName)
+    converted: isComponentConverted(componentName),
   };
 }
 
@@ -320,18 +344,18 @@ function getAllComponents(): string[] {
   }
 
   return fs.readdirSync(REACT_COMPONENTS_DIR)
-    .filter(name => {
-      const fullPath = path.join(REACT_COMPONENTS_DIR, name);
-      if (!fs.statSync(fullPath).isDirectory()) {
-        return false;
-      }
+      .filter(name => {
+        const fullPath = path.join(REACT_COMPONENTS_DIR, name);
+        if (!fs.statSync(fullPath).isDirectory()) {
+          return false;
+        }
 
-      // Only include directories that have a main component file
-      const mainFile = path.join(fullPath, `${name}.tsx`);
-      const altFile = path.join(fullPath, `${name}.ts`);
-      return fs.existsSync(mainFile) || fs.existsSync(altFile);
-    })
-    .sort();
+        // Only include directories that have a main component file
+        const mainFile = path.join(fullPath, `${name}.tsx`);
+        const altFile = path.join(fullPath, `${name}.ts`);
+        return fs.existsSync(mainFile) || fs.existsSync(altFile);
+      })
+      .sort();
 }
 
 function formatYAML(data: ComponentAnalysis[]): string {

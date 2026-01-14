@@ -36,14 +36,17 @@ export async function loadReactManifest(): Promise<ReactDemoManifest | null> {
   if (reactManifestCache) {
     return reactManifestCache;
   }
-  
+
   try {
     const manifestPath = join(process.cwd(), 'patternfly-react/demos.json');
     const content = await readFile(manifestPath, 'utf-8');
     reactManifestCache = JSON.parse(content);
     return reactManifestCache;
   } catch (error) {
-    console.warn('[demo] Could not load React demos manifest:', error instanceof Error ? error.message : error);
+    console.warn(
+      '[demo] Could not load React demos manifest:',
+      error instanceof Error ? error.message : error
+    );
     return null;
   }
 }
@@ -51,27 +54,30 @@ export async function loadReactManifest(): Promise<ReactDemoManifest | null> {
 /**
  * Get PascalCase component name from pfv6-{component} format
  * e.g., 'pfv6-card' → 'Card'
+ * @param kebabComponent - The kebab-case component name (e.g., 'pfv6-card')
  */
 export function getPascalCaseComponentName(kebabComponent: string): string {
   const withoutPrefix = kebabComponent.replace(/^pfv6-/, '');
   return withoutPrefix
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join('');
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join('');
 }
 
 /**
  * Formats a kebab-case demo name into a Title Case string
+ * @param name - The kebab-case demo name
  */
 export function formatDemoTitle(name: string): string {
   return name
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
 }
 
 /**
  * Get demos for a component from CEM (Lit demos)
+ * @param componentName - The component tag name (e.g., 'pfv6-card')
  */
 export async function getComponentDemos(componentName: string): Promise<DemoInfo[]> {
   try {
@@ -86,27 +92,31 @@ export async function getComponentDemos(componentName: string): Promise<DemoInfo
     }
 
     return declaration.demos
-      .map((demo) => {
+        .map(demo => {
         // Extract demo name from URL: /elements/pfv6-card/demo/basic -> basic
-        const urlParts = demo.url.split('/');
-        const demoName = urlParts[urlParts.length - 1];
-        
-        return {
-          url: demo.url,
-          name: demoName || '',
-          title: formatDemoTitle(demoName || ''),
-        };
-      })
-      .filter((demo) => demo.name && demo.name !== 'index')
-      .sort((a, b) => a.title.localeCompare(b.title));
+          const urlParts = demo.url.split('/');
+          const demoName = urlParts[urlParts.length - 1];
+
+          return {
+            url: demo.url,
+            name: demoName || '',
+            title: formatDemoTitle(demoName || ''),
+          };
+        })
+        .filter(demo => demo.name && demo.name !== 'index')
+        .sort((a, b) => a.title.localeCompare(b.title));
   } catch (error) {
-    console.warn('[demo] Could not read CEM for demos:', error instanceof Error ? error.message : error);
+    console.warn(
+      '[demo] Could not read CEM for demos:',
+      error instanceof Error ? error.message : error
+    );
     return [];
   }
 }
 
 /**
  * Discover React demo files from manifest
+ * @param componentName - The component tag name (e.g., 'pfv6-card')
  */
 export async function getReactDemos(componentName: string): Promise<DemoInfo[]> {
   try {
@@ -114,44 +124,52 @@ export async function getReactDemos(componentName: string): Promise<DemoInfo[]> 
     if (!manifest) {
       return [];
     }
-    
+
     const pascalComponentName = getPascalCaseComponentName(componentName);
     const componentData = manifest.components[pascalComponentName];
-    
+
     if (!componentData) {
       return [];
     }
-    
+
     return Object.keys(componentData.demos)
-      .map(kebabName => ({
-        name: kebabName,
-        title: formatDemoTitle(kebabName),
-        url: `/elements/${componentName}/react/${kebabName}`,
-      }))
-      .sort((a, b) => a.title.localeCompare(b.title));
+        .map(kebabName => ({
+          name: kebabName,
+          title: formatDemoTitle(kebabName),
+          url: `/elements/${componentName}/react/${kebabName}`,
+        }))
+        .sort((a, b) => a.title.localeCompare(b.title));
   } catch (error) {
-    console.warn('[demo] Could not read React demos from manifest:', error instanceof Error ? error.message : error);
+    console.warn(
+      '[demo] Could not read React demos from manifest:',
+      error instanceof Error ? error.message : error
+    );
     return [];
   }
 }
 
 /**
  * Check if a React demo exists in manifest
+ * @param componentName - The component tag name (e.g., 'pfv6-card')
+ * @param demoName - The demo name (e.g., 'basic')
  */
-export async function reactDemoExists(componentName: string, demoName: string): Promise<boolean> {
+export async function reactDemoExists(
+  componentName: string,
+  demoName: string
+): Promise<boolean> {
   try {
     const manifest = await loadReactManifest();
     if (!manifest) {
       return false;
     }
-    
+
     const pascalComponentName = getPascalCaseComponentName(componentName);
     const componentData = manifest.components[pascalComponentName];
-    
+
     if (!componentData) {
       return false;
     }
-    
+
     return demoName in componentData.demos;
   } catch {
     return false;
@@ -160,6 +178,7 @@ export async function reactDemoExists(componentName: string, demoName: string): 
 
 /**
  * Check if any React demos exist for a component
+ * @param componentName - The component tag name (e.g., 'pfv6-card')
  */
 export async function hasReactDemos(componentName: string): Promise<boolean> {
   const demos = await getReactDemos(componentName);
@@ -168,8 +187,13 @@ export async function hasReactDemos(componentName: string): Promise<boolean> {
 
 /**
  * Check if a Lit demo file exists
+ * @param componentName - The component tag name (e.g., 'pfv6-card')
+ * @param demoName - The demo name (e.g., 'basic')
  */
-export async function litDemoExists(componentName: string, demoName: string): Promise<boolean> {
+export async function litDemoExists(
+  componentName: string,
+  demoName: string
+): Promise<boolean> {
   try {
     const demoPath = join(process.cwd(), 'elements', componentName, 'demo', `${demoName}.html`);
     await readFile(demoPath, 'utf-8');

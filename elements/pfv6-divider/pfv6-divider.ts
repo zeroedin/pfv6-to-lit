@@ -28,8 +28,6 @@ import styles from './pfv6-divider.css';
  * <pfv6-divider role="presentation"></pfv6-divider>
  * ```
  *
- * @element pfv6-divider
- *
  * @cssprop --pf-v6-c-divider--Color - Color of the divider line
  * @cssprop --pf-v6-c-divider--Size - Width/height of the divider line (thickness)
  * @cssprop --pf-v6-c-divider--Display - Display property (default: flex)

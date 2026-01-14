@@ -181,7 +181,10 @@ export class Pfv6Radio extends LitElement {
 
     // Validation warning for accessibility
     if (!this.label && !this.accessibleLabel) {
-      console.warn('pfv6-radio: Either label or accessible-label must be provided for accessibility');
+      console.warn(
+        'pfv6-radio: Either label or accessible-label must be provided '
+        + 'for accessibility'
+      );
     }
   }
 
@@ -198,15 +201,19 @@ export class Pfv6Radio extends LitElement {
     this.#internals.ariaDisabled = disabled ? 'true' : 'false';
   }
 
-  formStateRestoreCallback(state: string | File | FormData | null, _mode: 'restore' | 'autocomplete') {
+  formStateRestoreCallback(
+    state: string | File | FormData | null,
+    _mode: 'restore' | 'autocomplete'
+  ) {
     if (typeof state === 'string') {
       this.checked = state === this.value;
     }
   }
 
   /**
-  * Updates form value when checked state changes
-  */
+   * Updates form value when checked state changes
+   * @param changedProperties - Properties that changed
+   */
   updated(changedProperties: PropertyValues<this>) {
     super.updated(changedProperties);
 
@@ -226,16 +233,18 @@ export class Pfv6Radio extends LitElement {
   }
 
   /**
-  * Handle radio input changes
-  */
+   * Handle radio input changes
+   * @param event - The change event from the input
+   */
   #handleChange(event: Event) {
     const input = event.target as HTMLInputElement;
     this.checked = input.checked;
   }
 
   /**
-  * Handle clicks on the wrapper when it's a label
-  */
+   * Handle clicks on the wrapper when it's a label
+   * @param event - The click event
+   */
   #handleWrapperClick(event: Event) {
     if (this.isLabelWrapped && !this.disabled) {
       // Prevent double-toggle from label click
@@ -326,6 +335,7 @@ export class Pfv6Radio extends LitElement {
         class=${classMap(wrapperClasses)}
         for="input"
         @click=${this.#handleWrapperClick}
+        @keydown=${() => { /* Keyboard handled natively via for="input" */ }}
       >
         ${content}
       </label>
