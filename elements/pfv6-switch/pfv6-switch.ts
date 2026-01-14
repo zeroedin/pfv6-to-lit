@@ -52,7 +52,7 @@ export class Pfv6Switch extends LitElement {
   name = '';
 
   /** Form control value */
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   value = 'on';
 
   /** Whether the switch is checked */

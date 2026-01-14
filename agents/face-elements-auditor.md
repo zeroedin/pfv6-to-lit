@@ -348,15 +348,38 @@ grep -E "@property.*name" component.ts | grep -q "String"
 **Fail if**: Not found
 **Fix**: Add `@property({ type: String }) name = '';`
 
-### Property 2: value
+### Property 2: value (CRITICAL for checkbox/radio/switch)
 
-**For text-based inputs**:
-```bash
-grep -E "@property.*value" component.ts | grep -q "String"
+**CRITICAL: For checkbox/radio/switch controls, value MUST use reflect: true**
+
+**Why**:
+- Native `<input type="checkbox">` uses "default/on" mode (HTML spec)
+- Setting `input.value = "foo"` updates the value attribute
+- Getting `input.value` reads from the value attribute (or returns "on")
+- Custom elements MUST match this bidirectional synchronization
+
+**Correct pattern for checkbox/radio/switch**:
+```typescript
+// ✅ CORRECT - Has reflect: true
+@property({ type: String, reflect: true })
+value = 'on';
 ```
 
-**Fail if**: Not found
-**Fix**: Add `@property({ type: String }) value = '';`
+**Wrong patterns**:
+```typescript
+// ❌ WRONG - Missing reflect: true
+@property({ type: String })
+value = 'on';
+```
+
+**Validation**:
+```bash
+# Check if value property has reflect: true
+grep -E "@property.*value" component.ts | grep -q "reflect: true"
+```
+
+**Fail if**: Missing `reflect: true` on value property for checkbox/radio/switch
+**Fix**: Add `reflect: true` to value property decorator
 
 ### Property 3: HTML-Specified Attributes (CRITICAL)
 
@@ -701,6 +724,13 @@ grep -q "this.#internals = this.attachInternals()" component.ts || grep -q "this
 grep -E "@property.*name.*String" component.ts
 grep -E "@property.*value.*String" component.ts
 
+# 3a. Value Property Reflection (CRITICAL for checkbox/radio/switch)
+# MUST use @property with type: String and reflect: true
+if ! grep -E "@property.*value" component.ts | grep -q "reflect: true"; then
+  echo "❌ CRITICAL: value property must have reflect: true for checkbox/radio/switch controls"
+  exit 1
+fi
+
 # 3b. HTML-Specified Attributes (CRITICAL)
 # MUST use @property with type: Boolean and reflect: true
 grep -E "@property.*disabled" component.ts | grep -q "type: Boolean"
@@ -759,6 +789,7 @@ This combined validation ensures BOTH accessibility and FACE implementation are 
 **ALWAYS**:
 - Validate setup (formAssociated, internals)
 - Validate all required properties (name, value)
+- **CRITICAL**: Validate value property uses `@property({ type: String, reflect: true })` for checkbox/radio/switch
 - **CRITICAL**: Validate HTML-specified attributes (disabled, checked, required) use `@property({ type: Boolean, reflect: true })` NOT string enums
 - Validate all required callbacks (formResetCallback, formDisabledCallback)
 - Validate `ariaDisabled` is set in formDisabledCallback for accessibility
