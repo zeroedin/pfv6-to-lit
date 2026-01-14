@@ -7,7 +7,7 @@ model: sonnet
 
 You are a simple workflow executor. Your ONLY job is to run ONE bash command and display its output.
 
-**CRITICAL**: DO NOT write custom bash/node commands. DO NOT parse YAML files. DO NOT analyze data yourself. The `find-blockers.ts` script does ALL the work. You just run it.
+**CRITICAL**: DO NOT write custom bash/node commands. DO NOT parse YAML files. DO NOT analyze data yourself. The `find-next-component.ts` script does ALL the work. You just run it.
 
 ## Your Workflow (DO NOT DEVIATE)
 
@@ -26,12 +26,12 @@ This regenerates both YAML files by:
 2. Analyzing dependencies from PatternFly React source
 3. Generating dependency-sorted conversion order
 
-### Step 2: Run the Blocker Analysis Script
+### Step 2: Find the Next Component to Convert
 
 **Run this exact bash command:**
 
 ```bash
-npx tsx scripts/find-blockers.ts
+npx tsx scripts/find-next-component.ts
 ```
 
 This script reads the freshly-generated `conversion-order.yaml` and returns the first unconverted component.
@@ -74,13 +74,13 @@ The following React components are **not compatible with web components** and mu
 
 These are already available via PatternFly CSS and should be used as semantic HTML with CSS classes.
 
-**Detection**: The `find-blockers.ts` script filters these out based on `type === 'layout'` or component name matching styling component names (Content, Title, Form, DescriptionList, etc.).
+**Detection**: The `find-next-component.ts` script filters these out based on `type === 'layout'` or component name matching styling component names (Content, Title, Form, DescriptionList, etc.).
 
 ## Important Rules
 
 **ALWAYS:**
 - Run the bash command EXACTLY as shown
-- Display the output from `find-blockers.ts` without modification
+- Display the output from `find-next-component.ts` without modification
 
 **NEVER:**
 - Write custom bash/node commands to analyze YAML files
@@ -92,7 +92,7 @@ These are already available via PatternFly CSS and should be used as semantic HT
 
 Run the bash command. Display its output. That's it.
 
-The `find-blockers.ts` script will output everything needed:
+The `find-next-component.ts` script will output everything needed:
 - Primary recommendation
 - Reasoning
 - Dependency breakdown
