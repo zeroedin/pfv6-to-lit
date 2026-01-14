@@ -99,6 +99,34 @@ Inform user that component has no React CSS and only minimal Shadow DOM CSS is n
 }
 ```
 
+### Form Element Normalize Reset (CRITICAL)
+
+**If component contains native form elements** (`<input>`, `<button>`, `<select>`, `<textarea>`), **MUST include normalize reset AFTER box-sizing**:
+
+```css
+:where(input) {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: var(--pf-t--global--text--color--regular, #151515);
+}
+```
+
+**Why Required**:
+- PatternFly React includes a **global normalize.scss** (`.cache/patternfly/src/patternfly/base/normalize.scss`)
+- This resets `margin: 0` and other properties on form elements globally
+- Shadow DOM isolates components from global styles
+- **Must recreate these resets inside Shadow DOM CSS**
+
+**Adapt for element type**:
+- `input` components: `:where(input) { ... }`
+- `button` components: `:where(button) { ... }`
+- `select` components: `:where(select) { ... }`
+- `textarea` components: `:where(textarea) { ... }`
+
+**Source**: `.cache/patternfly/src/patternfly/base/normalize.scss` lines 58-70
+
 **Why**: Shadow DOM defaults to `content-box`, but PatternFly expects `border-box`.
 
 ### Hex Color Format

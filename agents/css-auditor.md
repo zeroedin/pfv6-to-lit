@@ -137,6 +137,31 @@ Read('.cache/patternfly-react/packages/react-core/src/components/Card/card-body.
 - Why: Shadow DOM defaults to `content-box`, PatternFly expects `border-box`
 - Report if missing from ANY file
 
+**Form Element Normalize Reset (CRITICAL)**:
+- **If component contains native form elements** (`<input>`, `<button>`, `<select>`, `<textarea>`), CSS **MUST** include normalize reset
+- **Location**: Immediately AFTER box-sizing reset, BEFORE `:host`
+- **Pattern**:
+  ```css
+  :where(input) {
+    margin: 0;
+    font-family: inherit;
+    font-size: 100%;
+    line-height: var(--pf-t--global--font--line-height--body, 1.5);
+    color: var(--pf-t--global--text--color--regular, #151515);
+  }
+  ```
+- **Why**: PatternFly's global `normalize.scss` resets form element margins/fonts globally. Shadow DOM isolates from global styles, so must recreate reset inside Shadow DOM.
+- **Source**: `.cache/patternfly/src/patternfly/base/normalize.scss` lines 58-70
+- **Detection**:
+  1. Read component TypeScript file
+  2. Check if template includes `<input`, `<button`, `<select`, or `<textarea` (in shadow, not slotted)
+  3. If YES: Validate normalize reset exists in CSS
+  4. If NO: Normalize reset not required
+- **Validation**:
+  - ✅ Reset exists with correct properties: `margin: 0`, `font-family: inherit`, `font-size: 100%`, `line-height`, `color`
+  - ❌ **FAILURE**: Component uses form element but CSS missing normalize reset
+  - ❌ **FAILURE**: Reset present but missing required properties (e.g., `margin: 0`)
+
 **Selector Translation**:
 - BEM classes → IDs for unique elements: `.pf-v6-c-card` → `#container`
 - BEM element classes → IDs for unique elements: `.pf-v6-c-card__title` → `#title`
@@ -1376,6 +1401,7 @@ Provide a structured audit report:
 
 **MUST CHECK**:
 - [ ] Every CSS file starts with box-sizing reset
+- [ ] Form element normalize reset present if component uses `<input>`, `<button>`, `<select>`, or `<textarea>` in Shadow DOM
 - [ ] All PatternFly mixin patterns copied exactly from source (screen-reader, text-overflow, etc.)
 - [ ] Stylelint passes with no errors or warnings
 - [ ] No elaborate CSS for components that have no React CSS

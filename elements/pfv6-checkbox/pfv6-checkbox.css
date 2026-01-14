@@ -4,6 +4,14 @@
   box-sizing: border-box;
 }
 
+:where(input) {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: var(--pf-t--global--text--color--regular, #151515);
+}
+
 :host {
   /* Public CSS API - component-level variables */
   --pf-v6-c-check--GridGap:
