@@ -163,10 +163,13 @@ export class Pfv6Switch extends LitElement {
 
   render() {
     const containerClasses = {
-      reverse: this.isReversed
+      reverse: this.isReversed,
     };
 
-    const hasLabel = !!this.label;
+    const hasAccessibleLabel = !!this.accessibleLabel;
+    const hasVisualLabel = !!this.label;
+    const isStandaloneMode = hasAccessibleLabel && !hasVisualLabel;
+    const showCheckIcon = this.hasCheckIcon || isStandaloneMode;
 
     return html`
       <label
@@ -183,31 +186,8 @@ export class Pfv6Switch extends LitElement {
           ?required=${this.required}
           @change=${this.#handleChange}
         />
-        ${hasLabel ? html`
-          <span id="toggle">
-            ${this.hasCheckIcon ? html`
-              <span id="toggle-icon">
-                <svg
-                  fill="currentColor"
-                  height="1em"
-                  width="1em"
-                  viewBox="0 0 512 512"
-                  aria-hidden="true"
-                  role="img"
-                >
-                  <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path>
-                </svg>
-              </span>
-            ` : null}
-          </span>
-          <span
-            id="label"
-            aria-hidden="true"
-          >
-            ${this.label}
-          </span>
-        ` : html`
-          <span id="toggle">
+        <span id="toggle">
+          ${showCheckIcon ? html`
             <span id="toggle-icon">
               <svg
                 fill="currentColor"
@@ -220,8 +200,16 @@ export class Pfv6Switch extends LitElement {
                 <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path>
               </svg>
             </span>
-          </span>
-        `}
+          ` : null}
+        </span>
+        ${hasAccessibleLabel ? html`
+          <span id="label" class="screen-reader">${this.accessibleLabel}</span>
+        ` : hasVisualLabel ? html`
+          <span id="label">${this.label}</span>
+        ` : null}
+        ${hasAccessibleLabel && hasVisualLabel ? html`
+          <span aria-hidden="true">${this.label}</span>
+        ` : null}
       </label>
     `;
   }

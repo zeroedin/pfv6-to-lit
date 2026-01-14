@@ -232,10 +232,12 @@ describe('<pfv6-switch>', function() {
       expect(el.accessibleLabel).to.equal('Toggle feature');
     });
 
-    it('sets aria-label on input', async function() {
+    it('renders screen-reader only label', async function() {
       const el = await fixture<Pfv6Switch>(html`<pfv6-switch accessible-label="Toggle feature"></pfv6-switch>`);
-      const input = el.shadowRoot!.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(input.getAttribute('aria-label')).to.equal('Toggle feature');
+      const label = el.shadowRoot!.querySelector('#label') as HTMLSpanElement;
+      expect(label).to.exist;
+      expect(label.classList.contains('screen-reader')).to.be.true;
+      expect(label.textContent).to.equal('Toggle feature');
     });
 
     it('can be changed dynamically', async function() {
@@ -245,8 +247,9 @@ describe('<pfv6-switch>', function() {
       await el.updateComplete;
 
       expect(el.accessibleLabel).to.equal('New accessible label');
-      const input = el.shadowRoot!.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(input.getAttribute('aria-label')).to.equal('New accessible label');
+      const label = el.shadowRoot!.querySelector('#label') as HTMLSpanElement;
+      expect(label.classList.contains('screen-reader')).to.be.true;
+      expect(label.textContent).to.equal('New accessible label');
     });
 
     it('updates aria-label in ElementInternals', async function() {
@@ -636,10 +639,11 @@ describe('<pfv6-switch>', function() {
       expect(labelText!.textContent?.trim()).to.equal('Enable feature');
     });
 
-    it('label text has aria-hidden', async function() {
+    it('label text does not have aria-hidden when only label provided', async function() {
       const el = await fixture<Pfv6Switch>(html`<pfv6-switch label="Test"></pfv6-switch>`);
       const labelText = el.shadowRoot!.querySelector('#label');
-      expect(labelText!.getAttribute('aria-hidden')).to.equal('true');
+      expect(labelText).to.exist;
+      expect(labelText!.hasAttribute('aria-hidden')).to.be.false;
     });
   });
 
@@ -687,17 +691,27 @@ describe('<pfv6-switch>', function() {
       expect(labelText).to.not.exist;
     });
 
-    it('applies labelledby when label exists and no accessibleLabel', async function() {
+    it('renders visible label when only label provided', async function() {
       const el = await fixture<Pfv6Switch>(html`<pfv6-switch label="Test"></pfv6-switch>`);
-      const input = el.shadowRoot!.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(input.getAttribute('aria-labelledby')).to.equal('label');
+      const label = el.shadowRoot!.querySelector('#label') as HTMLSpanElement;
+      expect(label).to.exist;
+      expect(label.classList.contains('screen-reader')).to.be.false;
+      expect(label.textContent).to.equal('Test');
     });
 
-    it('does not apply labelledby when accessibleLabel provided', async function() {
-      const el = await fixture<Pfv6Switch>(html`<pfv6-switch label="Test" accessible-label="Override"></pfv6-switch>`);
-      const input = el.shadowRoot!.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(input.hasAttribute('aria-labelledby')).to.be.false;
-      expect(input.getAttribute('aria-label')).to.equal('Override');
+    it('renders both labels when both label and accessibleLabel provided', async function() {
+      const el = await fixture<Pfv6Switch>(html`<pfv6-switch label="Visual" accessible-label="Accessible"></pfv6-switch>`);
+
+      // Check for screen-reader label with accessibleLabel text
+      const srLabel = el.shadowRoot!.querySelector('#label') as HTMLSpanElement;
+      expect(srLabel).to.exist;
+      expect(srLabel.classList.contains('screen-reader')).to.be.true;
+      expect(srLabel.textContent).to.equal('Accessible');
+
+      // Check for aria-hidden visual label
+      const visualLabel = el.shadowRoot!.querySelector('span[aria-hidden="true"]') as HTMLSpanElement;
+      expect(visualLabel).to.exist;
+      expect(visualLabel.textContent).to.equal('Visual');
     });
   });
 
@@ -749,7 +763,9 @@ describe('<pfv6-switch>', function() {
       // This test validates the connectedCallback warning
       const consoleError = console.error;
       let errorCalled = false;
-      console.error = () => { errorCalled = true; };
+      console.error = () => {
+        errorCalled = true;
+      };
 
       await fixture<Pfv6Switch>(html`<pfv6-switch></pfv6-switch>`);
 
@@ -760,7 +776,9 @@ describe('<pfv6-switch>', function() {
     it('does not warn when label provided', async function() {
       const consoleError = console.error;
       let errorCalled = false;
-      console.error = () => { errorCalled = true; };
+      console.error = () => {
+        errorCalled = true;
+      };
 
       await fixture<Pfv6Switch>(html`<pfv6-switch label="Test"></pfv6-switch>`);
 
@@ -771,7 +789,9 @@ describe('<pfv6-switch>', function() {
     it('does not warn when accessibleLabel provided', async function() {
       const consoleError = console.error;
       let errorCalled = false;
-      console.error = () => { errorCalled = true; };
+      console.error = () => {
+        errorCalled = true;
+      };
 
       await fixture<Pfv6Switch>(html`<pfv6-switch accessible-label="Test"></pfv6-switch>`);
 
