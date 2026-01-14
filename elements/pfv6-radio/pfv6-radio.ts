@@ -76,7 +76,7 @@ export class Pfv6Radio extends LitElement {
   * The value of the radio input.
   * This is the value that will be submitted with the form when this radio is checked.
   */
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   value = 'on';
 
   /**
