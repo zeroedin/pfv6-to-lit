@@ -10,7 +10,8 @@
   },
   "scripts": {
     "deps:extract": "wireit",
-    "deps:order": "wireit",
+    "deps:tasks": "wireit",
+    "issues:sync": "npx tsx scripts/sync-github-issues.ts",
     "compile": "wireit",
     "compile:react-demos": "wireit",
     "copy:assets": "wireit",
@@ -25,34 +26,34 @@
   },
   "wireit": {
     "deps:extract": {
-      "command": "npx tsx scripts/extract-component-dependencies.ts > component-dependencies.yaml",
-      "description": "Extract component dependencies from PatternFly React and generate component-dependencies.yaml",
+      "command": "npx tsx scripts/extract-dependencies.ts > dependencies.json",
+      "description": "Extract component and demo dependencies from PatternFly React",
       "dependencies": [
         "cache"
       ],
       "files": [
-        "scripts/extract-component-dependencies.ts",
+        "scripts/extract-dependencies.ts",
         "scripts/lib/patternfly-utils.ts",
         ".cache/patternfly-react/**",
         "elements/pfv6-*/**"
       ],
       "output": [
-        "component-dependencies.yaml"
+        "dependencies.json"
       ]
     },
-    "deps:order": {
-      "command": "npx tsx scripts/generate-conversion-order.ts > conversion-order.yaml",
-      "description": "Generate conversion order based on component dependencies",
+    "deps:tasks": {
+      "command": "npx tsx scripts/generate-tasks.ts > tasks.json",
+      "description": "Generate ordered task list for component conversion",
       "dependencies": [
         "deps:extract"
       ],
       "files": [
-        "scripts/generate-conversion-order.ts",
+        "scripts/generate-tasks.ts",
         "scripts/lib/patternfly-utils.ts",
-        "component-dependencies.yaml"
+        "dependencies.json"
       ],
       "output": [
-        "conversion-order.yaml"
+        "tasks.json"
       ]
     },
     "clean:cache": {
@@ -278,6 +279,7 @@
     "wireit": "^0.14.12"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.7.4",
     "@lit/context": "^1.1.6",
     "lit": "^3.3.1"
   }
