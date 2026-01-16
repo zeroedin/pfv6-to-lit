@@ -1,0 +1,22 @@
+<pfv6-button
+  variant="plain"
+  id="favorite-button"
+  accessible-label="Favorite example not favorited"
+  is-favorite
+></pfv6-button>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+  const button = document.getElementById('favorite-button');
+  button.addEventListener('click', () => {
+    const isFavorited = button.hasAttribute('is-favorited');
+    if (isFavorited) {
+      button.removeAttribute('is-favorited');
+      button.setAttribute('accessible-label', 'Favorite example not favorited');
+    } else {
+      button.setAttribute('is-favorited', '');
+      button.setAttribute('accessible-label', 'Favorite example favorited');
+    }
+  });
+</script>
