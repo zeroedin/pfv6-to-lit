@@ -29,8 +29,11 @@
   --pf-v6-c-spinner--Height: var(--pf-v6-c-spinner--diameter);
   --pf-v6-c-spinner--Color:
     var(
-      --pf-t--global--icon--color--brand--default,
-      #0066cc
+      --pf-v6-c-button__progress--Color,
+      var(
+        --pf-t--global--icon--color--brand--default,
+        #0066cc
+      )
     );
   --pf-v6-c-spinner--AnimationDuration: 1.4s;
   --pf-v6-c-spinner--AnimationTimingFunction: linear;
