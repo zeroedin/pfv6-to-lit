@@ -8,7 +8,7 @@
  *
  * Exits early if repositories already exist.
  *
- * Usage: npm run patternfly-cache
+ * Usage: npm run cache
  *
  * Note: This is a development-only script. Not needed for CI/CD or production builds.
  * Only run this when you need to convert PatternFly components.

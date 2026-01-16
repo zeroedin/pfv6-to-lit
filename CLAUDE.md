@@ -80,7 +80,7 @@ Use TodoWrite to track progress through the workflow.
   ls -d .cache/patternfly-react/ .cache/patternfly/ > /dev/null 2>&1 && echo "✓ Caches exist"
   ```
 - **DO NOT list all files in .cache/** - just verify directories exist
-- If missing, inform user to run `npm run patternfly-cache`
+- If missing, inform user to run `npm run cache`
 
 ## Phase 2: Component Implementation
 
@@ -553,7 +553,7 @@ Place the Lit component next to React - they should be visually and functionally
 
 ```bash
 # Verify setup
-npm run patternfly-cache
+npm run cache
 ls -la .cache/patternfly-react/
 ls -la .cache/patternfly/
 

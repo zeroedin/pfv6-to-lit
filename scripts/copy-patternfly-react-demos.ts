@@ -198,7 +198,7 @@ async function main() {
   try {
     // Verify cache exists
     if (!existsSync(cacheDir)) {
-      console.error('❌ Cache directory not found. Run: npm run patternfly-cache');
+      console.error('❌ Cache directory not found. Run: npm run cache');
       process.exit(1);
     }
 

@@ -635,7 +635,7 @@ const DEPENDENCIES_FILE = 'dependencies.json';
 
 if (!fs.existsSync(DEPENDENCIES_FILE)) {
   console.error(`Error: ${DEPENDENCIES_FILE} not found`);
-  console.error('Run: npm run deps:extract:json');
+  console.error('Run: npm run deps:extract');
   process.exit(1);
 }
 

@@ -222,7 +222,7 @@ function createGitHubIssue(title: string, body: string, label: string): string {
 
 if (!fs.existsSync(TASKS_FILE)) {
   console.error(`Error: ${TASKS_FILE} not found`);
-  console.error('Run: npm run deps:tasks:json');
+  console.error('Run: npm run deps:tasks');
   process.exit(1);
 }
 

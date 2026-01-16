@@ -120,7 +120,7 @@ function isIcon(name: string): boolean {
  */
 function getAllComponents(): string[] {
   if (!fs.existsSync(REACT_COMPONENTS_DIR)) {
-    console.error('React components directory not found. Run: npm run patternfly-cache');
+    console.error('React components directory not found. Run: npm run cache');
     process.exit(1);
   }
 
