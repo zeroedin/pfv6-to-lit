@@ -728,13 +728,12 @@
     --pf-v6-c-button--PaddingInlineStart: var(--pf-v6-c-button--m-small--PaddingInlineStart);
   }
 
-  /* Display lg size */
+  /* Display lg size - padding only, font size set per-variant (e.g., .link.display-lg) */
   &.display-lg {
     --pf-v6-c-button--PaddingBlockStart: var(--pf-v6-c-button--m-display-lg--PaddingBlockStart);
     --pf-v6-c-button--PaddingInlineEnd: var(--pf-v6-c-button--m-display-lg--PaddingInlineEnd);
     --pf-v6-c-button--PaddingBlockEnd: var(--pf-v6-c-button--m-display-lg--PaddingBlockEnd);
     --pf-v6-c-button--PaddingInlineStart: var(--pf-v6-c-button--m-display-lg--PaddingInlineStart);
-    --pf-v6-c-button--FontSize: var(--pf-v6-c-button--m-display-lg--FontSize);
   }
 
   /* Favorite button */
