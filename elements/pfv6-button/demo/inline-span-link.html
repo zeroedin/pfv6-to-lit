@@ -1,0 +1,32 @@
+<p>
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  <pfv6-button variant="link" is-inline="true">
+    This is long button text that needs to be a span so that it will wrap inline with the text around it.
+  </pfv6-button>
+  Sed hendrerit nisi in cursus maximus. Ut malesuada nisi turpis, in condimentum velit elementum non.
+</p>
+
+<br>
+
+<p>
+  Note that using a <b>span</b> as a button does not fire the <b>onclick</b> event for Enter or Space keys.
+  <pfv6-button variant="link" is-inline="true" id="keydown-button">
+    An <b>onKeyDown</b> event listener is needed for Enter and Space key presses to prevent their default behavior and trigger your code.
+  </pfv6-button>
+  Pressing the Enter or Space keys on the inline link as span above demonstrates this by triggering an alert.
+</p>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+  const button = document.getElementById('keydown-button');
+  button.addEventListener('keydown', (event) => {
+    const isEnterKey = event.key === 'Enter';
+    const isEnterOrSpaceKey = isEnterKey || event.key === ' ';
+
+    if (isEnterOrSpaceKey) {
+      event.preventDefault();
+      alert(`${isEnterKey ? 'Enter' : 'Space'} key default behavior stopped by onKeyDown`);
+    }
+  });
+</script>
