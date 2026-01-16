@@ -56,8 +56,8 @@ dev-server/assets/patternfly/
 /patternfly-react
 
 # Generated dependency tracking files (regenerated from filesystem)
-component-dependencies.yaml
-conversion-order.yaml
+dependencies.json
+tasks.json
 
 .claude/settings.local.json
 custom-elements.json

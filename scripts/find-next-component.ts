@@ -2,68 +2,56 @@
 /**
  * Find the next component to convert.
  *
- * The conversion-order.yaml file is already sorted in dependency order.
- * This script simply returns the first component with Converted: false.
+ * Reads tasks.json and returns the first task with type: 'ready'.
  */
 
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
-interface Component {
-  name: string;
-  completed: boolean;
+interface Task {
+  task: number;
+  type: 'ready' | 'blocked' | 'component' | 'demo' | 'partial' | 'completed';
+  component: string;
+  demos: string[];
 }
 
-function parseYAML(yamlContent: string): Component[] {
-  const lines = yamlContent.split('\n');
-  const components: Component[] = [];
-  let currentComponent: Component | null = null;
-
-  for (const line of lines) {
-    // Component name
-    const componentMatch = line.match(/^ {2}- (\w+):$/);
-    if (componentMatch) {
-      currentComponent = {
-        name: componentMatch[1],
-        completed: false,
-      };
-      components.push(currentComponent);
-      continue;
-    }
-
-    // Completed field
-    const completedMatch = line.match(/^ {6}completed:\s*(true|false)$/);
-    if (completedMatch && currentComponent) {
-      currentComponent.completed = completedMatch[1] === 'true';
-    }
-  }
-
-  return components;
+interface TasksJSON {
+  statistics: {
+    total: number;
+    completed: number;
+    ready: number;
+    blocked: number;
+    partial: number;
+    component: number;
+    demo: number;
+  };
+  tasks: Task[];
 }
 
-// Load conversion order
-const yamlPath = resolve(process.cwd(), 'conversion-order.yaml');
-const yamlContent = readFileSync(yamlPath, 'utf-8');
-const components = parseYAML(yamlContent);
+// Load tasks
+const tasksPath = resolve(process.cwd(), 'tasks.json');
+const data: TasksJSON = JSON.parse(readFileSync(tasksPath, 'utf-8'));
 
-// Find first unconverted component
-const next = components.find(c => !c.completed);
+// Find first ready task
+const next = data.tasks.find(t => t.type === 'ready');
 
 if (!next) {
   console.log('🎉 All components converted!');
+  console.log(`\nStatistics: ${data.statistics.completed}/${data.statistics.total} completed`);
   process.exit(0);
 }
 
+console.log(`## Next Component to Convert: ${next.component}
 
-console.log(`## Next Component to Convert: ${next.name}
+This is the next component in dependency order that is ready to convert.
 
-This is the next component in dependency order that hasn't been converted yet.
+**Statistics:** ${data.statistics.completed}/${data.statistics.total} completed, ${data.statistics.ready} ready
 
 ---
 
 ## Next Steps
 
 \`\`\`
-Convert ${next.name} component
+Convert ${next.component} component
 \`\`\`
 `);
