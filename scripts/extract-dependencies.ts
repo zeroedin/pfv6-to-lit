@@ -3,8 +3,8 @@
 /**
  * Extract component dependencies from PatternFly React.
  *
- * JSON version of extract-dependencies.ts for better performance
- * and simpler parsing in downstream scripts.
+ * Analyzes React component source files to identify implementation
+ * dependencies and demo dependencies for each component.
  *
  * Output: dependencies.json
  */
