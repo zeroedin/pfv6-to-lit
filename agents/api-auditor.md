@@ -1053,6 +1053,113 @@ render() {
 }
 ```
 
+## Step 4b: Focus Delegation Validation (CRITICAL)
+
+### Check for tabIndex Property Declaration (Anti-Pattern)
+
+**CRITICAL**: Components that need to control focus on inner elements MUST use `delegatesFocus`, NOT a `tabIndex` property.
+
+**Why this is wrong**:
+- `tabIndex` is a **native property on HTMLElement** with its own getter/setter
+- Native `tabIndex` returns `0` or `-1`, never `undefined`
+- Using `@property` with `tabIndex` conflicts with the native accessor
+- Using `declare tabIndex` doesn't work because the native property already exists
+
+**❌ WRONG - Declaring tabIndex as a property**:
+```typescript
+// ❌ WRONG - Conflicts with native HTMLElement.tabIndex
+@property({ type: Number, attribute: 'tabindex' })
+tabIndex?: number;
+
+// ❌ WRONG - declare doesn't help, native accessor still takes precedence
+@property({ type: Number, attribute: 'tabindex' })
+declare tabIndex: number | undefined;
+
+// ❌ WRONG - Different attribute name diverges from React API
+@property({ type: Number, attribute: 'button-tabindex' })
+buttonTabIndex?: number;
+```
+
+**✅ CORRECT - Use delegatesFocus for focus delegation**:
+```typescript
+@customElement('pfv6-button')
+export class Pfv6Button extends LitElement {
+  static styles = styles;
+
+  /** Delegate focus to the inner button/span element */
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
+  // No tabIndex property needed!
+  // Users set native tabindex on host: <pfv6-button tabindex="2">
+  // Focus automatically delegates to inner focusable element
+}
+```
+
+**How delegatesFocus works**:
+1. Host's native `tabindex` attribute controls tab order entry
+2. When host receives focus, it delegates to first focusable element in shadow DOM
+3. API matches React exactly: `<pfv6-button tabindex="2">` = `<Button tabIndex={2}>`
+
+**When to use delegatesFocus**:
+- Components with internal focusable elements (buttons, inputs, links)
+- Components where React has a `tabIndex` prop
+- Components that render buttons, inputs, or other interactive elements
+
+**Detection Pattern**:
+1. Search for `@property.*tabIndex` or `declare tabIndex` in component
+2. If found, flag as CRITICAL violation
+3. Check if `shadowRootOptions` with `delegatesFocus: true` exists
+4. If component has focusable inner elements but no `delegatesFocus`, flag as warning
+
+**Special Case - Inline Spans**:
+Spans with `role="button"` aren't naturally focusable. They still need computed tabindex:
+
+```typescript
+private getComputedTabIndex(): number | undefined {
+  const isInlineLink = this.isInline && this.variant === 'link';
+
+  if (this.isDisabled) {
+    // Disabled inline spans need tabindex="-1"
+    return isInlineLink ? -1 : undefined;
+  }
+  if (isInlineLink) {
+    // Inline span needs tabindex="0" to be focusable for delegatesFocus
+    return 0;
+  }
+  // Regular buttons are naturally focusable
+  return undefined;
+}
+
+render() {
+  return this.isInlineLink ? html`
+    <span role="button" tabindex=${ifDefined(this.getComputedTabIndex())}>
+      <slot></slot>
+    </span>
+  ` : html`
+    <button>
+      <slot></slot>
+    </button>
+  `;
+}
+```
+
+**Report format**:
+```
+❌ CRITICAL: tabIndex declared as @property at line 45
+  - Conflicts with native HTMLElement.tabIndex
+  - Native tabIndex returns 0/-1, never undefined
+  - Fix: Remove @property declaration
+  - Fix: Add static shadowRootOptions = { ...LitElement.shadowRootOptions, delegatesFocus: true }
+  - Fix: Users set native tabindex on host element
+```
+
+**References**:
+- [Lit Shadow DOM - shadowRootOptions](https://lit.dev/docs/components/shadow-dom/)
+- [MDN - ShadowRoot.delegatesFocus](https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot/delegatesFocus)
+
 ## Step 5: Anti-Pattern Detection (CRITICAL)
 
 ### Check for :host Style Manipulation (Anti-Pattern)
@@ -1808,6 +1915,7 @@ After fixing all issues, re-run audit to verify:
 - **Detect unused code** - Flag unused variables, functions, methods, properties, and event classes
 - Validate property decorators match React types
 - **Check HTMLElement property compatibility** (especially `id: string`, not `id?: string`)
+- **Check for tabIndex property declarations** - Use `delegatesFocus` instead (see Step 4b)
 - Check template uses Lit directives correctly
 - Verify ElementInternals only for :host
 - Detect anti-patterns (:host manipulation, lift and shift)
@@ -1827,6 +1935,7 @@ After fixing all issues, re-run audit to verify:
 - Allow CustomEvent for component events
 - Allow ElementInternals for internal elements
 - Allow `private _name` for non-decorated fields/methods (use `#name`)
+- **Allow @property declarations for tabIndex** - Use `delegatesFocus` instead
 - Skip validation steps
 
 **Quality Bar**: Every issue must be documented with specific location, explanation of why it's wrong, and exact code to fix it.

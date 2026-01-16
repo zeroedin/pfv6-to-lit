@@ -717,32 +717,65 @@ describe('<pfv6-button>', function() {
     });
   });
 
-  describe('tabIndex property', function() {
-    it('defaults to undefined', async function() {
-      const el = await fixture<Pfv6Button>(html`<pfv6-button></pfv6-button>`);
-      expect(el.tabIndex).to.be.undefined;
-    });
-
-    it('accepts number value', async function() {
-      const el = await fixture<Pfv6Button>(html`<pfv6-button tabindex="0"></pfv6-button>`);
-      expect(el.tabIndex).to.equal(0);
-    });
-
-    it('accepts negative value', async function() {
-      const el = await fixture<Pfv6Button>(html`<pfv6-button tabindex="-1"></pfv6-button>`);
-      expect(el.tabIndex).to.equal(-1);
-    });
-
-    it('sets tabindex on button element', async function() {
-      const el = await fixture<Pfv6Button>(html`<pfv6-button tabindex="2">Click</pfv6-button>`);
-      const button = el.shadowRoot!.querySelector('button');
-      expect(button!.getAttribute('tabindex')).to.equal('2');
-    });
-
-    it('does not set tabindex when undefined', async function() {
+  describe('tabindex behavior (computed)', function() {
+    it('regular button does not have tabindex attribute', async function() {
       const el = await fixture<Pfv6Button>(html`<pfv6-button>Click</pfv6-button>`);
       const button = el.shadowRoot!.querySelector('button');
       expect(button!.hasAttribute('tabindex')).to.be.false;
+    });
+
+    it('inline link button (span) gets tabindex="0" for focusability', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button variant="link" is-inline>Link</pfv6-button>`);
+      const span = el.shadowRoot!.querySelector('span#container');
+      expect(span!.getAttribute('tabindex')).to.equal('0');
+    });
+
+    it('disabled inline link button (span) gets tabindex="-1"', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button variant="link" is-inline is-disabled>Link</pfv6-button>`);
+      const span = el.shadowRoot!.querySelector('span#container');
+      expect(span!.getAttribute('tabindex')).to.equal('-1');
+    });
+
+    it('disabled button does not have tabindex (uses disabled attribute)', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button is-disabled>Click</pfv6-button>`);
+      const button = el.shadowRoot!.querySelector('button');
+      expect(button!.hasAttribute('tabindex')).to.be.false;
+      expect(button!.hasAttribute('disabled')).to.be.true;
+    });
+
+    it('aria-disabled button does not have tabindex override', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button is-aria-disabled>Click</pfv6-button>`);
+      const button = el.shadowRoot!.querySelector('button');
+      expect(button!.hasAttribute('tabindex')).to.be.false;
+    });
+  });
+
+  describe('delegatesFocus behavior', function() {
+    it('shadow root has delegatesFocus enabled', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button>Click</pfv6-button>`);
+      expect(el.shadowRoot!.delegatesFocus).to.be.true;
+    });
+
+    it('host tabindex controls tab order (delegated to inner button)', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button tabindex="0">Click</pfv6-button>`);
+      // Native tabindex on host
+      expect(el.tabIndex).to.equal(0);
+      // Focus delegates to inner button
+      el.focus();
+      const button = el.shadowRoot!.querySelector('button');
+      expect(el.shadowRoot!.activeElement).to.equal(button);
+    });
+
+    it('tabindex="-1" removes from tab order', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button tabindex="-1">Click</pfv6-button>`);
+      expect(el.tabIndex).to.equal(-1);
+    });
+
+    it('focus() delegates to inner button', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button>Click</pfv6-button>`);
+      el.focus();
+      const button = el.shadowRoot!.querySelector('button');
+      expect(el.shadowRoot!.activeElement).to.equal(button);
     });
   });
 

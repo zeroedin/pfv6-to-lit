@@ -46,6 +46,12 @@ import '../pfv6-spinner/pfv6-spinner.js';
 export class Pfv6Button extends LitElement {
   static styles = styles;
 
+  /** Delegate focus to the inner button/span element */
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   /** Button variant */
   @property({ type: String, reflect: true })
   variant:
@@ -142,6 +148,27 @@ export class Pfv6Button extends LitElement {
   /** Spinner accessible label */
   @property({ type: String, attribute: 'spinner-accessible-label' })
   spinnerAccessibleLabel?: string;
+
+  /**
+   * Computes the appropriate tabindex for the inner button/span.
+   * With delegatesFocus, the host's native tabindex controls tab order.
+   * This only provides tabindex for inline spans (which aren't naturally focusable).
+   * Matches React Button's getDefaultTabIdx() logic.
+   */
+  private getComputedTabIndex(): number | undefined {
+    const isInlineLink = this.isInline && this.variant === 'link';
+
+    if (this.isDisabled) {
+      // Disabled inline spans need tabindex="-1" to be removed from tab order
+      return isInlineLink ? -1 : undefined;
+    }
+    if (isInlineLink) {
+      // Inline link (span) needs tabindex="0" to be focusable for delegatesFocus
+      return 0;
+    }
+    // Regular buttons are naturally focusable, delegatesFocus handles it
+    return undefined;
+  }
 
   firstUpdated() {
     // Sync initial disabled state to slotted badges
@@ -354,7 +381,7 @@ export class Pfv6Button extends LitElement {
         id="container"
         class=${classMap(classes)}
         role="button"
-        tabindex=${this.tabIndex}
+        tabindex=${ifDefined(this.getComputedTabIndex())}
         aria-disabled=${this.isAriaDisabled ? 'true' : 'false'}
         aria-label=${ifDefined(this.accessibleLabel)}
         @click=${this.handleClick}
@@ -371,7 +398,7 @@ export class Pfv6Button extends LitElement {
         aria-disabled=${this.isAriaDisabled ? 'true' : 'false'}
         aria-expanded=${ifDefined(this.isExpanded !== undefined ? String(this.isExpanded) : undefined)}
         aria-label=${ifDefined(this.accessibleLabel)}
-        tabindex=${this.tabIndex}
+        tabindex=${ifDefined(this.getComputedTabIndex())}
         @click=${this.handleClick}
         @keypress=${this.handleKeyPress}
       >
