@@ -1,0 +1,231 @@
+<link rel="stylesheet" href="../tooltip-examples.css">
+
+<!-- TODO: This demo requires pfv6-select for full parity with React.
+     Currently using native HTML form controls as placeholders.
+     Revisit when pfv6-select component is available. -->
+
+<div class="options-controls">
+  <fieldset>
+    <legend>Trigger</legend>
+    <label>
+      <input type="checkbox" id="trigger-mouseenter" checked>
+      mouseenter
+    </label>
+    <label>
+      <input type="checkbox" id="trigger-focus" checked>
+      focus
+    </label>
+    <label>
+      <input type="checkbox" id="trigger-click">
+      click
+    </label>
+    <label>
+      <input type="checkbox" id="trigger-manual">
+      manual
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Content Alignment</legend>
+    <label>
+      <input type="checkbox" id="content-left-aligned">
+      Left-aligned
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Flip Behavior</legend>
+    <label>
+      <input type="checkbox" id="enable-flip" checked>
+      enableFlip
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Position</legend>
+    <p>Position (will flip if enableFlip is true). The 'auto' position requires enableFlip to be set to true.</p>
+    <label for="position-select">Position:</label>
+    <select id="position-select">
+      <option value="auto">auto</option>
+      <option value="top" selected>top</option>
+      <option value="bottom">bottom</option>
+      <option value="left">left</option>
+      <option value="right">right</option>
+      <option value="top-start">top-start</option>
+      <option value="top-end">top-end</option>
+      <option value="bottom-start">bottom-start</option>
+      <option value="bottom-end">bottom-end</option>
+      <option value="left-start">left-start</option>
+      <option value="left-end">left-end</option>
+      <option value="right-start">right-start</option>
+      <option value="right-end">right-end</option>
+    </select>
+  </fieldset>
+
+  <fieldset>
+    <legend>Visibility</legend>
+    <label>
+      <input type="checkbox" id="is-visible">
+      isVisible (set trigger to 'manual' only to control programmatically)
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Timing (ms)</legend>
+    <label>
+      Entry delay:
+      <input type="number" id="entry-delay" value="0" min="0">
+    </label>
+    <label>
+      Exit delay:
+      <input type="number" id="exit-delay" value="0" min="0">
+    </label>
+    <label>
+      Animation duration:
+      <input type="number" id="animation-duration" value="300" min="0">
+    </label>
+  </fieldset>
+</div>
+
+<div id="tooltip-boundary" class="tooltip-box">
+  <pfv6-tooltip
+    id="demo-tooltip"
+    content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id feugiat augue, nec fringilla turpis."
+    trigger="mouseenter focus"
+    enable-flip
+    position="top"
+    entry-delay="0"
+    exit-delay="0"
+    animation-duration="300"
+    trigger-id="tooltip-button">
+  </pfv6-tooltip>
+  <button type="button" id="tooltip-button" class="pf-v6-c-button pf-m-primary tooltip-button">Tooltip</button>
+</div>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-tooltip/pfv6-tooltip.js';
+
+  const tooltip = document.getElementById('demo-tooltip');
+  const tooltipBoundary = document.getElementById('tooltip-boundary');
+
+  // Scroll to center the button
+  setTimeout(() => {
+    tooltipBoundary.scrollTop = 400;
+    tooltipBoundary.scrollLeft = 300;
+  }, 100);
+
+  // Trigger checkboxes
+  const triggerMouseenter = document.getElementById('trigger-mouseenter');
+  const triggerFocus = document.getElementById('trigger-focus');
+  const triggerClick = document.getElementById('trigger-click');
+  const triggerManual = document.getElementById('trigger-manual');
+
+  function updateTrigger() {
+    const triggers = [];
+    if (triggerMouseenter.checked) triggers.push('mouseenter');
+    if (triggerFocus.checked) triggers.push('focus');
+    if (triggerClick.checked) triggers.push('click');
+    if (triggerManual.checked) triggers.push('manual');
+    tooltip.trigger = triggers.join(' ');
+  }
+
+  triggerMouseenter.addEventListener('change', () => {
+    tooltip.isVisible = false;
+    updateTrigger();
+  });
+  triggerFocus.addEventListener('change', () => {
+    tooltip.isVisible = false;
+    updateTrigger();
+  });
+  triggerClick.addEventListener('change', () => {
+    tooltip.isVisible = false;
+    setTimeout(() => updateTrigger());
+  });
+  triggerManual.addEventListener('change', () => {
+    tooltip.isVisible = false;
+    updateTrigger();
+  });
+
+  // Content left-aligned
+  const contentLeftAligned = document.getElementById('content-left-aligned');
+  contentLeftAligned.addEventListener('change', () => {
+    tooltip.isContentLeftAligned = contentLeftAligned.checked;
+  });
+
+  // Enable flip
+  const enableFlip = document.getElementById('enable-flip');
+  enableFlip.addEventListener('change', () => {
+    tooltip.enableFlip = enableFlip.checked;
+  });
+
+  // Position select
+  const positionSelect = document.getElementById('position-select');
+  positionSelect.addEventListener('change', () => {
+    tooltip.position = positionSelect.value;
+  });
+
+  // Is visible
+  const isVisible = document.getElementById('is-visible');
+  isVisible.addEventListener('change', () => {
+    tooltip.isVisible = isVisible.checked;
+  });
+
+  // Entry delay
+  const entryDelay = document.getElementById('entry-delay');
+  entryDelay.addEventListener('input', () => {
+    tooltip.entryDelay = Number(entryDelay.value);
+  });
+
+  // Exit delay
+  const exitDelay = document.getElementById('exit-delay');
+  exitDelay.addEventListener('input', () => {
+    tooltip.exitDelay = Number(exitDelay.value);
+  });
+
+  // Animation duration
+  const animationDuration = document.getElementById('animation-duration');
+  animationDuration.addEventListener('input', () => {
+    tooltip.animationDuration = Number(animationDuration.value);
+  });
+</script>
+
+<style>
+  .options-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .options-controls fieldset {
+    border: 1px solid #ccc;
+    padding: 0.5rem 1rem;
+    min-width: 200px;
+  }
+
+  .options-controls legend {
+    font-weight: bold;
+    padding: 0 0.5rem;
+  }
+
+  .options-controls label {
+    display: block;
+    margin: 0.25rem 0;
+  }
+
+  .options-controls input[type="number"] {
+    width: 80px;
+    margin-left: 0.5rem;
+  }
+
+  .options-controls select {
+    width: 100%;
+    padding: 0.25rem;
+  }
+
+  .options-controls p {
+    font-size: 0.875rem;
+    color: #666;
+    margin: 0.5rem 0;
+  }
+</style>
