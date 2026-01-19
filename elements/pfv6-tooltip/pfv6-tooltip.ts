@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, isServer } from 'lit';
 import type { PropertyValues, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
@@ -43,6 +43,61 @@ import styles from './pfv6-tooltip.css';
 @customElement('pfv6-tooltip')
 export class Pfv6Tooltip extends LitElement {
   static styles = styles;
+
+  /** Track all tooltip instances for global keyboard handling */
+  private static instances = new Set<Pfv6Tooltip>();
+
+  /** Shared live region announcer element in document.body */
+  private static announcer: HTMLElement;
+
+  /** Initialize the shared announcer element */
+  private static initAnnouncer(): void {
+    if (Pfv6Tooltip.announcer) {
+      return;
+    }
+    Pfv6Tooltip.announcer = Object.assign(document.createElement('div'), {
+      role: 'status',
+      id: 'pfv6-tooltip-announcer',
+      // Visually hidden but accessible to screen readers
+      style: `
+        position: fixed;
+        inset-block-start: 0;
+        inset-inline-start: 0;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        white-space: nowrap;
+        border: 0;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+      `,
+    });
+    document.body.append(Pfv6Tooltip.announcer);
+  }
+
+  /**
+   * Announce tooltip content to screen readers via live region
+   * @param message - The text content to announce
+   */
+  private static announce(message: string): void {
+    if (Pfv6Tooltip.announcer) {
+      Pfv6Tooltip.announcer.innerText = message;
+    }
+  }
+
+  /** Clear the announcer content */
+  private static clearAnnouncement(): void {
+    if (Pfv6Tooltip.announcer) {
+      Pfv6Tooltip.announcer.innerText = '';
+    }
+  }
+
+  static {
+    if (!isServer) {
+      Pfv6Tooltip.initAnnouncer();
+    }
+  }
 
   /** Tooltip content text */
   @property({ type: String })
@@ -100,13 +155,12 @@ export class Pfv6Tooltip extends LitElement {
   @property({ type: Number, attribute: 'animation-duration' })
   animationDuration = 300;
 
-  /** aria-labelledby or aria-describedby for tooltip */
-  @property({ type: String })
-  aria: 'describedby' | 'labelledby' | 'none' = 'describedby';
-
-  /** Determines whether the tooltip is an aria-live region */
-  @property({ type: String, attribute: 'aria-live' })
-  ariaLive: 'off' | 'polite' = 'off';
+  /**
+   * When true, disables screen reader announcements for tooltip content.
+   * Use when the trigger element already has an accessible label.
+   */
+  @property({ type: Boolean, reflect: true })
+  silent = false;
 
   /** ID of an external trigger element (alternative to slotted trigger) */
   @property({ type: String, attribute: 'trigger-id' })
@@ -143,12 +197,10 @@ export class Pfv6Tooltip extends LitElement {
   /** Cleanup function for Floating UI */
   private _cleanupFloating?: () => void;
 
-  /** Unique ID for ARIA association */
-  private _tooltipId = `pf-tooltip-${Math.random().toString(36).substring(2, 9)}`;
-
   connectedCallback(): void {
     super.connectedCallback();
     this._setupTriggerElement();
+    Pfv6Tooltip.instances.add(this);
   }
 
   disconnectedCallback(): void {
@@ -156,6 +208,7 @@ export class Pfv6Tooltip extends LitElement {
     this._cleanupEventListeners();
     this._clearTimeouts();
     this._cleanupFloating?.();
+    Pfv6Tooltip.instances.delete(this);
   }
 
   updated(changedProperties: PropertyValues<this>): void {
@@ -346,17 +399,18 @@ export class Pfv6Tooltip extends LitElement {
   private async _show(): Promise<void> {
     this._clearHideTimeout();
     this._visible = true;
-    this._updateARIA();
     this.requestUpdate();
     await this.updateComplete;
     this._updatePosition();
     // Setup Floating UI auto-update
     this._setupFloatingAutoUpdate();
+    // Announce to screen readers via shared live region
+    this._announceToScreenReader();
   }
 
   private _hide(): void {
     this._visible = false;
-    this._removeARIA();
+    this._clearScreenReaderAnnouncement();
     this._cleanupFloating?.();
 
     // Dispatch event after animation completes
@@ -365,38 +419,23 @@ export class Pfv6Tooltip extends LitElement {
     }, this.animationDuration);
   }
 
-  private _updateARIA(): void {
-    if (this.aria === 'none' || !this._triggerElement) {
+  /**
+   * Announce tooltip content to screen readers via shared live region.
+   * This approach avoids cross-shadow-root ARIA IDREF issues.
+   */
+  private _announceToScreenReader(): void {
+    if (this.silent) {
       return;
     }
-
-    const ariaAttr = `aria-${this.aria}`;
-    const existingAria = this._triggerElement.getAttribute(ariaAttr);
-
-    if (!existingAria || !existingAria.includes(this._tooltipId)) {
-      const newAria = existingAria ? `${existingAria} ${this._tooltipId}` : this._tooltipId;
-      this._triggerElement.setAttribute(ariaAttr, newAria);
-    }
+    Pfv6Tooltip.announce(this.content);
   }
 
-  private _removeARIA(): void {
-    if (this.aria === 'none' || !this._triggerElement) {
+  /** Clear the screen reader announcement */
+  private _clearScreenReaderAnnouncement(): void {
+    if (this.silent) {
       return;
     }
-
-    const ariaAttr = `aria-${this.aria}`;
-    const existingAria = this._triggerElement.getAttribute(ariaAttr);
-
-    if (!existingAria) {
-      return;
-    }
-
-    const newAria = existingAria.replace(new RegExp(`\\b${this._tooltipId}\\b`, 'g'), '').trim();
-    if (newAria) {
-      this._triggerElement.setAttribute(ariaAttr, newAria);
-    } else {
-      this._triggerElement.removeAttribute(ariaAttr);
-    }
+    Pfv6Tooltip.clearAnnouncement();
   }
 
   private async _updatePosition(): Promise<void> {
@@ -524,7 +563,6 @@ export class Pfv6Tooltip extends LitElement {
         class=${classMap(classes)}
         role="tooltip"
         aria-labelledby="content"
-        aria-live=${this.ariaLive}
         style=${styleMap(tooltipStyles)}
       >
         <pfv6-tooltip-arrow></pfv6-tooltip-arrow>

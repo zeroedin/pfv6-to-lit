@@ -290,38 +290,25 @@ describe('<pfv6-tooltip>', function() {
     });
   });
 
-  describe('aria property', function() {
-    it('defaults to "describedby"', async function() {
+  describe('silent property', function() {
+    it('defaults to false', async function() {
       const el = await fixture<Pfv6Tooltip>(html`<pfv6-tooltip></pfv6-tooltip>`);
-      expect(el.aria).to.equal('describedby');
+      expect(el.silent).to.equal(false);
     });
 
-    it('accepts "labelledby" value', async function() {
+    it('can be set to true', async function() {
       const el = await fixture<Pfv6Tooltip>(html`
-        <pfv6-tooltip aria="labelledby"></pfv6-tooltip>
+        <pfv6-tooltip silent></pfv6-tooltip>
       `);
-      expect(el.aria).to.equal('labelledby');
+      expect(el.silent).to.equal(true);
     });
 
-    it('accepts "none" value', async function() {
-      const el = await fixture<Pfv6Tooltip>(html`
-        <pfv6-tooltip aria="none"></pfv6-tooltip>
-      `);
-      expect(el.aria).to.equal('none');
-    });
-  });
-
-  describe('ariaLive property', function() {
-    it('defaults to "off"', async function() {
+    it('reflects to attribute', async function() {
       const el = await fixture<Pfv6Tooltip>(html`<pfv6-tooltip></pfv6-tooltip>`);
-      expect(el.ariaLive).to.equal('off');
-    });
-
-    it('accepts "polite" value', async function() {
-      const el = await fixture<Pfv6Tooltip>(html`
-        <pfv6-tooltip aria-live="polite"></pfv6-tooltip>
-      `);
-      expect(el.ariaLive).to.equal('polite');
+      expect(el.hasAttribute('silent')).to.be.false;
+      el.silent = true;
+      await el.updateComplete;
+      expect(el.hasAttribute('silent')).to.be.true;
     });
   });
 
@@ -550,7 +537,71 @@ describe('<pfv6-tooltip>', function() {
   });
 
   describe('ARIA behavior', function() {
-    it('adds aria-describedby to trigger element when shown', async function() {
+    it('creates shared announcer element in document.body', async function() {
+      await fixture<Pfv6Tooltip>(html`<pfv6-tooltip></pfv6-tooltip>`);
+      const announcer = document.getElementById('pfv6-tooltip-announcer');
+      expect(announcer).to.exist;
+      expect(announcer?.getAttribute('role')).to.equal('status');
+    });
+
+    it('announces tooltip content when shown', async function() {
+      const el = await fixture<Pfv6Tooltip>(html`
+        <pfv6-tooltip content="Test tooltip content" trigger="manual">
+          <button>Trigger</button>
+        </pfv6-tooltip>
+      `);
+
+      const announcer = document.getElementById('pfv6-tooltip-announcer');
+      expect(announcer?.innerText).to.equal('');
+
+      // Show tooltip
+      el.isVisible = true;
+      await el.updateComplete;
+      await nextFrame();
+
+      expect(announcer?.innerText).to.equal('Test tooltip content');
+    });
+
+    it('clears announcement when tooltip is hidden', async function() {
+      const el = await fixture<Pfv6Tooltip>(html`
+        <pfv6-tooltip content="Test content" trigger="manual" is-visible>
+          <button>Trigger</button>
+        </pfv6-tooltip>
+      `);
+
+      await el.updateComplete;
+      await nextFrame();
+
+      const announcer = document.getElementById('pfv6-tooltip-announcer');
+      expect(announcer?.innerText).to.equal('Test content');
+
+      // Hide tooltip
+      el.isVisible = false;
+      await el.updateComplete;
+      await nextFrame();
+
+      expect(announcer?.innerText).to.equal('');
+    });
+
+    it('does not announce when silent is true', async function() {
+      const el = await fixture<Pfv6Tooltip>(html`
+        <pfv6-tooltip content="Silent content" trigger="manual" silent>
+          <button>Trigger</button>
+        </pfv6-tooltip>
+      `);
+
+      const announcer = document.getElementById('pfv6-tooltip-announcer');
+
+      // Show tooltip
+      el.isVisible = true;
+      await el.updateComplete;
+      await nextFrame();
+
+      // Announcer should remain empty when silent
+      expect(announcer?.innerText).to.equal('');
+    });
+
+    it('does not set aria-describedby on trigger (avoids cross-root issues)', async function() {
       const container = await fixture(html`
         <div>
           <pfv6-tooltip content="Test" trigger="manual">
@@ -561,81 +612,13 @@ describe('<pfv6-tooltip>', function() {
       const el = container.querySelector('pfv6-tooltip') as Pfv6Tooltip;
       const button = container.querySelector('button') as HTMLButtonElement;
 
-      // Initially no aria-describedby
-      expect(button.hasAttribute('aria-describedby')).to.be.false;
-
-      // Show tooltip
       el.isVisible = true;
       await el.updateComplete;
       await nextFrame();
 
-      // aria-describedby should be added
-      expect(button.hasAttribute('aria-describedby')).to.be.true;
-      expect(button.getAttribute('aria-describedby')).to.match(/^pf-tooltip-/);
-    });
-
-    it('adds aria-labelledby when aria="labelledby"', async function() {
-      const container = await fixture(html`
-        <div>
-          <pfv6-tooltip content="Test" trigger="manual" aria="labelledby">
-            <button id="test-button">Trigger</button>
-          </pfv6-tooltip>
-        </div>
-      `);
-      const el = container.querySelector('pfv6-tooltip') as Pfv6Tooltip;
-      const button = container.querySelector('button') as HTMLButtonElement;
-
-      el.isVisible = true;
-      await el.updateComplete;
-      await nextFrame();
-
-      expect(button.hasAttribute('aria-labelledby')).to.be.true;
-      expect(button.getAttribute('aria-labelledby')).to.match(/^pf-tooltip-/);
-    });
-
-    it('does not add ARIA when aria="none"', async function() {
-      const container = await fixture(html`
-        <div>
-          <pfv6-tooltip content="Test" trigger="manual" aria="none">
-            <button id="test-button">Trigger</button>
-          </pfv6-tooltip>
-        </div>
-      `);
-      const el = container.querySelector('pfv6-tooltip') as Pfv6Tooltip;
-      const button = container.querySelector('button') as HTMLButtonElement;
-
-      el.isVisible = true;
-      await el.updateComplete;
-      await nextFrame();
-
+      // Should NOT have aria-describedby (uses live region instead)
       expect(button.hasAttribute('aria-describedby')).to.be.false;
       expect(button.hasAttribute('aria-labelledby')).to.be.false;
-    });
-
-    it('removes aria-describedby when tooltip is hidden', async function() {
-      const container = await fixture(html`
-        <div>
-          <pfv6-tooltip content="Test" trigger="manual" is-visible>
-            <button id="test-button">Trigger</button>
-          </pfv6-tooltip>
-        </div>
-      `);
-      const el = container.querySelector('pfv6-tooltip') as Pfv6Tooltip;
-      const button = container.querySelector('button') as HTMLButtonElement;
-
-      await el.updateComplete;
-      await nextFrame();
-
-      // Should have aria-describedby
-      expect(button.hasAttribute('aria-describedby')).to.be.true;
-
-      // Hide tooltip
-      el.isVisible = false;
-      await el.updateComplete;
-      await nextFrame();
-
-      // aria-describedby should be removed
-      expect(button.hasAttribute('aria-describedby')).to.be.false;
     });
 
     it('tooltip has role="tooltip"', async function() {
