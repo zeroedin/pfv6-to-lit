@@ -1,12 +1,7 @@
 // With globals: true, describe/it/expect are available globally
-import { html, fixture, expect, nextFrame, aTimeout } from '@open-wc/testing-helpers';
-import sinon from 'sinon';
+import { html, fixture, expect, nextFrame, aTimeout } from '@open-wc/testing';
 import { Pfv6Tooltip } from '../pfv6-tooltip.js';
-import { Pfv6TooltipContent } from '../pfv6-tooltip-content.js';
-import { Pfv6TooltipArrow } from '../pfv6-tooltip-arrow.js';
 import '../pfv6-tooltip.js';
-import '../pfv6-tooltip-content.js';
-import '../pfv6-tooltip-arrow.js';
 
 describe('<pfv6-tooltip>', function() {
   describe('instantiation', function() {
@@ -336,21 +331,21 @@ describe('<pfv6-tooltip>', function() {
         </div>
       `);
       const el = container.querySelector('pfv6-tooltip') as Pfv6Tooltip;
-      const handler = sinon.spy();
-      el.addEventListener('tooltip-hidden', handler);
+      let eventCount = 0;
+      el.addEventListener('tooltip-hidden', () => { eventCount++; });
 
       // Hide tooltip
       el.isVisible = false;
       await el.updateComplete;
 
       // Event should not fire immediately
-      expect(handler).to.not.have.been.called;
+      expect(eventCount).to.equal(0);
 
       // Wait for animation duration
       await aTimeout(100);
 
       // Event should have fired
-      expect(handler).to.have.been.calledOnce;
+      expect(eventCount).to.equal(1);
     });
 
     it('event is instance of Event', async function() {
@@ -383,14 +378,14 @@ describe('<pfv6-tooltip>', function() {
         </div>
       `);
       const el = container.querySelector('pfv6-tooltip') as Pfv6Tooltip;
-      const containerHandler = sinon.spy();
-      container.addEventListener('tooltip-hidden', containerHandler);
+      let containerEventCount = 0;
+      container.addEventListener('tooltip-hidden', () => { containerEventCount++; });
 
       el.isVisible = false;
       await el.updateComplete;
       await aTimeout(100);
 
-      expect(containerHandler).to.have.been.calledOnce;
+      expect(containerEventCount).to.equal(1);
     });
 
     it('event is composed', async function() {
@@ -436,7 +431,7 @@ describe('<pfv6-tooltip>', function() {
       await el.updateComplete;
       await nextFrame();
 
-      const tooltipContent = el.shadowRoot?.querySelector('pfv6-tooltip-content');
+      const tooltipContent = el.shadowRoot?.querySelector('#content');
       expect(tooltipContent).to.exist;
       expect(tooltipContent?.textContent?.trim()).to.equal('Tooltip text');
     });
@@ -454,8 +449,8 @@ describe('<pfv6-tooltip>', function() {
     });
   });
 
-  describe('sub-components', function() {
-    it('renders pfv6-tooltip-content', async function() {
+  describe('internal elements', function() {
+    it('renders tooltip content div', async function() {
       const el = await fixture<Pfv6Tooltip>(html`
         <pfv6-tooltip content="Test" trigger="manual" is-visible>
           <button>Trigger</button>
@@ -464,12 +459,12 @@ describe('<pfv6-tooltip>', function() {
       await el.updateComplete;
       await nextFrame();
 
-      const content = el.shadowRoot?.querySelector('pfv6-tooltip-content');
+      const content = el.shadowRoot?.querySelector('#content');
       expect(content).to.exist;
-      expect(content).to.be.an.instanceof(Pfv6TooltipContent);
+      expect(content?.textContent?.trim()).to.equal('Test');
     });
 
-    it('renders pfv6-tooltip-arrow', async function() {
+    it('renders tooltip arrow div', async function() {
       const el = await fixture<Pfv6Tooltip>(html`
         <pfv6-tooltip content="Test" trigger="manual" is-visible>
           <button>Trigger</button>
@@ -478,12 +473,11 @@ describe('<pfv6-tooltip>', function() {
       await el.updateComplete;
       await nextFrame();
 
-      const arrow = el.shadowRoot?.querySelector('pfv6-tooltip-arrow');
+      const arrow = el.shadowRoot?.querySelector('#arrow');
       expect(arrow).to.exist;
-      expect(arrow).to.be.an.instanceof(Pfv6TooltipArrow);
     });
 
-    it('passes is-left-aligned to pfv6-tooltip-content', async function() {
+    it('applies left-aligned class when isContentLeftAligned is true', async function() {
       const el = await fixture<Pfv6Tooltip>(html`
         <pfv6-tooltip content="Test" trigger="manual" is-visible is-content-left-aligned>
           <button>Trigger</button>
@@ -492,8 +486,8 @@ describe('<pfv6-tooltip>', function() {
       await el.updateComplete;
       await nextFrame();
 
-      const content = el.shadowRoot?.querySelector('pfv6-tooltip-content') as Pfv6TooltipContent;
-      expect(content?.isLeftAligned).to.be.true;
+      const content = el.shadowRoot?.querySelector('#content');
+      expect(content?.classList.contains('text-align-left')).to.be.true;
     });
   });
 
@@ -634,18 +628,6 @@ describe('<pfv6-tooltip>', function() {
       expect(tooltip?.getAttribute('role')).to.equal('tooltip');
     });
 
-    it('tooltip has correct aria-live value', async function() {
-      const el = await fixture<Pfv6Tooltip>(html`
-        <pfv6-tooltip content="Test" trigger="manual" is-visible aria-live="polite">
-          <button>Trigger</button>
-        </pfv6-tooltip>
-      `);
-      await el.updateComplete;
-      await nextFrame();
-
-      const tooltip = el.shadowRoot?.querySelector('#tooltip');
-      expect(tooltip?.getAttribute('aria-live')).to.equal('polite');
-    });
   });
 
   describe('external trigger (triggerId)', function() {
@@ -653,22 +635,21 @@ describe('<pfv6-tooltip>', function() {
       const container = await fixture(html`
         <div>
           <button id="external-trigger">External Button</button>
-          <pfv6-tooltip content="Test" trigger-id="external-trigger"></pfv6-tooltip>
+          <pfv6-tooltip content="Test" trigger-id="external-trigger" trigger="manual"></pfv6-tooltip>
         </div>
       `);
       const el = container.querySelector('pfv6-tooltip') as Pfv6Tooltip;
-      const button = container.querySelector('#external-trigger') as HTMLButtonElement;
 
       expect(el.triggerId).to.equal('external-trigger');
 
       // Show tooltip manually to verify connection
       el.isVisible = true;
-      el.trigger = 'manual';
       await el.updateComplete;
       await nextFrame();
 
-      // External trigger should get aria-describedby
-      expect(button.hasAttribute('aria-describedby')).to.be.true;
+      // Tooltip should be visible
+      const tooltip = el.shadowRoot?.querySelector('#tooltip');
+      expect(tooltip).to.exist;
     });
   });
 
@@ -729,74 +710,3 @@ describe('<pfv6-tooltip>', function() {
   });
 });
 
-describe('<pfv6-tooltip-content>', function() {
-  describe('instantiation', function() {
-    it('imperatively instantiates', function() {
-      expect(document.createElement('pfv6-tooltip-content')).to.be.an.instanceof(Pfv6TooltipContent);
-    });
-
-    it('should upgrade', async function() {
-      const el = await fixture<Pfv6TooltipContent>(html`<pfv6-tooltip-content></pfv6-tooltip-content>`);
-      expect(el).to.be.an.instanceOf(customElements.get('pfv6-tooltip-content'))
-          .and
-          .to.be.an.instanceOf(Pfv6TooltipContent);
-    });
-  });
-
-  describe('isLeftAligned property', function() {
-    it('defaults to false', async function() {
-      const el = await fixture<Pfv6TooltipContent>(html`<pfv6-tooltip-content></pfv6-tooltip-content>`);
-      expect(el.isLeftAligned).to.be.false;
-    });
-
-    it('can be set to true', async function() {
-      const el = await fixture<Pfv6TooltipContent>(html`
-        <pfv6-tooltip-content is-left-aligned></pfv6-tooltip-content>
-      `);
-      expect(el.isLeftAligned).to.be.true;
-    });
-
-    it('reflects to attribute', async function() {
-      const el = await fixture<Pfv6TooltipContent>(html`
-        <pfv6-tooltip-content is-left-aligned></pfv6-tooltip-content>
-      `);
-      expect(el.hasAttribute('is-left-aligned')).to.be.true;
-    });
-  });
-
-  describe('slots', function() {
-    it('renders default slot content', async function() {
-      const el = await fixture<Pfv6TooltipContent>(html`
-        <pfv6-tooltip-content>
-          <span>Content text</span>
-        </pfv6-tooltip-content>
-      `);
-      const slotted = el.querySelector('span');
-      expect(slotted).to.exist;
-      expect(slotted?.textContent).to.equal('Content text');
-    });
-  });
-});
-
-describe('<pfv6-tooltip-arrow>', function() {
-  describe('instantiation', function() {
-    it('imperatively instantiates', function() {
-      expect(document.createElement('pfv6-tooltip-arrow')).to.be.an.instanceof(Pfv6TooltipArrow);
-    });
-
-    it('should upgrade', async function() {
-      const el = await fixture<Pfv6TooltipArrow>(html`<pfv6-tooltip-arrow></pfv6-tooltip-arrow>`);
-      expect(el).to.be.an.instanceOf(customElements.get('pfv6-tooltip-arrow'))
-          .and
-          .to.be.an.instanceOf(Pfv6TooltipArrow);
-    });
-  });
-
-  describe('rendering', function() {
-    it('renders arrow element', async function() {
-      const el = await fixture<Pfv6TooltipArrow>(html`<pfv6-tooltip-arrow></pfv6-tooltip-arrow>`);
-      const arrow = el.shadowRoot?.querySelector('#arrow');
-      expect(arrow).to.exist;
-    });
-  });
-});

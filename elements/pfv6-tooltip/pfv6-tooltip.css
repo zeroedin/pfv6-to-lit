@@ -40,16 +40,15 @@
   display: inline-block;
 }
 
-/* Main tooltip container - pfv6-tooltip */
 #tooltip {
   position: absolute;
   max-width: var(--pf-v6-c-tooltip--MaxWidth);
   box-shadow: var(--pf-v6-c-tooltip--BoxShadow);
 
   /* Position variants - Top */
-  &.pf-m-top,
-  &.pf-m-top-left,
-  &.pf-m-top-right {
+  &.top,
+  &.top-start,
+  &.top-end {
     --pf-v6-c-tooltip__arrow--InsetBlockEnd: var(--pf-v6-c-tooltip--m-top--InsetBlockEnd, 0);
     --pf-v6-c-tooltip__arrow--InsetInlineStart: var(--pf-v6-c-tooltip--m-top--InsetInlineStart, 50%);
     --pf-v6-c-tooltip__arrow--TranslateX: var(--pf-v6-c-tooltip__arrow--m-top--TranslateX);
@@ -58,9 +57,9 @@
   }
 
   /* Position variants - Bottom */
-  &.pf-m-bottom,
-  &.pf-m-bottom-left,
-  &.pf-m-bottom-right {
+  &.bottom,
+  &.bottom-start,
+  &.bottom-end {
     --pf-v6-c-tooltip__arrow--InsetBlockStart: var(--pf-v6-c-tooltip--m-bottom--InsetBlockStart, 0);
     --pf-v6-c-tooltip__arrow--InsetInlineStart: var(--pf-v6-c-tooltip--m-bottom--InsetInlineStart, 50%);
     --pf-v6-c-tooltip__arrow--TranslateX: var(--pf-v6-c-tooltip__arrow--m-bottom--TranslateX);
@@ -69,9 +68,9 @@
   }
 
   /* Position variants - Left */
-  &.pf-m-left,
-  &.pf-m-left-top,
-  &.pf-m-left-bottom {
+  &.left,
+  &.left-start,
+  &.left-end {
     --pf-v6-c-tooltip__arrow--InsetBlockStart: var(--pf-v6-c-tooltip--m-left--InsetBlockStart, 50%);
     --pf-v6-c-tooltip__arrow--InsetInlineEnd: var(--pf-v6-c-tooltip--m-left--InsetInlineEnd, 0);
     --pf-v6-c-tooltip__arrow--TranslateX: var(--pf-v6-c-tooltip__arrow--m-left--TranslateX);
@@ -80,9 +79,9 @@
   }
 
   /* Position variants - Right */
-  &.pf-m-right,
-  &.pf-m-right-top,
-  &.pf-m-right-bottom {
+  &.right,
+  &.right-start,
+  &.right-end {
     --pf-v6-c-tooltip__arrow--InsetBlockStart: var(--pf-v6-c-tooltip--m-right--InsetBlockStart, 50%);
     --pf-v6-c-tooltip__arrow--InsetInlineStart: var(--pf-v6-c-tooltip--m-right--InsetInlineStart, 0);
     --pf-v6-c-tooltip__arrow--TranslateX: var(--pf-v6-c-tooltip__arrow--m-right--TranslateX);
@@ -91,35 +90,34 @@
   }
 
   /* Corner position adjustments - Top corners */
-  &.pf-m-left-top,
-  &.pf-m-right-top {
+  &.left-start,
+  &.right-start {
     --pf-v6-c-tooltip__arrow--InsetBlockStart: 0;
     --pf-v6-c-tooltip__arrow--TranslateY: var(--pf-v6-c-tooltip__arrow--m-top--TranslateY);
   }
 
   /* Corner position adjustments - Bottom corners */
-  &.pf-m-left-bottom,
-  &.pf-m-right-bottom {
+  &.left-end,
+  &.right-end {
     --pf-v6-c-tooltip__arrow--InsetBlockStart: auto;
     --pf-v6-c-tooltip__arrow--InsetBlockEnd: 0;
   }
 
   /* Corner position adjustments - Left corners */
-  &.pf-m-top-left,
-  &.pf-m-bottom-left {
+  &.top-start,
+  &.bottom-start {
     --pf-v6-c-tooltip__arrow--InsetInlineStart: 0;
     --pf-v6-c-tooltip__arrow--TranslateX: var(--pf-v6-c-tooltip__arrow--m-left--TranslateX);
   }
 
   /* Corner position adjustments - Right corners */
-  &.pf-m-top-right,
-  &.pf-m-bottom-right {
+  &.top-end,
+  &.bottom-end {
     --pf-v6-c-tooltip__arrow--InsetInlineEnd: 0;
     --pf-v6-c-tooltip__arrow--InsetInlineStart: auto;
   }
 }
 
-/* Tooltip content - pfv6-tooltip-content */
 #content {
   position: relative;
   padding-block-start: var(--pf-v6-c-tooltip__content--PaddingBlockStart);
@@ -133,12 +131,11 @@
   background-color: var(--pf-v6-c-tooltip__content--BackgroundColor);
   border-radius: var(--pf-v6-c-tooltip__content--BorderRadius);
 
-  &.pf-m-text-align-left {
+  &.text-align-left {
     text-align: start;
   }
 }
 
-/* Tooltip arrow - pfv6-tooltip-arrow */
 #arrow {
   position: absolute;
   top: var(--pf-v6-c-tooltip__arrow--InsetBlockStart, auto);

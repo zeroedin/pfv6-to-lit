@@ -11,13 +11,10 @@ import {
   flip,
   shift,
   offset,
-  arrow,
   autoPlacement,
   type Placement,
   type Middleware,
 } from '@floating-ui/dom';
-import './pfv6-tooltip-content.js';
-import './pfv6-tooltip-arrow.js';
 import styles from './pfv6-tooltip.css';
 
 /**
@@ -177,10 +174,6 @@ export class Pfv6Tooltip extends LitElement {
   /** Tooltip element reference */
   @query('#tooltip')
   private _tooltipElement!: HTMLElement;
-
-  /** Arrow element reference */
-  @query('pfv6-tooltip-arrow')
-  private _arrowElement!: HTMLElement;
 
   /** Trigger element reference */
   private _triggerElement: HTMLElement | null = null;
@@ -439,7 +432,7 @@ export class Pfv6Tooltip extends LitElement {
   }
 
   private async _updatePosition(): Promise<void> {
-    if (!this._triggerElement || !this._tooltipElement || !this._arrowElement) {
+    if (!this._triggerElement || !this._tooltipElement) {
       return;
     }
 
@@ -456,7 +449,8 @@ export class Pfv6Tooltip extends LitElement {
     }
 
     middleware.push(shift({ padding: 5 }));
-    middleware.push(arrow({ element: this._arrowElement }));
+    // Note: Arrow positioning is handled via CSS based on placement classes,
+    // matching React's approach. We don't use Floating UI's arrow middleware.
 
     const options: { middleware: Middleware[]; placement?: Placement } = {
       middleware,
@@ -479,29 +473,7 @@ export class Pfv6Tooltip extends LitElement {
       top: `${y}px`,
     });
 
-    // Position arrow
-    const arrowData = middlewareData.arrow;
-    if (arrowData) {
-      const { x: arrowX, y: arrowY } = arrowData;
-
-      const basePlacement = placement.split('-')[0] ?? 'top';
-      const staticSideMap: Record<string, string> = {
-        top: 'bottom',
-        right: 'left',
-        bottom: 'top',
-        left: 'right',
-      };
-      const staticSide = staticSideMap[basePlacement] ?? 'bottom';
-
-      const arrowStyles: Record<string, string> = {
-        left: arrowX != null ? `${arrowX}px` : '',
-        top: arrowY != null ? `${arrowY}px` : '',
-        right: '',
-        bottom: '',
-      };
-      arrowStyles[staticSide] = '-4px';
-      Object.assign(this._arrowElement.style, arrowStyles);
-    }
+    // Arrow positioning is handled via CSS based on placement classes
   }
 
   private _setupFloatingAutoUpdate(): void {
@@ -524,18 +496,18 @@ export class Pfv6Tooltip extends LitElement {
     const [base, modifier] = this._currentPlacement.split('-');
 
     return {
-      'pf-m-top': base === 'top',
-      'pf-m-bottom': base === 'bottom',
-      'pf-m-left': base === 'left',
-      'pf-m-right': base === 'right',
-      'pf-m-top-left': base === 'top' && modifier === 'start',
-      'pf-m-top-right': base === 'top' && modifier === 'end',
-      'pf-m-bottom-left': base === 'bottom' && modifier === 'start',
-      'pf-m-bottom-right': base === 'bottom' && modifier === 'end',
-      'pf-m-left-top': base === 'left' && modifier === 'start',
-      'pf-m-left-bottom': base === 'left' && modifier === 'end',
-      'pf-m-right-top': base === 'right' && modifier === 'start',
-      'pf-m-right-bottom': base === 'right' && modifier === 'end',
+      'top': base === 'top',
+      'bottom': base === 'bottom',
+      'left': base === 'left',
+      'right': base === 'right',
+      'top-start': base === 'top' && modifier === 'start',
+      'top-end': base === 'top' && modifier === 'end',
+      'bottom-start': base === 'bottom' && modifier === 'start',
+      'bottom-end': base === 'bottom' && modifier === 'end',
+      'left-start': base === 'left' && modifier === 'start',
+      'left-end': base === 'left' && modifier === 'end',
+      'right-start': base === 'right' && modifier === 'start',
+      'right-end': base === 'right' && modifier === 'end',
     };
   }
 
@@ -557,6 +529,10 @@ export class Pfv6Tooltip extends LitElement {
       tooltipStyles['min-width'] = this.minWidth;
     }
 
+    const contentClasses = {
+      'text-align-left': this.isContentLeftAligned,
+    };
+
     return html`
       <div
         id="tooltip"
@@ -565,10 +541,10 @@ export class Pfv6Tooltip extends LitElement {
         aria-labelledby="content"
         style=${styleMap(tooltipStyles)}
       >
-        <pfv6-tooltip-arrow></pfv6-tooltip-arrow>
-        <pfv6-tooltip-content id="content" ?is-left-aligned=${this.isContentLeftAligned}>
+        <div id="arrow"></div>
+        <div id="content" class=${classMap(contentClasses)}>
           ${this.content}
-        </pfv6-tooltip-content>
+        </div>
       </div>
     `;
   }
