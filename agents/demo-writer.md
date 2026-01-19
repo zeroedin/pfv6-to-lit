@@ -32,11 +32,6 @@ elements/pfv6-{component}/demo/
 
 ## Step 1: Locate React Demo Files
 
-**CRITICAL - Memory Efficiency**:
-- **ONLY read demo files for the specific component being converted**
-- **Use targeted paths** with the exact component name in the path
-- **Example**: `./patternfly-react/Checkbox/*.tsx` NOT `./patternfly-react/**/*.tsx`
-
 **React Demos (PRIMARY SOURCE)**:
 - **Location**: `./patternfly-react/{Component}/*.tsx`
   - Example: `./patternfly-react/Checkbox/*.tsx`

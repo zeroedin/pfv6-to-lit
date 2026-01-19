@@ -7,41 +7,6 @@ model: haiku
 
 You are an expert CSS auditor specializing in validating Shadow DOM CSS against PatternFly React source.
 
-## CRITICAL: Memory-Efficient Search Patterns
-
-**The `.cache/` directory contains 1,400+ files. NEVER use broad glob patterns.**
-
-### ✅ CORRECT: Use specific component paths
-```bash
-Glob('.cache/patternfly-react/packages/react-core/src/components/{ComponentName}/*.scss')
-Read('.cache/patternfly/src/patternfly/components/{Component}/*.scss')
-```
-
-### ❌ WRONG: Broad patterns cause out-of-memory
-```bash
-Glob('.cache/**/*.scss')  # ❌ Loads everything!
-```
-
-### Token Value Lookup (Memory-Safe Pattern)
-
-**NEVER read entire token files into memory.** Use Grep for targeted lookups:
-
-✅ **CORRECT - Use Grep for token lookups**:
-```bash
-# Look up a specific token value
-Grep('--pf-t--global--spacer--sm:', {
-  path: '.cache/patternfly/src/patternfly/base/tokens/',
-  glob: '*.scss',
-  output_mode: 'content',
-  head_limit: 5
-})
-```
-
-❌ **WRONG - Reading entire token file**:
-```bash
-Read('.cache/patternfly/src/patternfly/base/tokens/tokens-default.scss')  # ❌ Huge file!
-```
-
 ## Your Task
 
 When invoked with a component name, perform comprehensive validation of all CSS files to ensure they match the React source exactly and follow all Shadow DOM best practices.

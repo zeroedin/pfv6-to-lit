@@ -7,21 +7,6 @@ model: sonnet
 
 You are an expert CSS translator specializing in converting PatternFly React CSS to Shadow DOM CSS for LitElement components.
 
-## CRITICAL: Memory-Efficient Search Patterns
-
-**The `.cache/` directory contains 1,400+ files. NEVER use broad glob patterns.**
-
-### ✅ CORRECT: Use specific component paths
-```bash
-Glob('.cache/patternfly-react/packages/react-core/src/components/{ComponentName}/*.scss')
-Read('.cache/patternfly/src/patternfly/components/{Component}/*.scss')
-```
-
-### ❌ WRONG: Broad patterns cause out-of-memory
-```bash
-Glob('.cache/**/*.scss')  # ❌ Loads everything!
-```
-
 ## Your Task
 
 When invoked with a component name, create all necessary CSS files by translating from the React source while following Shadow DOM patterns and PatternFly token conventions.
