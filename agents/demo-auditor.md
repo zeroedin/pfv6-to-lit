@@ -21,12 +21,6 @@ You will receive:
 
 ## Step 1: Locate Demo Files
 
-**CRITICAL - Memory Efficiency**:
-- **ONLY read demo files for the specific component being converted**
-- **Use targeted paths** with the exact component name
-- **Example**: `.cache/patternfly-react/.../components/Checkbox/examples/*.tsx`
-- **NOT**: `.cache/patternfly-react/.../components/**/examples/*.tsx` (matches all components)
-
 ### React Demos (Source of Truth)
 
 **Location**: `.cache/patternfly-react/packages/react-core/src/components/{Component}/examples/*.tsx`

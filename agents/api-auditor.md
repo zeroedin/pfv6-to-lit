@@ -357,6 +357,106 @@ id = '';  // Matches HTMLElement.id signature
 - `title` - If overridden, MUST be `string` with default
 - `lang` - If overridden, MUST be `string` with default
 
+### Check exactOptionalPropertyTypes Compliance (CRITICAL)
+
+**IMPORTANT**: This project uses `exactOptionalPropertyTypes: true` in TypeScript config. This means:
+- `prop?: Type` = "property can be MISSING" (omitted), but NOT explicitly set to `undefined`
+- `prop: Type | undefined` = "property is ALWAYS present" but can hold `undefined` value
+
+**Common Violations**:
+
+**1. Private properties that will be assigned `undefined`**:
+```typescript
+// ❌ WRONG - Will fail when assigning undefined
+private currentItemId?: string | number;  // Optional = can be missing, but NOT assignable to undefined
+
+someMethod(itemId?: string | number) {
+  this.currentItemId = itemId;  // ERROR: Cannot assign undefined to optional property
+}
+
+// ✅ CORRECT (Option A) - Explicit union type allows undefined assignment
+private currentItemId: string | number | undefined;
+
+// ✅ CORRECT (Option B) - Optional + undefined union (preferred if you want ?:)
+private currentItemId?: string | number | undefined;
+
+someMethod(itemId?: string | number) {
+  this.currentItemId = itemId;  // OK: Property accepts undefined in both options
+}
+```
+
+**Key insight**: With `exactOptionalPropertyTypes`, `?:` only means "can be omitted" - NOT "can be assigned undefined". Add `| undefined` to the type if you need to assign undefined values.
+
+**2. Method parameters assigned to properties**:
+```typescript
+// ❌ WRONG - Parameter is optional, property needs undefined in union
+updateItem(itemId?: string) {
+  this.itemId = itemId;  // ERROR if this.itemId is `itemId?: string`
+}
+
+// ✅ CORRECT - Property type includes undefined explicitly
+private itemId: string | undefined;
+
+updateItem(itemId?: string) {
+  this.itemId = itemId;  // OK
+}
+```
+
+**3. Conditional access after narrowing check (TypeScript flow analysis limitation)**:
+```typescript
+// ❌ MAY FAIL - TypeScript doesn't always narrow after boolean conditions
+const shouldNotify = this.parentList && !this.parentList.isControlled;
+if (shouldNotify) {
+  this.parentList.updateItem();  // ERROR: Object is possibly 'undefined'
+}
+
+// ✅ CORRECT - Re-check in the if condition for type narrowing
+if (shouldNotify && this.parentList) {
+  this.parentList.updateItem();  // OK: Narrowed in same scope
+}
+```
+
+**4. Array access without undefined check**:
+```typescript
+// ❌ WRONG - nodes[0] could be undefined
+const nodes = slot.assignedElements();
+return nodes.length > 0 && nodes[0].tagName === 'foo';  // ERROR: Object possibly undefined
+
+// ✅ CORRECT - Use optional chaining or extract variable
+const nodes = slot.assignedElements();
+const firstNode = nodes[0];
+return nodes.length > 0 && firstNode?.tagName === 'foo';  // OK
+```
+
+**Detection Pattern**:
+1. Search for `private \w+\?: \w+` (optional private properties)
+2. Check if property is ever assigned a value that could be `undefined`
+3. Search for array index access without optional chaining (e.g., `[0].` without `?`)
+4. Check narrowing conditions - if variable narrowed in condition, verify same variable re-checked in if body
+
+**Report Format**:
+```
+❌ CRITICAL: Optional property assigned undefined at line 85
+  - Property: `private currentItemId?: string | number`
+  - Assignment: `this.currentItemId = itemId` where `itemId?: string | number`
+  - Fix: Change to `private currentItemId: string | number | undefined`
+
+❌ CRITICAL: Array access without undefined check at line 112
+  - Expression: `nodes[0].tagName`
+  - Fix: Use `nodes[0]?.tagName` or extract to variable with optional chaining
+
+❌ CRITICAL: Narrowing not preserved in if body at line 101
+  - Condition narrows `this.parentList` but not re-checked in if body
+  - Fix: Add `&& this.parentList` to if condition
+```
+
+**Validation Steps**:
+1. Find all `private \w+\?:` declarations
+2. Search for assignments to those properties where RHS could be undefined
+3. Find all array index access patterns `\[\d+\]\.` without preceding `?`
+4. Find conditional narrowing patterns where narrowed variable isn't re-checked
+5. Flag each as CRITICAL (causes TypeScript compile failure)
+
 ### Check Attribute Names Match React Props
 
 ```typescript
@@ -1915,6 +2015,7 @@ After fixing all issues, re-run audit to verify:
 - **Detect unused code** - Flag unused variables, functions, methods, properties, and event classes
 - Validate property decorators match React types
 - **Check HTMLElement property compatibility** (especially `id: string`, not `id?: string`)
+- **Check exactOptionalPropertyTypes compliance** - Use `?: Type | undefined` if assigning undefined values
 - **Check for tabIndex property declarations** - Use `delegatesFocus` instead (see Step 4b)
 - Check template uses Lit directives correctly
 - Verify ElementInternals only for :host

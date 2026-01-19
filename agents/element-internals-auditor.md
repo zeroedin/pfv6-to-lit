@@ -323,6 +323,177 @@ updated(changed: PropertyValues) {
 3. **FAIL** if any invalid ARIA properties are used (will cause TypeScript compile error)
 4. Suggest correct property name or alternative approach
 
+### Rule 8: Shadow DOM List Accessibility Pattern
+
+**CRITICAL: When a custom element is slotted inside a `<ul>` or `<ol>`, screen readers don't see the internal `<li>` as a direct child.**
+
+**The Problem**:
+
+Shadow DOM breaks the required `ul > li` (or `ol > li`) direct parent-child relationship:
+
+```
+<parent-list>
+  └── #shadow-root
+        └── <ul>
+              └── <slot> → slotted: <list-item-element>
+                                      └── #shadow-root
+                                            └── <li>  ← NOT a direct child of <ul>!
+```
+
+Screen readers see `<ul>` with child `<list-item-element>` (a custom element with no semantic meaning), NOT `<li>`.
+
+**Detection**:
+```bash
+# Check if component renders <li> and is used inside a list parent
+grep -E "<li[^>]*>" component.ts
+
+# Check if parent component renders <ul> or <ol> with <slot>
+grep -E "<(ul|ol)[^>]*>.*<slot" parent-component.ts
+```
+
+**Antipattern**:
+```typescript
+// ❌ WRONG - <li> in shadow DOM is invisible to screen readers
+// when element is slotted into a <ul>
+render() {
+  return html`
+    <li class="item">
+      <slot></slot>
+    </li>
+  `;
+}
+```
+
+**Correct pattern**:
+```typescript
+// ✅ CORRECT - Use ElementInternals for listitem role on :host
+#internals: ElementInternals;
+
+constructor() {
+  super();
+  this.#internals = this.attachInternals();
+  this.#internals.role = 'listitem';
+}
+
+render() {
+  return html`
+    <div class="item">  <!-- Generic container, role is on :host -->
+      <slot></slot>
+    </div>
+  `;
+}
+```
+
+**Key points**:
+- `formAssociated = true` is NOT required for non-form elements
+- Just use `attachInternals()` and set the role
+- Change `<li>` to `<div>` in render() to avoid duplicative semantics (Rule 5)
+- This applies to any parent-child semantic relationship broken by Shadow DOM
+
+**Validation checklist**:
+- ✅ Component uses ElementInternals with `role = 'listitem'` on `:host`
+- ✅ Component renders `<div>` (not `<li>`) internally
+- ✅ Parent component renders `<ul>` or `<ol>` with slotted custom element children
+- ❌ FAIL if `<li>` is rendered inside shadow DOM when element is used as list item
+
+**Other affected semantic relationships**:
+| Parent element | Child element | Required role on `:host` |
+|----------------|---------------|--------------------------|
+| `<ul>` / `<ol>` | `<li>` | `listitem` |
+| `<dl>` | `<dt>` | `term` |
+| `<dl>` | `<dd>` | `definition` |
+| `<table>` | `<tr>` | `row` |
+| `<tr>` | `<td>` | `cell` |
+| `<tr>` | `<th>` | `columnheader` or `rowheader` |
+| `<thead>` | `<tr>` | `row` (within `rowgroup`) |
+| `<select>` | `<option>` | `option` |
+
+### Rule 9: Shadow DOM Buttons and Form Participation
+
+**CRITICAL: Buttons inside Shadow DOM cannot participate in form submission without `formAssociated = true`.**
+
+**The Problem**:
+
+A `<button type="submit">` or `<button type="reset">` inside Shadow DOM is encapsulated and won't interact with ancestor `<form>` elements.
+
+```html
+<form>
+  <my-component>
+    #shadow-root
+      <button type="submit">Submit</button>  <!-- Won't submit the form! -->
+  </my-component>
+</form>
+```
+
+**When `formAssociated = true` IS Required**:
+- Component contains `<button type="submit">` in Shadow DOM
+- Component contains `<button type="reset">` in Shadow DOM
+- Button needs to participate in form submission
+
+**When `formAssociated = true` is NOT Required**:
+- Button is standalone (client-side actions only, no form interaction)
+- Native button is **slotted** (remains in light DOM, works automatically)
+- Button only uses `type="button"` (no form interaction)
+
+**Detection**:
+```bash
+# Check if component renders submit/reset buttons
+grep -E 'type.*submit|type.*reset|type=.submit|type=.reset' component.ts
+
+# Check if formAssociated is set
+grep -q "static formAssociated = true" component.ts
+```
+
+**Correct Pattern**:
+```typescript
+@customElement('my-button-container')
+export class MyButtonContainer extends LitElement {
+  static formAssociated = true;
+
+  #internals: ElementInternals;
+
+  @property({ type: String })
+  type: 'button' | 'submit' | 'reset' = 'button';
+
+  constructor() {
+    super();
+    this.#internals = this.attachInternals();
+  }
+
+  #handleClick = () => {
+    const form = this.#internals.form;
+    if (form) {
+      if (this.type === 'submit') {
+        form.requestSubmit();
+      } else if (this.type === 'reset') {
+        form.reset();
+      }
+    }
+  };
+
+  render() {
+    return html`
+      <button type=${this.type} @click=${this.#handleClick}>
+        <slot></slot>
+      </button>
+    `;
+  }
+}
+```
+
+**Key Points**:
+- `formAssociated = true` enables `this.#internals.form` access
+- Must manually call `form.requestSubmit()` for submit buttons
+- Must manually call `form.reset()` for reset buttons
+- This is separate from FACE patterns (form controls with values)
+
+**Validation Checklist**:
+- ✅ Component has `static formAssociated = true` if rendering submit/reset buttons
+- ✅ Click handler calls `form.requestSubmit()` for submit type
+- ✅ Click handler calls `form.reset()` for reset type
+- ✅ Uses `this.#internals.form` to access parent form
+- ❌ FAIL if submit/reset button rendered without `formAssociated = true`
+
 ## Output Format
 
 ```markdown
@@ -365,10 +536,14 @@ updated(changed: PropertyValues) {
 - Validate that host-level ARIA uses ElementInternals, not direct attributes
 - Check for proper shadow DOM patterns (focus, roles)
 - **Validate that only valid ElementInternals ARIA properties are used (Rule 7)**
+- **Check if component renders list/table/dl child elements inside shadow DOM when used as slotted children (Rule 8)**
+- **Check if component renders submit/reset buttons - requires `formAssociated = true` (Rule 9)**
 
 **NEVER**:
 - Allow semantic elements in render() when ElementInternals sets corresponding role on :host
 - Allow direct ARIA attributes on :host (should use ElementInternals)
 - Skip validation of ElementInternals initialization
 - **Allow invalid ARIA properties like `ariaLabelledBy` (should be `ariaLabelledByElements`)**
+- **Allow `<li>`, `<tr>`, `<td>`, `<dt>`, `<dd>` in shadow DOM when element is slotted into semantic parent (use ElementInternals role instead)**
+- **Allow submit/reset buttons in shadow DOM without `formAssociated = true` and manual form handling**
 
