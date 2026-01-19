@@ -30,6 +30,7 @@ export function injectImportMapPlugin(): Plugin {
           const json: ImportMap = {
             imports: {
               '@pfv6/elements/': '/elements/',
+              '@patternfly/pfe-core/': 'https://cdn.jsdelivr.net/npm/@patternfly/pfe-core@5.0.5/',
               'lit': 'https://cdn.jsdelivr.net/npm/lit@3.3.1/index.js',
               'lit/': 'https://cdn.jsdelivr.net/npm/lit@3.3.1/',
               '@lit/context': 'https://cdn.jsdelivr.net/npm/@lit/context@1.1.6/development/index.js',

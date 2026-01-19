@@ -649,6 +649,261 @@ this.dispatchEvent(new CustomEvent('expand', {
 }));
 ```
 
+## Step 6.5: Parent-Child State Sharing with @lit/context (CRITICAL)
+
+**When React uses Context to share state between parent and children, you MUST use `@lit/context` in Lit.**
+
+### The Problem
+
+In React, when a parent's state changes, Context automatically triggers re-renders in all consuming children. In Lit, custom elements are independent - **a parent calling `requestUpdate()` does NOT cause children to re-render**.
+
+**Symptoms you're trying to solve**:
+- Parent maintains state (e.g., current selected item, expanded state)
+- Children need to react to that state
+- React uses Context to share this state
+- Without `@lit/context`, Lit children won't update when parent state changes
+
+### When to Use @lit/context
+
+**Use @lit/context when**:
+1. Parent component maintains state that children need to display
+2. React component uses `React.createContext()` and `Context.Provider`
+3. Children need to call parent methods (callbacks)
+4. Multiple children need to know about each other's state (e.g., which item is "current")
+
+**Common patterns that need context**:
+- SimpleList: Parent tracks `currentItemElement`, children check if they're current
+- Accordion: Parent tracks which panels are expanded
+- Tabs: Parent tracks active tab, children know if they're selected
+- Menu: Parent tracks selected items
+
+### Implementation Pattern
+
+**Parent Component (Provider)**:
+
+```typescript
+import { LitElement, html } from 'lit';
+import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators/property.js';
+import { createContext, provide } from '@lit/context';
+import styles from './pfv6-list.css';
+
+// 1. Define context interface
+export interface ListContext {
+  currentItemElement: HTMLElement | undefined;
+  isControlled: boolean;
+  updateCurrentItem: (element: HTMLElement, id?: string) => void;
+}
+
+// 2. Create context with unique symbol
+export const listContext = createContext<ListContext>(Symbol('list-context'));
+
+@customElement('pfv6-list')
+export class Pfv6List extends LitElement {
+  static styles = styles;
+
+  @property({ type: Boolean, attribute: 'is-controlled' })
+  isControlled = true;
+
+  private currentItemElement: HTMLElement | undefined;
+
+  // 3. Provide context via getter (reactive)
+  @provide({ context: listContext })
+  private get contextValue(): ListContext {
+    return {
+      currentItemElement: this.currentItemElement,
+      isControlled: this.isControlled,
+      updateCurrentItem: this.#handleUpdateCurrentItem,
+    };
+  }
+
+  // 4. Handler updates state and triggers re-render
+  #handleUpdateCurrentItem = (element: HTMLElement, id?: string) => {
+    this.currentItemElement = element;
+    this.requestUpdate();  // This updates context, which updates consumers
+  };
+
+  render() {
+    return html`<slot></slot>`;
+  }
+}
+```
+
+**Child Component (Consumer)**:
+
+```typescript
+import { LitElement, html } from 'lit';
+import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators/property.js';
+import { consume } from '@lit/context';
+import { listContext, type ListContext } from './pfv6-list.js';
+import styles from './pfv6-list-item.css';
+
+@customElement('pfv6-list-item')
+export class Pfv6ListItem extends LitElement {
+  static styles = styles;
+
+  // 5. Consume context with subscribe: true (CRITICAL)
+  @consume({ context: listContext, subscribe: true })
+  private listContext?: ListContext;
+
+  @property({ type: Boolean, attribute: 'is-active' })
+  isActive = false;
+
+  #handleClick = () => {
+    // 6. Call parent via context
+    this.listContext?.updateCurrentItem(this, this.id);
+  };
+
+  #isCurrentItem() {
+    if (!this.listContext) {
+      return this.isActive;  // Fallback when no parent
+    }
+
+    const { isControlled, currentItemElement } = this.listContext;
+
+    // Controlled mode: compare element refs
+    if (isControlled && currentItemElement) {
+      return currentItemElement === this;
+    }
+
+    // Uncontrolled or initial state: use isActive prop
+    return this.isActive;
+  }
+
+  render() {
+    const isCurrent = this.#isCurrentItem();
+    return html`
+      <button
+        class=${isCurrent ? 'current' : ''}
+        @click=${this.#handleClick}
+      >
+        <slot></slot>
+      </button>
+    `;
+  }
+}
+```
+
+### Critical Details
+
+**`subscribe: true` is MANDATORY**:
+```typescript
+// ✅ CORRECT - Will re-render when context changes
+@consume({ context: listContext, subscribe: true })
+private listContext?: ListContext;
+
+// ❌ WRONG - Only gets initial value, never updates
+@consume({ context: listContext })
+private listContext?: ListContext;
+```
+
+**Context must be a getter for reactivity**:
+```typescript
+// ✅ CORRECT - Getter creates new object on each access
+@provide({ context: listContext })
+private get contextValue(): ListContext {
+  return { ... };
+}
+
+// ❌ WRONG - Property won't trigger consumer updates
+@provide({ context: listContext })
+private contextValue: ListContext = { ... };
+```
+
+**Export context and type for consumers**:
+```typescript
+// In parent file - export both
+export const listContext = createContext<ListContext>(Symbol('list-context'));
+export interface ListContext { ... }
+
+// In child file - import both
+import { listContext, type ListContext } from './pfv6-list.js';
+```
+
+### Timing Issue with Slotted Content (CRITICAL)
+
+**Problem**: When using `@lit/context` with slotted (light DOM) children, there's a timing issue. Child elements may connect to the DOM before or simultaneously with the parent, causing the context request to fail because the parent's provider isn't ready yet.
+
+**Symptoms**:
+- Context works for dynamically added children but not for children in the initial HTML
+- `@consume` decorator receives `undefined`
+
+**Solution**: Use `ContextConsumer` class with `queueMicrotask()` to defer the context request:
+
+```typescript
+import { ContextConsumer } from '@lit/context';
+import { state } from 'lit/decorators/state.js';
+
+@customElement('pfv6-list-item')
+export class Pfv6ListItem extends LitElement {
+  #contextConsumer: ContextConsumer<typeof listContext, this> | null = null;
+
+  @state()
+  private listContext: ListContext | undefined;
+
+  override connectedCallback() {
+    super.connectedCallback();
+    // Defer context request to next microtask to ensure parent's provider is initialized
+    queueMicrotask(() => {
+      if (this.isConnected && !this.#contextConsumer) {
+        this.#contextConsumer = new ContextConsumer(this, {
+          context: listContext,
+          subscribe: true,
+          callback: (value) => {
+            this.listContext = value;
+          },
+        });
+      }
+    });
+  }
+}
+```
+
+**Why this works**:
+- `queueMicrotask()` schedules the context request after all synchronous DOM operations complete
+- By the time the microtask runs, the parent element has connected and initialized its provider
+- The `isConnected` check ensures we don't create consumers for disconnected elements
+
+**Note**: The `@consume` decorator may not work reliably with slotted content due to this timing issue. Prefer the explicit `ContextConsumer` pattern shown above.
+
+### Detecting Context Need from React
+
+**Look for these patterns in React source**:
+
+```tsx
+// React Context creation
+const CardContext = createContext<CardContextProps>({});
+
+// Context Provider in render
+return (
+  <CardContext.Provider value={{ isExpanded, toggleExpand }}>
+    {children}
+  </CardContext.Provider>
+);
+
+// Context Consumer in child
+const { isExpanded } = useContext(CardContext);
+```
+
+**Document in output when context is needed**:
+```markdown
+### Parent-Child State Sharing
+
+**Uses Context**: YES
+
+**Context Purpose**: Share current item state between list and items
+
+**Context Properties**:
+- `currentItemElement: HTMLElement | undefined` - Currently selected item
+- `isControlled: boolean` - Whether parent manages selection
+- `updateCurrentItem: (element, id?) => void` - Callback to update selection
+
+**Implementation**: Use `@lit/context` with:
+- Parent: `@provide({ context: listContext })`
+- Children: `@consume({ context: listContext, subscribe: true })`
+```
+
 ## Step 7: Form Control Architecture Decision (CRITICAL)
 
 **Before designing the component API, determine if this is a form control AND which pattern to use.**

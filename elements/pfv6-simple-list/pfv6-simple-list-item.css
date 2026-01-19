@@ -1,0 +1,71 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(button) {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: var(--pf-t--global--text--color--regular, #151515);
+  cursor: pointer;
+}
+
+:host {
+  display: contents;
+}
+
+.item {
+  display: block;
+}
+
+.item-link {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding-block-start: var(--pf-v6-c-simple-list__item-link--PaddingBlockStart);
+  padding-block-end: var(--pf-v6-c-simple-list__item-link--PaddingBlockEnd);
+  padding-inline-start: var(--pf-v6-c-simple-list__item-link--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-simple-list__item-link--PaddingInlineEnd);
+  font-size: var(--pf-v6-c-simple-list__item-link--FontSize);
+  color: var(--pf-v6-c-simple-list__item-link--Color);
+  text-align: start;
+  text-decoration-line: none;
+  background-color: var(--pf-v6-c-simple-list__item-link--BackgroundColor);
+  border: none;
+  border-radius: var(--pf-v6-c-simple-list__item-link--BorderRadius);
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    border-style: solid;
+    border-width: var(--pf-v6-c-simple-list__item-link--BorderWidth);
+    border-color: var(--pf-v6-c-simple-list__item-link--BorderColor);
+    border-radius: inherit;
+  }
+
+  &.link {
+    --pf-v6-c-simple-list__item-link--Color: var(--pf-v6-c-simple-list__item-link--m-link--Color);
+    --pf-v6-c-simple-list__item-link--hover--Color: var(--pf-v6-c-simple-list__item-link--m-link--m-current--Color);
+    --pf-v6-c-simple-list__item-link--m-current--Color: var(--pf-v6-c-simple-list__item-link--m-link--hover--Color);
+  }
+
+  &:is(:hover, :focus) {
+    --pf-v6-c-simple-list__item-link--BackgroundColor: var(--pf-v6-c-simple-list__item-link--hover--BackgroundColor);
+    --pf-v6-c-simple-list__item-link--Color: var(--pf-v6-c-simple-list__item-link--hover--Color);
+    --pf-v6-c-simple-list__item-link--BorderWidth: var(--pf-v6-c-simple-list__item-link--hover--BorderWidth);
+
+    text-decoration-line: none;
+  }
+
+  &.current {
+    /* stylelint-disable-next-line @stylistic/max-line-length -- PatternFly variable names */
+    --pf-v6-c-simple-list__item-link--BackgroundColor: var(--pf-v6-c-simple-list__item-link--m-current--BackgroundColor);
+    --pf-v6-c-simple-list__item-link--Color: var(--pf-v6-c-simple-list__item-link--m-current--Color);
+    --pf-v6-c-simple-list__item-link--BorderWidth: var(--pf-v6-c-simple-list__item-link--m-current--BorderWidth);
+  }
+}

@@ -1,0 +1,57 @@
+/* stylelint-disable @stylistic/max-line-length -- PatternFly CSS variable names */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(ul) {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+:host {
+  /* Public CSS variables - SimpleList item link */
+  --pf-v6-c-simple-list__item-link--PaddingBlockStart: var(--pf-t--global--spacer--xs, 0.25rem);
+  --pf-v6-c-simple-list__item-link--PaddingInlineEnd: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-simple-list__item-link--PaddingBlockEnd: var(--pf-t--global--spacer--xs, 0.25rem);
+  --pf-v6-c-simple-list__item-link--PaddingInlineStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-simple-list__item-link--BackgroundColor: var(--pf-t--global--background--color--action--plain--default, rgb(255 255 255 / 0%));
+  --pf-v6-c-simple-list__item-link--Color: var(--pf-t--global--text--color--subtle, #4d4d4d);
+  --pf-v6-c-simple-list__item-link--FontSize: var(--pf-t--global--font--size--body--default, 0.875rem);
+  --pf-v6-c-simple-list__item-link--m-current--Color: var(--pf-t--global--text--color--regular, #151515);
+  --pf-v6-c-simple-list__item-link--m-current--BackgroundColor: var(--pf-t--global--background--color--action--plain--clicked, rgb(199 199 199 / 25%));
+  --pf-v6-c-simple-list__item-link--hover--Color: var(--pf-t--global--text--color--subtle, #4d4d4d);
+  --pf-v6-c-simple-list__item-link--hover--BackgroundColor: var(--pf-t--global--background--color--action--plain--hover, rgb(199 199 199 / 25%));
+  --pf-v6-c-simple-list__item-link--BorderRadius: var(--pf-t--global--border--radius--tiny, 4px);
+  --pf-v6-c-simple-list__item-link--BorderWidth: var(--pf-t--global--border--width--action--plain--default, 0px);
+  --pf-v6-c-simple-list__item-link--BorderColor: var(--pf-t--global--border--color--high-contrast, rgb(255 255 255 / 0%));
+  --pf-v6-c-simple-list__item-link--hover--BorderWidth: var(--pf-t--global--border--width--action--plain--hover, 0px);
+  --pf-v6-c-simple-list__item-link--m-current--BorderWidth: var(--pf-t--global--border--width--action--plain--clicked, 0px);
+  --pf-v6-c-simple-list__item-link--m-link--Color: var(--pf-t--global--text--color--link--default, #0066cc);
+  --pf-v6-c-simple-list__item-link--m-link--m-current--Color: var(--pf-t--global--text--color--link--hover, #004d99);
+  --pf-v6-c-simple-list__item-link--m-link--hover--Color: var(--pf-t--global--text--color--link--hover, #004d99);
+
+  /* Public CSS variables - SimpleList title */
+  --pf-v6-c-simple-list__title--PaddingBlockStart: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-simple-list__title--PaddingInlineEnd: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-simple-list__title--PaddingBlockEnd: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-simple-list__title--PaddingInlineStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-simple-list__title--FontSize: var(--pf-t--global--font--size--body--sm, 0.75rem);
+  --pf-v6-c-simple-list__title--Color: var(--pf-t--global--text--color--regular, #151515);
+  --pf-v6-c-simple-list__title--FontWeight: var(--pf-t--global--font--weight--body--bold, 500);
+
+  /* Public CSS variables - SimpleList section */
+  --pf-v6-c-simple-list__section--section--MarginBlockStart: var(--pf-t--global--spacer--sm, 0.5rem);
+
+  display: block;
+}
+
+#container {
+  display: block;
+}
+
+.list {
+  display: block;
+}
