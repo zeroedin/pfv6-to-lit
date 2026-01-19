@@ -459,7 +459,7 @@ export class Pfv6Tooltip extends LitElement {
       options.placement = this.position;
     }
 
-    const { x, y, placement, middlewareData } = await computePosition(
+    const { x, y, placement } = await computePosition(
       this._triggerElement,
       this._tooltipElement,
       options
@@ -538,7 +538,6 @@ export class Pfv6Tooltip extends LitElement {
         id="tooltip"
         class=${classMap(classes)}
         role="tooltip"
-        aria-labelledby="content"
         style=${styleMap(tooltipStyles)}
       >
         <div id="arrow"></div>
