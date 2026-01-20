@@ -873,6 +873,85 @@ render() {
   - Recommendation: Remove part attribute
 ```
 
+### Check No Unnecessary Sub-Components (Anti-Pattern)
+
+**Flag any sub-components that are NOT slotted by users AND do NOT need reactive properties.**
+
+Sub-components (separate custom elements) add complexity and should only be used when:
+1. The element is slotted by users (they use it directly in their markup)
+2. The element needs reactive properties that users set via attributes
+
+**❌ WRONG - Internal structure as sub-components**:
+```typescript
+// ❌ WRONG - Arrow and content are internal, not user-slotted
+import './pfv6-tooltip-arrow.js';
+import './pfv6-tooltip-content.js';
+
+render() {
+  return html`
+    <div id="tooltip">
+      <pfv6-tooltip-arrow></pfv6-tooltip-arrow>
+      <pfv6-tooltip-content>${this.content}</pfv6-tooltip-content>
+    </div>
+  `;
+}
+```
+
+**✅ CORRECT - Use plain divs for internal structure**:
+```typescript
+// ✅ CORRECT - Internal elements are just divs, not sub-components
+render() {
+  return html`
+    <div id="tooltip">
+      <div class="pf-v6-c-tooltip__arrow"></div>
+      <div id="content">${this.content}</div>
+    </div>
+  `;
+}
+```
+
+**✅ CORRECT - Sub-components that users slot**:
+```typescript
+// ✅ CORRECT - Users actually use these in their markup
+// <pfv6-accordion>
+//   <pfv6-accordion-item>...</pfv6-accordion-item>
+// </pfv6-accordion>
+
+render() {
+  return html`<slot></slot>`;
+}
+```
+
+**Why this is wrong**:
+- Adds unnecessary file complexity (extra .ts, .css, .js files)
+- Increases bundle size with additional custom element registrations
+- Creates import dependencies that aren't needed
+- Makes debugging harder (more files to trace through)
+- Sub-components imply user interaction that doesn't exist
+
+**Detection Pattern**:
+1. Find all sub-component imports (`import './{component-name}-{subpart}.js'`)
+2. For each sub-component:
+   - Check if it's used in a `<slot>` (user-slotted)
+   - Check if users set attributes on it in demos
+   - If neither, flag as unnecessary sub-component
+3. Look for `<pfv6-*>` elements in render() that are NOT inside a slot
+
+**Report format**:
+```
+❌ Unnecessary sub-component: pfv6-tooltip-arrow
+  - Not slotted by users (internal to pfv6-tooltip)
+  - No reactive properties needed
+  - Fix: Replace with <div class="pf-v6-c-tooltip__arrow">
+  - Delete: pfv6-tooltip-arrow.ts, pfv6-tooltip-arrow.css
+
+❌ Unnecessary sub-component: pfv6-tooltip-content
+  - Not slotted by users (internal to pfv6-tooltip)
+  - No reactive properties set by users
+  - Fix: Replace with <div id="content">
+  - Delete: pfv6-tooltip-content.ts
+```
+
 ### Check Lists Use repeat() for Dynamic Content
 
 ```typescript

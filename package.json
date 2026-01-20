@@ -281,6 +281,7 @@
   "dependencies": {
     "@floating-ui/dom": "^1.7.4",
     "@lit/context": "^1.1.6",
+    "@patternfly/pfe-core": "^5.0.5",
     "lit": "^3.3.1"
   }
 }

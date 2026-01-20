@@ -1,0 +1,34 @@
+<pfv6-simple-list id="uncontrolled-list" accessible-label="Uncontrolled Simple List Example">
+  <pfv6-simple-list-item item-id="0">List item 1</pfv6-simple-list-item>
+  <pfv6-simple-list-item item-id="1">List item 2</pfv6-simple-list-item>
+  <pfv6-simple-list-item item-id="2">List item 3</pfv6-simple-list-item>
+</pfv6-simple-list>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-simple-list/pfv6-simple-list.js';
+
+  const list = document.getElementById('uncontrolled-list');
+  // Set to uncontrolled mode via property (boolean attributes use presence/absence)
+  list.isControlled = false;
+  let activeItem = 0;
+
+  // Set initial active state
+  const items = list.querySelectorAll('pfv6-simple-list-item');
+  items[activeItem].setAttribute('is-active', 'true');
+
+  // Handle selection events
+  list.addEventListener('select', (e) => {
+    const selectedItemId = parseInt(e.itemId, 10);
+
+    // Update active state on all items
+    items.forEach((item, index) => {
+      if (index === selectedItemId) {
+        item.setAttribute('is-active', 'true');
+      } else {
+        item.removeAttribute('is-active');
+      }
+    });
+
+    activeItem = selectedItemId;
+  });
+</script>

@@ -758,6 +758,105 @@ When demos use other pfv6-* components, verify the component exists AND attribut
 - Wrong attribute names (e.g., `disabled` vs `is-disabled`)
 - Using attributes when component expects slot content
 
+## Step 7.7: Import Validation (CRITICAL)
+
+Demos should only import the parent component. Sub-components that are already imported by the parent component should NOT be imported again in demos.
+
+### Why This Matters
+
+**Context Timing Issue**: When demos import sub-components separately, it can break `@lit/context` state sharing. During HTML parsing, child elements may connect before parent elements are fully initialized. Proper import order (parent first, children imported by parent) ensures context providers are ready.
+
+### Validation Process
+
+1. **Read the parent component** (`elements/pfv6-{component}/pfv6-{component}.ts`)
+2. **Find internal imports** of sub-components:
+   ```typescript
+   // Parent component imports sub-components internally:
+   import './pfv6-simple-list-item.js';
+   import './pfv6-simple-list-group.js';
+   ```
+
+3. **Read each demo file** and extract script imports:
+   ```html
+   <script type="module">
+     import '@pfv6/elements/pfv6-simple-list/pfv6-simple-list.js';
+     import '@pfv6/elements/pfv6-simple-list/pfv6-simple-list-item.js';  // REDUNDANT
+   </script>
+   ```
+
+4. **Flag redundant imports** where demos import sub-components already imported by parent
+
+### Detection Pattern
+
+```bash
+# Find what the parent component imports internally
+grep -E "^import '\\./pfv6-" elements/pfv6-{component}/pfv6-{component}.ts
+
+# Check if demos import those same sub-components
+grep -E "import '@pfv6/elements/pfv6-{component}/pfv6-{component}-(item|group|header|body|footer)" \
+  elements/pfv6-{component}/demo/*.html
+```
+
+### Correct vs Incorrect
+
+**Correct** - Only import parent:
+```html
+<script type="module">
+  import '@pfv6/elements/pfv6-simple-list/pfv6-simple-list.js';
+</script>
+```
+
+**Incorrect** - Redundant sub-component imports:
+```html
+<script type="module">
+  import '@pfv6/elements/pfv6-simple-list/pfv6-simple-list.js';
+  import '@pfv6/elements/pfv6-simple-list/pfv6-simple-list-item.js';  <!-- REDUNDANT -->
+  import '@pfv6/elements/pfv6-simple-list/pfv6-simple-list-group.js'; <!-- REDUNDANT -->
+</script>
+```
+
+### Report Format
+
+```markdown
+## Import Validation Issues
+
+❌ **Redundant Sub-Component Imports Found** ({N} demos):
+
+### `basic.html`
+**Imports**:
+```html
+import '@pfv6/elements/pfv6-simple-list/pfv6-simple-list.js';
+import '@pfv6/elements/pfv6-simple-list/pfv6-simple-list-item.js';  // REDUNDANT
+```
+
+**Parent Already Imports**:
+- `pfv6-simple-list-item.js` (line 12 of pfv6-simple-list.ts)
+
+**Fix**: Remove redundant import:
+```html
+<script type="module">
+  import '@pfv6/elements/pfv6-simple-list/pfv6-simple-list.js';
+</script>
+```
+
+---
+
+✅ **Correct** ({N} demos):
+- All other demos only import the parent component
+```
+
+### Common Patterns
+
+**Components with sub-components** (always check for redundant imports):
+- `pfv6-card` → `pfv6-card-body`, `pfv6-card-header`, `pfv6-card-footer`, `pfv6-card-title`
+- `pfv6-simple-list` → `pfv6-simple-list-item`, `pfv6-simple-list-group`
+- `pfv6-accordion` → `pfv6-accordion-item`, `pfv6-accordion-toggle`, `pfv6-accordion-content`
+- `pfv6-tabs` → `pfv6-tab`, `pfv6-tab-content`
+- `pfv6-modal` → `pfv6-modal-header`, `pfv6-modal-body`, `pfv6-modal-footer`
+
+**Single component** (no sub-components to check):
+- `pfv6-button`, `pfv6-badge`, `pfv6-spinner`, etc.
+
 ## Step 8: Missing Component Identification
 
 Check for HTML comments indicating blockers:
@@ -961,6 +1060,23 @@ Provide a detailed parity audit report:
 
 ---
 
+## Import Validation Issues
+
+❌ **Redundant Sub-Component Imports Found** (2):
+- `basic.html`: Imports `pfv6-{component}-item.js` (already imported by parent)
+- `with-groups.html`: Imports `pfv6-{component}-group.js` (already imported by parent)
+
+**Parent Component Internal Imports** (from `pfv6-{component}.ts`):
+- `import './pfv6-{component}-item.js';` (line 12)
+- `import './pfv6-{component}-group.js';` (line 13)
+
+**Fix**: Remove redundant imports from demo files. Only import the parent component.
+
+✅ **Correct** (8):
+- All other demos only import the parent component
+
+---
+
 ## Action Plan (Priority Order)
 
 ### 1. Fix File Naming (2 issues)
@@ -1002,7 +1118,11 @@ Provide a detailed parity audit report:
 - [ ] `with-dividers.html`: Fix text casing "item" → "Item"
 - [ ] `with-gutter.html`: Fix maxWidths object (add missing keys, correct values)
 
-### 9. Document Blocked Demos (1)
+### 9. Fix Import Issues ({N} issues)
+- [ ] Remove redundant sub-component imports from demo files
+- [ ] Ensure demos only import the parent component
+
+### 10. Document Blocked Demos (1)
 - [ ] Track `expandable.html` blocker (waiting for pfv6-button)
 
 ---
@@ -1036,6 +1156,7 @@ After fixing all issues, re-run audit to verify:
 - All HTML is valid
 - All component dependency APIs are correct (no hallucinated properties)
 - All lightdom CSS links are present and correct
+- All demos only import the parent component (no redundant sub-component imports)
 ```
 
 ## Critical Rules
@@ -1059,6 +1180,8 @@ After fixing all issues, re-run audit to verify:
 - Provide specific line numbers for all issues
 - Categorize issues by type and priority
 - Create actionable fix instructions
+- Validate import statements (demos should only import parent component)
+- Check for redundant sub-component imports that parent already imports internally
 
 **NEVER**:
 - Allow absolute paths for static assets
@@ -1078,6 +1201,8 @@ After fixing all issues, re-run audit to verify:
 - Accept attributes that don't exist in component's @property decorators
 - Allow property instead of slot when component uses slot pattern
 - Skip validation steps
+- Allow redundant sub-component imports (demos should only import parent component)
+- Ignore import statements when validating demos
 
 **Quality Bar**: Every Lit demo must have 1:1 parity with its React counterpart - same props, same elements, same text, same values, correct paths, valid HTML.
 

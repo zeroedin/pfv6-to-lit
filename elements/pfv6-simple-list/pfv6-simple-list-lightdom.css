@@ -1,0 +1,12 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Spacing between adjacent SimpleListGroup components */
+pfv6-simple-list {
+  & > pfv6-simple-list-group + pfv6-simple-list-group {
+    --_simple-list-group-margin-block-start: var(--pf-v6-c-simple-list__section--section--MarginBlockStart);
+  }
+}

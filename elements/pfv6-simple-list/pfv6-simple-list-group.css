@@ -1,0 +1,41 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  font-weight: var(--pf-t--global--font--weight--body--default, 400);
+}
+
+:where(ul) {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+:host {
+  display: contents;
+}
+
+#container {
+  display: block;
+  margin-block-start: var(--_simple-list-group-margin-block-start, 0);
+}
+
+.title {
+  padding-block-start: var(--pf-v6-c-simple-list__title--PaddingBlockStart);
+  padding-block-end: var(--pf-v6-c-simple-list__title--PaddingBlockEnd);
+  padding-inline-start: var(--pf-v6-c-simple-list__title--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-simple-list__title--PaddingInlineEnd);
+  font-size: var(--pf-v6-c-simple-list__title--FontSize);
+  font-weight: var(--pf-v6-c-simple-list__title--FontWeight);
+  color: var(--pf-v6-c-simple-list__title--Color);
+}
+
+.list {
+  display: block;
+}
