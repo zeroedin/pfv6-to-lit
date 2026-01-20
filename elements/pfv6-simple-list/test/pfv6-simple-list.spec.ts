@@ -1,6 +1,4 @@
-// With globals: true, describe/it/expect are available globally
-import { html, fixture } from '@open-wc/testing-helpers';
-import { userEvent } from 'vitest/browser';
+import { html, fixture, expect } from '@open-wc/testing';
 import { Pfv6SimpleList, Pfv6SimpleListSelectEvent } from '../pfv6-simple-list.js';
 import { Pfv6SimpleListItem, Pfv6SimpleListItemClickEvent } from '../pfv6-simple-list-item.js';
 import { Pfv6SimpleListGroup } from '../pfv6-simple-list-group.js';
@@ -80,7 +78,7 @@ describe('<pfv6-simple-list>', function() {
 
       const item = el.querySelector('pfv6-simple-list-item');
       const button = item!.shadowRoot!.querySelector('button');
-      await userEvent.click(button!);
+      button!.click();
 
       expect(capturedEvent).to.be.an.instanceof(Pfv6SimpleListSelectEvent);
     });
@@ -99,7 +97,7 @@ describe('<pfv6-simple-list>', function() {
 
       const item = el.querySelector('pfv6-simple-list-item');
       const button = item!.shadowRoot!.querySelector('button');
-      await userEvent.click(button!);
+      button!.click();
 
       expect(capturedEvent!.itemId).to.equal('item-1'); // Data as class field
     });
@@ -118,7 +116,7 @@ describe('<pfv6-simple-list>', function() {
 
       const item = el.querySelector('pfv6-simple-list-item');
       const button = item!.shadowRoot!.querySelector('button');
-      await userEvent.click(button!);
+      button!.click();
 
       expect(capturedEvent!.itemProps).to.exist;
       expect(capturedEvent!.itemProps!.itemId).to.equal('item-1');
@@ -140,7 +138,7 @@ describe('<pfv6-simple-list>', function() {
 
       const item = el.querySelector('pfv6-simple-list-item');
       const button = item!.shadowRoot!.querySelector('button');
-      await userEvent.click(button!);
+      button!.click();
 
       expect(capturedEvent).to.exist;
       expect(capturedEvent!.bubbles).to.be.true;
@@ -160,7 +158,7 @@ describe('<pfv6-simple-list>', function() {
 
       // Click first item
       const button1 = items[0].shadowRoot!.querySelector('button');
-      await userEvent.click(button1!);
+      button1!.click();
       await el.updateComplete;
 
       // First item should be current
@@ -168,7 +166,7 @@ describe('<pfv6-simple-list>', function() {
 
       // Click second item
       const button2 = items[1].shadowRoot!.querySelector('button');
-      await userEvent.click(button2!);
+      button2!.click();
       await el.updateComplete;
 
       // Second item should be current, first should not
@@ -192,7 +190,7 @@ describe('<pfv6-simple-list>', function() {
 
       // Click second item
       const button2 = items[1].shadowRoot!.querySelector('button');
-      await userEvent.click(button2!);
+      button2!.click();
       await el.updateComplete;
 
       // First item should still be current (uncontrolled mode)
@@ -320,13 +318,23 @@ describe('<pfv6-simple-list-item>', function() {
       expect(button).to.exist;
     });
 
-    it('renders anchor element when component="a"', async function() {
+    it('renders anchor element when href is provided', async function() {
       const el = await fixture<Pfv6SimpleListItem>(html`
-        <pfv6-simple-list-item component="a">Item 1</pfv6-simple-list-item>
+        <pfv6-simple-list-item href="/page">Item 1</pfv6-simple-list-item>
       `);
       await el.updateComplete;
       const anchor = el.shadowRoot!.querySelector('a');
       expect(anchor).to.exist;
+    });
+
+    it('renders button element when component="a" but no href (href determines element type)', async function() {
+      const el = await fixture<Pfv6SimpleListItem>(html`
+        <pfv6-simple-list-item component="a">Item 1</pfv6-simple-list-item>
+      `);
+      await el.updateComplete;
+      // Without href, renders as button regardless of component property
+      const button = el.shadowRoot!.querySelector('button');
+      expect(button).to.exist;
     });
   });
 
@@ -412,13 +420,16 @@ describe('<pfv6-simple-list-item>', function() {
       expect(anchor!.getAttribute('href')).to.equal('/path/to/page');
     });
 
-    it('does not apply when href is empty', async function() {
+    it('renders button when href is empty (href determines element type)', async function() {
       const el = await fixture<Pfv6SimpleListItem>(html`
-        <pfv6-simple-list-item component="a">Item 1</pfv6-simple-list-item>
+        <pfv6-simple-list-item>Item 1</pfv6-simple-list-item>
       `);
       await el.updateComplete;
+      // Without href, renders as button
+      const button = el.shadowRoot!.querySelector('button');
+      expect(button).to.exist;
       const anchor = el.shadowRoot!.querySelector('a');
-      expect(anchor!.hasAttribute('href')).to.be.false;
+      expect(anchor).to.not.exist;
     });
   });
 
@@ -434,7 +445,7 @@ describe('<pfv6-simple-list-item>', function() {
       });
 
       const button = el.shadowRoot!.querySelector('button');
-      await userEvent.click(button!);
+      button!.click();
 
       expect(capturedEvent).to.be.an.instanceof(Pfv6SimpleListItemClickEvent);
     });
@@ -450,7 +461,7 @@ describe('<pfv6-simple-list-item>', function() {
       });
 
       const button = el.shadowRoot!.querySelector('button');
-      await userEvent.click(button!);
+      button!.click();
 
       expect(capturedEvent!.itemId).to.equal('item-1'); // Data as class field
     });
@@ -466,7 +477,7 @@ describe('<pfv6-simple-list-item>', function() {
       });
 
       const button = el.shadowRoot!.querySelector('button');
-      await userEvent.click(button!);
+      button!.click();
 
       expect(capturedEvent).to.exist;
       expect(capturedEvent!.bubbles).to.be.true;
@@ -487,18 +498,18 @@ describe('<pfv6-simple-list-item>', function() {
   });
 
   describe('link variant styling', function() {
-    it('applies link class when component="a"', async function() {
+    it('applies link class when href is provided', async function() {
       const el = await fixture<Pfv6SimpleListItem>(html`
-        <pfv6-simple-list-item component="a">Item 1</pfv6-simple-list-item>
+        <pfv6-simple-list-item href="/page">Item 1</pfv6-simple-list-item>
       `);
       await el.updateComplete;
       const anchor = el.shadowRoot!.querySelector('a');
       expect(anchor!.classList.contains('link')).to.be.true;
     });
 
-    it('does not apply link class when component="button"', async function() {
+    it('does not apply link class when no href (renders as button)', async function() {
       const el = await fixture<Pfv6SimpleListItem>(html`
-        <pfv6-simple-list-item component="button">Item 1</pfv6-simple-list-item>
+        <pfv6-simple-list-item>Item 1</pfv6-simple-list-item>
       `);
       await el.updateComplete;
       const button = el.shadowRoot!.querySelector('button');
