@@ -209,7 +209,7 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
 
       try {
         // Load React demo with CSS override
-        await reactPage.goto(`/elements/pfv6-button/react/demo/${demo}`);
+        await reactPage.goto(`/elements/pfv6-button/react/test/${demo}`);
         await applyCssOverride(reactPage, '.pf-v6-c-button', name, testValue);
         await waitForFullLoad(reactPage);
 

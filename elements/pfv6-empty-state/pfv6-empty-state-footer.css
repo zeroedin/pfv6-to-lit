@@ -1,0 +1,25 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  row-gap:
+    var(
+      --_empty-state-footer-row-gap,
+      var(--pf-t--global--spacer--gap--group-to-group--vertical--default, 1.5rem)
+    );
+  align-items: center;
+  margin-block-start:
+    var(
+      --_empty-state-footer-margin-block-start,
+      var(--pf-t--global--spacer--xl, 2rem)
+    );
+}

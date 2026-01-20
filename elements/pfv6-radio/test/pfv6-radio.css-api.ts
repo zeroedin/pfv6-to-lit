@@ -203,7 +203,7 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
 
       try {
         // Load React demo with CSS override
-        await reactPage.goto(`/elements/pfv6-radio/react/demo/${demo}`);
+        await reactPage.goto(`/elements/pfv6-radio/react/test/${demo}`);
         await applyCssOverride(reactPage, '.pf-v6-c-radio', name, testValue);
         await waitForFullLoad(reactPage);
 
