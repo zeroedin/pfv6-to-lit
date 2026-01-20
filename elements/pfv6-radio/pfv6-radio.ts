@@ -211,9 +211,9 @@ export class Pfv6Radio extends LitElement {
   }
 
   /**
-   * Updates form value when checked state changes
-   * @param changedProperties - Properties that changed
-   */
+  * Updates form value when checked state changes
+  * @param changedProperties - Properties that changed
+  */
   updated(changedProperties: PropertyValues<this>) {
     super.updated(changedProperties);
 
@@ -233,18 +233,18 @@ export class Pfv6Radio extends LitElement {
   }
 
   /**
-   * Handle radio input changes
-   * @param event - The change event from the input
-   */
+  * Handle radio input changes
+  * @param event - The change event from the input
+  */
   #handleChange(event: Event) {
     const input = event.target as HTMLInputElement;
     this.checked = input.checked;
   }
 
   /**
-   * Handle clicks on the wrapper when it's a label
-   * @param event - The click event
-   */
+  * Handle clicks on the wrapper when it's a label
+  * @param event - The click event
+  */
   #handleWrapperClick(event: Event) {
     if (this.isLabelWrapped && !this.disabled) {
       // Prevent double-toggle from label click

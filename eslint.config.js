@@ -13,6 +13,8 @@ export default tseslint.config(
       'lib/**/*.d.ts',
       '**/*.js',
       '**/*.js.map',
+      '**/tasks.json',
+      'dev-server/plugins/**/*.d.ts',
     ],
   },
   {

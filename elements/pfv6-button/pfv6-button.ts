@@ -150,11 +150,11 @@ export class Pfv6Button extends LitElement {
   spinnerAccessibleLabel?: string;
 
   /**
-   * Computes the appropriate tabindex for the inner button/span.
-   * With delegatesFocus, the host's native tabindex controls tab order.
-   * This only provides tabindex for inline spans (which aren't naturally focusable).
-   * Matches React Button's getDefaultTabIdx() logic.
-   */
+  * Computes the appropriate tabindex for the inner button/span.
+  * With delegatesFocus, the host's native tabindex controls tab order.
+  * This only provides tabindex for inline spans (which aren't naturally focusable).
+  * Matches React Button's getDefaultTabIdx() logic.
+  */
   private getComputedTabIndex(): number | undefined {
     const isInlineLink = this.isInline && this.variant === 'link';
 

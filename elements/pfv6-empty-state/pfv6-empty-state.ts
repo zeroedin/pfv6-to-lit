@@ -66,34 +66,34 @@ export class Pfv6EmptyState extends LitElement {
   static styles = styles;
 
   /**
-   * Modifies empty state max-width and sizes of icon, title and body.
-   */
+  * Modifies empty state max-width and sizes of icon, title and body.
+  */
   @property({ type: String, reflect: true })
   variant: 'xs' | 'sm' | 'lg' | 'xl' | 'full' = 'full';
 
   /**
-   * Cause component to consume the available height of its container.
-   */
+  * Cause component to consume the available height of its container.
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-full-height' })
   isFullHeight = false;
 
   /**
-   * Status of the empty state, will set a default status icon and color.
-   * Icon can be overwritten using the icon slot in pfv6-empty-state-header.
-   */
+  * Status of the empty state, will set a default status icon and color.
+  * Icon can be overwritten using the icon slot in pfv6-empty-state-header.
+  */
   @property({ type: String, reflect: true })
   status?: 'danger' | 'warning' | 'success' | 'info' | 'custom';
 
   /**
-   * Title text for the empty state header.
-   * When provided, automatically renders a pfv6-empty-state-header.
-   */
+  * Title text for the empty state header.
+  * When provided, automatically renders a pfv6-empty-state-header.
+  */
   @property({ type: String, attribute: 'title-text' })
   titleText?: string;
 
   /**
-   * Heading level for the title when using titleText property.
-   */
+  * Heading level for the title when using titleText property.
+  */
   @property({ type: String, attribute: 'heading-level' })
   headingLevel: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' = 'h1';
 

@@ -256,7 +256,9 @@ describe('<pfv6-button>', function() {
       const button = el.shadowRoot!.querySelector('button')!;
 
       let clicked = false;
-      el.addEventListener('click', () => { clicked = true; });
+      el.addEventListener('click', () => {
+        clicked = true;
+      });
 
       button.click();
 
@@ -956,7 +958,9 @@ describe('<pfv6-button>', function() {
     it('logs error when is-hamburger set without is-expanded', async function() {
       const consoleError = console.error;
       let errorMessage = '';
-      console.error = (msg: string) => { errorMessage = msg; };
+      console.error = (msg: string) => {
+        errorMessage = msg;
+      };
 
       await fixture<Pfv6Button>(html`<pfv6-button is-hamburger accessible-label="Menu"></pfv6-button>`);
 
@@ -967,7 +971,9 @@ describe('<pfv6-button>', function() {
     it('logs error when icon-only button lacks accessible name', async function() {
       const consoleError = console.error;
       let errorMessage = '';
-      console.error = (msg: string) => { errorMessage = msg; };
+      console.error = (msg: string) => {
+        errorMessage = msg;
+      };
 
       await fixture<Pfv6Button>(html`<pfv6-button is-settings></pfv6-button>`);
 
@@ -978,7 +984,9 @@ describe('<pfv6-button>', function() {
     it('does not log error when icon-only button has accessible-label', async function() {
       const consoleError = console.error;
       let errorCalled = false;
-      console.error = () => { errorCalled = true; };
+      console.error = () => {
+        errorCalled = true;
+      };
 
       await fixture<Pfv6Button>(html`<pfv6-button is-settings accessible-label="Settings"></pfv6-button>`);
 
@@ -989,7 +997,9 @@ describe('<pfv6-button>', function() {
     it('does not log error when icon-only button has text content', async function() {
       const consoleError = console.error;
       let errorCalled = false;
-      console.error = () => { errorCalled = true; };
+      console.error = () => {
+        errorCalled = true;
+      };
 
       await fixture<Pfv6Button>(html`<pfv6-button is-settings>Settings</pfv6-button>`);
 
@@ -1004,7 +1014,9 @@ describe('<pfv6-button>', function() {
       const button = el.shadowRoot!.querySelector('button')!;
 
       let clicked = false;
-      button.addEventListener('click', () => { clicked = true; });
+      button.addEventListener('click', () => {
+        clicked = true;
+      });
 
       button.click();
 
@@ -1016,7 +1028,9 @@ describe('<pfv6-button>', function() {
       const button = el.shadowRoot!.querySelector('button')!;
 
       let keypressed = false;
-      button.addEventListener('keypress', () => { keypressed = true; });
+      button.addEventListener('keypress', () => {
+        keypressed = true;
+      });
 
       const event = new KeyboardEvent('keypress', { key: 'Enter' });
       button.dispatchEvent(event);

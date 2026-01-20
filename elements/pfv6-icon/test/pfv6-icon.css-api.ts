@@ -55,7 +55,7 @@ async function applyCssOverride(
   value: string
 ): Promise<void> {
   await page.addStyleTag({
-    content: `${selector} { ${cssVar}: ${value}; }`
+    content: `${selector} { ${cssVar}: ${value}; }`,
   });
 }
 
@@ -68,7 +68,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-icon--Height',
@@ -76,7 +76,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Standalone icon sizes
@@ -86,7 +86,7 @@ const cssApiTests = [
     resolvedValue: '0.75rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'standalone-icon-sizes'
+    demo: 'standalone-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-sm--Height',
@@ -94,7 +94,7 @@ const cssApiTests = [
     resolvedValue: '0.75rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'standalone-icon-sizes'
+    demo: 'standalone-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-md--Width',
@@ -102,7 +102,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'standalone-icon-sizes'
+    demo: 'standalone-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-md--Height',
@@ -110,7 +110,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'standalone-icon-sizes'
+    demo: 'standalone-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-lg--Width',
@@ -118,7 +118,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'standalone-icon-sizes'
+    demo: 'standalone-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-lg--Height',
@@ -126,7 +126,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'standalone-icon-sizes'
+    demo: 'standalone-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-xl--Width',
@@ -134,7 +134,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'standalone-icon-sizes'
+    demo: 'standalone-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-xl--Height',
@@ -142,7 +142,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'standalone-icon-sizes'
+    demo: 'standalone-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-2xl--Width',
@@ -150,7 +150,7 @@ const cssApiTests = [
     resolvedValue: '3.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'standalone-icon-sizes'
+    demo: 'standalone-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-2xl--Height',
@@ -158,7 +158,7 @@ const cssApiTests = [
     resolvedValue: '3.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'standalone-icon-sizes'
+    demo: 'standalone-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-3xl--Width',
@@ -166,7 +166,7 @@ const cssApiTests = [
     resolvedValue: '6rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'standalone-icon-sizes'
+    demo: 'standalone-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-3xl--Height',
@@ -174,7 +174,7 @@ const cssApiTests = [
     resolvedValue: '6rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'standalone-icon-sizes'
+    demo: 'standalone-icon-sizes',
   },
 
   // Body sizes
@@ -184,7 +184,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'body-icon-sizes'
+    demo: 'body-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-body-sm--Height',
@@ -192,7 +192,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'body-icon-sizes'
+    demo: 'body-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-body-default--Width',
@@ -200,7 +200,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'body-icon-sizes'
+    demo: 'body-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-body-default--Height',
@@ -208,7 +208,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'body-icon-sizes'
+    demo: 'body-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-body-lg--Width',
@@ -216,7 +216,7 @@ const cssApiTests = [
     resolvedValue: '1.125rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'body-icon-sizes'
+    demo: 'body-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-body-lg--Height',
@@ -224,7 +224,7 @@ const cssApiTests = [
     resolvedValue: '1.125rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'body-icon-sizes'
+    demo: 'body-icon-sizes',
   },
 
   // Heading sizes
@@ -234,7 +234,7 @@ const cssApiTests = [
     resolvedValue: '1.125rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'heading-icon-sizes'
+    demo: 'heading-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-sm--Height',
@@ -242,7 +242,7 @@ const cssApiTests = [
     resolvedValue: '1.125rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'heading-icon-sizes'
+    demo: 'heading-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-md--Width',
@@ -250,7 +250,7 @@ const cssApiTests = [
     resolvedValue: '1.125rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'heading-icon-sizes'
+    demo: 'heading-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-md--Height',
@@ -258,7 +258,7 @@ const cssApiTests = [
     resolvedValue: '1.125rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'heading-icon-sizes'
+    demo: 'heading-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-lg--Width',
@@ -266,7 +266,7 @@ const cssApiTests = [
     resolvedValue: '1.125rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'heading-icon-sizes'
+    demo: 'heading-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-lg--Height',
@@ -274,7 +274,7 @@ const cssApiTests = [
     resolvedValue: '1.125rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'heading-icon-sizes'
+    demo: 'heading-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-xl--Width',
@@ -282,7 +282,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'heading-icon-sizes'
+    demo: 'heading-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-xl--Height',
@@ -290,7 +290,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'heading-icon-sizes'
+    demo: 'heading-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-2xl--Width',
@@ -298,7 +298,7 @@ const cssApiTests = [
     resolvedValue: '1.75rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'heading-icon-sizes'
+    demo: 'heading-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-2xl--Height',
@@ -306,7 +306,7 @@ const cssApiTests = [
     resolvedValue: '1.75rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'heading-icon-sizes'
+    demo: 'heading-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-3xl--Width',
@@ -314,7 +314,7 @@ const cssApiTests = [
     resolvedValue: '2.25rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'heading-icon-sizes'
+    demo: 'heading-icon-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-3xl--Height',
@@ -322,7 +322,7 @@ const cssApiTests = [
     resolvedValue: '2.25rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'heading-icon-sizes'
+    demo: 'heading-icon-sizes',
   },
 
   // Inline sizes
@@ -332,7 +332,7 @@ const cssApiTests = [
     resolvedValue: '1em',
     type: 'size',
     testValue: '5em',
-    demo: 'inline'
+    demo: 'inline',
   },
   {
     name: '--pf-v6-c-icon--m-inline--Height',
@@ -340,7 +340,7 @@ const cssApiTests = [
     resolvedValue: '1em',
     type: 'size',
     testValue: '5em',
-    demo: 'inline'
+    demo: 'inline',
   },
 
   // Content SVG vertical alignment
@@ -350,7 +350,7 @@ const cssApiTests = [
     resolvedValue: '-0.125em',
     type: 'size',
     testValue: '5em',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Content colors
@@ -360,7 +360,7 @@ const cssApiTests = [
     resolvedValue: '#1f1f1f',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-icon__content--m-danger--Color',
@@ -368,7 +368,7 @@ const cssApiTests = [
     resolvedValue: '#b1380b',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
   {
     name: '--pf-v6-c-icon__content--m-warning--Color',
@@ -376,7 +376,7 @@ const cssApiTests = [
     resolvedValue: '#dca614',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
   {
     name: '--pf-v6-c-icon__content--m-success--Color',
@@ -384,7 +384,7 @@ const cssApiTests = [
     resolvedValue: '#3d7317',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
   {
     name: '--pf-v6-c-icon__content--m-info--Color',
@@ -392,7 +392,7 @@ const cssApiTests = [
     resolvedValue: '#5e40be',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
   {
     name: '--pf-v6-c-icon__content--m-custom--Color',
@@ -400,7 +400,7 @@ const cssApiTests = [
     resolvedValue: '#147878',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'status'
+    demo: 'status',
   },
   {
     name: '--pf-v6-c-icon--m-inline__content--Color',
@@ -408,7 +408,7 @@ const cssApiTests = [
     resolvedValue: 'initial',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'inline'
+    demo: 'inline',
   },
 
   // Content font sizes
@@ -418,7 +418,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Standalone content sizes
@@ -428,7 +428,7 @@ const cssApiTests = [
     resolvedValue: '0.75rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-md__content--FontSize',
@@ -436,7 +436,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-lg__content--FontSize',
@@ -444,7 +444,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-xl__content--FontSize',
@@ -452,7 +452,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-2xl__content--FontSize',
@@ -460,7 +460,7 @@ const cssApiTests = [
     resolvedValue: '3.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-3xl__content--FontSize',
@@ -468,7 +468,7 @@ const cssApiTests = [
     resolvedValue: '6rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
 
   // Body content sizes
@@ -478,7 +478,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-body-default__content--FontSize',
@@ -486,7 +486,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-body-lg__content--FontSize',
@@ -494,7 +494,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
 
   // Heading content sizes
@@ -504,7 +504,7 @@ const cssApiTests = [
     resolvedValue: '1.125rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-md__content--FontSize',
@@ -512,7 +512,7 @@ const cssApiTests = [
     resolvedValue: '1.125rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-lg__content--FontSize',
@@ -520,7 +520,7 @@ const cssApiTests = [
     resolvedValue: '1.125rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-xl__content--FontSize',
@@ -528,7 +528,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-2xl__content--FontSize',
@@ -536,7 +536,7 @@ const cssApiTests = [
     resolvedValue: '1.75rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
   {
     name: '--pf-v6-c-icon--m-heading-3xl__content--FontSize',
@@ -544,7 +544,7 @@ const cssApiTests = [
     resolvedValue: '2.25rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'content-sizes'
+    demo: 'content-sizes',
   },
 
   // Inline content size
@@ -554,8 +554,8 @@ const cssApiTests = [
     resolvedValue: '1em',
     type: 'size',
     testValue: '5em',
-    demo: 'inline'
-  }
+    demo: 'inline',
+  },
 ];
 
 test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
@@ -568,8 +568,8 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Variable: ${name}`,
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
-          `Test value: ${testValue}`
-        ].join('\n')
+          `Test value: ${testValue}`,
+        ].join('\n'),
       });
 
       // Set consistent viewport
@@ -593,12 +593,12 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare
@@ -616,23 +616,23 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 }  // Pixel-perfect
+          { threshold: 0 } // Pixel-perfect
         );
 
         // Attach images to report
         await test.info().attach('React with CSS override (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit with CSS override (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match

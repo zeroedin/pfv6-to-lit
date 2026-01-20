@@ -111,58 +111,58 @@ export class Pfv6TextInput extends LitElement {
   static styles = styles;
 
   /**
-   * Validation state of the input.
-   * Controls which status icon is displayed and applies validation styling.
-   */
+  * Validation state of the input.
+  * Controls which status icon is displayed and applies validation styling.
+  */
   @property({ type: String, reflect: true })
   validated: 'success' | 'warning' | 'error' | 'default' = 'default';
 
   /**
-   * Sets the input as readonly and determines the readonly styling.
-   * - 'default': Standard readonly styling
-   * - 'plain': Plain text appearance
-   */
+  * Sets the input as readonly and determines the readonly styling.
+  * - 'default': Standard readonly styling
+  * - 'plain': Plain text appearance
+  */
   @property({ type: String, reflect: true, attribute: 'read-only-variant' })
   readOnlyVariant?: 'plain' | 'default';
 
   /**
-   * Trim text at start (for long values that overflow).
-   * When enabled, the component will scroll to show the end of the value
-   * and truncate the beginning with ellipsis.
-   */
+  * Trim text at start (for long values that overflow).
+  * When enabled, the component will scroll to show the end of the value
+  * and truncate the beginning with ellipsis.
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-start-truncated' })
   isStartTruncated = false;
 
   /**
-   * Flag to apply expanded styling.
-   * Used when the input controls an expandable element (like a menu).
-   *
-   * @deprecated Use expanded-aria-controls instead to properly link to controlled element
-   */
+  * Flag to apply expanded styling.
+  * Used when the input controls an expandable element (like a menu).
+  *
+  * @deprecated Use expanded-aria-controls instead to properly link to controlled element
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-expanded' })
   isExpanded = false;
 
   /**
-   * ID of the element that this input controls (for expandable menus).
-   * When set, applies expanded styling and proper ARIA attributes.
-   */
+  * ID of the element that this input controls (for expandable menus).
+  * When set, applies expanded styling and proper ARIA attributes.
+  */
   @property({ type: String, attribute: 'expanded-aria-controls' })
   expandedAriaControls?: string;
 
   /**
-   * Internal state tracking if custom icon slot has content
-   */
+  * Internal state tracking if custom icon slot has content
+  */
   @state()
   private _hasCustomIcon = false;
 
   /**
-   * Reference to the slotted input element
-   */
+  * Reference to the slotted input element
+  */
   #slottedInput?: HTMLInputElement;
 
   /**
-   * ResizeObserver for handling start truncation
-   */
+  * ResizeObserver for handling start truncation
+  */
   #resizeObserver?: ResizeObserver;
 
   disconnectedCallback() {
@@ -248,9 +248,9 @@ export class Pfv6TextInput extends LitElement {
   }
 
   /**
-   * Handle slot change for input slot
-   * @param e - The slotchange event
-   */
+  * Handle slot change for input slot
+  * @param e - The slotchange event
+  */
   #handleInputSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;
     const elements = slot.assignedElements();
@@ -275,17 +275,17 @@ export class Pfv6TextInput extends LitElement {
   }
 
   /**
-   * Handle slot change for icon slot
-   * @param e - The slotchange event
-   */
+  * Handle slot change for icon slot
+  * @param e - The slotchange event
+  */
   #handleIconSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;
     this._hasCustomIcon = slot.assignedElements().length > 0;
   }
 
   /**
-   * Update ARIA attributes on slotted input for expansion control
-   */
+  * Update ARIA attributes on slotted input for expansion control
+  */
   #updateInputAriaAttributes() {
     if (!this.#slottedInput) {
       return;
@@ -305,8 +305,8 @@ export class Pfv6TextInput extends LitElement {
   }
 
   /**
-   * Setup truncation behavior with ResizeObserver
-   */
+  * Setup truncation behavior with ResizeObserver
+  */
   #setupTruncation() {
     if (!this.#slottedInput || this.#resizeObserver) {
       return;
@@ -321,8 +321,8 @@ export class Pfv6TextInput extends LitElement {
   }
 
   /**
-   * Cleanup truncation observer and listeners
-   */
+  * Cleanup truncation observer and listeners
+  */
   #cleanupTruncation() {
     if (this.#resizeObserver) {
       this.#resizeObserver.disconnect();
@@ -335,8 +335,8 @@ export class Pfv6TextInput extends LitElement {
   }
 
   /**
-   * Handle resize for truncation
-   */
+  * Handle resize for truncation
+  */
   #handleResize() {
     if (!this.#slottedInput) {
       return;
@@ -345,8 +345,8 @@ export class Pfv6TextInput extends LitElement {
   }
 
   /**
-   * Handle input focus - restore full text for truncated inputs
-   */
+  * Handle input focus - restore full text for truncated inputs
+  */
   #handleInputFocus = () => {
     if (!this.#slottedInput || !this.isStartTruncated) {
       return;
@@ -357,8 +357,8 @@ export class Pfv6TextInput extends LitElement {
   };
 
   /**
-   * Handle input blur - reapply truncation
-   */
+  * Handle input blur - reapply truncation
+  */
   #handleInputBlur = () => {
     if (!this.#slottedInput || !this.isStartTruncated) {
       return;
@@ -367,10 +367,10 @@ export class Pfv6TextInput extends LitElement {
   };
 
   /**
-   * Trim text from the left by scrolling to show the end
-   * (from PatternFly React trimLeft utility)
-   * @param input - The input element to trim
-   */
+  * Trim text from the left by scrolling to show the end
+  * (from PatternFly React trimLeft utility)
+  * @param input - The input element to trim
+  */
   #trimLeft(input: HTMLInputElement) {
     const { value } = input;
     if (!value) {

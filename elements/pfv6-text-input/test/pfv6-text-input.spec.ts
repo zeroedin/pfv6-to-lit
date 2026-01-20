@@ -628,7 +628,7 @@ describe('<pfv6-text-input>', function() {
     });
 
     it('supports all React validated values', async function() {
-      const values: Array<'success' | 'warning' | 'error' | 'default'> = ['success', 'warning', 'error', 'default'];
+      const values: ('success' | 'warning' | 'error' | 'default')[] = ['success', 'warning', 'error', 'default'];
 
       for (const value of values) {
         const el = await fixture<Pfv6TextInput>(html`<pfv6-text-input validated=${value}></pfv6-text-input>`);
@@ -637,7 +637,7 @@ describe('<pfv6-text-input>', function() {
     });
 
     it('supports all React readOnlyVariant values', async function() {
-      const values: Array<'plain' | 'default'> = ['plain', 'default'];
+      const values: ('plain' | 'default')[] = ['plain', 'default'];
 
       for (const value of values) {
         const el = await fixture<Pfv6TextInput>(html`<pfv6-text-input read-only-variant=${value}></pfv6-text-input>`);

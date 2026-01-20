@@ -140,18 +140,18 @@ export class Pfv6Switch extends LitElement {
   }
 
   /**
-   * Form disabled callback - updates disabled state
-   * @param disabled - Whether the form is disabled
-   */
+  * Form disabled callback - updates disabled state
+  * @param disabled - Whether the form is disabled
+  */
   formDisabledCallback(disabled: boolean): void {
     this.disabled = disabled;
     this.#internals.ariaDisabled = disabled ? 'true' : 'false';
   }
 
   /**
-   * Handle input change event
-   * @param event - The change event from the input
-   */
+  * Handle input change event
+  * @param event - The change event from the input
+  */
   #handleChange = (event: Event): void => {
     const target = event.target as HTMLInputElement;
     this.checked = target.checked;

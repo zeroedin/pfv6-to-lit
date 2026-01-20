@@ -18,14 +18,14 @@ export class Pfv6SimpleListGroup extends LitElement {
   static styles = styles;
 
   /**
-   * Title of the SimpleList group.
-   */
+  * Title of the SimpleList group.
+  */
   @property({ type: String })
   title = '';
 
   /**
-   * ID for the title element, used for aria-labelledby.
-   */
+  * ID for the title element, used for aria-labelledby.
+  */
   @property({ type: String, attribute: 'title-id' })
   titleId = '';
 

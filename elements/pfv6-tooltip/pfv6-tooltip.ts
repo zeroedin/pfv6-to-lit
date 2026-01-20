@@ -74,9 +74,9 @@ export class Pfv6Tooltip extends LitElement {
   }
 
   /**
-   * Announce tooltip content to screen readers via live region
-   * @param message - The text content to announce
-   */
+  * Announce tooltip content to screen readers via live region
+  * @param message - The text content to announce
+  */
   private static announce(message: string): void {
     if (Pfv6Tooltip.announcer) {
       Pfv6Tooltip.announcer.innerText = message;
@@ -121,10 +121,10 @@ export class Pfv6Tooltip extends LitElement {
   exitDelay = 300;
 
   /**
-   * Tooltip trigger events: mouseenter, focus, click, or manual
-   * Can be space-separated combination (e.g., "mouseenter focus")
-   * Set to "manual" to control visibility programmatically via isVisible property
-   */
+  * Tooltip trigger events: mouseenter, focus, click, or manual
+  * Can be space-separated combination (e.g., "mouseenter focus")
+  * Set to "manual" to control visibility programmatically via isVisible property
+  */
   @property({ type: String })
   trigger = 'mouseenter focus';
 
@@ -153,9 +153,9 @@ export class Pfv6Tooltip extends LitElement {
   animationDuration = 300;
 
   /**
-   * When true, disables screen reader announcements for tooltip content.
-   * Use when the trigger element already has an accessible label.
-   */
+  * When true, disables screen reader announcements for tooltip content.
+  * Use when the trigger element already has an accessible label.
+  */
   @property({ type: Boolean, reflect: true })
   silent = false;
 
@@ -413,9 +413,9 @@ export class Pfv6Tooltip extends LitElement {
   }
 
   /**
-   * Announce tooltip content to screen readers via shared live region.
-   * This approach avoids cross-shadow-root ARIA IDREF issues.
-   */
+  * Announce tooltip content to screen readers via shared live region.
+  * This approach avoids cross-shadow-root ARIA IDREF issues.
+  */
   private _announceToScreenReader(): void {
     if (this.silent) {
       return;
@@ -538,6 +538,7 @@ export class Pfv6Tooltip extends LitElement {
         id="tooltip"
         class=${classMap(classes)}
         role="tooltip"
+        aria-labelledby="content"
         style=${styleMap(tooltipStyles)}
       >
         <div id="arrow"></div>
