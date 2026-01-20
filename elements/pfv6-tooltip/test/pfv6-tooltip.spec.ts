@@ -332,7 +332,9 @@ describe('<pfv6-tooltip>', function() {
       `);
       const el = container.querySelector('pfv6-tooltip') as Pfv6Tooltip;
       let eventCount = 0;
-      el.addEventListener('tooltip-hidden', () => { eventCount++; });
+      el.addEventListener('tooltip-hidden', () => {
+        eventCount++;
+      });
 
       // Hide tooltip
       el.isVisible = false;
@@ -379,7 +381,9 @@ describe('<pfv6-tooltip>', function() {
       `);
       const el = container.querySelector('pfv6-tooltip') as Pfv6Tooltip;
       let containerEventCount = 0;
-      container.addEventListener('tooltip-hidden', () => { containerEventCount++; });
+      container.addEventListener('tooltip-hidden', () => {
+        containerEventCount++;
+      });
 
       el.isVisible = false;
       await el.updateComplete;
@@ -627,7 +631,6 @@ describe('<pfv6-tooltip>', function() {
       const tooltip = el.shadowRoot?.querySelector('#tooltip');
       expect(tooltip?.getAttribute('role')).to.equal('tooltip');
     });
-
   });
 
   describe('external trigger (triggerId)', function() {
@@ -709,4 +712,3 @@ describe('<pfv6-tooltip>', function() {
     });
   });
 });
-

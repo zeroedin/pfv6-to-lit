@@ -4,7 +4,7 @@ import { property } from 'lit/decorators/property.js';
 import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { ContextConsumer } from '@lit/context';
+import { consume } from '@lit/context';
 import { simpleListContext, type SimpleListContext } from './context.js';
 import styles from './pfv6-simple-list-item.css';
 
@@ -32,34 +32,23 @@ export class Pfv6SimpleListItem extends LitElement {
   static styles = styles;
 
   /**
-   * Form-associated custom element.
-   * Required for submit/reset buttons inside Shadow DOM to participate in forms.
-   */
+  * Form-associated custom element.
+  * Required for submit/reset buttons inside Shadow DOM to participate in forms.
+  */
   static formAssociated = true;
 
   /**
-   * ElementInternals provides:
-   * - listitem role on :host (Shadow DOM breaks ul > li relationship)
-   * - Form association for submit/reset button types
-   */
+  * ElementInternals provides:
+  * - listitem role on :host (Shadow DOM breaks ul > li relationship)
+  * - Form association for submit/reset button types
+  */
   #internals: ElementInternals;
 
   /**
-   * Context consumer for parent SimpleList.
-   * ContextRoot (initialized in context.ts) handles late provider scenarios,
-   * so we can create the consumer directly in the constructor.
-   */
-  #contextConsumer = new ContextConsumer(this, {
-    context: simpleListContext,
-    subscribe: true,
-    callback: (value) => {
-      this.listContext = value;
-    },
-  });
-
-  /**
-   * Context value from parent SimpleList.
-   */
+  * Context value from parent SimpleList.
+  * Uses @consume decorator to subscribe to context changes.
+  */
+  @consume({ context: simpleListContext, subscribe: true })
   @state()
   private listContext: SimpleListContext | undefined;
 
@@ -70,32 +59,32 @@ export class Pfv6SimpleListItem extends LitElement {
   }
 
   /**
-   * Unique identifier for the item.
-   */
+  * Unique identifier for the item.
+  */
   @property({ type: String, attribute: 'item-id' })
   itemId?: string | number;
 
   /**
-   * Component type of the SimpleList item.
-   */
+  * Component type of the SimpleList item.
+  */
   @property({ type: String })
   component: 'button' | 'a' = 'button';
 
   /**
-   * Indicates if the link is current/highlighted (uncontrolled mode).
-   */
+  * Indicates if the link is current/highlighted (uncontrolled mode).
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-active' })
   isActive = false;
 
   /**
-   * Type of button SimpleList item (only applies when component="button").
-   */
+  * Type of button SimpleList item (only applies when component="button").
+  */
   @property({ type: String })
   type: 'button' | 'submit' | 'reset' = 'button';
 
   /**
-   * Default hyperlink location (only applies when component="a").
-   */
+  * Default hyperlink location (only applies when component="a").
+  */
   @property({ type: String })
   href = '';
 

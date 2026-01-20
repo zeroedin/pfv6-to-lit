@@ -55,7 +55,7 @@ async function applyCssOverride(
   value: string
 ): Promise<void> {
   await page.addStyleTag({
-    content: `${selector} { ${cssVar}: ${value}; }`
+    content: `${selector} { ${cssVar}: ${value}; }`,
   });
 }
 
@@ -68,7 +68,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--Width',
@@ -76,7 +76,7 @@ const cssApiTests = [
     resolvedValue: '100%',
     type: 'size',
     testValue: '50%',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Typography
@@ -86,7 +86,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--FontSize',
@@ -94,7 +94,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--LineHeight',
@@ -102,7 +102,7 @@ const cssApiTests = [
     resolvedValue: '1.5',
     type: 'number',
     testValue: '999',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Background
@@ -112,7 +112,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Border radius
@@ -122,7 +122,7 @@ const cssApiTests = [
     resolvedValue: '6px',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Border - before pseudo-element
@@ -132,7 +132,7 @@ const cssApiTests = [
     resolvedValue: '1px',
     type: 'size',
     testValue: '10px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--before--BorderStyle',
@@ -140,7 +140,7 @@ const cssApiTests = [
     resolvedValue: 'solid',
     type: 'keyword',
     testValue: 'dashed',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--before--BorderColor',
@@ -148,7 +148,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Border - after pseudo-element (hover/focus)
@@ -158,7 +158,7 @@ const cssApiTests = [
     resolvedValue: '1px',
     type: 'size',
     testValue: '10px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--after--BorderStyle',
@@ -166,7 +166,7 @@ const cssApiTests = [
     resolvedValue: 'solid',
     type: 'keyword',
     testValue: 'dashed',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--after--BorderColor',
@@ -174,7 +174,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Padding - base
@@ -184,7 +184,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--PaddingBlockStart--base',
@@ -192,7 +192,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--PaddingBlockEnd--base',
@@ -200,7 +200,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Outline
@@ -210,7 +210,7 @@ const cssApiTests = [
     resolvedValue: '-6px',
     type: 'size',
     testValue: '-50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--Resize',
@@ -218,7 +218,7 @@ const cssApiTests = [
     resolvedValue: 'none',
     type: 'keyword',
     testValue: 'both',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Hover state
@@ -228,7 +228,7 @@ const cssApiTests = [
     resolvedValue: '1px',
     type: 'size',
     testValue: '10px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--hover--after--BorderColor',
@@ -236,7 +236,7 @@ const cssApiTests = [
     resolvedValue: '#4394e5',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Expanded state (focus)
@@ -246,7 +246,7 @@ const cssApiTests = [
     resolvedValue: '2px',
     type: 'size',
     testValue: '10px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--m-expanded--after--BorderColor',
@@ -254,7 +254,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Placeholder
@@ -264,7 +264,7 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Readonly state
@@ -274,7 +274,7 @@ const cssApiTests = [
     resolvedValue: '#f2f2f2',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'read-only'
+    demo: 'read-only',
   },
   {
     name: '--pf-v6-c-form-control--m-readonly--BorderColor',
@@ -282,7 +282,7 @@ const cssApiTests = [
     resolvedValue: '#e0e0e0',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'read-only'
+    demo: 'read-only',
   },
   {
     name: '--pf-v6-c-form-control--m-readonly--hover--after--BorderColor',
@@ -290,7 +290,7 @@ const cssApiTests = [
     resolvedValue: 'revert',
     type: 'keyword',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'read-only'
+    demo: 'read-only',
   },
 
   // Readonly plain variant
@@ -300,7 +300,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'read-only'
+    demo: 'read-only',
   },
   {
     name: '--pf-v6-c-form-control--m-readonly--m-plain--BorderColor',
@@ -308,7 +308,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'read-only'
+    demo: 'read-only',
   },
   {
     name: '--pf-v6-c-form-control--m-readonly--m-plain--inset--base',
@@ -316,7 +316,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'size',
     testValue: '50px',
-    demo: 'read-only'
+    demo: 'read-only',
   },
   {
     name: '--pf-v6-c-form-control--m-readonly--m-plain--OutlineOffset',
@@ -324,7 +324,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'size',
     testValue: '50px',
-    demo: 'read-only'
+    demo: 'read-only',
   },
 
   // Icon sizing
@@ -334,7 +334,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50px',
-    demo: 'custom-icon'
+    demo: 'custom-icon',
   },
 
   // Success state
@@ -344,7 +344,7 @@ const cssApiTests = [
     resolvedValue: '1px',
     type: 'size',
     testValue: '10px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--m-success--after--BorderColor',
@@ -352,7 +352,7 @@ const cssApiTests = [
     resolvedValue: '#3d7317',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--m-success--hover--after--BorderColor',
@@ -360,7 +360,7 @@ const cssApiTests = [
     resolvedValue: '#3d7317',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Warning state
@@ -370,7 +370,7 @@ const cssApiTests = [
     resolvedValue: '1px',
     type: 'size',
     testValue: '10px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--m-warning--after--BorderColor',
@@ -378,7 +378,7 @@ const cssApiTests = [
     resolvedValue: '#dca614',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--m-warning--hover--after--BorderColor',
@@ -386,7 +386,7 @@ const cssApiTests = [
     resolvedValue: '#dca614',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Error state
@@ -396,7 +396,7 @@ const cssApiTests = [
     resolvedValue: '1px',
     type: 'size',
     testValue: '10px',
-    demo: 'invalid'
+    demo: 'invalid',
   },
   {
     name: '--pf-v6-c-form-control--m-error--after--BorderColor',
@@ -404,7 +404,7 @@ const cssApiTests = [
     resolvedValue: '#b1380b',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'invalid'
+    demo: 'invalid',
   },
   {
     name: '--pf-v6-c-form-control--m-error--hover--after--BorderColor',
@@ -412,7 +412,7 @@ const cssApiTests = [
     resolvedValue: '#b1380b',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'invalid'
+    demo: 'invalid',
   },
 
   // Custom icon
@@ -422,7 +422,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50px',
-    demo: 'custom-icon'
+    demo: 'custom-icon',
   },
   {
     name: '--pf-v6-c-form-control--m-icon--icon--spacer',
@@ -430,7 +430,7 @@ const cssApiTests = [
     resolvedValue: 'calc(1rem / 2)',
     type: 'size',
     testValue: '50px',
-    demo: 'custom-icon'
+    demo: 'custom-icon',
   },
 
   // Icon colors
@@ -440,7 +440,7 @@ const cssApiTests = [
     resolvedValue: '#1f1f1f',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'custom-icon'
+    demo: 'custom-icon',
   },
   {
     name: '--pf-v6-c-form-control__icon--FontSize',
@@ -448,7 +448,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50px',
-    demo: 'custom-icon'
+    demo: 'custom-icon',
   },
   {
     name: '--pf-v6-c-form-control__icon--m-status--Color',
@@ -456,7 +456,7 @@ const cssApiTests = [
     resolvedValue: '#1f1f1f',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'custom-icon'
+    demo: 'custom-icon',
   },
   {
     name: '--pf-v6-c-form-control--m-success__icon--m-status--Color',
@@ -464,7 +464,7 @@ const cssApiTests = [
     resolvedValue: '#3d7317',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--m-warning__icon--m-status--Color',
@@ -472,7 +472,7 @@ const cssApiTests = [
     resolvedValue: '#dca614',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-form-control--m-error__icon--m-status--Color',
@@ -480,7 +480,7 @@ const cssApiTests = [
     resolvedValue: '#b1380b',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'invalid'
+    demo: 'invalid',
   },
 
   // Utilities
@@ -490,7 +490,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50px',
-    demo: 'custom-icon'
+    demo: 'custom-icon',
   },
 
   // Danger jiggle animation
@@ -500,7 +500,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'size',
     testValue: '50px',
-    demo: 'invalid'
+    demo: 'invalid',
   },
 ];
 
@@ -515,8 +515,8 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
           `Test value: ${testValue}`,
-          `Demo: ${demo}`
-        ].join('\n')
+          `Demo: ${demo}`,
+        ].join('\n'),
       });
 
       // Set consistent viewport
@@ -540,12 +540,12 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare
@@ -563,23 +563,23 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 }  // Pixel-perfect
+          { threshold: 0 } // Pixel-perfect
         );
 
         // Attach images to report
         await test.info().attach('React with CSS override (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit with CSS override (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match

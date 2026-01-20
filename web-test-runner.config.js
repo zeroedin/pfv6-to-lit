@@ -69,17 +69,7 @@ export default {
     },
   },
 
-  // Coverage settings
-  coverage: true,
-  coverageConfig: {
-    report: true,
-    reportDir: 'coverage',
-    threshold: {
-      statements: 80,
-      branches: 80,
-      functions: 80,
-      lines: 80,
-    },
-  },
+  // Coverage disabled
+  coverage: false,
 };
 

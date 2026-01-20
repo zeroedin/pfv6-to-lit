@@ -42,58 +42,58 @@ export class Pfv6Icon extends LitElement {
   static styles = styles;
 
   /**
-   * Size of the icon component container and icon.
-   * Affects both the container dimensions and the icon content size.
-   */
+  * Size of the icon component container and icon.
+  * Affects both the container dimensions and the icon content size.
+  */
   @property({ type: String, reflect: true })
   size?: IconSize;
 
   /**
-   * Size of icon content.
-   * Overrides the icon size set by the size property.
-   */
+  * Size of icon content.
+  * Overrides the icon size set by the size property.
+  */
   @property({ type: String, reflect: true, attribute: 'icon-size' })
   iconSize?: IconSize;
 
   /**
-   * Size of progress icon.
-   * Overrides the icon size set by the size property when in progress state.
-   */
+  * Size of progress icon.
+  * Overrides the icon size set by the size property when in progress state.
+  */
   @property({ type: String, reflect: true, attribute: 'progress-icon-size' })
   progressIconSize?: IconSize;
 
   /**
-   * Status color of the icon.
-   * Applies semantic colors for different states.
-   */
+  * Status color of the icon.
+  * Applies semantic colors for different states.
+  */
   @property({ type: String, reflect: true })
   status?: 'custom' | 'info' | 'success' | 'warning' | 'danger';
 
   /**
-   * Indicates the icon is inline and should inherit text font size and color.
-   * Overridden by size and iconSize properties.
-   */
+  * Indicates the icon is inline and should inherit text font size and color.
+  * Overridden by size and iconSize properties.
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-inline' })
   isInline = false;
 
   /**
-   * Indicates the icon is in progress.
-   * When true, displays the progress icon slot instead of the default icon.
-   */
+  * Indicates the icon is in progress.
+  * When true, displays the progress icon slot instead of the default icon.
+  */
   @property({ type: Boolean, reflect: true, attribute: 'is-in-progress' })
   isInProgress = false;
 
   /**
-   * Aria-label for the default progress icon (spinner).
-   * Only used when no custom progress icon is provided via slot.
-   */
+  * Aria-label for the default progress icon (spinner).
+  * Only used when no custom progress icon is provided via slot.
+  */
   @property({ type: String, attribute: 'default-progress-aria-label' })
   defaultProgressAriaLabel = 'Loading...';
 
   /**
-   * Flag indicating whether the icon should be mirrored for right-to-left (RTL) languages.
-   * This applies only to the main icon content, not the progress icon.
-   */
+  * Flag indicating whether the icon should be mirrored for right-to-left (RTL) languages.
+  * This applies only to the main icon content, not the progress icon.
+  */
   @property({ type: Boolean, reflect: true, attribute: 'should-mirror-rtl' })
   shouldMirrorRTL = false;
 

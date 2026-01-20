@@ -228,7 +228,7 @@ if (!fs.existsSync(TASKS_FILE)) {
 
 console.log('Reading tasks.json...');
 const data: TasksJSON = JSON.parse(fs.readFileSync(TASKS_FILE, 'utf-8'));
-const tasks = data.tasks;
+const { tasks } = data;
 console.log(`Found ${tasks.length} tasks`);
 
 console.log('Fetching GitHub issues...');

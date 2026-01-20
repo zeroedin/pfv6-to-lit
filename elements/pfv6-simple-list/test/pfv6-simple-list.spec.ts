@@ -73,7 +73,7 @@ describe('<pfv6-simple-list>', function() {
       `);
 
       let capturedEvent: Pfv6SimpleListSelectEvent | null = null;
-      el.addEventListener('select', (e) => {
+      el.addEventListener('select', e => {
         capturedEvent = e as Pfv6SimpleListSelectEvent;
       });
 
@@ -92,7 +92,7 @@ describe('<pfv6-simple-list>', function() {
       `);
 
       let capturedEvent: Pfv6SimpleListSelectEvent | null = null;
-      el.addEventListener('select', (e) => {
+      el.addEventListener('select', e => {
         capturedEvent = e as Pfv6SimpleListSelectEvent;
       });
 
@@ -111,7 +111,7 @@ describe('<pfv6-simple-list>', function() {
       `);
 
       let capturedEvent: Pfv6SimpleListSelectEvent | null = null;
-      el.addEventListener('select', (e) => {
+      el.addEventListener('select', e => {
         capturedEvent = e as Pfv6SimpleListSelectEvent;
       });
 
@@ -133,7 +133,7 @@ describe('<pfv6-simple-list>', function() {
       `);
 
       let capturedEvent: Pfv6SimpleListSelectEvent | null = null;
-      el.addEventListener('select', (e) => {
+      el.addEventListener('select', e => {
         capturedEvent = e as Pfv6SimpleListSelectEvent;
       });
 
@@ -443,7 +443,7 @@ describe('<pfv6-simple-list-item>', function() {
       `);
 
       let capturedEvent: Pfv6SimpleListItemClickEvent | null = null;
-      el.addEventListener('click', (e) => {
+      el.addEventListener('click', e => {
         capturedEvent = e as Pfv6SimpleListItemClickEvent;
       });
 
@@ -459,7 +459,7 @@ describe('<pfv6-simple-list-item>', function() {
       `);
 
       let capturedEvent: Pfv6SimpleListItemClickEvent | null = null;
-      el.addEventListener('click', (e) => {
+      el.addEventListener('click', e => {
         capturedEvent = e as Pfv6SimpleListItemClickEvent;
       });
 
@@ -475,7 +475,7 @@ describe('<pfv6-simple-list-item>', function() {
       `);
 
       let capturedEvent: Pfv6SimpleListItemClickEvent | null = null;
-      el.addEventListener('click', (e) => {
+      el.addEventListener('click', e => {
         capturedEvent = e as Pfv6SimpleListItemClickEvent;
       });
 

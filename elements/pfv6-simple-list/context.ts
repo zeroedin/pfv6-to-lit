@@ -9,7 +9,11 @@ export interface SimpleListContext {
   /** Whether the list is in controlled mode */
   isControlled: boolean;
   /** Callback to update the current item */
-  updateCurrentItem: (itemElement: HTMLElement, itemId?: string | number, itemProps?: Record<string, unknown>) => void;
+  updateCurrentItem: (
+    itemElement: HTMLElement,
+    itemId?: string | number,
+    itemProps?: Record<string, unknown>,
+  ) => void;
 }
 
 /**
@@ -22,4 +26,6 @@ export interface SimpleListContext {
  *
  * @see https://lit.dev/docs/data/context/#critical-contextroot
  */
-export const simpleListContext = createContextWithRoot<SimpleListContext>(Symbol('simple-list-context'));
+export const simpleListContext = createContextWithRoot<SimpleListContext>(
+  Symbol('simple-list-context'),
+);

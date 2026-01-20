@@ -16,7 +16,7 @@ import styles from './pfv6-simple-list.css';
 export class Pfv6SimpleListSelectEvent extends Event {
   constructor(
     public itemId?: string | number,
-    public itemProps?: Record<string, unknown>
+    public itemProps?: Record<string, unknown>,
   ) {
     super('select', { bubbles: true, composed: true });
   }
@@ -81,7 +81,11 @@ export class Pfv6SimpleList extends LitElement {
   /**
    * Handle current item update from child items.
    */
-  #handleUpdateCurrentItem = (itemElement: HTMLElement, itemId?: string | number, itemProps?: Record<string, unknown>) => {
+  #handleUpdateCurrentItem = (
+    itemElement: HTMLElement,
+    itemId?: string | number,
+    itemProps?: Record<string, unknown>,
+  ) => {
     // Update state
     this.currentItemElement = itemElement;
 
@@ -133,7 +137,10 @@ export class Pfv6SimpleList extends LitElement {
     }
     const nodes = slot.assignedElements();
     const [firstNode] = nodes;
-    return nodes.length > 0 && firstNode?.tagName.toLowerCase() === 'pfv6-simple-list-group';
+    return (
+      nodes.length > 0
+      && firstNode?.tagName.toLowerCase() === 'pfv6-simple-list-group'
+    );
   }
 
   render() {
@@ -141,13 +148,13 @@ export class Pfv6SimpleList extends LitElement {
 
     return html`
       <div id="container">
-        ${isGrouped ? html`
-          <slot @slotchange=${this.#handleSlotChange}></slot>
-        ` : html`
-          <ul class="list" aria-label=${ifDefined(this.accessibleLabel)}>
-            <slot @slotchange=${this.#handleSlotChange}></slot>
-          </ul>
-        `}
+        ${isGrouped ?
+          html` <slot @slotchange=${this.#handleSlotChange}></slot> `
+          : html`
+              <ul class="list" aria-label=${ifDefined(this.accessibleLabel)}>
+                <slot @slotchange=${this.#handleSlotChange}></slot>
+              </ul>
+            `}
       </div>
     `;
   }

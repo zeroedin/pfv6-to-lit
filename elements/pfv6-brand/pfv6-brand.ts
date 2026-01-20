@@ -148,10 +148,10 @@ export class Pfv6Brand extends LitElement {
   }
 
   /**
-   * Handles slot content changes to determine if component should render as picture or img.
-   * Updates internal state to trigger re-render when slot content changes.
-   * @param e - The slot change event
-   */
+  * Handles slot content changes to determine if component should render as picture or img.
+  * Updates internal state to trigger re-render when slot content changes.
+  * @param e - The slot change event
+  */
   #handleSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;
     const nodes = slot.assignedNodes({ flatten: true });
@@ -161,9 +161,9 @@ export class Pfv6Brand extends LitElement {
   }
 
   /**
-   * Initialize slot content state on first update.
-   * @param changedProperties - Properties that changed
-   */
+  * Initialize slot content state on first update.
+  * @param changedProperties - Properties that changed
+  */
   protected firstUpdated(changedProperties: PropertyValues): void {
     super.firstUpdated(changedProperties);
 
