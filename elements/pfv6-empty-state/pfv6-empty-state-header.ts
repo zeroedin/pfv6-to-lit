@@ -29,26 +29,29 @@ export class Pfv6EmptyStateHeader extends LitElement {
   static styles = styles;
 
   /**
-   * Text of the title inside empty state header, will be wrapped in headingLevel.
-   */
+  * Text of the title inside empty state header, will be wrapped in headingLevel.
+  */
   @property({ type: String, attribute: 'title-text' })
   titleText?: string;
 
   /**
-   * The heading level to use, default is h1.
-   */
+  * The heading level to use, default is h1.
+  */
   @property({ type: String, attribute: 'heading-level' })
   headingLevel: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' = 'h1';
 
   /**
-   * Status of the empty state. When set, displays the corresponding status icon
-   * unless a custom icon is provided via the icon slot.
-   */
+  * Status of the empty state. When set, displays the corresponding status icon
+  * unless a custom icon is provided via the icon slot.
+  */
   @property({ type: String, reflect: true })
   status?: StatusType;
 
   @state()
   private _hasCustomIcon = false;
+
+  @state()
+  private _hasDefaultSlotContent = false;
 
   #handleIconSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;
@@ -56,8 +59,18 @@ export class Pfv6EmptyStateHeader extends LitElement {
     this._hasCustomIcon = assignedNodes.length > 0;
   }
 
+  #handleDefaultSlotChange(e: Event) {
+    const slot = e.target as HTMLSlotElement;
+    const assignedNodes = slot.assignedNodes({ flatten: true });
+    this._hasDefaultSlotContent = assignedNodes.some(
+      node => node.nodeType === Node.ELEMENT_NODE || node.textContent?.trim()
+    );
+  }
+
   render() {
-    const titleContent = this.titleText ? html`${this.titleText}` : html`<slot></slot>`;
+    const titleContent = this.titleText ?
+      html`${this.titleText}`
+      : html`<slot @slotchange=${this.#handleDefaultSlotChange}></slot>`;
     const statusIcon = this.status && statusIcons[this.status] ? statusIcons[this.status] : null;
 
     return html`
@@ -67,7 +80,7 @@ export class Pfv6EmptyStateHeader extends LitElement {
           : statusIcon ?
             html`<div id="icon">${statusIcon}</div>`
             : html`<slot name="icon" @slotchange=${this.#handleIconSlotChange}></slot>`}
-        ${this.titleText || this.querySelector(':not([slot])') ? html`
+        ${this.titleText || this._hasDefaultSlotContent ? html`
           <div id="title">
             ${this.headingLevel === 'h1' ? html`<h1 id="title-text">${titleContent}</h1>` : null}
             ${this.headingLevel === 'h2' ? html`<h2 id="title-text">${titleContent}</h2>` : null}
