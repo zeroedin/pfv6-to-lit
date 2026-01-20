@@ -26,8 +26,9 @@ describe('<pfv6-simple-list>', function() {
       expect(el.isControlled).to.be.true; // Match React default
     });
 
-    it('can be set to false', async function() {
-      const el = await fixture<Pfv6SimpleList>(html`<pfv6-simple-list is-controlled="false"></pfv6-simple-list>`);
+    it('can be set to false via property', async function() {
+      const el = await fixture<Pfv6SimpleList>(html`<pfv6-simple-list></pfv6-simple-list>`);
+      el.isControlled = false;
       expect(el.isControlled).to.be.false;
     });
 
@@ -176,11 +177,13 @@ describe('<pfv6-simple-list>', function() {
 
     it('does not manage state when isControlled is false', async function() {
       const el = await fixture<Pfv6SimpleList>(html`
-        <pfv6-simple-list is-controlled="false">
+        <pfv6-simple-list>
           <pfv6-simple-list-item item-id="item-1" is-active>Item 1</pfv6-simple-list-item>
           <pfv6-simple-list-item item-id="item-2">Item 2</pfv6-simple-list-item>
         </pfv6-simple-list>
       `);
+      el.isControlled = false;
+      await el.updateComplete;
 
       const items = el.querySelectorAll('pfv6-simple-list-item');
 
