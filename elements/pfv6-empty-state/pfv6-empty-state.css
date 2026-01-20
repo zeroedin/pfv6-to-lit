@@ -1,0 +1,184 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Padding */
+  --pf-v6-c-empty-state--PaddingBlockStart: var(--pf-t--global--spacer--xl, 2rem);
+  --pf-v6-c-empty-state--PaddingInlineEnd: var(--pf-t--global--spacer--xl, 2rem);
+  --pf-v6-c-empty-state--PaddingBlockEnd: var(--pf-t--global--spacer--xl, 2rem);
+  --pf-v6-c-empty-state--PaddingInlineStart: var(--pf-t--global--spacer--xl, 2rem);
+  --pf-v6-c-empty-state--m-xs--PaddingBlockStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-empty-state--m-xs--PaddingInlineEnd: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-empty-state--m-xs--PaddingBlockEnd: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-empty-state--m-xs--PaddingInlineStart: var(--pf-t--global--spacer--md, 1rem);
+
+  /* Content */
+  --pf-v6-c-empty-state__content--MaxWidth: none;
+  --pf-v6-c-empty-state--m-xs__content--MaxWidth: 21.875rem;
+  --pf-v6-c-empty-state--m-sm__content--MaxWidth: 25rem;
+  --pf-v6-c-empty-state--m-lg__content--MaxWidth: 37.5rem;
+
+  /* Icon */
+  --pf-v6-c-empty-state__icon--MarginBlockEnd: var(--pf-t--global--spacer--lg, 1.5rem);
+  --pf-v6-c-empty-state__icon--FontSize: var(--pf-t--global--icon--size--2xl, 3.5rem);
+  --pf-v6-c-empty-state__icon--Color: var(--pf-t--global--icon--color--subtle, #707070);
+  --pf-v6-c-empty-state--m-xs__icon--MarginBlockEnd: var(--pf-t--global--spacer--lg, 1.5rem);
+  --pf-v6-c-empty-state--m-xl__icon--MarginBlockEnd: var(--pf-t--global--spacer--xl, 2rem);
+  --pf-v6-c-empty-state--m-xl__icon--FontSize: var(--pf-t--global--icon--size--3xl, 6rem);
+
+  /* Status variant icon color */
+  --pf-v6-c-empty-state--m-danger__icon--Color: var(--pf-t--global--icon--color--status--danger--default, #b1380b);
+  --pf-v6-c-empty-state--m-warning__icon--Color: var(--pf-t--global--icon--color--status--warning--default, #ffcc17);
+  --pf-v6-c-empty-state--m-success__icon--Color: var(--pf-t--global--icon--color--status--success--default, #3d7317);
+  --pf-v6-c-empty-state--m-info__icon--Color: var(--pf-t--global--icon--color--status--info--default, #5e40be);
+  --pf-v6-c-empty-state--m-custom__icon--Color: var(--pf-t--global--icon--color--status--custom--default, #147878);
+
+  /* Title text */
+  --pf-v6-c-empty-state__title-text--FontFamily:
+    var(
+      --pf-t--global--font--family--heading,
+      "Red Hat Display",
+      Helvetica,
+      Arial,
+      sans-serif
+    );
+  --pf-v6-c-empty-state__title-text--FontSize: var(--pf-t--global--font--size--heading--md, 1.25rem);
+  --pf-v6-c-empty-state__title-text--FontWeight: var(--pf-t--global--font--weight--heading--default, 500);
+  --pf-v6-c-empty-state__title-text--LineHeight: var(--pf-t--global--font--line-height--heading, 1.3);
+  --pf-v6-c-empty-state--m-xs__title-text--FontSize: var(--pf-t--global--font--size--heading--xs, 1rem);
+  --pf-v6-c-empty-state--m-xl__title-text--FontSize: var(--pf-t--global--font--size--heading--2xl, 2.25rem);
+  --pf-v6-c-empty-state--m-xl__title-text--LineHeight: var(--pf-t--global--font--line-height--heading, 1.3);
+
+  /* Body */
+  --pf-v6-c-empty-state__body--MarginBlockStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-empty-state__body--Color: var(--pf-t--global--text--color--subtle, #4d4d4d);
+  --pf-v6-c-empty-state--body--FontSize: var(--pf-t--global--font--size--body--lg, 1rem);
+  --pf-v6-c-empty-state--m-xs__body--FontSize: var(--pf-t--global--font--size--body--lg, 1rem);
+  --pf-v6-c-empty-state--m-xs__body--MarginBlockStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-empty-state--m-xl__body--FontSize: var(--pf-t--global--font--size--body--lg, 1rem);
+  --pf-v6-c-empty-state--m-xl__body--MarginBlockStart: var(--pf-t--global--spacer--xl, 2rem);
+
+  /* Footer */
+  --pf-v6-c-empty-state__footer--RowGap: var(--pf-t--global--spacer--gap--group-to-group--vertical--default, 1.5rem);
+  --pf-v6-c-empty-state__footer--MarginBlockStart: var(--pf-t--global--spacer--xl, 2rem);
+  --pf-v6-c-empty-state--m-xs__footer--MarginBlockStart: var(--pf-t--global--spacer--md, 1rem);
+
+  /* Actions */
+  --pf-v6-c-empty-state__actions--RowGap: var(--pf-t--global--spacer--gap--group--vertical, 0.5rem);
+  --pf-v6-c-empty-state__actions--ColumnGap: var(--pf-t--global--spacer--gap--action-to-action--default, 1rem);
+
+  display: block;
+}
+
+#container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block-start: var(--pf-v6-c-empty-state--PaddingBlockStart);
+  padding-block-end: var(--pf-v6-c-empty-state--PaddingBlockEnd);
+  padding-inline-start: var(--pf-v6-c-empty-state--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-empty-state--PaddingInlineEnd);
+  text-align: center;
+
+  &.xs {
+    --pf-v6-c-empty-state--PaddingBlockStart: var(--pf-v6-c-empty-state--m-xs--PaddingBlockStart);
+    --pf-v6-c-empty-state--PaddingInlineEnd: var(--pf-v6-c-empty-state--m-xs--PaddingInlineEnd);
+    --pf-v6-c-empty-state--PaddingBlockEnd: var(--pf-v6-c-empty-state--m-xs--PaddingBlockEnd);
+    --pf-v6-c-empty-state--PaddingInlineStart: var(--pf-v6-c-empty-state--m-xs--PaddingInlineStart);
+    --pf-v6-c-empty-state__title-text--FontSize: var(--pf-v6-c-empty-state--m-xs__title-text--FontSize);
+    --pf-v6-c-empty-state__content--MaxWidth: var(--pf-v6-c-empty-state--m-xs__content--MaxWidth);
+    --pf-v6-c-empty-state__icon--MarginBlockEnd: var(--pf-v6-c-empty-state--m-xs__icon--MarginBlockEnd);
+    --pf-v6-c-empty-state__body--MarginBlockStart: var(--pf-v6-c-empty-state--m-xs__body--MarginBlockStart);
+    --pf-v6-c-empty-state--body--FontSize: var(--pf-v6-c-empty-state--m-xs__body--FontSize);
+    --pf-v6-c-empty-state__footer--MarginBlockStart: var(--pf-v6-c-empty-state--m-xs__footer--MarginBlockStart);
+  }
+
+  &.sm {
+    --pf-v6-c-empty-state__content--MaxWidth: var(--pf-v6-c-empty-state--m-sm__content--MaxWidth);
+  }
+
+  &.lg {
+    --pf-v6-c-empty-state__content--MaxWidth: var(--pf-v6-c-empty-state--m-lg__content--MaxWidth);
+  }
+
+  &.xl {
+    --pf-v6-c-empty-state__body--MarginBlockStart: var(--pf-v6-c-empty-state--m-xl__body--MarginBlockStart);
+    --pf-v6-c-empty-state--body--FontSize: var(--pf-v6-c-empty-state--m-xl__body--FontSize);
+    --pf-v6-c-empty-state__icon--MarginBlockEnd: var(--pf-v6-c-empty-state--m-xl__icon--MarginBlockEnd);
+    --pf-v6-c-empty-state__icon--FontSize: var(--pf-v6-c-empty-state--m-xl__icon--FontSize);
+    --pf-v6-c-empty-state__title-text--FontSize: var(--pf-v6-c-empty-state--m-xl__title-text--FontSize);
+    --pf-v6-c-empty-state__title-text--LineHeight: var(--pf-v6-c-empty-state--m-xl__title-text--LineHeight);
+  }
+
+  &.full-height {
+    height: 100%;
+  }
+
+  &.danger {
+    --pf-v6-c-empty-state__icon--Color: var(--pf-v6-c-empty-state--m-danger__icon--Color);
+  }
+
+  &.warning {
+    --pf-v6-c-empty-state__icon--Color: var(--pf-v6-c-empty-state--m-warning__icon--Color);
+  }
+
+  &.success {
+    --pf-v6-c-empty-state__icon--Color: var(--pf-v6-c-empty-state--m-success__icon--Color);
+  }
+
+  &.info {
+    --pf-v6-c-empty-state__icon--Color: var(--pf-v6-c-empty-state--m-info__icon--Color);
+  }
+
+  &.custom {
+    --pf-v6-c-empty-state__icon--Color: var(--pf-v6-c-empty-state--m-custom__icon--Color);
+  }
+}
+
+#content {
+  max-width: var(--pf-v6-c-empty-state__content--MaxWidth);
+}
+
+::slotted(pfv6-empty-state-icon) {
+  --_empty-state-icon-margin-block-end: var(--pf-v6-c-empty-state__icon--MarginBlockEnd);
+  --_empty-state-icon-font-size: var(--pf-v6-c-empty-state__icon--FontSize);
+  --_empty-state-icon-color: var(--pf-v6-c-empty-state__icon--Color);
+}
+
+/* For slotted header (when user provides their own header) */
+::slotted(pfv6-empty-state-header) {
+  --_empty-state-title-text-font-family: var(--pf-v6-c-empty-state__title-text--FontFamily);
+  --_empty-state-title-text-font-size: var(--pf-v6-c-empty-state__title-text--FontSize);
+  --_empty-state-title-text-font-weight: var(--pf-v6-c-empty-state__title-text--FontWeight);
+  --_empty-state-title-text-line-height: var(--pf-v6-c-empty-state__title-text--LineHeight);
+}
+
+/* For internal header (when using title-text attribute) */
+pfv6-empty-state-header {
+  --_empty-state-title-text-font-family: var(--pf-v6-c-empty-state__title-text--FontFamily);
+  --_empty-state-title-text-font-size: var(--pf-v6-c-empty-state__title-text--FontSize);
+  --_empty-state-title-text-font-weight: var(--pf-v6-c-empty-state__title-text--FontWeight);
+  --_empty-state-title-text-line-height: var(--pf-v6-c-empty-state__title-text--LineHeight);
+  --_empty-state-icon-margin-block-end: var(--pf-v6-c-empty-state__icon--MarginBlockEnd);
+  --_empty-state-icon-font-size: var(--pf-v6-c-empty-state__icon--FontSize);
+  --_empty-state-icon-color: var(--pf-v6-c-empty-state__icon--Color);
+}
+
+::slotted(pfv6-empty-state-body) {
+  --_empty-state-body-margin-block-start: var(--pf-v6-c-empty-state__body--MarginBlockStart);
+  --_empty-state-body-font-size: var(--pf-v6-c-empty-state--body--FontSize);
+  --_empty-state-body-color: var(--pf-v6-c-empty-state__body--Color);
+}
+
+::slotted(pfv6-empty-state-footer) {
+  --_empty-state-footer-row-gap: var(--pf-v6-c-empty-state__footer--RowGap);
+  --_empty-state-footer-margin-block-start: var(--pf-v6-c-empty-state__footer--MarginBlockStart);
+}
+
+::slotted(pfv6-empty-state-actions) {
+  --_empty-state-actions-row-gap: var(--pf-v6-c-empty-state__actions--RowGap);
+  --_empty-state-actions-column-gap: var(--pf-v6-c-empty-state__actions--ColumnGap);
+}

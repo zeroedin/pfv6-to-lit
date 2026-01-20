@@ -1,0 +1,52 @@
+<pfv6-empty-state id="status-empty-state" status="success" title-text="You're all set" heading-level="h4">
+  <pfv6-empty-state-body>
+    This represents an the empty state pattern in PatternFly. Hopefully it's simple enough to use but flexible
+    enough to meet a variety of needs.
+  </pfv6-empty-state-body>
+  <pfv6-empty-state-footer>
+    <pfv6-empty-state-actions>
+      <pfv6-button variant="primary" id="toggle-status">
+        Toggle status
+      </pfv6-button>
+    </pfv6-empty-state-actions>
+    <pfv6-empty-state-actions>
+      <pfv6-button variant="link">Multiple</pfv6-button>
+      <pfv6-button variant="link">Action Buttons</pfv6-button>
+      <pfv6-button variant="link">Can</pfv6-button>
+      <pfv6-button variant="link">Go here</pfv6-button>
+      <pfv6-button variant="link">In the secondary</pfv6-button>
+      <pfv6-button variant="link">Action area</pfv6-button>
+    </pfv6-empty-state-actions>
+  </pfv6-empty-state-footer>
+</pfv6-empty-state>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-empty-state/pfv6-empty-state.js';
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+  const emptyState = document.getElementById('status-empty-state');
+  const toggleButton = document.getElementById('toggle-status');
+
+  const statusToggleMap = {
+    success: 'danger',
+    danger: 'warning',
+    warning: 'info',
+    info: 'custom',
+    custom: 'success'
+  };
+
+  const titleMap = {
+    success: "You're all set",
+    danger: "You're not set",
+    warning: "You're probably not set",
+    info: 'You might be set',
+    custom: "You're custom"
+  };
+
+  toggleButton.addEventListener('click', () => {
+    const currentStatus = emptyState.getAttribute('status');
+    const newStatus = statusToggleMap[currentStatus];
+    emptyState.setAttribute('status', newStatus);
+    emptyState.setAttribute('title-text', titleMap[newStatus]);
+  });
+</script>

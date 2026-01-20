@@ -245,7 +245,7 @@ Demos MUST be minimal HTML fragments, NOT full documents.
 </script>
 ```
 
-**For demos with attributes**:
+**For demos with child sub-components**:
 ```html
 <pfv6-component variant="compact" is-rounded="true">
   <pfv6-component-title>Title</pfv6-component-title>
@@ -253,11 +253,16 @@ Demos MUST be minimal HTML fragments, NOT full documents.
 </pfv6-component>
 
 <script type="module">
+  // Only import the parent - it imports its own children
   import '@pfv6/elements/pfv6-component/pfv6-component.js';
-  import '@pfv6/elements/pfv6-component-title/pfv6-component-title.js';
-  import '@pfv6/elements/pfv6-component-body/pfv6-component-body.js';
 </script>
 ```
+
+**IMPORTANT - Import Rules**:
+- ✅ Parent components import their own child sub-components (e.g., `pfv6-card.ts` imports `pfv6-card-title.js`)
+- ✅ Demos only import the **parent component** (e.g., `pfv6-card.js`)
+- ✅ Demos import **external slotted components** (e.g., `pfv6-button.js`, `pfv6-icon.js`) that are NOT children of the parent
+- ❌ Do NOT import child sub-components in demos (they're auto-imported by the parent)
 
 **For demos with lightdom CSS**:
 ```html
@@ -268,8 +273,8 @@ Demos MUST be minimal HTML fragments, NOT full documents.
 </pfv6-component>
 
 <script type="module">
+  // Only import the parent - it imports its own children
   import '@pfv6/elements/pfv6-component/pfv6-component.js';
-  import '@pfv6/elements/pfv6-component-title/pfv6-component-title.js';
 </script>
 ```
 
@@ -663,9 +668,8 @@ export const CardBasic = () => (
 </pfv6-card>
 
 <script type="module">
+  // Only import parent - it auto-imports its children (card-title, card-body)
   import '@pfv6/elements/pfv6-card/pfv6-card.js';
-  import '@pfv6/elements/pfv6-card-title/pfv6-card-title.js';
-  import '@pfv6/elements/pfv6-card-body/pfv6-card-body.js';
 </script>
 ```
 

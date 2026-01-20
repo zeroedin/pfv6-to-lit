@@ -1,0 +1,25 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+#container {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap:
+    var(
+      --_empty-state-actions-row-gap,
+      var(--pf-t--global--spacer--gap--group--vertical, 0.5rem)
+    );
+  column-gap:
+    var(
+      --_empty-state-actions-column-gap,
+      var(--pf-t--global--spacer--gap--action-to-action--default, 1rem)
+    );
+  justify-content: center;
+}

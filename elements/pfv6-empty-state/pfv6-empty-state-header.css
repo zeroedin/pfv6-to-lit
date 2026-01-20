@@ -1,0 +1,55 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  font-weight: var(--pf-t--global--font--weight--body--default, 400);
+}
+
+:host {
+  display: block;
+}
+
+#container {
+  display: contents;
+}
+
+#title {
+  display: contents;
+}
+
+#title-text {
+  font-family:
+    var(
+      --_empty-state-title-text-font-family,
+      var(--pf-t--global--font--family--heading, "Red Hat Display", Helvetica, Arial, sans-serif)
+    );
+  font-size:
+    var(
+      --_empty-state-title-text-font-size,
+      var(--pf-t--global--font--size--heading--md, 1.25rem)
+    );
+  font-weight:
+    var(
+      --_empty-state-title-text-font-weight,
+      var(--pf-t--global--font--weight--heading--default, 500)
+    );
+  line-height:
+    var(
+      --_empty-state-title-text-line-height,
+      var(--pf-t--global--font--line-height--heading, 1.3)
+    );
+}
+
+/* Internal status icon (rendered in shadow DOM when status is set) */
+#icon {
+  margin-block-end: var(--_empty-state-icon-margin-block-end, var(--pf-t--global--spacer--lg, 1.5rem));
+  font-size: var(--_empty-state-icon-font-size, var(--pf-t--global--icon--size--2xl, 3.5rem));
+  line-height: 1;
+  color: var(--_empty-state-icon-color, var(--pf-t--global--icon--color--subtle, #707070));
+}

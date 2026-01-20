@@ -1,0 +1,15 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+#container {
+  margin-block-start: var(--_empty-state-body-margin-block-start, var(--pf-t--global--spacer--md, 1rem));
+  font-size: var(--_empty-state-body-font-size, var(--pf-t--global--font--size--body--lg, 1rem));
+  color: var(--_empty-state-body-color, var(--pf-t--global--text--color--subtle, #4d4d4d));
+}
