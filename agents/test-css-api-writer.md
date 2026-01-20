@@ -376,6 +376,9 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
   - Lit: `pfv6-{component}`
 - Use `threshold: 0` for pixel-perfect comparison
 - Attach all 3 images to test report
+- Use correct demo paths:
+  - React: `/elements/pfv6-{component}/react/test/${demo}`
+  - Lit: `/elements/pfv6-{component}/demo/${demo}`
 
 **NEVER**:
 - Skip any public CSS variables
@@ -384,6 +387,7 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
 - Test token variables (`--pf-t--*`)
 - Use different demos for React vs Lit
 - Allow threshold > 0
+- Use `/react/demo/` path (WRONG) - always use `/react/test/` (CORRECT)
 
 ## Demo Selection
 
