@@ -18,6 +18,41 @@ When invoked with a component name, create all necessary demo files by convertin
 You will receive:
 - Component name (e.g., "Card")
 - Component location (e.g., `elements/pfv6-card/`)
+- **Optional**: List of blocked demos to SKIP (from find agent output)
+
+### Handling Blocked Demos (CRITICAL)
+
+The orchestrator may include a **SKIP BLOCKED DEMOS** section in your prompt:
+
+```
+**IMPORTANT - SKIP BLOCKED DEMOS:**
+The following demos are blocked by unconverted dependencies and must be SKIPPED:
+- BreadcrumbDropdown.tsx (blocked by: Dropdown, MenuToggle)
+
+Only create demos for these files:
+- BreadcrumbBasic.tsx
+- BreadcrumbWithHeading.tsx
+- BreadcrumbWithoutHomeLink.tsx
+```
+
+**When blocked demos are specified:**
+
+1. **DO NOT create demo files** for any demos listed as blocked
+2. **Only create demos** for files explicitly listed as "ready" or not in the blocked list
+3. **Document the skipped demos** in your output for tracking
+
+**Why skip?** Blocked demos depend on components that don't exist yet as `pfv6-*` custom elements. Creating these demos now would result in:
+- Missing imports (component doesn't exist)
+- Broken demos (references non-existent elements)
+- False validation failures
+
+These demos will be created in a future task when their dependencies are converted.
+
+**Example behavior:**
+
+Prompt says skip `BreadcrumbDropdown.tsx`:
+- ❌ DO NOT create `dropdown.html`
+- ✅ Create `basic.html`, `with-heading.html`, `without-home-link.html`
 
 ### Output Files
 
@@ -724,12 +759,17 @@ After creating demo files, inform the user:
 ```
 Created demo files for {ComponentName}:
 
+**Demos Created ({N}):**
 - elements/pfv6-{component}/demo/basic.html
 - elements/pfv6-{component}/demo/with-actions.html
 - elements/pfv6-{component}/demo/compact-variant.html
 - elements/pfv6-{component}/demo/avatar.svg (static asset)
 
-Total: {N} demos created from {N} React examples (1:1 URL parity)
+**Demos Skipped ({M} - blocked by dependencies):**
+- {demo-file.tsx} (blocked by: {Component1}, {Component2})
+
+Total: {N} demos created from {X} React examples
+(Note: {M} demos skipped due to blocked dependencies - will be created when dependencies are converted)
 
 Layout components converted to HTML+CSS:
 - {N} Flex instances → <div class="pf-v6-l-flex">
@@ -739,12 +779,16 @@ Layout components converted to HTML+CSS:
 These demos should now be validated with demo-auditor for parity verification.
 ```
 
-**Note**: Only include the "Layout components converted" section if the demos contain layout components.
+**Notes**:
+- Only include the "Layout components converted" section if the demos contain layout components
+- Only include the "Demos Skipped" section if blocked demos were specified in the prompt
+- The demo count should match the **ready demos** count, not total React examples
 
 ## Critical Rules
 
 **ALWAYS**:
-- Convert ALL React demos (1:1 mapping for URL parity)
+- **Skip blocked demos** when specified in the prompt (demos blocked by unconverted dependencies)
+- Convert all **ready** React demos (1:1 mapping for URL parity)
 - Create `{descriptor}.html` for every `{Component}{Descriptor}.tsx` (e.g., `CardBasic.tsx` → `basic.html`)
 - Translate layout components (Flex, Gallery, Grid, Stack, etc.) to HTML+CSS classes, NOT custom elements
 - Use kebab-case filenames (descriptor only, no component name)
@@ -758,6 +802,7 @@ These demos should now be validated with demo-auditor for parity verification.
 - Stub missing components with HTML comments
 
 **NEVER**:
+- **Create demos for blocked files** (when skip list is provided in prompt)
 - Create `index.html` (breaks URL parity - use `basic.html` instead)
 - Mix up paths: static assets in demo/ use `./`, lightdom CSS uses `../../`
 - Create custom elements for layout components (use HTML+CSS classes instead)

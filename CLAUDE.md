@@ -28,6 +28,45 @@ The `targeted-search` agent uses memory-efficient strategies (grep, node, ripgre
 
 Use TodoWrite to track progress through the workflow.
 
+### Data Flow Between Agents
+
+Subagents run in isolation and don't share state. All context must flow through the orchestrator via prompts.
+
+When the `find` agent outputs component information, **extract and store** the following data for use in later steps:
+
+```
+┌─────────────┐     structured output      ┌──────────────┐
+│  find agent │ ─────────────────────────► │ Orchestrator │
+└─────────────┘  "blockedDemos: [...]"     └──────┬───────┘
+                                                  │
+                                    passes blocked info in prompt
+                                                  │
+                                                  ▼
+                                          ┌─────────────────┐
+                                          │  demo-writer    │
+                                          │ "Skip: [...]"   │
+                                          └─────────────────┘
+```
+
+**Parsing Find Agent Output:**
+
+The find agent outputs a `## Machine-Parseable Data` section with JSON:
+
+```json
+{
+  "component": "ComponentName",
+  "taskType": "partial",
+  "readyDemos": ["Demo1.tsx", "Demo2.tsx"],
+  "blockedDemos": ["Demo3.tsx"],
+  "blockedDemoDetails": [{"file": "Demo3.tsx", "blockedBy": ["Dropdown"]}]
+}
+```
+
+**Store in memory** for use in Step 6:
+- `readyDemos` - demos that should be created
+- `blockedDemos` - demo filenames to SKIP
+- `blockedDemoDetails` - which components are blocking each demo
+
 ## Phase 1: Initial Setup & API Analysis
 
 **MANDATORY**: Complete ALL steps before proceeding to Phase 2.
@@ -152,14 +191,30 @@ npx eslint elements/pfv6-{component}/**/*.ts
 - Tool name: `Task`
 - subagent_type: `'demo-writer'`
 - description: `'Create demos for pfv6-{component}'`
-- prompt: `'Create HTML demos for pfv6-{component} from PatternFly React examples with 1:1 parity.'`
+- prompt: Include blocked demo info from find agent (see "Data Flow Between Agents")
+
+**Prompt construction:**
+
+```
+Create HTML demos for pfv6-{component} from PatternFly React examples with 1:1 parity.
+
+[If blockedDemos is NOT empty, append:]
+
+**IMPORTANT - SKIP BLOCKED DEMOS:**
+The following demos are blocked by unconverted dependencies and must be SKIPPED:
+- {file} (blocked by: {blockers})
+
+Only create demos for these files:
+- {readyDemo1}
+- {readyDemo2}
+```
 
 **BLOCKING REQUIREMENT:**
 You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
 
 Expected response includes:
-- List of specific demo files created
-- Demo count matches React example count (1:1 parity)
+- List of demo files created
+- Confirmation of any skipped demos
 
 ### Step 7: IF LAYOUT COMPONENTS DETECTED - DELEGATE to layout-translator
 
