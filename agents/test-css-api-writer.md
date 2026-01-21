@@ -376,9 +376,9 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
   - Lit: `pfv6-{component}`
 - Use `threshold: 0` for pixel-perfect comparison
 - Attach all 3 images to test report
-- Use correct demo paths:
+- Use correct demo paths (CRITICAL - both must use `/test/` for minimal template):
   - React: `/elements/pfv6-{component}/react/test/${demo}`
-  - Lit: `/elements/pfv6-{component}/demo/${demo}`
+  - Lit: `/elements/pfv6-{component}/test/${demo}`
 
 **NEVER**:
 - Skip any public CSS variables
@@ -387,7 +387,36 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
 - Test token variables (`--pf-t--*`)
 - Use different demos for React vs Lit
 - Allow threshold > 0
-- Use `/react/demo/` path (WRONG) - always use `/react/test/` (CORRECT)
+- Use `/demo/` path for tests (WRONG) - always use `/test/` (CORRECT)
+  - `/demo/` uses `demo.html` template with navigation/styling that differs between React and Lit
+  - `/test/` uses `test.html` template with minimal wrapper, ensuring fair visual comparison
+
+## Demo Paths (CRITICAL)
+
+The dev server uses different templates for different URL paths. **Both React and Lit must use the `/test/` path** to ensure fair visual comparison:
+
+| Path Pattern | Template | Purpose |
+|-------------|----------|---------|
+| `/elements/pfv6-{component}/test/{demo}` | `test.html` | Minimal wrapper for visual testing |
+| `/elements/pfv6-{component}/demo/{demo}` | `demo.html` | Full navigation, styling for development |
+| `/elements/pfv6-{component}/react/test/{demo}` | `test.html` | Minimal wrapper for React testing |
+| `/elements/pfv6-{component}/react/{demo}` | `demo.html` | Full navigation for React development |
+
+**Why `/test/` is required for parity tests**:
+- The `demo.html` template includes navigation and styling that differs between React and Lit
+- The `test.html` template provides a minimal, consistent wrapper
+- Using different templates would cause false positives in visual comparisons
+
+**Correct URLs in test code**:
+```typescript
+// ✅ CORRECT - Both use /test/ path
+await reactPage.goto(`/elements/pfv6-card/react/test/${demo}`);
+await page.goto(`/elements/pfv6-card/test/${demo}`);
+
+// ❌ WRONG - Lit uses /demo/ path (different template!)
+await reactPage.goto(`/elements/pfv6-card/react/test/${demo}`);
+await page.goto(`/elements/pfv6-card/demo/${demo}`);  // WRONG!
+```
 
 ## Demo Selection
 

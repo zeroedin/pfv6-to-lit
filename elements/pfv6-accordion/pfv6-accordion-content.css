@@ -1,0 +1,82 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+#container:where([hidden]) {
+  display: revert;
+}
+
+#container {
+  max-height: var(--_accordion-expandable-content-max-height, 0);
+  margin-block-end: var(--_accordion-expandable-content-margin-block-end, 0);
+  margin-inline-start:
+    var(
+      --_accordion-expandable-content-margin-inline-start,
+      var(--pf-t--global--spacer--md, 1rem)
+    );
+  margin-inline-end:
+    var(
+      --_accordion-expandable-content-margin-inline-end,
+      var(--pf-t--global--spacer--md, 1rem)
+    );
+  font-size:
+    var(
+      --_accordion-expandable-content-font-size,
+      var(--pf-t--global--font--size--body--default, 0.875rem)
+    );
+  color:
+    var(
+      --_accordion-expandable-content-color,
+      var(--pf-t--global--text--color--regular, #151515)
+    );
+  visibility: var(--_accordion-expandable-content-visibility, hidden);
+  background-color:
+    var(
+      --_accordion-expandable-content-background-color,
+      var(--pf-t--global--background--color--primary--default, #ffffff)
+    );
+  border:
+    var(--_accordion-expandable-content-border-width, 0) solid
+    var(--_accordion-expandable-content-border-color, rgb(255 255 255 / 0%));
+  border-radius: var(--_accordion-expandable-content-border-radius, 6px);
+  opacity: var(--_accordion-expandable-content-opacity, 0);
+  transition-delay:
+    0s,
+    0s,
+    var(
+      --_accordion-expandable-content-transition-duration-fade-delay,
+      var(--_accordion-expandable-content-transition-duration-fade, 100ms)
+    ),
+    var(
+      --_accordion-expandable-content-transition-duration-fade-delay,
+      var(--_accordion-expandable-content-transition-duration-fade, 100ms)
+    ),
+    var(
+      --_accordion-expandable-content-transition-duration-fade-delay,
+      var(--_accordion-expandable-content-transition-duration-fade, 100ms)
+    );
+  transition-timing-function:
+    var(
+      --_accordion-expandable-content-transition-timing-function,
+      cubic-bezier(0.4, 0, 0.2, 1)
+    );
+  transition-duration:
+    var(--_accordion-expandable-content-transition-duration-fade, 100ms),
+    var(--_accordion-expandable-content-transition-duration-slide, 0s),
+    0s,
+    0s,
+    0s;
+  transition-property: opacity, translate, visibility, max-height, margin-block-end;
+  translate: 0 var(--_accordion-expandable-content-translate-y, 0);
+
+  &.fixed {
+    max-height: var(--_accordion-expandable-content-fixed-max-height-base, 0);
+    overflow-y: auto;
+  }
+}

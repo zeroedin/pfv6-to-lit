@@ -345,66 +345,75 @@ export class Pfv6Button extends LitElement {
       'display-lg': this.size === 'lg',
     };
 
-    const hasTextContent = this.hasTextContent();
-    const icon = this.renderIcon();
-    const textContent = hasTextContent ? html`<span class="text"><slot></slot></span>` : html`<slot></slot>`;
-
-    const isInlineLink = this.isInline && this.variant === 'link';
-
-    const content = html`
-      ${this.isLoading ? html`
-        <span class="progress">
-          <pfv6-spinner
-            size="md"
-            ?is-inline=${this.isInline}
-            accessible-valuetext=${ifDefined(this.spinnerAccessibleValuetext)}
-            accessible-label=${ifDefined(this.spinnerAccessibleLabel)}
-          ></pfv6-spinner>
+    return this.isInline && this.variant === 'link' ?
+      html`
+        <span
+          id="container"
+          class=${classMap(classes)}
+          role="button"
+          tabindex=${ifDefined(this.getComputedTabIndex())}
+          aria-disabled=${this.isAriaDisabled ? 'true' : 'false'}
+          aria-label=${ifDefined(this.accessibleLabel)}
+          @click=${this.handleClick}
+          @keydown=${this.handleKeyPress}
+        >
+          ${this.isLoading ? html`
+            <span class="progress">
+              <pfv6-spinner
+                size="md"
+                is-inline
+                accessible-valuetext=${ifDefined(this.spinnerAccessibleValuetext)}
+                accessible-label=${ifDefined(this.spinnerAccessibleLabel)}
+              ></pfv6-spinner>
+            </span>
+          ` : null}
+          ${this.iconPosition === 'end' ? html`
+            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+            ${this.renderIcon()}
+          ` : html`
+            ${this.renderIcon()}
+            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+          `}
+          ${this.querySelector('[slot="count"]') ? html`
+            <span class="count"><slot name="count"></slot></span>
+          ` : null}
         </span>
-      ` : null}
-      ${this.iconPosition === 'end' ? html`
-        ${textContent}
-        ${icon}
-      ` : html`
-        ${icon}
-        ${textContent}
-      `}
-      ${this.querySelector('[slot="count"]') ? html`
-        <span class="count">
-          <slot name="count"></slot>
-        </span>
-      ` : null}
-    `;
-
-    return isInlineLink ? html`
-      <span
-        id="container"
-        class=${classMap(classes)}
-        role="button"
-        tabindex=${ifDefined(this.getComputedTabIndex())}
-        aria-disabled=${this.isAriaDisabled ? 'true' : 'false'}
-        aria-label=${ifDefined(this.accessibleLabel)}
-        @click=${this.handleClick}
-        @keydown=${this.handleKeyPress}
-      >
-        ${content}
-      </span>
-    ` : html`
-      <button
-        id="container"
-        class=${classMap(classes)}
-        type=${this.type}
-        ?disabled=${this.isDisabled}
-        aria-disabled=${this.isAriaDisabled ? 'true' : 'false'}
-        aria-expanded=${ifDefined(this.isExpanded !== undefined ? String(this.isExpanded) : undefined)}
-        aria-label=${ifDefined(this.accessibleLabel)}
-        tabindex=${ifDefined(this.getComputedTabIndex())}
-        @click=${this.handleClick}
-        @keypress=${this.handleKeyPress}
-      >
-        ${content}
-      </button>
-    `;
+      `
+      : html`
+        <button
+          id="container"
+          class=${classMap(classes)}
+          type=${this.type}
+          ?disabled=${this.isDisabled}
+          aria-disabled=${this.isAriaDisabled ? 'true' : 'false'}
+          aria-expanded=${ifDefined(this.isExpanded !== undefined ? String(this.isExpanded) : undefined)}
+          aria-label=${ifDefined(this.accessibleLabel)}
+          tabindex=${ifDefined(this.getComputedTabIndex())}
+          @click=${this.handleClick}
+          @keypress=${this.handleKeyPress}
+        >
+          ${this.isLoading ? html`
+            <span class="progress">
+              <pfv6-spinner
+                size="md"
+                ?is-inline=${this.isInline}
+                accessible-valuetext=${ifDefined(this.spinnerAccessibleValuetext)}
+                accessible-label=${ifDefined(this.spinnerAccessibleLabel)}
+              ></pfv6-spinner>
+            </span>
+          ` : null}
+          ${this.iconPosition === 'end' ? html`
+            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+            ${this.renderIcon()}
+          ` : html`
+            ${this.renderIcon()}
+            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+          `}
+          ${this.querySelector('[slot="count"]') ? html`
+            <span class="count"><slot name="count"></slot></span>
+          ` : null}
+        </button>
+      `;
   }
 }
 

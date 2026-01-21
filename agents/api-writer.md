@@ -867,6 +867,162 @@ export class Pfv6ListItem extends LitElement {
 
 **Note**: The `@consume` decorator may not work reliably with slotted content due to this timing issue. Prefer the explicit `ContextConsumer` pattern shown above.
 
+## Step 6.6: React useEffect → Lit updated() (CRITICAL)
+
+**When React uses `useEffect` with dependencies, you MUST translate ALL dependencies to Lit's `updated()` lifecycle.**
+
+### The Pattern
+
+React's `useEffect` runs when ANY dependency in the array changes:
+
+```javascript
+// React
+useEffect(() => {
+  // Side effect logic
+  if (condition1 && condition2) {
+    doSomething();
+  }
+}, [dep1, dep2, dep3]); // ← Effect runs when ANY of these change
+```
+
+**Lit equivalent - check ALL dependencies**:
+
+```typescript
+// ✅ CORRECT - Check ALL dependencies from useEffect array
+override updated(changedProperties: PropertyValues) {
+  super.updated(changedProperties);
+
+  // Must check ALL dependencies from React's useEffect array
+  if (
+    changedProperties.has('dep1') ||
+    changedProperties.has('dep2') ||
+    changedProperties.has('dep3')
+  ) {
+    // Same side effect logic
+    if (this.condition1 && this.condition2) {
+      this.#doSomething();
+    }
+  }
+}
+```
+
+```typescript
+// ❌ WRONG - Only checking ONE dependency (common bug!)
+override updated(changedProperties: PropertyValues) {
+  // Missing dep2 and dep3 - effect won't run when those change!
+  if (changedProperties.has('dep1')) {
+    this.#doSomething();
+  }
+}
+```
+
+### Real-World Example
+
+**React (AccordionContent)**:
+```javascript
+const [hasScrollbar, setHasScrollbar] = useState(false);
+const { isExpanded } = useContext(AccordionItemContext);
+
+useEffect(() => {
+  if (containerRef?.current && isFixed && isExpanded) {
+    const { offsetHeight, scrollHeight } = containerRef.current;
+    setHasScrollbar(offsetHeight < scrollHeight);
+  } else if (!isFixed) {
+    setHasScrollbar(false);
+  }
+}, [containerRef, isFixed, isExpanded]); // ← THREE dependencies
+```
+
+**Lit (correct translation)**:
+```typescript
+@state() private hasScrollbar = false;
+
+// isFixed is a @property, _itemContext contains isExpanded
+override updated(changedProperties: PropertyValues) {
+  super.updated(changedProperties);
+
+  // Check ALL dependencies: isFixed AND _itemContext (contains isExpanded)
+  if (changedProperties.has('isFixed') || changedProperties.has('_itemContext')) {
+    this.#checkScrollbar();
+  }
+}
+
+#checkScrollbar() {
+  const container = this.shadowRoot?.getElementById('container');
+  const isExpanded = this._itemContext?.isExpanded ?? false;
+
+  if (container && this.isFixed && isExpanded) {
+    const { offsetHeight, scrollHeight } = container;
+    this.hasScrollbar = offsetHeight < scrollHeight;
+  } else if (!this.isFixed) {
+    this.hasScrollbar = false;
+  }
+}
+```
+
+### Translation Rules
+
+| React useEffect Dependency | Lit updated() Check |
+|---------------------------|---------------------|
+| `[propA]` | `changedProperties.has('propA')` |
+| `[propA, propB]` | `changedProperties.has('propA') \|\| changedProperties.has('propB')` |
+| `[propA, context.value]` | `changedProperties.has('propA') \|\| changedProperties.has('_contextState')` |
+| `[ref]` | Usually not needed (refs don't change) unless using context |
+| `[]` (empty) | Use `firstUpdated()` instead |
+
+### Context Dependencies
+
+When a `useEffect` dependency comes from React context (e.g., `useContext()`):
+- The context value is consumed via `@consume({ context, subscribe: true })`
+- The consumed property (e.g., `_itemContext`) triggers `updated()` when context changes
+- Check for changes to the consumed context property
+
+### Key Points
+
+1. **Count dependencies**: React `useEffect([a, b, c])` = 3 checks in Lit `updated()`
+2. **Don't skip any**: Missing a dependency = bug (effect won't run when it should)
+3. **Empty array `[]`**: Use `firstUpdated()` for one-time initialization
+4. **No array**: Rare in PatternFly; runs every render = no condition in `updated()`
+5. **Context values**: Check the consumed context property, not individual fields
+
+### Detecting useEffect in React Source
+
+**Look for these patterns**:
+
+```javascript
+// Pattern 1: Direct useEffect
+useEffect(() => {
+  // logic
+}, [dep1, dep2]);
+
+// Pattern 2: useEffect with state setter
+const [state, setState] = useState(initial);
+useEffect(() => {
+  setState(newValue);
+}, [dependency]);
+
+// Pattern 3: useEffect with context
+const { contextValue } = useContext(SomeContext);
+useEffect(() => {
+  // uses contextValue
+}, [contextValue, otherDep]);
+```
+
+**Document in output**:
+```markdown
+### Lifecycle Effects
+
+**useEffect found**: YES
+
+**Dependencies**:
+- `isFixed` → property
+- `isExpanded` → from AccordionItemContext
+
+**Lit Translation**:
+- Check `changedProperties.has('isFixed')` OR `changedProperties.has('_itemContext')`
+- Call side effect method when either changes
+```
+
 ### Detecting Context Need from React
 
 **Look for these patterns in React source**:
