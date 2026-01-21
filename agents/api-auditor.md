@@ -1507,6 +1507,170 @@ grep "import.*Event.*from.*\./" elements/pfv6-card/pfv6-card.ts  # Should be emp
 - Violates Lit community best practices
 - Makes codebase harder to navigate
 
+## Step 6.5: useEffect Dependency Validation (CRITICAL)
+
+### Check ALL useEffect Dependencies are Translated to updated()
+
+**When React uses `useEffect` with dependencies, the Lit component MUST check ALL dependencies in `updated()`.**
+
+**React Pattern**:
+```javascript
+useEffect(() => {
+  // side effect
+}, [dep1, dep2, dep3]); // ← 3 dependencies
+```
+
+**Required Lit Translation**:
+```typescript
+override updated(changedProperties: PropertyValues) {
+  super.updated(changedProperties);
+
+  // ✅ CORRECT - Check ALL 3 dependencies
+  if (
+    changedProperties.has('dep1') ||
+    changedProperties.has('dep2') ||
+    changedProperties.has('dep3')
+  ) {
+    this.#sideEffect();
+  }
+}
+```
+
+### Detection Pattern
+
+1. **Read React source** (memory-safe pattern):
+   ```bash
+   Read('.cache/patternfly-react/.../components/{ComponentName}/{ComponentName}.tsx')
+   ```
+
+2. **Extract useEffect calls**:
+   - Search for `useEffect\(.*\[` pattern
+   - Extract dependency array: everything between `[` and `]`
+   - Count dependencies
+
+3. **Read Lit component**:
+   - Search for `changedProperties.has\(` in `updated()` method
+   - Count how many properties are checked
+
+4. **Compare counts**:
+   - If Lit checks FEWER properties than React dependencies → **CRITICAL ERROR**
+   - If counts match → **PASS**
+
+### Common Bug Pattern
+
+**❌ WRONG - Missing dependency**:
+```typescript
+// React: useEffect(() => { ... }, [containerRef, isFixed, isExpanded])
+// 3 dependencies, but Lit only checks 1:
+
+override updated(changedProperties: PropertyValues) {
+  // ❌ CRITICAL: Missing isExpanded check!
+  if (changedProperties.has('isFixed')) {
+    this.#checkScrollbar();
+  }
+}
+```
+
+**✅ CORRECT - All dependencies checked**:
+```typescript
+override updated(changedProperties: PropertyValues) {
+  // ✅ Checks isFixed AND _itemContext (contains isExpanded)
+  if (changedProperties.has('isFixed') || changedProperties.has('_itemContext')) {
+    this.#checkScrollbar();
+  }
+}
+```
+
+### Context Dependencies
+
+When React useEffect depends on a context value (e.g., `useContext()`):
+- The context value is consumed via `@consume({ context, subscribe: true })`
+- Check for changes to the consumed context property (e.g., `_itemContext`)
+- NOT individual fields within the context
+
+**React**:
+```javascript
+const { isExpanded } = useContext(AccordionItemContext);
+useEffect(() => { ... }, [isFixed, isExpanded]);
+```
+
+**Lit**:
+```typescript
+@consume({ context: accordionItemContext, subscribe: true })
+@state()
+private _itemContext?: AccordionItemContext;
+
+// Check _itemContext, not isExpanded directly
+if (changedProperties.has('isFixed') || changedProperties.has('_itemContext')) { ... }
+```
+
+### Validation Steps
+
+1. Read React component file
+2. Extract ALL `useEffect` calls with their dependency arrays
+3. For each useEffect:
+   - Count dependencies (ignore `[]` empty arrays → `firstUpdated()`)
+   - Map context values to consumed properties
+   - Map refs to property names (usually not needed)
+4. Read Lit component file
+5. Find corresponding `updated()` method logic
+6. Count `changedProperties.has()` calls for that logic
+7. Compare: Lit checks must be >= React dependencies (accounting for context grouping)
+
+### Report Format
+
+```markdown
+## useEffect Dependency Validation
+
+### React useEffect #1
+**Location**: AccordionContent.tsx line 45
+**Dependencies**: [containerRef, isFixed, isExpanded] (3 items)
+**Mapped to Lit**:
+- containerRef → (not needed, ref doesn't change)
+- isFixed → `isFixed` property
+- isExpanded → `_itemContext` (from context)
+
+### Lit updated() Check
+**Location**: pfv6-accordion-content.ts line 105
+**Properties Checked**: isFixed, _itemContext (2 items)
+**Expected Checks**: 2 (after ref removal)
+
+**Result**: ✅ PASS - All dependencies translated correctly
+
+---
+
+### React useEffect #2 (if CRITICAL violation found)
+**Dependencies**: [propA, propB, propC]
+
+**Lit updated() Check**:
+- Only checks: propA
+- Missing: propB, propC
+
+**Result**: ❌ CRITICAL - Missing 2 dependencies
+
+**Bug**: Side effect won't run when propB or propC change
+
+**Fix**:
+```typescript
+override updated(changedProperties: PropertyValues) {
+  if (
+    changedProperties.has('propA') ||
+    changedProperties.has('propB') ||  // ← Add this
+    changedProperties.has('propC')     // ← Add this
+  ) {
+    this.#sideEffect();
+  }
+}
+```
+```
+
+### Empty Dependency Array `[]`
+
+If React uses `useEffect(() => { ... }, [])`:
+- This runs once on mount
+- Lit equivalent is `firstUpdated()` lifecycle method
+- Verify logic is in `firstUpdated()`, NOT `updated()`
+
 ## Step 7: HTML Structural Validity & Semantic HTML Wrappers
 
 ### Verify NO `component` Property for Element Type Transformation

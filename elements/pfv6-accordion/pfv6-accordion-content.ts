@@ -105,8 +105,9 @@ export class Pfv6AccordionContent extends LitElement {
   override updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
 
-    // Check for scrollbar when isFixed changes
-    if (changedProperties.has('isFixed')) {
+    // Check for scrollbar when isFixed or isExpanded changes
+    // React dependency array: [containerRef, isFixed, isExpanded]
+    if (changedProperties.has('isFixed') || changedProperties.has('_itemContext')) {
       this.#checkScrollbar();
     }
   }
