@@ -517,6 +517,10 @@
     --pf-v6-c-button--m-small--PaddingInlineEnd: var(--pf-v6-c-button--m-link--m-small--PaddingInlineEnd);
     --pf-v6-c-button--m-small--PaddingInlineStart: var(--pf-v6-c-button--m-link--m-small--PaddingInlineStart);
 
+    & ::slotted(pfv6-icon) {
+      --pf-v6-c-icon__content--Color: var(--pf-v6-c-button__icon--Color);
+    }
+
     &.inline {
       /* Override display and icon margins for span-like behavior */
       --pf-v6-c-button--m-link--m-inline--Display: var(--pf-v6-c-button--span--m-link--m-inline--Display);
