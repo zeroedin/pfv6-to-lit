@@ -1,6 +1,12 @@
-import { html, fixture, expect } from '@open-wc/testing';
+import { html, fixture, expect, aTimeout } from '@open-wc/testing';
 import { Pfv6FormSelect } from '../pfv6-form-select.js';
 import '../pfv6-form-select.js';
+
+/** Wait for MutationObserver callbacks to fire and component to update */
+async function waitForMutationObserver(el: Pfv6FormSelect) {
+  await aTimeout(0);  // MutationObserver callbacks are scheduled as microtasks
+  await el.updateComplete;
+}
 
 describe('<pfv6-form-select>', function() {
   describe('instantiation', function() {
@@ -328,7 +334,7 @@ describe('<pfv6-form-select>', function() {
 
       // Disable select
       select.disabled = true;
-      await el.updateComplete;
+      await waitForMutationObserver(el);
 
       container = el.shadowRoot!.querySelector('#container');
       expect(container!.classList.contains('disabled')).to.be.true;
@@ -611,7 +617,7 @@ describe('<pfv6-form-select>', function() {
       // Verify that the select element is detected (via disabled class logic)
       const select = el.querySelector('select')!;
       select.disabled = true;
-      await el.updateComplete;
+      await waitForMutationObserver(el);
 
       const container = el.shadowRoot!.querySelector('#container');
       expect(container!.classList.contains('disabled')).to.be.true;
