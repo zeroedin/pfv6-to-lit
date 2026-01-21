@@ -1,0 +1,20 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Public CSS variables - overrideable from outside */
+  --pf-v6-c-breadcrumb__item--FontSize: var(--pf-t--global--font--size--body--sm, 0.75rem);
+  --pf-v6-c-breadcrumb__item--LineHeight: var(--pf-t--global--font--line-height--body, 1.5);
+  --pf-v6-c-breadcrumb__item--MarginInlineEnd: var(--pf-t--global--spacer--sm, 0.5rem);
+
+  display: inline-flex;
+}
+
+#list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
