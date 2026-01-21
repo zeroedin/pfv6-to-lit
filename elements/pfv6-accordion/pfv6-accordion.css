@@ -1,0 +1,83 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Public CSS API - Component-level variables */
+  --pf-v6-c-accordion--BackgroundColor:
+    var(
+      --pf-t--global--background--color--primary--default,
+      #ffffff
+    );
+  --pf-v6-c-accordion--RowGap: var(--pf-t--global--spacer--xs, 0.25rem);
+
+  display: block;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--pf-v6-c-accordion--RowGap);
+  background-color: var(--pf-v6-c-accordion--BackgroundColor);
+
+  /* toggle-start modifier */
+  &.toggle-start {
+    --_accordion-toggle-column-gap:
+      var(
+        --pf-t--global--spacer--gap--text-to-element--default,
+        0.5rem
+      );
+  }
+
+  /* display-lg modifier */
+  &.display-lg {
+    --_accordion-toggle-padding-block-start: var(--pf-t--global--spacer--md, 1rem);
+    --_accordion-toggle-padding-inline-end: var(--pf-t--global--spacer--md, 1rem);
+    --_accordion-toggle-padding-block-end: var(--pf-t--global--spacer--md, 1rem);
+    --_accordion-toggle-expanded-padding-block-end: var(--pf-t--global--spacer--sm, 0.5rem);
+    --_accordion-toggle-padding-inline-start: var(--pf-t--global--spacer--md, 1rem);
+    /* stylelint-disable-next-line @stylistic/max-line-length */
+    --_accordion-toggle-font-family: var(--pf-t--global--font--family--heading, "Red Hat Display", "RedHatDisplay", "Noto Sans Arabic", "Noto Sans Hebrew", "Noto Sans JP", "Noto Sans KR", "Noto Sans Malayalam", "Noto Sans SC", "Noto Sans TC", "Noto Sans Thai", Helvetica, Arial, sans-serif);
+    --_accordion-toggle-font-size: var(--pf-t--global--font--size--heading--sm, 0.875rem);
+    --_accordion-toggle-text-font-weight:
+      var(
+        --pf-t--global--font--weight--heading--default,
+        500
+      );
+    --_accordion-toggle-expanded-text-font-weight:
+      var(
+        --pf-t--global--font--weight--heading--default,
+        500
+      );
+    --_accordion-expandable-content-font-size:
+      var(
+        --pf-t--global--font--size--body--lg,
+        1rem
+      );
+    --_accordion-expandable-content-color:
+      var(
+        --pf-t--global--text--color--regular,
+        #151515
+      );
+  }
+
+  /* bordered modifier */
+  &.bordered {
+    --pf-v6-c-accordion--RowGap: 0;
+    --_accordion-item-border-radius: 0;
+    --_accordion-toggle-border-radius: 0;
+    --_accordion-item-border-width: 0;
+    --_accordion-item-bordered-border-block-end-width:
+      var(
+        --pf-t--global--border--width--divider--default,
+        1px
+      );
+    --_accordion-item-bordered-border-block-end-color:
+      var(
+        --pf-t--global--border--color--default,
+        #c7c7c7
+      );
+  }
+}

@@ -1,0 +1,13 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Light DOM styles for accordion slotted children */
+pfv6-accordion.bordered {
+  & > pfv6-accordion-item {
+    --_accordion-item-bordered-border-block-end-width: var(--pf-t--global--border--width--divider--default, 1px);
+    --_accordion-item-bordered-border-block-end-color: var(--pf-t--global--border--color--default, #c7c7c7);
+  }
+}

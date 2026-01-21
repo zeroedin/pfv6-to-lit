@@ -1,0 +1,121 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(button) {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: var(--pf-t--global--text--color--regular, #151515);
+  cursor: pointer;
+}
+
+:host {
+  display: contents;
+}
+
+/* Reset heading defaults - the container is an h1-h6 element */
+#container {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+#toggle {
+  position: relative;
+  z-index: var(--_accordion-toggle-z-index, 100);
+  display: flex;
+  column-gap:
+    var(
+      --_accordion-toggle-column-gap,
+      var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem)
+    );
+  align-items: center;
+  width: 100%;
+  padding-block-start:
+    var(
+      --_accordion-toggle-padding-block-start,
+      var(--pf-t--global--spacer--sm, 0.5rem)
+    );
+  padding-block-end:
+    var(
+      --_accordion-toggle-padding-block-end,
+      var(--pf-t--global--spacer--sm, 0.5rem)
+    );
+  padding-inline-start:
+    var(
+      --_accordion-toggle-padding-inline-start,
+      var(--pf-t--global--spacer--md, 1rem)
+    );
+  padding-inline-end:
+    var(
+      --_accordion-toggle-padding-inline-end,
+      var(--pf-t--global--spacer--md, 1rem)
+    );
+  font-family: var(--_accordion-toggle-font-family, inherit);
+  font-size: var(--_accordion-toggle-font-size, inherit);
+  text-align: start;
+  background-color:
+    var(
+      --_accordion-toggle-background-color,
+      var(--pf-t--global--background--color--action--plain--default, rgb(255 255 255 / 0%))
+    );
+  border: 0;
+  border-radius: var(--_accordion-toggle-border-radius, 6px);
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    border:
+      var(--_accordion-toggle-border-width, 0) solid
+      var(--_accordion-toggle-border-color, rgb(255 255 255 / 0%));
+    border-radius: inherit;
+  }
+
+  &:is(:hover, :focus) {
+    --_accordion-toggle-background-color:
+      var(
+        --pf-t--global--background--color--action--plain--hover,
+        rgb(199 199 199 / 25%)
+      );
+    --_accordion-toggle-border-width:
+      var(
+        --pf-t--global--border--width--action--plain--hover,
+        0
+      );
+  }
+}
+
+#text {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight:
+    var(
+      --_accordion-toggle-text-font-weight,
+      var(--pf-t--global--font--weight--body--default, 400)
+    );
+  color:
+    var(
+      --_accordion-toggle-text-color,
+      var(--pf-t--global--text--color--regular, #151515)
+    );
+}
+
+#icon {
+  transition:
+    transform var(--_accordion-toggle-icon-transition-duration, 100ms)
+    var(--_accordion-toggle-icon-transition-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+  transform: rotate(var(--_accordion-toggle-icon-rotate, 0));
+
+  /* RTL support */
+  &:dir(rtl) {
+    transform: scaleX(-1) rotate(var(--_accordion-toggle-icon-rotate, 0));
+  }
+}

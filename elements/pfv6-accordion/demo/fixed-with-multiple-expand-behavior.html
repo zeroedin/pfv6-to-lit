@@ -1,0 +1,89 @@
+<pfv6-accordion>
+  <pfv6-accordion-item id="ex2-item-1">
+    <pfv6-accordion-toggle>
+      Item one
+    </pfv6-accordion-toggle>
+    <pfv6-accordion-content is-fixed>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+        dolore magna aliqua.
+      </p>
+    </pfv6-accordion-content>
+  </pfv6-accordion-item>
+
+  <pfv6-accordion-item id="ex2-item-2">
+    <pfv6-accordion-toggle>
+      Item two
+    </pfv6-accordion-toggle>
+    <pfv6-accordion-content is-fixed>
+      <p>
+        Vivamus et tortor sed arcu congue vehicula eget et diam. Praesent nec dictum lorem. Aliquam id diam
+        ultrices, faucibus erat id, maximus nunc.
+      </p>
+    </pfv6-accordion-content>
+  </pfv6-accordion-item>
+
+  <pfv6-accordion-item id="ex2-item-3">
+    <pfv6-accordion-toggle>
+      Item three
+    </pfv6-accordion-toggle>
+    <pfv6-accordion-content is-fixed>
+      <p>Morbi vitae urna quis nunc convallis hendrerit. Aliquam congue orci quis ultricies tempus.</p>
+    </pfv6-accordion-content>
+  </pfv6-accordion-item>
+
+  <pfv6-accordion-item id="ex2-item-4" is-expanded>
+    <pfv6-accordion-toggle>
+      Item four
+    </pfv6-accordion-toggle>
+    <pfv6-accordion-content is-fixed>
+      <p>
+        Donec vel posuere orci. Phasellus quis tortor a ex hendrerit efficitur. Aliquam lacinia ligula pharetra,
+        sagittis ex ut, pellentesque diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
+        cubilia Curae; Vestibulum ultricies nulla nibh. Etiam vel dui fermentum ligula ullamcorper eleifend non quis
+        tortor. Morbi tempus ornare tempus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur
+        ridiculus mus. Mauris et velit neque. Donec ultricies condimentum mauris, pellentesque imperdiet libero
+        convallis convallis. Aliquam erat volutpat. Donec rutrum semper tempus. Proin dictum imperdiet nibh, quis
+        dapibus nulla. Integer sed tincidunt lectus, sit amet auctor eros.
+      </p>
+      <p>
+        Donec vel posuere orci. Phasellus quis tortor a ex hendrerit efficitur. Aliquam lacinia ligula pharetra,
+        sagittis ex ut, pellentesque diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
+        cubilia Curae; Vestibulum ultricies nulla nibh. Etiam vel dui fermentum ligula ullamcorper eleifend non quis
+        tortor. Morbi tempus ornare tempus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur
+        ridiculus mus. Mauris et velit neque. Donec ultricies condimentum mauris, pellentesque imperdiet libero
+        convallis convallis. Aliquam erat volutpat. Donec rutrum semper tempus. Proin dictum imperdiet nibh, quis
+        dapibus nulla. Integer sed tincidunt lectus, sit amet auctor eros.
+      </p>
+    </pfv6-accordion-content>
+  </pfv6-accordion-item>
+
+  <pfv6-accordion-item id="ex2-item-5">
+    <pfv6-accordion-toggle>
+      Item five
+    </pfv6-accordion-toggle>
+    <pfv6-accordion-content is-fixed>
+      <p>Vivamus finibus dictum ex id ultrices. Mauris dictum neque a iaculis blandit.</p>
+    </pfv6-accordion-content>
+  </pfv6-accordion-item>
+</pfv6-accordion>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-accordion/pfv6-accordion.js';
+
+  const items = [
+    document.getElementById('ex2-item-1'),
+    document.getElementById('ex2-item-2'),
+    document.getElementById('ex2-item-3'),
+    document.getElementById('ex2-item-4'),
+    document.getElementById('ex2-item-5')
+  ];
+
+  // Multiple expand behavior - toggle each independently
+  items.forEach((item) => {
+    const toggle = item.querySelector('pfv6-accordion-toggle');
+    toggle.addEventListener('click', () => {
+      item.isExpanded = !item.isExpanded;
+    });
+  });
+</script>

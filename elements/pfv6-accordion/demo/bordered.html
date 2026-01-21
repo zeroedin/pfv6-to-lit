@@ -1,0 +1,110 @@
+<pfv6-accordion id="bordered-accordion" is-bordered>
+  <pfv6-accordion-item id="bordered-item-1">
+    <pfv6-accordion-toggle>
+      Item one
+    </pfv6-accordion-toggle>
+    <pfv6-accordion-content>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+        dolore magna aliqua.
+      </p>
+    </pfv6-accordion-content>
+  </pfv6-accordion-item>
+
+  <pfv6-accordion-item id="bordered-item-2">
+    <pfv6-accordion-toggle>
+      Item two
+    </pfv6-accordion-toggle>
+    <pfv6-accordion-content>
+      <p>
+        Vivamus et tortor sed arcu congue vehicula eget et diam. Praesent nec dictum lorem. Aliquam id diam
+        ultrices, faucibus erat id, maximus nunc.
+      </p>
+    </pfv6-accordion-content>
+  </pfv6-accordion-item>
+
+  <pfv6-accordion-item id="bordered-item-3">
+    <pfv6-accordion-toggle>
+      Item three
+    </pfv6-accordion-toggle>
+    <pfv6-accordion-content>
+      <p>Morbi vitae urna quis nunc convallis hendrerit. Aliquam congue orci quis ultricies tempus.</p>
+    </pfv6-accordion-content>
+  </pfv6-accordion-item>
+
+  <pfv6-accordion-item id="bordered-item-4" is-expanded>
+    <pfv6-accordion-toggle>
+      Item four
+    </pfv6-accordion-toggle>
+    <pfv6-accordion-content is-custom-content>
+      <pfv6-accordion-expandable-content-body>
+        Donec vel posuere orci. Phasellus quis tortor a ex hendrerit efficitur. Aliquam lacinia ligula pharetra,
+        sagittis ex ut, pellentesque diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+        posuere cubilia Curae; Vestibulum ultricies nulla nibh. Etiam vel dui fermentum ligula ullamcorper
+        eleifend non quis tortor. Morbi tempus ornare tempus. Orci varius natoque penatibus et magnis dis
+        parturient montes, nascetur ridiculus mus. Mauris et velit neque. Donec ultricies condimentum mauris,
+        pellentesque imperdiet libero convallis convallis. Aliquam erat volutpat. Donec rutrum semper tempus.
+        Proin dictum imperdiet nibh, quis dapibus nulla. Integer sed tincidunt lectus, sit amet auctor eros.
+      </pfv6-accordion-expandable-content-body>
+      <pfv6-accordion-expandable-content-body>
+        <pfv6-button variant="link" size="lg" icon-position="end" is-inline>
+          <pfv6-icon slot="icon">
+            <svg fill="currentColor" height="1em" width="1em" viewBox="0 0 448 512" aria-hidden="true" role="img">
+              <path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path>
+            </svg>
+          </pfv6-icon>
+          Call to action
+        </pfv6-button>
+      </pfv6-accordion-expandable-content-body>
+    </pfv6-accordion-content>
+  </pfv6-accordion-item>
+
+  <pfv6-accordion-item id="bordered-item-5">
+    <pfv6-accordion-toggle>
+      Item five
+    </pfv6-accordion-toggle>
+    <pfv6-accordion-content>
+      <p>Vivamus finibus dictum ex id ultrices. Mauris dictum neque a iaculis blandit.</p>
+    </pfv6-accordion-content>
+  </pfv6-accordion-item>
+</pfv6-accordion>
+
+<div style="margin-top: 30px;">
+  <label for="toggle-display-lg" class="pf-v6-screen-reader">show display large variation checkbox</label>
+  <pfv6-checkbox id="toggle-display-lg" label="Display size large"></pfv6-checkbox>
+</div>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-accordion/pfv6-accordion.js';
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+  import '@pfv6/elements/pfv6-icon/pfv6-icon.js';
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
+
+  const accordion = document.getElementById('bordered-accordion');
+  const checkbox = document.getElementById('toggle-display-lg');
+  const items = [
+    document.getElementById('bordered-item-1'),
+    document.getElementById('bordered-item-2'),
+    document.getElementById('bordered-item-3'),
+    document.getElementById('bordered-item-4'),
+    document.getElementById('bordered-item-5')
+  ];
+
+  // Single expand behavior
+  items.forEach((item, index) => {
+    const toggle = item.querySelector('pfv6-accordion-toggle');
+    toggle.addEventListener('click', () => {
+      items.forEach((otherItem, otherIndex) => {
+        if (otherIndex !== index) {
+          otherItem.isExpanded = false;
+        }
+      });
+      item.isExpanded = !item.isExpanded;
+    });
+  });
+
+  // Display size toggle
+  checkbox.addEventListener('change', (e) => {
+    accordion.displaySize = e.target.checked ? 'lg' : 'default';
+  });
+</script>

@@ -1,0 +1,37 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+#container {
+  padding-block-start:
+    var(
+      --_accordion-expandable-content-body-padding-block-start,
+      var(--pf-t--global--spacer--sm, 0.5rem)
+    );
+  padding-block-end:
+    var(
+      --_accordion-expandable-content-body-padding-block-end,
+      var(--pf-t--global--spacer--sm, 0.5rem)
+    );
+  padding-inline-start:
+    var(
+      --_accordion-expandable-content-body-padding-inline-start,
+      var(--pf-t--global--spacer--sm, 0.5rem)
+    );
+  padding-inline-end:
+    var(
+      --_accordion-expandable-content-body-padding-inline-end,
+      var(--pf-t--global--spacer--sm, 0.5rem)
+    );
+}
+
+/* When adjacent to another content body, remove top padding */
+:host(:not(:first-of-type)) {
+  --_accordion-expandable-content-body-padding-block-start: 0;
+}
