@@ -53,13 +53,6 @@ export class Pfv6BreadcrumbHeading extends LitElement {
   target?: string;
 
   /**
-   * Component type to render.
-   * @default 'a'
-   */
-  @property({ type: String })
-  component: 'a' | 'button' = 'a';
-
-  /**
    * Internal state to track if this is the first item.
    */
   @state()
@@ -74,7 +67,7 @@ export class Pfv6BreadcrumbHeading extends LitElement {
     super.updated(changedProperties);
 
     // Re-check divider visibility if parent changes
-    if (changedProperties.has('to') || changedProperties.has('component')) {
+    if (changedProperties.has('to')) {
       this.#updateShowDivider();
     }
   }
@@ -108,16 +101,7 @@ export class Pfv6BreadcrumbHeading extends LitElement {
       ` : null}
 
       <h1 id="heading">
-        ${this.component === 'button' && !this.to ? html`
-          <button
-            id="link"
-            class=${classMap(linkClasses)}
-            aria-current="page"
-            type="button"
-          >
-            <slot></slot>
-          </button>
-        ` : this.to ? html`
+        ${this.to ? html`
           <a
             id="link"
             class=${classMap(linkClasses)}
@@ -128,7 +112,14 @@ export class Pfv6BreadcrumbHeading extends LitElement {
             <slot></slot>
           </a>
         ` : html`
-          <slot></slot>
+          <button
+            id="link"
+            class=${classMap(linkClasses)}
+            aria-current="page"
+            type="button"
+          >
+            <slot></slot>
+          </button>
         `}
       </h1>
     `;

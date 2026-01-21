@@ -68,13 +68,6 @@ export class Pfv6BreadcrumbItem extends LitElement {
   target?: string;
 
   /**
-   * Component type to render.
-   * @default 'a'
-   */
-  @property({ type: String })
-  component: 'a' | 'button' = 'a';
-
-  /**
    * Internal state to track if this is the first item.
    */
   @state()
@@ -124,16 +117,7 @@ export class Pfv6BreadcrumbItem extends LitElement {
         </span>
       ` : null}
 
-      ${this.component === 'button' ? html`
-        <button
-          id="link"
-          class=${classMap(linkClasses)}
-          aria-current=${ifDefined(ariaCurrent)}
-          type="button"
-        >
-          <slot></slot>
-        </button>
-      ` : this.isDropdown ? html`
+      ${this.isDropdown ? html`
         <span id="dropdown">
           <slot></slot>
         </span>
@@ -148,7 +132,14 @@ export class Pfv6BreadcrumbItem extends LitElement {
           <slot></slot>
         </a>
       ` : html`
-        <slot></slot>
+        <button
+          id="link"
+          class=${classMap(linkClasses)}
+          aria-current=${ifDefined(ariaCurrent)}
+          type="button"
+        >
+          <slot></slot>
+        </button>
       `}
     `;
   }
