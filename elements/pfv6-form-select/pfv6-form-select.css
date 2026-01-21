@@ -422,12 +422,7 @@
   grid-row: 1 / 2;
   grid-column: 2;
   gap: var(--pf-v6-c-form-control__utilities--Gap);
-  padding-block-start: var(--pf-v6-c-form-control__utilities--PaddingBlockStart);
-  padding-inline-end: var(--pf-v6-c-form-control__utilities--PaddingInlineEnd);
   pointer-events: none;
-}
-
-#container:has(select) .utilities {
   padding-inline-end: var(--pf-v6-c-form-control__utilities--select--PaddingInlineEnd);
 }
 
