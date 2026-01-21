@@ -79,6 +79,11 @@ export class Pfv6FormSelect extends LitElement {
     // Clean up previous observer
     this.#observer?.disconnect();
 
+    // Clean up previous select listener
+    if (this.#selectElement) {
+      this.#selectElement.removeEventListener('change', this.#handleSelectChange);
+    }
+
     // Find the select element
     this.#selectElement = elements.find(el => el.tagName === 'SELECT') as HTMLSelectElement | null;
 
