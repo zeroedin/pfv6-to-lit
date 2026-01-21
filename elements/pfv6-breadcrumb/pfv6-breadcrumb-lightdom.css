@@ -1,0 +1,17 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+pfv6-breadcrumb {
+  /* Set CSS variable on first breadcrumb item to remove padding */
+  & > :is(pfv6-breadcrumb-item, pfv6-breadcrumb-heading):first-child {
+    --pf-v6-c-breadcrumb__link--PaddingInlineStart: 0;
+  }
+
+  /* Ensure items that are not last get margin */
+  & > :is(pfv6-breadcrumb-item, pfv6-breadcrumb-heading):not(:last-child) {
+    margin-inline-end: var(--pf-v6-c-breadcrumb__item--MarginInlineEnd);
+  }
+}
