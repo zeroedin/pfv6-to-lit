@@ -1369,6 +1369,7 @@ Provide a structured audit report:
 - [ ] Form element normalize reset present if component uses `<input>`, `<button>`, `<select>`, or `<textarea>` in Shadow DOM
 - [ ] All PatternFly mixin patterns copied exactly from source (screen-reader, text-overflow, etc.)
 - [ ] Stylelint passes with no errors or warnings
+- [ ] No stylelint disable comments (`/* stylelint-disable */` or `/* stylelint-disable-next-line */`)
 - [ ] No elaborate CSS for components that have no React CSS
 - [ ] Simple class names used (`compact`, not `pf-m-compact`)
 - [ ] Variable names match React CSS exactly
@@ -1384,6 +1385,7 @@ Provide a structured audit report:
 - ❌ Missing box-sizing reset
 - ❌ PatternFly mixin pattern reimplemented instead of copied exactly
 - ❌ Stylelint errors or warnings
+- ❌ Stylelint disable comments present (must fix underlying issue instead)
 - ❌ Flat selectors (not using CSS nesting with `&`)
 - ❌ `:host([attribute])` selectors found
 - ❌ `:host-context()` found anywhere

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Select Demo</title>
+  <script type="module">
+    import '../pfv6-form-select.js';
+  </script>
+</head>
+<body>
+  <h1>Form Select Demo</h1>
+
+  <h2>Basic</h2>
+  <label>
+    Country
+    <pfv6-form-select>
+      <select slot="select" name="country">
+        <option value="">Choose...</option>
+        <option value="us">United States</option>
+        <option value="ca">Canada</option>
+        <option value="mx">Mexico</option>
+      </select>
+    </pfv6-form-select>
+  </label>
+
+  <h2>With Validation States</h2>
+  <label>
+    Success
+    <pfv6-form-select validated="success">
+      <select slot="select" name="success">
+        <option value="valid">Valid Option</option>
+      </select>
+    </pfv6-form-select>
+  </label>
+
+  <label>
+    Warning
+    <pfv6-form-select validated="warning">
+      <select slot="select" name="warning">
+        <option value="warn">Warning Option</option>
+      </select>
+    </pfv6-form-select>
+  </label>
+
+  <label>
+    Error
+    <pfv6-form-select validated="error">
+      <select slot="select" name="error" aria-invalid="true">
+        <option value="">Choose...</option>
+        <option value="invalid">Invalid Option</option>
+      </select>
+    </pfv6-form-select>
+  </label>
+
+  <h2>With Option Groups</h2>
+  <label>
+    Region
+    <pfv6-form-select>
+      <select slot="select" name="region">
+        <optgroup label="North America">
+          <option value="us">United States</option>
+          <option value="ca">Canada</option>
+          <option value="mx">Mexico</option>
+        </optgroup>
+        <optgroup label="Europe">
+          <option value="uk">United Kingdom</option>
+          <option value="fr">France</option>
+          <option value="de">Germany</option>
+        </optgroup>
+      </select>
+    </pfv6-form-select>
+  </label>
+
+  <h2>Disabled</h2>
+  <label>
+    Disabled Select
+    <pfv6-form-select>
+      <select slot="select" name="disabled" disabled>
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+      </select>
+    </pfv6-form-select>
+  </label>
+
+  <h2>Required</h2>
+  <label>
+    Required Select
+    <pfv6-form-select validated="error">
+      <select slot="select" name="required" required>
+        <option value="">Choose...</option>
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+      </select>
+    </pfv6-form-select>
+  </label>
+</body>
+</html>

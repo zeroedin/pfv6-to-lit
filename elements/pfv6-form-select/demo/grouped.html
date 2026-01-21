@@ -1,0 +1,21 @@
+<label for="grouped-select" class="pf-v6-screen-reader">FormSelect Input</label>
+<pfv6-form-select>
+  <select id="grouped-select" slot="select">
+    <optgroup label="Group1">
+      <option value="1">The first option</option>
+      <option value="2" selected>Second option is selected by default</option>
+    </optgroup>
+    <optgroup label="Group2">
+      <option value="3">The third option</option>
+      <option value="4">The fourth option</option>
+    </optgroup>
+    <optgroup label="Group3" disabled>
+      <option value="5">The fifth option</option>
+      <option value="6">The sixth option</option>
+    </optgroup>
+  </select>
+</pfv6-form-select>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-form-select/pfv6-form-select.js';
+</script>

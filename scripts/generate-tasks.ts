@@ -119,6 +119,22 @@ function toKebabCase(str: string): string {
 }
 
 /**
+ * Convert React demo filename to HTML demo filename
+ * e.g., "AccordionBordered.tsx" -> "bordered.html"
+ *       "ButtonBasic.tsx" -> "basic.html"
+ */
+function reactDemoToHtmlFile(reactDemo: string, componentName: string): string {
+  // Remove file extension
+  const baseName = reactDemo.replace(/\.tsx?$/, '');
+  // Remove component name prefix (e.g., "AccordionBordered" -> "Bordered")
+  const withoutPrefix = baseName.startsWith(componentName)
+    ? baseName.slice(componentName.length)
+    : baseName;
+  // Convert to kebab-case and add .html
+  return toKebabCase(withoutPrefix) + '.html';
+}
+
+/**
  * Check if a task is completed based on filesystem state
  */
 function isTaskCompleted(task: Task): boolean {
@@ -137,7 +153,7 @@ function isTaskCompleted(task: Task): boolean {
     }
     // Check if all demos in this task have corresponding HTML files
     return task.demos.every(demo => {
-      const htmlFile = demo.replace(/\.tsx?$/, '.html');
+      const htmlFile = reactDemoToHtmlFile(demo, task.component);
       return fs.existsSync(path.join(demoDir, htmlFile));
     });
   }

@@ -1,0 +1,473 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(select) {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: var(--pf-t--global--text--color--regular, #151515);
+}
+
+:host {
+  /* Public CSS API - Form Control Variables */
+  --pf-v6-c-form-control--ColumnGap: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
+  --pf-v6-c-form-control--Color: var(--pf-t--global--text--color--regular, #151515);
+  --pf-v6-c-form-control--FontSize: var(--pf-t--global--font--size--body--default, 0.875rem);
+  --pf-v6-c-form-control--LineHeight: var(--pf-t--global--font--line-height--body, 1.5);
+  --pf-v6-c-form-control--Resize: none;
+  --pf-v6-c-form-control--OutlineOffset: -6px;
+  --pf-v6-c-form-control--BorderRadius: var(--pf-t--global--border--radius--small, 6px);
+  --pf-v6-c-form-control--before--BorderWidth: var(--pf-t--global--border--width--control--default, 1px);
+  --pf-v6-c-form-control--before--BorderStyle: solid;
+  --pf-v6-c-form-control--before--BorderColor: var(--pf-t--global--border--color--default, #c7c7c7);
+  --pf-v6-c-form-control--before--BorderRadius: var(--pf-v6-c-form-control--BorderRadius);
+  --pf-v6-c-form-control--after--BorderWidth: var(--pf-t--global--border--width--control--default, 1px);
+  --pf-v6-c-form-control--after--BorderStyle: solid;
+  --pf-v6-c-form-control--after--BorderColor: transparent;
+  --pf-v6-c-form-control--after--BorderRadius: var(--pf-v6-c-form-control--BorderRadius);
+  --pf-v6-c-form-control--BackgroundColor: var(--pf-t--global--background--color--control--default, #ffffff);
+  --pf-v6-c-form-control--Width: 100%;
+
+  /* Padding */
+  --pf-v6-c-form-control--inset--base: var(--pf-t--global--spacer--control--horizontal--default, 1rem);
+  --pf-v6-c-form-control--PaddingBlockStart--base: var(--pf-t--global--spacer--control--vertical--default, 0.5rem);
+  --pf-v6-c-form-control--PaddingBlockEnd--base: var(--pf-t--global--spacer--control--vertical--default, 0.5rem);
+  --pf-v6-c-form-control--PaddingInlineEnd--base: var(--pf-v6-c-form-control--inset--base);
+  --pf-v6-c-form-control--PaddingInlineStart--base: var(--pf-v6-c-form-control--inset--base);
+  --pf-v6-c-form-control--PaddingBlockStart: var(--pf-v6-c-form-control--PaddingBlockStart--base);
+  --pf-v6-c-form-control--PaddingBlockEnd: var(--pf-v6-c-form-control--PaddingBlockEnd--base);
+  --pf-v6-c-form-control--PaddingInlineEnd: var(--pf-v6-c-form-control--PaddingInlineEnd--base);
+  --pf-v6-c-form-control--PaddingInlineStart: var(--pf-v6-c-form-control--PaddingInlineStart--base);
+
+  /* Utilities padding inline end */
+  --pf-v6-c-form-control__utilities--select--PaddingInlineEnd: var(--pf-v6-c-form-control__select--PaddingInlineEnd);
+
+  /* Select padding */
+  --pf-v6-c-form-control__select--PaddingBlockStart: var(--pf-v6-c-form-control--PaddingBlockStart--base);
+  --pf-v6-c-form-control__select--PaddingBlockEnd: var(--pf-v6-c-form-control--PaddingBlockEnd--base);
+  --pf-v6-c-form-control__select--PaddingInlineEnd: var(--pf-v6-c-form-control--PaddingInlineEnd--base);
+  --pf-v6-c-form-control__select--PaddingInlineStart: var(--pf-v6-c-form-control--PaddingInlineStart--base);
+
+  /* Hover */
+  --pf-v6-c-form-control--hover--after--BorderWidth:
+    var(
+      --pf-t--global--border--width--control--hover,
+      1px
+    );
+  --pf-v6-c-form-control--hover--after--BorderColor:
+    var(
+      --pf-t--global--border--color--hover,
+      #4394e5
+    );
+  --pf-v6-c-form-control--m-success--hover--after--BorderColor:
+    var(
+      --pf-t--global--border--color--status--success--hover,
+      #204d00
+    );
+  --pf-v6-c-form-control--m-warning--hover--after--BorderColor:
+    var(
+      --pf-t--global--border--color--status--warning--hover,
+      #b98412
+    );
+  --pf-v6-c-form-control--m-error--hover--after--BorderColor:
+    var(
+      --pf-t--global--border--color--status--danger--hover,
+      #731f00
+    );
+
+  /* Expanded */
+  --pf-v6-c-form-control--m-expanded--after--BorderWidth: var(--pf-t--global--border--width--control--clicked, 2px);
+  --pf-v6-c-form-control--m-expanded--after--BorderColor: var(--pf-t--global--border--color--clicked, #0066cc);
+
+  /* Placeholder */
+  --pf-v6-c-form-control--m-placeholder--Color: var(--pf-t--global--text--color--placeholder, #4d4d4d);
+  --pf-v6-c-form-control--m-placeholder--child--Color: var(--pf-t--global--text--color--regular, #151515);
+
+  /* Disabled */
+  --pf-v6-c-form-control--m-disabled--Color:
+    var(
+      --pf-t--global--text--color--on-disabled,
+      #707070
+    );
+  --pf-v6-c-form-control--m-disabled--BackgroundColor:
+    var(
+      --pf-t--global--background--color--disabled--default,
+      #c7c7c7
+    );
+  --pf-v6-c-form-control--m-disabled--after--BorderColor: transparent;
+
+  /* Readonly */
+  --pf-v6-c-form-control--m-readonly--BackgroundColor:
+    var(
+      --pf-t--global--background--color--control--read-only,
+      #f2f2f2
+    );
+  --pf-v6-c-form-control--m-readonly--BorderColor:
+    var(
+      --pf-t--global--border--color--control--read-only,
+      #e0e0e0
+    );
+  --pf-v6-c-form-control--m-readonly--hover--after--BorderColor: revert;
+
+  /* Readonly plain */
+  --pf-v6-c-form-control--m-readonly--m-plain--BackgroundColor: transparent;
+  --pf-v6-c-form-control--m-readonly--m-plain--BorderColor: transparent;
+  --pf-v6-c-form-control--m-readonly--m-plain--inset--base: 0;
+  --pf-v6-c-form-control--m-readonly--m-plain--OutlineOffset: 0;
+  --pf-v6-c-form-control--icon--width: var(--pf-v6-c-form-control--FontSize);
+
+  /* Success */
+  --pf-v6-c-form-control--m-success--after--BorderWidth:
+    var(
+      --pf-t--global--border--width--control--default,
+      1px
+    );
+  --pf-v6-c-form-control--m-success--after--BorderColor:
+    var(
+      --pf-t--global--border--color--status--success--default,
+      #3d7317
+    );
+  --pf-v6-c-form-control--m-success--PaddingInlineEnd: initial;
+  --pf-v6-c-form-control__select--m-success--m-status--PaddingInlineEnd: initial;
+  --pf-v6-c-form-control__select--m-success--PaddingInlineEnd:
+    calc(
+      var(--pf-v6-c-form-control--m-icon--icon--width) +
+      var(--pf-v6-c-form-control--m-icon--icon--spacer) +
+      var(--pf-v6-c-form-control__utilities--Gap) +
+      var(--pf-v6-c-form-control--ColumnGap) +
+      var(--pf-v6-c-form-control__utilities--select--PaddingInlineEnd)
+    );
+
+  /* Warning */
+  --pf-v6-c-form-control--m-warning--after--BorderWidth:
+    var(
+      --pf-t--global--border--width--control--default,
+      1px
+    );
+  --pf-v6-c-form-control--m-warning--after--BorderColor:
+    var(
+      --pf-t--global--border--color--status--warning--default,
+      #dca614
+    );
+  --pf-v6-c-form-control--m-warning--PaddingInlineEnd: initial;
+  --pf-v6-c-form-control__select--m-warning--m-status--PaddingInlineEnd: initial;
+  --pf-v6-c-form-control__select--m-warning--PaddingInlineEnd:
+    calc(
+      var(--pf-v6-c-form-control--m-icon--icon--width) +
+      var(--pf-v6-c-form-control--m-icon--icon--spacer) +
+      var(--pf-v6-c-form-control__utilities--Gap) +
+      var(--pf-v6-c-form-control--ColumnGap) +
+      var(--pf-v6-c-form-control__utilities--select--PaddingInlineEnd)
+    );
+
+  /* Error */
+  --pf-v6-c-form-control--m-error--after--BorderWidth:
+    var(
+      --pf-t--global--border--width--control--default,
+      1px
+    );
+  --pf-v6-c-form-control--m-error--after--BorderColor:
+    var(
+      --pf-t--global--border--color--status--danger--default,
+      #b1380b
+    );
+  --pf-v6-c-form-control--m-error--PaddingInlineEnd: initial;
+  --pf-v6-c-form-control__select--m-error--m-status--PaddingInlineEnd: initial;
+  --pf-v6-c-form-control--m-error--icon--width: var(--pf-v6-c-form-control--FontSize);
+  --pf-v6-c-form-control__select--m-error--PaddingInlineEnd:
+    calc(
+      var(--pf-v6-c-form-control--m-icon--icon--width) +
+      var(--pf-v6-c-form-control--m-icon--icon--spacer) +
+      var(--pf-v6-c-form-control__utilities--Gap) +
+      var(--pf-v6-c-form-control--ColumnGap) +
+      var(--pf-v6-c-form-control__utilities--select--PaddingInlineEnd)
+    );
+
+  /* Custom icon */
+  --pf-v6-c-form-control--m-icon--PaddingInlineEnd:
+    calc(
+      var(--pf-v6-c-form-control--m-icon--icon--width) +
+      var(--pf-v6-c-form-control--ColumnGap) +
+      var(--pf-v6-c-form-control__utilities--input--PaddingInlineEnd)
+    );
+  --pf-v6-c-form-control--m-icon--icon--width: var(--pf-v6-c-form-control--FontSize);
+  --pf-v6-c-form-control--m-icon--icon--spacer:
+    calc(
+      var(--pf-t--global--spacer--control--horizontal--default, 1rem) / 2
+    );
+
+  /* Form control icon */
+  --pf-v6-c-form-control__icon--Color:
+    var(
+      --pf-t--global--icon--color--regular,
+      #1f1f1f
+    );
+  --pf-v6-c-form-control__icon--FontSize:
+    var(
+      --pf-t--global--icon--size--font--body--default,
+      0.875rem
+    );
+  --pf-v6-c-form-control__icon--m-status--Color:
+    var(
+      --pf-t--global--icon--color--regular,
+      #1f1f1f
+    );
+  --pf-v6-c-form-control--m-success__icon--m-status--Color:
+    var(
+      --pf-t--global--icon--color--status--success--default,
+      #3d7317
+    );
+  --pf-v6-c-form-control--m-warning__icon--m-status--Color:
+    var(
+      --pf-t--global--icon--color--status--warning--default,
+      #dca614
+    );
+  --pf-v6-c-form-control--m-error__icon--m-status--Color:
+    var(
+      --pf-t--global--icon--color--status--danger--default,
+      #b1380b
+    );
+
+  /* Form control utilities */
+  --pf-v6-c-form-control__utilities--Gap: var(--pf-t--global--spacer--gap--group--horizontal, 1rem);
+  --pf-v6-c-form-control__utilities--PaddingBlockStart: var(--pf-v6-c-form-control--PaddingBlockStart);
+  --pf-v6-c-form-control__utilities--PaddingInlineEnd: var(--pf-v6-c-form-control--PaddingInlineEnd--base);
+
+  /* Form control select toggle icon */
+  --pf-v6-c-form-control__toggle-icon--PaddingInlineStart: 0;
+  --pf-v6-c-form-control__toggle-icon--PaddingInlineEnd: 0;
+  --pf-v6-c-form-control__toggle-icon--Color: var(--pf-t--global--icon--color--regular, #1f1f1f);
+  --pf-v6-c-form-control__toggle-icon--FontSize: var(--pf-t--global--icon--size--font--body--default, 0.875rem);
+  --pf-v6-c-form-control--m-disabled__toggle-icon--Color: var(--pf-t--global--icon--color--disabled, #a3a3a3);
+
+  display: block;
+}
+
+#container {
+  /* Set select-specific padding */
+  --pf-v6-c-form-control--PaddingBlockStart: var(--pf-v6-c-form-control__select--PaddingBlockStart);
+  --pf-v6-c-form-control--PaddingBlockEnd: var(--pf-v6-c-form-control__select--PaddingBlockEnd);
+  --pf-v6-c-form-control--PaddingInlineStart: var(--pf-v6-c-form-control__select--PaddingInlineStart);
+  --pf-v6-c-form-control--PaddingInlineEnd:
+    calc(
+      var(--pf-v6-c-form-control__select--PaddingInlineEnd) +
+      var(--pf-v6-c-form-control__icon--FontSize)
+    );
+  --pf-v6-c-form-control__utilities--PaddingInlineEnd: var(--pf-v6-c-form-control__utilities--select--PaddingInlineEnd);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: var(--pf-v6-c-form-control--ColumnGap);
+  align-items: start;
+  width: var(--pf-v6-c-form-control--Width);
+  font-size: var(--pf-v6-c-form-control--FontSize);
+  line-height: var(--pf-v6-c-form-control--LineHeight);
+  resize: var(--pf-v6-c-form-control--Resize);
+  background-color: var(--pf-v6-c-form-control--BackgroundColor);
+  border-radius: var(--pf-v6-c-form-control--BorderRadius);
+
+  &::before,
+  &::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+  }
+
+  &::before {
+    border-color: var(--pf-v6-c-form-control--before--BorderColor);
+    border-style: var(--pf-v6-c-form-control--before--BorderStyle);
+    border-width: var(--pf-v6-c-form-control--before--BorderWidth);
+    border-radius: var(--pf-v6-c-form-control--before--BorderRadius);
+  }
+
+  &::after {
+    border:
+      var(--pf-v6-c-form-control--after--BorderWidth)
+      var(--pf-v6-c-form-control--after--BorderStyle)
+      var(--pf-v6-c-form-control--after--BorderColor);
+    border-radius: var(--pf-v6-c-form-control--before--BorderRadius);
+  }
+
+  &:hover {
+    --pf-v6-c-form-control--after--BorderColor: var(--pf-v6-c-form-control--hover--after--BorderColor);
+    --pf-v6-c-form-control--after--BorderWidth: var(--pf-v6-c-form-control--hover--after--BorderWidth);
+  }
+
+  &.disabled {
+    --pf-v6-c-form-control--BackgroundColor: var(--pf-v6-c-form-control--m-disabled--BackgroundColor);
+    --pf-v6-c-form-control--Color: var(--pf-v6-c-form-control--m-disabled--Color);
+    --pf-v6-c-form-control--m-placeholder--Color: var(--pf-v6-c-form-control--m-disabled--Color);
+    --pf-v6-c-form-control__toggle-icon--Color: var(--pf-v6-c-form-control--m-disabled__toggle-icon--Color);
+    --pf-v6-c-form-control--before--BorderStyle: none;
+    --pf-v6-c-form-control--after--BorderStyle: none;
+
+    cursor: not-allowed;
+  }
+
+  &.placeholder {
+    --pf-v6-c-form-control--Color: var(--pf-v6-c-form-control--m-placeholder--Color);
+  }
+
+  &.success {
+    --pf-v6-c-form-control--after--BorderColor:
+      var(
+        --pf-v6-c-form-control--m-success--after--BorderColor
+      );
+    --pf-v6-c-form-control--hover--after--BorderColor:
+      var(
+        --pf-v6-c-form-control--m-success--hover--after--BorderColor
+      );
+    --pf-v6-c-form-control__icon--m-status--Color:
+      var(
+        --pf-v6-c-form-control--m-success__icon--m-status--Color
+      );
+    --pf-v6-c-form-control--after--BorderWidth:
+      var(
+        --pf-v6-c-form-control--m-success--after--BorderWidth
+      );
+  }
+
+  &.warning {
+    --pf-v6-c-form-control--after--BorderColor:
+      var(
+        --pf-v6-c-form-control--m-warning--after--BorderColor
+      );
+    --pf-v6-c-form-control--hover--after--BorderColor:
+      var(
+        --pf-v6-c-form-control--m-warning--hover--after--BorderColor
+      );
+    --pf-v6-c-form-control__icon--m-status--Color:
+      var(
+        --pf-v6-c-form-control--m-warning__icon--m-status--Color
+      );
+    --pf-v6-c-form-control--after--BorderWidth:
+      var(
+        --pf-v6-c-form-control--m-warning--after--BorderWidth
+      );
+  }
+
+  &.error {
+    --pf-v6-c-form-control--after--BorderColor:
+      var(
+        --pf-v6-c-form-control--m-error--after--BorderColor
+      );
+    --pf-v6-c-form-control--hover--after--BorderColor:
+      var(
+        --pf-v6-c-form-control--m-error--hover--after--BorderColor
+      );
+    --pf-v6-c-form-control__icon--m-status--Color:
+      var(
+        --pf-v6-c-form-control--m-error__icon--m-status--Color
+      );
+    --pf-v6-c-form-control--after--BorderWidth:
+      var(
+        --pf-v6-c-form-control--m-error--after--BorderWidth
+      );
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: pf-v6-c-form-control-error 250ms cubic-bezier(0.42, 0, 0.58, 1);
+    }
+  }
+}
+
+::slotted(select) {
+  grid-row: 1 / 2;
+  grid-column: 1 / -1;
+  padding-block-start: var(--pf-v6-c-form-control--PaddingBlockStart);
+  padding-block-end: var(--pf-v6-c-form-control--PaddingBlockEnd);
+  padding-inline-start: var(--pf-v6-c-form-control--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-form-control--PaddingInlineEnd);
+  color: var(--pf-v6-c-form-control--Color);
+  appearance: none;
+  background-color: var(--pf-v6-c-form-control--BackgroundColor);
+  border: none;
+  border-radius: var(--pf-v6-c-form-control--BorderRadius);
+  outline-offset: var(--pf-v6-c-form-control--OutlineOffset);
+  text-overflow: ellipsis;
+}
+
+#container.success ::slotted(select) {
+  padding-inline-end:
+    var(
+      --pf-v6-c-form-control__select--m-success--m-status--PaddingInlineEnd,
+      var(--pf-v6-c-form-control__select--m-success--PaddingInlineEnd)
+    );
+}
+
+#container.warning ::slotted(select) {
+  padding-inline-end:
+    var(
+      --pf-v6-c-form-control__select--m-warning--m-status--PaddingInlineEnd,
+      var(--pf-v6-c-form-control__select--m-warning--PaddingInlineEnd)
+    );
+}
+
+#container.error ::slotted(select) {
+  padding-inline-end:
+    var(
+      --pf-v6-c-form-control__select--m-error--m-status--PaddingInlineEnd,
+      var(--pf-v6-c-form-control__select--m-error--PaddingInlineEnd)
+    );
+}
+
+.utilities {
+  display: flex;
+  flex-wrap: nowrap;
+  grid-row: 1 / 2;
+  grid-column: 2;
+  gap: var(--pf-v6-c-form-control__utilities--Gap);
+  padding-block-start: var(--pf-v6-c-form-control__utilities--PaddingBlockStart);
+  padding-inline-end: var(--pf-v6-c-form-control__utilities--select--PaddingInlineEnd);
+  pointer-events: none;
+}
+
+.icon {
+  font-size: var(--pf-v6-c-form-control__icon--FontSize);
+  color: var(--pf-v6-c-form-control__icon--Color);
+
+  &.status {
+    --pf-v6-c-form-control__icon--Color: var(--pf-v6-c-form-control__icon--m-status--Color);
+  }
+}
+
+.toggle-icon {
+  grid-row: 1 / 2;
+  grid-column: 3;
+  padding-inline-start: var(--pf-v6-c-form-control__toggle-icon--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-form-control__toggle-icon--PaddingInlineEnd);
+  font-size: var(--pf-v6-c-form-control__toggle-icon--FontSize);
+  color: var(--pf-v6-c-form-control__toggle-icon--Color);
+  pointer-events: none;
+}
+
+@keyframes pf-v6-c-form-control-error {
+  0% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-0.5rem);
+  }
+
+  40% {
+    transform: translateX(0.5rem);
+  }
+
+  60% {
+    transform: translateX(-0.5rem);
+  }
+
+  80% {
+    transform: translateX(0.5rem);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
