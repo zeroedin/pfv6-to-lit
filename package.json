@@ -27,33 +27,13 @@
   "wireit": {
     "deps:extract": {
       "command": "npx tsx scripts/extract-dependencies.ts > dependencies.json",
-      "description": "Extract component and demo dependencies from PatternFly React",
-      "dependencies": [
-        "cache"
-      ],
-      "files": [
-        "scripts/extract-dependencies.ts",
-        "scripts/lib/patternfly-utils.ts",
-        ".cache/patternfly-react/**",
-        "elements/pfv6-*/**"
-      ],
-      "output": [
-        "dependencies.json"
-      ]
+      "description": "Extract component and demo dependencies from PatternFly React (never cached)"
     },
     "deps:tasks": {
       "command": "npx tsx scripts/generate-tasks.ts > tasks.json",
-      "description": "Generate ordered task list for component conversion",
+      "description": "Generate ordered task list for component conversion (never cached)",
       "dependencies": [
         "deps:extract"
-      ],
-      "files": [
-        "scripts/generate-tasks.ts",
-        "scripts/lib/patternfly-utils.ts",
-        "dependencies.json"
-      ],
-      "output": [
-        "tasks.json"
       ]
     },
     "clean:cache": {
