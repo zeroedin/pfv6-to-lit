@@ -255,7 +255,7 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         await waitForFullLoad(reactPage);
 
         // Load Lit demo with CSS override
-        await page.goto(`/elements/pfv6-breadcrumb/demo/${demo}`);
+        await page.goto(`/elements/pfv6-breadcrumb/test/${demo}`);
         await applyCssOverride(page, 'pfv6-breadcrumb', name, testValue);
         await waitForFullLoad(page);
 
