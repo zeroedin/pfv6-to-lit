@@ -106,8 +106,8 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         await applyCssOverride(reactPage, '.pf-v6-c-accordion', name, testValue);
         await waitForFullLoad(reactPage);
 
-        // Load Lit demo with CSS override
-        await page.goto(`/elements/pfv6-accordion/demo/${demo}`);
+        // Load Lit demo with CSS override (use /test/ path for minimal template)
+        await page.goto(`/elements/pfv6-accordion/test/${demo}`);
         await applyCssOverride(page, 'pfv6-accordion', name, testValue);
         await waitForFullLoad(page);
 
