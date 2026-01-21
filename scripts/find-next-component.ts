@@ -32,8 +32,10 @@ interface TasksJSON {
 const tasksPath = resolve(process.cwd(), 'tasks.json');
 const data: TasksJSON = JSON.parse(readFileSync(tasksPath, 'utf-8'));
 
-// Find first ready task
-const next = data.tasks.find(t => t.type === 'ready');
+// Find first actionable task (not completed, not blocked)
+// Tasks are ordered by dependency, so blockers appear before blocked components.
+// By the time we reach a blocked task, its blockers should already be completed.
+const next = data.tasks.find(t => t.type !== 'completed' && t.type !== 'blocked');
 
 if (!next) {
   console.log('🎉 All components converted!');
