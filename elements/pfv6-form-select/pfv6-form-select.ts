@@ -70,9 +70,14 @@ export class Pfv6FormSelect extends LitElement {
 
   #selectElement: HTMLSelectElement | null = null;
 
+  #observer: MutationObserver | null = null;
+
   #handleSlotChange = (event: Event) => {
     const slot = event.target as HTMLSlotElement;
     const elements = slot.assignedElements();
+
+    // Clean up previous observer
+    this.#observer?.disconnect();
 
     // Find the select element
     this.#selectElement = elements.find(el => el.tagName === 'SELECT') as HTMLSelectElement | null;
@@ -81,6 +86,28 @@ export class Pfv6FormSelect extends LitElement {
       // Listen for value changes to update placeholder state
       this.#selectElement.addEventListener('change', this.#handleSelectChange);
       this.#updatePlaceholderState();
+      this.isDisabled = this.#selectElement.disabled;
+
+      // Sync aria-invalid state (may have been set before select was slotted)
+      this.#syncAriaInvalid();
+
+      // Watch for disabled attribute changes
+      this.#observer = new MutationObserver(this.#handleAttributeMutation);
+      this.#observer.observe(this.#selectElement, { attributes: true, attributeFilter: ['disabled'] });
+    }
+  };
+
+  #syncAriaInvalid() {
+    if (!this.#selectElement) return;
+    if (this.validated === 'error') {
+      this.#selectElement.setAttribute('aria-invalid', 'true');
+    } else {
+      this.#selectElement.removeAttribute('aria-invalid');
+    }
+  }
+
+  #handleAttributeMutation = () => {
+    if (this.#selectElement) {
       this.isDisabled = this.#selectElement.disabled;
     }
   };
@@ -101,6 +128,7 @@ export class Pfv6FormSelect extends LitElement {
 
   override disconnectedCallback() {
     super.disconnectedCallback();
+    this.#observer?.disconnect();
     if (this.#selectElement) {
       this.#selectElement.removeEventListener('change', this.#handleSelectChange);
     }
@@ -110,14 +138,7 @@ export class Pfv6FormSelect extends LitElement {
     super.updated(changedProperties);
 
     if (changedProperties.has('validated')) {
-      // Update aria-invalid on the slotted select element
-      if (this.#selectElement) {
-        if (this.validated === 'error') {
-          this.#selectElement.setAttribute('aria-invalid', 'true');
-        } else {
-          this.#selectElement.removeAttribute('aria-invalid');
-        }
-      }
+      this.#syncAriaInvalid();
     }
   }
 
