@@ -82,16 +82,6 @@ export class Pfv6ProgressStep extends LitElement {
         this.internals.ariaCurrent = null;
       }
     }
-
-    // Warn if id or titleId is missing
-    if (changedProperties.has('id') || changedProperties.has('titleId')) {
-      if (!this.id || !this.titleId) {
-        console.warn(
-          'ProgressStep: The titleId and id properties are required to make '
-          + 'this component accessible, and one or both are missing.',
-        );
-      }
-    }
   }
 
   #renderDefaultIcon() {

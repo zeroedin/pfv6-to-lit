@@ -1341,6 +1341,45 @@ render() {
 
 ## Step 5: Anti-Pattern Detection (CRITICAL)
 
+### Check for Console Statements (Anti-Pattern)
+
+**Flag any console.warn/log/error statements in component code**:
+
+```typescript
+// ❌ WRONG - Console statements pollute user space
+if (!this.id || !this.titleId) {
+  console.warn('ProgressStep: Missing required properties...');
+}
+
+console.log('Debug info:', this.state);
+console.error('Something went wrong');
+
+// ✅ CORRECT - No console statements
+// Developer warnings should be caught by linters, TypeScript, or tests
+// NOT runtime console output that pollutes user's browser console
+```
+
+**Why this is wrong**:
+- Pollutes user's browser console with developer concerns
+- Users cannot disable or control these warnings
+- Creates noise that obscures actual application issues
+- Developer problems should be caught at build/lint time, not runtime
+- React may have these patterns, but we don't replicate bad practices
+
+**Detection Pattern**:
+- Search for `console\.warn\(`, `console\.log\(`, `console\.error\(` in component files
+- Flag each occurrence as a CRITICAL violation
+- Exception: Test files may use console for debugging
+
+**Report format**:
+```
+❌ CRITICAL: Console statement in component code at line 77
+  - Found: console.warn('ProgressStep: Missing required properties...')
+  - Reason: Console statements pollute user's browser console
+  - Fix: Remove the console statement entirely
+  - Note: Use TypeScript types, linters, or tests to catch developer errors
+```
+
 ### Check for :host Style Manipulation (Anti-Pattern)
 
 **Flag any programmatic :host modifications**:
