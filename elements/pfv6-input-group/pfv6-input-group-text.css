@@ -1,0 +1,36 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Public CSS API - Input Group Text */
+  --pf-v6-c-input-group__text--FontSize: var(--pf-t--global--font--size--body--default, 0.875rem);
+  --pf-v6-c-input-group__text--Color: var(--pf-t--global--text--color--regular, #151515);
+
+  /* Disabled variant */
+  --pf-v6-c-input-group__item--m-disabled__text--Color: var(--pf-t--global--text--color--on-disabled, #4d4d4d);
+
+  display: block;
+}
+
+/* Make the nested input-group-item fill the height */
+pfv6-input-group-item {
+  height: 100%;
+}
+
+/* Set CSS variable on slotted input-group-item when this text is disabled */
+::slotted(pfv6-input-group-item) {
+  --_input-group-text-color: var(--pf-v6-c-input-group__text--Color);
+}
+
+:host([is-disabled]) ::slotted(pfv6-input-group-item) {
+  --_input-group-text-color: var(--pf-v6-c-input-group__item--m-disabled__text--Color);
+}
+
+#container {
+  align-self: center;
+  font-size: var(--pf-v6-c-input-group__text--FontSize);
+  color: var(--_input-group-text-color, var(--pf-v6-c-input-group__text--Color));
+}
