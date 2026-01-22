@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit';
 import type { PropertyValues } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
+import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './pfv6-progress-step.css';
@@ -57,6 +58,10 @@ export class Pfv6ProgressStep extends LitElement {
    * step's icon, including the variant and the completed status. */
   @property({ type: String, attribute: 'accessible-label' })
   accessibleLabel?: string;
+
+  /** Internal state tracking whether popover slot has content */
+  @state()
+  private _hasPopover = false;
 
   constructor() {
     super();
@@ -116,9 +121,9 @@ export class Pfv6ProgressStep extends LitElement {
     }
   }
 
-  #hasPopover() {
-    const popoverSlot = this.shadowRoot?.querySelector('slot[name="popover"]') as HTMLSlotElement;
-    return popoverSlot?.assignedNodes().length > 0;
+  #onPopoverSlotChange(event: Event) {
+    const slot = event.target as HTMLSlotElement;
+    this._hasPopover = slot.assignedNodes().length > 0;
   }
 
   render() {
@@ -131,8 +136,6 @@ export class Pfv6ProgressStep extends LitElement {
       current: this.isCurrent,
     };
 
-    const hasPopover = this.#hasPopover();
-
     return html`
       <div id="container" class=${classMap(classes)}>
         <div id="connector">
@@ -141,19 +144,20 @@ export class Pfv6ProgressStep extends LitElement {
           </span>
         </div>
         <div id="main">
-          ${hasPopover ? html`
+          ${this._hasPopover ? html`
             <button
               id=${ifDefined(this.titleId)}
               class="help-text"
               type="button"
             >
               <slot></slot>
-              <slot name="popover"></slot>
+              <slot name="popover" @slotchange=${this.#onPopoverSlotChange}></slot>
             </button>
           ` : html`
             <div id=${ifDefined(this.titleId)}>
               <slot></slot>
             </div>
+            <slot name="popover" @slotchange=${this.#onPopoverSlotChange}></slot>
           `}
           <slot name="description"></slot>
         </div>
