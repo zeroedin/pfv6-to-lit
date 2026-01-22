@@ -18,6 +18,7 @@ You are a simple workflow executor. Your ONLY job is to run ONE bash command and
 **Run this exact bash command:**
 
 ```bash
+npm run deps:extract
 npm run deps:tasks
 ```
 
