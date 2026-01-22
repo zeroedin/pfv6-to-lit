@@ -231,7 +231,7 @@ const cssApiTests = [
     resolvedValue: 'column',
     type: 'keyword',
     testValue: 'row',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -240,7 +240,7 @@ const cssApiTests = [
     resolvedValue: 'initial',
     type: 'keyword',
     testValue: '1fr 1fr 1fr',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -249,7 +249,7 @@ const cssApiTests = [
     resolvedValue: 'calc(1.5rem / 2)',
     type: 'calc',
     testValue: '25px',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -258,7 +258,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'size',
     testValue: '10px',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -267,7 +267,7 @@ const cssApiTests = [
     resolvedValue: '100%',
     type: 'size',
     testValue: '200px',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -276,7 +276,7 @@ const cssApiTests = [
     resolvedValue: 'auto',
     type: 'keyword',
     testValue: '8px',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -285,7 +285,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'size',
     testValue: '2px',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -294,7 +294,7 @@ const cssApiTests = [
     resolvedValue: 'unset',
     type: 'keyword',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -303,7 +303,7 @@ const cssApiTests = [
     resolvedValue: '1px',
     type: 'size',
     testValue: '4px',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -312,7 +312,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -321,7 +321,7 @@ const cssApiTests = [
     resolvedValue: 'translateY(-50%)',
     type: 'transform',
     testValue: 'translateY(-100%)',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -330,7 +330,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '25px',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -339,7 +339,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '20px',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -348,7 +348,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'size',
     testValue: '15px',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -357,7 +357,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'size',
     testValue: '10px',
-    demo: 'horizontal',
+    demo: 'basic',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -546,7 +546,7 @@ const cssApiTests = [
     resolvedValue: '1fr',
     type: 'grid-template',
     testValue: 'auto',
-    demo: 'center',
+    demo: 'basic-with-alignment',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -555,7 +555,7 @@ const cssApiTests = [
     resolvedValue: 'center',
     type: 'keyword',
     testValue: 'flex-end',
-    demo: 'center',
+    demo: 'basic-with-alignment',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -564,7 +564,7 @@ const cssApiTests = [
     resolvedValue: '50%',
     type: 'size',
     testValue: '75%',
-    demo: 'center',
+    demo: 'basic-with-alignment',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -573,7 +573,7 @@ const cssApiTests = [
     resolvedValue: '""',
     type: 'content',
     testValue: 'none',
-    demo: 'center',
+    demo: 'basic-with-alignment',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -582,7 +582,7 @@ const cssApiTests = [
     resolvedValue: 'none',
     type: 'content',
     testValue: '""',
-    demo: 'center',
+    demo: 'basic-with-alignment',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -591,7 +591,7 @@ const cssApiTests = [
     resolvedValue: '0.25rem',
     type: 'size',
     testValue: '20px',
-    demo: 'center',
+    demo: 'basic-with-alignment',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -600,7 +600,7 @@ const cssApiTests = [
     resolvedValue: '0.25rem',
     type: 'size',
     testValue: '20px',
-    demo: 'center',
+    demo: 'basic-with-alignment',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -609,7 +609,7 @@ const cssApiTests = [
     resolvedValue: 'center',
     type: 'keyword',
     testValue: 'left',
-    demo: 'center',
+    demo: 'basic-with-alignment',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -618,7 +618,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'size',
     testValue: '15px',
-    demo: 'center',
+    demo: 'basic-with-alignment',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -627,7 +627,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'size',
     testValue: '15px',
-    demo: 'center',
+    demo: 'basic-with-alignment',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -636,7 +636,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'size',
     testValue: '10px',
-    demo: 'center',
+    demo: 'basic-with-alignment',
     selector: 'pfv6-progress-stepper'
   },
   {
@@ -645,7 +645,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'size',
     testValue: '10px',
-    demo: 'center',
+    demo: 'basic-with-alignment',
     selector: 'pfv6-progress-stepper'
   },
 
