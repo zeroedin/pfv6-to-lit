@@ -1,0 +1,45 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(input) {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: var(--pf-t--global--text--color--regular, #151515);
+}
+
+:host {
+  display: inline-block;
+}
+
+#container {
+  display: inline-flex;
+  gap: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
+  align-items: flex-start;
+  cursor: pointer;
+
+  &.standalone {
+    gap: 0;
+  }
+}
+
+#input {
+  flex-shrink: 0;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+#label {
+  color: var(--_menu-toggle-checkbox-label-color, inherit);
+
+  #container:has(#input:disabled) & {
+    color: var(--_menu-toggle-checkbox-label-disabled-color, var(--pf-t--global--text--color--on-disabled, #4d4d4d));
+  }
+}
