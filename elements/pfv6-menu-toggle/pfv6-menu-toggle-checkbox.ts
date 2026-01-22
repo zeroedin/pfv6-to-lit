@@ -169,12 +169,13 @@ export class Pfv6MenuToggleCheckbox extends LitElement {
   }
 
   #handleChange = (event: Event) => {
+    const input = event.target as HTMLInputElement;
+
     if (this.readonly) {
-      event.preventDefault();
+      input.checked = this.isChecked;
+      event.stopPropagation();
       return;
     }
-
-    const input = event.target as HTMLInputElement;
     this.isChecked = input.checked;
     this.indeterminate = false;
 
