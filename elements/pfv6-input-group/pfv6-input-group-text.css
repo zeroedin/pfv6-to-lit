@@ -15,17 +15,15 @@
   display: block;
 }
 
-/* Make the nested input-group-item fill the height */
+/* Style the nested input-group-item (shadow DOM child, not slotted) */
 pfv6-input-group-item {
+  --_input-group-text-color: var(--pf-v6-c-input-group__text--Color);
+
   height: 100%;
 }
 
-/* Set CSS variable on slotted input-group-item when this text is disabled */
-::slotted(pfv6-input-group-item) {
-  --_input-group-text-color: var(--pf-v6-c-input-group__text--Color);
-}
-
-:host([is-disabled]) ::slotted(pfv6-input-group-item) {
+/* Target the child element's attribute directly, not :host([attribute]) */
+pfv6-input-group-item[is-disabled] {
   --_input-group-text-color: var(--pf-v6-c-input-group__item--m-disabled__text--Color);
 }
 
