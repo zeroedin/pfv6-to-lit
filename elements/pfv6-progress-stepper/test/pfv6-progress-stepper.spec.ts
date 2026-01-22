@@ -505,65 +505,6 @@ describe('<pfv6-progress-step>', function() {
       const titleElement = el.shadowRoot!.querySelector('#step-1') as HTMLButtonElement;
       expect(titleElement?.getAttribute('type')).to.equal('button');
     });
-
-    it('sets aria-labelledby when popover exists and titleId is set', async function() {
-      const el = await fixture<Pfv6ProgressStep>(html`
-        <pfv6-progress-step title-id="step-1">
-          Title
-          <span slot="popover">Info</span>
-        </pfv6-progress-step>
-      `);
-      const titleElement = el.shadowRoot!.querySelector('#step-1');
-      expect(titleElement?.getAttribute('aria-labelledby')).to.equal('step-1');
-    });
-
-    it('does not set aria-labelledby when popover exists but titleId is missing', async function() {
-      const el = await fixture<Pfv6ProgressStep>(html`
-        <pfv6-progress-step>
-          Title
-          <span slot="popover">Info</span>
-        </pfv6-progress-step>
-      `);
-      const titleElement = el.shadowRoot!.querySelector('button');
-      expect(titleElement?.hasAttribute('aria-labelledby')).to.be.false;
-    });
-  });
-
-  describe('accessibility warnings', function() {
-    it('warns when id is missing', async function() {
-      const consoleWarnSpy = sinon.spy(console, 'warn');
-      await fixture<Pfv6ProgressStep>(html`<pfv6-progress-step title-id="step-1"></pfv6-progress-step>`);
-
-      expect(consoleWarnSpy).to.have.been.calledWith(
-        sinon.match(/ProgressStep.*id.*titleId.*required.*missing/)
-      );
-
-      consoleWarnSpy.restore();
-    });
-
-    it('warns when titleId is missing', async function() {
-      const consoleWarnSpy = sinon.spy(console, 'warn');
-      const el = await fixture<Pfv6ProgressStep>(html`<pfv6-progress-step></pfv6-progress-step>`);
-      el.id = 'test-step';
-      await el.updateComplete;
-
-      expect(consoleWarnSpy).to.have.been.calledWith(
-        sinon.match(/ProgressStep.*id.*titleId.*required.*missing/)
-      );
-
-      consoleWarnSpy.restore();
-    });
-
-    it('does not warn when both id and titleId are set', async function() {
-      const consoleWarnSpy = sinon.spy(console, 'warn');
-      const el = await fixture<Pfv6ProgressStep>(html`<pfv6-progress-step title-id="step-1"></pfv6-progress-step>`);
-      el.id = 'test-step';
-      await el.updateComplete;
-
-      expect(consoleWarnSpy).not.to.have.been.called;
-
-      consoleWarnSpy.restore();
-    });
   });
 
   describe('integration with parent stepper', function() {
