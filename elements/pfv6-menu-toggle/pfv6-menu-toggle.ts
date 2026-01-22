@@ -157,9 +157,7 @@ export class Pfv6MenuToggle extends LitElement {
 
     return html`
       ${this.#renderIcon()}
-      ${isTypeahead ? html`<slot></slot>` : html`
-        <slot></slot>
-      `}
+      <slot></slot>
       ${hasBadge ? html`
         <span id="count">
           <slot name="badge"></slot>
