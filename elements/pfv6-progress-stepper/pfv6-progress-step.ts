@@ -143,11 +143,6 @@ export class Pfv6ProgressStep extends LitElement {
 
     const hasPopover = this.#hasPopover();
 
-    // For aria-labelledby when popover exists (only reference internal ID, not host ID)
-    const ariaLabelledby = hasPopover && this.titleId ?
-      this.titleId
-      : undefined;
-
     return html`
       <div id="container" class=${classMap(classes)}>
         <div id="connector">
@@ -160,7 +155,6 @@ export class Pfv6ProgressStep extends LitElement {
             <button
               id=${ifDefined(this.titleId)}
               class="help-text"
-              aria-labelledby=${ifDefined(ariaLabelledby)}
               type="button"
             >
               <slot></slot>
