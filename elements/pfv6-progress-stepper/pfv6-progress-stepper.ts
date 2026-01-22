@@ -1,4 +1,5 @@
 import { LitElement, html } from 'lit';
+import type { PropertyValues } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
@@ -45,7 +46,7 @@ export class Pfv6ProgressStepper extends LitElement {
     this.internals.role = 'list';
   }
 
-  updated(changedProperties: Map<string, unknown>) {
+  updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
 
     if (changedProperties.has('accessibleLabel')) {
