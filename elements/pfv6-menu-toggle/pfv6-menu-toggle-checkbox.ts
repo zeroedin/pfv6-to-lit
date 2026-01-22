@@ -186,7 +186,9 @@ export class Pfv6MenuToggleCheckbox extends LitElement {
     const slot = this.shadowRoot?.querySelector('slot');
     const nodes = slot?.assignedNodes({ flatten: true }) || [];
     this.hasLabel = nodes.some(
-      node => node.nodeType === Node.TEXT_NODE || node.nodeType === Node.ELEMENT_NODE,
+      node =>
+        node.nodeType === Node.ELEMENT_NODE ||
+        (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()),
     );
   };
 
