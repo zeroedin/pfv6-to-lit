@@ -773,6 +773,7 @@ describe('<pfv6-menu-toggle-checkbox>', function() {
 
       // Event is prevented in readonly mode
       expect(el.isChecked).to.be.false;
+      expect(eventFired).to.be.false;
     });
   });
 
