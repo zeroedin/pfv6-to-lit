@@ -1,0 +1,49 @@
+<pfv6-checkbox id="toggle-compact-vertical" label="Vertical alignment"></pfv6-checkbox>
+<pfv6-checkbox id="toggle-compact-center" label="Center alignment"></pfv6-checkbox>
+
+<br>
+
+<pfv6-progress-stepper id="compact-stepper" is-compact="true">
+  <pfv6-progress-step
+    variant="success"
+    id="compact-step1"
+    title-id="compact-step1-title"
+    accessible-label="completed step, step with success"
+  >
+    First step
+  </pfv6-progress-step>
+  <pfv6-progress-step
+    variant="info"
+    is-current="true"
+    id="compact-step2"
+    title-id="compact-step2-title"
+    accessible-label="step with info"
+  >
+    Second step
+  </pfv6-progress-step>
+  <pfv6-progress-step
+    variant="pending"
+    id="compact-step3"
+    title-id="compact-step3-title"
+    accessible-label="pending step"
+  >
+    Third step
+  </pfv6-progress-step>
+</pfv6-progress-stepper>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-progress-stepper/pfv6-progress-stepper.js';
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
+
+  const verticalCheckbox = document.getElementById('toggle-compact-vertical');
+  const centerCheckbox = document.getElementById('toggle-compact-center');
+  const stepper = document.getElementById('compact-stepper');
+
+  verticalCheckbox.addEventListener('change', (e) => {
+    stepper.isVertical = e.target.checked;
+  });
+
+  centerCheckbox.addEventListener('change', (e) => {
+    stepper.isCenterAligned = e.target.checked;
+  });
+</script>

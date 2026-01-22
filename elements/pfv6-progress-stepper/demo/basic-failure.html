@@ -1,0 +1,47 @@
+<pfv6-progress-stepper accessible-label="Basic progress stepper with failure">
+  <pfv6-progress-step
+    variant="success"
+    id="basic-with-failure-step1"
+    title-id="basic-with-failure-step1-title"
+    accessible-label="completed step, step with success"
+  >
+    First step
+  </pfv6-progress-step>
+  <pfv6-progress-step
+    variant="success"
+    id="basic-with-failure-step2"
+    title-id="basic-with-failure-step2-title"
+    accessible-label="completed step, step with success"
+  >
+    Second step
+  </pfv6-progress-step>
+  <pfv6-progress-step
+    variant="success"
+    id="basic-with-failure-step3"
+    title-id="basic-with-failure-step3-title"
+    accessible-label="completed step, step with success"
+  >
+    Third step
+  </pfv6-progress-step>
+  <pfv6-progress-step
+    variant="danger"
+    is-current="true"
+    id="basic-with-failure-step4"
+    title-id="basic-with-failure-step4-title"
+    accessible-label="step with danger"
+  >
+    Fourth step
+  </pfv6-progress-step>
+  <pfv6-progress-step
+    variant="pending"
+    id="basic-with-failure-step5"
+    title-id="basic-with-failure-step5-title"
+    accessible-label="pending step"
+  >
+    Fifth step
+  </pfv6-progress-step>
+</pfv6-progress-stepper>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-progress-stepper/pfv6-progress-stepper.js';
+</script>
