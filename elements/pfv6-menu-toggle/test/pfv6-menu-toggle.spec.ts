@@ -520,17 +520,17 @@ describe('<pfv6-menu-toggle-checkbox>', function() {
     });
 
     it('can be set to false', async function() {
-      const el = await fixture<Pfv6MenuToggleCheckbox>(html`<pfv6-menu-toggle-checkbox is-valid="false"></pfv6-menu-toggle-checkbox>`);
+      const el = await fixture<Pfv6MenuToggleCheckbox>(html`<pfv6-menu-toggle-checkbox .isValid=${false}></pfv6-menu-toggle-checkbox>`);
       expect(el.isValid).to.be.false;
     });
 
-    it('reflects to attribute', async function() {
-      const el = await fixture<Pfv6MenuToggleCheckbox>(html`<pfv6-menu-toggle-checkbox is-valid="false"></pfv6-menu-toggle-checkbox>`);
-      expect(el.hasAttribute('is-valid')).to.be.true;
+    it('reflects to attribute when false', async function() {
+      const el = await fixture<Pfv6MenuToggleCheckbox>(html`<pfv6-menu-toggle-checkbox .isValid=${false}></pfv6-menu-toggle-checkbox>`);
+      expect(el.hasAttribute('is-valid')).to.be.false;
     });
 
     it('sets aria-invalid on input element', async function() {
-      const el = await fixture<Pfv6MenuToggleCheckbox>(html`<pfv6-menu-toggle-checkbox is-valid="false"></pfv6-menu-toggle-checkbox>`);
+      const el = await fixture<Pfv6MenuToggleCheckbox>(html`<pfv6-menu-toggle-checkbox .isValid=${false}></pfv6-menu-toggle-checkbox>`);
       const input = el.shadowRoot!.querySelector('input');
       expect(input?.getAttribute('aria-invalid')).to.equal('true');
     });
