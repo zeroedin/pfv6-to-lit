@@ -1,0 +1,34 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Public CSS API - Input Group Text */
+  --pf-v6-c-input-group__text--FontSize: var(--pf-t--global--font--size--body--default, 0.875rem);
+  --pf-v6-c-input-group__text--Color: var(--pf-t--global--text--color--regular, #151515);
+
+  /* Disabled variant */
+  --pf-v6-c-input-group__item--m-disabled__text--Color: var(--pf-t--global--text--color--on-disabled, #4d4d4d);
+
+  display: block;
+}
+
+/* Style the nested input-group-item (shadow DOM child, not slotted) */
+pfv6-input-group-item {
+  --_input-group-text-color: var(--pf-v6-c-input-group__text--Color);
+
+  height: 100%;
+}
+
+/* Target the child element's attribute directly, not :host([attribute]) */
+pfv6-input-group-item[is-disabled] {
+  --_input-group-text-color: var(--pf-v6-c-input-group__item--m-disabled__text--Color);
+}
+
+#container {
+  align-self: center;
+  font-size: var(--pf-v6-c-input-group__text--FontSize);
+  color: var(--_input-group-text-color, var(--pf-v6-c-input-group__text--Color));
+}

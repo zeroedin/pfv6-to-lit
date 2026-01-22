@@ -1,0 +1,90 @@
+/* stylelint-disable @stylistic/max-line-length -- PatternFly CSS variable names */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Public CSS API - Input Group Item */
+  --pf-v6-c-input-group__item--offset: var(--pf-t--global--border--width--control--default, 1px);
+  --pf-v6-c-input-group__item--BorderWidth--base: var(--pf-t--global--border--width--control--default, 1px);
+  --pf-v6-c-input-group__item--BorderColor--base: var(--pf-t--global--border--color--default, #c7c7c7);
+  --pf-v6-c-input-group__item--BackgroundColor: transparent;
+  --pf-v6-c-input-group__item--AlignItems: start;
+
+  /* Box variant */
+  --pf-v6-c-input-group__item--m-box--PaddingInlineEnd: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-input-group__item--m-box--PaddingInlineStart: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-input-group__item--m-box--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f2f2f2);
+  --pf-v6-c-input-group__item--m-box--BorderWidth: var(--pf-v6-c-input-group__item--BorderWidth--base);
+  --pf-v6-c-input-group__item--m-box--BorderRadius: var(--pf-t--global--border--radius--small, 6px);
+  --pf-v6-c-input-group__item--m-box--BorderBlockStartColor: var(--pf-v6-c-input-group__item--BorderColor--base);
+  --pf-v6-c-input-group__item--m-box--BorderInlineEndColor: var(--pf-v6-c-input-group__item--BorderColor--base);
+  --pf-v6-c-input-group__item--m-box--BorderBlockEndColor: var(--pf-v6-c-input-group__item--BorderColor--base);
+  --pf-v6-c-input-group__item--m-box--BorderInlineStartColor: var(--pf-v6-c-input-group__item--BorderColor--base);
+
+  /* Plain variant */
+  --pf-v6-c-input-group__item--m-plain--BackgroundColor: transparent;
+
+  /* Disabled variant */
+  --pf-v6-c-input-group__item--m-disabled--BackgroundColor: var(--pf-t--global--background--color--disabled--default, #c7c7c7);
+
+  display: block;
+}
+
+:host([is-fill]) {
+  flex-grow: 1;
+}
+
+/* Consume private variable from pfv6-input-group-text for text color */
+::slotted(*) {
+  color: var(--_input-group-text-color);
+}
+
+#container {
+  position: relative;
+  display: flex;
+  height: 100%;
+  align-items: var(--pf-v6-c-input-group__item--AlignItems);
+  min-width: var(--pf-v6-c-input-group__item--MinWidth, revert);
+  max-width: var(--pf-v6-c-input-group__item--MaxWidth, revert);
+  background-color: var(--pf-v6-c-input-group__item--BackgroundColor);
+  border-block-start-color: var(--pf-v6-c-input-group__item--m-box--BorderBlockStartColor);
+  border-block-end-color: var(--pf-v6-c-input-group__item--m-box--BorderBlockEndColor);
+  border-inline-start-color: var(--pf-v6-c-input-group__item--m-box--BorderInlineStartColor);
+  border-inline-end-color: var(--pf-v6-c-input-group__item--m-box--BorderInlineEndColor);
+
+  &.box {
+    --pf-v6-c-input-group__item--BackgroundColor: var(--pf-v6-c-input-group__item--m-box--BackgroundColor);
+
+    padding-inline-start: var(--pf-v6-c-input-group__item--m-box--PaddingInlineStart);
+    padding-inline-end: var(--pf-v6-c-input-group__item--m-box--PaddingInlineEnd);
+    border: var(--pf-v6-c-input-group__item--m-box--BorderWidth) solid;
+    border-block-start-color: var(--pf-v6-c-input-group__item--m-box--BorderBlockStartColor);
+    border-block-end-color: var(--pf-v6-c-input-group__item--m-box--BorderBlockEndColor);
+    border-inline-start-color: var(--pf-v6-c-input-group__item--m-box--BorderInlineStartColor);
+    border-inline-end-color: var(--pf-v6-c-input-group__item--m-box--BorderInlineEndColor);
+    border-radius: var(--pf-v6-c-input-group__item--m-box--BorderRadius);
+  }
+
+  &.plain {
+    --pf-v6-c-input-group__item--BackgroundColor: var(--pf-v6-c-input-group__item--m-plain--BackgroundColor);
+
+    border: none;
+  }
+
+  &.disabled {
+    --pf-v6-c-input-group__item--BackgroundColor: var(--pf-v6-c-input-group__item--m-disabled--BackgroundColor);
+  }
+
+  &.fill {
+    flex-grow: 1;
+
+    & > ::slotted(*) {
+      flex-grow: 1;
+      width: 100%;
+    }
+  }
+}

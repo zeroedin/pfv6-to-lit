@@ -1,0 +1,18 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Public CSS API - Input Group */
+  --pf-v6-c-input-group--Gap: var(--pf-t--global--spacer--gap--control-to-control--default, 0.25rem);
+
+  display: block;
+}
+
+#container {
+  display: flex;
+  gap: var(--pf-v6-c-input-group--Gap);
+  width: 100%;
+}
