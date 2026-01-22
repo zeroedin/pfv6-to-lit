@@ -1,0 +1,34 @@
+<pfv6-progress-stepper accessible-label="Basic progress stepper with description">
+  <pfv6-progress-step
+    variant="success"
+    id="basic-desc-step1"
+    title-id="basic-desc-step1-title"
+    accessible-label="completed step, step with success"
+  >
+    First step
+    <span slot="description">This is the first thing to happen</span>
+  </pfv6-progress-step>
+  <pfv6-progress-step
+    variant="info"
+    is-current="true"
+    id="basic-desc-step2"
+    title-id="basic-desc-step2-title"
+    accessible-label="step with info"
+  >
+    Second step
+    <span slot="description">This is the second thing to happen</span>
+  </pfv6-progress-step>
+  <pfv6-progress-step
+    variant="pending"
+    id="basic-desc-step3"
+    title-id="basic-desc-step3-title"
+    accessible-label="pending step"
+  >
+    Third step
+    <span slot="description">This is the last thing to happen</span>
+  </pfv6-progress-step>
+</pfv6-progress-stepper>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-progress-stepper/pfv6-progress-stepper.js';
+</script>

@@ -1,0 +1,182 @@
+/* stylelint-disable @stylistic/max-line-length -- PatternFly CSS variable names */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* PUBLIC CSS API - Grid layout variables */
+  --pf-v6-c-progress-stepper--GridTemplateRows: auto 1fr;
+  --pf-v6-c-progress-stepper--GridAutoFlow: row;
+  --pf-v6-c-progress-stepper--GridTemplateColumns: auto 1fr;
+
+  /* Vertical layout (default) */
+  --pf-v6-c-progress-stepper--m-vertical--GridAutoFlow: row;
+  --pf-v6-c-progress-stepper--m-vertical--GridTemplateColumns: auto 1fr;
+  --pf-v6-c-progress-stepper--m-vertical__step-connector--before--InsetBlockStart: 0;
+  --pf-v6-c-progress-stepper--m-vertical__step-connector--before--InsetInlineStart: calc(var(--pf-v6-c-progress-stepper__step-icon--Width, 1.5rem) / 2);
+  --pf-v6-c-progress-stepper--m-vertical__step-connector--before--Width: auto;
+  --pf-v6-c-progress-stepper--m-vertical__step-connector--before--Height: 100%;
+  --pf-v6-c-progress-stepper--m-vertical__step-connector--before--BorderInlineEndWidth: var(--pf-t--global--border--width--box--default, 1px);
+  --pf-v6-c-progress-stepper--m-vertical__step-connector--before--BorderInlineEndColor: var(--pf-t--global--border--color--default, #c7c7c7);
+  --pf-v6-c-progress-stepper--m-vertical__step-connector--before--BorderBlockEndWidth: 0;
+  --pf-v6-c-progress-stepper--m-vertical__step-connector--before--BorderBlockEndColor: transparent;
+  --pf-v6-c-progress-stepper--m-vertical__step-connector--before--Transform: translateX(-50%);
+  --pf-v6-c-progress-stepper--m-vertical__step-main--MarginBlockStart: 0px;
+  --pf-v6-c-progress-stepper--m-vertical__step-main--MarginInlineEnd: 0;
+  --pf-v6-c-progress-stepper--m-vertical__step-main--MarginBlockEnd: var(--pf-t--global--spacer--xl, 2rem);
+  --pf-v6-c-progress-stepper--m-vertical__step-main--MarginInlineStart: var(--pf-t--global--spacer--sm, 0.5rem);
+
+  /* Horizontal layout */
+  --pf-v6-c-progress-stepper--m-horizontal--GridAutoFlow: column;
+  --pf-v6-c-progress-stepper--m-horizontal--GridTemplateColumns: initial;
+  --pf-v6-c-progress-stepper--m-horizontal__step-connector--before--InsetBlockStart: calc(var(--pf-v6-c-progress-stepper__step-icon--Height, 1.5rem) / 2);
+  --pf-v6-c-progress-stepper--m-horizontal__step-connector--before--InsetInlineStart: 0;
+  --pf-v6-c-progress-stepper--m-horizontal__step-connector--before--Width: 100%;
+  --pf-v6-c-progress-stepper--m-horizontal__step-connector--before--Height: auto;
+  --pf-v6-c-progress-stepper--m-horizontal__step-connector--before--BorderInlineEndWidth: 0;
+  --pf-v6-c-progress-stepper--m-horizontal__step-connector--before--BorderInlineEndColor: transparent;
+  --pf-v6-c-progress-stepper--m-horizontal__step-connector--before--BorderBlockEndWidth: var(--pf-t--global--border--width--divider--default, 1px);
+  --pf-v6-c-progress-stepper--m-horizontal__step-connector--before--BorderBlockEndColor: var(--pf-t--global--border--color--default, #c7c7c7);
+  --pf-v6-c-progress-stepper--m-horizontal__step-connector--before--Transform: translateY(-50%);
+  --pf-v6-c-progress-stepper--m-horizontal__step-main--MarginBlockStart: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-progress-stepper--m-horizontal__step-main--MarginInlineEnd: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-progress-stepper--m-horizontal__step-main--MarginBlockEnd: 0;
+  --pf-v6-c-progress-stepper--m-horizontal__step-main--MarginInlineStart: 0;
+
+  /* Compact general */
+  --pf-v6-c-progress-stepper--m-compact--GridAutoFlow: row;
+  --pf-v6-c-progress-stepper--m-compact--GridTemplateColumns: 1fr;
+  --pf-v6-c-progress-stepper--m-compact__step-connector--GridRow: auto;
+  --pf-v6-c-progress-stepper--m-compact__step-connector--MinWidth: 1.75rem;
+  --pf-v6-c-progress-stepper--m-compact__step-connector--PaddingBlockEnd: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-progress-stepper--m-compact__step-main--MarginBlockStart: 0;
+  --pf-v6-c-progress-stepper--m-compact__step-main--MarginBlockEnd: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-progress-stepper--m-compact__step-icon--Width: 1.125rem;
+  --pf-v6-c-progress-stepper--m-compact__step-icon--FontSize: var(--pf-t--global--icon--size--font--body--sm, 0.875rem);
+  --pf-v6-c-progress-stepper--m-compact__step-title--FontSize: var(--pf-t--global--font--size--body--lg, 1rem);
+  --pf-v6-c-progress-stepper--m-compact__step-title--FontWeight: var(--pf-t--global--font--weight--body--bold, 500);
+
+  /* Center alignment */
+  --pf-v6-c-progress-stepper--m-center--GridTemplateColumns: 1fr;
+  --pf-v6-c-progress-stepper--m-center__step-connector--JustifyContent: center;
+  --pf-v6-c-progress-stepper--m-center__step-connector--before--InsetInlineStart: 50%;
+  --pf-v6-c-progress-stepper--m-center__step-connector--before--Content: "";
+  --pf-v6-c-progress-stepper--m-center__step-main--before--Content: none;
+  --pf-v6-c-progress-stepper--m-center__step-main--MarginInlineEnd: var(--pf-t--global--spacer--xs, 0.25rem);
+  --pf-v6-c-progress-stepper--m-center__step-main--MarginInlineStart: var(--pf-t--global--spacer--xs, 0.25rem);
+  --pf-v6-c-progress-stepper--m-center__step-main--TextAlign: center;
+
+  /* PRIVATE VARIABLES - Passed to slotted steps (vertical layout default) */
+  --_step-connector--JustifyContent: flex-start;
+  --_step-connector--before--InsetBlockStart: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--InsetBlockStart);
+  --_step-connector--before--InsetInlineStart: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--InsetInlineStart);
+  --_step-connector--before--Width: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--Width);
+  --_step-connector--before--Height: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--Height);
+  --_step-connector--before--BorderInlineEndWidth: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--BorderInlineEndWidth);
+  --_step-connector--before--BorderInlineEndColor: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--BorderInlineEndColor);
+  --_step-connector--before--BorderBlockEndWidth: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--BorderBlockEndWidth);
+  --_step-connector--before--BorderBlockEndColor: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--BorderBlockEndColor);
+  --_step-connector--before--Transform: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--Transform);
+  --_step-main--MarginBlockStart: var(--pf-v6-c-progress-stepper--m-vertical__step-main--MarginBlockStart);
+  --_step-main--MarginInlineEnd: var(--pf-v6-c-progress-stepper--m-vertical__step-main--MarginInlineEnd);
+  --_step-main--MarginBlockEnd: var(--pf-v6-c-progress-stepper--m-vertical__step-main--MarginBlockEnd);
+  --_step-main--MarginInlineStart: var(--pf-v6-c-progress-stepper--m-vertical__step-main--MarginInlineStart);
+
+  display: block;
+
+  /* Apply horizontal layout at md breakpoint */
+  @media (width >= 768px) {
+    --_step-connector--before--InsetBlockStart: var(--pf-v6-c-progress-stepper--m-horizontal__step-connector--before--InsetBlockStart);
+    --_step-connector--before--InsetInlineStart: var(--pf-v6-c-progress-stepper--m-horizontal__step-connector--before--InsetInlineStart);
+    --_step-connector--before--Width: var(--pf-v6-c-progress-stepper--m-horizontal__step-connector--before--Width);
+    --_step-connector--before--Height: var(--pf-v6-c-progress-stepper--m-horizontal__step-connector--before--Height);
+    --_step-connector--before--BorderInlineEndWidth: var(--pf-v6-c-progress-stepper--m-horizontal__step-connector--before--BorderInlineEndWidth);
+    --_step-connector--before--BorderInlineEndColor: var(--pf-v6-c-progress-stepper--m-horizontal__step-connector--before--BorderInlineEndColor);
+    --_step-connector--before--BorderBlockEndWidth: var(--pf-v6-c-progress-stepper--m-horizontal__step-connector--before--BorderBlockEndWidth);
+    --_step-connector--before--BorderBlockEndColor: var(--pf-v6-c-progress-stepper--m-horizontal__step-connector--before--BorderBlockEndColor);
+    --_step-connector--before--Transform: var(--pf-v6-c-progress-stepper--m-horizontal__step-connector--before--Transform);
+    --_step-main--MarginBlockStart: var(--pf-v6-c-progress-stepper--m-horizontal__step-main--MarginBlockStart);
+    --_step-main--MarginInlineEnd: var(--pf-v6-c-progress-stepper--m-horizontal__step-main--MarginInlineEnd);
+    --_step-main--MarginBlockEnd: var(--pf-v6-c-progress-stepper--m-horizontal__step-main--MarginBlockEnd);
+    --_step-main--MarginInlineStart: var(--pf-v6-c-progress-stepper--m-horizontal__step-main--MarginInlineStart);
+  }
+}
+
+/* Force vertical layout */
+:host([is-vertical]) {
+  --_step-connector--before--InsetBlockStart: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--InsetBlockStart);
+  --_step-connector--before--InsetInlineStart: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--InsetInlineStart);
+  --_step-connector--before--Width: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--Width);
+  --_step-connector--before--Height: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--Height);
+  --_step-connector--before--BorderInlineEndWidth: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--BorderInlineEndWidth);
+  --_step-connector--before--BorderInlineEndColor: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--BorderInlineEndColor);
+  --_step-connector--before--BorderBlockEndWidth: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--BorderBlockEndWidth);
+  --_step-connector--before--BorderBlockEndColor: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--BorderBlockEndColor);
+  --_step-connector--before--Transform: var(--pf-v6-c-progress-stepper--m-vertical__step-connector--before--Transform);
+  --_step-main--MarginBlockStart: var(--pf-v6-c-progress-stepper--m-vertical__step-main--MarginBlockStart);
+  --_step-main--MarginInlineEnd: var(--pf-v6-c-progress-stepper--m-vertical__step-main--MarginInlineEnd);
+  --_step-main--MarginBlockEnd: var(--pf-v6-c-progress-stepper--m-vertical__step-main--MarginBlockEnd);
+  --_step-main--MarginInlineStart: var(--pf-v6-c-progress-stepper--m-vertical__step-main--MarginInlineStart);
+}
+
+/* Center alignment */
+:host([is-center-aligned]) {
+  --_step-connector--JustifyContent: var(--pf-v6-c-progress-stepper--m-center__step-connector--JustifyContent);
+  --_step-connector--before--InsetInlineStart: var(--pf-v6-c-progress-stepper--m-center__step-connector--before--InsetInlineStart);
+  --_step-main--MarginInlineEnd: var(--pf-v6-c-progress-stepper--m-center__step-main--MarginInlineEnd);
+  --_step-main--MarginInlineStart: var(--pf-v6-c-progress-stepper--m-center__step-main--MarginInlineStart);
+  --_step-main--TextAlign: var(--pf-v6-c-progress-stepper--m-center__step-main--TextAlign);
+  --_step-title--TextAlign: center;
+  --_step-description--TextAlign: center;
+  --_step-main--before--Content: "";
+}
+
+/* Compact mode */
+:host([is-compact]) {
+  --_step-main--MarginBlockStart: var(--pf-v6-c-progress-stepper--m-compact__step-main--MarginBlockStart);
+  --_step-main--MarginBlockEnd: var(--pf-v6-c-progress-stepper--m-compact__step-main--MarginBlockEnd);
+  --_step-icon--Width: var(--pf-v6-c-progress-stepper--m-compact__step-icon--Width);
+  --_step-icon--FontSize: var(--pf-v6-c-progress-stepper--m-compact__step-icon--FontSize);
+  --_step-title--FontSize: var(--pf-v6-c-progress-stepper--m-compact__step-title--FontSize);
+  --_step-title--FontWeight--current: var(--pf-v6-c-progress-stepper--m-compact__step-title--FontWeight);
+  --_step-connector--GridRow: var(--pf-v6-c-progress-stepper--m-compact__step-connector--GridRow);
+  --_step-connector--MinWidth: var(--pf-v6-c-progress-stepper--m-compact__step-connector--MinWidth);
+  --_step-connector--PaddingBlockEnd: var(--pf-v6-c-progress-stepper--m-compact__step-connector--PaddingBlockEnd);
+}
+
+#container {
+  position: relative;
+  display: grid;
+  grid-template-rows: var(--pf-v6-c-progress-stepper--GridTemplateRows);
+  grid-template-columns: var(--pf-v6-c-progress-stepper--m-vertical--GridTemplateColumns);
+  grid-auto-columns: 1fr;
+  grid-auto-flow: var(--pf-v6-c-progress-stepper--m-vertical--GridAutoFlow);
+
+  @media (width >= 768px) {
+    grid-template-columns: var(--pf-v6-c-progress-stepper--m-horizontal--GridTemplateColumns);
+    grid-auto-flow: var(--pf-v6-c-progress-stepper--m-horizontal--GridAutoFlow);
+  }
+
+  &.vertical {
+    grid-template-columns: var(--pf-v6-c-progress-stepper--m-vertical--GridTemplateColumns);
+    grid-auto-flow: var(--pf-v6-c-progress-stepper--m-vertical--GridAutoFlow);
+  }
+
+  &.center {
+    grid-template-columns: var(--pf-v6-c-progress-stepper--m-center--GridTemplateColumns);
+  }
+
+  &.compact {
+    display: inline-grid;
+    grid-template-columns: var(--pf-v6-c-progress-stepper--m-compact--GridTemplateColumns);
+    grid-auto-flow: var(--pf-v6-c-progress-stepper--m-compact--GridAutoFlow);
+  }
+}
+
+/* Hide connector line on last step */
+::slotted(pfv6-progress-step:last-of-type) {
+  --_step-connector--before--Content: none;
+  --_step-main--before--Content: none;
+}

@@ -1,0 +1,251 @@
+/* stylelint-disable @stylistic/max-line-length -- PatternFly CSS variable names */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(button) {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: var(--pf-t--global--text--color--regular, #151515);
+  cursor: pointer;
+}
+
+:host {
+  /* PUBLIC CSS API - Step icon variables */
+  --pf-v6-c-progress-stepper__step-icon--ZIndex: var(--pf-t--global--z-index--xs, 100);
+  --pf-v6-c-progress-stepper__step-icon--Width: 1.5rem;
+  --pf-v6-c-progress-stepper__step-icon--Height: var(--pf-v6-c-progress-stepper__step-icon--Width);
+  --pf-v6-c-progress-stepper__step-icon--FontSize: var(--pf-t--global--icon--size--font--body--default, 1rem);
+  --pf-v6-c-progress-stepper__step-icon--Color: var(--pf-t--global--icon--color--regular, #1f1f1f);
+  --pf-v6-c-progress-stepper__step-icon--BackgroundColor: var(--pf-t--global--background--color--primary--default, #ffffff);
+  --pf-v6-c-progress-stepper__step-icon--BorderWidth: var(--pf-t--global--border--width--box--default, 1px);
+  --pf-v6-c-progress-stepper__step-icon--BorderColor: var(--pf-t--global--border--color--default, #c7c7c7);
+
+  /* Step title variables */
+  --pf-v6-c-progress-stepper__step-title--Color: var(--pf-t--global--text--color--regular, #151515);
+  --pf-v6-c-progress-stepper__step-title--TextAlign: start;
+  --pf-v6-c-progress-stepper__step-title--FontSize: var(--pf-t--global--font--size--body--lg, 1rem);
+  --pf-v6-c-progress-stepper__step-title--FontWeight: var(--pf-t--global--font--weight--body--default, 400);
+
+  /* Step description variables */
+  --pf-v6-c-progress-stepper__step-description--MarginBlockStart: var(--pf-t--global--spacer--xs, 0.25rem);
+  --pf-v6-c-progress-stepper__step-description--FontSize: var(--pf-t--global--font--size--body--sm, 0.875rem);
+  --pf-v6-c-progress-stepper__step-description--Color: var(--pf-t--global--text--color--subtle, #4d4d4d);
+  --pf-v6-c-progress-stepper__step-description--TextAlign: start;
+
+  /* Help text variables for the step title */
+  --pf-v6-c-progress-stepper__step-title--m-help-text--PaddingInlineStart: 0;
+  --pf-v6-c-progress-stepper__step-title--m-help-text--PaddingInlineEnd: 0;
+  --pf-v6-c-progress-stepper__step-title--m-help-text--TextDecorationLine: var(--pf-t--global--text-decoration--help-text--line--default, underline);
+  --pf-v6-c-progress-stepper__step-title--m-help-text--TextDecorationStyle: var(--pf-t--global--text-decoration--help-text--style--default, dashed);
+  --pf-v6-c-progress-stepper__step-title--m-help-text--TextUnderlineOffset: 0.25rem;
+  --pf-v6-c-progress-stepper__step-title--m-help-text--hover--TextDecorationLine: var(--pf-t--global--text-decoration--help-text--line--hover, underline);
+  --pf-v6-c-progress-stepper__step-title--m-help-text--hover--TextDecorationStyle: var(--pf-t--global--text-decoration--help-text--style--hover, dashed);
+  --pf-v6-c-progress-stepper__step-title--m-help-text--hover--Color: var(--pf-t--global--text--color--brand--hover, #004d99);
+
+  /* Variant: current */
+  --pf-v6-c-progress-stepper__step--m-current__step-icon--Color: var(--pf-t--global--icon--color--brand--default, #0066cc);
+  --pf-v6-c-progress-stepper__step--m-current__step-title--FontWeight: var(--pf-t--global--font--weight--body--bold, 500);
+  --pf-v6-c-progress-stepper__step--m-current__step-title--Color: var(--pf-t--global--text--color--regular, #151515);
+
+  /* Variant: pending */
+  --pf-v6-c-progress-stepper__step--m-pending__step-title--Color: var(--pf-t--global--text--color--subtle, #4d4d4d);
+
+  /* Variant: info */
+  --pf-v6-c-progress-stepper__step--m-info__step-icon--Color: var(--pf-t--global--icon--color--status--info--default, #5e40be);
+
+  /* Variant: success */
+  --pf-v6-c-progress-stepper__step--m-success__step-icon--Color: var(--pf-t--global--icon--color--status--success--default, #3d7317);
+
+  /* Variant: warning */
+  --pf-v6-c-progress-stepper__step--m-warning__step-icon--Color: var(--pf-t--global--icon--color--status--warning--default, #dca614);
+
+  /* Variant: danger */
+  --pf-v6-c-progress-stepper__step--m-danger__step-icon--Color: var(--pf-t--global--icon--color--status--danger--default, #b1380b);
+  --pf-v6-c-progress-stepper__step--m-danger__step-title--Color: var(--pf-t--global--text--color--status--danger--default, #b1380b);
+  --pf-v6-c-progress-stepper__step--m-danger__step-title--m-help-text--hover--Color: var(--pf-t--global--text--color--status--danger--hover, #731f00);
+
+  /* Variant: custom */
+  --pf-v6-c-progress-stepper__step--m-custom__step-icon--Color: var(--pf-t--global--icon--color--status--custom--default, #147878);
+
+  /* Step connector variables */
+  --pf-v6-c-progress-stepper__step-connector--JustifyContent: flex-start;
+
+  display: contents;
+}
+
+#container {
+  display: contents;
+
+  /* Apply variant colors based on class */
+  &.current {
+    --pf-v6-c-progress-stepper__step-title--FontWeight: var(--pf-v6-c-progress-stepper__step--m-current__step-title--FontWeight);
+    --pf-v6-c-progress-stepper__step-title--Color: var(--pf-v6-c-progress-stepper__step--m-current__step-title--Color);
+    --pf-v6-c-progress-stepper__step-icon--Color: var(--pf-v6-c-progress-stepper__step--m-current__step-icon--Color);
+  }
+
+  &.pending {
+    --pf-v6-c-progress-stepper__step-title--Color: var(--pf-v6-c-progress-stepper__step--m-pending__step-title--Color);
+  }
+
+  &.success {
+    --pf-v6-c-progress-stepper__step-icon--Color: var(--pf-v6-c-progress-stepper__step--m-success__step-icon--Color);
+  }
+
+  &.danger {
+    --pf-v6-c-progress-stepper__step-icon--Color: var(--pf-v6-c-progress-stepper__step--m-danger__step-icon--Color);
+    --pf-v6-c-progress-stepper__step-title--Color: var(--pf-v6-c-progress-stepper__step--m-danger__step-title--Color);
+    --pf-v6-c-progress-stepper__step-title--m-help-text--hover--Color: var(--pf-v6-c-progress-stepper__step--m-danger__step-title--m-help-text--hover--Color);
+  }
+
+  &.warning {
+    --pf-v6-c-progress-stepper__step-icon--Color: var(--pf-v6-c-progress-stepper__step--m-warning__step-icon--Color);
+  }
+
+  &.info {
+    --pf-v6-c-progress-stepper__step-icon--Color: var(--pf-v6-c-progress-stepper__step--m-info__step-icon--Color);
+  }
+
+  &.custom {
+    --pf-v6-c-progress-stepper__step-icon--Color: var(--pf-v6-c-progress-stepper__step--m-custom__step-icon--Color);
+  }
+}
+
+/* Step connector */
+#connector {
+  position: relative;
+  display: flex;
+  justify-content:
+    var(
+      --_step-connector--JustifyContent,
+      var(--pf-v6-c-progress-stepper__step-connector--JustifyContent)
+    );
+  width: 100%;
+  grid-row: var(--_step-connector--GridRow);
+  min-width: var(--_step-connector--MinWidth);
+  padding-block-end: var(--_step-connector--PaddingBlockEnd);
+
+  /* Connector line (not rendered on last step) */
+  &::before {
+    position: absolute;
+    inset-block-start: var(--_step-connector--before--InsetBlockStart);
+    inset-inline-start: var(--_step-connector--before--InsetInlineStart);
+    width: var(--_step-connector--before--Width);
+    height: var(--_step-connector--before--Height);
+    content: var(--_step-connector--before--Content, "");
+    border-block-end:
+      var(--_step-connector--before--BorderBlockEndWidth)
+      solid
+      var(--_step-connector--before--BorderBlockEndColor);
+    border-inline-end:
+      var(--_step-connector--before--BorderInlineEndWidth)
+      solid
+      var(--_step-connector--before--BorderInlineEndColor);
+    transform: var(--_step-connector--before--Transform);
+  }
+}
+
+/* Step icon */
+#icon {
+  z-index: var(--pf-v6-c-progress-stepper__step-icon--ZIndex);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width:
+    var(
+      --_step-icon--Width,
+      var(--pf-v6-c-progress-stepper__step-icon--Width)
+    );
+  height: var(--pf-v6-c-progress-stepper__step-icon--Height);
+  font-size:
+    var(
+      --_step-icon--FontSize,
+      var(--pf-v6-c-progress-stepper__step-icon--FontSize)
+    );
+  color: var(--pf-v6-c-progress-stepper__step-icon--Color);
+  background-color: var(--pf-v6-c-progress-stepper__step-icon--BackgroundColor);
+  border:
+    var(--pf-v6-c-progress-stepper__step-icon--BorderWidth)
+    solid
+    var(--pf-v6-c-progress-stepper__step-icon--BorderColor);
+  border-radius: 50%;
+}
+
+/* Step main */
+#main {
+  position: relative;
+  min-width: 0;
+  margin-block-start: var(--_step-main--MarginBlockStart);
+  margin-block-end: var(--_step-main--MarginBlockEnd);
+  margin-inline-start: var(--_step-main--MarginInlineStart);
+  margin-inline-end: var(--_step-main--MarginInlineEnd);
+  text-align: var(--_step-main--TextAlign, auto);
+  overflow-wrap: anywhere;
+
+  /* Draw border for center vertical alignment */
+  &::before {
+    position: absolute;
+    inset-block-start: calc(100% + var(--_step-main--MarginBlockStart));
+    inset-inline-start: calc(50% - calc(var(--_step-connector--before--BorderInlineEndWidth) / 2));
+    width: auto;
+    height: calc(var(--_step-main--MarginBlockStart) + var(--_step-main--MarginBlockEnd));
+    content: var(--_step-main--before--Content, none);
+    border-inline-end:
+      var(--_step-connector--before--BorderInlineEndWidth)
+      solid
+      var(--_step-connector--before--BorderInlineEndColor);
+  }
+}
+
+/* Step title */
+#main > div,
+#main > button {
+  font-size:
+    var(
+      --_step-title--FontSize,
+      var(--pf-v6-c-progress-stepper__step-title--FontSize)
+    );
+  font-weight: var(--pf-v6-c-progress-stepper__step-title--FontWeight);
+  color: var(--pf-v6-c-progress-stepper__step-title--Color);
+  text-align:
+    var(
+      --_step-title--TextAlign,
+      var(--pf-v6-c-progress-stepper__step-title--TextAlign)
+    );
+  background: none;
+  border: 0;
+
+  &.help-text {
+    padding-inline-start: var(--pf-v6-c-progress-stepper__step-title--m-help-text--PaddingInlineStart);
+    padding-inline-end: var(--pf-v6-c-progress-stepper__step-title--m-help-text--PaddingInlineEnd);
+    text-decoration-line: var(--pf-v6-c-progress-stepper__step-title--m-help-text--TextDecorationLine);
+    text-decoration-style: var(--pf-v6-c-progress-stepper__step-title--m-help-text--TextDecorationStyle);
+    text-underline-offset: var(--pf-v6-c-progress-stepper__step-title--m-help-text--TextUnderlineOffset);
+    cursor: pointer;
+
+    &:is(:hover, :focus) {
+      text-decoration-line: var(--pf-v6-c-progress-stepper__step-title--m-help-text--hover--TextDecorationLine);
+      text-decoration-style: var(--pf-v6-c-progress-stepper__step-title--m-help-text--hover--TextDecorationStyle);
+      color: var(--pf-v6-c-progress-stepper__step-title--m-help-text--hover--Color);
+    }
+  }
+}
+
+/* Step description */
+::slotted([slot="description"]) {
+  display: block;
+  margin-block-start: var(--pf-v6-c-progress-stepper__step-description--MarginBlockStart);
+  margin-inline-end: var(--_step-description--MarginInlineEnd, 0);
+  margin-inline-start: var(--_step-description--MarginInlineStart, 0);
+  font-size: var(--pf-v6-c-progress-stepper__step-description--FontSize);
+  color: var(--pf-v6-c-progress-stepper__step-description--Color);
+  text-align:
+    var(
+      --_step-description--TextAlign,
+      var(--pf-v6-c-progress-stepper__step-description--TextAlign)
+    );
+}
