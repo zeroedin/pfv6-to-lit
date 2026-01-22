@@ -229,7 +229,7 @@ export class Pfv6MenuToggleCheckbox extends LitElement {
           ?required=${this.required}
           ?readonly=${this.readonly}
           aria-label=${ifDefined(this.accessibleLabel)}
-          aria-invalid=${!this.isValid}
+          aria-invalid=${!this.isValid || !this.internals.checkValidity()}
           @change=${this.#handleChange}
         />
         ${this.label || this.hasLabel ? html`
