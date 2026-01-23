@@ -17,7 +17,14 @@ import styles from './pfv6-input-group-item.css';
  * @cssprop --pf-v6-c-input-group__item--m-box--PaddingInlineEnd - End padding for box variant
  * @cssprop --pf-v6-c-input-group__item--m-box--PaddingInlineStart - Start padding for box variant
  * @cssprop --pf-v6-c-input-group__item--m-box--BackgroundColor - Background color for box variant
+ * @cssprop --pf-v6-c-input-group__item--m-box--BorderWidth - Border width for box variant
  * @cssprop --pf-v6-c-input-group__item--m-box--BorderRadius - Border radius for box variant
+ * @cssprop --pf-v6-c-input-group__item--m-box--BorderBlockStartColor - Border block start color for box variant
+ * @cssprop --pf-v6-c-input-group__item--m-box--BorderInlineEndColor - Border inline end color for box variant
+ * @cssprop --pf-v6-c-input-group__item--m-box--BorderBlockEndColor - Border block end color for box variant
+ * @cssprop --pf-v6-c-input-group__item--m-box--BorderInlineStartColor - Border inline start color for box variant
+ * @cssprop --pf-v6-c-input-group__item--m-plain--BackgroundColor - Background color for plain variant
+ * @cssprop --pf-v6-c-input-group__item--m-disabled--BackgroundColor - Background color for disabled variant
  */
 @customElement('pfv6-input-group-item')
 export class Pfv6InputGroupItem extends LitElement {
