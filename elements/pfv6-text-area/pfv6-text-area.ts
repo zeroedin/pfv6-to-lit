@@ -137,6 +137,10 @@ export class Pfv6TextArea extends LitElement {
     ) as HTMLTextAreaElement | undefined;
 
     if (textarea) {
+      // Clean up previous textarea if it changed
+      if (this._textareaElement && this._textareaElement !== textarea) {
+        this._textareaElement.removeEventListener('input', this.#handleTextareaInput);
+      }
       this._textareaElement = textarea;
 
       // Detect disabled state from slotted textarea
@@ -169,6 +173,10 @@ export class Pfv6TextArea extends LitElement {
       }
     } else {
       console.error('pfv6-text-area: requires a <textarea> element in the textarea slot');
+      // Clean up previous textarea
+      if (this._textareaElement) {
+        this._textareaElement.removeEventListener('input', this.#handleTextareaInput);
+      }
       this.#disabledObserver?.disconnect();
       this.#disabledObserver = null;
       this._textareaElement = null;
@@ -217,10 +225,10 @@ export class Pfv6TextArea extends LitElement {
   }
 
   render() {
-    const orientation =
+    const orientationClass =
       this.resizeOrientation !== 'none' ?
         `resize-${this.resizeOrientation}`
-        : undefined;
+        : '';
 
     const classes = {
       disabled: this._isDisabled,
@@ -229,7 +237,6 @@ export class Pfv6TextArea extends LitElement {
       success: this.validated === 'success',
       warning: this.validated === 'warning',
       error: this.validated === 'error',
-      [`${orientation}`]: !!orientation,
     };
 
     const hasStatusIcon = ['success', 'error', 'warning'].includes(this.validated);
@@ -242,7 +249,7 @@ export class Pfv6TextArea extends LitElement {
     /* eslint-enable @stylistic/max-len */
 
     return html`
-      <span id="container" class=${classMap(classes)}>
+      <span id="container" class="${orientationClass} ${classMap(classes)}">
         <slot name="textarea" @slotchange=${this.#handleSlotChange}></slot>
         ${hasStatusIcon ? html`
           <span id="utilities">
