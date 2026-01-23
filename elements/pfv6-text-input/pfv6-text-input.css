@@ -281,9 +281,7 @@
   }
 
   /* Disabled state */
-  &:has(input:disabled),
-  &:has(select:disabled),
-  &:has(textarea:disabled) {
+  &.disabled {
     --pf-v6-c-form-control--BackgroundColor:
       var(--pf-v6-c-form-control--m-disabled--BackgroundColor);
     --pf-v6-c-form-control--Color:

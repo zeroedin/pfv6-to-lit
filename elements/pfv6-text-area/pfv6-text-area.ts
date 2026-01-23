@@ -85,9 +85,12 @@ export class Pfv6TextArea extends LitElement {
   @state()
   private _textareaElement: HTMLTextAreaElement | null = null;
 
-  /** Internal state tracking if slotted textarea is disabled */
+  /** Internal state tracking if slotted textarea is disabled. */
   @state()
   private _isDisabled = false;
+
+  /** MutationObserver to watch for disabled attribute changes on slotted textarea. */
+  #disabledObserver: MutationObserver | null = null;
 
   override updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
@@ -139,6 +142,17 @@ export class Pfv6TextArea extends LitElement {
       // Detect disabled state from slotted textarea
       this._isDisabled = textarea.disabled;
 
+      // Watch for disabled attribute changes
+      this.#disabledObserver?.disconnect();
+      this.#disabledObserver = new MutationObserver(mutations => {
+        for (const mutation of mutations) {
+          if (mutation.attributeName === 'disabled') {
+            this._isDisabled = (mutation.target as HTMLTextAreaElement).disabled;
+          }
+        }
+      });
+      this.#disabledObserver.observe(textarea, { attributes: true, attributeFilter: ['disabled'] });
+
       // Apply initial aria-invalid state
       textarea.setAttribute('aria-invalid', this.validated === 'error' ? 'true' : 'false');
 
@@ -155,6 +169,8 @@ export class Pfv6TextArea extends LitElement {
       }
     } else {
       console.error('pfv6-text-area: requires a <textarea> element in the textarea slot');
+      this.#disabledObserver?.disconnect();
+      this.#disabledObserver = null;
       this._textareaElement = null;
       this._isDisabled = false;
     }
@@ -192,10 +208,12 @@ export class Pfv6TextArea extends LitElement {
 
   override disconnectedCallback() {
     super.disconnectedCallback();
-    // Clean up event listener
+    // Clean up event listener and observer
     if (this._textareaElement) {
       this._textareaElement.removeEventListener('input', this.#handleTextareaInput);
     }
+    this.#disabledObserver?.disconnect();
+    this.#disabledObserver = null;
   }
 
   render() {
