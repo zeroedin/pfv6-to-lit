@@ -55,7 +55,7 @@ async function applyCssOverride(
   value: string
 ): Promise<void> {
   await page.addStyleTag({
-    content: `${selector} { ${cssVar}: ${value}; }`
+    content: `${selector} { ${cssVar}: ${value}; }`,
   });
 }
 
@@ -69,16 +69,18 @@ const cssApiTests = [
       'var(--pf-t--global--spacer--gap--control-to-control--default, 0.25rem)',
       'var(--pf-t--global--spacer--xs)',
       'var(--pf-t--global--spacer--100)',
-      '0.25rem'
+      '0.25rem',
     ],
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
-  }
+    demo: 'basic',
+  },
 ];
 
 test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
-  cssApiTests.forEach(({ name, defaultValue, resolvedValue, resolutionChain, type, testValue, demo }) => {
+  cssApiTests.forEach(({
+    name, defaultValue, resolvedValue, resolutionChain, type, testValue, demo,
+  }) => {
     test(`CSS API: ${name}`, async ({ page, browser }) => {
       // Add metadata to test report
       test.info().annotations.push({
@@ -88,8 +90,8 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Default: ${defaultValue}`,
           `Resolution chain: ${resolutionChain.join(' → ')}`,
           `Resolves to: ${resolvedValue} (${type})`,
-          `Test value: ${testValue}`
-        ].join('\n')
+          `Test value: ${testValue}`,
+        ].join('\n'),
       });
 
       // Set consistent viewport
@@ -113,12 +115,12 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare
@@ -136,23 +138,23 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 }  // Pixel-perfect
+          { threshold: 0 } // Pixel-perfect
         );
 
         // Attach images to report
         await test.info().attach('React with CSS override (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit with CSS override (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match
