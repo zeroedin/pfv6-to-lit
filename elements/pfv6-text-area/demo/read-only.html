@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="/elements/pfv6-text-area/pfv6-text-area-lightdom.css">
+<label for="text-area-readonly" class="pf-v6-screen-reader">read only text area example</label>
+<div style="margin-bottom: 12px;">
+  <pfv6-checkbox id="is-plain" label="Plain read only variant"></pfv6-checkbox>
+</div>
+<pfv6-text-area id="readonly-textarea" read-only-variant="default">
+  <textarea slot="textarea" id="text-area-readonly" readonly>read only text area example</textarea>
+</pfv6-text-area>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-text-area/pfv6-text-area.js';
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
+
+  const checkbox = document.getElementById('is-plain');
+  const textarea = document.getElementById('readonly-textarea');
+
+  checkbox.addEventListener('change', () => {
+    textarea.setAttribute('read-only-variant', checkbox.checked ? 'plain' : 'default');
+  });
+</script>

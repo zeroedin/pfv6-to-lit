@@ -1179,10 +1179,25 @@ export class Pfv6TextInput extends LitElement {
   @property() validated: 'success' | 'warning' | 'error' | 'default' = 'default';
 
   render() {
+    const hasStatusIcon = ['success', 'error', 'warning'].includes(this.validated);
+    const iconPaths: Record<string, string> = {
+      success: '...',
+      warning: '...',
+      error: '...',
+    };
+
     return html`
       <span id="container" class=${classMap({ error: this.validated === 'error' })}>
         <slot name="input" @slotchange=${this.#handleSlotChange}></slot>
-        ${this.#renderStatusIcon()}
+        ${hasStatusIcon ? html`
+          <span id="utilities">
+            <span id="icon" class="status">
+              <svg fill="currentColor" height="1em" width="1em" viewBox="0 0 24 24" aria-hidden="true">
+                <path d=${iconPaths[this.validated]}></path>
+              </svg>
+            </span>
+          </span>
+        ` : null}
       </span>
     `;
   }

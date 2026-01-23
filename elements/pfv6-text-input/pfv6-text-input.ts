@@ -155,6 +155,10 @@ export class Pfv6TextInput extends LitElement {
   @state()
   private _hasCustomIcon = false;
 
+  /** Internal state tracking if slotted input is disabled. */
+  @state()
+  private _isDisabled = false;
+
   /**
   * Reference to the slotted input element
   */
@@ -165,9 +169,14 @@ export class Pfv6TextInput extends LitElement {
   */
   #resizeObserver?: ResizeObserver;
 
+  /** MutationObserver to watch for disabled attribute changes on slotted input. */
+  #disabledObserver: MutationObserver | null = null;
+
   disconnectedCallback() {
     super.disconnectedCallback();
     this.#cleanupTruncation();
+    this.#disabledObserver?.disconnect();
+    this.#disabledObserver = null;
   }
 
   updated(changedProperties: PropertyValues<this>) {
@@ -193,6 +202,7 @@ export class Pfv6TextInput extends LitElement {
     const isExpanded = this.isExpanded || !!this.expandedAriaControls;
 
     const classes = {
+      disabled: this._isDisabled,
       readonly: !!this.readOnlyVariant,
       plain: this.readOnlyVariant === 'plain',
       expanded: isExpanded,
@@ -258,6 +268,20 @@ export class Pfv6TextInput extends LitElement {
     this.#slottedInput = elements.find(el => el instanceof HTMLInputElement) as HTMLInputElement;
 
     if (this.#slottedInput) {
+      // Detect disabled state from slotted input
+      this._isDisabled = this.#slottedInput.disabled;
+
+      // Watch for disabled attribute changes
+      this.#disabledObserver?.disconnect();
+      this.#disabledObserver = new MutationObserver(mutations => {
+        for (const mutation of mutations) {
+          if (mutation.attributeName === 'disabled') {
+            this._isDisabled = (mutation.target as HTMLInputElement).disabled;
+          }
+        }
+      });
+      this.#disabledObserver.observe(this.#slottedInput, { attributes: true, attributeFilter: ['disabled'] });
+
       // Set initial ARIA attributes if needed
       this.#updateInputAriaAttributes();
 
@@ -271,6 +295,10 @@ export class Pfv6TextInput extends LitElement {
         this.#slottedInput.addEventListener('focus', this.#handleInputFocus);
         this.#slottedInput.addEventListener('blur', this.#handleInputBlur);
       }
+    } else {
+      this.#disabledObserver?.disconnect();
+      this.#disabledObserver = null;
+      this._isDisabled = false;
     }
   }
 

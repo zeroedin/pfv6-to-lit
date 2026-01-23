@@ -4,14 +4,6 @@
   box-sizing: border-box;
 }
 
-:where(input) {
-  margin: 0;
-  font-family: inherit;
-  font-size: 100%;
-  line-height: var(--pf-t--global--font--line-height--body, 1.5);
-  color: var(--pf-t--global--text--color--regular, #151515);
-}
-
 :host {
   /* Public CSS API - Component-level variables */
   --pf-v6-c-form-control--ColumnGap: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
@@ -281,9 +273,7 @@
   }
 
   /* Disabled state */
-  &:has(input:disabled),
-  &:has(select:disabled),
-  &:has(textarea:disabled) {
+  &.disabled {
     --pf-v6-c-form-control--BackgroundColor:
       var(--pf-v6-c-form-control--m-disabled--BackgroundColor);
     --pf-v6-c-form-control--Color:
@@ -301,6 +291,10 @@
 ::slotted(input) {
   grid-row: 1 / 2;
   grid-column: 1 / -1;
+  margin: 0;
+  font-family: inherit;
+  font-size: var(--pf-v6-c-form-control--FontSize);
+  line-height: var(--pf-v6-c-form-control--LineHeight);
   padding-block-start: var(--pf-v6-c-form-control--PaddingBlockStart);
   padding-block-end: var(--pf-v6-c-form-control--PaddingBlockEnd);
   padding-inline-start: var(--pf-v6-c-form-control--PaddingInlineStart);
@@ -312,10 +306,6 @@
   border-radius: var(--pf-v6-c-form-control--BorderRadius);
   outline-offset: var(--pf-v6-c-form-control--OutlineOffset);
   text-overflow: ellipsis;
-}
-
-::slotted(input::placeholder) {
-  color: var(--pf-v6-c-form-control--m-placeholder--Color);
 }
 
 /* Success state input padding */
