@@ -113,6 +113,18 @@ export class Pfv6TextArea extends LitElement {
         );
       }
     }
+
+    // Handle autoResize setup/teardown
+    if (changedProperties.has('autoResize')) {
+      if (this._textareaElement) {
+        if (this.autoResize) {
+          this.#setAutoHeight(this._textareaElement);
+          this._textareaElement.addEventListener('input', this.#handleTextareaInput);
+        } else {
+          this._textareaElement.removeEventListener('input', this.#handleTextareaInput);
+        }
+      }
+    }
   }
 
   #handleSlotChange = (event: Event) => {
