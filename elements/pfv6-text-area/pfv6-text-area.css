@@ -4,14 +4,6 @@
   box-sizing: border-box;
 }
 
-:where(textarea) {
-  margin: 0;
-  font-family: inherit;
-  font-size: 100%;
-  line-height: var(--pf-t--global--font--line-height--body, 1.5);
-  color: var(--pf-t--global--text--color--regular, #151515);
-}
-
 :host {
   /* Public CSS API - FormControl variables */
   --pf-v6-c-form-control--ColumnGap: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
@@ -265,6 +257,10 @@
 ::slotted(textarea) {
   grid-row: 1 / 2;
   grid-column: 1 / -1;
+  margin: 0;
+  font-family: inherit;
+  font-size: var(--pf-v6-c-form-control--FontSize);
+  line-height: var(--pf-v6-c-form-control--LineHeight);
   padding-block-start: calc(var(--pf-v6-c-form-control__textarea--PaddingBlockStart) - var(--pf-v6-c-form-control--textarea--PaddingBlockStart--offset)) !important;
   padding-block-end: calc(var(--pf-v6-c-form-control__textarea--PaddingBlockEnd) - var(--pf-v6-c-form-control--textarea--PaddingBlockEnd--offset)) !important;
   padding-inline-start: calc(var(--pf-v6-c-form-control__textarea--PaddingInlineStart) - var(--pf-v6-c-form-control--textarea--PaddingInlineStart--offset)) !important;
