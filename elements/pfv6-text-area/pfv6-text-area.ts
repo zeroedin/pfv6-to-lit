@@ -172,7 +172,6 @@ export class Pfv6TextArea extends LitElement {
         textarea.addEventListener('input', this.#handleTextareaInput);
       }
     } else {
-      console.error('pfv6-text-area: requires a <textarea> element in the textarea slot');
       // Clean up previous textarea
       if (this._textareaElement) {
         this._textareaElement.removeEventListener('input', this.#handleTextareaInput);

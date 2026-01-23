@@ -161,27 +161,27 @@ For **every** React callback prop, create tests validating:
 describe('expand event', function() {
   it('dispatches on expansion', async function() {
     const el = await fixture<Pfv6Card>(html`<pfv6-card></pfv6-card>`);
-    const handler = sinon.spy();
-    el.addEventListener('expand', handler);
-    
+    let eventFired = false;
+    el.addEventListener('expand', () => { eventFired = true; });
+
     // Trigger expansion
     const button = el.shadowRoot!.querySelector('button');
     await userEvent.click(button);
-    
-    expect(handler).to.have.been.calledOnce;
+
+    expect(eventFired).to.be.true;
   });
 
   it('event contains correct data', async function() {
     const el = await fixture<Pfv6Card>(html`<pfv6-card id="test"></pfv6-card>`);
-    let capturedEvent;
-    el.addEventListener('expand', (e) => { capturedEvent = e; });
-    
+    let capturedEvent: Pfv6ExpandEvent | undefined;
+    el.addEventListener('expand', (e) => { capturedEvent = e as Pfv6ExpandEvent; });
+
     // Trigger expansion
     const button = el.shadowRoot!.querySelector('button');
     await userEvent.click(button);
-    
+
     expect(capturedEvent).to.be.an.instanceof(Pfv6ExpandEvent);
-    expect(capturedEvent.expanded).to.be.true; // Data as class field
+    expect(capturedEvent!.expanded).to.be.true; // Data as class field
     // NEVER: expect(capturedEvent.detail.expanded) - we don't use CustomEvent
   });
 });
@@ -286,6 +286,7 @@ describe('sub-components', function() {
 - Use Jest-style assertions (`.toBe`, `.toBeDefined`)
 - Test private/internal implementation details
 - Test CSS classes directly (those are internal)
+- Use sinon for spies/stubs - use native event capture patterns instead
 
 ### Validation Checklist
 
