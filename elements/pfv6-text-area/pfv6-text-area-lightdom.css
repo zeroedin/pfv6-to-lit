@@ -1,0 +1,12 @@
+/**
+ * Light DOM styles for pfv6-text-area
+ *
+ * These styles must be applied in the light DOM because shadow DOM CSS
+ * cannot style pseudo-elements like ::placeholder on slotted elements.
+ *
+ * Include this stylesheet in your application or demo to style placeholders.
+ */
+
+pfv6-text-area textarea::placeholder {
+  color: var(--pf-v6-c-form-control--m-placeholder--Color, #4d4d4d);
+}

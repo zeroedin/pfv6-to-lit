@@ -282,10 +282,6 @@
   scrollbar-gutter: stable;
 }
 
-::slotted(textarea::placeholder) {
-  color: var(--pf-v6-c-form-control--m-placeholder--Color);
-}
-
 #utilities {
   display: flex;
   flex-wrap: nowrap;

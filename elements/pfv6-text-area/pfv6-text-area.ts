@@ -224,18 +224,16 @@ export class Pfv6TextArea extends LitElement {
   }
 
   render() {
-    const orientationClass =
-      this.resizeOrientation !== 'none' ?
-        `resize-${this.resizeOrientation}`
-        : '';
-
     const classes = {
-      disabled: this._isDisabled,
-      readonly: !!this.readOnlyVariant,
-      plain: this.readOnlyVariant === 'plain',
-      success: this.validated === 'success',
-      warning: this.validated === 'warning',
-      error: this.validated === 'error',
+      'disabled': this._isDisabled,
+      'readonly': !!this.readOnlyVariant,
+      'plain': this.readOnlyVariant === 'plain',
+      'success': this.validated === 'success',
+      'warning': this.validated === 'warning',
+      'error': this.validated === 'error',
+      'resize-horizontal': this.resizeOrientation === 'horizontal',
+      'resize-vertical': this.resizeOrientation === 'vertical',
+      'resize-both': this.resizeOrientation === 'both',
     };
 
     const hasStatusIcon = ['success', 'error', 'warning'].includes(this.validated);
@@ -248,7 +246,7 @@ export class Pfv6TextArea extends LitElement {
     /* eslint-enable @stylistic/max-len */
 
     return html`
-      <span id="container" class="${orientationClass} ${classMap(classes)}">
+      <span id="container" class=${classMap(classes)}>
         <slot name="textarea" @slotchange=${this.#handleSlotChange}></slot>
         ${hasStatusIcon ? html`
           <span id="utilities">

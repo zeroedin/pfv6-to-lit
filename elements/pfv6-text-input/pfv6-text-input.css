@@ -312,10 +312,6 @@
   text-overflow: ellipsis;
 }
 
-::slotted(input::placeholder) {
-  color: var(--pf-v6-c-form-control--m-placeholder--Color);
-}
-
 /* Success state input padding */
 #container.success ::slotted(input) {
   padding-inline-end: var(--pf-v6-c-form-control__input--m-success--PaddingInlineEnd);
