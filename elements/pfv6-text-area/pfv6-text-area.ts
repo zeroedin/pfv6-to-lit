@@ -1,10 +1,9 @@
 import { LitElement, html } from 'lit';
-import type { PropertyValues, TemplateResult } from 'lit';
+import type { PropertyValues } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
 import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './pfv6-text-area.css';
 
 /**
@@ -199,49 +198,6 @@ export class Pfv6TextArea extends LitElement {
     }
   }
 
-  #renderStatusIcon(): TemplateResult | null {
-    const hasStatusIcon = ['success', 'error', 'warning'].includes(this.validated);
-
-    if (!hasStatusIcon) {
-      return null;
-    }
-
-    // Icon SVG paths from PatternFly icons
-    /* eslint-disable @stylistic/max-len */
-    const iconPaths = {
-      success: 'M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1.5 14.5L6 12l1.5-1.5L11 14l6.5-6.5L19 9l-8.5 8.5z',
-      warning: 'M12 2L2 22h20L12 2zm-1 7h2v6h-2V9zm0 8h2v2h-2v-2z',
-      error: 'M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1 5h2v6h-2V7zm0 8h2v2h-2v-2z',
-    };
-    /* eslint-enable @stylistic/max-len */
-
-    const validatedState = this.validated as 'success' | 'warning' | 'error';
-    const iconPath = iconPaths[validatedState];
-    const iconLabel = {
-      success: 'Success',
-      warning: 'Warning',
-      error: 'Error',
-    }[validatedState];
-
-    return html`
-      <span id="utilities">
-        <span id="icon" class="status">
-          <svg
-            fill="currentColor"
-            height="1em"
-            width="1em"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            role="img"
-            aria-label=${ifDefined(iconLabel)}
-          >
-            <path d=${iconPath}></path>
-          </svg>
-        </span>
-      </span>
-    `;
-  }
-
   render() {
     const orientation =
       this.resizeOrientation !== 'none' ?
@@ -258,10 +214,33 @@ export class Pfv6TextArea extends LitElement {
       [`${orientation}`]: !!orientation,
     };
 
+    const hasStatusIcon = ['success', 'error', 'warning'].includes(this.validated);
+    /* eslint-disable @stylistic/max-len */
+    const iconPaths: Record<string, string> = {
+      success: 'M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1.5 14.5L6 12l1.5-1.5L11 14l6.5-6.5L19 9l-8.5 8.5z',
+      warning: 'M12 2L2 22h20L12 2zm-1 7h2v6h-2V9zm0 8h2v2h-2v-2z',
+      error: 'M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1 5h2v6h-2V7zm0 8h2v2h-2v-2z',
+    };
+    /* eslint-enable @stylistic/max-len */
+
     return html`
       <span id="container" class=${classMap(classes)}>
         <slot name="textarea" @slotchange=${this.#handleSlotChange}></slot>
-        ${this.#renderStatusIcon()}
+        ${hasStatusIcon ? html`
+          <span id="utilities">
+            <span id="icon" class="status">
+              <svg
+                fill="currentColor"
+                height="1em"
+                width="1em"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d=${iconPaths[this.validated]}></path>
+              </svg>
+            </span>
+          </span>
+        ` : null}
       </span>
     `;
   }
