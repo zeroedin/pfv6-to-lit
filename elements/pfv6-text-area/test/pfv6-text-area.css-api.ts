@@ -317,24 +317,6 @@ const cssApiTests = [
     demo: 'basic'
   },
 
-  // Expanded states
-  {
-    name: '--pf-v6-c-form-control--m-expanded--after--BorderWidth',
-    defaultValue: 'var(--pf-t--global--border--width--control--clicked, 2px)',
-    resolvedValue: '2px',
-    type: 'size',
-    testValue: '50px',
-    demo: 'basic'
-  },
-  {
-    name: '--pf-v6-c-form-control--m-expanded--after--BorderColor',
-    defaultValue: 'var(--pf-t--global--border--color--clicked, #0066cc)',
-    resolvedValue: '#0066cc',
-    type: 'color',
-    testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
-  },
-
   // Placeholder
   {
     name: '--pf-v6-c-form-control--m-placeholder--Color',

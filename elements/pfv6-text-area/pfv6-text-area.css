@@ -56,10 +56,6 @@
   --pf-v6-c-form-control--m-warning--hover--after--BorderColor: var(--pf-t--global--border--color--status--warning--hover, #ffcc17);
   --pf-v6-c-form-control--m-error--hover--after--BorderColor: var(--pf-t--global--border--color--status--danger--hover, #fbbea8);
 
-  /* Expanded */
-  --pf-v6-c-form-control--m-expanded--after--BorderWidth: var(--pf-t--global--border--width--control--clicked, 2px);
-  --pf-v6-c-form-control--m-expanded--after--BorderColor: var(--pf-t--global--border--color--clicked, #0066cc);
-
   /* Placeholder */
   --pf-v6-c-form-control--m-placeholder--Color: var(--pf-t--global--text--color--placeholder, #4d4d4d);
   --pf-v6-c-form-control--m-placeholder--child--Color: var(--pf-t--global--text--color--regular, #151515);
