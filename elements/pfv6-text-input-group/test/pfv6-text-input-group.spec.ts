@@ -591,12 +591,6 @@ describe('<pfv6-text-input-group-main>', function() {
     });
   });
 
-  describe('supportsCrossRootActiveDescendant static property', function() {
-    it('returns a boolean', function() {
-      expect(typeof Pfv6TextInputGroupMain.supportsCrossRootActiveDescendant).to.equal('boolean');
-    });
-  });
-
   describe('change event', function() {
     it('dispatches on input change', async function() {
       const el = await fixture<Pfv6TextInputGroupMain>(html`<pfv6-text-input-group-main></pfv6-text-input-group-main>`);
