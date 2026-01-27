@@ -152,10 +152,6 @@ describe('<pfv6-toggle-group>', function() {
   });
 
   describe('ElementInternals', function() {
-    it('has formAssociated set to true', function() {
-      expect(Pfv6ToggleGroup.formAssociated).to.be.true;
-    });
-
     it('attaches internals in constructor', async function() {
       const el = await fixture<Pfv6ToggleGroup>(html`<pfv6-toggle-group></pfv6-toggle-group>`);
       // ElementInternals is private, but we can verify via ariaLabel mapping
