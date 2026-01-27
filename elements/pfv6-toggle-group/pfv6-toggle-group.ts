@@ -74,13 +74,9 @@ export class Pfv6ToggleGroup extends LitElement {
       this.internals.ariaLabel = this.accessibleLabel ?? null;
     }
 
-    // Only sync disabled state when areAllGroupsDisabled changes from a previous boolean value
-    // Skip initial render (when old value is undefined) to preserve individual is-disabled attributes
+    // Sync disabled state to child items whenever areAllGroupsDisabled changes
     if (changedProperties.has('areAllGroupsDisabled')) {
-      const oldValue = changedProperties.get('areAllGroupsDisabled');
-      if (typeof oldValue === 'boolean') {
-        this.#updateItemsDisabledState();
-      }
+      this.#updateItemsDisabledState();
     }
   }
 
