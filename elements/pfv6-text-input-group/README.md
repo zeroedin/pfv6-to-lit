@@ -114,13 +114,15 @@ The component handles:
 
 ### Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
-| `change` | `{ value: string, originalEvent: Event }` | Input value changed |
+| Event | Properties | Description |
+|-------|------------|-------------|
+| `change` | `e.value: string`, `e.originalEvent: Event` | Input value changed |
 | `focus` | — | Input focused |
 | `blur` | — | Input blurred |
 | `open` | — | Listbox opened (combobox mode) |
 | `close` | — | Listbox closed (combobox mode) |
+
+> **Note:** The `change` event is a `Pfv6TextInputGroupMainChangeEvent` which extends `Event`. Access properties directly on the event object (`e.value`), not via `e.detail`.
 
 ## Testing
 
