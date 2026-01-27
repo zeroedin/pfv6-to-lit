@@ -156,6 +156,9 @@ export class Pfv6TextInputGroupMain extends LitElement {
   @state()
   private hasIcon = false;
 
+  @state()
+  private _formDisabled = false;
+
   /** List of option elements from light DOM */
   get options(): ComboboxOption[] {
     if (isServer) {
@@ -185,8 +188,8 @@ export class Pfv6TextInputGroupMain extends LitElement {
     this.value = this.#initialValue;
   }
 
-  formDisabledCallback(_disabled: boolean): void {
-    this.requestUpdate();
+  formDisabledCallback(disabled: boolean): void {
+    this._formDisabled = disabled;
   }
 
   #requestShowListbox(): void | boolean {
@@ -231,7 +234,7 @@ export class Pfv6TextInputGroupMain extends LitElement {
   }
 
   render() {
-    const isDisabled = this._context?.isDisabled ?? false;
+    const isDisabled = this._formDisabled || (this._context?.isDisabled ?? false);
     const validated = this._context?.validated;
     const showStatusIcon = !!validated;
     const statusIconPath = validated ? STATUS_ICON_PATHS[validated] : '';
