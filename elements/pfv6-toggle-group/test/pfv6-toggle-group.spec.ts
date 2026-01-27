@@ -76,10 +76,13 @@ describe('<pfv6-toggle-group>', function() {
       `);
       await el.updateComplete;
 
+      // Check that buttons inside items are disabled via context
       const items = el.querySelectorAll('pfv6-toggle-group-item');
-      items.forEach(item => {
-        expect(item.hasAttribute('is-disabled')).to.be.true;
-      });
+      for (const item of items) {
+        await item.updateComplete;
+        const button = item.shadowRoot!.querySelector('button');
+        expect(button?.disabled).to.be.true;
+      }
     });
 
     it('enables all child items when set to false', async function() {
@@ -94,10 +97,13 @@ describe('<pfv6-toggle-group>', function() {
       el.areAllGroupsDisabled = false;
       await el.updateComplete;
 
+      // Check that buttons inside items are enabled via context
       const items = el.querySelectorAll('pfv6-toggle-group-item');
-      items.forEach(item => {
-        expect(item.hasAttribute('is-disabled')).to.be.false;
-      });
+      for (const item of items) {
+        await item.updateComplete;
+        const button = item.shadowRoot!.querySelector('button');
+        expect(button?.disabled).to.be.false;
+      }
     });
   });
 
@@ -628,10 +634,13 @@ describe('integration tests', function() {
       el.areAllGroupsDisabled = true;
       await el.updateComplete;
 
+      // Check that buttons inside items are disabled via context
       const items = el.querySelectorAll('pfv6-toggle-group-item');
-      items.forEach(item => {
-        expect(item.hasAttribute('is-disabled')).to.be.true;
-      });
+      for (const item of items) {
+        await item.updateComplete;
+        const button = item.shadowRoot!.querySelector('button');
+        expect(button?.disabled).to.be.true;
+      }
     });
 
     it('compact styling applies to group', async function() {

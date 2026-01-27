@@ -5,6 +5,7 @@ import { createContextWithRoot } from '@patternfly/pfe-core/functions/context.js
  */
 export interface ToggleGroupContext {
   isCompact: boolean;
+  areAllGroupsDisabled: boolean;
 }
 
 /**

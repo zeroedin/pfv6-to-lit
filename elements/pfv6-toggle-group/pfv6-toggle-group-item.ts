@@ -91,8 +91,13 @@ export class Pfv6ToggleGroupItem extends LitElement {
   @property({ type: String, attribute: 'button-id' })
   buttonId?: string;
 
+  /** Computed disabled state: individually disabled OR group disabled via context */
+  get #effectiveDisabled(): boolean {
+    return this.isDisabled || (this._toggleGroupContext?.areAllGroupsDisabled ?? false);
+  }
+
   #handleClick = () => {
-    if (this.isDisabled) {
+    if (this.#effectiveDisabled) {
       return;
     }
 
@@ -140,7 +145,7 @@ export class Pfv6ToggleGroupItem extends LitElement {
           aria-pressed=${this.isSelected ? 'true' : 'false'}
           @click=${this.#handleClick}
           aria-label=${ifDefined(this.accessibleLabel)}
-          ?disabled=${this.isDisabled}
+          ?disabled=${this.#effectiveDisabled}
           id=${ifDefined(this.buttonId)}
         >
           ${this.iconPosition === 'start' ? (

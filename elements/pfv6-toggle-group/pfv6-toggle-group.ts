@@ -51,6 +51,7 @@ export class Pfv6ToggleGroup extends LitElement {
   @state()
   protected _context: ToggleGroupContext = {
     isCompact: false,
+    areAllGroupsDisabled: false,
   };
 
   constructor() {
@@ -60,9 +61,14 @@ export class Pfv6ToggleGroup extends LitElement {
 
   protected override willUpdate(changedProperties: PropertyValues): void {
     // Always update context on first render or when relevant properties change
-    if (!this.hasUpdated || changedProperties.has('isCompact')) {
+    if (
+      !this.hasUpdated ||
+      changedProperties.has('isCompact') ||
+      changedProperties.has('areAllGroupsDisabled')
+    ) {
       this._context = {
         isCompact: this.isCompact,
+        areAllGroupsDisabled: this.areAllGroupsDisabled,
       };
     }
   }
@@ -73,28 +79,6 @@ export class Pfv6ToggleGroup extends LitElement {
     if (changedProperties.has('accessibleLabel')) {
       this.internals.ariaLabel = this.accessibleLabel ?? null;
     }
-
-    // Sync disabled state to child items whenever areAllGroupsDisabled changes
-    if (changedProperties.has('areAllGroupsDisabled')) {
-      this.#updateItemsDisabledState();
-    }
-  }
-
-  #updateItemsDisabledState() {
-    const items = this.querySelectorAll('pfv6-toggle-group-item');
-    items.forEach(item => {
-      if (this.areAllGroupsDisabled) {
-        // Mark that this was disabled by the group, not individually
-        item.setAttribute('is-disabled', '');
-        item.setAttribute('data-group-disabled', '');
-      } else {
-        // Only remove if it was disabled by the group, not individually
-        if (item.hasAttribute('data-group-disabled')) {
-          item.removeAttribute('is-disabled');
-          item.removeAttribute('data-group-disabled');
-        }
-      }
-    });
   }
 
   render() {
