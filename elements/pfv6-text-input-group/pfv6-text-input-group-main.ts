@@ -179,9 +179,9 @@ export class Pfv6TextInputGroupMain extends LitElement {
     if (changed.has('value')) {
       this.#internals.setFormValue(this.value);
     }
-    if (changed.has('_context')) {
-      this.#combobox.disabled = this._context?.isDisabled ?? false;
-    }
+    // Sync combobox disabled state from context and form state
+    const isDisabled = this._formDisabled || (this._context?.isDisabled ?? false);
+    this.#combobox.disabled = isDisabled;
   }
 
   formResetCallback(): void {
