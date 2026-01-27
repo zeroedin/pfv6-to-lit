@@ -897,6 +897,151 @@ describe('<pfv6-text-input-group-main>', function() {
     });
   });
 
+  describe('combobox behavior', function() {
+    it('dispatches open event when listbox opens', async function() {
+      const el = await fixture<Pfv6TextInputGroupMain>(html`
+        <pfv6-text-input-group-main>
+          <test-option slot="options" value="option1">Option 1</test-option>
+        </pfv6-text-input-group-main>
+      `);
+      let openFired = false;
+      el.addEventListener('open', () => {
+        openFired = true;
+      });
+
+      el.expanded = true;
+      await el.updateComplete;
+
+      expect(openFired).to.be.true;
+    });
+
+    it('dispatches close event when listbox closes', async function() {
+      const el = await fixture<Pfv6TextInputGroupMain>(html`
+        <pfv6-text-input-group-main expanded>
+          <test-option slot="options" value="option1">Option 1</test-option>
+        </pfv6-text-input-group-main>
+      `);
+      await el.updateComplete;
+
+      let closeFired = false;
+      el.addEventListener('close', () => {
+        closeFired = true;
+      });
+
+      el.expanded = false;
+      await el.updateComplete;
+
+      expect(closeFired).to.be.true;
+    });
+
+    it('listbox container is hidden when not expanded', async function() {
+      const el = await fixture<Pfv6TextInputGroupMain>(html`
+        <pfv6-text-input-group-main>
+          <test-option slot="options" value="option1">Option 1</test-option>
+        </pfv6-text-input-group-main>
+      `);
+      await el.updateComplete;
+
+      const listboxContainer = el.shadowRoot!.querySelector('#listbox-container');
+      expect(listboxContainer).to.exist;
+      expect(listboxContainer!.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('listbox container is visible when expanded', async function() {
+      const el = await fixture<Pfv6TextInputGroupMain>(html`
+        <pfv6-text-input-group-main expanded>
+          <test-option slot="options" value="option1">Option 1</test-option>
+        </pfv6-text-input-group-main>
+      `);
+      await el.updateComplete;
+
+      const listboxContainer = el.shadowRoot!.querySelector('#listbox-container');
+      expect(listboxContainer).to.exist;
+      expect(listboxContainer!.hasAttribute('hidden')).to.be.false;
+    });
+
+    it('renders listbox with role="listbox"', async function() {
+      const el = await fixture<Pfv6TextInputGroupMain>(html`
+        <pfv6-text-input-group-main>
+          <test-option slot="options" value="option1">Option 1</test-option>
+        </pfv6-text-input-group-main>
+      `);
+      await el.updateComplete;
+
+      const listbox = el.shadowRoot!.querySelector('#listbox');
+      expect(listbox).to.exist;
+      expect(listbox!.getAttribute('role')).to.equal('listbox');
+    });
+
+    it('listbox has accessible label', async function() {
+      const el = await fixture<Pfv6TextInputGroupMain>(html`
+        <pfv6-text-input-group-main accessible-label="Search options">
+          <test-option slot="options" value="option1">Option 1</test-option>
+        </pfv6-text-input-group-main>
+      `);
+      await el.updateComplete;
+
+      const listbox = el.shadowRoot!.querySelector('#listbox');
+      expect(listbox!.getAttribute('aria-label')).to.equal('Search options');
+    });
+
+    it('options getter returns TestOption elements with value property', async function() {
+      const el = await fixture<Pfv6TextInputGroupMain>(html`
+        <pfv6-text-input-group-main>
+          <test-option slot="options" value="first">First</test-option>
+          <test-option slot="options" value="second">Second</test-option>
+          <test-option slot="options" value="third">Third</test-option>
+        </pfv6-text-input-group-main>
+      `);
+
+      expect(el.options.length).to.equal(3);
+      expect(el.options[0].value).to.equal('first');
+      expect(el.options[1].value).to.equal('second');
+      expect(el.options[2].value).to.equal('third');
+    });
+
+    it('does not render listbox when no options are slotted', async function() {
+      const el = await fixture<Pfv6TextInputGroupMain>(html`
+        <pfv6-text-input-group-main></pfv6-text-input-group-main>
+      `);
+      await el.updateComplete;
+
+      const listboxContainer = el.shadowRoot!.querySelector('#listbox-container');
+      expect(listboxContainer).to.not.exist;
+    });
+
+    it('combobox is disabled when form-level disabled', async function() {
+      const el = await fixture<Pfv6TextInputGroupMain>(html`
+        <pfv6-text-input-group-main>
+          <test-option slot="options" value="option1">Option 1</test-option>
+        </pfv6-text-input-group-main>
+      `);
+
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+
+      const input = el.shadowRoot!.querySelector('input#input') as HTMLInputElement;
+      expect(input.disabled).to.be.true;
+    });
+
+    it('combobox is disabled when context isDisabled is true', async function() {
+      const el = await fixture<Pfv6TextInputGroup>(html`
+        <pfv6-text-input-group is-disabled>
+          <pfv6-text-input-group-main>
+            <test-option slot="options" value="option1">Option 1</test-option>
+          </pfv6-text-input-group-main>
+        </pfv6-text-input-group>
+      `);
+      await el.updateComplete;
+      const main = el.querySelector('pfv6-text-input-group-main') as Pfv6TextInputGroupMain;
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await main.updateComplete;
+
+      const input = main.shadowRoot!.querySelector('input#input') as HTMLInputElement;
+      expect(input.disabled).to.be.true;
+    });
+  });
+
   describe('focus event', function() {
     it('dispatches focus event when input receives focus', async function() {
       const el = await fixture<Pfv6TextInputGroupMain>(html`<pfv6-text-input-group-main></pfv6-text-input-group-main>`);
