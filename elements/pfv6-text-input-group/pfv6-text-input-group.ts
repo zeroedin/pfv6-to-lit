@@ -49,6 +49,9 @@ export class Pfv6TextInputGroup extends LitElement {
     validated: undefined,
   };
 
+  @state()
+  private _hasUtilities = false;
+
   willUpdate(changed: PropertyValues<this>): void {
     if (changed.has('isDisabled') || changed.has('validated')) {
       this._context = {
@@ -58,6 +61,12 @@ export class Pfv6TextInputGroup extends LitElement {
     }
   }
 
+  #handleSlotChange(e: Event): void {
+    const slot = e.target as HTMLSlotElement;
+    this._hasUtilities = slot.assignedElements()
+        .some(el => el.localName === 'pfv6-text-input-group-utilities');
+  }
+
   render() {
     const classes = {
       disabled: this.isDisabled,
@@ -65,11 +74,12 @@ export class Pfv6TextInputGroup extends LitElement {
       success: this.validated === 'success',
       warning: this.validated === 'warning',
       error: this.validated === 'error',
+      'has-utilities': this._hasUtilities,
     };
 
     return html`
       <div id="container" class=${classMap(classes)}>
-        <slot></slot>
+        <slot @slotchange=${this.#handleSlotChange}></slot>
       </div>
     `;
   }

@@ -128,7 +128,7 @@
     --pf-v6-c-text-input-group__text-input--PaddingInlineEnd: var(--pf-v6-c-text-input-group--status__text-input--PaddingInlineEnd);
   }
 
-  &:has(::slotted(pfv6-text-input-group-utilities)) {
+  &.has-utilities {
     --pf-v6-c-text-input-group__icon--m-status--InsetInlineEnd: var(--pf-v6-c-text-input-group--utilities--icon--m-status--InsetInlineEnd);
     --pf-v6-c-text-input-group--status__text-input--PaddingInlineEnd: var(--pf-v6-c-text-input-group--utilities--status__text-input--PaddingInlineEnd);
   }
