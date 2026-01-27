@@ -149,6 +149,10 @@ export class Pfv6TextInputGroupMain extends LitElement {
   @property({ type: String })
   name?: string;
 
+  /** Autocomplete attribute for the input */
+  @property({ type: String })
+  autocomplete?: string;
+
   /** Whether the listbox is expanded. Only applies when options are slotted. */
   @property({ type: Boolean, reflect: true })
   expanded = false;
@@ -273,6 +277,7 @@ export class Pfv6TextInputGroupMain extends LitElement {
             .value=${this.value}
             placeholder=${ifDefined(this.placeholder)}
             name=${ifDefined(this.name)}
+            autocomplete=${ifDefined(this.autocomplete)}
             @input=${this.#handleChange}
             @focus=${this.#handleFocus}
             @blur=${this.#handleBlur}
