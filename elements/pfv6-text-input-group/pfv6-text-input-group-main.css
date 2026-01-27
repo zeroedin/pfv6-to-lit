@@ -1,0 +1,100 @@
+/* stylelint-disable @stylistic/max-line-length -- PatternFly CSS variable names */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(input) {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: var(--pf-t--global--text--color--regular, #151515);
+}
+
+:host {
+  display: block;
+}
+
+#label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+#container {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: var(--pf-v6-c-text-input-group__main--RowGap) var(--pf-v6-c-text-input-group__main--ColumnGap);
+  min-width: 0;
+
+  &.icon {
+    --pf-v6-c-text-input-group__text-input--PaddingInlineStart: var(--pf-v6-c-text-input-group__main--m-icon__text-input--PaddingInlineStart);
+  }
+
+  & > ::slotted(:first-child:not(pfv6-text-input-group-main)) {
+    margin-inline-start: var(--pf-v6-c-text-input-group__main--first-child--not--text-input--MarginInlineStart);
+  }
+}
+
+#text {
+  position: relative;
+  display: inline-grid;
+  flex: 1;
+  grid-template-areas: "text-input";
+  grid-template-columns: 1fr;
+}
+
+#hint-input,
+#input {
+  grid-area: text-input;
+}
+
+#hint-input {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: relative;
+  width: 100%;
+  min-width: var(--pf-v6-c-text-input-group__text-input--MinWidth);
+  padding-block-start: var(--pf-v6-c-text-input-group__text-input--PaddingBlockStart);
+  padding-block-end: var(--pf-v6-c-text-input-group__text-input--PaddingBlockEnd);
+  padding-inline-start: var(--pf-v6-c-text-input-group__text-input--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-text-input-group__text-input--PaddingInlineEnd);
+  background-color: var(--pf-v6-c-text-input-group__text-input--BackgroundColor);
+  border: 0;
+  outline-offset: var(--pf-v6-c-text-input-group__text-input--OutlineOffset);
+
+  &.hint {
+    color: var(--pf-v6-c-text-input-group__text-input--m-hint--Color);
+  }
+}
+
+#input {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: relative;
+  width: 100%;
+  min-width: var(--pf-v6-c-text-input-group__text-input--MinWidth);
+  padding-block-start: var(--pf-v6-c-text-input-group__text-input--PaddingBlockStart);
+  padding-block-end: var(--pf-v6-c-text-input-group__text-input--PaddingBlockEnd);
+  padding-inline-start: var(--pf-v6-c-text-input-group__text-input--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-text-input-group__text-input--PaddingInlineEnd);
+  color: var(--pf-v6-c-text-input-group__text-input--Color);
+  background-color: var(--pf-v6-c-text-input-group__text-input--BackgroundColor);
+  border: 0;
+  outline-offset: var(--pf-v6-c-text-input-group__text-input--OutlineOffset);
+
+  &::placeholder {
+    color: var(--pf-v6-c-text-input-group__text-input--placeholder--Color);
+  }
+}
