@@ -185,10 +185,8 @@ export class Pfv6TextInputGroupMain extends LitElement {
     this.value = this.#initialValue;
   }
 
-  formDisabledCallback(disabled: boolean): void {
-    if (disabled) {
-      this.requestUpdate();
-    }
+  formDisabledCallback(_disabled: boolean): void {
+    this.requestUpdate();
   }
 
   #requestShowListbox(): void | boolean {
