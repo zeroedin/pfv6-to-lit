@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="/elements/pfv6-toggle-group/pfv6-toggle-group-lightdom.css">
+<pfv6-toggle-group id="compact-toggle-group" is-compact accessible-label="Compact variant toggle group">
+  <pfv6-toggle-group-item text="Option 1" button-id="toggle-group-compact-1"></pfv6-toggle-group-item>
+  <pfv6-toggle-group-item text="Option 2" button-id="toggle-group-compact-2"></pfv6-toggle-group-item>
+  <pfv6-toggle-group-item text="Option 3" is-disabled></pfv6-toggle-group-item>
+</pfv6-toggle-group>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-toggle-group/pfv6-toggle-group.js';
+
+  const toggleGroup = document.getElementById('compact-toggle-group');
+  const items = toggleGroup.querySelectorAll('pfv6-toggle-group-item');
+
+  items.forEach(item => {
+    item.addEventListener('change', (e) => {
+      item.isSelected = e.selected;
+    });
+  });
+</script>

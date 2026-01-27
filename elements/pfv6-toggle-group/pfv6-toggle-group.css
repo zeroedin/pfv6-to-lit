@@ -1,0 +1,29 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+}
+
+#container {
+  display: flex;
+}
+
+::slotted(pfv6-toggle-group-item) {
+  /* Set private variables for communication with child components */
+  --_toggle-group-item-margin-inline-start: calc(-1 * var(--pf-t--global--border--width--control--default, 1px));
+}
+
+::slotted(pfv6-toggle-group-item:first-child) {
+  --_toggle-group-item-first-border-start-start-radius: var(--pf-t--global--border--radius--tiny, 4px);
+  --_toggle-group-item-first-border-end-start-radius: var(--pf-t--global--border--radius--tiny, 4px);
+  --_toggle-group-item-margin-inline-start: 0;
+}
+
+::slotted(pfv6-toggle-group-item:last-child) {
+  --_toggle-group-item-last-border-start-end-radius: var(--pf-t--global--border--radius--tiny, 4px);
+  --_toggle-group-item-last-border-end-end-radius: var(--pf-t--global--border--radius--tiny, 4px);
+}
