@@ -1,0 +1,24 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: inline-block;
+}
+
+#container {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: var(--pf-v6-c-text-input-group__icon--InsetInlineStart);
+  font-size: var(--pf-v6-c-text-input-group__icon--FontSize);
+  color: var(--pf-v6-c-text-input-group__icon--Color);
+  transform: translateY(var(--pf-v6-c-text-input-group__icon--TranslateY));
+
+  &.status {
+    inset-inline-start: auto;
+    inset-inline-end: var(--pf-v6-c-text-input-group__icon--m-status--InsetInlineEnd);
+    color: var(--pf-v6-c-text-input-group__icon--m-status--Color);
+  }
+}
