@@ -212,6 +212,10 @@
   display: inline-block;
 }
 
+:host([is-full-width]) {
+  width: 100%;
+}
+
 /* Container (button or div) */
 #container {
   position: relative;
@@ -543,6 +547,10 @@
     & #controls {
       display: flex;
       align-items: stretch;
+    }
+
+    & ::slotted(pfv6-text-input-group) {
+      flex: 1;
     }
   }
 }
