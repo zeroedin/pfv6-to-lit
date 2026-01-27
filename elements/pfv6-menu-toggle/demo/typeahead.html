@@ -23,8 +23,8 @@
   const clearButton = utilities.querySelector('pfv6-button');
 
   // Show utilities when input has value
-  inputMain.addEventListener('change', (e) => {
-    const hasValue = e.value && e.value.length > 0;
+  inputMain.addEventListener('input', () => {
+    const hasValue = inputMain.value && inputMain.value.length > 0;
     utilities.style.display = hasValue ? '' : 'none';
   });
 
