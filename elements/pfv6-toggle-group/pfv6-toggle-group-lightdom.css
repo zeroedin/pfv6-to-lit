@@ -1,9 +1,3 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
 /* Sibling combinator for consecutive selected items */
 pfv6-toggle-group {
   /* For consecutive selected items, turn the left border back to what it was */
