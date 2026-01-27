@@ -176,7 +176,7 @@ export class Pfv6TextInputGroupMain extends LitElement {
     if (changed.has('value')) {
       this.#internals.setFormValue(this.value);
     }
-    if (changed.has('expanded')) {
+    if (changed.has('_context')) {
       this.#combobox.disabled = this._context?.isDisabled ?? false;
     }
   }
