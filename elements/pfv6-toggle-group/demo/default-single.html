@@ -14,7 +14,7 @@
   let selectedId = '';
 
   items.forEach(item => {
-    item.addEventListener('change', (e) => {
+    item.addEventListener('change', () => {
       const clickedId = item.buttonId;
 
       // Deselect previously selected item
@@ -25,9 +25,9 @@
         }
       }
 
-      // Update current item
-      item.isSelected = e.selected;
-      selectedId = e.selected ? clickedId : '';
+      // Always select clicked item (single selection doesn't toggle off)
+      item.isSelected = true;
+      selectedId = clickedId;
     });
   });
 </script>
