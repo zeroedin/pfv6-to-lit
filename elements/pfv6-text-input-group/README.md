@@ -73,25 +73,39 @@ LitElement implementation of PatternFly's TextInputGroup component.
 
 ### Built-in Combobox Support
 
-Unlike React, the Lit component has integrated combobox/autocomplete via `ComboboxController`:
+Unlike React (which composes autocomplete using separate `Menu`/`Popper` components), the Lit component has integrated combobox/autocomplete via `ComboboxController`:
 
 ```html
 <pfv6-text-input-group>
   <pfv6-text-input-group-main placeholder="Search...">
-    <my-option slot="options" value="Option 1">Option 1</my-option>
-    <my-option slot="options" value="Option 2">Option 2</my-option>
+    <pfv6-select-option slot="options" value="Option 1">Option 1</pfv6-select-option>
+    <pfv6-select-option slot="options" value="Option 2">Option 2</pfv6-select-option>
   </pfv6-text-input-group-main>
 </pfv6-text-input-group>
 ```
 
-Option elements must implement:
-- `value: string` — the form value
-- `selected: boolean` — whether selected
-- `active: boolean` — whether keyboard-focused
+> **Note:** The combobox functionality requires `pfv6-select-option` (from the Select component) to be converted. Until then, you must provide a custom element that implements the required interface below.
 
-Events:
-- `open` — listbox opened
-- `close` — listbox closed
+#### Option Element Interface
+
+Option elements slotted into `slot="options"` must implement these DOM properties (not just attributes):
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `value` | `string` | The form value for this option |
+| `selected` | `boolean` | Whether the option is currently selected |
+| `active` | `boolean` | Whether the option is keyboard-focused (active descendant) |
+
+Plain HTML elements like `<div value="...">` will not work because `value` is an attribute, not a DOM property. Use `pfv6-select-option` or a custom element.
+
+#### Combobox Events
+
+| Event | Description |
+|-------|-------------|
+| `open` | Listbox opened |
+| `close` | Listbox closed |
+
+#### Combobox Features
 
 The component handles:
 - Keyboard navigation (Arrow keys, Enter, Escape)
