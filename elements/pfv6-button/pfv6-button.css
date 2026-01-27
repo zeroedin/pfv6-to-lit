@@ -387,6 +387,7 @@
 
   display: inline-block;
   vertical-align: top;
+  outline: none; /* delegatesFocus handles focus on internal button */
 }
 
 #container {
