@@ -5,6 +5,33 @@ import { Pfv6TextInputGroupUtilities } from '../pfv6-text-input-group-utilities.
 import { Pfv6TextInputGroupIcon } from '../pfv6-text-input-group-icon.js';
 import '../pfv6-text-input-group.js';
 
+/**
+ * Test helper element that implements the ComboboxOption interface.
+ *
+ * TODO: Remove this helper and replace with pfv6-select-option once
+ * the Select component is converted. See README.md for details.
+ */
+class TestOption extends HTMLElement {
+  value = '';
+  selected = false;
+  active = false;
+
+  static get observedAttributes() {
+    return ['value'];
+  }
+
+  attributeChangedCallback(name: string, _old: string, value: string) {
+    if (name === 'value') {
+      this.value = value;
+    }
+  }
+
+  connectedCallback() {
+    this.value = this.getAttribute('value') ?? '';
+  }
+}
+customElements.define('test-option', TestOption);
+
 /** Helper to simulate typing into an input */
 function fillInput(input: HTMLInputElement, value: string): void {
   input.value = value;
@@ -842,8 +869,8 @@ describe('<pfv6-text-input-group-main>', function() {
     it('accepts option elements in options slot', async function() {
       const el = await fixture<Pfv6TextInputGroupMain>(html`
         <pfv6-text-input-group-main>
-          <div slot="options" value="option1">Option 1</div>
-          <div slot="options" value="option2">Option 2</div>
+          <test-option slot="options" value="option1">Option 1</test-option>
+          <test-option slot="options" value="option2">Option 2</test-option>
         </pfv6-text-input-group-main>
       `);
       expect(el.options.length).to.equal(2);
@@ -852,10 +879,21 @@ describe('<pfv6-text-input-group-main>', function() {
     it('options getter returns elements with value property', async function() {
       const el = await fixture<Pfv6TextInputGroupMain>(html`
         <pfv6-text-input-group-main>
-          <div slot="options" value="test">Test Option</div>
+          <test-option slot="options" value="test">Test Option</test-option>
         </pfv6-text-input-group-main>
       `);
-      expect(el.options[0].getAttribute('value')).to.equal('test');
+      expect(el.options[0].value).to.equal('test');
+    });
+
+    it('options have selected and active properties', async function() {
+      const el = await fixture<Pfv6TextInputGroupMain>(html`
+        <pfv6-text-input-group-main>
+          <test-option slot="options" value="test">Test Option</test-option>
+        </pfv6-text-input-group-main>
+      `);
+      const option = el.options[0];
+      expect(option.selected).to.be.false;
+      expect(option.active).to.be.false;
     });
   });
 

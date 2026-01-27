@@ -121,3 +121,11 @@ The component handles:
 | `blur` | — | Input blurred |
 | `open` | — | Listbox opened (combobox mode) |
 | `close` | — | Listbox closed (combobox mode) |
+
+## Testing
+
+### Test Helper: `<test-option>`
+
+The unit tests use a `TestOption` helper element defined in `test/pfv6-text-input-group.spec.ts` that implements the `ComboboxOption` interface (`value`, `selected`, `active` properties).
+
+**TODO:** When `pfv6-select-option` is created (from the Select component conversion), remove the `TestOption` helper class and replace all `<test-option>` elements in tests with `<pfv6-select-option>`.
