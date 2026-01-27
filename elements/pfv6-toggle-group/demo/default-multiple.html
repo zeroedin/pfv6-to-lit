@@ -1,0 +1,35 @@
+<div class="pf-v6-l-stack pf-m-gutter">
+  <div>
+    <pfv6-toggle-group id="multiple-toggle-group" accessible-label="Default with multiple selectable">
+      <pfv6-toggle-group-item text="Option 1" button-id="toggle-group-multiple-1"></pfv6-toggle-group-item>
+      <pfv6-toggle-group-item text="Option 2" button-id="toggle-group-multiple-2"></pfv6-toggle-group-item>
+      <pfv6-toggle-group-item text="Option 3" is-disabled></pfv6-toggle-group-item>
+    </pfv6-toggle-group>
+  </div>
+  <div>
+    <pfv6-button id="disable-button">Disable all</pfv6-button>
+  </div>
+</div>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-toggle-group/pfv6-toggle-group.js';
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+  const toggleGroup = document.getElementById('multiple-toggle-group');
+  const items = toggleGroup.querySelectorAll('pfv6-toggle-group-item');
+  const disableButton = document.getElementById('disable-button');
+
+  let disableAll = false;
+
+  items.forEach(item => {
+    item.addEventListener('change', (e) => {
+      item.isSelected = e.selected;
+    });
+  });
+
+  disableButton.addEventListener('click', () => {
+    disableAll = !disableAll;
+    toggleGroup.areAllGroupsDisabled = disableAll;
+    disableButton.textContent = disableAll ? 'Enable back' : 'Disable all';
+  });
+</script>

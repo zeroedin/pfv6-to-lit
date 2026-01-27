@@ -1,0 +1,18 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Sibling combinator for consecutive selected items */
+pfv6-toggle-group {
+  /* For consecutive selected items, turn the left border back to what it was */
+  & > pfv6-toggle-group-item[is-selected] + pfv6-toggle-group-item[is-selected] {
+    --pf-v6-c-toggle-group__button--before--BorderInlineStartColor: var(--pf-t--global--border--color--alt, #ffffff);
+  }
+
+  /* For consecutive disabled items, turn the left border back to what it was */
+  & > pfv6-toggle-group-item[is-disabled] + pfv6-toggle-group-item[is-disabled] {
+    --pf-v6-c-toggle-group__button--before--BorderInlineStartColor: var(--pf-t--global--border--color--disabled, #a3a3a3);
+  }
+}

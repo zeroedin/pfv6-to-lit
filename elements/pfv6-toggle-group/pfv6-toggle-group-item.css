@@ -1,0 +1,180 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(button) {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: var(--pf-t--global--text--color--regular, #151515);
+  cursor: pointer;
+}
+
+:host {
+  /* Compact modifier variables */
+  --pf-v6-c-toggle-group--m-compact__button--PaddingBlockStart: 0;
+  --pf-v6-c-toggle-group--m-compact__button--PaddingInlineEnd: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-toggle-group--m-compact__button--PaddingBlockEnd: 0;
+  --pf-v6-c-toggle-group--m-compact__button--PaddingInlineStart: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-toggle-group--m-compact__button--FontSize: var(--pf-t--global--font--size--body--default, 0.875rem);
+
+  /* Button variables */
+  --pf-v6-c-toggle-group__button--PaddingBlockStart: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-toggle-group__button--PaddingInlineEnd: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-toggle-group__button--PaddingBlockEnd: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-toggle-group__button--PaddingInlineStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-toggle-group__button--FontSize: var(--pf-t--global--font--size--body--default, 0.875rem);
+  --pf-v6-c-toggle-group__button--LineHeight: var(--pf-t--global--font--line-height--body, 1.5);
+  --pf-v6-c-toggle-group__button--Color: var(--pf-t--global--text--color--regular, #151515);
+  --pf-v6-c-toggle-group__button--BackgroundColor: var(--pf-t--global--background--color--action--plain--default, rgb(255 255 255 / 0%));
+  --pf-v6-c-toggle-group__button--ZIndex: auto;
+  --pf-v6-c-toggle-group__button--hover--BackgroundColor: var(--pf-t--global--background--color--primary--hover, #f2f2f2);
+  --pf-v6-c-toggle-group__button--hover--ZIndex: var(--pf-t--global--z-index--xs, 100);
+  --pf-v6-c-toggle-group__button--hover--before--BorderColor: var(--pf-t--global--border--color--default, #c7c7c7);
+  --pf-v6-c-toggle-group__button--hover--after--BorderWidth: var(--pf-t--global--border--width--high-contrast--regular, 0);
+  --pf-v6-c-toggle-group__button--before--BorderWidth: var(--pf-t--global--border--width--control--default, 1px);
+  --pf-v6-c-toggle-group__button--before--BorderColor: var(--pf-t--global--border--color--default, #c7c7c7);
+
+  /* Selected state variables */
+  --pf-v6-c-toggle-group__button--m-selected--BackgroundColor: var(--pf-t--global--color--brand--default, #0066cc);
+  --pf-v6-c-toggle-group__button--m-selected--Color: var(--pf-t--global--text--color--on-brand--default, #ffffff);
+  --pf-v6-c-toggle-group__button--m-selected--before--BorderColor: var(--pf-t--global--border--color--clicked, #0066cc);
+  --pf-v6-c-toggle-group__button--m-selected-selected--before--BorderInlineStartColor: var(--pf-t--global--border--color--alt, #ffffff);
+  --pf-v6-c-toggle-group__button--m-selected--ZIndex: var(--pf-t--global--z-index--xs, 100);
+  --pf-v6-c-toggle-group__button--m-selected--after--BorderWidth: var(--pf-t--global--border--width--high-contrast--strong, 0);
+
+  /* Disabled state variables */
+  --pf-v6-c-toggle-group__button--disabled--BackgroundColor: var(--pf-t--global--background--color--disabled--default, #c7c7c7);
+  --pf-v6-c-toggle-group__button--disabled--Color: var(--pf-t--global--text--color--on-disabled, #4d4d4d);
+  --pf-v6-c-toggle-group__button--disabled--before--BorderColor: var(--pf-t--global--border--color--disabled, #a3a3a3);
+  --pf-v6-c-toggle-group__button--disabled-disabled--before--BorderInlineStartColor: var(--pf-t--global--border--color--disabled, #a3a3a3);
+  --pf-v6-c-toggle-group__button--disabled--ZIndex: var(--pf-t--global--z-index--xs, 100);
+
+  /* Icon/text spacing */
+  --pf-v6-c-toggle-group__icon--text--MarginInlineStart: var(--pf-t--global--spacer--sm, 0.5rem);
+
+  display: inline-block;
+}
+
+#container {
+  /* Consume private variables from parent for positioning and spacing */
+  margin-inline-start: var(--_toggle-group-item-margin-inline-start, 0);
+}
+
+button {
+  position: relative;
+  z-index: var(--pf-v6-c-toggle-group__button--ZIndex);
+  display: inline-flex;
+  padding-block-start: var(--pf-v6-c-toggle-group__button--PaddingBlockStart);
+  padding-block-end: var(--pf-v6-c-toggle-group__button--PaddingBlockEnd);
+  padding-inline-start: var(--pf-v6-c-toggle-group__button--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-toggle-group__button--PaddingInlineEnd);
+  font-size: var(--pf-v6-c-toggle-group__button--FontSize);
+  line-height: var(--pf-v6-c-toggle-group__button--LineHeight);
+  color: var(--pf-v6-c-toggle-group__button--Color);
+  background-color: var(--pf-v6-c-toggle-group__button--BackgroundColor);
+  border: 0;
+
+  /* Apply border radius from parent (first/last child) */
+  border-start-start-radius: var(--_toggle-group-item-first-border-start-start-radius, 0);
+  border-end-start-radius: var(--_toggle-group-item-first-border-end-start-radius, 0);
+  border-start-end-radius: var(--_toggle-group-item-last-border-start-end-radius, 0);
+  border-end-end-radius: var(--_toggle-group-item-last-border-end-end-radius, 0);
+
+  &::before,
+  &::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    border-style: solid;
+    border-radius: inherit;
+  }
+
+  &::before {
+    border-width: var(--pf-v6-c-toggle-group__button--before--BorderWidth);
+    border-block-start-color:
+      var(
+        --pf-v6-c-toggle-group__button--before--BorderBlockStartColor,
+        var(--pf-v6-c-toggle-group__button--before--BorderColor)
+      );
+    border-block-end-color:
+      var(
+        --pf-v6-c-toggle-group__button--before--BorderBlockEndColor,
+        var(--pf-v6-c-toggle-group__button--before--BorderColor)
+      );
+    border-inline-start-color:
+      var(
+        --pf-v6-c-toggle-group__button--before--BorderInlineStartColor,
+        var(--pf-v6-c-toggle-group__button--before--BorderColor)
+      );
+    border-inline-end-color:
+      var(
+        --pf-v6-c-toggle-group__button--before--BorderInlineEndColor,
+        var(--pf-v6-c-toggle-group__button--before--BorderColor)
+      );
+  }
+
+  /* Forced-colors borders */
+  &::after {
+    inset: var(--pf-v6-c-toggle-group__button--before--BorderWidth);
+    border-color: var(--pf-v6-c-toggle-group__button--after--BorderColor, transparent);
+    border-width: var(--pf-v6-c-toggle-group__button--after--BorderWidth, 0);
+  }
+
+  &:is(:hover, :focus) {
+    --pf-v6-c-toggle-group__button--BackgroundColor: var(--pf-v6-c-toggle-group__button--hover--BackgroundColor);
+    --pf-v6-c-toggle-group__button--ZIndex: var(--pf-v6-c-toggle-group__button--hover--ZIndex);
+    --pf-v6-c-toggle-group__button--before--BorderColor: var(--pf-v6-c-toggle-group__button--hover--before--BorderColor);
+    --pf-v6-c-toggle-group__button--after--BorderWidth: var(--pf-v6-c-toggle-group__button--hover--after--BorderWidth);
+
+    text-decoration-line: none;
+  }
+
+  &.selected {
+    --pf-v6-c-toggle-group__button--BackgroundColor: var(--pf-v6-c-toggle-group__button--m-selected--BackgroundColor);
+    --pf-v6-c-toggle-group__button--Color: var(--pf-v6-c-toggle-group__button--m-selected--Color, inherit);
+    --pf-v6-c-toggle-group__button--ZIndex: var(--pf-v6-c-toggle-group__button--m-selected--ZIndex);
+    --pf-v6-c-toggle-group__button--before--BorderColor: var(--pf-v6-c-toggle-group__button--m-selected--before--BorderColor);
+    --pf-v6-c-toggle-group__button--after--BorderWidth: var(--pf-v6-c-toggle-group__button--m-selected--after--BorderWidth);
+
+    /* Pass icon color to child pfv6-toggle-group-item-element for slotted pfv6-icon */
+    --_toggle-group-icon-color: var(--pf-v6-c-toggle-group__button--m-selected--Color);
+  }
+
+  &:disabled {
+    --pf-v6-c-toggle-group__button--BackgroundColor: var(--pf-v6-c-toggle-group__button--disabled--BackgroundColor);
+    --pf-v6-c-toggle-group__button--Color: var(--pf-v6-c-toggle-group__button--disabled--Color);
+    --pf-v6-c-toggle-group__button--ZIndex: var(--pf-v6-c-toggle-group__button--disabled--ZIndex);
+    --pf-v6-c-toggle-group__button--before--BorderColor: var(--pf-v6-c-toggle-group__button--disabled--before--BorderColor);
+
+    pointer-events: none;
+  }
+
+  &.compact {
+    --pf-v6-c-toggle-group__button--PaddingBlockStart: var(--pf-v6-c-toggle-group--m-compact__button--PaddingBlockStart);
+    --pf-v6-c-toggle-group__button--PaddingInlineEnd: var(--pf-v6-c-toggle-group--m-compact__button--PaddingInlineEnd);
+    --pf-v6-c-toggle-group__button--PaddingBlockEnd: var(--pf-v6-c-toggle-group--m-compact__button--PaddingBlockEnd);
+    --pf-v6-c-toggle-group__button--PaddingInlineStart: var(--pf-v6-c-toggle-group--m-compact__button--PaddingInlineStart);
+    --pf-v6-c-toggle-group__button--FontSize: var(--pf-v6-c-toggle-group--m-compact__button--FontSize);
+  }
+}
+
+/* Spacing between icon and text elements inside button */
+button {
+  & > pfv6-toggle-group-item-element[variant="icon"] {
+    --_toggle-group-item-element-margin-inline-start: 0;
+  }
+
+  & > pfv6-toggle-group-item-element[variant="text"] {
+    --_toggle-group-item-element-margin-inline-start: 0;
+  }
+
+  & > pfv6-toggle-group-item-element[variant="icon"] + pfv6-toggle-group-item-element[variant="text"],
+  & > pfv6-toggle-group-item-element[variant="text"] + pfv6-toggle-group-item-element[variant="icon"] {
+    --_toggle-group-item-element-margin-inline-start: var(--pf-v6-c-toggle-group__icon--text--MarginInlineStart);
+  }
+}

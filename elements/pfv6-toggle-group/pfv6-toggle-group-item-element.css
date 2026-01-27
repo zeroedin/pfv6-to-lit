@@ -1,0 +1,30 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: inline-flex;
+
+  /* Consume private variable from parent for spacing between icon/text */
+  margin-inline-start: var(--_toggle-group-item-element-margin-inline-start, 0);
+}
+
+span {
+  display: inline-flex;
+  align-items: center;
+
+  &.icon {
+    display: block;
+
+    /* Pass icon color from parent to slotted pfv6-icon */
+    ::slotted(pfv6-icon) {
+      --pf-v6-c-icon__content--Color: var(--_toggle-group-icon-color);
+    }
+  }
+
+  &.text {
+    /* Text specific styles if needed */
+  }
+}

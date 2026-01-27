@@ -1,0 +1,32 @@
+<pfv6-toggle-group id="single-toggle-group" accessible-label="Default with single selectable">
+  <pfv6-toggle-group-item text="Option 1" button-id="toggle-group-single-1"></pfv6-toggle-group-item>
+  <pfv6-toggle-group-item text="Option 2" button-id="toggle-group-single-2"></pfv6-toggle-group-item>
+  <pfv6-toggle-group-item text="Option 3" button-id="toggle-group-single-3"></pfv6-toggle-group-item>
+</pfv6-toggle-group>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-toggle-group/pfv6-toggle-group.js';
+
+  const toggleGroup = document.getElementById('single-toggle-group');
+  const items = toggleGroup.querySelectorAll('pfv6-toggle-group-item');
+
+  let selectedId = '';
+
+  items.forEach(item => {
+    item.addEventListener('change', (e) => {
+      const clickedId = item.buttonId;
+
+      // Deselect previously selected item
+      if (selectedId && selectedId !== clickedId) {
+        const previousItem = toggleGroup.querySelector(`[button-id="${selectedId}"]`);
+        if (previousItem) {
+          previousItem.isSelected = false;
+        }
+      }
+
+      // Update current item
+      item.isSelected = e.selected;
+      selectedId = e.selected ? clickedId : '';
+    });
+  });
+</script>
