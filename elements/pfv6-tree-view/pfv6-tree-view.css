@@ -4,12 +4,6 @@
   box-sizing: border-box;
 }
 
-:where(ul) {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
 :host {
   /* Node base */
   --pf-v6-c-tree-view__node--indent--base: calc(var(--pf-t--global--spacer--md, 1rem) * 2 + var(--pf-v6-c-tree-view__node-toggle-icon--MinWidth, 0.875rem));

@@ -81,6 +81,7 @@ export class Pfv6TreeView extends LitElement {
     ) {
       this._context = {
         isCompact: this.variant === 'compact' || this.variant === 'compactNoBackground',
+        isNoBackground: this.variant === 'compactNoBackground',
         hasGuides: this.hasGuides,
         hasBadges: this.hasBadges,
         hasCheckboxes: this.hasCheckboxes,

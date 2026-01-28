@@ -173,6 +173,11 @@ export class Pfv6TreeViewItem extends LitElement {
     return this._treeContext.hasGuides;
   }
 
+  /** Whether no-background mode is active (from context) */
+  get effectiveIsNoBackground(): boolean {
+    return this._treeContext.isNoBackground;
+  }
+
   /** Whether badges are enabled (explicit attribute or context) */
   get effectiveHasBadge(): boolean {
     return this.hasAttribute('has-badge') ? this.hasBadge : this._treeContext.hasBadges;
@@ -368,6 +373,7 @@ export class Pfv6TreeViewItem extends LitElement {
       <div id="container" class=${classMap({
         'expanded': this.internalIsExpanded,
         'compact': this.effectiveIsCompact,
+        'no-background': this.effectiveIsNoBackground,
         'guides': this.effectiveHasGuides,
         'nested': this.level > 1,
         'level-1': this.level === 1,

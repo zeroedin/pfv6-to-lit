@@ -7,6 +7,8 @@ import { createContextWithRoot } from '@patternfly/pfe-core/functions/context.js
 export interface TreeViewContext {
   /** Whether the tree-view is using compact variant */
   isCompact: boolean;
+  /** Whether the tree-view is using no-background variant */
+  isNoBackground: boolean;
   /** Whether guide lines are shown */
   hasGuides: boolean;
   /** Whether badges are enabled globally */
@@ -26,6 +28,7 @@ export interface TreeViewContext {
  */
 export const defaultTreeViewContext: TreeViewContext = {
   isCompact: false,
+  isNoBackground: false,
   hasGuides: false,
   hasBadges: false,
   hasCheckboxes: false,
