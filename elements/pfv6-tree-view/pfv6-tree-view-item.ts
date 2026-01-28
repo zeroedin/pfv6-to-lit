@@ -249,7 +249,9 @@ export class Pfv6TreeViewItem extends LitElement {
     // Set ARIA states via ElementInternals
     this.#internals.ariaLabel = this.name;
     this.#internals.ariaExpanded = this.hasChildren ? String(this.internalIsExpanded) : null;
-    this.#internals.ariaChecked = this.effectiveHasCheckbox ? String(this.checked) : null;
+    this.#internals.ariaChecked = this.effectiveHasCheckbox
+      ? (this.indeterminate ? 'mixed' : String(this.checked))
+      : null;
     this.#internals.ariaSelected = !this.effectiveHasCheckbox ? String(this.isSelected) : null;
 
     // Sync indeterminate state on checkbox
