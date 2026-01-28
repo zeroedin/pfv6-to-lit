@@ -639,8 +639,6 @@ const cssApiTests = [
 ];
 
 test.describe('CSS API Tests - pfv6-tree-view', () => {
-  test.describe.configure({ mode: 'parallel' });
-
   cssApiTests.forEach(({ name, defaultValue, resolvedValue, type, testValue, demo }) => {
     test(`CSS API: ${name}`, async ({ page, browser }) => {
       // Add metadata to test report
