@@ -117,9 +117,9 @@ export class Pfv6TreeView extends LitElement {
 
     const item = target as HTMLElement & { isSelected: boolean; isSelectable: boolean; hasChildren: boolean };
 
-    // Only select items that are leaf nodes OR have isSelectable=true
-    // Items with children that aren't explicitly selectable just expand/collapse
-    if (item.hasChildren && !item.isSelectable) {
+    // Only select items that are leaf nodes OR are selectable (via tree-level or per-item)
+    // Items with children that aren't selectable just expand/collapse
+    if (item.hasChildren && !this.hasSelectableNodes && !item.isSelectable) {
       return;
     }
 
