@@ -6,6 +6,7 @@ import { property } from 'lit/decorators/property.js';
 import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { consume } from '@lit/context';
+import { getRandomId } from '@patternfly/pfe-core/functions/random.js';
 import styles from './pfv6-tree-view-item.css';
 import { treeViewContext, defaultTreeViewContext, type TreeViewContext } from './pfv6-tree-view-context.js';
 
@@ -199,7 +200,7 @@ export class Pfv6TreeViewItem extends LitElement {
   override connectedCallback() {
     super.connectedCallback();
     this.internalIsExpanded = this.defaultExpanded;
-    this.checkboxId = `checkbox-${Math.random().toString(36).substr(2, 9)}`;
+    this.checkboxId = getRandomId('checkbox');
 
     // Detect nesting level from parent tree-view-item
     // Note: Level is per-item based on nesting, not from context
