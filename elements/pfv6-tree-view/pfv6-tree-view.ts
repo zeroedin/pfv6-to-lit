@@ -57,10 +57,6 @@ export class Pfv6TreeView extends LitElement {
   @property({ type: String, attribute: 'accessible-label' })
   accessibleLabel?: string;
 
-  /** Flag indicating if all nodes are expanded by default */
-  @property({ type: Boolean, reflect: true, attribute: 'default-all-expanded' })
-  defaultAllExpanded = false;
-
   /** Sets the expanded state on all tree nodes, overriding internal state */
   @property({ type: Boolean, attribute: 'all-expanded' })
   allExpanded?: boolean;

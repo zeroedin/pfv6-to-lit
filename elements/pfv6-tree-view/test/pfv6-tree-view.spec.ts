@@ -134,23 +134,6 @@ describe('<pfv6-tree-view>', function() {
     });
   });
 
-  describe('defaultAllExpanded property', function() {
-    it('defaults to false', async function() {
-      const el = await fixture<Pfv6TreeView>(html`<pfv6-tree-view></pfv6-tree-view>`);
-      expect(el.defaultAllExpanded).to.be.false;
-    });
-
-    it('can be set to true', async function() {
-      const el = await fixture<Pfv6TreeView>(html`<pfv6-tree-view default-all-expanded></pfv6-tree-view>`);
-      expect(el.defaultAllExpanded).to.be.true;
-    });
-
-    it('reflects to attribute', async function() {
-      const el = await fixture<Pfv6TreeView>(html`<pfv6-tree-view default-all-expanded></pfv6-tree-view>`);
-      expect(el.hasAttribute('default-all-expanded')).to.be.true;
-    });
-  });
-
   describe('allExpanded property', function() {
     it('defaults to undefined', async function() {
       const el = await fixture<Pfv6TreeView>(html`<pfv6-tree-view></pfv6-tree-view>`);
