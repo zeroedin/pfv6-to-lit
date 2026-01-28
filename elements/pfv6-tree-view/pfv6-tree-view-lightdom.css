@@ -1,0 +1,11 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Hide bottom border on last item in compact mode */
+pfv6-tree-view[variant="compact"] > pfv6-tree-view-item:last-child,
+pfv6-tree-view[variant="compactNoBackground"] > pfv6-tree-view-item:last-child {
+  --_tree-view-item-border-block-end: none;
+}

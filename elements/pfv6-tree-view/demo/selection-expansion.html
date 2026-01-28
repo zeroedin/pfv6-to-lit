@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="../../pfv6-tree-view-lightdom.css">
+
+<pfv6-tree-view has-selectable-nodes accessible-label="Tree View separate selection and expansion example">
+  <pfv6-tree-view-item name="Application launcher" id="SelNodesTreeView-AppLaunch" default-expanded>
+    <pfv6-tree-view-item name="Application 1" id="SelNodesTreeView-App1">
+      <pfv6-tree-view-item name="Settings" id="SelNodesTreeView-App1Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Current" id="SelNodesTreeView-App1Current"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+    <pfv6-tree-view-item name="Application 2" id="SelNodesTreeView-App2">
+      <pfv6-tree-view-item name="Settings" id="SelNodesTreeView-App2Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Loader" id="SelNodesTreeView-App2Loader">
+        <pfv6-tree-view-item name="Loading App 1" id="SelNodesTreeView-LoadApp1"></pfv6-tree-view-item>
+        <pfv6-tree-view-item name="Loading App 2" id="SelNodesTreeView-LoadApp2"></pfv6-tree-view-item>
+        <pfv6-tree-view-item name="Loading App 3" id="SelNodesTreeView-LoadApp3"></pfv6-tree-view-item>
+      </pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Cost management" id="SelNodesTreeView-Cost">
+    <pfv6-tree-view-item name="Application 3" id="SelNodesTreeView-App3">
+      <pfv6-tree-view-item name="Settings" id="SelNodesTreeView-App3Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Current" id="SelNodesTreeView-App3Current"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Sources" id="SelNodesTreeView-Sources">
+    <pfv6-tree-view-item name="Application 4" id="SelNodesTreeView-App4">
+      <pfv6-tree-view-item name="Settings" id="SelNodesTreeView-App4Settings"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Really really really long folder name that overflows the container it is in" id="SelNodesTreeView-Long">
+    <pfv6-tree-view-item name="Application 5" id="SelNodesTreeView-App5"></pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+</pfv6-tree-view>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-tree-view/pfv6-tree-view.js';
+</script>
