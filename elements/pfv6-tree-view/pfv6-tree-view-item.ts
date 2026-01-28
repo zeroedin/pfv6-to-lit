@@ -232,9 +232,14 @@ export class Pfv6TreeViewItem extends LitElement {
     // This matches React's useEffect behavior - sync when prop changes, but allow user toggling
     // Note: We check on every willUpdate because @consume context changes may not appear in changedProperties
     const currentAllExpanded = this._treeContext.allExpanded;
-    if (currentAllExpanded !== undefined && currentAllExpanded !== this.#previousAllExpanded) {
-      this.internalIsExpanded = currentAllExpanded;
+    if (currentAllExpanded !== undefined) {
+      if (currentAllExpanded !== this.#previousAllExpanded) {
+        this.internalIsExpanded = currentAllExpanded;
+      }
       this.#previousAllExpanded = currentAllExpanded;
+    } else {
+      // Reset tracking when allExpanded becomes undefined (uncontrolled mode)
+      this.#previousAllExpanded = undefined;
     }
 
     // Sync controlled isExpanded prop
