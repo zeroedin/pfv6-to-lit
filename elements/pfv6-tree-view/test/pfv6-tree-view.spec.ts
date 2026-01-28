@@ -803,38 +803,6 @@ describe('<pfv6-tree-view-item>', function() {
   });
 
   describe('rendering structure', function() {
-    it('sets role to treeitem via ElementInternals', async function() {
-      const el = await fixture<Pfv6TreeViewItem>(html`<pfv6-tree-view-item name="Item"></pfv6-tree-view-item>`);
-      // Verify internals.role is set to 'treeitem' (tested via implementation)
-      expect(el).to.exist;
-    });
-
-    it('updates aria-expanded via ElementInternals based on expansion state', async function() {
-      const el = await fixture<Pfv6TreeViewItem>(html`
-        <pfv6-tree-view-item name="Parent">
-          <pfv6-tree-view-item name="Child"></pfv6-tree-view-item>
-        </pfv6-tree-view-item>
-      `);
-      await el.updateComplete;
-      // Verify internals.ariaExpanded is set based on expansion state (tested via implementation)
-      const container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('expanded')).to.be.false;
-    });
-
-    it('updates aria-checked via ElementInternals based on checked state', async function() {
-      const el = await fixture<Pfv6TreeViewItem>(html`<pfv6-tree-view-item name="Item" has-checkbox checked></pfv6-tree-view-item>`);
-      await el.updateComplete;
-      // Verify internals.ariaChecked is set based on checked state (tested via implementation)
-      expect(el.checked).to.be.true;
-    });
-
-    it('updates aria-selected via ElementInternals based on selection state', async function() {
-      const el = await fixture<Pfv6TreeViewItem>(html`<pfv6-tree-view-item name="Item" is-selected></pfv6-tree-view-item>`);
-      await el.updateComplete;
-      // Verify internals.ariaSelected is set based on selection state (tested via implementation)
-      expect(el.isSelected).to.be.true;
-    });
-
     it('renders node as button when default mode', async function() {
       const el = await fixture<Pfv6TreeViewItem>(html`<pfv6-tree-view-item name="Item"></pfv6-tree-view-item>`);
       const node = el.shadowRoot!.querySelector('.node');
