@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="../../pfv6-tree-view-lightdom.css">
+
+<pfv6-tree-view is-multi-selectable accessible-label="Tree View multiselectable example">
+  <pfv6-tree-view-item name="Application launcher" id="multiselectExample-AppLaunch" default-expanded>
+    <pfv6-tree-view-item name="Application 1" id="multiselectExample-App1">
+      <pfv6-tree-view-item name="Settings" id="multiselectExample-App1Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Current" id="multiselectExample-App1Current"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+    <pfv6-tree-view-item name="Application 2" id="multiselectExample-App2">
+      <pfv6-tree-view-item name="Settings" id="multiselectExample-App2Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Loader" id="multiselectExample-App2Loader">
+        <pfv6-tree-view-item name="Loading App 1" id="multiselectExample-LoadApp1"></pfv6-tree-view-item>
+        <pfv6-tree-view-item name="Loading App 2" id="multiselectExample-LoadApp2"></pfv6-tree-view-item>
+        <pfv6-tree-view-item name="Loading App 3" id="multiselectExample-LoadApp3"></pfv6-tree-view-item>
+      </pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Cost management" id="multiselectExample-Cost">
+    <pfv6-tree-view-item name="Application 3" id="multiselectExample-App3">
+      <pfv6-tree-view-item name="Settings" id="multiselectExample-App3Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Current" id="multiselectExample-App3Current"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Sources" id="multiselectExample-Sources">
+    <pfv6-tree-view-item name="Application 4" id="multiselectExample-App4">
+      <pfv6-tree-view-item name="Settings" id="multiselectExample-App4Settings"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Really really really long folder name that overflows the container it is in" id="multiselectExample-Long">
+    <pfv6-tree-view-item name="Application 5" id="multiselectExample-App5"></pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+</pfv6-tree-view>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-tree-view/pfv6-tree-view.js';
+</script>

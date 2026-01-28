@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="../../pfv6-tree-view-lightdom.css">
+
+<pfv6-tree-view variant="compactNoBackground" accessible-label="Tree View compact no background example">
+  <pfv6-tree-view-item name="APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value and may reject unrecognized values." item-title="apiVersion" id="example10-apiVersion"></pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated is CamelCase. More info:" item-title="kind" id="example10-kind"></pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Standard metadata object" item-title="metadata" id="example10-metadata"></pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Standard metadata object" item-title="spec" id="example10-spec">
+    <pfv6-tree-view-item name="Minimum number of seconds for which a newly created pod should be ready without any of its container crashing, for it to be considered available. Default to 0 (pod will be considered available as soon as it is ready)." item-title="minReadySeconds" id="example10-minReadySeconds"></pfv6-tree-view-item>
+    <pfv6-tree-view-item name="Indicates that the deployment is paused" item-title="paused" id="example10-paused"></pfv6-tree-view-item>
+    <pfv6-tree-view-item name="The maximum time in seconds for a deployment to make progress before it is considered to be failed. The deployment controller will continue to process failed deployments and a condition with a ProgressDeadlineExceeded reason will be surfaced in the deployment status. Note that the progress will not de estimated during the time a deployment is paused. Defaults to 600s." item-title="progressDeadlineSeconds" id="example10-progressDeadlineSeconds">
+      <pfv6-tree-view-item name="The number of old ReplicaSets to retain to allow rollback. This is a pointer to distinguish between explicit zero and not specified. Defaults to 10." item-title="revisionHistoryLimit" id="example10-revisionHistoryLimit">
+        <pfv6-tree-view-item name="Map of {key.value} pairs. A single {key.value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is &quot;key&quot;, the operator is &quot;In&quot; and the values array contains only &quot;value&quot;. The requirements are ANDed." item-title="matchLabels" id="example10-matchLabels"></pfv6-tree-view-item>
+      </pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+</pfv6-tree-view>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-tree-view/pfv6-tree-view.js';
+</script>

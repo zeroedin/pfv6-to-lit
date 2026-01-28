@@ -1,0 +1,300 @@
+import { LitElement, html } from 'lit';
+import type { PropertyValues } from 'lit';
+import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators/property.js';
+import { state } from 'lit/decorators/state.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
+import { provide } from '@lit/context';
+import './pfv6-tree-view-item.js';
+import styles from './pfv6-tree-view.css';
+import { treeViewContext, defaultTreeViewContext, type TreeViewContext } from './pfv6-tree-view-context.js';
+
+/**
+ * Tree view component for displaying hierarchical data structures.
+ *
+ * @summary Tree view for hierarchical navigation
+ * @slot - Default slot for tree view items
+ * @slot toolbar - Toolbar content displayed above the tree (typically search)
+ */
+@customElement('pfv6-tree-view')
+export class Pfv6TreeView extends LitElement {
+  static styles = styles;
+
+  /**
+   * Context value provided to child components.
+   * Updated whenever relevant properties change.
+   */
+  @provide({ context: treeViewContext })
+  @state()
+  protected _context: TreeViewContext = defaultTreeViewContext;
+
+  /** Flag indicating if the tree view has badges */
+  @property({ type: Boolean, reflect: true, attribute: 'has-badges' })
+  hasBadges = false;
+
+  /** Variant presentation styles for the tree view */
+  @property({ type: String, reflect: true })
+  variant: 'default' | 'compact' | 'compactNoBackground' = 'default';
+
+  /** Flag indicating if the tree view has guide lines */
+  @property({ type: Boolean, reflect: true, attribute: 'has-guides' })
+  hasGuides = false;
+
+  /** Flag indicating if all nodes in the tree view should have checkboxes */
+  @property({ type: Boolean, reflect: true, attribute: 'has-checkboxes' })
+  hasCheckboxes = false;
+
+  /** Flag indicating that tree nodes should be independently selectable, even when having children */
+  @property({ type: Boolean, reflect: true, attribute: 'has-selectable-nodes' })
+  hasSelectableNodes = false;
+
+  /** Flag indicating whether multiple nodes can be selected in the tree view */
+  @property({ type: Boolean, reflect: true, attribute: 'is-multi-selectable' })
+  isMultiSelectable = false;
+
+  /** Accessible label for the tree view */
+  @property({ type: String, attribute: 'accessible-label' })
+  accessibleLabel?: string;
+
+  /** Flag indicating if all nodes are expanded by default */
+  @property({ type: Boolean, reflect: true, attribute: 'default-all-expanded' })
+  defaultAllExpanded = false;
+
+  /** Sets the expanded state on all tree nodes, overriding internal state */
+  @property({ type: Boolean, attribute: 'all-expanded' })
+  allExpanded?: boolean;
+
+  override willUpdate(changedProperties: PropertyValues) {
+    super.willUpdate(changedProperties);
+
+    // Always update context on first render or when relevant properties change
+    if (
+      !this.hasUpdated ||
+      changedProperties.has('variant') ||
+      changedProperties.has('hasGuides') ||
+      changedProperties.has('hasBadges') ||
+      changedProperties.has('hasCheckboxes') ||
+      changedProperties.has('hasSelectableNodes') ||
+      changedProperties.has('isMultiSelectable') ||
+      changedProperties.has('allExpanded')
+    ) {
+      this._context = {
+        isCompact: this.variant === 'compact' || this.variant === 'compactNoBackground',
+        hasGuides: this.hasGuides,
+        hasBadges: this.hasBadges,
+        hasCheckboxes: this.hasCheckboxes,
+        hasSelectableNodes: this.hasSelectableNodes,
+        isMultiSelectable: this.isMultiSelectable,
+        allExpanded: this.allExpanded,
+      };
+    }
+  }
+
+  override updated(changedProperties: PropertyValues) {
+    super.updated(changedProperties);
+
+    // Set up keyboard navigation on first render
+    if (changedProperties.has('hasCheckboxes') || changedProperties.has('hasSelectableNodes')) {
+      this.#setupKeyboardNavigation();
+    }
+  }
+
+  override connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener('keydown', this.#handleKeydown);
+    this.addEventListener('select', this.#handleSelect as EventListener);
+  }
+
+  override disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('keydown', this.#handleKeydown);
+    this.removeEventListener('select', this.#handleSelect as EventListener);
+  }
+
+  #handleSelect = (event: Event) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName.toLowerCase() !== 'pfv6-tree-view-item') {
+      return;
+    }
+
+    const item = target as HTMLElement & { isSelected: boolean; isSelectable: boolean; hasChildren: boolean };
+
+    // Only select items that are leaf nodes OR have isSelectable=true
+    // Items with children that aren't explicitly selectable just expand/collapse
+    if (item.hasChildren && !item.isSelectable) {
+      return;
+    }
+
+    if (this.isMultiSelectable) {
+      // Multi-select: toggle the clicked item's selection
+      item.isSelected = !item.isSelected;
+    } else {
+      // Single-select: deselect all other items, select this one
+      const allItems = this.querySelectorAll('pfv6-tree-view-item');
+      allItems.forEach(otherItem => {
+        (otherItem as HTMLElement & { isSelected: boolean }).isSelected = (otherItem === target);
+      });
+    }
+  };
+
+  #setupKeyboardNavigation() {
+    // Set initial tabindex on first focusable element
+    this.updateComplete.then(() => {
+      const container = this.shadowRoot?.getElementById('container');
+      if (!container) {
+        return;
+      }
+
+      if (this.hasCheckboxes || this.hasSelectableNodes) {
+        const firstToggle = container.querySelector('.toggle') as HTMLElement;
+        if (firstToggle) {
+          firstToggle.tabIndex = 0;
+        }
+        if (this.hasCheckboxes) {
+          const firstInput = container.querySelector('input[type="checkbox"]') as HTMLElement;
+          if (firstInput) {
+            firstInput.tabIndex = 0;
+          }
+        }
+        if (this.hasSelectableNodes) {
+          const firstTextButton = container.querySelector('.text') as HTMLElement;
+          if (firstTextButton) {
+            firstTextButton.tabIndex = 0;
+          }
+        }
+      } else {
+        const firstNode = container.querySelector('.node') as HTMLElement;
+        if (firstNode) {
+          firstNode.tabIndex = 0;
+        }
+      }
+    });
+  }
+
+  #handleKeydown = (event: KeyboardEvent) => {
+    const target = event.target as HTMLElement;
+    const container = this.shadowRoot?.getElementById('container');
+    if (!container?.contains(target)) {
+      return;
+    }
+
+    if (this.hasCheckboxes || this.hasSelectableNodes) {
+      this.#handleKeysCheckbox(event);
+    } else {
+      this.#handleKeys(event);
+    }
+  };
+
+  #handleKeys(event: KeyboardEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.classList.contains('node')) {
+      return;
+    }
+
+    const { key } = event;
+    const container = this.shadowRoot?.getElementById('container');
+    const treeNodes = Array.from(container?.querySelectorAll('.node') || []).filter(
+      el => !el.classList.contains('disabled') && !el.closest('[inert]')
+    ) as HTMLElement[];
+
+    if (key === ' ') {
+      target.click();
+      event.preventDefault();
+      return;
+    }
+
+    // Basic arrow navigation (simplified from React version)
+    if (key === 'ArrowDown') {
+      const currentIndex = treeNodes.indexOf(target);
+      const nextNode = treeNodes[currentIndex + 1];
+      if (nextNode) {
+        target.tabIndex = -1;
+        nextNode.tabIndex = 0;
+        nextNode.focus();
+      }
+      event.preventDefault();
+    } else if (key === 'ArrowUp') {
+      const currentIndex = treeNodes.indexOf(target);
+      const prevNode = treeNodes[currentIndex - 1];
+      if (prevNode) {
+        target.tabIndex = -1;
+        prevNode.tabIndex = 0;
+        prevNode.focus();
+      }
+      event.preventDefault();
+    }
+  }
+
+  #handleKeysCheckbox(event: KeyboardEvent) {
+    const target = event.target as HTMLElement;
+    const { key } = event;
+
+    if (key === ' ') {
+      target.click();
+      event.preventDefault();
+      return;
+    }
+
+    const container = this.shadowRoot?.getElementById('container');
+    const treeNodes = Array.from(container?.querySelectorAll('.node') || []).filter(
+      el => !el.closest('[inert]')
+    ) as HTMLElement[];
+
+    // Simplified arrow navigation for checkbox mode
+    if (key === 'ArrowDown') {
+      const currentNode = target.closest('.node') as HTMLElement;
+      const currentIndex = treeNodes.indexOf(currentNode);
+      const nextNode = treeNodes[currentIndex + 1];
+      if (nextNode) {
+        const focusTarget = nextNode.querySelector('button, input') as HTMLElement;
+        if (focusTarget) {
+          focusTarget.focus();
+        }
+      }
+      event.preventDefault();
+    } else if (key === 'ArrowUp') {
+      const currentNode = target.closest('.node') as HTMLElement;
+      const currentIndex = treeNodes.indexOf(currentNode);
+      const prevNode = treeNodes[currentIndex - 1];
+      if (prevNode) {
+        const focusTarget = prevNode.querySelector('button, input') as HTMLElement;
+        if (focusTarget) {
+          focusTarget.focus();
+        }
+      }
+      event.preventDefault();
+    }
+  }
+
+  #handleToolbarSlotChange = () => {
+    this.requestUpdate();
+  };
+
+  render() {
+    const classes = {
+      'guides': this.hasGuides,
+      'compact': this.variant === 'compact' || this.variant === 'compactNoBackground',
+      'no-background': this.variant === 'compactNoBackground',
+    };
+
+    return html`
+      <div id="container" class=${classMap(classes)}>
+        <slot name="toolbar" @slotchange=${this.#handleToolbarSlotChange}></slot>
+        <div
+          role="tree"
+          aria-label=${ifDefined(this.accessibleLabel)}
+          aria-multiselectable=${this.isMultiSelectable ? 'true' : 'false'}
+        >
+          <slot></slot>
+        </div>
+      </div>
+    `;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'pfv6-tree-view': Pfv6TreeView;
+  }
+}

@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="../../pfv6-tree-view-lightdom.css">
+
+<pfv6-tree-view has-badges accessible-label="Tree View with badges example">
+  <pfv6-tree-view-item name="Application launcher" id="example5-AppLaunch" default-expanded>
+    <pfv6-tree-view-item name="Application 1" id="example5-App1">
+      <pfv6-tree-view-item name="Settings" id="example5-App1Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Current" id="example5-App1Current"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+    <pfv6-tree-view-item name="Application 2" id="example5-App2">
+      <pfv6-tree-view-item name="Settings" id="example5-App2Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Loader" id="example5-App2Loader">
+        <pfv6-tree-view-item name="Loading App 1" id="example5-LoadApp1"></pfv6-tree-view-item>
+        <pfv6-tree-view-item name="Loading App 2" id="example5-LoadApp2"></pfv6-tree-view-item>
+        <pfv6-tree-view-item name="Loading App 3" id="example5-LoadApp3"></pfv6-tree-view-item>
+      </pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Cost management" id="example5-Cost">
+    <pfv6-tree-view-item name="Application 3" id="example5-App3">
+      <pfv6-tree-view-item name="Settings" id="example5-App3Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Current" id="example5-App3Current"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Sources" id="example5-Sources">
+    <pfv6-tree-view-item name="Application 4" id="example5-App4">
+      <pfv6-tree-view-item name="Settings" id="example5-App4Settings"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Really really really long folder name that overflows the container it is in" id="example5-Long">
+    <pfv6-tree-view-item name="Application 5" id="example5-App5"></pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+</pfv6-tree-view>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-tree-view/pfv6-tree-view.js';
+</script>

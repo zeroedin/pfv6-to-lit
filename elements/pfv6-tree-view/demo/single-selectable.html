@@ -1,0 +1,49 @@
+<link rel="stylesheet" href="../../pfv6-tree-view-lightdom.css">
+
+<pfv6-button id="toggle-btn" variant="link">Expand all</pfv6-button>
+
+<pfv6-tree-view id="tree" accessible-label="Tree View single selectable example">
+  <pfv6-tree-view-item name="Application launcher" id="example1-AppLaunch" default-expanded>
+    <pfv6-tree-view-item name="Application 1" id="example1-App1">
+      <pfv6-tree-view-item name="Settings" id="example1-App1Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Current" id="example1-App1Current"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+    <pfv6-tree-view-item name="Application 2" id="example1-App2">
+      <pfv6-tree-view-item name="Settings" id="example1-App2Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Loader" id="example1-App2Loader">
+        <pfv6-tree-view-item name="Loading App 1" id="example1-LoadApp1"></pfv6-tree-view-item>
+        <pfv6-tree-view-item name="Loading App 2" id="example1-LoadApp2"></pfv6-tree-view-item>
+        <pfv6-tree-view-item name="Loading App 3" id="example1-LoadApp3"></pfv6-tree-view-item>
+      </pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Cost management" id="example1-Cost">
+    <pfv6-tree-view-item name="Application 3" id="example1-App3">
+      <pfv6-tree-view-item name="Settings" id="example1-App3Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Current" id="example1-App3Current"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Sources" id="example1-Sources">
+    <pfv6-tree-view-item name="Application 4" id="example1-App4">
+      <pfv6-tree-view-item name="Settings" id="example1-App4Settings"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Really really really long folder name that overflows the container it is in" id="example1-Long">
+    <pfv6-tree-view-item name="Application 5" id="example1-App5"></pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+</pfv6-tree-view>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-tree-view/pfv6-tree-view.js';
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+  const tree = document.getElementById('tree');
+  const toggleBtn = document.getElementById('toggle-btn');
+  let allExpanded = false;
+
+  toggleBtn.addEventListener('click', () => {
+    allExpanded = !allExpanded;
+    tree.allExpanded = allExpanded;
+    toggleBtn.textContent = allExpanded ? 'Collapse all' : 'Expand all';
+  });
+</script>
