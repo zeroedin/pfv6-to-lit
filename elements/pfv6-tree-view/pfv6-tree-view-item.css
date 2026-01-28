@@ -19,6 +19,7 @@ button {
 
 :host {
   display: block;
+  outline: none; /* delegatesFocus handles focus on internal element */
 
   /* Consume position from parent when in guides/compact mode */
   position: var(--_tree-view-item-position, static);

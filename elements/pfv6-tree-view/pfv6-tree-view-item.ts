@@ -8,7 +8,11 @@ import { classMap } from 'lit/directives/class-map.js';
 import { consume } from '@lit/context';
 import { getRandomId } from '@patternfly/pfe-core/functions/random.js';
 import styles from './pfv6-tree-view-item.css';
-import { treeViewContext, defaultTreeViewContext, type TreeViewContext } from './pfv6-tree-view-context.js';
+import {
+  treeViewContext,
+  defaultTreeViewContext,
+  type TreeViewContext,
+} from './pfv6-tree-view-context.js';
 
 import '../pfv6-badge/pfv6-badge.js';
 
@@ -75,6 +79,10 @@ export class Pfv6TreeViewItemCheckEvent extends Event {
 @customElement('pfv6-tree-view-item')
 export class Pfv6TreeViewItem extends LitElement {
   static styles = styles;
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
 
   #internals = this.attachInternals();
 
@@ -148,13 +156,13 @@ export class Pfv6TreeViewItem extends LitElement {
   @property({ type: Boolean, reflect: true })
   disabled = false;
 
-  /** Internal expansion state */
+  /** Internal expansion state (exposed for keyboard navigation) */
   @state()
-  private internalIsExpanded = false;
+  internalIsExpanded = false;
 
-  /** Whether item has children (detected from slot) */
+  /** Whether item has children - detected from slot (exposed for keyboard navigation) */
   @state()
-  private hasChildren = false;
+  hasChildren = false;
 
   /** Generated ID for checkbox/label association */
   @state()
@@ -191,7 +199,10 @@ export class Pfv6TreeViewItem extends LitElement {
 
   /** Whether item is selectable even with children (explicit attribute or context) */
   get effectiveIsSelectable(): boolean {
-    return this.hasAttribute('is-selectable') ? this.isSelectable : this._treeContext.hasSelectableNodes;
+    if (this.hasAttribute('is-selectable')) {
+      return this.isSelectable;
+    }
+    return this._treeContext.hasSelectableNodes;
   }
 
   /** Tracks the previous allExpanded context value to detect changes */

@@ -870,6 +870,45 @@ describe('<pfv6-tree-view-item>', function() {
       expect(group?.hasAttribute('inert')).to.be.true;
     });
   });
+
+  describe('delegatesFocus behavior', function() {
+    it('shadow root has delegatesFocus enabled', async function() {
+      const el = await fixture<Pfv6TreeViewItem>(html`
+        <pfv6-tree-view-item name="Item"></pfv6-tree-view-item>
+      `);
+      expect(el.shadowRoot!.delegatesFocus).to.be.true;
+    });
+
+    it('focusing the host delegates to internal button', async function() {
+      const el = await fixture<Pfv6TreeViewItem>(html`
+        <pfv6-tree-view-item name="Item"></pfv6-tree-view-item>
+      `);
+      el.focus();
+      await el.updateComplete;
+      const node = el.shadowRoot!.querySelector('.node') as HTMLElement;
+      expect(el.shadowRoot!.activeElement).to.equal(node);
+    });
+
+    it('hasChildren state is exposed for keyboard navigation', async function() {
+      const el = await fixture<Pfv6TreeViewItem>(html`
+        <pfv6-tree-view-item name="Parent">
+          <pfv6-tree-view-item name="Child"></pfv6-tree-view-item>
+        </pfv6-tree-view-item>
+      `);
+      await el.updateComplete;
+      expect(el.hasChildren).to.be.true;
+    });
+
+    it('internalIsExpanded state is exposed for keyboard navigation', async function() {
+      const el = await fixture<Pfv6TreeViewItem>(html`
+        <pfv6-tree-view-item name="Parent" default-expanded>
+          <pfv6-tree-view-item name="Child"></pfv6-tree-view-item>
+        </pfv6-tree-view-item>
+      `);
+      await el.updateComplete;
+      expect(el.internalIsExpanded).to.be.true;
+    });
+  });
 });
 
 describe('<pfv6-tree-view-search>', function() {

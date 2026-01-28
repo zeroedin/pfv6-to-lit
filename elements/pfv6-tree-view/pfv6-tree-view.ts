@@ -6,9 +6,13 @@ import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { provide } from '@lit/context';
-import './pfv6-tree-view-item.js';
+import { Pfv6TreeViewItem } from './pfv6-tree-view-item.js';
 import styles from './pfv6-tree-view.css';
-import { treeViewContext, defaultTreeViewContext, type TreeViewContext } from './pfv6-tree-view-context.js';
+import {
+  treeViewContext,
+  defaultTreeViewContext,
+  type TreeViewContext,
+} from './pfv6-tree-view-context.js';
 
 /**
  * Tree view component for displaying hierarchical data structures.
@@ -66,14 +70,14 @@ export class Pfv6TreeView extends LitElement {
 
     // Always update context on first render or when relevant properties change
     if (
-      !this.hasUpdated ||
-      changedProperties.has('variant') ||
-      changedProperties.has('hasGuides') ||
-      changedProperties.has('hasBadges') ||
-      changedProperties.has('hasCheckboxes') ||
-      changedProperties.has('hasSelectableNodes') ||
-      changedProperties.has('isMultiSelectable') ||
-      changedProperties.has('allExpanded')
+      !this.hasUpdated
+      || changedProperties.has('variant')
+      || changedProperties.has('hasGuides')
+      || changedProperties.has('hasBadges')
+      || changedProperties.has('hasCheckboxes')
+      || changedProperties.has('hasSelectableNodes')
+      || changedProperties.has('isMultiSelectable')
+      || changedProperties.has('allExpanded')
     ) {
       this._context = {
         isCompact: this.variant === 'compact' || this.variant === 'compactNoBackground',
@@ -88,14 +92,6 @@ export class Pfv6TreeView extends LitElement {
     }
   }
 
-  override updated(changedProperties: PropertyValues) {
-    super.updated(changedProperties);
-
-    // Set up keyboard navigation on first render
-    if (changedProperties.has('hasCheckboxes') || changedProperties.has('hasSelectableNodes')) {
-      this.#setupKeyboardNavigation();
-    }
-  }
 
   override connectedCallback() {
     super.connectedCallback();
@@ -115,7 +111,12 @@ export class Pfv6TreeView extends LitElement {
       return;
     }
 
-    const item = target as HTMLElement & { isSelected: boolean; isSelectable: boolean; hasChildren: boolean };
+    type TreeItem = HTMLElement & {
+      isSelected: boolean;
+      isSelectable: boolean;
+      hasChildren: boolean;
+    };
+    const item = target as TreeItem;
 
     // Only select items that are leaf nodes OR are selectable (via tree-level or per-item)
     // Items with children that aren't selectable just expand/collapse
@@ -135,133 +136,129 @@ export class Pfv6TreeView extends LitElement {
     }
   };
 
-  #setupKeyboardNavigation() {
-    // Set initial tabindex on first focusable element
-    this.updateComplete.then(() => {
-      const container = this.shadowRoot?.getElementById('container');
-      if (!container) {
-        return;
-      }
-
-      if (this.hasCheckboxes || this.hasSelectableNodes) {
-        const firstToggle = container.querySelector('.toggle') as HTMLElement;
-        if (firstToggle) {
-          firstToggle.tabIndex = 0;
-        }
-        if (this.hasCheckboxes) {
-          const firstInput = container.querySelector('input[type="checkbox"]') as HTMLElement;
-          if (firstInput) {
-            firstInput.tabIndex = 0;
-          }
-        }
-        if (this.hasSelectableNodes) {
-          const firstTextButton = container.querySelector('.text') as HTMLElement;
-          if (firstTextButton) {
-            firstTextButton.tabIndex = 0;
-          }
-        }
-      } else {
-        const firstNode = container.querySelector('.node') as HTMLElement;
-        if (firstNode) {
-          firstNode.tabIndex = 0;
-        }
-      }
-    });
+  /**
+   * Gets all visible (not inside collapsed parent) and non-disabled tree items.
+   * Items inside inert groups (collapsed parents) are excluded.
+   */
+  #getVisibleItems(): Pfv6TreeViewItem[] {
+    return Array.from(this.querySelectorAll<Pfv6TreeViewItem>('pfv6-tree-view-item'))
+        .filter(item => !item.disabled && !item.closest('[inert]'));
   }
 
   #handleKeydown = (event: KeyboardEvent) => {
+    // Find the tree-view-item that contains the event target
+    // With shadow DOM event retargeting, target may be the item itself or composed from within
     const target = event.target as HTMLElement;
-    const container = this.shadowRoot?.getElementById('container');
-    if (!container?.contains(target)) {
+    const item = target.closest('pfv6-tree-view-item') as Pfv6TreeViewItem | null;
+
+    if (!item || !this.contains(item)) {
       return;
     }
 
-    if (this.hasCheckboxes || this.hasSelectableNodes) {
-      this.#handleKeysCheckbox(event);
-    } else {
-      this.#handleKeys(event);
+    const items = this.#getVisibleItems();
+    const currentIndex = items.indexOf(item);
+
+    if (currentIndex === -1) {
+      return;
+    }
+
+    const { key } = event;
+
+    switch (key) {
+      case 'ArrowDown': {
+        const nextItem = items[currentIndex + 1];
+        if (nextItem) {
+          this.#focusItem(nextItem);
+        }
+        event.preventDefault();
+        break;
+      }
+
+      case 'ArrowUp': {
+        const prevItem = items[currentIndex - 1];
+        if (prevItem) {
+          this.#focusItem(prevItem);
+        }
+        event.preventDefault();
+        break;
+      }
+
+      case 'ArrowRight': {
+        // If item has children and is collapsed, expand it
+        // If item has children and is expanded, move to first child
+        // If item has no children, do nothing
+        if (item.hasChildren) {
+          const isExpanded = item.isExpanded ?? item.internalIsExpanded;
+          if (!isExpanded) {
+            // Expand the item by clicking the toggle
+            const toggle = item.shadowRoot?.querySelector('.toggle') as HTMLElement;
+            toggle?.click();
+          } else {
+            // Move to first child
+            const selector = ':scope > pfv6-tree-view-item';
+            const children = item.querySelectorAll<Pfv6TreeViewItem>(selector);
+            const firstVisibleChild = [...children].find(child => !child.disabled);
+            if (firstVisibleChild) {
+              this.#focusItem(firstVisibleChild);
+            }
+          }
+        }
+        event.preventDefault();
+        break;
+      }
+
+      case 'ArrowLeft': {
+        // If item has children and is expanded, collapse it
+        // If item is collapsed or has no children, move to parent
+        if (item.hasChildren) {
+          const isExpanded = item.isExpanded ?? item.internalIsExpanded;
+          if (isExpanded) {
+            // Collapse the item by clicking the toggle
+            const toggle = item.shadowRoot?.querySelector('.toggle') as HTMLElement;
+            toggle?.click();
+            event.preventDefault();
+            break;
+          }
+        }
+        // Move to parent item
+        const parent = item.parentElement?.closest('pfv6-tree-view-item');
+        if (parent && this.contains(parent)) {
+          this.#focusItem(parent as Pfv6TreeViewItem);
+        }
+        event.preventDefault();
+        break;
+      }
+
+      case 'Home': {
+        const [firstItem] = items;
+        if (firstItem && firstItem !== item) {
+          this.#focusItem(firstItem);
+        }
+        event.preventDefault();
+        break;
+      }
+
+      case 'End': {
+        const lastItem = items[items.length - 1];
+        if (lastItem && lastItem !== item) {
+          this.#focusItem(lastItem);
+        }
+        event.preventDefault();
+        break;
+      }
+
+      // Space is handled by the internal button click via delegatesFocus
+      // Enter triggers the node's click handler
     }
   };
 
-  #handleKeys(event: KeyboardEvent) {
-    const target = event.target as HTMLElement;
-    if (!target.classList.contains('node')) {
-      return;
-    }
-
-    const { key } = event;
-    const container = this.shadowRoot?.getElementById('container');
-    const treeNodes = Array.from(container?.querySelectorAll('.node') || []).filter(
-      el => !el.classList.contains('disabled') && !el.closest('[inert]')
-    ) as HTMLElement[];
-
-    if (key === ' ') {
-      target.click();
-      event.preventDefault();
-      return;
-    }
-
-    // Basic arrow navigation (simplified from React version)
-    if (key === 'ArrowDown') {
-      const currentIndex = treeNodes.indexOf(target);
-      const nextNode = treeNodes[currentIndex + 1];
-      if (nextNode) {
-        target.tabIndex = -1;
-        nextNode.tabIndex = 0;
-        nextNode.focus();
-      }
-      event.preventDefault();
-    } else if (key === 'ArrowUp') {
-      const currentIndex = treeNodes.indexOf(target);
-      const prevNode = treeNodes[currentIndex - 1];
-      if (prevNode) {
-        target.tabIndex = -1;
-        prevNode.tabIndex = 0;
-        prevNode.focus();
-      }
-      event.preventDefault();
-    }
-  }
-
-  #handleKeysCheckbox(event: KeyboardEvent) {
-    const target = event.target as HTMLElement;
-    const { key } = event;
-
-    if (key === ' ') {
-      target.click();
-      event.preventDefault();
-      return;
-    }
-
-    const container = this.shadowRoot?.getElementById('container');
-    const treeNodes = Array.from(container?.querySelectorAll('.node') || []).filter(
-      el => !el.closest('[inert]')
-    ) as HTMLElement[];
-
-    // Simplified arrow navigation for checkbox mode
-    if (key === 'ArrowDown') {
-      const currentNode = target.closest('.node') as HTMLElement;
-      const currentIndex = treeNodes.indexOf(currentNode);
-      const nextNode = treeNodes[currentIndex + 1];
-      if (nextNode) {
-        const focusTarget = nextNode.querySelector('button, input') as HTMLElement;
-        if (focusTarget) {
-          focusTarget.focus();
-        }
-      }
-      event.preventDefault();
-    } else if (key === 'ArrowUp') {
-      const currentNode = target.closest('.node') as HTMLElement;
-      const currentIndex = treeNodes.indexOf(currentNode);
-      const prevNode = treeNodes[currentIndex - 1];
-      if (prevNode) {
-        const focusTarget = prevNode.querySelector('button, input') as HTMLElement;
-        if (focusTarget) {
-          focusTarget.focus();
-        }
-      }
-      event.preventDefault();
-    }
+  /**
+   * Moves focus to the specified item.
+   * With delegatesFocus, focusing the item automatically focuses its internal button.
+   * @param toItem - The item receiving focus
+   */
+  #focusItem(toItem: Pfv6TreeViewItem) {
+    toItem.focus();
   }
 
   #handleToolbarSlotChange = () => {
