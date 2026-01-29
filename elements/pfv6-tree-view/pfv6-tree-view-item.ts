@@ -319,13 +319,6 @@ export class Pfv6TreeViewItem extends LitElement {
     }
   };
 
-  #handleNodeKeydown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      this.#handleNodeClick();
-    }
-  };
-
   #handleCheckboxChange = (e: Event) => {
     e.stopPropagation();
     const checkbox = e.target as HTMLInputElement;
@@ -417,7 +410,7 @@ export class Pfv6TreeViewItem extends LitElement {
           ${this.effectiveHasCheckbox ? html`
             <label class=${classMap({ node: true, current: this.isSelected, disabled: this.disabled })} @click=${this.#handleNodeClick} for=${this.checkboxId} id=${`label-${this.checkboxId}`}>${nodeContent}</label>
           ` : (this.effectiveIsSelectable && this.hasChildren) ? html`
-            <div class=${classMap({ node: true, current: this.isSelected, disabled: this.disabled })} @click=${this.#handleNodeClick} id=${`label-${this.checkboxId}`} role="button" tabindex="0" @keydown=${this.#handleNodeKeydown}>${nodeContent}</div>
+            <div class=${classMap({ node: true, current: this.isSelected, disabled: this.disabled })} @click=${this.#handleNodeClick} id=${`label-${this.checkboxId}`}>${nodeContent}</div>
           ` : html`
             <button class=${classMap({ node: true, current: this.isSelected, disabled: this.disabled })} @click=${this.#handleNodeClick} type="button">${nodeContent}</button>
           `}
