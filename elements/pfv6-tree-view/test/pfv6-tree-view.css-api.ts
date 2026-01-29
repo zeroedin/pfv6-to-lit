@@ -661,9 +661,6 @@ test.describe('CSS API Tests - pfv6-tree-view', () => {
       await reactPage.setViewportSize({ width: 1280, height: 720 });
 
       try {
-        // NOTE: Tree-view does not have React implementation yet
-        // These paths are prepared for when React implementation is added
-
         // Load React demo with CSS override
         await reactPage.goto(`/elements/pfv6-tree-view/react/test/${demo}`);
         await applyCssOverride(reactPage, '.pf-v6-c-tree-view', name, testValue);
