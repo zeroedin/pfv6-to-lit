@@ -1924,6 +1924,170 @@ render() {
 
 ## Step 9: Naming Convention Validation
 
+### Light DOM vs Shadow DOM Class Naming (CRITICAL)
+
+**This is a fundamental distinction for class naming conventions:**
+
+| Location | Class Naming | Reason |
+|----------|--------------|--------|
+| **Shadow DOM** | Simple IDs/classes only | Internal implementation detail - users never see this |
+| **Light DOM** | `.pf-v6-*` BEM classes allowed | External - users see/interact with this, enables CSS variable overrides |
+| **CSS Variables** | `--pf-v6-*` naming | External API - must match React for parity |
+
+**Shadow DOM (Internal Implementation)**:
+- Use simple IDs: `id="container"`, `id="overflow-button"`
+- Use simple classes: `class="icon"`, `class="label"`
+- NEVER use `.pf-v6-c-*` or `.pf-m-*` BEM naming
+- This is purely internal - users cannot see or interact with it
+
+**Light DOM (External - User Visible)**:
+- CAN use `.pf-v6-c-*` BEM classes
+- CAN use `.pf-m-*` modifier classes
+- This enables CSS variable overrides to work correctly
+- Users can see and style these elements
+
+**CSS Custom Properties (External API)**:
+- MUST use `--pf-v6-*` naming to match React
+- Users override these variables and expect same response as React
+- This is part of the public API
+
+### Host Element Styling Pattern (CRITICAL)
+
+**NEVER style the host element directly based on attributes or classes. Instead, apply internal classes to the Shadow DOM container.**
+
+**❌ WRONG - Styling host with :host([attribute])**:
+```typescript
+// Component
+@property({ type: Boolean, reflect: true, attribute: 'is-toast' })
+isToast = false;
+```
+```css
+/* CSS - WRONG */
+:host([is-toast]) {
+  position: fixed;
+  /* ... */
+}
+```
+
+**❌ WRONG - Applying classes to host element**:
+```typescript
+// Component - NEVER do this
+connectedCallback() {
+  super.connectedCallback();
+  if (this.isToast) {
+    this.classList.add('toast');  // ❌ WRONG - modifying host
+  }
+}
+```
+```css
+/* CSS - WRONG */
+:host(.toast) {
+  position: fixed;
+  /* ... */
+}
+```
+
+**✅ CORRECT - Apply internal classes to Shadow DOM container**:
+```typescript
+// Component
+@property({ type: Boolean, reflect: true, attribute: 'is-toast' })
+isToast = false;
+
+render() {
+  const classes = {
+    toast: this.isToast,  // ✅ Internal class based on property
+  };
+
+  return html`
+    <div id="container" class=${classMap(classes)}>
+      <slot></slot>
+    </div>
+  `;
+}
+```
+```css
+/* CSS - CORRECT */
+#container.toast {
+  position: fixed;
+  /* ... */
+}
+```
+
+**Why this pattern**:
+1. Host element is in Light DOM - we don't modify Light DOM
+2. Container is in Shadow DOM - internal implementation detail
+3. Property/attribute on host is the API (users set `is-toast`)
+4. Internal class on container is implementation (CSS styles `.toast`)
+5. Clean separation between API and implementation
+
+**Detection Pattern**:
+1. Search for `:host([` in CSS files → CRITICAL VIOLATION
+2. Search for `:host(.` in CSS files → CRITICAL VIOLATION
+3. Search for `this.classList.add` or `this.className` → CRITICAL VIOLATION
+4. Verify properties are mapped to internal container classes via `classMap()`
+
+**❌ WRONG - BEM classes in Shadow DOM template**:
+```typescript
+render() {
+  return html`
+    <div class="pf-v6-c-alert-group">  <!-- ❌ WRONG in Shadow DOM -->
+      <slot></slot>
+      <div role="listitem" class="pf-v6-c-alert-group__item">  <!-- ❌ WRONG -->
+        <button class="pf-v6-c-alert-group__overflow-button">  <!-- ❌ WRONG -->
+          <slot name="overflow">${this.overflowMessage}</slot>
+        </button>
+      </div>
+    </div>
+  `;
+}
+```
+
+**✅ CORRECT - Simple IDs/classes in Shadow DOM template**:
+```typescript
+render() {
+  return html`
+    <div id="container" role="list">  <!-- ✅ Simple ID -->
+      <slot></slot>
+      <div role="listitem" id="overflow-item">  <!-- ✅ Simple ID -->
+        <button id="overflow-button">  <!-- ✅ Simple ID -->
+          <slot name="overflow">${this.overflowMessage}</slot>
+        </button>
+      </div>
+    </div>
+  `;
+}
+```
+
+**✅ CORRECT - BEM classes in Light DOM (dynamically created wrappers)**:
+```typescript
+#handleSlotChange = (event: Event) => {
+  // Creating wrapper in Light DOM (outside shadow DOM)
+  const wrapper = document.createElement('div');
+  wrapper.className = 'pf-v6-c-alert-group__item';  // ✅ OK in Light DOM
+  wrapper.classList.add('pf-m-incoming');  // ✅ OK in Light DOM
+  // ...
+};
+```
+
+**Detection Pattern**:
+1. Search for `.pf-v6-` or `.pf-m-` in the `render()` method template
+2. If found in Shadow DOM template → **CRITICAL VIOLATION**
+3. If found in Light DOM manipulation code (e.g., `createElement`) → **ACCEPTABLE**
+
+**Report Format**:
+```
+❌ CRITICAL: BEM class in Shadow DOM template at line 85
+  - Found: class="pf-v6-c-alert-group__item"
+  - Location: render() method (Shadow DOM)
+  - Fix: Use simple ID: id="group-item"
+  - Reason: Shadow DOM is internal implementation, use simple selectors
+
+✅ ACCEPTABLE: BEM class in Light DOM wrapper at line 120
+  - Found: wrapper.className = 'pf-v6-c-alert-group__item'
+  - Location: #handleSlotChange (Light DOM manipulation)
+  - Reason: Light DOM is external, BEM classes enable CSS variable overrides
+```
+
 ### Check Component API vs CSS API Separation
 
 **Component API** (properties): Must match React prop names
@@ -2387,6 +2551,7 @@ After fixing all issues, re-run audit to verify:
 - Detect anti-patterns (:host manipulation, lift and shift)
 - Check event classes extend Event (not CustomEvent)
 - Validate naming conventions (Component API vs CSS API)
+- **Check Light DOM vs Shadow DOM class naming** - BEM classes (.pf-v6-*) only in Light DOM, simple IDs/classes in Shadow DOM
 - **Check private fields/methods use `#name` syntax** (not `private _name`) unless decorated
 - Provide specific line numbers for all issues
 - Categorize by severity (Critical, Warning, Best Practice, Unused Code)
@@ -2402,6 +2567,9 @@ After fixing all issues, re-run audit to verify:
 - Allow ElementInternals for internal elements
 - Allow `private _name` for non-decorated fields/methods (use `#name`)
 - **Allow @property declarations for tabIndex** - Use `delegatesFocus` instead
+- **Allow BEM classes (.pf-v6-*, .pf-m-*) in Shadow DOM templates** - Use simple IDs/classes instead
+- **Allow :host([attribute]) or :host(.class) styling** - Apply internal classes to container instead
+- **Allow this.classList modifications** - Never modify host element classes
 - Skip validation steps
 
 **Quality Bar**: Every issue must be documented with specific location, explanation of why it's wrong, and exact code to fix it.
