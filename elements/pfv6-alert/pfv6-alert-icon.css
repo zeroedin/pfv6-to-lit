@@ -1,0 +1,13 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  grid-area: icon;
+  margin-inline-end: var(--pf-v6-c-alert__icon--MarginInlineEnd, 0.5rem);
+  font-size: var(--pf-v6-c-alert__icon--FontSize, 0.875rem);
+  color: var(--pf-v6-c-alert__icon--Color, #151515);
+}

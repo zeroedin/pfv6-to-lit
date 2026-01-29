@@ -1,0 +1,65 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(button) {
+  display: inline-flex;
+  gap: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
+  align-items: baseline;
+  justify-content: center;
+  min-width:
+    calc(
+      1em * var(--pf-t--global--font--line-height--body, 1.5) +
+      var(--pf-t--global--spacer--control--vertical--default, 0.5rem) * 2
+    );
+  padding-block: var(--pf-t--global--spacer--control--vertical--default, 0.5rem);
+  padding-inline: var(--pf-t--global--spacer--action--horizontal--plain--default, 0.5rem);
+  margin: 0;
+  font-family: inherit;
+  font-size: var(--pf-t--global--font--size--body--default, 1rem);
+  font-weight: var(--pf-t--global--font--weight--body--default, 400);
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: var(--pf-t--global--icon--color--regular, #151515);
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--pf-t--global--background--color--action--plain--default, transparent);
+  border: 0;
+  border-radius: var(--pf-t--global--border--radius--small, 6px);
+}
+
+:where(button:hover),
+:where(button:focus) {
+  background-color: var(--pf-t--global--background--color--action--plain--hover, rgb(0 0 0 / 6%));
+}
+
+:where(button:active) {
+  background-color: var(--pf-t--global--background--color--action--plain--clicked, rgb(0 0 0 / 10%));
+}
+
+:host {
+  display: contents;
+}
+
+.pf-v6-c-alert__action {
+  grid-area: action;
+  margin-block-start:
+    var(
+      --pf-v6-c-alert__action--MarginBlockStart,
+      calc(var(--pf-t--global--spacer--control--vertical--default, 0.5rem) * -1)
+    );
+  margin-block-end:
+    var(
+      --pf-v6-c-alert__action--MarginBlockEnd,
+      calc(var(--pf-t--global--spacer--control--vertical--default, 0.5rem) * -1)
+    );
+  margin-inline-end:
+    var(
+      --pf-v6-c-alert__action--MarginInlineEnd,
+      calc(var(--pf-t--global--spacer--sm, 0.5rem) * -1)
+    );
+  transform: translateY(var(--pf-v6-c-alert__action--TranslateY, 0.125rem));
+}
