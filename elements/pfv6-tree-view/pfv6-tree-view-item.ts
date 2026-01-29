@@ -371,13 +371,13 @@ export class Pfv6TreeViewItem extends LitElement {
         ${this.effectiveIsCompact ? html`
           <span id="content">
             ${this.itemTitle ? html`<span id="title">${this.itemTitle}</span>` : null}
-            ${this.effectiveIsSelectable ?
+            ${this.effectiveIsSelectable && this.hasChildren ?
               html`<button type="button" id="text" tabindex="-1" @click=${this.#handleSelectButtonClick} ?disabled=${this.disabled}>${this.name}</button>`
               : html`<span id="text">${this.name}</span>`}
           </span>
         ` : html`
           ${this.itemTitle ? html`<span id="title">${this.itemTitle}</span>` : null}
-          ${this.effectiveIsSelectable ?
+          ${this.effectiveIsSelectable && this.hasChildren ?
             html`<button type="button" id="text" tabindex="-1" @click=${this.#handleSelectButtonClick} ?disabled=${this.disabled}>${this.name}</button>`
             : html`<span id="text">${this.name}</span>`}
         `}

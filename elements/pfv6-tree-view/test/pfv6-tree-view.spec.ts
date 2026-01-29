@@ -451,10 +451,25 @@ describe('<pfv6-tree-view-item>', function() {
       expect(el.hasAttribute('is-selectable')).to.be.true;
     });
 
-    it('renders text as button when true', async function() {
-      const el = await fixture<Pfv6TreeViewItem>(html`<pfv6-tree-view-item is-selectable name="Item"></pfv6-tree-view-item>`);
+    it('renders text as button when true with children', async function() {
+      // Inner button only renders for parent nodes (hasChildren) to avoid nested buttons
+      const el = await fixture<Pfv6TreeViewItem>(html`
+        <pfv6-tree-view-item is-selectable name="Parent">
+          <pfv6-tree-view-item name="Child"></pfv6-tree-view-item>
+        </pfv6-tree-view-item>
+      `);
+      await el.updateComplete;
       const textButton = el.shadowRoot!.querySelector('button#text');
       expect(textButton).to.exist;
+    });
+
+    it('renders text as span for leaf nodes even when selectable', async function() {
+      // Leaf nodes use outer <button class="node">, so inner text is a span
+      const el = await fixture<Pfv6TreeViewItem>(html`<pfv6-tree-view-item is-selectable name="Item"></pfv6-tree-view-item>`);
+      const textSpan = el.shadowRoot!.querySelector('span#text');
+      expect(textSpan).to.exist;
+      const textButton = el.shadowRoot!.querySelector('button#text');
+      expect(textButton).to.not.exist;
     });
   });
 
