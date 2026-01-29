@@ -165,6 +165,7 @@ export class Pfv6TreeViewItem extends LitElement {
   private checkboxId = '';
 
   /** Nesting level (1-based, set automatically based on parent) */
+  @state()
   level = 1;
 
   // Computed properties that combine explicit attributes with context values
