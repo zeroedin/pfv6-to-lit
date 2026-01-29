@@ -275,12 +275,13 @@ export class Pfv6TreeViewItem extends LitElement {
 
   /** Focus the internal node element. Public API for keyboard navigation. */
   focusNode(): void {
-    const focusable = this.shadowRoot?.querySelector<HTMLElement>(
-      'button.node, label.node, div.node[tabindex="0"]'
-    );
+    // Try to focus the outer node element (button or label)
+    // For selectable parents with children, the outer is a div so we fall back to delegatesFocus
+    const focusable = this.shadowRoot?.querySelector<HTMLElement>('button.node, label.node');
     if (focusable) {
       focusable.focus();
     } else {
+      // delegatesFocus will focus the first focusable child (e.g., toggle button)
       this.focus();
     }
   }
