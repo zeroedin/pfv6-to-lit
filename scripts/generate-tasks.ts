@@ -409,9 +409,10 @@ function generateTasks(
       // Check if this component was previously blocked by demo deps
       const demoBlockers = hadAllDemosBlocked.get(compName);
 
-      // Determine task type
+      // Determine task type - only blocked if deps are unsatisfied
+      const unsatisfiedBlockers = uniqueBlockers.filter(b => !createdComponents.has(b));
       let taskType: 'ready' | 'blocked';
-      if (uniqueBlockers.length > 0 || demoBlockers) {
+      if (unsatisfiedBlockers.length > 0 || demoBlockers) {
         taskType = 'blocked';
       } else {
         taskType = 'ready';
