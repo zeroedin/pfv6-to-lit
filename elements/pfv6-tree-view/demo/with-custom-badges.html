@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="../../pfv6-tree-view-lightdom.css">
+
+<pfv6-tree-view has-badges accessible-label="Tree View with custom badges example">
+  <pfv6-tree-view-item name="Application launcher" id="example6-AppLaunch" badge-content="2 applications" default-expanded>
+    <pfv6-tree-view-item name="Application 1" id="example6-App1" badge-content="2 children">
+      <pfv6-tree-view-item name="Settings" id="example6-App1Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Current" id="example6-App1Current"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+    <pfv6-tree-view-item name="Application 2" id="example6-App2" badge-content="2 children">
+      <pfv6-tree-view-item name="Settings" id="example6-App2Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Loader" id="example6-App2Loader" badge-content="3 loading apps">
+        <pfv6-tree-view-item name="Loading app 1" id="example6-LoadApp1"></pfv6-tree-view-item>
+        <pfv6-tree-view-item name="Loading app 2" id="example6-LoadApp2"></pfv6-tree-view-item>
+        <pfv6-tree-view-item name="Loading app 3" id="example6-LoadApp3"></pfv6-tree-view-item>
+      </pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Cost management" id="example6-Cost" badge-content="1 applications">
+    <pfv6-tree-view-item name="Application 3" id="example6-App3" badge-content="2 children">
+      <pfv6-tree-view-item name="Settings" id="example6-App3Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Current" id="example6-App3Current"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Sources" id="example6-Sources" badge-content="1 source">
+    <pfv6-tree-view-item name="Application 4" id="example6-App4" badge-content="1 child">
+      <pfv6-tree-view-item name="Settings" id="example6-App4Settings"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Really really really long folder name that overflows the container it is in" id="example6-Long" badge-content="1 application">
+    <pfv6-tree-view-item name="Application 5" id="example6-App5"></pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+</pfv6-tree-view>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-tree-view/pfv6-tree-view.js';
+</script>

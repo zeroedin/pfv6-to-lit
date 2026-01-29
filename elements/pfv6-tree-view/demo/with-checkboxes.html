@@ -1,0 +1,133 @@
+<link rel="stylesheet" href="../../pfv6-tree-view-lightdom.css">
+
+<pfv6-tree-view id="tree" has-checkboxes accessible-label="Tree View with checkboxes example">
+  <pfv6-tree-view-item name="Application launcher" id="example3-AppLaunch" default-expanded>
+    <pfv6-tree-view-item name="Application 1" id="example3-App1">
+      <pfv6-tree-view-item name="Settings" id="example3-App1Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Current" id="example3-App1Current"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+    <pfv6-tree-view-item name="Application 2" id="example3-App2">
+      <pfv6-tree-view-item name="Settings" id="example3-App2Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Loader" id="example3-App2Loader">
+        <pfv6-tree-view-item name="Loading App 1" id="example3-LoadApp1"></pfv6-tree-view-item>
+        <pfv6-tree-view-item name="Loading App 2" id="example3-LoadApp2"></pfv6-tree-view-item>
+        <pfv6-tree-view-item name="Loading App 3" id="example3-LoadApp3"></pfv6-tree-view-item>
+      </pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Cost management" id="example3-Cost">
+    <pfv6-tree-view-item name="Application 3" id="example3-App3">
+      <pfv6-tree-view-item name="Settings" id="example3-App3Settings"></pfv6-tree-view-item>
+      <pfv6-tree-view-item name="Current" id="example3-App3Current"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Sources" id="example3-Sources">
+    <pfv6-tree-view-item name="Application 4" id="example3-App4">
+      <pfv6-tree-view-item name="Settings" id="example3-App4Settings"></pfv6-tree-view-item>
+    </pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+  <pfv6-tree-view-item name="Really really really long folder name that overflows the container it is in" id="example3-Long">
+    <pfv6-tree-view-item name="Application 5" id="example3-App5"></pfv6-tree-view-item>
+  </pfv6-tree-view-item>
+</pfv6-tree-view>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-tree-view/pfv6-tree-view.js';
+
+  const tree = document.getElementById('tree');
+
+  /**
+   * Get all descendant tree-view-items of an item
+   */
+  function getDescendants(item) {
+    return Array.from(item.querySelectorAll('pfv6-tree-view-item'));
+  }
+
+  /**
+   * Get direct children tree-view-items of an item
+   */
+  function getChildren(item) {
+    return Array.from(item.children).filter(
+      child => child.tagName.toLowerCase() === 'pfv6-tree-view-item'
+    );
+  }
+
+  /**
+   * Get all ancestor tree-view-items of an item
+   */
+  function getAncestors(item) {
+    const ancestors = [];
+    let parent = item.parentElement?.closest('pfv6-tree-view-item');
+    while (parent) {
+      ancestors.push(parent);
+      parent = parent.parentElement?.closest('pfv6-tree-view-item');
+    }
+    return ancestors;
+  }
+
+  /**
+   * Check if all descendants are checked
+   */
+  function areAllDescendantsChecked(item) {
+    const children = getChildren(item);
+    if (children.length === 0) {
+      return item.checked;
+    }
+    return children.every(child => areAllDescendantsChecked(child));
+  }
+
+  /**
+   * Check if some (but not all) descendants are checked
+   */
+  function areSomeDescendantsChecked(item) {
+    const children = getChildren(item);
+    if (children.length === 0) {
+      return item.checked;
+    }
+    return children.some(child => areSomeDescendantsChecked(child));
+  }
+
+  /**
+   * Update parent checkbox states based on children
+   */
+  function updateAncestorStates(item) {
+    const ancestors = getAncestors(item);
+    for (const ancestor of ancestors) {
+      const allChecked = areAllDescendantsChecked(ancestor);
+      const someChecked = areSomeDescendantsChecked(ancestor);
+
+      if (allChecked) {
+        ancestor.checked = true;
+        ancestor.indeterminate = false;
+      } else if (someChecked) {
+        ancestor.checked = false;
+        ancestor.indeterminate = true;
+      } else {
+        ancestor.checked = false;
+        ancestor.indeterminate = false;
+      }
+    }
+  }
+
+  /**
+   * Handle checkbox check events
+   */
+  tree.addEventListener('check', (e) => {
+    const item = e.target;
+    const isChecked = e.checked;
+
+    // Update the clicked item
+    item.checked = isChecked;
+    item.indeterminate = false;
+
+    // Cascade to all descendants
+    const descendants = getDescendants(item);
+    for (const descendant of descendants) {
+      descendant.checked = isChecked;
+      descendant.indeterminate = false;
+    }
+
+    // Update all ancestor states
+    updateAncestorStates(item);
+  });
+</script>

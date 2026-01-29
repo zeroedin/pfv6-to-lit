@@ -1,0 +1,567 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button,
+input {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: var(--pf-t--global--text--color--regular, #151515);
+}
+
+button {
+  cursor: pointer;
+}
+
+:host {
+  display: block;
+  outline: none; /* delegatesFocus handles focus on internal element */
+
+  /* Consume position from parent when in guides/compact mode */
+  position: var(--_tree-view-item-position, static);
+
+  /* Consume border from parent when in compact mode */
+  border-block-end: var(--_tree-view-item-border-block-end, none);
+}
+
+/* Remove border on nested children in compact mode */
+#container.compact ::slotted(pfv6-tree-view-item) {
+  --_tree-view-item-border-block-end: none;
+}
+
+#container {
+  /* Reset inherited rotation to prevent parent expanded state from affecting children */
+  --pf-v6-c-tree-view__node-toggle-icon--Rotate: 0;
+  --pf-v6-c-tree-view__node-toggle--Color: var(--pf-v6-c-tree-view__node-toggle--Color--base, #707070);
+
+  /* Base indent: calc(1rem * 2 + 0.875rem) = 2.875rem. Nested indent: calc(base - 1rem) = 1.875rem */
+  --_base-indent: 2.875rem;
+  --_nested-indent: 1.875rem;
+
+  /* Level-based padding - default is level 1 */
+  --pf-v6-c-tree-view__node--PaddingInlineStart: var(--_base-indent);
+
+  &.level-2 {
+    --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--_nested-indent) * 1 + var(--_base-indent));
+    --pf-v6-c-tree-view__list-item__list-item__node-toggle--InsetInlineStart: calc(var(--_nested-indent) * 1 + var(--_base-indent));
+  }
+
+  &.level-3 {
+    --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--_nested-indent) * 2 + var(--_base-indent));
+    --pf-v6-c-tree-view__list-item__list-item__node-toggle--InsetInlineStart: calc(var(--_nested-indent) * 2 + var(--_base-indent));
+  }
+
+  &.level-4 {
+    --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--_nested-indent) * 3 + var(--_base-indent));
+    --pf-v6-c-tree-view__list-item__list-item__node-toggle--InsetInlineStart: calc(var(--_nested-indent) * 3 + var(--_base-indent));
+  }
+
+  &.level-5 {
+    --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--_nested-indent) * 4 + var(--_base-indent));
+    --pf-v6-c-tree-view__list-item__list-item__node-toggle--InsetInlineStart: calc(var(--_nested-indent) * 4 + var(--_base-indent));
+  }
+
+  &.level-6 {
+    --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--_nested-indent) * 5 + var(--_base-indent));
+    --pf-v6-c-tree-view__list-item__list-item__node-toggle--InsetInlineStart: calc(var(--_nested-indent) * 5 + var(--_base-indent));
+  }
+
+  &.level-7 {
+    --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--_nested-indent) * 6 + var(--_base-indent));
+    --pf-v6-c-tree-view__list-item__list-item__node-toggle--InsetInlineStart: calc(var(--_nested-indent) * 6 + var(--_base-indent));
+  }
+
+  &.level-8 {
+    --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--_nested-indent) * 7 + var(--_base-indent));
+    --pf-v6-c-tree-view__list-item__list-item__node-toggle--InsetInlineStart: calc(var(--_nested-indent) * 7 + var(--_base-indent));
+  }
+
+  &.level-9 {
+    --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--_nested-indent) * 8 + var(--_base-indent));
+    --pf-v6-c-tree-view__list-item__list-item__node-toggle--InsetInlineStart: calc(var(--_nested-indent) * 8 + var(--_base-indent));
+  }
+
+  &.level-10 {
+    --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--_nested-indent) * 9 + var(--_base-indent));
+    --pf-v6-c-tree-view__list-item__list-item__node-toggle--InsetInlineStart: calc(var(--_nested-indent) * 9 + var(--_base-indent));
+  }
+
+  /* Guides nested styling (non-compact with guides) */
+  &.guides.nested:not(.compact) {
+    /* Vertical guide line */
+    &::before {
+      position: absolute;
+      inset-block-start: var(--pf-v6-c-tree-view--m-guides__list-item--before--InsetBlockStart, 0);
+      inset-inline-start: var(--pf-v6-c-tree-view--m-guides--guide--InsetInlineStart, 1.375rem);
+      z-index: var(--pf-v6-c-tree-view--m-guides__list-item--ZIndex, 100);
+      width: var(--pf-v6-c-tree-view--m-guides__list-item--before--Width, 1px);
+      height: var(--pf-v6-c-tree-view--m-guides__list-item--before--Height, 100%);
+      content: "";
+      background-color: var(--pf-v6-c-tree-view--m-guides__list-item--before--BackgroundColor, #c7c7c7);
+    }
+
+    /* Horizontal guide line on node */
+    .node::before {
+      position: absolute;
+      inset-block-start: var(--pf-v6-c-tree-view--m-guides__node--before--InsetBlockStart, 1.125rem);
+      inset-inline-start: var(--pf-v6-c-tree-view--m-guides--guide--InsetInlineStart, 1.375rem);
+      width: var(--pf-v6-c-tree-view--m-guides__node--before--Width, 1rem);
+      height: var(--pf-v6-c-tree-view--m-guides__node--before--Height, 1px);
+      content: "";
+      background-color: var(--pf-v6-c-tree-view--m-guides__node--before--BackgroundColor, #c7c7c7);
+    }
+
+    /* Progressive indentation for guides mode */
+    &.level-2 {
+      --pf-v6-c-tree-view--m-guides--guide--InsetInlineStart: calc(var(--_nested-indent) * 1 + var(--_base-indent) - var(--pf-v6-c-tree-view--m-guides--guide-left--base--offset, 1.875rem));
+    }
+
+    &.level-3 {
+      --pf-v6-c-tree-view--m-guides--guide--InsetInlineStart: calc(var(--_nested-indent) * 2 + var(--_base-indent) - var(--pf-v6-c-tree-view--m-guides--guide-left--base--offset, 1.875rem));
+    }
+
+    &.level-4 {
+      --pf-v6-c-tree-view--m-guides--guide--InsetInlineStart: calc(var(--_nested-indent) * 3 + var(--_base-indent) - var(--pf-v6-c-tree-view--m-guides--guide-left--base--offset, 1.875rem));
+    }
+
+    &.level-5 {
+      --pf-v6-c-tree-view--m-guides--guide--InsetInlineStart: calc(var(--_nested-indent) * 4 + var(--_base-indent) - var(--pf-v6-c-tree-view--m-guides--guide-left--base--offset, 1.875rem));
+    }
+
+    &.level-6 {
+      --pf-v6-c-tree-view--m-guides--guide--InsetInlineStart: calc(var(--_nested-indent) * 5 + var(--_base-indent) - var(--pf-v6-c-tree-view--m-guides--guide-left--base--offset, 1.875rem));
+    }
+
+    &.level-7 {
+      --pf-v6-c-tree-view--m-guides--guide--InsetInlineStart: calc(var(--_nested-indent) * 6 + var(--_base-indent) - var(--pf-v6-c-tree-view--m-guides--guide-left--base--offset, 1.875rem));
+    }
+
+    &.level-8 {
+      --pf-v6-c-tree-view--m-guides--guide--InsetInlineStart: calc(var(--_nested-indent) * 7 + var(--_base-indent) - var(--pf-v6-c-tree-view--m-guides--guide-left--base--offset, 1.875rem));
+    }
+
+    &.level-9 {
+      --pf-v6-c-tree-view--m-guides--guide--InsetInlineStart: calc(var(--_nested-indent) * 8 + var(--_base-indent) - var(--pf-v6-c-tree-view--m-guides--guide-left--base--offset, 1.875rem));
+    }
+
+    &.level-10 {
+      --pf-v6-c-tree-view--m-guides--guide--InsetInlineStart: calc(var(--_nested-indent) * 9 + var(--_base-indent) - var(--pf-v6-c-tree-view--m-guides--guide-left--base--offset, 1.875rem));
+    }
+  }
+
+  /* Compact nested styling */
+  &.compact.nested {
+    /* Override padding for compact mode - use base indent for level 2 */
+    --pf-v6-c-tree-view__node--PaddingInlineStart: var(--pf-v6-c-tree-view--m-compact__node--level-2--PaddingInlineStart, 2.875rem);
+    --pf-v6-c-tree-view__node--PaddingBlockStart: var(--pf-v6-c-tree-view--m-compact__node--nested--PaddingBlockStart, 0.5rem);
+    --pf-v6-c-tree-view__node--PaddingBlockEnd: var(--pf-v6-c-tree-view--m-compact__node--nested--PaddingBlockEnd, 0.5rem);
+    --pf-v6-c-tree-view__node-container--BackgroundColor: var(--pf-v6-c-tree-view--m-compact__node-container--nested--BackgroundColor, #f2f2f2);
+    --pf-v6-c-tree-view__node-container--PaddingBlockStart: var(--pf-v6-c-tree-view--m-compact__node-container--nested--PaddingBlockStart, 1rem);
+    --pf-v6-c-tree-view__node-container--PaddingBlockEnd: var(--pf-v6-c-tree-view--m-compact__node-container--nested--PaddingBlockEnd, 1rem);
+    --pf-v6-c-tree-view__node-container--PaddingInlineStart: var(--pf-v6-c-tree-view--m-compact__node-container--nested--PaddingInlineStart, 1.5rem);
+    --pf-v6-c-tree-view__node-container--PaddingInlineEnd: var(--pf-v6-c-tree-view--m-compact__node-container--nested--PaddingInlineEnd, 1.5rem);
+
+    /* Toggle is static in nested compact mode with negative margins to align text */
+    --pf-v6-c-tree-view__node-toggle--Position: static;
+    --pf-v6-c-tree-view__list-item__list-item__node-toggle--TranslateX: 0;
+
+    #toggle {
+      margin-inline-start: var(--pf-v6-c-tree-view--m-compact__node-toggle--nested--MarginInlineStart, -1.5rem);
+      margin-inline-end: var(--pf-v6-c-tree-view--m-compact__node-toggle--nested--MarginInlineEnd, -0.5rem);
+    }
+
+    /* Vertical guide line */
+    &::before {
+      position: absolute;
+      inset-block-start: var(--pf-v6-c-tree-view--m-compact__list-item--before--InsetBlockStart, 0);
+      inset-inline-start: var(--pf-v6-c-tree-view--m-compact--border--InsetInlineStart, 1.875rem);
+      z-index: var(--pf-v6-c-tree-view--m-guides__list-item--ZIndex, 100);
+      width: var(--pf-v6-c-tree-view--m-guides__list-item--before--Width, 1px);
+      height: 100%;
+      content: "";
+      background-color: var(--pf-v6-c-tree-view--m-guides__list-item--before--BackgroundColor, #c7c7c7);
+    }
+
+    /* Horizontal guide line on node */
+    .node::before {
+      position: absolute;
+      inset-block-start: var(--pf-v6-c-tree-view--m-compact__node--before--InsetBlockStart, 2rem);
+      inset-inline-start: var(--pf-v6-c-tree-view--m-compact--border--InsetInlineStart, 1.875rem);
+      width: var(--pf-v6-c-tree-view--m-guides__node--before--Width, 1rem);
+      height: var(--pf-v6-c-tree-view--m-guides__node--before--Height, 1px);
+      content: "";
+      background-color: var(--pf-v6-c-tree-view--m-guides__node--before--BackgroundColor, #c7c7c7);
+    }
+
+    /* Progressive indentation for levels 3+ */
+
+    /* Pattern: (level - 2) * 1.5rem + 2.875rem for node padding */
+
+    /* Pattern: (level - 2) * 1.5rem + 1.875rem for guide line inset */
+
+    /* Levels 3+ also get inset-block-start: -0.5rem for guide lines */
+    &.level-3 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 1 + var(--pf-v6-c-tree-view--m-compact__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact__list-item--before--InsetBlockStart: -0.5rem;
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 1 + 1.875rem);
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 1 + var(--pf-v6-c-tree-view--m-compact--border--InsetInlineStart--base, 1.875rem));
+      }
+    }
+
+    &.level-4 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 2 + var(--pf-v6-c-tree-view--m-compact__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact__list-item--before--InsetBlockStart: -0.5rem;
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 2 + 1.875rem);
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 2 + var(--pf-v6-c-tree-view--m-compact--border--InsetInlineStart--base, 1.875rem));
+      }
+    }
+
+    &.level-5 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 3 + var(--pf-v6-c-tree-view--m-compact__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact__list-item--before--InsetBlockStart: -0.5rem;
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 3 + 1.875rem);
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 3 + var(--pf-v6-c-tree-view--m-compact--border--InsetInlineStart--base, 1.875rem));
+      }
+    }
+
+    &.level-6 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 4 + var(--pf-v6-c-tree-view--m-compact__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact__list-item--before--InsetBlockStart: -0.5rem;
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 4 + 1.875rem);
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 4 + var(--pf-v6-c-tree-view--m-compact--border--InsetInlineStart--base, 1.875rem));
+      }
+    }
+
+    &.level-7 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 5 + var(--pf-v6-c-tree-view--m-compact__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact__list-item--before--InsetBlockStart: -0.5rem;
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 5 + 1.875rem);
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 5 + var(--pf-v6-c-tree-view--m-compact--border--InsetInlineStart--base, 1.875rem));
+      }
+    }
+
+    &.level-8 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 6 + var(--pf-v6-c-tree-view--m-compact__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact__list-item--before--InsetBlockStart: -0.5rem;
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 6 + 1.875rem);
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 6 + var(--pf-v6-c-tree-view--m-compact--border--InsetInlineStart--base, 1.875rem));
+      }
+    }
+
+    &.level-9 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 7 + var(--pf-v6-c-tree-view--m-compact__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact__list-item--before--InsetBlockStart: -0.5rem;
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 7 + 1.875rem);
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 7 + var(--pf-v6-c-tree-view--m-compact--border--InsetInlineStart--base, 1.875rem));
+      }
+    }
+
+    &.level-10 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 8 + var(--pf-v6-c-tree-view--m-compact__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact__list-item--before--InsetBlockStart: -0.5rem;
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 8 + 1.875rem);
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact__node--nested-indent--base, 1.5rem) * 8 + var(--pf-v6-c-tree-view--m-compact--border--InsetInlineStart--base, 1.875rem));
+      }
+    }
+  }
+
+  /* Compact nested no-background styling */
+  &.compact.nested.no-background {
+    /* No-background nested items have 0 padding block */
+    --pf-v6-c-tree-view__node--PaddingBlockStart: var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested--PaddingBlockStart, 0);
+    --pf-v6-c-tree-view__node--PaddingBlockEnd: var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested--PaddingBlockEnd, 0);
+
+    /* Levels 3+ use different indent and border inset for no-background */
+    &.level-3 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 1 + var(--pf-v6-c-tree-view--m-compact--m-no-background__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 1 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 1 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+      }
+    }
+
+    &.level-4 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 2 + var(--pf-v6-c-tree-view--m-compact--m-no-background__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 2 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 2 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+      }
+    }
+
+    &.level-5 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 3 + var(--pf-v6-c-tree-view--m-compact--m-no-background__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 3 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 3 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+      }
+    }
+
+    &.level-6 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 4 + var(--pf-v6-c-tree-view--m-compact--m-no-background__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 4 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 4 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+      }
+    }
+
+    &.level-7 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 5 + var(--pf-v6-c-tree-view--m-compact--m-no-background__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 5 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 5 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+      }
+    }
+
+    &.level-8 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 6 + var(--pf-v6-c-tree-view--m-compact--m-no-background__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 6 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 6 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+      }
+    }
+
+    &.level-9 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 7 + var(--pf-v6-c-tree-view--m-compact--m-no-background__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 7 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 7 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+      }
+    }
+
+    &.level-10 {
+      --pf-v6-c-tree-view__node--PaddingInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 8 + var(--pf-v6-c-tree-view--m-compact--m-no-background__node--indent--base, 2.875rem));
+      --pf-v6-c-tree-view--m-compact--border--InsetInlineStart: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 8 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+
+      .node::before {
+        inset-inline-start: calc(var(--pf-v6-c-tree-view--m-compact--m-no-background__node--nested-indent--base, 3rem) * 8 + var(--pf-v6-c-tree-view--m-compact--m-no-background--base-border--InsetInlineStart, 2.375rem));
+      }
+    }
+  }
+
+  /* Nested list transitions */
+  & > [role="group"] {
+    max-height: 0;
+    visibility: hidden;
+    opacity: var(--pf-v6-c-tree-view__list--Opacity, 0);
+    transition-delay: 0s, 0s, var(--pf-v6-c-tree-view__list--TransitionDuration--fade, 100ms), var(--pf-v6-c-tree-view__list--TransitionDuration--fade, 100ms);
+    transition-timing-function: var(--pf-v6-c-tree-view__list--TransitionTimingFunction, cubic-bezier(0.4, 0, 0.2, 1));
+    transition-duration: var(--pf-v6-c-tree-view__list--TransitionDuration--fade, 100ms), var(--pf-v6-c-tree-view__list--TransitionDuration--slide, 0s), 0s, 0s;
+    transition-property: opacity, translate, visibility, max-height;
+    translate: 0 var(--pf-v6-c-tree-view__list--TranslateY, -0.5rem);
+  }
+
+  &.expanded {
+    --pf-v6-c-tree-view__node-toggle--Color: var(--pf-v6-c-tree-view__list-item--m-expanded__node-toggle--Color, #1f1f1f);
+    --pf-v6-c-tree-view__node-toggle-icon--Rotate: var(--pf-v6-c-tree-view__list-item--m-expanded__node-toggle-icon--Rotate, 90deg);
+
+    /* Level 1 compact expanded items have no bottom padding on node-container */
+    &.compact:not(.nested) {
+      --pf-v6-c-tree-view__node-container--PaddingBlockEnd: var(--pf-v6-c-tree-view--m-compact__list-item--m-expanded__node-container--PaddingBlockEnd, 0);
+    }
+
+    & > [role="group"] {
+      max-height: 99999px;
+      visibility: visible;
+      opacity: var(--pf-v6-c-tree-view--m-expanded__list--Opacity, 1);
+      transition-delay: 0s;
+      transition-duration: var(--pf-v6-c-tree-view__list--TransitionDuration--expand--fade, 200ms), var(--pf-v6-c-tree-view__list--TransitionDuration--expand--slide, 0s), 0s, 0s;
+      translate: 0 var(--pf-v6-c-tree-view--m-expanded__list--TranslateY, 0);
+    }
+  }
+}
+
+/* Last child in compact mode - shorter guide line */
+:host(:last-child) #container.compact.nested::before {
+  height: var(--pf-v6-c-tree-view--m-compact__list-item--last-child--before--Height, 2.25rem);
+}
+
+/* Last child in compact no-background mode level 2 - shorter guide line (28px = 1.75rem) */
+:host(:last-child) #container.compact.nested.no-background.level-2::before {
+  height: var(--pf-v6-c-tree-view--m-compact--m-no-background__list-item--level-2--before--Height, 1.75rem);
+}
+
+#tree-view-content {
+  display: flex;
+  align-items: center;
+  background-color: var(--pf-v6-c-tree-view__content--BackgroundColor);
+  border-radius: var(--pf-v6-c-tree-view__content--BorderRadius, 6px);
+
+  &:hover,
+  &:focus-within {
+    --pf-v6-c-tree-view__node--BorderWidth: var(--pf-v6-c-tree-view__node--hover--BorderWidth, 0px);
+
+    background-color: var(--pf-v6-c-tree-view__node--hover--BackgroundColor, #e0e0e0);
+  }
+
+  &:has(.node.current) {
+    --pf-v6-c-tree-view__content--BackgroundColor: var(--pf-v6-c-tree-view__node--m-current--BackgroundColor, #e0e0e0);
+  }
+}
+
+.node,
+#node-container {
+  flex: 1 1;
+  align-items: flex-start;
+  min-width: 0;
+  text-align: start;
+  cursor: pointer;
+  border: 0;
+}
+
+.node {
+  position: relative;
+  display: flex;
+  padding-block-start: var(--pf-v6-c-tree-view__node--PaddingBlockStart, 0.5rem);
+  padding-block-end: var(--pf-v6-c-tree-view__node--PaddingBlockEnd, 0.5rem);
+  padding-inline-start: var(--pf-v6-c-tree-view__node--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-tree-view__node--PaddingInlineEnd, 0.5rem);
+  color: var(--pf-v6-c-tree-view__node--Color, #4d4d4d);
+  background-color: var(--pf-v6-c-tree-view__node--BackgroundColor, transparent);
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    border: var(--pf-v6-c-tree-view__node--BorderWidth, 0) solid var(--pf-v6-c-tree-view__node--BorderColor, rgb(255 255 255 / 0%));
+    border-radius: var(--pf-v6-c-tree-view__node--BorderRadius, 6px);
+  }
+
+  &.current {
+    --pf-v6-c-tree-view__node--Color: var(--pf-v6-c-tree-view__node--m-current--Color, #151515);
+    --pf-v6-c-tree-view__node--BorderWidth: var(--pf-v6-c-tree-view__node--m-current--BorderWidth, 0px);
+  }
+}
+
+#node-container {
+  display: var(--pf-v6-c-tree-view__node-container--Display, contents);
+  flex-grow: 1;
+  padding-block-start: var(--pf-v6-c-tree-view__node-container--PaddingBlockStart, 0);
+  padding-block-end: var(--pf-v6-c-tree-view__node-container--PaddingBlockEnd, 0);
+  padding-inline-start: var(--pf-v6-c-tree-view__node-container--PaddingInlineStart, 0);
+  padding-inline-end: var(--pf-v6-c-tree-view__node-container--PaddingInlineEnd, 0);
+  background-color: var(--pf-v6-c-tree-view__node-container--BackgroundColor, transparent);
+  border-radius: var(--pf-v6-c-tree-view--m-compact__node-container--BorderRadius, 6px);
+}
+
+#toggle {
+  position: var(--pf-v6-c-tree-view__node-toggle--Position, absolute);
+  inset-block-start: var(--pf-v6-c-tree-view__list-item__list-item__node-toggle--InsetBlockStart);
+  inset-inline-start: var(--pf-v6-c-tree-view__list-item__list-item__node-toggle--InsetInlineStart);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-block-start: var(--pf-v6-c-tree-view__node-toggle--PaddingBlockStart, 0.5rem);
+  padding-block-end: var(--pf-v6-c-tree-view__node-toggle--PaddingBlockEnd, 0.5rem);
+  padding-inline-start: var(--pf-v6-c-tree-view__node-toggle--PaddingInlineStart, 1rem);
+  padding-inline-end: var(--pf-v6-c-tree-view__node-toggle--PaddingInlineEnd, 1rem);
+  margin-block-start: var(--pf-v6-c-tree-view__node-toggle--MarginBlockStart);
+  margin-block-end: var(--pf-v6-c-tree-view__node-toggle--MarginBlockEnd);
+  color: var(--pf-v6-c-tree-view__node-toggle--Color, #707070);
+  background-color: var(--pf-v6-c-tree-view__node-toggle--BackgroundColor, transparent);
+  border: 0;
+  transform: translateX(var(--pf-v6-c-tree-view__list-item__list-item__node-toggle--TranslateX, -100%));
+
+  &:dir(rtl) {
+    transform: translateX(calc(var(--pf-v6-c-tree-view__list-item__list-item__node-toggle--TranslateX, -100%) * -1));
+  }
+}
+
+#toggle-icon {
+  display: inline-block;
+  min-width: var(--pf-v6-c-tree-view__node-toggle-icon--MinWidth, 0.875rem);
+  text-align: center;
+  transition: transform var(--pf-v6-c-tree-view__node-toggle-icon--TransitionDuration, 100ms) var(--pf-v6-c-tree-view__node-toggle-icon--TransitionTimingFunction, cubic-bezier(0.4, 0, 0.2, 1));
+  transform: rotate(var(--pf-v6-c-tree-view__node-toggle-icon--Rotate, 0));
+
+  &:dir(ltr) {
+    transform: scaleX(1) rotate(var(--pf-v6-c-tree-view__node-toggle-icon--Rotate, 0));
+  }
+
+  &:dir(rtl) {
+    transform: scaleX(-1) rotate(var(--pf-v6-c-tree-view__node-toggle-icon--Rotate, 0));
+  }
+}
+
+#check {
+  margin-inline-end: var(--pf-v6-c-tree-view__node-check--MarginInlineEnd, 0.5rem);
+}
+
+#icon {
+  padding-inline-end: var(--pf-v6-c-tree-view__node-icon--PaddingInlineEnd, 0.5rem);
+  color: var(--pf-v6-c-tree-view__node-icon--Color, #707070);
+}
+
+#content {
+  display: flex;
+  flex-direction: column;
+  overflow: var(--pf-v6-c-tree-view__node-content--Overflow, visible);
+
+  & > * + * {
+    margin-block-start: var(--pf-v6-c-tree-view__node-content--RowGap, 0.5rem);
+  }
+}
+
+#title {
+  font-weight: var(--pf-v6-c-tree-view__node-title--FontWeight, 500);
+}
+
+#text {
+  font-weight: inherit;
+  color: inherit;
+  text-align: start;
+  background-color: transparent;
+  border: 0;
+}
+
+#count {
+  margin-inline-start: var(--pf-v6-c-tree-view__node-count--MarginInlineStart, 0.5rem);
+}
+
+#action {
+  margin-inline-end: var(--pf-v6-c-tree-view__action--MarginInlineEnd, 1rem);
+}
+
+/* Last child in guides mode - shorter guide line */
+:host(:last-child) #container.guides.nested:not(.compact)::before {
+  height: var(--pf-v6-c-tree-view--m-guides__list-item--last-child--before--Height, 1.125rem);
+}
+
+/* Height overrides for compact nested levels 3+ - explicit selectors outside nesting */
+#container.compact.nested.level-3::before,
+#container.compact.nested.level-4::before,
+#container.compact.nested.level-5::before,
+#container.compact.nested.level-6::before,
+#container.compact.nested.level-7::before,
+#container.compact.nested.level-8::before,
+#container.compact.nested.level-9::before,
+#container.compact.nested.level-10::before {
+  height: calc(var(--pf-v6-c-tree-view--m-compact__node--before--InsetBlockStart, 2rem) + var(--pf-v6-c-tree-view--m-compact__node--nested--PaddingBlockStart, 0.5rem)) !important;
+}

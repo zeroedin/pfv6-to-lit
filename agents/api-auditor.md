@@ -780,26 +780,109 @@ render() {
 - Search for `className=` in template strings
 - Flag each occurrence as a violation
 
-### Check Static Wrapper Uses ID (Not Class)
+### Check Singular Elements Use ID (Not Class) - CRITICAL
 
+**RULE**: If a DOM element appears only ONCE in the template (is NOT repeated), use `#id`. Use `.class` ONLY for elements that repeat (e.g., via `repeat()` or conditional rendering of multiple instances).
+
+**Why this matters**:
+- IDs are semantically correct for unique elements
+- IDs have better CSS performance (browser can index by ID)
+- Classes imply "one of many" which is misleading for singular elements
+- Consistent convention makes components easier to audit
+
+**Detection Pattern**:
+1. Find all elements with `class="..."` (static class) or `class=${...}` (dynamic class)
+2. For each element, check if it repeats in the template:
+   - Is it inside a `repeat()` call?
+   - Is it inside a `map()` call?
+   - Does the same element appear multiple times with same class?
+3. If element does NOT repeat and has only a static class → **CRITICAL VIOLATION**
+4. If element repeats → class is acceptable
+
+**Exception**: Elements that need BOTH an ID and dynamic variant classes via `classMap()` are acceptable:
 ```typescript
-// ❌ WRONG - Static class on wrapper
-render() {
-  return html`<div class="container"><slot></slot></div>`;
-}
+// ✅ ACCEPTABLE - ID for uniqueness + classMap for variants
+<div id="container" class=${classMap({ expanded: this.isExpanded })}></div>
+```
 
-// ✅ CORRECT - ID for static wrapper
+**❌ WRONG - Singular elements using class instead of ID**:
+```typescript
 render() {
-  return html`<div id="container"><slot></slot></div>`;
+  return html`
+    <div class="container">               <!-- ❌ Should be id="container" -->
+      <div class="form-control">          <!-- ❌ Should be id="form-control" -->
+        <input type="text" />
+        <div class="utilities">           <!-- ❌ Should be id="utilities" -->
+          <div class="icon">              <!-- ❌ Should be id="icon" -->
+            <svg>...</svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 }
+```
 
-// ✅ CORRECT - ID + classMap for variants
+**✅ CORRECT - Singular elements use ID**:
+```typescript
 render() {
-  const classes = {
-    raised: this.variant === 'raised'
-  };
-  return html`<div id="container" class=${classMap(classes)}><slot></slot></div>`;
+  return html`
+    <div id="container">
+      <div id="form-control">
+        <input type="text" />
+        <div id="utilities">
+          <div id="icon">
+            <svg>...</svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 }
+```
+
+**✅ CORRECT - Repeated elements use class**:
+```typescript
+render() {
+  return html`
+    <ul id="list">
+      ${repeat(this.items, item => item.id, item => html`
+        <li class="list-item">${item.name}</li>  <!-- ✅ Repeats, class OK -->
+      `)}
+    </ul>
+  `;
+}
+```
+
+**Validation Steps**:
+1. Grep for `class="[^"$]+"` (static class attributes) in render template
+2. For each match:
+   - Extract the element and its class name
+   - Determine if element repeats (check for `repeat()`, `map()`, or multiple occurrences)
+   - If singular element → Flag as CRITICAL violation
+3. Also check CSS file for class selectors that should be ID selectors
+
+**CSS File Cross-Check**:
+When flagging TypeScript violations, also check the CSS file:
+- If `.class-name` exists in CSS but element is singular → Both files need fixing
+- CSS should use `#id` selector for singular elements
+
+**Report Format**:
+```
+❌ CRITICAL: Singular element uses class instead of ID
+
+Template violation at line 52:
+  <div class="form-control">
+  - Element appears once (not repeated)
+  - Should use: <div id="form-control">
+
+CSS violation at line 15:
+  .form-control { ... }
+  - Should use: #form-control { ... }
+
+Files to update:
+  - elements/pfv6-component/pfv6-component.ts (line 52)
+  - elements/pfv6-component/pfv6-component.css (line 15)
 ```
 
 ### Check No Unnecessary Parts

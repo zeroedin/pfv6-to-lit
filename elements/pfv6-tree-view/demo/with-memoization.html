@@ -1,0 +1,38 @@
+<link rel="stylesheet" href="../../pfv6-tree-view-lightdom.css">
+
+<pfv6-button id="toggle-btn" variant="link">Expand all</pfv6-button>
+
+<pfv6-tree-view id="tree" accessible-label="Tree View with memoization example">
+</pfv6-tree-view>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-tree-view/pfv6-tree-view.js';
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+  const tree = document.getElementById('tree');
+  const toggleBtn = document.getElementById('toggle-btn');
+  let allExpanded = false;
+
+  // Generate large tree structure
+  for (let i = 1; i <= 20; i++) {
+    const parentItem = document.createElement('pfv6-tree-view-item');
+    parentItem.name = 'Option ' + i;
+    parentItem.id = i.toString();
+
+    const childNum = 5;
+    for (let j = 1; j <= childNum; j++) {
+      const childItem = document.createElement('pfv6-tree-view-item');
+      childItem.name = 'Child ' + j;
+      childItem.id = `Option${i}-Child${j}`;
+      parentItem.appendChild(childItem);
+    }
+
+    tree.appendChild(parentItem);
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    allExpanded = !allExpanded;
+    tree.allExpanded = allExpanded;
+    toggleBtn.textContent = allExpanded ? 'Collapse all' : 'Expand all';
+  });
+</script>
