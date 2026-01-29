@@ -138,11 +138,26 @@ export class Pfv6TreeView extends LitElement {
 
   /**
    * Gets all visible (not inside collapsed parent) and non-disabled tree items.
-   * Items inside inert groups (collapsed parents) are excluded.
+   * Checks ancestor tree-view-items for collapsed state since inert is in shadow DOM.
    */
   #getVisibleItems(): Pfv6TreeViewItem[] {
     return Array.from(this.querySelectorAll<Pfv6TreeViewItem>('pfv6-tree-view-item'))
-        .filter(item => !item.disabled && !item.closest('[inert]'));
+        .filter(item => {
+          if (item.disabled) {
+            return false;
+          }
+          // Walk up ancestor tree-view-items to check if any are collapsed
+          let parent = item.parentElement?.closest('pfv6-tree-view-item') as Pfv6TreeViewItem | null;
+          while (parent) {
+            // If parent is collapsed, this item is not visible
+            const isExpanded = parent.isExpanded ?? parent.internalIsExpanded;
+            if (!isExpanded) {
+              return false;
+            }
+            parent = parent.parentElement?.closest('pfv6-tree-view-item') as Pfv6TreeViewItem | null;
+          }
+          return true;
+        });
   }
 
   #handleKeydown = (event: KeyboardEvent) => {
@@ -258,7 +273,14 @@ export class Pfv6TreeView extends LitElement {
    * @param toItem - The item receiving focus
    */
   #focusItem(toItem: Pfv6TreeViewItem) {
-    toItem.focus();
+    // Focus the internal button/focusable element directly
+    // delegatesFocus doesn't work reliably when focus is already in another shadow DOM
+    const focusable = toItem.shadowRoot?.querySelector<HTMLElement>('button.node, label.node, div.node[tabindex="0"]');
+    if (focusable) {
+      focusable.focus();
+    } else {
+      toItem.focus();
+    }
   }
 
   #handleToolbarSlotChange = () => {
