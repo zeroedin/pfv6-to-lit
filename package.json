@@ -94,6 +94,13 @@
     "compile:tsc": {
       "command": "tsc",
       "description": "Compile TypeScript",
+      "files": [
+        "elements/**/*.ts",
+        "!elements/**/*.spec.ts",
+        "lib/**/*.ts",
+        "dev-server/**/*.ts",
+        "tsconfig.json"
+      ],
       "output": [
         "elements/**/*.js",
         "elements/**/*.js.map",
