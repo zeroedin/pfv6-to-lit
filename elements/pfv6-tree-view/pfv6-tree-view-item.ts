@@ -148,10 +148,6 @@ export class Pfv6TreeViewItem extends LitElement {
   @property({ type: Boolean, reflect: true, attribute: 'is-compact' })
   isCompact = false;
 
-  /** Flag indicating if the tree view has guides */
-  @property({ type: Boolean, reflect: true, attribute: 'has-guides' })
-  hasGuides = false;
-
   /** Flag indicating if item is disabled */
   @property({ type: Boolean, reflect: true })
   disabled = false;
@@ -172,37 +168,24 @@ export class Pfv6TreeViewItem extends LitElement {
   level = 1;
 
   // Computed properties that combine explicit attributes with context values
-  /** Whether compact mode is active (from context) */
+  /** Whether compact mode is active (explicit attribute or context) */
   get effectiveIsCompact(): boolean {
-    return this._treeContext.isCompact;
-  }
-
-  /** Whether guides are shown (from context) */
-  get effectiveHasGuides(): boolean {
-    return this._treeContext.hasGuides;
-  }
-
-  /** Whether no-background mode is active (from context) */
-  get effectiveIsNoBackground(): boolean {
-    return this._treeContext.isNoBackground;
+    return this.isCompact || this._treeContext.isCompact;
   }
 
   /** Whether badges are enabled (explicit attribute or context) */
   get effectiveHasBadge(): boolean {
-    return this.hasAttribute('has-badge') ? this.hasBadge : this._treeContext.hasBadges;
+    return this.hasBadge || this._treeContext.hasBadges;
   }
 
   /** Whether checkbox is shown (explicit attribute or context) */
   get effectiveHasCheckbox(): boolean {
-    return this.hasAttribute('has-checkbox') ? this.hasCheckbox : this._treeContext.hasCheckboxes;
+    return this.hasCheckbox || this._treeContext.hasCheckboxes;
   }
 
   /** Whether item is selectable even with children (explicit attribute or context) */
   get effectiveIsSelectable(): boolean {
-    if (this.hasAttribute('is-selectable')) {
-      return this.isSelectable;
-    }
-    return this._treeContext.hasSelectableNodes;
+    return this.isSelectable || this._treeContext.hasSelectableNodes;
   }
 
   /** Tracks the previous allExpanded context value to detect changes */
@@ -400,8 +383,8 @@ export class Pfv6TreeViewItem extends LitElement {
       <div id="container" class=${classMap({
         'expanded': this.internalIsExpanded,
         'compact': this.effectiveIsCompact,
-        'no-background': this.effectiveIsNoBackground,
-        'guides': this.effectiveHasGuides,
+        'no-background': this._treeContext.isNoBackground,
+        'guides': this._treeContext.hasGuides,
         'nested': this.level > 1,
         'level-1': this.level === 1,
         'level-2': this.level === 2,
