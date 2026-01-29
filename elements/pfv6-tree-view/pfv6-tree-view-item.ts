@@ -354,12 +354,12 @@ export class Pfv6TreeViewItem extends LitElement {
       <span id="node-container">
         ${this.hasChildren ?
           (this.effectiveHasCheckbox || this.effectiveIsSelectable) ?
-            html`<button id="toggle" @click=${this.#handleToggleClick} aria-labelledby=${`label-${this.checkboxId}`} type="button" tabindex="-1">${toggleIcon}</button>`
+            html`<button id="toggle" @click=${this.#handleToggleClick} aria-labelledby=${`label-${this.checkboxId}`} type="button">${toggleIcon}</button>`
             : html`<span id="toggle" @click=${this.#handleToggleClick} tabindex="-1">${toggleIcon}</span>`
           : null}
         ${this.effectiveHasCheckbox ? html`
           <span id="check">
-            <input type="checkbox" id=${this.checkboxId} .checked=${this.checked} .indeterminate=${this.indeterminate} @change=${this.#handleCheckboxChange} @click=${(e: Event) => e.stopPropagation()} ?disabled=${this.disabled} tabindex="-1" />
+            <input type="checkbox" id=${this.checkboxId} .checked=${this.checked} .indeterminate=${this.indeterminate} @change=${this.#handleCheckboxChange} @click=${(e: Event) => e.stopPropagation()} ?disabled=${this.disabled} />
           </span>
         ` : null}
         <span id="icon">
