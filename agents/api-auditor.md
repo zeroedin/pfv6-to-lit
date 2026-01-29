@@ -980,13 +980,13 @@ render() {
 }
 ```
 
-**✅ CORRECT - Use plain divs for internal structure**:
+**✅ CORRECT - Use plain elements with IDs for internal structure**:
 ```typescript
-// ✅ CORRECT - Internal elements are just divs, not sub-components
+// ✅ CORRECT - Internal elements use IDs (singular) not sub-components
 render() {
   return html`
     <div id="tooltip">
-      <div class="pf-v6-c-tooltip__arrow"></div>
+      <div id="arrow"></div>
       <div id="content">${this.content}</div>
     </div>
   `;
@@ -1025,13 +1025,13 @@ render() {
 ❌ Unnecessary sub-component: pfv6-tooltip-arrow
   - Not slotted by users (internal to pfv6-tooltip)
   - No reactive properties needed
-  - Fix: Replace with <div class="pf-v6-c-tooltip__arrow">
+  - Fix: Replace with <div id="arrow"> (singular element uses ID)
   - Delete: pfv6-tooltip-arrow.ts, pfv6-tooltip-arrow.css
 
 ❌ Unnecessary sub-component: pfv6-tooltip-content
   - Not slotted by users (internal to pfv6-tooltip)
   - No reactive properties set by users
-  - Fix: Replace with <div id="content">
+  - Fix: Replace with <div id="content"> (singular element uses ID)
   - Delete: pfv6-tooltip-content.ts
 ```
 
