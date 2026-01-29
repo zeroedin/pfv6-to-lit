@@ -147,14 +147,15 @@ export class Pfv6TreeView extends LitElement {
             return false;
           }
           // Walk up ancestor tree-view-items to check if any are collapsed
-          let parent = item.parentElement?.closest('pfv6-tree-view-item') as Pfv6TreeViewItem | null;
+          type ItemOrNull = Pfv6TreeViewItem | null;
+          let parent = item.parentElement?.closest('pfv6-tree-view-item') as ItemOrNull;
           while (parent) {
             // If parent is collapsed, this item is not visible
             const isExpanded = parent.isExpanded ?? parent.internalIsExpanded;
             if (!isExpanded) {
               return false;
             }
-            parent = parent.parentElement?.closest('pfv6-tree-view-item') as Pfv6TreeViewItem | null;
+            parent = parent.parentElement?.closest('pfv6-tree-view-item') as ItemOrNull;
           }
           return true;
         });
@@ -205,9 +206,7 @@ export class Pfv6TreeView extends LitElement {
         if (item.hasChildren) {
           const isExpanded = item.isExpanded ?? item.internalIsExpanded;
           if (!isExpanded) {
-            // Expand the item by clicking the toggle
-            const toggle = item.shadowRoot?.querySelector('#toggle') as HTMLElement;
-            toggle?.click();
+            item.toggle();
           } else {
             // Move to first child
             const selector = ':scope > pfv6-tree-view-item';
@@ -228,9 +227,7 @@ export class Pfv6TreeView extends LitElement {
         if (item.hasChildren) {
           const isExpanded = item.isExpanded ?? item.internalIsExpanded;
           if (isExpanded) {
-            // Collapse the item by clicking the toggle
-            const toggle = item.shadowRoot?.querySelector('#toggle') as HTMLElement;
-            toggle?.click();
+            item.toggle();
             event.preventDefault();
             break;
           }
@@ -269,18 +266,10 @@ export class Pfv6TreeView extends LitElement {
 
   /**
    * Moves focus to the specified item.
-   * With delegatesFocus, focusing the item automatically focuses its internal button.
    * @param toItem - The item receiving focus
    */
   #focusItem(toItem: Pfv6TreeViewItem) {
-    // Focus the internal button/focusable element directly
-    // delegatesFocus doesn't work reliably when focus is already in another shadow DOM
-    const focusable = toItem.shadowRoot?.querySelector<HTMLElement>('button.node, label.node, div.node[tabindex="0"]');
-    if (focusable) {
-      focusable.focus();
-    } else {
-      toItem.focus();
-    }
+    toItem.focusNode();
   }
 
   #handleToolbarSlotChange = () => {

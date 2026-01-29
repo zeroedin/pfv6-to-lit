@@ -235,7 +235,7 @@ describe('<pfv6-tree-view-item>', function() {
 
     it('renders name in text content', async function() {
       const el = await fixture<Pfv6TreeViewItem>(html`<pfv6-tree-view-item name="My Item"></pfv6-tree-view-item>`);
-      const text = el.shadowRoot!.querySelector('.text');
+      const text = el.shadowRoot!.querySelector('#text');
       expect(text?.textContent?.trim()).to.equal('My Item');
     });
   });
@@ -253,7 +253,7 @@ describe('<pfv6-tree-view-item>', function() {
 
     it('renders title when present', async function() {
       const el = await fixture<Pfv6TreeViewItem>(html`<pfv6-tree-view-item item-title="Item Title" name="Description"></pfv6-tree-view-item>`);
-      const title = el.shadowRoot!.querySelector('.title');
+      const title = el.shadowRoot!.querySelector('#title');
       expect(title?.textContent).to.equal('Item Title');
     });
   });
@@ -386,7 +386,7 @@ describe('<pfv6-tree-view-item>', function() {
 
     it('renders badge when true with content', async function() {
       const el = await fixture<Pfv6TreeViewItem>(html`<pfv6-tree-view-item has-badge badge-content="5"></pfv6-tree-view-item>`);
-      const count = el.shadowRoot!.querySelector('.count');
+      const count = el.shadowRoot!.querySelector('#count');
       expect(count).to.exist;
       const badge = count?.querySelector('pfv6-badge');
       expect(badge).to.exist;
@@ -453,7 +453,7 @@ describe('<pfv6-tree-view-item>', function() {
 
     it('renders text as button when true', async function() {
       const el = await fixture<Pfv6TreeViewItem>(html`<pfv6-tree-view-item is-selectable name="Item"></pfv6-tree-view-item>`);
-      const textButton = el.shadowRoot!.querySelector('button.text');
+      const textButton = el.shadowRoot!.querySelector('button#text');
       expect(textButton).to.exist;
     });
   });
@@ -590,8 +590,7 @@ describe('<pfv6-tree-view-item>', function() {
         eventFired = true;
       });
 
-      const toggle = el.shadowRoot!.querySelector('.toggle') as HTMLElement;
-      toggle.click();
+      el.toggle();
 
       expect(eventFired).to.be.true;
     });
@@ -608,8 +607,7 @@ describe('<pfv6-tree-view-item>', function() {
         capturedEvent = e as Pfv6TreeViewItemExpandEvent;
       });
 
-      const toggle = el.shadowRoot!.querySelector('.toggle') as HTMLElement;
-      toggle.click();
+      el.toggle();
 
       expect(capturedEvent).to.be.an.instanceof(Pfv6TreeViewItemExpandEvent);
       expect(capturedEvent!.itemId).to.equal('parent-1');
@@ -628,8 +626,7 @@ describe('<pfv6-tree-view-item>', function() {
         capturedEvent = e;
       });
 
-      const toggle = el.shadowRoot!.querySelector('.toggle') as HTMLElement;
-      toggle.click();
+      el.toggle();
 
       expect(capturedEvent).to.be.an.instanceof(Pfv6TreeViewItemExpandEvent);
       expect(capturedEvent).to.be.an.instanceof(Event);
@@ -649,8 +646,7 @@ describe('<pfv6-tree-view-item>', function() {
         eventFired = true;
       });
 
-      const toggle = el.shadowRoot!.querySelector('.toggle') as HTMLElement;
-      toggle.click();
+      el.toggle();
 
       expect(eventFired).to.be.true;
     });
@@ -667,8 +663,7 @@ describe('<pfv6-tree-view-item>', function() {
         capturedEvent = e as Pfv6TreeViewItemCollapseEvent;
       });
 
-      const toggle = el.shadowRoot!.querySelector('.toggle') as HTMLElement;
-      toggle.click();
+      el.toggle();
 
       expect(capturedEvent).to.be.an.instanceof(Pfv6TreeViewItemCollapseEvent);
       expect(capturedEvent!.itemId).to.equal('parent-1');
@@ -686,8 +681,7 @@ describe('<pfv6-tree-view-item>', function() {
         capturedEvent = e;
       });
 
-      const toggle = el.shadowRoot!.querySelector('.toggle') as HTMLElement;
-      toggle.click();
+      el.toggle();
 
       expect(capturedEvent).to.be.an.instanceof(Pfv6TreeViewItemCollapseEvent);
       expect(capturedEvent).to.be.an.instanceof(Event);
@@ -877,6 +871,99 @@ describe('<pfv6-tree-view-item>', function() {
       expect(el.internalIsExpanded).to.be.true;
     });
   });
+
+  describe('toggle() method', function() {
+    it('expands a collapsed item', async function() {
+      const el = await fixture<Pfv6TreeViewItem>(html`
+        <pfv6-tree-view-item name="Parent">
+          <pfv6-tree-view-item name="Child"></pfv6-tree-view-item>
+        </pfv6-tree-view-item>
+      `);
+      await el.updateComplete;
+      expect(el.internalIsExpanded).to.be.false;
+
+      el.toggle();
+      await el.updateComplete;
+
+      expect(el.internalIsExpanded).to.be.true;
+    });
+
+    it('collapses an expanded item', async function() {
+      const el = await fixture<Pfv6TreeViewItem>(html`
+        <pfv6-tree-view-item name="Parent" default-expanded>
+          <pfv6-tree-view-item name="Child"></pfv6-tree-view-item>
+        </pfv6-tree-view-item>
+      `);
+      await el.updateComplete;
+      expect(el.internalIsExpanded).to.be.true;
+
+      el.toggle();
+      await el.updateComplete;
+
+      expect(el.internalIsExpanded).to.be.false;
+    });
+
+    it('does nothing when disabled', async function() {
+      const el = await fixture<Pfv6TreeViewItem>(html`
+        <pfv6-tree-view-item name="Parent" disabled>
+          <pfv6-tree-view-item name="Child"></pfv6-tree-view-item>
+        </pfv6-tree-view-item>
+      `);
+      await el.updateComplete;
+      expect(el.internalIsExpanded).to.be.false;
+
+      el.toggle();
+      await el.updateComplete;
+
+      expect(el.internalIsExpanded).to.be.false;
+    });
+
+    it('dispatches expand event when expanding', async function() {
+      const el = await fixture<Pfv6TreeViewItem>(html`
+        <pfv6-tree-view-item name="Parent" id="parent-1">
+          <pfv6-tree-view-item name="Child"></pfv6-tree-view-item>
+        </pfv6-tree-view-item>
+      `);
+      await el.updateComplete;
+      let eventFired = false;
+      el.addEventListener('expand', () => {
+        eventFired = true;
+      });
+
+      el.toggle();
+
+      expect(eventFired).to.be.true;
+    });
+
+    it('dispatches collapse event when collapsing', async function() {
+      const el = await fixture<Pfv6TreeViewItem>(html`
+        <pfv6-tree-view-item name="Parent" id="parent-1" default-expanded>
+          <pfv6-tree-view-item name="Child"></pfv6-tree-view-item>
+        </pfv6-tree-view-item>
+      `);
+      await el.updateComplete;
+      let eventFired = false;
+      el.addEventListener('collapse', () => {
+        eventFired = true;
+      });
+
+      el.toggle();
+
+      expect(eventFired).to.be.true;
+    });
+  });
+
+  describe('focusNode() method', function() {
+    it('focuses the internal node element', async function() {
+      const el = await fixture<Pfv6TreeViewItem>(html`<pfv6-tree-view-item name="Item"></pfv6-tree-view-item>`);
+      await el.updateComplete;
+
+      el.focusNode();
+
+      const node = el.shadowRoot!.querySelector('.node');
+      expect(el.shadowRoot!.activeElement).to.equal(node);
+    });
+  });
 });
 
 describe('<pfv6-tree-view-search>', function() {
@@ -1013,7 +1100,7 @@ describe('<pfv6-tree-view-search>', function() {
 
     it('renders search icon', async function() {
       const el = await fixture<Pfv6TreeViewSearch>(html`<pfv6-tree-view-search></pfv6-tree-view-search>`);
-      const icon = el.shadowRoot!.querySelector('.icon svg');
+      const icon = el.shadowRoot!.querySelector('#icon svg');
       expect(icon).to.exist;
       expect(icon?.getAttribute('aria-hidden')).to.equal('true');
     });

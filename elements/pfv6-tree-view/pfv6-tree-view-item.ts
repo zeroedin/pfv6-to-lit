@@ -257,9 +257,8 @@ export class Pfv6TreeViewItem extends LitElement {
     this.hasChildren = children.length > 0;
   };
 
-  #handleToggleClick = (e: Event) => {
-    e.stopPropagation();
-
+  /** Toggle the expanded state of this item. Public API for keyboard navigation. */
+  toggle(): void {
     if (this.disabled) {
       return;
     }
@@ -272,6 +271,23 @@ export class Pfv6TreeViewItem extends LitElement {
     } else {
       this.dispatchEvent(new Pfv6TreeViewItemCollapseEvent(this.id));
     }
+  }
+
+  /** Focus the internal node element. Public API for keyboard navigation. */
+  focusNode(): void {
+    const focusable = this.shadowRoot?.querySelector<HTMLElement>(
+      'button.node, label.node, div.node[tabindex="0"]'
+    );
+    if (focusable) {
+      focusable.focus();
+    } else {
+      this.focus();
+    }
+  }
+
+  #handleToggleClick = (e: Event) => {
+    e.stopPropagation();
+    this.toggle();
   };
 
   #handleNodeClick = () => {
