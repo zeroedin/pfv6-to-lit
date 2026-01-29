@@ -162,20 +162,55 @@ Expected response includes:
 
 **If form control NOT detected**, skip this step and proceed to Step 5.
 
-### Step 5: DELEGATE to api-auditor
+### Step 5: DELEGATE to api-auditors (IN PARALLEL)
 
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
-- subagent_type: `'api-auditor'`
-- description: `'Audit pfv6-{component} API'`
-- prompt: `'Validate the pfv6-{component} component API against Lit best practices, React parity, and project standards.'`
+**MANDATORY: Run ALL 6 focused auditors in a single message**:
+
+Launch these 6 Task calls simultaneously:
+
+1. **api-bem-auditor** (CRITICAL - must pass first)
+   - subagent_type: `'api-bem-auditor'`
+   - description: `'Detect BEM classes in pfv6-{component}'`
+   - prompt: `'Check pfv6-{component} for BEM classes (pf-v6-c-*, pf-m-*) in Shadow DOM templates.'`
+
+2. **api-import-auditor**
+   - subagent_type: `'api-import-auditor'`
+   - description: `'Audit pfv6-{component} imports'`
+   - prompt: `'Validate import patterns and detect unused code in pfv6-{component}.'`
+
+3. **api-property-auditor**
+   - subagent_type: `'api-property-auditor'`
+   - description: `'Audit pfv6-{component} properties'`
+   - prompt: `'Validate property decorators and React API parity in pfv6-{component}.'`
+
+4. **api-template-auditor**
+   - subagent_type: `'api-template-auditor'`
+   - description: `'Audit pfv6-{component} templates'`
+   - prompt: `'Validate template patterns, directives, and naming conventions in pfv6-{component}.'`
+
+5. **api-internals-auditor**
+   - subagent_type: `'api-internals-auditor'`
+   - description: `'Audit pfv6-{component} ElementInternals'`
+   - prompt: `'Validate ElementInternals and focus delegation patterns in pfv6-{component}.'`
+
+6. **api-lifecycle-auditor**
+   - subagent_type: `'api-lifecycle-auditor'`
+   - description: `'Audit pfv6-{component} lifecycle'`
+   - prompt: `'Validate anti-patterns, events, and useEffect translation in pfv6-{component}.'`
+
+**Aggregate Results**:
+After ALL agents complete:
+- Count CRITICAL issues across all agents
+- If `api-bem-auditor` reports CRITICAL → Fix before proceeding
+- If ANY other auditor reports CRITICAL → Fix before proceeding
+- Present unified report to user
 
 **BLOCKING REQUIREMENT:**
-You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+You CANNOT proceed to the next step until ALL auditors have completed and ALL critical issues are fixed.
 
 ### Step 5.5: Run eslint
 
-**After api-auditor completes**, run eslint to validate TypeScript code quality:
+**After all api-auditors complete**, run eslint to validate TypeScript code quality:
 
 ```bash
 npx eslint elements/pfv6-{component}/**/*.ts
@@ -537,7 +572,7 @@ Once all tests pass, the component conversion is complete!
 **Completion Criteria (ALL must be true):**
 - ✅ All subagents have run successfully
 - ✅ All linters pass (eslint, stylelint)
-- ✅ All audits pass (api-auditor, demo-auditor, css-auditor, aria-auditor, etc.)
+- ✅ All audits pass (api-auditors, demo-auditor, css-auditor, aria-auditor, etc.)
 - ✅ Component files are created (`elements/pfv6-{component}/` exists)
 - ✅ Demos are created and validated
 - ✅ CSS is created and validated
@@ -557,7 +592,12 @@ The dependency tracking files (`component-dependencies.yaml` and `conversion-ord
 **Delegation Requirements:**
 - [ ] **api-writer invoked** - Component API design received and verified
 - [ ] **face-elements-writer invoked** (if form control) - FACE patterns added
-- [ ] **api-auditor invoked** - Component API validated
+- [ ] **api-bem-auditor invoked** - BEM class detection passed
+- [ ] **api-import-auditor invoked** - Import patterns validated
+- [ ] **api-property-auditor invoked** - Property decorators validated
+- [ ] **api-template-auditor invoked** - Template patterns validated
+- [ ] **api-internals-auditor invoked** - ElementInternals validated
+- [ ] **api-lifecycle-auditor invoked** - Lifecycle patterns validated
 - [ ] **eslint passed** - No TypeScript code quality errors
 - [ ] **demo-writer invoked** - Demo files created
 - [ ] **layout-translator invoked** (if layout components detected) - Layouts translated
@@ -577,7 +617,7 @@ The dependency tracking files (`component-dependencies.yaml` and `conversion-ord
 - [ ] `.cache/` repositories verified
 - [ ] Component has ZERO dependencies OR all dependencies exist as pfv6-* components
 - [ ] Component API matches api-writer specification exactly
-- [ ] Component API passes api-auditor validation
+- [ ] Component API passes all api-auditor validations (6 focused auditors)
 - [ ] Template structure follows api-writer patterns (id vs class, classMap, etc.)
 - [ ] **If form control**: FACE patterns implemented correctly
   - [ ] `static formAssociated = true` present

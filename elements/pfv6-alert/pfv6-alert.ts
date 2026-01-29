@@ -22,7 +22,7 @@ export { alertContext, type AlertContext } from './context.js';
 export class Pfv6AlertExpandEvent extends Event {
   constructor(
     public expanded: boolean,
-    public id?: string
+    public id?: string,
   ) {
     super('expand', { bubbles: true, composed: true });
   }
@@ -32,9 +32,7 @@ export class Pfv6AlertExpandEvent extends Event {
  * Event fired when alert is closed.
  */
 export class Pfv6AlertCloseEvent extends Event {
-  constructor(
-    public id?: string
-  ) {
+  constructor(public id?: string) {
     super('close', { bubbles: true, composed: true });
   }
 }
@@ -43,9 +41,7 @@ export class Pfv6AlertCloseEvent extends Event {
  * Event fired when alert timeout completes.
  */
 export class Pfv6AlertTimeoutEvent extends Event {
-  constructor(
-    public id?: string
-  ) {
+  constructor(public id?: string) {
     super('timeout', { bubbles: true, composed: true });
   }
 }
@@ -140,11 +136,11 @@ export class Pfv6Alert extends LitElement {
 
   /** Variant label text for screen readers */
   @property({ type: String, attribute: 'variant-label' })
-  variantLabel?: string;
+  variantLabel?: string | undefined;
 
   /** Accessible label for toggle button */
-  @property({ type: String, attribute: 'toggle-aria-label' })
-  toggleAriaLabel?: string;
+  @property({ type: String, attribute: 'toggle-accessible-label' })
+  toggleAccessibleLabel?: string | undefined;
 
   /** Truncate title to number of lines */
   @property({ type: Number, attribute: 'truncate-title' })
@@ -162,7 +158,7 @@ export class Pfv6Alert extends LitElement {
   @property({ type: String, attribute: 'tooltip-position' })
   tooltipPosition?: 'auto' | 'top' | 'bottom' | 'left' | 'right'
     | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'
-    | 'left-start' | 'left-end' | 'right-start' | 'right-end';
+    | 'left-start' | 'left-end' | 'right-start' | 'right-end' | undefined;
 
   /** Title heading level */
   @property({ type: String })
@@ -365,17 +361,17 @@ export class Pfv6Alert extends LitElement {
     // Dynamic heading level based on component property
     switch (this.component) {
       case 'h1':
-        return html`<h1 id="title" class=${classMap(titleClasses)} ?tabindex=${this.isTooltipVisible}>${titleContent}</h1>`;
+        return html`<h1 id="title" class=${classMap(titleClasses)} tabindex=${this.isTooltipVisible ? 0 : -1}>${titleContent}</h1>`;
       case 'h2':
-        return html`<h2 id="title" class=${classMap(titleClasses)} ?tabindex=${this.isTooltipVisible}>${titleContent}</h2>`;
+        return html`<h2 id="title" class=${classMap(titleClasses)} tabindex=${this.isTooltipVisible ? 0 : -1}>${titleContent}</h2>`;
       case 'h3':
-        return html`<h3 id="title" class=${classMap(titleClasses)} ?tabindex=${this.isTooltipVisible}>${titleContent}</h3>`;
+        return html`<h3 id="title" class=${classMap(titleClasses)} tabindex=${this.isTooltipVisible ? 0 : -1}>${titleContent}</h3>`;
       case 'h5':
-        return html`<h5 id="title" class=${classMap(titleClasses)} ?tabindex=${this.isTooltipVisible}>${titleContent}</h5>`;
+        return html`<h5 id="title" class=${classMap(titleClasses)} tabindex=${this.isTooltipVisible ? 0 : -1}>${titleContent}</h5>`;
       case 'h6':
-        return html`<h6 id="title" class=${classMap(titleClasses)} ?tabindex=${this.isTooltipVisible}>${titleContent}</h6>`;
+        return html`<h6 id="title" class=${classMap(titleClasses)} tabindex=${this.isTooltipVisible ? 0 : -1}>${titleContent}</h6>`;
       default:
-        return html`<h4 id="title" class=${classMap(titleClasses)} ?tabindex=${this.isTooltipVisible}>${titleContent}</h4>`;
+        return html`<h4 id="title" class=${classMap(titleClasses)} tabindex=${this.isTooltipVisible ? 0 : -1}>${titleContent}</h4>`;
     }
   }
 
@@ -408,11 +404,11 @@ export class Pfv6Alert extends LitElement {
               id="toggle-button"
               type="button"
               aria-expanded=${this.isExpanded}
-              aria-label=${this.toggleAriaLabel || `Toggle ${this.variantLabel || this.variant} alert: ${this.title}`}
+              aria-label=${this.toggleAccessibleLabel || `Toggle ${this.variantLabel || this.variant} alert: ${this.title}`}
               @click=${this.#handleToggleExpand}
             >
               <span id="toggle-icon">
-                <svg fill="currentColor" height="1em" width="1em" viewBox="0 0 320 512" aria-hidden="true" role="img">
+                <svg fill="currentColor" height="1em" width="1em" viewBox="0 0 320 512" aria-hidden="true">
                   <path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path>
                 </svg>
               </span>

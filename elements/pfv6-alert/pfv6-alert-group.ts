@@ -2,6 +2,7 @@ import { LitElement, html, type PropertyValues } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { provide } from '@lit/context';
 import { alertGroupContext, type AlertGroupContext } from './context.js';
 import type { Pfv6Alert } from './pfv6-alert.js';
@@ -34,11 +35,11 @@ export class Pfv6AlertGroup extends LitElement {
 
   /** Custom text to show for the overflow message */
   @property({ type: String, attribute: 'overflow-message' })
-  overflowMessage?: string;
+  overflowMessage?: string | undefined;
 
   /** Accessible label for the alert group */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   @provide({ context: alertGroupContext })
   private alertGroupContextValue: AlertGroupContext = {
@@ -76,7 +77,8 @@ export class Pfv6AlertGroup extends LitElement {
       return;
     }
 
-    const prefersReducedMotion = !window.matchMedia('(prefers-reduced-motion: no-preference)')?.matches;
+    const mediaQuery = '(prefers-reduced-motion: no-preference)';
+    const prefersReducedMotion = !window.matchMedia(mediaQuery)?.matches;
 
     const handler = (event: TransitionEvent) => {
       // For reduced motion: any transition end triggers callback
@@ -136,7 +138,7 @@ export class Pfv6AlertGroup extends LitElement {
         class=${classMap(classes)}
         aria-live=${this.isLiveRegion ? 'polite' : 'off'}
         aria-atomic=${this.isLiveRegion ? 'false' : 'true'}
-        aria-label=${this.accessibleLabel ?? ''}
+        aria-label=${ifDefined(this.accessibleLabel)}
       >
         <slot @slotchange=${this.#handleSlotChange}></slot>
         ${this.overflowMessage ? html`
