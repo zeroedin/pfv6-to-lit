@@ -236,7 +236,6 @@ export class Pfv6TreeViewItem extends LitElement {
     super.updated(changedProperties);
 
     // Set ARIA states via ElementInternals
-    this.#internals.ariaLabel = this.name;
     this.#internals.ariaExpanded = this.hasChildren ? String(this.internalIsExpanded) : null;
     this.#internals.ariaChecked = this.effectiveHasCheckbox ?
       (this.indeterminate ? 'mixed' : String(this.checked))
