@@ -343,7 +343,7 @@ export class Pfv6TreeViewItem extends LitElement {
 
   render() {
     const toggleIcon = html`
-      <span class="toggle-icon">
+      <span id="toggle-icon">
         <svg fill="currentColor" height="1em" width="1em" viewBox="0 0 256 512" aria-hidden="true">
           <path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path>
         </svg>
@@ -351,37 +351,37 @@ export class Pfv6TreeViewItem extends LitElement {
     `;
 
     const nodeContent = html`
-      <span class="node-container">
+      <span id="node-container">
         ${this.hasChildren ?
           (this.effectiveHasCheckbox || this.effectiveIsSelectable) ?
-            html`<button class="toggle" @click=${this.#handleToggleClick} aria-labelledby=${`label-${this.checkboxId}`} type="button" tabindex="-1">${toggleIcon}</button>`
-            : html`<span class="toggle" @click=${this.#handleToggleClick} tabindex="-1">${toggleIcon}</span>`
+            html`<button id="toggle" @click=${this.#handleToggleClick} aria-labelledby=${`label-${this.checkboxId}`} type="button" tabindex="-1">${toggleIcon}</button>`
+            : html`<span id="toggle" @click=${this.#handleToggleClick} tabindex="-1">${toggleIcon}</span>`
           : null}
         ${this.effectiveHasCheckbox ? html`
-          <span class="check">
+          <span id="check">
             <input type="checkbox" id=${this.checkboxId} .checked=${this.checked} .indeterminate=${this.indeterminate} @change=${this.#handleCheckboxChange} @click=${(e: Event) => e.stopPropagation()} ?disabled=${this.disabled} tabindex="-1" />
           </span>
         ` : null}
-        <span class="icon">
+        <span id="icon">
           ${this.internalIsExpanded ?
             html`<slot name="expanded-icon"><slot name="icon"></slot></slot>`
             : html`<slot name="icon"></slot>`}
         </span>
         ${this.effectiveIsCompact ? html`
-          <span class="content">
-            ${this.itemTitle ? html`<span class="title">${this.itemTitle}</span>` : null}
+          <span id="content">
+            ${this.itemTitle ? html`<span id="title">${this.itemTitle}</span>` : null}
             ${this.effectiveIsSelectable ?
-              html`<button type="button" class="text" tabindex="-1" @click=${this.#handleSelectButtonClick} ?disabled=${this.disabled}>${this.name}</button>`
-              : html`<span class="text">${this.name}</span>`}
+              html`<button type="button" id="text" tabindex="-1" @click=${this.#handleSelectButtonClick} ?disabled=${this.disabled}>${this.name}</button>`
+              : html`<span id="text">${this.name}</span>`}
           </span>
         ` : html`
-          ${this.itemTitle ? html`<span class="title">${this.itemTitle}</span>` : null}
+          ${this.itemTitle ? html`<span id="title">${this.itemTitle}</span>` : null}
           ${this.effectiveIsSelectable ?
-            html`<button type="button" class="text" tabindex="-1" @click=${this.#handleSelectButtonClick} ?disabled=${this.disabled}>${this.name}</button>`
-            : html`<span class="text">${this.name}</span>`}
+            html`<button type="button" id="text" tabindex="-1" @click=${this.#handleSelectButtonClick} ?disabled=${this.disabled}>${this.name}</button>`
+            : html`<span id="text">${this.name}</span>`}
         `}
         ${this.effectiveHasBadge && this.badgeContent ? html`
-          <span class="count">
+          <span id="count">
             <pfv6-badge ?is-read=${this.badgeIsRead}>${this.badgeContent}</pfv6-badge>
           </span>
         ` : null}
@@ -406,7 +406,7 @@ export class Pfv6TreeViewItem extends LitElement {
         'level-9': this.level === 9,
         'level-10': this.level >= 10,
       })}>
-        <div class="tree-view-content">
+        <div id="tree-view-content">
           ${this.effectiveHasCheckbox ? html`
             <label class=${classMap({ node: true, current: this.isSelected, disabled: this.disabled })} @click=${this.#handleNodeClick} for=${this.checkboxId} id=${`label-${this.checkboxId}`}>${nodeContent}</label>
           ` : (this.effectiveIsSelectable && this.hasChildren) ? html`
@@ -414,7 +414,7 @@ export class Pfv6TreeViewItem extends LitElement {
           ` : html`
             <button class=${classMap({ node: true, current: this.isSelected, disabled: this.disabled })} @click=${this.#handleNodeClick} type="button">${nodeContent}</button>
           `}
-          <div class="action">
+          <div id="action">
             <slot name="action"></slot>
           </div>
         </div>

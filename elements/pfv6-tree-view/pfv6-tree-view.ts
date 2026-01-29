@@ -191,7 +191,7 @@ export class Pfv6TreeView extends LitElement {
           const isExpanded = item.isExpanded ?? item.internalIsExpanded;
           if (!isExpanded) {
             // Expand the item by clicking the toggle
-            const toggle = item.shadowRoot?.querySelector('.toggle') as HTMLElement;
+            const toggle = item.shadowRoot?.querySelector('#toggle') as HTMLElement;
             toggle?.click();
           } else {
             // Move to first child
@@ -214,7 +214,7 @@ export class Pfv6TreeView extends LitElement {
           const isExpanded = item.isExpanded ?? item.internalIsExpanded;
           if (isExpanded) {
             // Collapse the item by clicking the toggle
-            const toggle = item.shadowRoot?.querySelector('.toggle') as HTMLElement;
+            const toggle = item.shadowRoot?.querySelector('#toggle') as HTMLElement;
             toggle?.click();
             event.preventDefault();
             break;
