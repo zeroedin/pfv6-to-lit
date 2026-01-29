@@ -326,10 +326,14 @@ export class Pfv6TreeViewItem extends LitElement {
   #handleCheckboxChange = (e: Event) => {
     e.stopPropagation();
     const checkbox = e.target as HTMLInputElement;
+    // Update internal state to match native checkbox for responsive UX
+    // Parent can override via checked/indeterminate props if fully controlled
+    this.checked = checkbox.checked;
+    this.indeterminate = false; // Clicking always clears indeterminate
     this.dispatchEvent(new Pfv6TreeViewItemCheckEvent(
       this.id,
-      checkbox.checked,
-      checkbox.indeterminate,
+      this.checked,
+      this.indeterminate,
     ));
   };
 
