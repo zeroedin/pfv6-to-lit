@@ -254,8 +254,8 @@ export class Pfv6TreeViewItem extends LitElement {
     // Set ARIA states via ElementInternals
     this.#internals.ariaLabel = this.name;
     this.#internals.ariaExpanded = this.hasChildren ? String(this.internalIsExpanded) : null;
-    this.#internals.ariaChecked = this.effectiveHasCheckbox
-      ? (this.indeterminate ? 'mixed' : String(this.checked))
+    this.#internals.ariaChecked = this.effectiveHasCheckbox ?
+      (this.indeterminate ? 'mixed' : String(this.checked))
       : null;
     this.#internals.ariaSelected = !this.effectiveHasCheckbox ? String(this.isSelected) : null;
 
@@ -301,7 +301,11 @@ export class Pfv6TreeViewItem extends LitElement {
       return;
     }
 
-    this.dispatchEvent(new Pfv6TreeViewItemSelectEvent(this.id));
+    // Only dispatch select for leaf nodes or selectable parent nodes
+    // Parent nodes without is-selectable just expand/collapse
+    if (!this.hasChildren || this.effectiveIsSelectable) {
+      this.dispatchEvent(new Pfv6TreeViewItemSelectEvent(this.id));
+    }
 
     // If not selectable and has children, toggle expansion
     if (!this.effectiveIsSelectable && this.hasChildren) {
