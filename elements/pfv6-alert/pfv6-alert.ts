@@ -212,7 +212,10 @@ export class Pfv6Alert extends LitElement {
 
   // Provide context to sub-components
   @provide({ context: alertContext })
-  protected get contextValue(): AlertContext {
+  @state()
+  protected _context: AlertContext = this.#createAlertContext();
+
+  #createAlertContext(): AlertContext {
     const capitalizedVariant = this.variant.charAt(0).toUpperCase() + this.variant.slice(1);
     return {
       title: this.title,
@@ -255,6 +258,13 @@ export class Pfv6Alert extends LitElement {
 
   override updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
+
+    // Update context when relevant properties change
+    if (changedProperties.has('title')
+        || changedProperties.has('variant')
+        || changedProperties.has('variantLabel')) {
+      this._context = this.#createAlertContext();
+    }
 
     // Check for title truncation
     if (changedProperties.has('title') || changedProperties.has('truncateTitle')) {
