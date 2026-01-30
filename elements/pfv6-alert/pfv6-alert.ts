@@ -231,8 +231,9 @@ export class Pfv6Alert extends LitElement {
       }, calculatedTimeout);
     }
 
-    // Setup focus tracking
-    document.addEventListener('focus', this.#handleDocumentFocus, true);
+    // Setup focus tracking via focusin/focusout (composes through shadow boundaries)
+    this.addEventListener('focusin', this.#handleFocusIn);
+    this.addEventListener('focusout', this.#handleFocusOut);
 
     // Listen for close events from action-close slot
     this.addEventListener('close', this.#handleClose);
@@ -248,7 +249,8 @@ export class Pfv6Alert extends LitElement {
       clearTimeout(this.animationTimer);
     }
 
-    document.removeEventListener('focus', this.#handleDocumentFocus, true);
+    this.removeEventListener('focusin', this.#handleFocusIn);
+    this.removeEventListener('focusout', this.#handleFocusOut);
     this.removeEventListener('close', this.#handleClose);
   }
 
@@ -285,11 +287,14 @@ export class Pfv6Alert extends LitElement {
     }
   }
 
-  #handleDocumentFocus = () => {
-    if (this.shadowRoot && this.contains(document.activeElement)) {
-      this.containsFocus = true;
-      this.timedOutAnimation = false;
-    } else if (this.containsFocus) {
+  #handleFocusIn = () => {
+    this.containsFocus = true;
+    this.timedOutAnimation = false;
+  };
+
+  #handleFocusOut = (event: FocusEvent) => {
+    // Only clear focus if the new focus target is outside the component
+    if (!this.contains(event.relatedTarget as Node)) {
       this.containsFocus = false;
     }
   };
