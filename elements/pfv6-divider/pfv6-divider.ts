@@ -3,7 +3,6 @@ import type { TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
 
 import { responsivePropertyConverter } from '../../lib/converters.js';
 
@@ -14,6 +13,12 @@ import styles from './pfv6-divider.css';
  *
  * @alias Divider
  *
+ * The divider has `role="presentation"` by default (purely decorative).
+ * To add separator semantics, override the role:
+ * ```html
+ * <pfv6-divider role="separator"></pfv6-divider>
+ * ```
+ *
  * For list semantics, wrap in `<li>`:
  * ```html
  * <ul>
@@ -21,11 +26,6 @@ import styles from './pfv6-divider.css';
  *   <li><pfv6-divider></pfv6-divider></li>
  *   <li>Item</li>
  * </ul>
- * ```
- *
- * To override the implicit separator role:
- * ```html
- * <pfv6-divider role="presentation"></pfv6-divider>
  * ```
  *
  * @cssprop --pf-v6-c-divider--Color - Color of the divider line
@@ -36,6 +36,14 @@ import styles from './pfv6-divider.css';
 @customElement('pfv6-divider')
 export class Pfv6Divider extends LitElement {
   static readonly styles = styles;
+
+  #internals: ElementInternals;
+
+  constructor() {
+    super();
+    this.#internals = this.attachInternals();
+    this.#internals.role = 'presentation';
+  }
 
   /**
   * Insets at various breakpoints.
@@ -62,16 +70,6 @@ export class Pfv6Divider extends LitElement {
   @property({ converter: responsivePropertyConverter })
   orientation?: Record<string, string> | undefined;
 
-  /**
-  * ARIA role of the divider.
-  * Set this to override the implicit separator role of <hr>.
-  *
-  * @example
-  * <pfv6-divider role="presentation"></pfv6-divider>
-  */
-  @property({ type: String })
-  role: string | null = null;
-
   override render(): TemplateResult {
     // Build class map from responsive properties
     const classes: Record<string, boolean> = {};
@@ -92,12 +90,7 @@ export class Pfv6Divider extends LitElement {
       });
     }
 
-    // If role property is set, suppress the <hr> implicit separator role
-    // This allows the host's explicit role to take precedence
-    // Example: <pfv6-divider role="presentation"> renders <hr role="none"> internally
-    const hrRole = this.role ? 'none' : undefined;
-
-    return html`<hr role=${ifDefined(hrRole)} class=${classMap(classes)} />`;
+    return html`<div class=${classMap(classes)}></div>`;
   }
 }
 

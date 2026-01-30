@@ -4,11 +4,6 @@
   box-sizing: border-box;
 }
 
-:where(hr) {
-  padding: 0;
-  margin: 0;
-}
-
 :host {
   /* Public CSS variables (from React) */
   --pf-v6-c-divider--Color: var(--pf-t--global--border--color--default, #c7c7c7);
@@ -19,7 +14,6 @@
   display: contents;
 }
 
-hr,
 div {
   /* Default: horizontal orientation */
   display: var(--pf-v6-c-divider--Display, flex);
