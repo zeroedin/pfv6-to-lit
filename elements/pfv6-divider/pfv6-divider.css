@@ -13,6 +13,7 @@
   /* Public CSS variables (from React) */
   --pf-v6-c-divider--Color: var(--pf-t--global--border--color--default, #c7c7c7);
   --pf-v6-c-divider--Size: var(--pf-t--global--border--width--divider--default, 1px);
+  --pf-v6-c-divider--Display: flex;
   --pf-v6-c-divider--before--FlexBasis: 100%;
 
   display: contents;

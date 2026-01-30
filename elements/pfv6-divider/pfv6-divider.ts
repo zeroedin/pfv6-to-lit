@@ -47,7 +47,7 @@ export class Pfv6Divider extends LitElement {
   * <pfv6-divider inset="insetMd md:insetNone lg:inset3xl"></pfv6-divider>
   */
   @property({ converter: responsivePropertyConverter })
-  inset?: Record<string, string>;
+  inset?: Record<string, string> | undefined;
 
   /**
   * Indicates how the divider will display at various breakpoints.
@@ -60,7 +60,7 @@ export class Pfv6Divider extends LitElement {
   * <pfv6-divider orientation="horizontal md:vertical"></pfv6-divider>
   */
   @property({ converter: responsivePropertyConverter })
-  orientation?: Record<string, string>;
+  orientation?: Record<string, string> | undefined;
 
   /**
   * ARIA role of the divider.
