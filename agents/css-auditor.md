@@ -138,6 +138,8 @@ Read('.cache/patternfly-react/packages/react-core/src/components/Card/card-body.
 **Forbidden Selectors**:
 - NO `:host([attribute])` selectors (use `classMap()` instead)
 - NO `:host-context()` anywhere (not cross-browser)
+- NO `:where()` pseudo-class (unnecessary in Shadow DOM - specificity management not needed)
+- NO BEM classes (`.pf-v6-c-*`, `.pf-m-*`) in Shadow DOM selectors (use IDs/simple classes)
 - RTL must use `:dir(rtl)`, not `:host-context([dir="rtl"])`
 
 ### Step 2.5: PatternFly Mixin Pattern Validation (CRITICAL)
@@ -1372,6 +1374,8 @@ Provide a structured audit report:
 - [ ] No stylelint disable comments (`/* stylelint-disable */` or `/* stylelint-disable-next-line */`)
 - [ ] No elaborate CSS for components that have no React CSS
 - [ ] Simple class names used (`compact`, not `pf-m-compact`)
+- [ ] No BEM classes in Shadow DOM CSS (`.pf-v6-c-*`, `.pf-m-*`)
+- [ ] No `:where()` pseudo-class (unnecessary specificity management in Shadow DOM)
 - [ ] Variable names match React CSS exactly
 - [ ] JSDoc `@cssprop` annotations match CSS variables exactly
 - [ ] JSDoc `@csspart` annotations match template parts exactly
@@ -1389,10 +1393,11 @@ Provide a structured audit report:
 - ❌ Flat selectors (not using CSS nesting with `&`)
 - ❌ `:host([attribute])` selectors found
 - ❌ `:host-context()` found anywhere
+- ❌ `:where()` pseudo-class found (unnecessary in Shadow DOM)
 - ❌ Made-up CSS variable names (not in PatternFly source)
 - ❌ PatternFly prefixes on custom variables (`--pfv6-`, `--pf-v6-c-`)
 - ❌ CSS rules for components with no React CSS
-- ❌ BEM classes in code (`.pf-m-*`)
+- ❌ BEM classes in Shadow DOM CSS (`.pf-v6-c-*`, `.pf-m-*`)
 - ❌ Unscoped lightdom CSS selectors
 - ❌ JSDoc `@cssprop` for non-existent variables
 - ❌ JSDoc `@cssprop` with wrong variable name pattern
