@@ -53,18 +53,7 @@
     const index = alerts.findIndex(a => a.key === key);
     if (index !== -1) {
       const alertData = alerts[index];
-      const alertElement = alertData.element;
-
-      // Set outgoing animation state
-      alertElement.animation = 'outgoing';
-
-      // Remove after transition completes
-      alertElement.addEventListener('transitionend', (event) => {
-        if (event.propertyName === 'grid-template-rows') {
-          alertElement.remove();
-        }
-      });
-
+      alertData.element.remove();
       alerts.splice(index, 1);
     }
   }
