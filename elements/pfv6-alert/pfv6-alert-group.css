@@ -162,7 +162,6 @@
   display: grid;
   grid-template-rows: 1fr;
   opacity: 1;
-  transform: translateX(0) translateY(0);
 
   /* Base transition for reduced motion */
   transition: opacity var(--pf-v6-c-alert-group--m-toast__item--Transition--opacity--default);

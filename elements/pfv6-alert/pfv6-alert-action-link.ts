@@ -1,10 +1,13 @@
 import { LitElement, html } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './pfv6-alert-action-link.css';
+import '@pfv6/elements/pfv6-button/pfv6-button.js';
 
 /**
- * Action link for alerts. Renders as `<a>` when href is provided, otherwise `<button>`.
+ * Action link for alerts. Uses Button with link variant and inline styling.
+ * When href is provided, renders as an anchor element.
  *
  * @alias AlertActionLink
  * @summary Action link for alerts.
@@ -24,9 +27,13 @@ export class Pfv6AlertActionLink extends LitElement {
   href?: string | undefined;
 
   render() {
-    return this.href
-      ? html`<a id="link" href=${this.href}><slot></slot></a>`
-      : html`<button id="button" type="button"><slot></slot></button>`;
+    return this.href ?
+      html`<a id="link" href=${ifDefined(this.href)}><slot></slot></a>`
+      : html`
+        <pfv6-button variant="link" is-inline>
+          <slot></slot>
+        </pfv6-button>
+      `;
   }
 }
 

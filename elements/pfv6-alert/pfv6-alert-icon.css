@@ -11,3 +11,7 @@
   font-size: var(--pf-v6-c-alert__icon--FontSize, 0.875rem);
   color: var(--pf-v6-c-alert__icon--Color, #151515);
 }
+
+svg {
+  vertical-align: -0.125em;
+}

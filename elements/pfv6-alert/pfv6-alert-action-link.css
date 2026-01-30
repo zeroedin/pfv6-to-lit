@@ -8,20 +8,16 @@
   display: contents;
 }
 
-button,
+/* Anchor styling for when href is provided - matches inline link button styling */
 a {
-  margin: 0;
-  padding: 0;
   font-family: inherit;
-  font-size: 100%;
+  font-size: inherit;
   line-height: var(--pf-t--global--font--line-height--body, 1.5);
   color: var(--pf-t--global--text--color--link--default, #0066cc);
-  cursor: pointer;
-  background: none;
-  border: none;
   text-decoration: none;
 
   &:hover {
+    color: var(--pf-t--global--text--color--link--hover, #004080);
     text-decoration: underline;
   }
 }

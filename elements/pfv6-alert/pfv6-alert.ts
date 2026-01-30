@@ -288,7 +288,9 @@ export class Pfv6Alert extends LitElement {
     }
 
     // Handle timeout animation
-    if (changedProperties.has('containsFocus') || changedProperties.has('isMouseOver')) {
+    if (changedProperties.has('containsFocus')
+        || changedProperties.has('isMouseOver')
+        || changedProperties.has('timeoutAnimation')) {
       if (!this.containsFocus && !this.isMouseOver) {
         this.animationTimer = window.setTimeout(() => {
           this.timedOutAnimation = true;
