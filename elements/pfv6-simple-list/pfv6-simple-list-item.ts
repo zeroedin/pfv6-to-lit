@@ -37,6 +37,11 @@ export class Pfv6SimpleListItem extends LitElement {
   */
   static formAssociated = true;
 
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   /**
   * ElementInternals provides:
   * - listitem role on :host (Shadow DOM breaks ul > li relationship)
