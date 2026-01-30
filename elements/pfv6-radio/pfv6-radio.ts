@@ -61,6 +61,11 @@ export class Pfv6RadioChangeEvent extends Event {
 export class Pfv6Radio extends LitElement {
   static readonly styles = styles;
 
+  static readonly shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   // Form-Associated Custom Element
   static readonly formAssociated = true;
   #internals: ElementInternals;
