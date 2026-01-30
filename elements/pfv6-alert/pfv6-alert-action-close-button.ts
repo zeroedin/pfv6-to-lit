@@ -43,7 +43,7 @@ export class Pfv6AlertActionCloseButton extends LitElement {
     const effectiveVariantLabel = this.variantLabel || contextVariantLabel;
 
     const computedAriaLabel = this.accessibleLabel
-      || `Close ${effectiveVariantLabel} alert: ${title}`;
+      || `Close ${effectiveVariantLabel} ${title}`;
 
     return html`
       <div id="action">
