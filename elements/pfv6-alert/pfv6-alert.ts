@@ -268,6 +268,9 @@ export class Pfv6Alert extends LitElement {
           this.timedOutAnimation = true;
         }, this.timeoutAnimation);
       } else {
+        if (this.animationTimer) {
+          clearTimeout(this.animationTimer);
+        }
         this.timedOutAnimation = false;
       }
     }
