@@ -15,7 +15,7 @@ Find any `pf-v6-c-*` or `pf-m-*` class names inside `html\`` template literals a
 
 Execute this exact command:
 
-```
+```text
 Grep('pf-v6-c-|pf-m-', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -33,7 +33,7 @@ If BOTH are true → This is a **CRITICAL VIOLATION**
 
 **If violations found, report:**
 
-```
+```markdown
 ## BEM Class Detection: ❌ CRITICAL VIOLATION
 
 **Status**: FAIL
@@ -54,7 +54,7 @@ If BOTH are true → This is a **CRITICAL VIOLATION**
 
 **If no violations found, report:**
 
-```
+```markdown
 ## BEM Class Detection: ✅ PASS
 
 **Status**: PASS

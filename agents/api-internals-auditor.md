@@ -15,7 +15,7 @@ Validate ElementInternals and focus delegation in the specified component.
 
 **Check if component uses ElementInternals**:
 
-```
+```text
 Grep('ElementInternals|attachInternals', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -57,7 +57,7 @@ accessibleLabel?: string | undefined;
 ```
 
 **Detection**:
-```
+```text
 Grep('attribute:.*aria-', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -96,7 +96,7 @@ this.style.display = 'none';
 Use CSS custom properties in stylesheet, toggle via attributes.
 
 **Detection**:
-```
+```text
 Grep('this\\.style\\.', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -163,7 +163,7 @@ If component uses IDREF attributes:
 
 ## Report Format
 
-```
+```markdown
 ## ElementInternals & Focus Audit: pfv6-{component}
 
 ### ElementInternals Detection

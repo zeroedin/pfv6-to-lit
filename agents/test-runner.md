@@ -35,7 +35,7 @@ You can analyze one or both test types depending on the request.
 **⚠️ IMPORTANT**: These commands start a dev server and may take several minutes. They can hang or timeout.
 
 **Best Practice**: Ask the user to run tests manually:
-```
+```text
 Please run the visual tests for this component:
 npm run e2e:parity -- pfv6-{component}.visual.ts
 
@@ -66,7 +66,7 @@ npx playwright show-report
 **⚠️ IMPORTANT**: Spec tests also start a dev server and may take time.
 
 **Best Practice**: Ask the user to run tests manually:
-```
+```text
 Please run the spec tests for this component:
 npm test -- elements/pfv6-{component}/test/pfv6-{component}.spec.ts
 
@@ -323,7 +323,6 @@ If blocked failures occur:
 
 ### Fix Demo Content
 - [ ] `elements/pfv6-card/demo/with-dividers.html`
-```
 
 ### For Spec Tests
 
@@ -409,7 +408,6 @@ variant: 'default' | 'compact' = 'default'; // was 'primary'
 
 ### Fix Component API
 - [ ] `elements/pfv6-card/pfv6-card.ts` (lines 25, 30, 45)
-```
 
 ## Testing Philosophy
 

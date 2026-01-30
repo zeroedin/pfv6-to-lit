@@ -33,7 +33,7 @@ import styles from './pfv6-component.css';
 ```
 
 **Detection**:
-```
+```text
 Grep('from .lit/decorators.js|from .lit/directives.js|with { type:', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -74,7 +74,7 @@ Look for:
 - Event classes defined but never dispatched
 
 ### Console Statements
-```
+```text
 Grep('console\\.(log|warn|error|debug)', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -82,7 +82,7 @@ If matches found → **WARNING** (remove before production)
 
 ## Report Format
 
-```
+```markdown
 ## Import & Unused Code Audit: pfv6-{component}
 
 ### Import Patterns

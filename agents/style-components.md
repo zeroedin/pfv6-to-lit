@@ -855,48 +855,48 @@ Found and translated [N] styling component(s):
 ### Content Components
 [For each Content component found:]
 **React**:
-```
+```typescript
 [original React code]
 ```
 
 **HTML**:
-```
+```html
 [translated HTML]
 ```
 
 ### Title Components
 [For each Title component found:]
 **React**:
-```
+```typescript
 [original React code]
 ```
 
 **HTML**:
-```
+```html
 [translated HTML]
 ```
 
 ### Form Components
 [For each Form component found:]
 **React**:
-```
+```typescript
 [original React code]
 ```
 
 **HTML**:
-```
+```html
 [translated HTML]
 ```
 
 ### DescriptionList Components
 [For each DescriptionList component found:]
 **React**:
-```
+```typescript
 [original React code]
 ```
 
 **HTML**:
-```
+```html
 [translated HTML]
 ```
 

@@ -31,7 +31,7 @@ html`<div aria-label=${ifDefined(this.ariaLabel)}>`  // Omits attribute when und
 ```
 
 **Detection**:
-```
+```text
 Grep('\\$\\{this\\.\\w+\\}', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -76,7 +76,7 @@ html`<input ?checked=${this.checked}>`     // ✅ Correct
 | `maxLength` | `maxlength` |
 
 **Detection**:
-```
+```text
 Grep('className=|htmlFor=|tabIndex=|autoFocus=', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -181,7 +181,7 @@ render() { return html`${this.#getProcessedData()}`; }
 
 ## Report Format
 
-```
+```markdown
 ## Template Audit: pfv6-{component}
 
 ### Directive Usage

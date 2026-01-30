@@ -14,7 +14,7 @@ Validate property decorators and React API completeness for the specified compon
 ## Step 1: Read React Source
 
 **MEMORY-SAFE lookup**:
-```
+```text
 Read('.cache/patternfly-react/packages/react-core/src/components/{ComponentName}/{ComponentName}.tsx')
 ```
 
@@ -132,7 +132,7 @@ this.setAttribute('aria-label', this.accessibleLabel);
 
 Compare Lit properties against React Category B props:
 
-```
+```markdown
 ## API Completeness
 
 | React Prop | Lit Property | Status |
@@ -147,7 +147,7 @@ Compare Lit properties against React Category B props:
 
 ## Report Format
 
-```
+```markdown
 ## Property Audit: pfv6-{component}
 
 ### React API Analysis

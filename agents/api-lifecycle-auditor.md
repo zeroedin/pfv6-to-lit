@@ -16,7 +16,7 @@ Validate lifecycle patterns, events, and HTML structure in the specified compone
 ### 1.1 Console Statements
 
 **Detect debug statements**:
-```
+```text
 Grep('console\\.(log|warn|error|debug|info)', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -25,7 +25,7 @@ If found → **WARNING** (remove before production)
 ### 1.2 :host Style Manipulation
 
 **NEVER manipulate :host styles programmatically**:
-```
+```text
 Grep('this\\.style\\.', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -34,7 +34,7 @@ If found → **CRITICAL VIOLATION**
 ### 1.3 "Lift and Shift" Pattern
 
 **Detect Light DOM manipulation anti-patterns**:
-```
+```text
 Grep('createElement|appendChild|insertBefore|innerHTML', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -50,7 +50,7 @@ Suspicious if:
 ### 1.4 Dynamic Tag Names
 
 **NEVER use dynamic tag names**:
-```
+```text
 Grep('<\\$\\{|staticTagName|\\${.*Tag}', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -62,7 +62,7 @@ If found → **CRITICAL VIOLATION**
 
 **Events MUST extend Event (NOT CustomEvent)**:
 
-```
+```text
 Grep('extends CustomEvent', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -118,7 +118,7 @@ export class Pfv6AlertExpandEvent extends Event {
 
 **Events MUST have `bubbles: true` and `composed: true`**:
 
-```
+```text
 Grep('extends Event|new Event\\(|dispatchEvent', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
@@ -268,7 +268,7 @@ This is not supported in Web Components. Use appropriate semantic element.
 
 ## Report Format
 
-```
+```markdown
 ## Lifecycle & Event Audit: pfv6-{component}
 
 ### Anti-Pattern Detection
