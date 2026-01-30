@@ -10,7 +10,7 @@ import styles from './pfv6-alert-action-close-button.css';
  *
  * @alias AlertActionCloseButton
  * @summary Close button for dismissable alerts.
- * @fires click - Fired when close button is clicked
+ * @fires close - Fired when the close button is clicked
  */
 @customElement('pfv6-alert-action-close-button')
 export class Pfv6AlertActionCloseButton extends LitElement {
