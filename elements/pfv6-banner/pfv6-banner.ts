@@ -71,21 +71,21 @@ export class Pfv6Banner extends LitElement {
   * This prop should only be passed in when the banner conveys status/severity.
   */
   @property({ type: String, attribute: 'screen-reader-text' })
-  screenReaderText?: string;
+  screenReaderText?: string | undefined;
 
   /**
   * Color options for the banner, will be overwritten by any applied using the status prop.
   * Valid values: 'red', 'orangered', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple'
   */
   @property({ type: String, reflect: true })
-  color?: 'red' | 'orangered' | 'orange' | 'yellow' | 'green' | 'teal' | 'blue' | 'purple';
+  color?: 'red' | 'orangered' | 'orange' | 'yellow' | 'green' | 'teal' | 'blue' | 'purple' | undefined;
 
   /**
   * Status style options for the banner, will overwrite any color applied using the color prop.
   * Valid values: 'success', 'warning', 'danger', 'info', 'custom'
   */
   @property({ type: String, reflect: true })
-  status?: 'success' | 'warning' | 'danger' | 'info' | 'custom';
+  status?: 'success' | 'warning' | 'danger' | 'info' | 'custom' | undefined;
 
   render() {
     const classes = {
