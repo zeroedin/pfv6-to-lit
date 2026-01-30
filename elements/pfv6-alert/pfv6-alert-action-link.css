@@ -4,15 +4,24 @@
   box-sizing: border-box;
 }
 
-:where(button) {
+:host {
+  display: contents;
+}
+
+button,
+a {
   margin: 0;
+  padding: 0;
   font-family: inherit;
   font-size: 100%;
   line-height: var(--pf-t--global--font--line-height--body, 1.5);
-  color: var(--pf-t--global--text--color--regular, #151515);
+  color: var(--pf-t--global--text--color--link--default, #0066cc);
   cursor: pointer;
-}
+  background: none;
+  border: none;
+  text-decoration: none;
 
-:host {
-  display: contents;
+  &:hover {
+    text-decoration: underline;
+  }
 }
