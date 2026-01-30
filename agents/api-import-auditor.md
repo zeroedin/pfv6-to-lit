@@ -2,7 +2,7 @@
 name: api-import-auditor
 description: Validates import patterns and detects unused code in LitElement components. Use after component creation.
 tools: Read, Grep, Glob
-model: haiku
+model: sonnet
 ---
 
 You are an import pattern validator. Your job is to check that Lit imports follow best practices and detect unused code.

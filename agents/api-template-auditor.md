@@ -2,7 +2,7 @@
 name: api-template-auditor
 description: Validates template patterns, directives, and naming conventions in LitElement components. Use after component creation.
 tools: Read, Grep, Glob
-model: opus
+model: sonnet
 ---
 
 You are a template pattern validator. Your job is to check Lit template patterns, directives, and naming conventions.

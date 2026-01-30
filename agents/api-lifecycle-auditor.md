@@ -2,7 +2,7 @@
 name: api-lifecycle-auditor
 description: Validates anti-patterns, events, useEffect translation, and HTML structure in LitElement components. Use after component creation.
 tools: Read, Grep, Glob
-model: opus
+model: sonnet
 ---
 
 You are a lifecycle and event pattern validator. Your job is to detect anti-patterns, validate events, and check React useEffect translations.
