@@ -364,7 +364,8 @@ const cssApiTests = [
     resolvedValue: '#1fa1a1',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'group-static'
+    demo: 'group-static',
+    variant: 'custom'
   },
   {
     name: '--pf-v6-c-alert--m-custom__icon--Color',
@@ -372,7 +373,8 @@ const cssApiTests = [
     resolvedValue: '#1fa1a1',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'group-static'
+    demo: 'group-static',
+    variant: 'custom'
   },
   {
     name: '--pf-v6-c-alert--m-custom__title--Color',
@@ -380,7 +382,8 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'group-static'
+    demo: 'group-static',
+    variant: 'custom'
   },
 
   // Success variant variables
@@ -416,7 +419,8 @@ const cssApiTests = [
     resolvedValue: '#ba6233',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'group-static'
+    demo: 'group-static',
+    variant: 'danger'
   },
   {
     name: '--pf-v6-c-alert--m-danger__icon--Color',
@@ -424,7 +428,8 @@ const cssApiTests = [
     resolvedValue: '#ba6233',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'group-static'
+    demo: 'group-static',
+    variant: 'danger'
   },
   {
     name: '--pf-v6-c-alert--m-danger__title--Color',
@@ -432,7 +437,8 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'group-static'
+    demo: 'group-static',
+    variant: 'danger'
   },
 
   // Warning variant variables
@@ -442,7 +448,8 @@ const cssApiTests = [
     resolvedValue: '#f0ab00',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'group-static'
+    demo: 'group-static',
+    variant: 'warning'
   },
   {
     name: '--pf-v6-c-alert--m-warning__icon--Color',
@@ -450,7 +457,8 @@ const cssApiTests = [
     resolvedValue: '#f0ab00',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'group-static'
+    demo: 'group-static',
+    variant: 'warning'
   },
   {
     name: '--pf-v6-c-alert--m-warning__title--Color',
@@ -458,7 +466,8 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'group-static'
+    demo: 'group-static',
+    variant: 'warning'
   },
 
   // Info variant variables
@@ -593,7 +602,7 @@ const cssApiTests = [
 ];
 
 test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
-  cssApiTests.forEach(({ name, defaultValue, resolvedValue, type, testValue, demo }) => {
+  cssApiTests.forEach(({ name, defaultValue, resolvedValue, type, testValue, demo, variant }) => {
     test(`CSS API: ${name}`, async ({ page, browser }) => {
       // Add metadata to test report
       test.info().annotations.push({
@@ -602,8 +611,9 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Variable: ${name}`,
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
-          `Test value: ${testValue}`
-        ].join('\n')
+          `Test value: ${testValue}`,
+          variant ? `Variant: ${variant}` : ''
+        ].filter(Boolean).join('\n')
       });
 
       // Set consistent viewport
@@ -614,13 +624,40 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
       await reactPage.setViewportSize({ width: 1280, height: 720 });
 
       try {
-        // Load React demo with CSS override
+        // Load React demo
         await reactPage.goto(`/elements/pfv6-alert/react/test/${demo}`);
+
+        // If variant is specified, change all alerts to that variant
+        if (variant) {
+          await reactPage.evaluate((v) => {
+            document.querySelectorAll('.pf-v6-c-alert').forEach(alert => {
+              // Remove existing variant classes
+              alert.classList.remove(
+                'pf-m-custom', 'pf-m-success', 'pf-m-danger', 'pf-m-warning', 'pf-m-info'
+              );
+              // Add the specified variant class
+              alert.classList.add(`pf-m-${v}`);
+            });
+          }, variant);
+        }
+
         await applyCssOverride(reactPage, '.pf-v6-c-alert', name, testValue);
         await waitForFullLoad(reactPage);
 
-        // Load Lit demo with CSS override
+        // Load Lit demo
         await page.goto(`/elements/pfv6-alert/test/${demo}`);
+
+        // If variant is specified, change all alerts to that variant
+        if (variant) {
+          await page.evaluate((v) => {
+            document.querySelectorAll('pfv6-alert').forEach((alert: Element) => {
+              (alert as HTMLElement).setAttribute('variant', v);
+            });
+          }, variant);
+          // Wait for Lit to update the component
+          await page.waitForTimeout(100);
+        }
+
         await applyCssOverride(page, 'pfv6-alert', name, testValue);
         await waitForFullLoad(page);
 
