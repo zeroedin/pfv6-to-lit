@@ -50,7 +50,6 @@ export class Pfv6AlertActionCloseButton extends LitElement {
         <button
           id="close-button"
           type="button"
-          tabindex="-1"
           aria-label=${computedAriaLabel}
           @click=${this.#handleClick}
         >
