@@ -58,7 +58,7 @@ describe('<pfv6-alert>', function() {
     it('applies variant modifier class', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert variant="danger"></pfv6-alert>`);
       const container = el.shadowRoot!.querySelector('#container');
-      expect(container!.classList.contains('pf-m-danger')).to.be.true;
+      expect(container!.classList.contains('danger')).to.be.true;
     });
   });
 
@@ -75,7 +75,7 @@ describe('<pfv6-alert>', function() {
 
     it('renders title in shadow DOM', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert title="Test Title"></pfv6-alert>`);
-      const titleElement = el.shadowRoot!.querySelector('.pf-v6-c-alert__title');
+      const titleElement = el.shadowRoot!.querySelector('#title');
       expect(titleElement).to.exist;
       expect(titleElement!.textContent).to.include('Test Title');
     });
@@ -100,13 +100,13 @@ describe('<pfv6-alert>', function() {
     it('applies inline modifier class when true', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert is-inline></pfv6-alert>`);
       const container = el.shadowRoot!.querySelector('#container');
-      expect(container!.classList.contains('pf-m-inline')).to.be.true;
+      expect(container!.classList.contains('inline')).to.be.true;
     });
 
     it('does not apply inline modifier class when false', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert></pfv6-alert>`);
       const container = el.shadowRoot!.querySelector('#container');
-      expect(container!.classList.contains('pf-m-inline')).to.be.false;
+      expect(container!.classList.contains('inline')).to.be.false;
     });
   });
 
@@ -129,7 +129,7 @@ describe('<pfv6-alert>', function() {
     it('applies plain modifier class when true', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert is-plain></pfv6-alert>`);
       const container = el.shadowRoot!.querySelector('#container');
-      expect(container!.classList.contains('pf-m-plain')).to.be.true;
+      expect(container!.classList.contains('plain')).to.be.true;
     });
   });
 
@@ -187,18 +187,18 @@ describe('<pfv6-alert>', function() {
     it('applies expandable modifier class when true', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert is-expandable></pfv6-alert>`);
       const container = el.shadowRoot!.querySelector('#container');
-      expect(container!.classList.contains('pf-m-expandable')).to.be.true;
+      expect(container!.classList.contains('expandable')).to.be.true;
     });
 
     it('renders toggle button when true', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert is-expandable title="Expandable"></pfv6-alert>`);
-      const toggle = el.shadowRoot!.querySelector('.pf-v6-c-alert__toggle');
+      const toggle = el.shadowRoot!.querySelector('#toggle');
       expect(toggle).to.exist;
     });
 
     it('does not render toggle button when false', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert></pfv6-alert>`);
-      const toggle = el.shadowRoot!.querySelector('.pf-v6-c-alert__toggle');
+      const toggle = el.shadowRoot!.querySelector('#toggle');
       expect(toggle).to.not.exist;
     });
 
@@ -206,7 +206,7 @@ describe('<pfv6-alert>', function() {
       const el = await fixture<Pfv6Alert>(html`
         <pfv6-alert is-expandable>Description content</pfv6-alert>
       `);
-      const description = el.shadowRoot!.querySelector('.pf-v6-c-alert__description');
+      const description = el.shadowRoot!.querySelector('#description');
       expect(description).to.not.exist;
     });
   });
@@ -224,7 +224,7 @@ describe('<pfv6-alert>', function() {
 
     it('uses default variant label when undefined', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert variant="success" title="Test"></pfv6-alert>`);
-      const srText = el.shadowRoot!.querySelector('.pf-v6-screen-reader');
+      const srText = el.shadowRoot!.querySelector('.screen-reader');
       expect(srText!.textContent).to.equal('Success alert:');
     });
 
@@ -232,29 +232,29 @@ describe('<pfv6-alert>', function() {
       const el = await fixture<Pfv6Alert>(html`
         <pfv6-alert variant="success" variant-label="Successful operation:" title="Test"></pfv6-alert>
       `);
-      const srText = el.shadowRoot!.querySelector('.pf-v6-screen-reader');
+      const srText = el.shadowRoot!.querySelector('.screen-reader');
       expect(srText!.textContent).to.equal('Successful operation:');
     });
   });
 
-  describe('toggleAriaLabel property', function() {
+  describe('toggleAccessibleLabel property', function() {
     it('defaults to undefined', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert></pfv6-alert>`);
-      expect(el.toggleAriaLabel).to.be.undefined;
+      expect(el.toggleAccessibleLabel).to.be.undefined;
     });
 
     it('accepts string value', async function() {
       const el = await fixture<Pfv6Alert>(html`
-        <pfv6-alert toggle-aria-label="Toggle details"></pfv6-alert>
+        <pfv6-alert toggle-accessible-label="Toggle details"></pfv6-alert>
       `);
-      expect(el.toggleAriaLabel).to.equal('Toggle details');
+      expect(el.toggleAccessibleLabel).to.equal('Toggle details');
     });
 
     it('uses custom aria-label on toggle button when provided', async function() {
       const el = await fixture<Pfv6Alert>(html`
-        <pfv6-alert is-expandable toggle-aria-label="Show more details" title="Alert"></pfv6-alert>
+        <pfv6-alert is-expandable toggle-accessible-label="Show more details" title="Alert"></pfv6-alert>
       `);
-      const toggleButton = el.shadowRoot!.querySelector('.pf-v6-c-alert__toggle button');
+      const toggleButton = el.shadowRoot!.querySelector('#toggle-button');
       expect(toggleButton!.getAttribute('aria-label')).to.equal('Show more details');
     });
   });
@@ -272,14 +272,14 @@ describe('<pfv6-alert>', function() {
 
     it('applies truncate modifier class when greater than 0', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert truncate-title="2" title="Long title"></pfv6-alert>`);
-      const titleElement = el.shadowRoot!.querySelector('.pf-v6-c-alert__title');
-      expect(titleElement!.classList.contains('pf-m-truncate')).to.be.true;
+      const titleElement = el.shadowRoot!.querySelector('#title');
+      expect(titleElement!.classList.contains('truncate')).to.be.true;
     });
 
     it('does not apply truncate modifier class when 0', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert title="Title"></pfv6-alert>`);
-      const titleElement = el.shadowRoot!.querySelector('.pf-v6-c-alert__title');
-      expect(titleElement!.classList.contains('pf-m-truncate')).to.be.false;
+      const titleElement = el.shadowRoot!.querySelector('#title');
+      expect(titleElement!.classList.contains('truncate')).to.be.false;
     });
   });
 
@@ -398,7 +398,7 @@ describe('<pfv6-alert>', function() {
         eventFired = true;
       });
 
-      const toggleButton = el.shadowRoot!.querySelector('.pf-v6-c-alert__toggle button') as HTMLButtonElement;
+      const toggleButton = el.shadowRoot!.querySelector('#toggle-button') as HTMLButtonElement;
       await userEvent.click(toggleButton);
 
       expect(eventFired).to.be.true;
@@ -413,7 +413,7 @@ describe('<pfv6-alert>', function() {
         capturedEvent = e as Pfv6AlertExpandEvent;
       });
 
-      const toggleButton = el.shadowRoot!.querySelector('.pf-v6-c-alert__toggle button') as HTMLButtonElement;
+      const toggleButton = el.shadowRoot!.querySelector('#toggle-button') as HTMLButtonElement;
       await userEvent.click(toggleButton);
 
       expect(capturedEvent).to.be.an.instanceof(Pfv6AlertExpandEvent);
@@ -425,7 +425,7 @@ describe('<pfv6-alert>', function() {
         <pfv6-alert is-expandable title="Alert">Description</pfv6-alert>
       `);
 
-      const toggleButton = el.shadowRoot!.querySelector('.pf-v6-c-alert__toggle button') as HTMLButtonElement;
+      const toggleButton = el.shadowRoot!.querySelector('#toggle-button') as HTMLButtonElement;
       await userEvent.click(toggleButton); // Expand first
 
       let capturedEvent: Pfv6AlertExpandEvent | undefined;
@@ -448,7 +448,7 @@ describe('<pfv6-alert>', function() {
         capturedEvent = e as Pfv6AlertExpandEvent;
       });
 
-      const toggleButton = el.shadowRoot!.querySelector('.pf-v6-c-alert__toggle button') as HTMLButtonElement;
+      const toggleButton = el.shadowRoot!.querySelector('#toggle-button') as HTMLButtonElement;
       await userEvent.click(toggleButton);
 
       expect(capturedEvent!.id).to.equal('test-alert');
@@ -459,12 +459,12 @@ describe('<pfv6-alert>', function() {
         <pfv6-alert is-expandable title="Alert">Description</pfv6-alert>
       `);
 
-      const toggleButton = el.shadowRoot!.querySelector('.pf-v6-c-alert__toggle button') as HTMLButtonElement;
+      const toggleButton = el.shadowRoot!.querySelector('#toggle-button') as HTMLButtonElement;
       await userEvent.click(toggleButton);
       await el.updateComplete;
 
       const container = el.shadowRoot!.querySelector('#container');
-      expect(container!.classList.contains('pf-m-expanded')).to.be.true;
+      expect(container!.classList.contains('expanded')).to.be.true;
     });
 
     it('shows description when expanded', async function() {
@@ -472,11 +472,11 @@ describe('<pfv6-alert>', function() {
         <pfv6-alert is-expandable title="Alert">Description content</pfv6-alert>
       `);
 
-      const toggleButton = el.shadowRoot!.querySelector('.pf-v6-c-alert__toggle button') as HTMLButtonElement;
+      const toggleButton = el.shadowRoot!.querySelector('#toggle-button') as HTMLButtonElement;
       await userEvent.click(toggleButton);
       await el.updateComplete;
 
-      const description = el.shadowRoot!.querySelector('.pf-v6-c-alert__description');
+      const description = el.shadowRoot!.querySelector('#description');
       expect(description).to.exist;
     });
   });
@@ -731,11 +731,9 @@ describe('<pfv6-alert>', function() {
         const el = await fixture<Pfv6AlertActionLink>(
           html`<pfv6-alert-action-link>Link text</pfv6-alert-action-link>`
         );
-        const button = el.shadowRoot!.querySelector('button');
+        const button = el.shadowRoot!.querySelector('#button');
         expect(button).to.exist;
-        expect(button!.classList.contains('pf-v6-c-button')).to.be.true;
-        expect(button!.classList.contains('pf-m-link')).to.be.true;
-        expect(button!.classList.contains('pf-m-inline')).to.be.true;
+        expect(button!.tagName.toLowerCase()).to.equal('button');
       });
     });
 
@@ -839,8 +837,8 @@ describe('<pfv6-alert>', function() {
       expect(el.isInline).to.be.true;
 
       const container = el.shadowRoot!.querySelector('#container');
-      expect(container!.classList.contains('pf-m-success')).to.be.true;
-      expect(container!.classList.contains('pf-m-inline')).to.be.true;
+      expect(container!.classList.contains('success')).to.be.true;
+      expect(container!.classList.contains('inline')).to.be.true;
     });
 
     it('can combine variant and plain', async function() {
@@ -851,8 +849,8 @@ describe('<pfv6-alert>', function() {
       expect(el.isPlain).to.be.true;
 
       const container = el.shadowRoot!.querySelector('#container');
-      expect(container!.classList.contains('pf-m-warning')).to.be.true;
-      expect(container!.classList.contains('pf-m-plain')).to.be.true;
+      expect(container!.classList.contains('warning')).to.be.true;
+      expect(container!.classList.contains('plain')).to.be.true;
     });
 
     it('can combine expandable with variant', async function() {
@@ -863,8 +861,8 @@ describe('<pfv6-alert>', function() {
       expect(el.isExpandable).to.be.true;
 
       const container = el.shadowRoot!.querySelector('#container');
-      expect(container!.classList.contains('pf-m-info')).to.be.true;
-      expect(container!.classList.contains('pf-m-expandable')).to.be.true;
+      expect(container!.classList.contains('info')).to.be.true;
+      expect(container!.classList.contains('expandable')).to.be.true;
     });
 
     it('can combine inline, plain, and variant', async function() {
@@ -876,9 +874,9 @@ describe('<pfv6-alert>', function() {
       expect(el.isPlain).to.be.true;
 
       const container = el.shadowRoot!.querySelector('#container');
-      expect(container!.classList.contains('pf-m-danger')).to.be.true;
-      expect(container!.classList.contains('pf-m-inline')).to.be.true;
-      expect(container!.classList.contains('pf-m-plain')).to.be.true;
+      expect(container!.classList.contains('danger')).to.be.true;
+      expect(container!.classList.contains('inline')).to.be.true;
+      expect(container!.classList.contains('plain')).to.be.true;
     });
   });
 
@@ -887,7 +885,7 @@ describe('<pfv6-alert>', function() {
       const el = await fixture<Pfv6Alert>(html`
         <pfv6-alert variant="success" title="Operation successful">Success message</pfv6-alert>
       `);
-      const srText = el.shadowRoot!.querySelector('.pf-v6-screen-reader');
+      const srText = el.shadowRoot!.querySelector('.screen-reader');
       expect(srText).to.exist;
       expect(srText!.textContent).to.equal('Success alert:');
     });
@@ -896,7 +894,7 @@ describe('<pfv6-alert>', function() {
       const el = await fixture<Pfv6Alert>(html`
         <pfv6-alert is-expandable title="Expandable">Content</pfv6-alert>
       `);
-      const toggleButton = el.shadowRoot!.querySelector('.pf-v6-c-alert__toggle button');
+      const toggleButton = el.shadowRoot!.querySelector('#toggle-button');
       expect(toggleButton!.getAttribute('aria-expanded')).to.equal('false');
     });
 
@@ -904,7 +902,7 @@ describe('<pfv6-alert>', function() {
       const el = await fixture<Pfv6Alert>(html`
         <pfv6-alert is-expandable title="Expandable">Content</pfv6-alert>
       `);
-      const toggleButton = el.shadowRoot!.querySelector('.pf-v6-c-alert__toggle button') as HTMLButtonElement;
+      const toggleButton = el.shadowRoot!.querySelector('#toggle-button') as HTMLButtonElement;
 
       await userEvent.click(toggleButton);
       await el.updateComplete;
@@ -916,7 +914,7 @@ describe('<pfv6-alert>', function() {
       const el = await fixture<Pfv6Alert>(html`
         <pfv6-alert is-expandable variant="warning" title="Warning Alert">Content</pfv6-alert>
       `);
-      const toggleButton = el.shadowRoot!.querySelector('.pf-v6-c-alert__toggle button');
+      const toggleButton = el.shadowRoot!.querySelector('#toggle-button');
       const ariaLabel = toggleButton!.getAttribute('aria-label');
       expect(ariaLabel).to.include('Warning alert:');
       expect(ariaLabel).to.include('Warning Alert');
@@ -924,7 +922,8 @@ describe('<pfv6-alert>', function() {
 
     it('icon has aria-hidden="true"', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert variant="success" title="Success">Content</pfv6-alert>`);
-      const icon = el.shadowRoot!.querySelector('pfv6-alert-icon svg');
+      const alertIcon = el.shadowRoot!.querySelector('pfv6-alert-icon');
+      const icon = alertIcon!.shadowRoot!.querySelector('svg');
       expect(icon!.getAttribute('aria-hidden')).to.equal('true');
     });
 
@@ -950,12 +949,6 @@ describe('<pfv6-alert>', function() {
       expect(container!.tagName).to.equal('DIV');
     });
 
-    it('container has pf-v6-c-alert base class', async function() {
-      const el = await fixture<Pfv6Alert>(html`<pfv6-alert title="Alert">Content</pfv6-alert>`);
-      const container = el.shadowRoot!.querySelector('#container');
-      expect(container!.classList.contains('pf-v6-c-alert')).to.be.true;
-    });
-
     it('renders icon component', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert variant="success" title="Alert">Content</pfv6-alert>`);
       const icon = el.shadowRoot!.querySelector('pfv6-alert-icon');
@@ -965,20 +958,19 @@ describe('<pfv6-alert>', function() {
 
     it('renders title element', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert title="Test Title">Content</pfv6-alert>`);
-      const titleElement = el.shadowRoot!.querySelector('.pf-v6-c-alert__title');
+      const titleElement = el.shadowRoot!.querySelector('#title');
       expect(titleElement).to.exist;
-      expect(titleElement!.classList.contains('pf-v6-c-alert__title')).to.be.true;
     });
 
     it('renders description container', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert title="Alert">Description</pfv6-alert>`);
-      const description = el.shadowRoot!.querySelector('.pf-v6-c-alert__description');
+      const description = el.shadowRoot!.querySelector('#description');
       expect(description).to.exist;
     });
 
     it('renders action group container', async function() {
       const el = await fixture<Pfv6Alert>(html`<pfv6-alert title="Alert">Content</pfv6-alert>`);
-      const actionGroup = el.shadowRoot!.querySelector('.pf-v6-c-alert__action-group');
+      const actionGroup = el.shadowRoot!.querySelector('#action-group');
       expect(actionGroup).to.exist;
     });
   });
