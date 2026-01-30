@@ -59,7 +59,7 @@ export class Pfv6Avatar extends LitElement {
   * - xl: Extra large avatar
   */
   @property({ type: String, reflect: true })
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | undefined;
 
   render() {
     const classes = {
