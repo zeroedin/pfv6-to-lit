@@ -43,8 +43,10 @@ export class Pfv6AlertActionCloseButton extends LitElement {
     const contextVariantLabel = this.alertContextValue?.variantLabel || '';
     const effectiveVariantLabel = this.variantLabel || contextVariantLabel;
 
+    // Compute label with safe fallback when all values are empty
+    const dynamicLabel = `Close ${effectiveVariantLabel} ${title}`.trim();
     const computedAriaLabel = this.accessibleLabel
-      || `Close ${effectiveVariantLabel} ${title}`;
+      || (dynamicLabel !== 'Close' ? dynamicLabel : 'Close alert');
 
     return html`
       <div id="action">
