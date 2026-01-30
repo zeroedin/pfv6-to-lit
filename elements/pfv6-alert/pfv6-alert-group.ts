@@ -137,8 +137,8 @@ export class Pfv6AlertGroup extends LitElement {
         id="container"
         role="list"
         class=${classMap(classes)}
-        aria-live=${this.isLiveRegion ? 'polite' : 'off'}
-        aria-atomic=${this.isLiveRegion ? 'false' : 'true'}
+        aria-live=${ifDefined(this.isLiveRegion ? 'polite' : undefined)}
+        aria-atomic=${ifDefined(this.isLiveRegion ? 'false' : undefined)}
         aria-label=${ifDefined(this.accessibleLabel)}
       >
         <slot @slotchange=${this.#handleSlotChange}></slot>

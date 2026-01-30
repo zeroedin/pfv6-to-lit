@@ -28,7 +28,7 @@ export class Pfv6AlertActionLink extends LitElement {
 
   render() {
     return this.href ?
-      html`<a id="link" href=${ifDefined(this.href)}><slot></slot></a>`
+      html`<a id="link" href=${ifDefined(this.href)} tabindex="-1"><slot></slot></a>`
       : html`
         <pfv6-button variant="link" is-inline>
           <slot></slot>
