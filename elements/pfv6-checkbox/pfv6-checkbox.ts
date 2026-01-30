@@ -50,6 +50,10 @@ import styles from './pfv6-checkbox.css';
 export class Pfv6Checkbox extends LitElement {
   static styles = styles;
   static formAssociated = true;
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
 
   #internals: ElementInternals;
 
@@ -82,7 +86,7 @@ export class Pfv6Checkbox extends LitElement {
 
   /** Label text for the checkbox */
   @property({ type: String })
-  label?: string;
+  label?: string | undefined;
 
   /** Position of the label relative to the checkbox */
   @property({ type: String, reflect: true, attribute: 'label-position' })
@@ -90,15 +94,15 @@ export class Pfv6Checkbox extends LitElement {
 
   /** Description text for the checkbox */
   @property({ type: String })
-  description?: string;
+  description?: string | undefined;
 
   /** Body text for the checkbox */
   @property({ type: String })
-  body?: string;
+  body?: string | undefined;
 
   /** Accessible label for the checkbox (maps to aria-label) */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   /** Whether the checkbox is indeterminate (partially checked) */
   @property({ type: Boolean, reflect: true })
