@@ -44,6 +44,11 @@ export class Pfv6Switch extends LitElement {
   static readonly styles = styles;
   static readonly formAssociated = true;
 
+  static readonly shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   #internals: ElementInternals;
 
 
