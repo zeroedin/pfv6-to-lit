@@ -23,10 +23,6 @@
   const onButton = toggleGroup.querySelector('[button-id="async-alerts-on"]');
   const offButton = toggleGroup.querySelector('[button-id="async-alerts-off"]');
 
-  function getUniqueId() {
-    return new Date().getTime();
-  }
-
   function addAlert() {
     alertCounter++;
     const alert = document.createElement('pfv6-alert');
