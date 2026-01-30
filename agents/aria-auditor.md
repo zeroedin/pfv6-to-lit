@@ -84,7 +84,7 @@ Always verify React component ARIA patterns.
 **The Problem**: When a custom element is wrapped in a semantic HTML element, the `component` attribute that matches the wrapper is **redundant and must be removed**.
 
 **Detection Pattern** (search ALL demo files):
-```regex
+```text
 <(li|tr|td|th|dt|dd|option)>.*<pfv6-[^>]*component="(li|tr|td|th|dt|dd|option)"[^>]*>
 ```
 
@@ -149,7 +149,7 @@ For example, if `component="li"` causes the component to set `internals.role = "
 - `<option>` - Must be child of `<select>`, `<optgroup>`, or `<datalist>`
 
 **Fix Action** (MUST be automated):
-```bash
+```text
 # For each demo file, detect and remove duplicative component attributes
 # Example: <li><pfv6-divider component="li" → <li><pfv6-divider
 ```
@@ -190,7 +190,7 @@ This rule applies to **Lit demo files only**. **Edit** demos to remove redundant
 | `<th>` | columnheader/rowheader | columnheader, rowheader |
 
 **Decision logic**:
-```
+```text
 IF element.hasAttribute('role')
   AND (role value == implicit role for that element
        OR role value == component's internals.role)
@@ -300,7 +300,7 @@ html`<input type="checkbox" .checked=${this.checked} />`
 ```
 
 **Detection Commands**:
-```bash
+```text
 # 1. Find ElementInternals ARIA assignments
 grep -E "this\.(#?internals|_internals)\.aria[A-Z]" pfv6-{component}.ts
 

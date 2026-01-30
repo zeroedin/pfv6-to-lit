@@ -1,0 +1,23 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+/* Anchor styling for when href is provided - matches inline link button styling */
+a {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: var(--pf-t--global--text--color--link--default, #0066cc);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--pf-t--global--text--color--link--hover, #004080);
+    text-decoration: underline;
+  }
+}

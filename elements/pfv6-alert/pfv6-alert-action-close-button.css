@@ -1,0 +1,29 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+#action {
+  grid-area: action;
+  margin-block-start:
+    var(
+      --pf-v6-c-alert__action--MarginBlockStart,
+      calc(var(--pf-t--global--spacer--control--vertical--default, 0.5rem) * -1)
+    );
+  margin-block-end:
+    var(
+      --pf-v6-c-alert__action--MarginBlockEnd,
+      calc(var(--pf-t--global--spacer--control--vertical--default, 0.5rem) * -1)
+    );
+  margin-inline-end:
+    var(
+      --pf-v6-c-alert__action--MarginInlineEnd,
+      calc(var(--pf-t--global--spacer--sm, 0.5rem) * -1)
+    );
+  transform: translateY(var(--pf-v6-c-alert__action--TranslateY, 0.125rem));
+}

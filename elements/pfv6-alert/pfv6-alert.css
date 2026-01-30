@@ -1,0 +1,308 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(button) {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: var(--pf-t--global--text--color--regular, #151515);
+  cursor: pointer;
+}
+
+:host {
+  /* Public CSS API - Alert variables */
+  --pf-v6-c-alert--BoxShadow: var(--pf-t--global--box-shadow--lg, 0 10px 20px 0 rgb(41 41 41 / 15%));
+  --pf-v6-c-alert--BackgroundColor: var(--pf-t--global--background--color--floating--default, #ffffff);
+  --pf-v6-c-alert--GridTemplateColumns: max-content 1fr max-content;
+  --pf-v6-c-alert--GridTemplateAreas:
+    "icon title action"
+    ". description description"
+    ". actiongroup actiongroup";
+  --pf-v6-c-alert--BorderWidth: var(--pf-t--global--border--width--box--status--default, 2px);
+  --pf-v6-c-alert--BorderColor: transparent;
+  --pf-v6-c-alert--BorderRadius: var(--pf-t--global--border--radius--medium, 16px);
+  --pf-v6-c-alert--PaddingBlockStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-alert--PaddingInlineEnd: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-alert--PaddingBlockEnd: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-alert--PaddingInlineStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-alert--FontSize: var(--pf-t--global--font--size--body--default, 0.875rem);
+
+  /* Toggle */
+  --pf-v6-c-alert__toggle--MarginBlockStart: calc(-1 * var(--pf-t--global--spacer--control--vertical--default, 0.5rem));
+  --pf-v6-c-alert__toggle--MarginBlockEnd: calc(-1 * var(--pf-t--global--spacer--control--vertical--default, 0.5rem));
+  /* stylelint-disable-next-line @stylistic/max-line-length */
+  --pf-v6-c-alert__toggle--MarginInlineStart: calc(-1 * var(--pf-t--global--spacer--action--horizontal--plain--default, 0.5rem));
+  --pf-v6-c-alert__toggle--MarginInlineEnd: var(--pf-t--global--spacer--sm, 0.5rem);
+
+  /* Toggle icon */
+  --pf-v6-c-alert__toggle-icon--Rotate: 0;
+  /* stylelint-disable-next-line @stylistic/max-line-length */
+  --pf-v6-c-alert__toggle-icon--TransitionTimingFunction: var(--pf-t--global--motion--timing-function--default, cubic-bezier(0.4, 0, 0.2, 1));
+  --pf-v6-c-alert__toggle-icon--TransitionDuration: var(--pf-t--global--motion--duration--icon--long, 200ms);
+
+  /* Icon */
+  --pf-v6-c-alert__icon--Color: var(--pf-t--global--icon--color--regular, #151515);
+  --pf-v6-c-alert__icon--MarginInlineEnd: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
+  --pf-v6-c-alert__icon--FontSize: var(--pf-t--global--icon--size--md, 0.875rem);
+
+  /* Title */
+  --pf-v6-c-alert__title--FontWeight: var(--pf-t--global--font--weight--body--bold, 500);
+  --pf-v6-c-alert__title--Color: var(--pf-t--global--text--color--regular, #151515);
+  --pf-v6-c-alert__title--max-lines: 1;
+
+  /* Action */
+  --pf-v6-c-alert__action--MarginBlockStart: calc(var(--pf-t--global--spacer--control--vertical--default, 0.5rem) * -1);
+  --pf-v6-c-alert__action--MarginBlockEnd: calc(var(--pf-t--global--spacer--control--vertical--default, 0.5rem) * -1);
+  --pf-v6-c-alert__action--TranslateY: 0.125rem;
+  --pf-v6-c-alert__action--MarginInlineEnd: calc(var(--pf-t--global--spacer--sm, 0.5rem) * -1);
+
+  /* Description */
+  --pf-v6-c-alert__description--PaddingBlockStart: var(--pf-t--global--spacer--xs, 0.25rem);
+
+  /* Action group */
+  --pf-v6-c-alert__action-group--PaddingBlockStart-base: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-alert__action-group--PaddingBlockStart: var(--pf-v6-c-alert__action-group--PaddingBlockStart-base);
+  --pf-v6-c-alert__description--action-group--PaddingBlockStart-base: var(--pf-t--global--spacer--sm, 0.5rem);
+  /* stylelint-disable-next-line @stylistic/max-line-length */
+  --pf-v6-c-alert__description--action-group--PaddingBlockStart: var(--pf-v6-c-alert__description--action-group--PaddingBlockStart-base);
+  /* stylelint-disable-next-line @stylistic/max-line-length */
+  --pf-v6-c-alert__action-group__c-button--not-last-child--MarginInlineEnd: var(--pf-t--global--spacer--gap--action-to-action--default, 1rem);
+
+  /* Custom variant */
+  --pf-v6-c-alert--m-custom--BorderColor: var(--pf-t--global--border--color--status--custom--default, #1fa1a1);
+  --pf-v6-c-alert--m-custom__icon--Color: var(--pf-t--global--icon--color--status--custom--default, #1fa1a1);
+  --pf-v6-c-alert--m-custom__title--Color: var(--pf-t--global--text--color--regular, #151515);
+
+  /* Success variant */
+  --pf-v6-c-alert--m-success--BorderColor: var(--pf-t--global--border--color--status--success--default, #3d9e3d);
+  --pf-v6-c-alert--m-success__icon--Color: var(--pf-t--global--icon--color--status--success--default, #3d9e3d);
+  --pf-v6-c-alert--m-success__title--Color: var(--pf-t--global--text--color--regular, #151515);
+
+  /* Danger variant */
+  --pf-v6-c-alert--m-danger--BorderColor: var(--pf-t--global--border--color--status--danger--default, #ba6233);
+  --pf-v6-c-alert--m-danger__icon--Color: var(--pf-t--global--icon--color--status--danger--default, #ba6233);
+  --pf-v6-c-alert--m-danger__title--Color: var(--pf-t--global--text--color--regular, #151515);
+
+  /* Warning variant */
+  --pf-v6-c-alert--m-warning--BorderColor: var(--pf-t--global--border--color--status--warning--default, #f0ab00);
+  --pf-v6-c-alert--m-warning__icon--Color: var(--pf-t--global--icon--color--status--warning--default, #f0ab00);
+  --pf-v6-c-alert--m-warning__title--Color: var(--pf-t--global--text--color--regular, #151515);
+
+  /* Info variant */
+  --pf-v6-c-alert--m-info--BorderColor: var(--pf-t--global--border--color--status--info--default, #a18fff);
+  --pf-v6-c-alert--m-info__icon--Color: var(--pf-t--global--icon--color--status--info--default, #a18fff);
+  --pf-v6-c-alert--m-info__title--Color: var(--pf-t--global--text--color--regular, #151515);
+
+  /* Inline modifier */
+  --pf-v6-c-alert--m-inline--BackgroundColor: var(--pf-t--global--background--color--primary--default, #ffffff);
+  --pf-v6-c-alert--m-inline--BoxShadow: none;
+
+  /* Inline plain modifier */
+  --pf-v6-c-alert--m-inline--m-plain--BorderWidth: 0;
+  --pf-v6-c-alert--m-inline--m-plain--BackgroundColor: transparent;
+  --pf-v6-c-alert--m-inline--m-plain--PaddingBlockStart: 0;
+  --pf-v6-c-alert--m-inline--m-plain--PaddingInlineEnd: 0;
+  --pf-v6-c-alert--m-inline--m-plain--PaddingBlockEnd: 0;
+  --pf-v6-c-alert--m-inline--m-plain--PaddingInlineStart: 0;
+
+  /* Pseudo-private properties for alert-group animation integration */
+  /* Defined on :host so they can be overridden by Light DOM CSS */
+  --_min-height: auto;
+  --_transition: none;
+
+  /* Expandable modifier */
+  --pf-v6-c-alert--m-expandable--GridTemplateColumns: auto max-content 1fr max-content;
+  --pf-v6-c-alert--m-expandable--GridTemplateAreas:
+    "toggle icon title action"
+    ". . description description"
+    ". . actiongroup actiongroup";
+  /* stylelint-disable-next-line @stylistic/max-line-length */
+  --pf-v6-c-alert--m-expandable__description--action-group--PaddingBlockStart: var(--pf-v6-c-alert__action-group--PaddingBlockStart-base);
+
+  /* Expanded modifier */
+  --pf-v6-c-alert--m-expanded__toggle-icon--Rotate: 90deg;
+  /* stylelint-disable-next-line @stylistic/max-line-length */
+  --pf-v6-c-alert--m-expanded__description--action-group--PaddingBlockStart: var(--pf-v6-c-alert__description--action-group--PaddingBlockStart-base);
+}
+
+#container {
+  position: relative;
+  display: grid;
+  grid-template-areas: var(--pf-v6-c-alert--GridTemplateAreas);
+  grid-template-columns: var(--pf-v6-c-alert--GridTemplateColumns);
+  padding-block-start: var(--pf-v6-c-alert--PaddingBlockStart);
+  padding-block-end: var(--pf-v6-c-alert--PaddingBlockEnd);
+  padding-inline-start: var(--pf-v6-c-alert--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-alert--PaddingInlineEnd);
+  font-size: var(--pf-v6-c-alert--FontSize);
+  background-color: var(--pf-v6-c-alert--BackgroundColor);
+  border: var(--pf-v6-c-alert--BorderWidth) solid var(--pf-v6-c-alert--BorderColor);
+  border-radius: var(--pf-v6-c-alert--BorderRadius);
+  box-shadow: var(--pf-v6-c-alert--BoxShadow);
+
+  /* Use pseudo-private properties for alert-group animation integration */
+  /* Defaults defined on :host, can be overridden by Light DOM CSS */
+  min-height: var(--_min-height);
+  transition: var(--_transition);
+
+  &.custom {
+    --pf-v6-c-alert--BorderColor: var(--pf-v6-c-alert--m-custom--BorderColor);
+    --pf-v6-c-alert__icon--Color: var(--pf-v6-c-alert--m-custom__icon--Color);
+    --pf-v6-c-alert__title--Color: var(--pf-v6-c-alert--m-custom__title--Color);
+  }
+
+  &.success {
+    --pf-v6-c-alert--BorderColor: var(--pf-v6-c-alert--m-success--BorderColor);
+    --pf-v6-c-alert__icon--Color: var(--pf-v6-c-alert--m-success__icon--Color);
+    --pf-v6-c-alert__title--Color: var(--pf-v6-c-alert--m-success__title--Color);
+  }
+
+  &.danger {
+    --pf-v6-c-alert--BorderColor: var(--pf-v6-c-alert--m-danger--BorderColor);
+    --pf-v6-c-alert__icon--Color: var(--pf-v6-c-alert--m-danger__icon--Color);
+    --pf-v6-c-alert__title--Color: var(--pf-v6-c-alert--m-danger__title--Color);
+  }
+
+  &.warning {
+    --pf-v6-c-alert--BorderColor: var(--pf-v6-c-alert--m-warning--BorderColor);
+    --pf-v6-c-alert__icon--Color: var(--pf-v6-c-alert--m-warning__icon--Color);
+    --pf-v6-c-alert__title--Color: var(--pf-v6-c-alert--m-warning__title--Color);
+  }
+
+  &.info {
+    --pf-v6-c-alert--BorderColor: var(--pf-v6-c-alert--m-info--BorderColor);
+    --pf-v6-c-alert__icon--Color: var(--pf-v6-c-alert--m-info__icon--Color);
+    --pf-v6-c-alert__title--Color: var(--pf-v6-c-alert--m-info__title--Color);
+  }
+
+  &.inline {
+    --pf-v6-c-alert--BoxShadow: var(--pf-v6-c-alert--m-inline--BoxShadow);
+    --pf-v6-c-alert--BackgroundColor: var(--pf-v6-c-alert--m-inline--BackgroundColor);
+  }
+
+  &.plain {
+    --pf-v6-c-alert--BorderWidth: var(--pf-v6-c-alert--m-inline--m-plain--BorderWidth);
+    --pf-v6-c-alert--BackgroundColor: var(--pf-v6-c-alert--m-inline--m-plain--BackgroundColor);
+    --pf-v6-c-alert--PaddingBlockStart: var(--pf-v6-c-alert--m-inline--m-plain--PaddingBlockStart);
+    --pf-v6-c-alert--PaddingInlineEnd: var(--pf-v6-c-alert--m-inline--m-plain--PaddingInlineEnd);
+    --pf-v6-c-alert--PaddingBlockEnd: var(--pf-v6-c-alert--m-inline--m-plain--PaddingBlockEnd);
+    --pf-v6-c-alert--PaddingInlineStart: var(--pf-v6-c-alert--m-inline--m-plain--PaddingInlineStart);
+  }
+
+  &.expandable {
+    --pf-v6-c-alert--GridTemplateColumns: var(--pf-v6-c-alert--m-expandable--GridTemplateColumns);
+    --pf-v6-c-alert--GridTemplateAreas: var(--pf-v6-c-alert--m-expandable--GridTemplateAreas);
+    /* stylelint-disable-next-line @stylistic/max-line-length */
+    --pf-v6-c-alert__description--action-group--PaddingBlockStart: var(--pf-v6-c-alert--m-expandable__description--action-group--PaddingBlockStart);
+  }
+
+  &.expanded {
+    --pf-v6-c-alert__toggle-icon--Rotate: var(--pf-v6-c-alert--m-expanded__toggle-icon--Rotate);
+    /* stylelint-disable-next-line @stylistic/max-line-length */
+    --pf-v6-c-alert__description--action-group--PaddingBlockStart: var(--pf-v6-c-alert--m-expanded__description--action-group--PaddingBlockStart);
+  }
+}
+
+#toggle {
+  margin-block-start: var(--pf-v6-c-alert__toggle--MarginBlockStart);
+  margin-block-end: var(--pf-v6-c-alert__toggle--MarginBlockEnd);
+  margin-inline-start: var(--pf-v6-c-alert__toggle--MarginInlineStart);
+  margin-inline-end: var(--pf-v6-c-alert__toggle--MarginInlineEnd);
+}
+
+#toggle-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding:
+    var(--pf-t--global--spacer--control--vertical--default, 0.5rem)
+    var(--pf-t--global--spacer--action--horizontal--plain--default, 0.5rem);
+  font-size: var(--pf-t--global--icon--size--md, 0.875rem);
+  color: var(--pf-t--global--icon--color--regular, #151515);
+  background-color: transparent;
+  border: none;
+  border-radius: var(--pf-t--global--border--radius--small, 8px);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--pf-t--global--background--color--action--plain--hover, #f0f0f0);
+  }
+
+  &:focus-visible {
+    outline:
+      var(--pf-t--global--border--width--regular, 1px) solid
+      var(--pf-t--global--border--color--clicked, #0066cc);
+    outline-offset: var(--pf-t--global--spacer--xs, 0.25rem);
+  }
+}
+
+#toggle-icon {
+  display: inline-block;
+  transition:
+    transform
+    var(--pf-v6-c-alert__toggle-icon--TransitionDuration)
+    var(--pf-v6-c-alert__toggle-icon--TransitionTimingFunction);
+  transform: rotate(var(--pf-v6-c-alert__toggle-icon--Rotate));
+
+  &:dir(rtl) {
+    transform: scaleX(-1) rotate(var(--pf-v6-c-alert__toggle-icon--Rotate));
+  }
+}
+
+#title {
+  grid-area: title;
+  margin: 0;
+  font-weight: var(--pf-v6-c-alert__title--FontWeight);
+  color: var(--pf-v6-c-alert__title--Color);
+  overflow-wrap: break-word;
+
+  &.truncate {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--pf-v6-c-alert__title--max-lines);
+  }
+}
+
+#action-group {
+  grid-area: actiongroup;
+  padding-block-start: var(--pf-v6-c-alert__action-group--PaddingBlockStart);
+}
+
+#description {
+  grid-area: description;
+  padding-block-start: var(--pf-v6-c-alert__description--PaddingBlockStart);
+  overflow-wrap: break-word;
+
+  & + #action-group {
+    /* stylelint-disable-next-line @stylistic/max-line-length */
+    --pf-v6-c-alert__action-group--PaddingBlockStart: var(--pf-v6-c-alert__description--action-group--PaddingBlockStart);
+  }
+}
+
+::slotted([slot="action-close"]) {
+  grid-area: action;
+  margin-block-start: var(--pf-v6-c-alert__action--MarginBlockStart);
+  margin-block-end: var(--pf-v6-c-alert__action--MarginBlockEnd);
+  margin-inline-end: var(--pf-v6-c-alert__action--MarginInlineEnd);
+  transform: translateY(var(--pf-v6-c-alert__action--TranslateY));
+}
+
+::slotted([slot="action-links"]:not(:last-child)) {
+  margin-inline-end: var(--pf-v6-c-alert__action-group__c-button--not-last-child--MarginInlineEnd);
+}
+
+.screen-reader {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

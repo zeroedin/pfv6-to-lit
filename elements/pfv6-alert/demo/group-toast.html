@@ -1,0 +1,92 @@
+<div class="pf-v6-l-flex pf-m-gap-xs">
+  <div>
+    <button id="add-success" type="button" class="pf-v6-c-button pf-m-secondary">
+      Add toast success alert
+    </button>
+  </div>
+  <div>
+    <button id="add-danger" type="button" class="pf-v6-c-button pf-m-secondary">
+      Add toast danger alert
+    </button>
+  </div>
+  <div>
+    <button id="add-info" type="button" class="pf-v6-c-button pf-m-secondary">
+      Add toast info alert
+    </button>
+  </div>
+</div>
+
+<pfv6-alert-group id="alert-group" has-animations is-toast is-live-region>
+  <!-- Alerts will be dynamically inserted here -->
+</pfv6-alert-group>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-alert/pfv6-alert.js';
+
+  let alerts = [];
+  const alertGroup = document.getElementById('alert-group');
+  const successBtn = document.getElementById('add-success');
+  const dangerBtn = document.getElementById('add-danger');
+  const infoBtn = document.getElementById('add-info');
+
+  function getUniqueId() {
+    return new Date().getTime();
+  }
+
+  function createAlert(title, variant, key) {
+    const alert = document.createElement('pfv6-alert');
+    alert.variant = variant;
+    alert.title = title;
+
+    // Create close button
+    const closeButton = document.createElement('pfv6-alert-action-close-button');
+    closeButton.variantLabel = `${variant} alert`;
+    closeButton.slot = 'action-close';
+    closeButton.addEventListener('click', () => removeAlert(key));
+
+    alert.appendChild(closeButton);
+    return alert;
+  }
+
+  function removeAlert(key) {
+    const index = alerts.findIndex(a => a.key === key);
+    if (index !== -1) {
+      const alertData = alerts[index];
+      const alertElement = alertData.element;
+
+      // Set outgoing animation state
+      alertElement.animation = 'outgoing';
+
+      // Remove after transition completes
+      alertElement.addEventListener('transitionend', (event) => {
+        // Wait for grid-template-rows to finish (the final property)
+        if (event.propertyName === 'grid-template-rows') {
+          alertElement.remove();
+        }
+      });
+
+      alerts.splice(index, 1);
+    }
+  }
+
+  function addAlert(title, variant) {
+    const key = getUniqueId();
+    const alert = createAlert(title, variant, key);
+
+    // Insert at the beginning
+    alertGroup.insertBefore(alert, alertGroup.firstChild);
+    alerts.unshift({ key, element: alert });
+  }
+
+  successBtn.addEventListener('click', () => {
+    addAlert('Toast success alert', 'success');
+  });
+
+  dangerBtn.addEventListener('click', () => {
+    addAlert('Toast danger alert', 'danger');
+  });
+
+  infoBtn.addEventListener('click', () => {
+    addAlert('Toast info alert', 'info');
+  });
+</script>

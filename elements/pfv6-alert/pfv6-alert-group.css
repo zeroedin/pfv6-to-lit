@@ -1,0 +1,262 @@
+/* pfv6-alert-group CSS - AlertGroup container component */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+/* Alert group container */
+#container {
+  --pf-v6-c-alert-group__item--MarginBlockStart: var(--pf-t--global--spacer--gap--group--vertical, 0.5rem);
+
+  /* Toast variables */
+  --pf-v6-c-alert-group--m-toast--InsetBlockStart: var(--pf-t--global--spacer--2xl, 2rem);
+  --pf-v6-c-alert-group--m-toast--InsetInlineEnd: var(--pf-t--global--spacer--xl, 1.5rem);
+  --pf-v6-c-alert-group--m-toast--MaxWidth: 37.5rem;
+  --pf-v6-c-alert-group--m-toast--ZIndex: var(--pf-t--global--z-index--2xl, 600);
+
+  /* Item entry animation (reduced motion default) */
+  --pf-v6-c-alert-group--m-toast__item--TransitionDuration--opacity--default: var(--pf-t--global--motion--duration--fade--default, 250ms);
+  --pf-v6-c-alert-group--m-toast__item--TransitionTimingFunction--opacity--default: var(--pf-t--global--motion--timing-function--decelerate, cubic-bezier(0, 0, 0.2, 1));
+  --pf-v6-c-alert-group--m-toast__item--Transition--opacity--default:
+    var(--pf-v6-c-alert-group--m-toast__item--TransitionDuration--opacity--default)
+    var(--pf-v6-c-alert-group--m-toast__item--TransitionTimingFunction--opacity--default)
+    0s;
+
+  /* Item entry animation (full motion) */
+  --pf-v6-c-alert-group--m-toast__item--TransitionDuration--opacity: var(--pf-t--global--motion--duration--fade--default, 250ms);
+  --pf-v6-c-alert-group--m-toast__item--TransitionTimingFunction--opacity: var(--pf-t--global--motion--timing-function--decelerate, cubic-bezier(0, 0, 0.2, 1));
+  --pf-v6-c-alert-group--m-toast__item--TransitionDelay--opacity: var(--pf-t--global--motion--delay--none, 0ms);
+  --pf-v6-c-alert-group--m-toast__item--TransitionDuration--transform: var(--pf-t--global--motion--duration--slide-in--default, 300ms);
+  --pf-v6-c-alert-group--m-toast__item--TransitionTimingFunction--transform: var(--pf-t--global--motion--timing-function--decelerate, cubic-bezier(0, 0, 0.2, 1));
+  --pf-v6-c-alert-group--m-toast__item--TransitionDelay--transform: var(--pf-t--global--motion--delay--none, 0ms);
+  --pf-v6-c-alert-group--m-toast__item--TransitionDuration--grid-template-rows: var(--pf-t--global--motion--duration--slide-in--default, 300ms);
+  --pf-v6-c-alert-group--m-toast__item--TransitionTimingFunction--grid-template-rows: var(--pf-t--global--motion--timing-function--decelerate, cubic-bezier(0, 0, 0.2, 1));
+  --pf-v6-c-alert-group--m-toast__item--TransitionDuration--margin-block: var(--pf-t--global--motion--duration--slide-in--default, 300ms);
+  --pf-v6-c-alert-group--m-toast__item--TransitionTimingFunction--margin-block: var(--pf-t--global--motion--timing-function--decelerate, cubic-bezier(0, 0, 0.2, 1));
+
+  /* Alert entry animation */
+  --pf-v6-c-alert-group--m-toast__item--c-alert--TransitionDuration: var(--pf-t--global--motion--duration--slide-in--default, 300ms);
+  --pf-v6-c-alert-group--m-toast__item--c-alert--TransitionTimingFunction: var(--pf-t--global--motion--timing-function--decelerate, cubic-bezier(0, 0, 0.2, 1));
+  --pf-v6-c-alert-group--m-toast__item--c-alert--Transition:
+    all
+    var(--pf-v6-c-alert-group--m-toast__item--c-alert--TransitionDuration)
+    var(--pf-v6-c-alert-group--m-toast__item--c-alert--TransitionTimingFunction)
+    0s;
+
+  /* Item exit animation (reduced motion default) */
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDuration--opacity--default: var(--pf-t--global--motion--duration--fade--default, 250ms);
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionTimingFunction--opacity--default: var(--pf-t--global--motion--timing-function--accelerate, cubic-bezier(0.4, 0, 1, 1));
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDelay--grid-template-rows--default: var(--pf-t--global--motion--duration--fade--default, 250ms);
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDelay--margin-block--default: var(--pf-t--global--motion--duration--fade--default, 250ms);
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--c-alert--TransitionDelay--default: var(--pf-t--global--motion--duration--fade--default, 250ms);
+
+  /* Item exit animation (full motion) */
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDuration--transform: var(--pf-t--global--motion--duration--slide-out--short, 150ms);
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionTimingFunction--transform: var(--pf-t--global--motion--timing-function--accelerate, cubic-bezier(0.4, 0, 1, 1));
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDuration--opacity: var(--pf-t--global--motion--duration--slide-out--short, 150ms);
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionTimingFunction--opacity: var(--pf-t--global--motion--timing-function--accelerate, cubic-bezier(0.4, 0, 1, 1));
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDuration--margin-block: var(--pf-t--global--motion--duration--fade--short, 100ms);
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionTimingFunction--margin-block: var(--pf-t--global--motion--timing-function--accelerate, cubic-bezier(0.4, 0, 1, 1));
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDelay--margin-block: var(--pf-t--global--motion--duration--slide-out--short, 150ms);
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDuration--grid-template-rows: var(--pf-t--global--motion--duration--slide-in--short, 200ms);
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionTimingFunction--grid-template-rows: var(--pf-t--global--motion--timing-function--accelerate, cubic-bezier(0.4, 0, 1, 1));
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDelay--grid-template-rows: var(--pf-t--global--motion--duration--slide-out--short, 150ms);
+
+  /* Alert exit animation */
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--c-alert--TransitionDuration: var(--pf-t--global--motion--duration--slide-out--short, 150ms);
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--c-alert--TransitionTimingFunction: var(--pf-t--global--motion--timing-function--accelerate, cubic-bezier(0.4, 0, 1, 1));
+  --pf-v6-c-alert-group--m-toast__item--m-outgoing--c-alert--Transition:
+    all
+    var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--c-alert--TransitionDuration)
+    var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--c-alert--TransitionTimingFunction)
+    var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--c-alert--TransitionDuration);
+
+  /* Overflow button */
+  --pf-v6-c-alert-group__overflow-button--BorderWidth: var(--pf-t--global--border--width--high-contrast--regular, 0);
+  --pf-v6-c-alert-group__overflow-button--BorderColor: var(--pf-t--global--border--color--high-contrast, transparent);
+  --pf-v6-c-alert-group__overflow-button--BorderRadius: var(--pf-t--global--border--radius--medium, 0.375rem);
+  --pf-v6-c-alert-group__overflow-button--PaddingBlockStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-alert-group__overflow-button--PaddingInlineEnd: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-alert-group__overflow-button--PaddingBlockEnd: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-alert-group__overflow-button--PaddingInlineStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-alert-group__overflow-button--Color: var(--pf-t--global--text--color--link--default, #0066cc);
+  --pf-v6-c-alert-group__overflow-button--BoxShadow:
+    var(
+      --pf-t--global--box-shadow--lg,
+      0 0.5rem 1rem 0 rgb(3 3 3 / 16%),
+      0 0 0.375rem 0 rgb(3 3 3 / 8%)
+    );
+  --pf-v6-c-alert-group__overflow-button--BackgroundColor: var(--pf-t--global--background--color--floating--default, #ffffff);
+  --pf-v6-c-alert-group__overflow-button--hover--BorderWidth: var(--pf-t--global--border--width--high-contrast--strong, 0);
+  --pf-v6-c-alert-group__overflow-button--hover--Color: var(--pf-t--global--text--color--link--hover, #004080);
+  --pf-v6-c-alert-group__overflow-button--hover--BackgroundColor: var(--pf-t--global--background--color--floating--hover, #f0f0f0);
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Spacing between alerts */
+#container > ::slotted(*:not(:first-child)) {
+  margin-block-start: var(--pf-v6-c-alert-group__item--MarginBlockStart);
+}
+
+/* Toast positioning modifier */
+#container.toast {
+  position: fixed;
+  inset-block-start: var(--pf-v6-c-alert-group--m-toast--InsetBlockStart);
+  inset-inline-end: var(--pf-v6-c-alert-group--m-toast--InsetInlineEnd);
+  z-index: var(--pf-v6-c-alert-group--m-toast--ZIndex);
+  width: calc(100% - calc(var(--pf-v6-c-alert-group--m-toast--InsetInlineEnd) * 2));
+  max-width: var(--pf-v6-c-alert-group--m-toast--MaxWidth);
+}
+
+/* Overflow button styling */
+#overflow-button {
+  position: relative;
+  width: 100%;
+  padding-block-start: var(--pf-v6-c-alert-group__overflow-button--PaddingBlockStart);
+  padding-block-end: var(--pf-v6-c-alert-group__overflow-button--PaddingBlockEnd);
+  padding-inline-start: var(--pf-v6-c-alert-group__overflow-button--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-alert-group__overflow-button--PaddingInlineEnd);
+  font: inherit;
+  color: var(--pf-v6-c-alert-group__overflow-button--Color);
+  cursor: pointer;
+  background-color: var(--pf-v6-c-alert-group__overflow-button--BackgroundColor);
+  border: 0;
+  border-radius: var(--pf-v6-c-alert-group__overflow-button--BorderRadius);
+  box-shadow: var(--pf-v6-c-alert-group__overflow-button--BoxShadow);
+}
+
+#overflow-button::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  border:
+    var(--pf-v6-c-alert-group__overflow-button--BorderWidth)
+    solid
+    var(--pf-v6-c-alert-group__overflow-button--BorderColor);
+  border-radius: inherit;
+}
+
+#overflow-button:hover,
+#overflow-button:focus {
+  --pf-v6-c-alert-group__overflow-button--BorderWidth: var(--pf-v6-c-alert-group__overflow-button--hover--BorderWidth);
+  --pf-v6-c-alert-group__overflow-button--BackgroundColor: var(--pf-v6-c-alert-group__overflow-button--hover--BackgroundColor);
+  --pf-v6-c-alert-group__overflow-button--Color: var(--pf-v6-c-alert-group__overflow-button--hover--Color);
+}
+
+/* ==========================================================================
+   Alert Animation Styles
+   ========================================================================== */
+
+/* Base alert styling - alert becomes the grid container for animations */
+::slotted(pfv6-alert) {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+
+  /* Base transition for reduced motion */
+  transition: opacity var(--pf-v6-c-alert-group--m-toast__item--Transition--opacity--default);
+
+  /* Set pseudo-private transition for alert's internal container */
+  --_transition: opacity var(--pf-v6-c-alert-group--m-toast__item--Transition--opacity--default);
+}
+
+/* Enhanced transitions when motion is allowed */
+@media screen and (prefers-reduced-motion: no-preference) {
+  ::slotted(pfv6-alert) {
+    transition:
+      opacity
+        var(--pf-v6-c-alert-group--m-toast__item--TransitionDuration--opacity)
+        var(--pf-v6-c-alert-group--m-toast__item--TransitionTimingFunction--opacity)
+        var(--pf-v6-c-alert-group--m-toast__item--TransitionDelay--opacity),
+      transform
+        var(--pf-v6-c-alert-group--m-toast__item--TransitionDuration--transform)
+        var(--pf-v6-c-alert-group--m-toast__item--TransitionTimingFunction--transform)
+        var(--pf-v6-c-alert-group--m-toast__item--TransitionDelay--transform),
+      grid-template-rows
+        var(--pf-v6-c-alert-group--m-toast__item--TransitionDuration--grid-template-rows)
+        var(--pf-v6-c-alert-group--m-toast__item--TransitionTimingFunction--grid-template-rows),
+      margin-block
+        var(--pf-v6-c-alert-group--m-toast__item--TransitionDuration--margin-block)
+        var(--pf-v6-c-alert-group--m-toast__item--TransitionTimingFunction--margin-block);
+
+    /* Set pseudo-private transition for alert's internal container */
+    --_transition: var(--pf-v6-c-alert-group--m-toast__item--c-alert--Transition);
+  }
+}
+
+/* Incoming state - alert starts hidden/collapsed (only first-child animates in from top) */
+::slotted(pfv6-alert[animation="incoming"]:first-child) {
+  grid-template-rows: 0fr;
+  margin-block: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-100%);
+
+  /* Override CSS custom properties that inherit into Shadow DOM */
+  --_min-height: 0;
+  --pf-v6-c-alert--PaddingBlockStart: 0;
+  --pf-v6-c-alert--PaddingBlockEnd: 0;
+  --pf-v6-c-alert--BorderWidth: 0;
+}
+
+/* Outgoing state - alert exits (reduced motion: just fade) */
+::slotted(pfv6-alert[animation="outgoing"]) {
+  grid-template-rows: 0fr;
+  margin-block: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    grid-template-rows
+      0s
+      var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDelay--grid-template-rows--default),
+    margin-block
+      0s
+      var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDelay--margin-block--default),
+    opacity
+      var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDuration--opacity--default)
+      var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionTimingFunction--opacity--default);
+
+  /* Override CSS custom properties that inherit into Shadow DOM */
+  --_min-height: 0;
+  --pf-v6-c-alert--PaddingBlockStart: 0;
+  --pf-v6-c-alert--PaddingBlockEnd: 0;
+  --pf-v6-c-alert--BorderWidth: 0;
+  --_transition:
+    all
+    0s
+    var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--c-alert--TransitionDelay--default);
+}
+
+/* Outgoing with full motion - slides right */
+@media screen and (prefers-reduced-motion: no-preference) {
+  ::slotted(pfv6-alert[animation="outgoing"]) {
+    transform: translateX(100%);
+    transition:
+      transform
+        var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDuration--transform)
+        var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionTimingFunction--transform),
+      opacity
+        var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDuration--opacity)
+        var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionTimingFunction--opacity),
+      margin-block
+        var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDuration--margin-block)
+        var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionTimingFunction--margin-block)
+        var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDelay--margin-block),
+      grid-template-rows
+        var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDuration--grid-template-rows)
+        var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionTimingFunction--grid-template-rows)
+        var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--TransitionDelay--grid-template-rows);
+
+    --_transition: var(--pf-v6-c-alert-group--m-toast__item--m-outgoing--c-alert--Transition);
+  }
+}

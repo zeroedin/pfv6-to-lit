@@ -1,0 +1,64 @@
+<div class="pf-v6-l-flex pf-m-gap-xs" style="margin-bottom: 16px;">
+  <pfv6-toggle-group aria-label="Toggle asynchronous alerts" id="async-toggle">
+    <pfv6-toggle-group-item text="Async alerts on" button-id="async-alerts-on"></pfv6-toggle-group-item>
+    <pfv6-toggle-group-item text="Async alerts off" button-id="async-alerts-off" is-selected="true"></pfv6-toggle-group-item>
+  </pfv6-toggle-group>
+</div>
+
+<pfv6-alert-group id="alert-group" has-animations is-live-region>
+  <!-- Alerts will be dynamically inserted here -->
+</pfv6-alert-group>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-alert/pfv6-alert.js';
+  import '@pfv6/elements/pfv6-toggle-group/pfv6-toggle-group.js';
+
+  let alerts = [];
+  let isActive = false;
+  let intervalTimer = null;
+  let alertCounter = 0;
+
+  const alertGroup = document.getElementById('alert-group');
+  const toggleGroup = document.getElementById('async-toggle');
+  const onButton = toggleGroup.querySelector('[button-id="async-alerts-on"]');
+  const offButton = toggleGroup.querySelector('[button-id="async-alerts-off"]');
+
+  function addAlert() {
+    alertCounter++;
+    const alert = document.createElement('pfv6-alert');
+    alert.variant = 'info';
+    alert.title = `Async alert number ${alertCounter}`;
+
+    // Insert at the beginning
+    alertGroup.insertBefore(alert, alertGroup.firstChild);
+    alerts.unshift(alert);
+  }
+
+  function startAlerts() {
+    isActive = true;
+    onButton.isSelected = true;
+    offButton.isSelected = false;
+
+    if (intervalTimer) {
+      clearInterval(intervalTimer);
+    }
+
+    intervalTimer = setInterval(() => {
+      addAlert();
+    }, 4500);
+  }
+
+  function stopAlerts() {
+    isActive = false;
+    onButton.isSelected = false;
+    offButton.isSelected = true;
+
+    if (intervalTimer) {
+      clearInterval(intervalTimer);
+      intervalTimer = null;
+    }
+  }
+
+  onButton.addEventListener('click', startAlerts);
+  offButton.addEventListener('click', stopAlerts);
+</script>

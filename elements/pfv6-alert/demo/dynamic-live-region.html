@@ -1,0 +1,51 @@
+<div class="pf-v6-l-flex pf-m-gap-xs" style="margin-bottom: 16px;">
+  <div>
+    <button id="add-success" type="button" class="pf-v6-c-button pf-m-secondary">
+      Add single success alert
+    </button>
+  </div>
+  <div>
+    <button id="add-info" type="button" class="pf-v6-c-button pf-m-secondary">
+      Add single info alert
+    </button>
+  </div>
+  <div>
+    <button id="add-danger" type="button" class="pf-v6-c-button pf-m-secondary">
+      Add single danger alert
+    </button>
+  </div>
+</div>
+
+<pfv6-alert-group id="alert-group" has-animations is-live-region aria-live="polite" aria-relevant="additions text" aria-atomic="false">
+  <!-- Alerts will be dynamically inserted here -->
+</pfv6-alert-group>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-alert/pfv6-alert.js';
+
+  const alertGroup = document.getElementById('alert-group');
+  const successBtn = document.getElementById('add-success');
+  const infoBtn = document.getElementById('add-info');
+  const dangerBtn = document.getElementById('add-danger');
+
+  function addAlert(title, variant) {
+    const alert = document.createElement('pfv6-alert');
+    alert.variant = variant;
+    alert.title = title;
+
+    // Insert at the beginning
+    alertGroup.insertBefore(alert, alertGroup.firstChild);
+  }
+
+  successBtn.addEventListener('click', () => {
+    addAlert('Single success alert', 'success');
+  });
+
+  infoBtn.addEventListener('click', () => {
+    addAlert('Single info alert', 'info');
+  });
+
+  dangerBtn.addEventListener('click', () => {
+    addAlert('Single danger alert', 'danger');
+  });
+</script>

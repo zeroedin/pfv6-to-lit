@@ -1,0 +1,128 @@
+<div class="pf-v6-l-flex pf-m-gap-xs" style="margin-bottom: 16px;">
+  <div>
+    <button id="add-success" type="button" class="pf-v6-c-button pf-m-secondary">
+      Add single success alert
+    </button>
+  </div>
+  <div>
+    <button id="add-danger" type="button" class="pf-v6-c-button pf-m-secondary">
+      Add single danger alert
+    </button>
+  </div>
+  <div>
+    <button id="add-info" type="button" class="pf-v6-c-button pf-m-secondary">
+      Add single info alert
+    </button>
+  </div>
+</div>
+
+<pfv6-alert-group id="alert-group" has-animations is-live-region>
+  <!-- Alerts will be dynamically inserted here -->
+</pfv6-alert-group>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-alert/pfv6-alert.js';
+
+  let alerts = [];
+  const maxDisplayed = 4;
+
+  const alertGroup = document.getElementById('alert-group');
+  const successBtn = document.getElementById('add-success');
+  const dangerBtn = document.getElementById('add-danger');
+  const infoBtn = document.getElementById('add-info');
+
+  function getUniqueId() {
+    return new Date().getTime();
+  }
+
+  function getOverflowMessage(alertsNumber) {
+    const overflow = alertsNumber - maxDisplayed;
+    if (overflow > 0) {
+      return `View ${overflow} more alerts`;
+    }
+    return '';
+  }
+
+  function updateOverflowMessage() {
+    const message = getOverflowMessage(alerts.length);
+    alertGroup.overflowMessage = message || undefined;
+  }
+
+  function createAlert(title, variant, key) {
+    const alert = document.createElement('pfv6-alert');
+    alert.variant = variant;
+    alert.title = title;
+    alert.isInline = true;
+
+    // Create close button
+    const closeButton = document.createElement('pfv6-alert-action-close-button');
+    closeButton.variantLabel = `${variant} alert`;
+    closeButton.slot = 'action-close';
+    closeButton.addEventListener('click', () => removeAlert(key));
+
+    alert.appendChild(closeButton);
+    return alert;
+  }
+
+  function removeAlert(key) {
+    const index = alerts.findIndex(a => a.key === key);
+    if (index !== -1) {
+      const alertData = alerts[index];
+      const alertElement = alertData.element;
+
+      // Set outgoing animation state
+      alertElement.animation = 'outgoing';
+
+      // Remove after transition completes
+      alertElement.addEventListener('transitionend', (event) => {
+        if (event.propertyName === 'grid-template-rows') {
+          alertElement.remove();
+          renderVisibleAlerts();
+        }
+      });
+
+      alerts.splice(index, 1);
+      updateOverflowMessage();
+    }
+  }
+
+  function renderVisibleAlerts() {
+    // Remove all alerts from the alert group first
+    const currentAlerts = alertGroup.querySelectorAll('pfv6-alert');
+    currentAlerts.forEach(alert => alert.remove());
+
+    // Show only first maxDisplayed alerts
+    alerts.slice(0, maxDisplayed).forEach(({ element }) => {
+      alertGroup.appendChild(element);
+    });
+  }
+
+  function addAlert(title, variant) {
+    const key = getUniqueId();
+    const alert = createAlert(title, variant, key);
+
+    // Add to alerts array at the beginning
+    alerts.unshift({ key, element: alert });
+
+    updateOverflowMessage();
+    renderVisibleAlerts();
+  }
+
+  function onOverflowClick() {
+    console.log('Overflow message clicked');
+  }
+
+  alertGroup.addEventListener('overflow-click', onOverflowClick);
+
+  successBtn.addEventListener('click', () => {
+    addAlert('Success alert', 'success');
+  });
+
+  dangerBtn.addEventListener('click', () => {
+    addAlert('Danger alert', 'danger');
+  });
+
+  infoBtn.addEventListener('click', () => {
+    addAlert('Info alert', 'info');
+  });
+</script>

@@ -1,0 +1,97 @@
+<pfv6-input-group style="margin-bottom: 16px;">
+  <pfv6-input-group-item>
+    <button id="start-async" type="button" class="pf-v6-c-button pf-m-secondary">
+      Start async alerts
+    </button>
+  </pfv6-input-group-item>
+  <pfv6-input-group-item>
+    <button id="stop-async" type="button" class="pf-v6-c-button pf-m-secondary">
+      Stop async alerts
+    </button>
+  </pfv6-input-group-item>
+</pfv6-input-group>
+
+<pfv6-alert-group id="alert-group" has-animations is-toast is-live-region aria-live="assertive">
+  <!-- Alerts will be dynamically inserted here -->
+</pfv6-alert-group>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-alert/pfv6-alert.js';
+  import '@pfv6/elements/pfv6-input-group/pfv6-input-group.js';
+
+  let alerts = [];
+  let isRunning = false;
+  let intervalTimer = null;
+  let alertCounter = 0;
+
+  const alertGroup = document.getElementById('alert-group');
+  const startBtn = document.getElementById('start-async');
+  const stopBtn = document.getElementById('stop-async');
+
+  function getUniqueId() {
+    return new Date().getTime();
+  }
+
+  function addAlert() {
+    alertCounter++;
+    const alert = document.createElement('pfv6-alert');
+    alert.variant = 'danger';
+    alert.title = `Async notification ${alertCounter} was added to the queue.`;
+
+    const key = getUniqueId();
+
+    // Create close button
+    const closeButton = document.createElement('pfv6-alert-action-close-button');
+    closeButton.variantLabel = 'danger alert';
+    closeButton.slot = 'action-close';
+    closeButton.addEventListener('click', () => removeAlert(key));
+
+    alert.appendChild(closeButton);
+
+    // Insert at the beginning
+    alertGroup.insertBefore(alert, alertGroup.firstChild);
+    alerts.unshift({ key, element: alert });
+  }
+
+  function removeAlert(key) {
+    const index = alerts.findIndex(a => a.key === key);
+    if (index !== -1) {
+      const alertData = alerts[index];
+      const alertElement = alertData.element;
+
+      // Set outgoing animation state
+      alertElement.animation = 'outgoing';
+
+      // Remove after transition completes
+      alertElement.addEventListener('transitionend', (event) => {
+        if (event.propertyName === 'grid-template-rows') {
+          alertElement.remove();
+        }
+      });
+
+      alerts.splice(index, 1);
+    }
+  }
+
+  function startAsyncAlerts() {
+    if (!isRunning) {
+      isRunning = true;
+      intervalTimer = setInterval(() => {
+        addAlert();
+      }, 4500);
+    }
+  }
+
+  function stopAsyncAlerts() {
+    if (isRunning) {
+      isRunning = false;
+      if (intervalTimer) {
+        clearInterval(intervalTimer);
+        intervalTimer = null;
+      }
+    }
+  }
+
+  startBtn.addEventListener('click', startAsyncAlerts);
+  stopBtn.addEventListener('click', stopAsyncAlerts);
+</script>
