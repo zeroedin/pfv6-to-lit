@@ -68,7 +68,7 @@ export class Pfv6Accordion extends LitElement {
    * When set, the accordion becomes a region landmark.
    */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   /**
    * Context value provided to child components.
@@ -85,10 +85,10 @@ export class Pfv6Accordion extends LitElement {
   protected override willUpdate(changedProperties: PropertyValues): void {
     // Always update context on first render or when relevant properties change
     if (
-      !this.hasUpdated ||
-      changedProperties.has('headingLevel') ||
-      changedProperties.has('asDefinitionList') ||
-      changedProperties.has('togglePosition')
+      !this.hasUpdated
+      || changedProperties.has('headingLevel')
+      || changedProperties.has('asDefinitionList')
+      || changedProperties.has('togglePosition')
     ) {
       this._context = {
         headingLevel: this.headingLevel,

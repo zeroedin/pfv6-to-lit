@@ -40,8 +40,7 @@ export class Pfv6AccordionContent extends LitElement {
   /**
    * Cached reference to sibling toggle element for aria-labelledby.
    */
-  @state()
-  private _siblingToggleId?: string;
+  #siblingToggle: Element | null = null;
 
   /**
    * Flag to indicate accordion content is fixed (has max-height).
@@ -53,13 +52,13 @@ export class Pfv6AccordionContent extends LitElement {
    * Accessible label for the accordion content.
    */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   /**
    * ID of the controlling accordion toggle to label the content.
    */
   @property({ type: String, attribute: 'accessible-labelled-by' })
-  accessibleLabelledBy?: string;
+  accessibleLabelledBy?: string | undefined;
 
   /**
    * Flag indicating content is custom. Expanded content body wrapper will be removed from children.
@@ -70,19 +69,8 @@ export class Pfv6AccordionContent extends LitElement {
 
   override connectedCallback(): void {
     super.connectedCallback();
-    // Find sibling toggle for aria-labelledby (they share the same parent accordion-item)
-    this.#findSiblingToggle();
-  }
-
-  #findSiblingToggle(): void {
-    // Look for sibling pfv6-accordion-toggle in the same parent
-    const parent = this.parentElement;
-    if (parent) {
-      const toggle = parent.querySelector('pfv6-accordion-toggle');
-      if (toggle) {
-        this._siblingToggleId = toggle.id;
-      }
-    }
+    // Find sibling toggle element (they share the same parent accordion-item)
+    this.#siblingToggle = this.parentElement?.querySelector('pfv6-accordion-toggle') ?? null;
   }
 
   protected override willUpdate(changedProperties: PropertyValues): void {
@@ -93,12 +81,12 @@ export class Pfv6AccordionContent extends LitElement {
     // For scrollable content not in definition list mode, use role="region" on the container instead
     this.#internals.role = asDefinitionList ? 'definition' : null;
 
-    // Set aria-labelledby on host to link to sibling toggle when in definition list mode
-    // User-provided accessibleLabelledBy takes precedence
-    if (asDefinitionList && !this.accessibleLabelledBy && this._siblingToggleId) {
-      this.setAttribute('aria-labelledby', this._siblingToggleId);
-    } else if (!this.accessibleLabelledBy) {
-      this.removeAttribute('aria-labelledby');
+    // Link content to sibling toggle via ElementInternals when in definition list mode
+    // This provides proper accessibility for term/definition relationships
+    if (asDefinitionList && this.#siblingToggle) {
+      this.#internals.ariaLabelledByElements = [this.#siblingToggle];
+    } else {
+      this.#internals.ariaLabelledByElements = null;
     }
   }
 
@@ -136,6 +124,11 @@ export class Pfv6AccordionContent extends LitElement {
     // Use role="region" on container for scrollable content when not a definition list
     const containerRole = !asDefinitionList && this.hasScrollbar ? 'region' : undefined;
 
+    // ARIA labels are only set on container when NOT in definition list mode
+    // In definition list mode, ariaLabelledByElements is set on :host via ElementInternals
+    const containerAriaLabel = !asDefinitionList ? this.accessibleLabel : undefined;
+    const containerAriaLabelledBy = !asDefinitionList ? this.accessibleLabelledBy : undefined;
+
     const content = this.isCustomContent ? html`
       <slot></slot>
     ` : html`
@@ -150,8 +143,8 @@ export class Pfv6AccordionContent extends LitElement {
         id="container"
         class=${classMap(classes)}
         ?hidden=${!isExpanded}
-        aria-label=${ifDefined(this.accessibleLabel)}
-        aria-labelledby=${ifDefined(this.accessibleLabelledBy)}
+        aria-label=${ifDefined(containerAriaLabel)}
+        aria-labelledby=${ifDefined(containerAriaLabelledBy)}
         tabindex=${ifDefined(this.hasScrollbar ? 0 : undefined)}
         role=${ifDefined(containerRole)}
       >

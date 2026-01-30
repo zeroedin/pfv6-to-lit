@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-:where(button) {
+button {
   margin: 0;
   font-family: inherit;
   font-size: 100%;
@@ -88,6 +88,14 @@
         --pf-t--global--border--width--action--plain--hover,
         0
       );
+  }
+
+  &:focus-visible {
+    outline:
+      var(--pf-t--global--border--width--focus--default, 2px)
+      solid
+      var(--pf-t--global--color--brand--default, #0066cc);
+    outline-offset: var(--pf-t--global--spacer--xs, 0.25rem);
   }
 }
 

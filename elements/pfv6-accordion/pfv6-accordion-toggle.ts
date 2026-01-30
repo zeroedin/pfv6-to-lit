@@ -24,6 +24,11 @@ import styles from './pfv6-accordion-toggle.css';
 export class Pfv6AccordionToggle extends LitElement {
   static styles = styles;
 
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   #internals = this.attachInternals();
 
   @consume({ context: accordionContext, subscribe: true })
