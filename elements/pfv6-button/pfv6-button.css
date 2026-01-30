@@ -19,7 +19,12 @@
   --pf-v6-c-button--AlignItems: baseline;
   --pf-v6-c-button--JustifyContent: center;
   --pf-v6-c-button--Gap: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
-  --pf-v6-c-button--MinWidth: calc(1em * var(--pf-v6-c-button--LineHeight) + var(--pf-v6-c-button--PaddingBlockStart) + var(--pf-v6-c-button--PaddingBlockEnd));
+  --pf-v6-c-button--MinWidth:
+    calc(
+      1em * var(--pf-v6-c-button--LineHeight)
+      + var(--pf-v6-c-button--PaddingBlockStart)
+      + var(--pf-v6-c-button--PaddingBlockEnd)
+    );
   --pf-v6-c-button--PaddingBlockStart: var(--pf-t--global--spacer--control--vertical--default, 0.5rem);
   --pf-v6-c-button--PaddingInlineEnd: var(--pf-t--global--spacer--action--horizontal--default, 1.5rem);
   --pf-v6-c-button--PaddingBlockEnd: var(--pf-t--global--spacer--control--vertical--default, 0.5rem);
@@ -84,11 +89,26 @@
   --pf-v6-c-button--m-secondary--m-danger--BorderColor: var(--pf-t--global--border--color--status--danger--default);
   --pf-v6-c-button--m-secondary--m-danger__icon--Color: var(--pf-t--global--icon--color--status--danger--default);
   --pf-v6-c-button--m-secondary--m-danger--hover--Color: var(--pf-t--global--text--color--status--danger--hover);
-  --pf-v6-c-button--m-secondary--m-danger--hover--BorderColor: var(--pf-t--global--border--color--status--danger--hover);
-  --pf-v6-c-button--m-secondary--m-danger--hover__icon--Color: var(--pf-t--global--icon--color--status--danger--hover);
-  --pf-v6-c-button--m-secondary--m-danger--m-clicked--Color: var(--pf-t--global--text--color--status--danger--clicked);
-  --pf-v6-c-button--m-secondary--m-danger--m-clicked--BorderColor: var(--pf-t--global--border--color--status--danger--clicked);
-  --pf-v6-c-button--m-secondary--m-danger--m-clicked__icon--Color: var(--pf-t--global--icon--color--status--danger--clicked);
+  --pf-v6-c-button--m-secondary--m-danger--hover--BorderColor:
+    var(
+      --pf-t--global--border--color--status--danger--hover
+    );
+  --pf-v6-c-button--m-secondary--m-danger--hover__icon--Color:
+    var(
+      --pf-t--global--icon--color--status--danger--hover
+    );
+  --pf-v6-c-button--m-secondary--m-danger--m-clicked--Color:
+    var(
+      --pf-t--global--text--color--status--danger--clicked
+    );
+  --pf-v6-c-button--m-secondary--m-danger--m-clicked--BorderColor:
+    var(
+      --pf-t--global--border--color--status--danger--clicked
+    );
+  --pf-v6-c-button--m-secondary--m-danger--m-clicked__icon--Color:
+    var(
+      --pf-t--global--icon--color--status--danger--clicked
+    );
 
   /* Tertiary */
   --pf-v6-c-button--m-tertiary--Color: var(--pf-t--global--text--color--brand--default);
@@ -107,7 +127,11 @@
   --pf-v6-c-button--m-link--PaddingInlineEnd: var(--pf-t--global--spacer--action--horizontal--plain--default, 0.5rem);
   --pf-v6-c-button--m-link--PaddingInlineStart: var(--pf-t--global--spacer--action--horizontal--plain--default, 0.5rem);
   --pf-v6-c-button--m-link--Color: var(--pf-t--global--text--color--brand--default);
-  --pf-v6-c-button--m-link--BackgroundColor: var(--pf-t--global--background--color--action--plain--default, rgb(255 255 255 / 0%));
+  --pf-v6-c-button--m-link--BackgroundColor:
+    var(
+      --pf-t--global--background--color--action--plain--default,
+      rgb(255 255 255 / 0%)
+    );
   --pf-v6-c-button--m-link__icon--Color: var(--pf-t--global--icon--color--brand--default);
   --pf-v6-c-button--m-link--hover--Color: var(--pf-t--global--text--color--brand--hover);
   --pf-v6-c-button--m-link--hover--BackgroundColor: var(--pf-t--global--background--color--action--plain--hover);
@@ -115,25 +139,64 @@
   --pf-v6-c-button--m-link--m-clicked--Color: var(--pf-t--global--text--color--brand--clicked);
   --pf-v6-c-button--m-link--m-clicked--BackgroundColor: var(--pf-t--global--background--color--action--plain--clicked);
   --pf-v6-c-button--m-link--m-clicked__icon--Color: var(--pf-t--global--text--color--brand--clicked);
-  --pf-v6-c-button--m-link--m-small--PaddingInlineEnd: var(--pf-t--global--spacer--action--horizontal--plain--compact, 0.25rem);
-  --pf-v6-c-button--m-link--m-small--PaddingInlineStart: var(--pf-t--global--spacer--action--horizontal--plain--compact, 0.25rem);
+  --pf-v6-c-button--m-link--m-small--PaddingInlineEnd:
+    var(
+      --pf-t--global--spacer--action--horizontal--plain--compact,
+      0.25rem
+    );
+  --pf-v6-c-button--m-link--m-small--PaddingInlineStart:
+    var(
+      --pf-t--global--spacer--action--horizontal--plain--compact,
+      0.25rem
+    );
   --pf-v6-c-button--m-link--BorderWidth: var(--pf-t--global--border--width--action--plain--default, 0px);
   --pf-v6-c-button--m-link--m-clicked--BorderWidth: var(--pf-t--global--border--width--action--plain--clicked, 0px);
   --pf-v6-c-button--m-link--hover--BorderWidth: var(--pf-t--global--border--width--action--plain--hover, 0px);
-  --pf-v6-c-button--m-link--BorderColor: var(--pf-t--global--border--color--high-contrast, rgb(255 255 255 / 0%));
-  --pf-v6-c-button--m-link--m-clicked--BorderColor: var(--pf-t--global--border--color--high-contrast, rgb(255 255 255 / 0%));
-  --pf-v6-c-button--m-link--hover--BorderColor: var(--pf-t--global--border--color--high-contrast, rgb(255 255 255 / 0%));
+  --pf-v6-c-button--m-link--BorderColor:
+    var(
+      --pf-t--global--border--color--high-contrast,
+      rgb(255 255 255 / 0%)
+    );
+  --pf-v6-c-button--m-link--m-clicked--BorderColor:
+    var(
+      --pf-t--global--border--color--high-contrast,
+      rgb(255 255 255 / 0%)
+    );
+  --pf-v6-c-button--m-link--hover--BorderColor:
+    var(
+      --pf-t--global--border--color--high-contrast,
+      rgb(255 255 255 / 0%)
+    );
 
   /* Link danger */
   --pf-v6-c-button--m-link--m-danger--Color: var(--pf-t--global--text--color--status--danger--default);
-  --pf-v6-c-button--m-link--m-danger--BackgroundColor: var(--pf-t--global--background--color--action--plain--default, rgb(255 255 255 / 0%));
+  --pf-v6-c-button--m-link--m-danger--BackgroundColor:
+    var(
+      --pf-t--global--background--color--action--plain--default,
+      rgb(255 255 255 / 0%)
+    );
   --pf-v6-c-button--m-link--m-danger__icon--Color: var(--pf-t--global--text--color--status--danger--default);
   --pf-v6-c-button--m-link--m-danger--hover--Color: var(--pf-t--global--text--color--status--danger--hover);
-  --pf-v6-c-button--m-link--m-danger--hover--BackgroundColor: var(--pf-t--global--background--color--action--plain--hover);
-  --pf-v6-c-button--m-link--m-danger--hover__icon--Color: var(--pf-t--global--text--color--status--danger--hover);
-  --pf-v6-c-button--m-link--m-danger--m-clicked--Color: var(--pf-t--global--text--color--status--danger--clicked);
-  --pf-v6-c-button--m-link--m-danger--m-clicked--BackgroundColor: var(--pf-t--global--background--color--action--plain--clicked);
-  --pf-v6-c-button--m-link--m-danger--m-clicked__icon--Color: var(--pf-t--global--text--color--status--danger--clicked);
+  --pf-v6-c-button--m-link--m-danger--hover--BackgroundColor:
+    var(
+      --pf-t--global--background--color--action--plain--hover
+    );
+  --pf-v6-c-button--m-link--m-danger--hover__icon--Color:
+    var(
+      --pf-t--global--text--color--status--danger--hover
+    );
+  --pf-v6-c-button--m-link--m-danger--m-clicked--Color:
+    var(
+      --pf-t--global--text--color--status--danger--clicked
+    );
+  --pf-v6-c-button--m-link--m-danger--m-clicked--BackgroundColor:
+    var(
+      --pf-t--global--background--color--action--plain--clicked
+    );
+  --pf-v6-c-button--m-link--m-danger--m-clicked__icon--Color:
+    var(
+      --pf-t--global--text--color--status--danger--clicked
+    );
 
   /* Link inline */
   --pf-v6-c-button--m-link--m-inline--Display: inline-flex;
@@ -147,15 +210,34 @@
   --pf-v6-c-button--m-link--m-inline--PaddingInlineStart: 0;
   --pf-v6-c-button--m-link--m-inline--TextDecorationLine: var(--pf-t--global--text-decoration--link--line--default);
   --pf-v6-c-button--m-link--m-inline--TextDecorationStyle: var(--pf-t--global--text-decoration--link--style--default);
-  --pf-v6-c-button--m-link--m-inline--hover--TextDecorationLine: var(--pf-t--global--text-decoration--link--line--hover);
-  --pf-v6-c-button--m-link--m-inline--hover--TextDecorationStyle: var(--pf-t--global--text-decoration--link--style--hover);
+  --pf-v6-c-button--m-link--m-inline--hover--TextDecorationLine:
+    var(
+      --pf-t--global--text-decoration--link--line--hover
+    );
+  --pf-v6-c-button--m-link--m-inline--hover--TextDecorationStyle:
+    var(
+      --pf-t--global--text-decoration--link--style--hover
+    );
   --pf-v6-c-button--m-link--m-inline__progress--InsetInlineStart: var(--pf-t--global--spacer--xs, 0.25rem);
-  --pf-v6-c-button--m-link--m-inline--m-in-progress--PaddingInlineStart: calc(var(--pf-v6-c-button--m-link--m-inline__progress--InsetInlineStart) + 1rem + var(--pf-t--global--spacer--sm, 0.5rem));
+  --pf-v6-c-button--m-link--m-inline--m-in-progress--PaddingInlineStart:
+    calc(
+      var(--pf-v6-c-button--m-link--m-inline__progress--InsetInlineStart)
+      + 1rem
+      + var(--pf-t--global--spacer--sm, 0.5rem)
+    );
   --pf-v6-c-button--m-link--m-inline--disabled--Color: var(--pf-t--global--text--color--disabled);
   --pf-v6-c-button--m-link--m-inline--disabled__icon--Color: var(--pf-t--global--icon--color--disabled);
   --pf-v6-c-button--span--m-link--m-inline--Display: inline;
-  --pf-v6-c-button--span--m-link--m-inline__icon--m-start--MarginInlineEnd: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
-  --pf-v6-c-button--span--m-link--m-inline__icon--m-end--MarginInlineStart: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
+  --pf-v6-c-button--span--m-link--m-inline__icon--m-start--MarginInlineEnd:
+    var(
+      --pf-t--global--spacer--gap--text-to-element--default,
+      0.5rem
+    );
+  --pf-v6-c-button--span--m-link--m-inline__icon--m-end--MarginInlineStart:
+    var(
+      --pf-t--global--spacer--gap--text-to-element--default,
+      0.5rem
+    );
   --pf-v6-c-button--m-link--m-inline--Color: var(--pf-t--global--text--color--brand--default);
   --pf-v6-c-button--m-link--m-inline__icon--Color: var(--pf-t--global--icon--color--brand--default);
   --pf-v6-c-button--m-link--m-inline--TextDecorationColor: currentcolor;
@@ -165,11 +247,23 @@
 
   /* Plain */
   --pf-v6-c-button--m-plain--BorderRadius: var(--pf-t--global--border--radius--small);
-  --pf-v6-c-button--m-plain--PaddingInlineEnd: var(--pf-t--global--spacer--action--horizontal--plain--default, 0.5rem);
-  --pf-v6-c-button--m-plain--PaddingInlineStart: var(--pf-t--global--spacer--action--horizontal--plain--default, 0.5rem);
+  --pf-v6-c-button--m-plain--PaddingInlineEnd:
+    var(
+      --pf-t--global--spacer--action--horizontal--plain--default,
+      0.5rem
+    );
+  --pf-v6-c-button--m-plain--PaddingInlineStart:
+    var(
+      --pf-t--global--spacer--action--horizontal--plain--default,
+      0.5rem
+    );
   --pf-v6-c-button--m-plain--Color: var(--pf-t--global--icon--color--regular);
   --pf-v6-c-button--m-plain__icon--Color: var(--pf-t--global--text--color--regular);
-  --pf-v6-c-button--m-plain--BackgroundColor: var(--pf-t--global--background--color--action--plain--default, rgb(255 255 255 / 0%));
+  --pf-v6-c-button--m-plain--BackgroundColor:
+    var(
+      --pf-t--global--background--color--action--plain--default,
+      rgb(255 255 255 / 0%)
+    );
   --pf-v6-c-button--m-plain--hover--Color: var(--pf-t--global--icon--color--regular);
   --pf-v6-c-button--m-plain--hover--BackgroundColor: var(--pf-t--global--background--color--action--plain--hover);
   --pf-v6-c-button--m-plain--m-clicked--Color: var(--pf-t--global--icon--color--regular);
@@ -177,14 +271,30 @@
   --pf-v6-c-button--m-plain--disabled--Color: var(--pf-t--global--text--color--disabled);
   --pf-v6-c-button--m-plain--disabled__icon--Color: var(--pf-t--global--icon--color--disabled);
   --pf-v6-c-button--m-plain--disabled--BackgroundColor: transparent;
-  --pf-v6-c-button--m-plain--m-small--PaddingInlineEnd: var(--pf-t--global--spacer--action--horizontal--plain--compact, 0.25rem);
-  --pf-v6-c-button--m-plain--m-small--PaddingInlineStart: var(--pf-t--global--spacer--action--horizontal--plain--compact, 0.25rem);
+  --pf-v6-c-button--m-plain--m-small--PaddingInlineEnd:
+    var(
+      --pf-t--global--spacer--action--horizontal--plain--compact,
+      0.25rem
+    );
+  --pf-v6-c-button--m-plain--m-small--PaddingInlineStart:
+    var(
+      --pf-t--global--spacer--action--horizontal--plain--compact,
+      0.25rem
+    );
   --pf-v6-c-button--m-plain--BorderWidth: var(--pf-t--global--border--width--action--plain--default, 0px);
   --pf-v6-c-button--m-plain--m-clicked--BorderWidth: var(--pf-t--global--border--width--action--plain--clicked, 0px);
   --pf-v6-c-button--m-plain--hover--BorderWidth: var(--pf-t--global--border--width--action--plain--hover, 0px);
   --pf-v6-c-button--m-plain--BorderColor: transparent;
-  --pf-v6-c-button--m-plain--m-clicked--BorderColor: var(--pf-t--global--border--color--high-contrast, rgb(255 255 255 / 0%));
-  --pf-v6-c-button--m-plain--hover--BorderColor: var(--pf-t--global--border--color--high-contrast, rgb(255 255 255 / 0%));
+  --pf-v6-c-button--m-plain--m-clicked--BorderColor:
+    var(
+      --pf-t--global--border--color--high-contrast,
+      rgb(255 255 255 / 0%)
+    );
+  --pf-v6-c-button--m-plain--hover--BorderColor:
+    var(
+      --pf-t--global--border--color--high-contrast,
+      rgb(255 255 255 / 0%)
+    );
 
   /* Plain no padding */
   --pf-v6-c-button--m-plain--m-no-padding--MinWidth: auto;
@@ -247,18 +357,48 @@
   --pf-v6-c-button--m-unread--hover__icon--Color: var(--pf-t--global--icon--color--status--unread--on-default--hover);
   --pf-v6-c-button--m-unread--m-clicked--Color: var(--pf-t--global--text--color--status--unread--on-default--clicked);
   --pf-v6-c-button--m-unread--m-clicked--BackgroundColor: var(--pf-t--global--color--status--unread--clicked);
-  --pf-v6-c-button--m-unread--m-clicked__icon--Color: var(--pf-t--global--icon--color--status--unread--on-default--clicked);
+  --pf-v6-c-button--m-unread--m-clicked__icon--Color:
+    var(
+      --pf-t--global--icon--color--status--unread--on-default--clicked
+    );
 
   /* Attention */
-  --pf-v6-c-button--m-attention--Color: var(--pf-t--global--text--color--status--unread--on-attention--default);
-  --pf-v6-c-button--m-attention--BackgroundColor: var(--pf-t--global--color--status--unread--attention--default);
-  --pf-v6-c-button--m-attention__icon--Color: var(--pf-t--global--icon--color--status--unread--on-attention--default);
-  --pf-v6-c-button--m-attention--hover--Color: var(--pf-t--global--text--color--status--unread--on-attention--hover);
-  --pf-v6-c-button--m-attention--hover--BackgroundColor: var(--pf-t--global--color--status--unread--attention--hover);
-  --pf-v6-c-button--m-attention--hover__icon--Color: var(--pf-t--global--icon--color--status--unread--on-attention--hover);
-  --pf-v6-c-button--m-attention--m-clicked--Color: var(--pf-t--global--text--color--status--unread--on-attention--clicked);
-  --pf-v6-c-button--m-attention--m-clicked--BackgroundColor: var(--pf-t--global--color--status--unread--attention--clicked);
-  --pf-v6-c-button--m-attention--m-clicked__icon--Color: var(--pf-t--global--icon--color--status--unread--on-attention--clicked);
+  --pf-v6-c-button--m-attention--Color:
+    var(
+      --pf-t--global--text--color--status--unread--on-attention--default
+    );
+  --pf-v6-c-button--m-attention--BackgroundColor:
+    var(
+      --pf-t--global--color--status--unread--attention--default
+    );
+  --pf-v6-c-button--m-attention__icon--Color:
+    var(
+      --pf-t--global--icon--color--status--unread--on-attention--default
+    );
+  --pf-v6-c-button--m-attention--hover--Color:
+    var(
+      --pf-t--global--text--color--status--unread--on-attention--hover
+    );
+  --pf-v6-c-button--m-attention--hover--BackgroundColor:
+    var(
+      --pf-t--global--color--status--unread--attention--hover
+    );
+  --pf-v6-c-button--m-attention--hover__icon--Color:
+    var(
+      --pf-t--global--icon--color--status--unread--on-attention--hover
+    );
+  --pf-v6-c-button--m-attention--m-clicked--Color:
+    var(
+      --pf-t--global--text--color--status--unread--on-attention--clicked
+    );
+  --pf-v6-c-button--m-attention--m-clicked--BackgroundColor:
+    var(
+      --pf-t--global--color--status--unread--attention--clicked
+    );
+  --pf-v6-c-button--m-attention--m-clicked__icon--Color:
+    var(
+      --pf-t--global--icon--color--status--unread--on-attention--clicked
+    );
 
   /* Warning */
   --pf-v6-c-button--m-warning--Color: var(--pf-t--global--text--color--status--on-warning--default);
@@ -312,7 +452,10 @@
   --pf-v6-c-button__icon--m-start--MarginInlineEnd: 0;
   --pf-v6-c-button__icon--m-end--MarginInlineStart: 0;
   --pf-v6-c-button--m-notify__icon--AnimationDuration--notify: var(--pf-t--global--motion--duration--3xl);
-  --pf-v6-c-button--m-notify__icon--AnimationTimingFunction--notify: var(--pf-t--global--motion--timing-function--default);
+  --pf-v6-c-button--m-notify__icon--AnimationTimingFunction--notify:
+    var(
+      --pf-t--global--motion--timing-function--default
+    );
   --pf-v6-c-button__icon--TransitionDelay: 0s;
   --pf-v6-c-button__icon--TransitionTimingFunction: auto;
   --pf-v6-c-button__icon--TransitionDuration: 0s;
@@ -329,11 +472,17 @@
 
   /* Favorite button */
   --pf-v6-c-button--m-favorite__icon--TransitionDuration: var(--pf-t--global--motion--duration--icon--default);
-  --pf-v6-c-button--m-favorite__icon--TransitionTimingFunction: var(--pf-t--global--motion--timing-function--default);
+  --pf-v6-c-button--m-favorite__icon--TransitionTimingFunction:
+    var(
+      --pf-t--global--motion--timing-function--default
+    );
   --pf-v6-c-button--m-favorited__icon--Color: var(--pf-t--global--color--favorite--default);
   --pf-v6-c-button--m-favorited--hover__icon--Color: var(--pf-t--global--color--favorite--hover);
   --pf-v6-c-button--m-favorited__icon--AnimationDuration: var(--pf-t--global--motion--duration--icon--long);
-  --pf-v6-c-button--m-favorited__icon--AnimationTimingFunction: var(--pf-t--global--motion--timing-function--default);
+  --pf-v6-c-button--m-favorited__icon--AnimationTimingFunction:
+    var(
+      --pf-t--global--motion--timing-function--default
+    );
   --pf-v6-c-button__icon--favorite--Opacity: 1;
   --pf-v6-c-button__icon--favorited--Opacity: 0;
   --pf-v6-c-button--m-favorited__icon--favorite--Opacity: 0;
@@ -341,25 +490,47 @@
   --pf-v6-c-button__icon--favorite--TransitionDuration: var(--pf-t--global--motion--duration--icon--default);
 
   /* Progress */
-  --pf-v6-c-button__progress--width: calc(var(--pf-t--global--icon--size--lg) + var(--pf-t--global--spacer--sm, 0.5rem));
+  --pf-v6-c-button__progress--width:
+    calc(
+      var(--pf-t--global--icon--size--lg)
+      + var(--pf-t--global--spacer--sm, 0.5rem)
+    );
   --pf-v6-c-button__progress--Opacity: 0;
   --pf-v6-c-button__progress--TranslateY: -50%;
   --pf-v6-c-button__progress--TranslateX: 0;
   --pf-v6-c-button__progress--InsetBlockStart: 50%;
   --pf-v6-c-button__progress--InsetInlineStart: var(--pf-t--global--spacer--control--horizontal--default);
-  --pf-v6-c-button--m-progress--PaddingInlineEnd: calc(var(--pf-t--global--spacer--control--horizontal--default) + var(--pf-v6-c-button__progress--width) / 2);
-  --pf-v6-c-button--m-progress--PaddingInlineStart: calc(var(--pf-t--global--spacer--control--horizontal--default) + var(--pf-v6-c-button__progress--width) / 2);
+  --pf-v6-c-button--m-progress--PaddingInlineEnd:
+    calc(
+      var(--pf-t--global--spacer--control--horizontal--default)
+      + var(--pf-v6-c-button__progress--width) / 2
+    );
+  --pf-v6-c-button--m-progress--PaddingInlineStart:
+    calc(
+      var(--pf-t--global--spacer--control--horizontal--default)
+      + var(--pf-v6-c-button__progress--width) / 2
+    );
   --pf-v6-c-button--m-in-progress--PaddingInlineEnd: var(--pf-t--global--spacer--control--horizontal--default);
-  --pf-v6-c-button--m-in-progress--PaddingInlineStart: calc(var(--pf-t--global--spacer--control--horizontal--default) + var(--pf-v6-c-button__progress--width));
+  --pf-v6-c-button--m-in-progress--PaddingInlineStart:
+    calc(
+      var(--pf-t--global--spacer--control--horizontal--default)
+      + var(--pf-v6-c-button__progress--width)
+    );
   --pf-v6-c-button--m-in-progress--m-plain--Color: var(--pf-t--global--icon--color--brand--default);
   --pf-v6-c-button--m-in-progress--m-plain__progress--InsetInlineStart: 50%;
   --pf-v6-c-button--m-in-progress--m-plain__progress--TranslateX: -50%;
 
   /* Settings */
   --pf-v6-c-button--m-settings__icon--TransitionDuration: var(--pf-t--global--motion--duration--icon--long);
-  --pf-v6-c-button--m-settings__icon--TransitionTimingFunction: var(--pf-t--global--motion--timing-function--accelerate);
+  --pf-v6-c-button--m-settings__icon--TransitionTimingFunction:
+    var(
+      --pf-t--global--motion--timing-function--accelerate
+    );
   --pf-v6-c-button--m-settings--hover__icon--TransitionDuration: var(--pf-t--global--motion--duration--icon--long);
-  --pf-v6-c-button--m-settings--hover__icon--TransitionTimingFunction: var(--pf-t--global--motion--timing-function--decelerate);
+  --pf-v6-c-button--m-settings--hover__icon--TransitionTimingFunction:
+    var(
+      --pf-t--global--motion--timing-function--decelerate
+    );
   --pf-v6-c-button--m-settings--hover__icon--Rotate: 60deg;
 
   /* Count */
@@ -390,6 +561,26 @@
   outline: none; /* delegatesFocus handles focus on internal button */
 }
 
+.icon {
+  margin-inline-start: var(--pf-v6-c-button__icon--MarginInlineStart);
+  margin-inline-end: var(--pf-v6-c-button__icon--MarginInlineEnd);
+  color: var(--pf-v6-c-button__icon--Color);
+  transition-delay: var(--pf-v6-c-button__icon--TransitionDelay);
+  transition-timing-function: var(--pf-v6-c-button__icon--TransitionTimingFunction);
+  transition-duration: var(--pf-v6-c-button__icon--TransitionDuration);
+  transition-property: var(--pf-v6-c-button__icon--TransitionProperty);
+  rotate: var(--pf-v6-c-button__icon--Rotate);
+  scale: var(--pf-v6-c-button__icon--ScaleX) var(--pf-v6-c-button__icon--ScaleY);
+
+  &.icon-start {
+    --pf-v6-c-button__icon--MarginInlineEnd: var(--pf-v6-c-button__icon--m-start--MarginInlineEnd);
+  }
+
+  &.icon-end {
+    --pf-v6-c-button__icon--MarginInlineStart: var(--pf-v6-c-button__icon--m-end--MarginInlineStart);
+  }
+}
+
 #container {
   --pf-v6-c-button__progress--Color: var(--pf-v6-c-button__icon--Color);
 
@@ -416,7 +607,14 @@
   white-space: nowrap;
   cursor: pointer;
   user-select: none;
-  background: var(--pf-v6-c-button--BackgroundColor) radial-gradient(circle, transparent 1%, color-mix(in srgb, currentcolor 15%, transparent) 2%) center/15000% 15000%;
+  background:
+    var(--pf-v6-c-button--BackgroundColor)
+    radial-gradient(
+      circle,
+      transparent 1%,
+      color-mix(in srgb, currentcolor 15%, transparent) 2%
+    )
+    center / 15000% 15000%;
   border: 0;
   border-start-start-radius: var(--pf-v6-c-button--BorderStartStartRadius, var(--pf-v6-c-button--BorderRadius));
   border-start-end-radius: var(--pf-v6-c-button--BorderStartEndRadius, var(--pf-v6-c-button--BorderRadius));
@@ -468,13 +666,28 @@
     --pf-v6-c-button--m-danger__icon--Color: var(--pf-v6-c-button--m-secondary--m-danger__icon--Color);
     --pf-v6-c-button--m-danger--hover--Color: var(--pf-v6-c-button--m-secondary--m-danger--hover--Color);
     --pf-v6-c-button--m-danger--hover__icon--Color: var(--pf-v6-c-button--m-secondary--m-danger--hover__icon--Color);
-    --pf-v6-c-button--m-danger--m-clicked--Color: var(--pf-v6-c-button--m-secondary--m-danger--m-clicked--Color);
-    --pf-v6-c-button--m-danger--m-clicked__icon--Color: var(--pf-v6-c-button--m-secondary--m-danger--m-clicked__icon--Color);
+    --pf-v6-c-button--m-danger--m-clicked--Color:
+      var(
+        --pf-v6-c-button--m-secondary--m-danger--m-clicked--Color
+      );
+    --pf-v6-c-button--m-danger--m-clicked__icon--Color:
+      var(
+        --pf-v6-c-button--m-secondary--m-danger--m-clicked__icon--Color
+      );
 
     &.danger {
-      --pf-v6-c-button--m-secondary--BorderColor: var(--pf-v6-c-button--m-secondary--m-danger--BorderColor);
-      --pf-v6-c-button--m-secondary--hover--BorderColor: var(--pf-v6-c-button--m-secondary--m-danger--hover--BorderColor);
-      --pf-v6-c-button--m-secondary--m-clicked--BorderColor: var(--pf-v6-c-button--m-secondary--m-danger--m-clicked--BorderColor);
+      --pf-v6-c-button--m-secondary--BorderColor:
+        var(
+          --pf-v6-c-button--m-secondary--m-danger--BorderColor
+        );
+      --pf-v6-c-button--m-secondary--hover--BorderColor:
+        var(
+          --pf-v6-c-button--m-secondary--m-danger--hover--BorderColor
+        );
+      --pf-v6-c-button--m-secondary--m-clicked--BorderColor:
+        var(
+          --pf-v6-c-button--m-secondary--m-danger--m-clicked--BorderColor
+        );
       --pf-v6-c-button--m-danger--BackgroundColor: transparent;
       --pf-v6-c-button--m-danger--hover--BackgroundColor: transparent;
       --pf-v6-c-button--m-danger--m-clicked--BackgroundColor: transparent;
@@ -525,8 +738,14 @@
     &.inline {
       /* Override display and icon margins for span-like behavior */
       --pf-v6-c-button--m-link--m-inline--Display: var(--pf-v6-c-button--span--m-link--m-inline--Display);
-      --pf-v6-c-button__icon--m-start--MarginInlineEnd: var(--pf-v6-c-button--span--m-link--m-inline__icon--m-start--MarginInlineEnd);
-      --pf-v6-c-button__icon--m-end--MarginInlineStart: var(--pf-v6-c-button--span--m-link--m-inline__icon--m-end--MarginInlineStart);
+      --pf-v6-c-button__icon--m-start--MarginInlineEnd:
+        var(
+          --pf-v6-c-button--span--m-link--m-inline__icon--m-start--MarginInlineEnd
+        );
+      --pf-v6-c-button__icon--m-end--MarginInlineStart:
+        var(
+          --pf-v6-c-button--span--m-link--m-inline__icon--m-end--MarginInlineStart
+        );
       --pf-v6-c-button--Display: var(--pf-v6-c-button--m-link--m-inline--Display);
       --pf-v6-c-button--JustifyContent: var(--pf-v6-c-button--m-link--m-inline--JustifyContent);
       --pf-v6-c-button--FontSize: var(--pf-v6-c-button--m-link--m-inline--FontSize);
@@ -568,11 +787,20 @@
       --pf-v6-c-button--m-danger--BackgroundColor: var(--pf-v6-c-button--m-link--m-danger--BackgroundColor);
       --pf-v6-c-button--m-danger__icon--Color: var(--pf-v6-c-button--m-link--m-danger__icon--Color);
       --pf-v6-c-button--m-danger--hover--Color: var(--pf-v6-c-button--m-link--m-danger--hover--Color);
-      --pf-v6-c-button--m-danger--hover--BackgroundColor: var(--pf-v6-c-button--m-link--m-danger--hover--BackgroundColor);
+      --pf-v6-c-button--m-danger--hover--BackgroundColor:
+        var(
+          --pf-v6-c-button--m-link--m-danger--hover--BackgroundColor
+        );
       --pf-v6-c-button--m-danger--hover__icon--Color: var(--pf-v6-c-button--m-link--m-danger--hover__icon--Color);
       --pf-v6-c-button--m-danger--m-clicked--Color: var(--pf-v6-c-button--m-link--m-danger--m-clicked--Color);
-      --pf-v6-c-button--m-danger--m-clicked--BackgroundColor: var(--pf-v6-c-button--m-link--m-danger--m-clicked--BackgroundColor);
-      --pf-v6-c-button--m-danger--m-clicked__icon--Color: var(--pf-v6-c-button--m-link--m-danger--m-clicked__icon--Color);
+      --pf-v6-c-button--m-danger--m-clicked--BackgroundColor:
+        var(
+          --pf-v6-c-button--m-link--m-danger--m-clicked--BackgroundColor
+        );
+      --pf-v6-c-button--m-danger--m-clicked__icon--Color:
+        var(
+          --pf-v6-c-button--m-link--m-danger--m-clicked__icon--Color
+        );
     }
 
     &.display-lg {
@@ -704,13 +932,22 @@
       --pf-v6-c-button__icon--Color: var(--pf-v6-c-button--m-plain--m-no-padding__icon--Color);
       --pf-v6-c-button--BackgroundColor: var(--pf-v6-c-button--m-plain--m-no-padding--BackgroundColor);
       --pf-v6-c-button--hover--BackgroundColor: var(--pf-v6-c-button--m-plain--m-no-padding--hover--BackgroundColor);
-      --pf-v6-c-button--m-clicked--BackgroundColor: var(--pf-v6-c-button--m-plain--m-no-padding--m-clicked--BackgroundColor);
+      --pf-v6-c-button--m-clicked--BackgroundColor:
+        var(
+          --pf-v6-c-button--m-plain--m-no-padding--m-clicked--BackgroundColor
+        );
       --pf-v6-c-button--PaddingBlockStart: var(--pf-v6-c-button--m-plain--m-no-padding--PaddingBlockStart);
       --pf-v6-c-button--PaddingBlockEnd: var(--pf-v6-c-button--m-plain--m-no-padding--PaddingBlockEnd);
       --pf-v6-c-button--PaddingInlineEnd: var(--pf-v6-c-button--m-plain--m-no-padding--PaddingInlineEnd);
       --pf-v6-c-button--PaddingInlineStart: var(--pf-v6-c-button--m-plain--m-no-padding--PaddingInlineStart);
-      --pf-v6-c-button--m-small--PaddingInlineEnd: var(--pf-v6-c-button--m-plain--m-no-padding--m-small--PaddingInlineEnd);
-      --pf-v6-c-button--m-small--PaddingInlineStart: var(--pf-v6-c-button--m-plain--m-no-padding--m-small--PaddingInlineStart);
+      --pf-v6-c-button--m-small--PaddingInlineEnd:
+        var(
+          --pf-v6-c-button--m-plain--m-no-padding--m-small--PaddingInlineEnd
+        );
+      --pf-v6-c-button--m-small--PaddingInlineStart:
+        var(
+          --pf-v6-c-button--m-plain--m-no-padding--m-small--PaddingInlineStart
+        );
       --pf-v6-c-button--border--offset: var(--pf-v6-c-button--m-plain--m-no-padding--border--offset);
 
       min-width: var(--pf-v6-c-button--m-plain--m-no-padding--MinWidth);
@@ -770,10 +1007,19 @@
   &.settings {
     --pf-v6-c-button__icon--TransitionProperty: rotate;
     --pf-v6-c-button__icon--TransitionDuration: var(--pf-v6-c-button--m-settings__icon--TransitionDuration);
-    --pf-v6-c-button__icon--TransitionTimingFunction: var(--pf-v6-c-button--m-settings__icon--TransitionTimingFunction);
+    --pf-v6-c-button__icon--TransitionTimingFunction:
+      var(
+        --pf-v6-c-button--m-settings__icon--TransitionTimingFunction
+      );
     --pf-v6-c-button--hover__icon--TransitionProperty: rotate;
-    --pf-v6-c-button--hover__icon--TransitionDuration: var(--pf-v6-c-button--m-settings--hover__icon--TransitionDuration);
-    --pf-v6-c-button--hover__icon--TransitionTimingFunction: var(--pf-v6-c-button--m-settings--hover__icon--TransitionTimingFunction);
+    --pf-v6-c-button--hover__icon--TransitionDuration:
+      var(
+        --pf-v6-c-button--m-settings--hover__icon--TransitionDuration
+      );
+    --pf-v6-c-button--hover__icon--TransitionTimingFunction:
+      var(
+        --pf-v6-c-button--m-settings--hover__icon--TransitionTimingFunction
+      );
     --pf-v6-c-button--hover__icon--Rotate: var(--pf-v6-c-button--m-settings--hover__icon--Rotate);
   }
 
@@ -812,7 +1058,10 @@
     --pf-v6-c-button--BorderWidth: var(--pf-v6-c-button--hover--BorderWidth);
     --pf-v6-c-button--ScaleX: var(--pf-v6-c-button--hover--ScaleX);
     --pf-v6-c-button--ScaleY: var(--pf-v6-c-button--hover--ScaleY);
-    --pf-v6-c-button--m-plain--m-no-padding__icon--Color: var(--pf-v6-c-button--m-plain--m-no-padding--hover__icon--Color);
+    --pf-v6-c-button--m-plain--m-no-padding__icon--Color:
+      var(
+        --pf-v6-c-button--m-plain--m-no-padding--hover__icon--Color
+      );
     --pf-v6-c-button__icon--Color: var(--pf-v6-c-button--hover__icon--Color);
     --pf-v6-c-button__icon--TransitionTimingFunction: var(--pf-v6-c-button--hover__icon--TransitionTimingFunction);
     --pf-v6-c-button__icon--TransitionDuration: var(--pf-v6-c-button--hover__icon--TransitionDuration);
@@ -878,7 +1127,10 @@
   }
 
   &.in-progress {
-    --pf-v6-c-button--m-link--m-inline--PaddingInlineStart: var(--pf-v6-c-button--m-link--m-inline--m-in-progress--PaddingInlineStart);
+    --pf-v6-c-button--m-link--m-inline--PaddingInlineStart:
+      var(
+        --pf-v6-c-button--m-link--m-inline--m-in-progress--PaddingInlineStart
+      );
 
     &:not(.plain) {
       --pf-v6-c-button--PaddingInlineEnd: var(--pf-v6-c-button--m-in-progress--PaddingInlineEnd);
@@ -886,33 +1138,16 @@
     }
 
     &.plain {
-      --pf-v6-c-button__progress--InsetInlineStart: var(--pf-v6-c-button--m-in-progress--m-plain__progress--InsetInlineStart);
+      --pf-v6-c-button__progress--InsetInlineStart:
+        var(
+          --pf-v6-c-button--m-in-progress--m-plain__progress--InsetInlineStart
+        );
       --pf-v6-c-button__progress--TranslateX: var(--pf-v6-c-button--m-in-progress--m-plain__progress--TranslateX);
 
       & > :not(.progress) {
         opacity: 0;
       }
     }
-  }
-}
-
-.icon {
-  margin-inline-start: var(--pf-v6-c-button__icon--MarginInlineStart);
-  margin-inline-end: var(--pf-v6-c-button__icon--MarginInlineEnd);
-  color: var(--pf-v6-c-button__icon--Color);
-  transition-delay: var(--pf-v6-c-button__icon--TransitionDelay);
-  transition-timing-function: var(--pf-v6-c-button__icon--TransitionTimingFunction);
-  transition-duration: var(--pf-v6-c-button__icon--TransitionDuration);
-  transition-property: var(--pf-v6-c-button__icon--TransitionProperty);
-  rotate: var(--pf-v6-c-button__icon--Rotate);
-  scale: var(--pf-v6-c-button__icon--ScaleX) var(--pf-v6-c-button__icon--ScaleY);
-
-  &.icon-start {
-    --pf-v6-c-button__icon--MarginInlineEnd: var(--pf-v6-c-button__icon--m-start--MarginInlineEnd);
-  }
-
-  &.icon-end {
-    --pf-v6-c-button__icon--MarginInlineStart: var(--pf-v6-c-button__icon--m-end--MarginInlineStart);
   }
 }
 
@@ -955,7 +1190,10 @@
     stroke: currentcolor;
     stroke-linecap: round;
     stroke-linejoin: round;
-    transition: d var(--pf-v6-c-button--hamburger-icon--TransitionDuration) var(--pf-v6-c-button--hamburger-icon--TransitionTimingFunction);
+    transition:
+      d
+      var(--pf-v6-c-button--hamburger-icon--TransitionDuration)
+      var(--pf-v6-c-button--hamburger-icon--TransitionTimingFunction);
   }
 }
 

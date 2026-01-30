@@ -857,6 +857,140 @@ import '@pfv6/elements/pfv6-simple-list/pfv6-simple-list-item.js';  // REDUNDANT
 **Single component** (no sub-components to check):
 - `pfv6-button`, `pfv6-badge`, `pfv6-spinner`, etc.
 
+## Step 7.8: SVG Icon Validation (CRITICAL)
+
+When demos contain SVG icons, verify they exactly match the SVG definitions from PatternFly React icons.
+
+### Why This Matters
+
+PatternFly React uses icons from `@patternfly/react-icons`. Each icon has specific:
+- **viewBox dimensions** (width × height)
+- **SVG path data** (the `d` attribute value)
+
+Using incorrect or placeholder SVG icons breaks visual parity with React.
+
+### Validation Process
+
+1. **Find SVG icons in Lit demos**:
+   ```bash
+   grep -E "<svg.*viewBox" elements/pfv6-{component}/demo/*.html
+   ```
+
+2. **Find corresponding React demos** and identify which icons they use:
+   ```bash
+   grep -E "import.*Icon from '@patternfly/react-icons" .cache/patternfly-react/.../examples/*.tsx
+   ```
+
+3. **Look up correct SVG definitions** in `node_modules/@patternfly/react-icons/dist/esm/icons/`:
+   - Each icon file exports `{IconName}Config` with `width`, `height`, and `svgPath`
+   - Example: `plus-circle-icon.js` contains `PlusCircleIconConfig`
+
+4. **Compare Lit SVG against React icon definition**:
+   - viewBox must match: `viewBox="0 0 {width} {height}"`
+   - path `d` attribute must match `svgPath` exactly
+
+### Common Icons and Their Dimensions
+
+| Icon Name | Width | Height | viewBox |
+|-----------|-------|--------|---------|
+| PlusCircleIcon | 512 | 512 | `0 0 512 512` |
+| TimesIcon | 352 | 512 | `0 0 352 512` |
+| ExternalLinkSquareAltIcon | 448 | 512 | `0 0 448 512` |
+| CopyIcon | 448 | 512 | `0 0 448 512` |
+| BellIcon | 896 | 1024 | `0 0 896 1024` |
+| CheckCircleIcon | 512 | 512 | `0 0 512 512` |
+| ExclamationCircleIcon | 512 | 512 | `0 0 512 512` |
+| InfoCircleIcon | 512 | 512 | `0 0 512 512` |
+| ExclamationTriangleIcon | 576 | 512 | `0 0 576 512` |
+
+### Validation Rules
+
+**Rule 1: viewBox Must Match Icon Definition**
+
+```html
+<!-- React uses BellIcon (896x1024) -->
+
+<!-- ❌ WRONG - Wrong dimensions -->
+<svg viewBox="0 0 448 512">...</svg>
+
+<!-- ✅ CORRECT - Matches BellIcon dimensions -->
+<svg viewBox="0 0 896 1024">...</svg>
+```
+
+**Rule 2: SVG Path Must Match Exactly**
+
+```html
+<!-- ❌ WRONG - Wrong path (different icon or outdated) -->
+<svg viewBox="0 0 896 1024">
+  <path d="M439.39 362.29c-19.32..."></path>  <!-- This is NOT BellIcon -->
+</svg>
+
+<!-- ✅ CORRECT - Exact BellIcon path from react-icons -->
+<svg viewBox="0 0 896 1024">
+  <path d="M448,0 C465.333333,0..."></path>
+</svg>
+```
+
+### Report Format
+
+```markdown
+## SVG Icon Validation
+
+❌ **SVG Icon Issues Found** ({N} demos):
+
+### `variations.html`
+
+**Line 33**: Incorrect SVG icon
+- React uses: `ExternalLinkSquareAltIcon` (448 × 512)
+- Found viewBox: `0 0 512 512` ❌
+- Expected viewBox: `0 0 448 512`
+- Path data: Does not match ExternalLinkSquareAltIcon
+
+**Line 68**: Incorrect SVG icon
+- React uses: `BellIcon` (896 × 1024)
+- Found viewBox: `0 0 448 512` ❌
+- Expected viewBox: `0 0 896 1024`
+- Path data: Does not match BellIcon
+
+**Fix**: Copy exact SVG definitions from `node_modules/@patternfly/react-icons/dist/esm/icons/`:
+- `external-link-square-alt-icon.js` for ExternalLinkSquareAltIcon
+- `bell-icon.js` for BellIcon
+
+---
+
+✅ **Correct SVG Icons** ({N} demos):
+- `basic.html`: All SVG icons match React source
+- `disabled.html`: No SVG icons present
+```
+
+### How to Get Correct SVG
+
+1. Identify the React icon import: `import BellIcon from '@patternfly/react-icons/.../bell-icon'`
+2. Read the icon definition file: `node_modules/@patternfly/react-icons/dist/esm/icons/bell-icon.js`
+3. Extract the config:
+   ```javascript
+   export const BellIconConfig = {
+     name: 'BellIcon',
+     height: 1024,
+     width: 896,
+     svgPath: "M448,0 C465.333333,0..."
+   };
+   ```
+4. Create SVG in Lit demo:
+   ```html
+   <svg fill="currentColor" height="1em" width="1em" viewBox="0 0 896 1024" aria-hidden="true" role="img">
+     <path d="M448,0 C465.333333,0..."></path>
+   </svg>
+   ```
+
+### Common Failures
+
+- ❌ Using placeholder SVG paths (generic icons)
+- ❌ Using wrong viewBox dimensions (e.g., `0 0 512 512` for all icons)
+- ❌ Using outdated or modified path data
+- ❌ Using different icon than React source
+- ❌ Copying paths from FontAwesome or other sources instead of PatternFly
+
 ## Step 8: Missing Component Identification
 
 Check for HTML comments indicating blockers:
