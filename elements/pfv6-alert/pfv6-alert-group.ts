@@ -5,7 +5,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { provide } from '@lit/context';
 import { alertGroupContext, type AlertGroupContext } from './context.js';
-import type { Pfv6Alert } from './pfv6-alert.js';
+import { Pfv6Alert } from './pfv6-alert.js';
 import styles from './pfv6-alert-group.css';
 
 /**
@@ -108,14 +108,14 @@ export class Pfv6AlertGroup extends LitElement {
       // Set listitem role on the alert for accessibility
       element.setAttribute('role', 'listitem');
 
-      // Set incoming animation state if animations enabled
-      if (this.hasAnimations) {
-        (element as Pfv6Alert).animation = 'incoming';
+      // Set incoming animation state if animations enabled and element is an alert
+      if (this.hasAnimations && element instanceof Pfv6Alert) {
+        element.animation = 'incoming';
 
         // Trigger entry animation after next frame
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
-            (element as Pfv6Alert).animation = undefined;
+            element.animation = undefined;
           });
         });
       }
