@@ -24,11 +24,11 @@ Alert component for displaying contextual feedback messages.
 
 ### `component` prop
 
-**Not implemented**
+**Partially implemented (heading levels only)**
 
-- **React behavior**: The `component` prop allows changing the title heading level (e.g., `component="h2"`)
-- **Lit behavior**: Use the `component` attribute with a string value (`"h1"` through `"h6"`)
-- **Note**: This prop IS implemented, but only accepts heading levels, not arbitrary element types.
+- **React behavior**: The `component` prop allows changing the rendered element type to any JSX intrinsic element
+- **Lit behavior**: Only supports heading levels `"h1"` through `"h6"` for the title element
+- **Why**: Web Components cannot dynamically change element types at runtime like React's JSX can
 
 ```html
 <pfv6-alert component="h2" title="Important">...</pfv6-alert>
