@@ -36,6 +36,11 @@ import styles from './pfv6-breadcrumb-item.css';
 export class Pfv6BreadcrumbItem extends LitElement {
   static styles = styles;
 
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   readonly #internals = this.attachInternals();
 
   constructor() {
