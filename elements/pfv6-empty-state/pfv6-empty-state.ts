@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import './pfv6-empty-state-header.js';
 import './pfv6-empty-state-icon.js';
 import './pfv6-empty-state-body.js';
@@ -82,14 +83,14 @@ export class Pfv6EmptyState extends LitElement {
   * Icon can be overwritten using the icon slot in pfv6-empty-state-header.
   */
   @property({ type: String, reflect: true })
-  status?: 'danger' | 'warning' | 'success' | 'info' | 'custom';
+  status?: 'danger' | 'warning' | 'success' | 'info' | 'custom' | undefined;
 
   /**
   * Title text for the empty state header.
   * When provided, automatically renders a pfv6-empty-state-header.
   */
   @property({ type: String, attribute: 'title-text' })
-  titleText?: string;
+  titleText?: string | undefined;
 
   /**
   * Heading level for the title when using titleText property.
@@ -118,7 +119,7 @@ export class Pfv6EmptyState extends LitElement {
             <pfv6-empty-state-header
               title-text=${this.titleText}
               heading-level=${this.headingLevel}
-              status=${this.status || ''}
+              status=${ifDefined(this.status)}
             >
               <slot name="icon" slot="icon"></slot>
             </pfv6-empty-state-header>
