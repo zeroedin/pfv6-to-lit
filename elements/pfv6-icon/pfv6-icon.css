@@ -6,8 +6,8 @@
 
 :host {
   /* Container sizes - default */
-  --pf-v6-c-icon--Width: var(--pf-t--global--icon--size--font--body--default, 1rem);
-  --pf-v6-c-icon--Height: var(--pf-t--global--icon--size--font--body--default, 1rem);
+  --pf-v6-c-icon--Width: var(--pf-t--global--icon--size--font--body--default, 0.875rem);
+  --pf-v6-c-icon--Height: var(--pf-t--global--icon--size--font--body--default, 0.875rem);
 
   /* Standalone icon sizes */
   --pf-v6-c-icon--m-sm--Width: var(--pf-t--global--icon--size--sm, 0.75rem);
