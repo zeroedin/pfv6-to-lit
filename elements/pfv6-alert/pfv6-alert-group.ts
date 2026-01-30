@@ -145,6 +145,7 @@ export class Pfv6AlertGroup extends LitElement {
           <div role="listitem" id="overflow-item">
             <button
               id="overflow-button"
+              type="button"
               @click=${this.#handleOverflowClick}
             >
               <slot name="overflow">${this.overflowMessage}</slot>
