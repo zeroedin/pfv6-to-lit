@@ -51,7 +51,7 @@ export class Pfv6Panel extends LitElement {
   * Adds panel variant styles
   */
   @property({ type: String, reflect: true })
-  variant?: 'raised' | 'bordered' | 'secondary';
+  variant?: 'raised' | 'bordered' | 'secondary' | undefined;
 
   /**
   * Flag to add scrollable styling to the panel
