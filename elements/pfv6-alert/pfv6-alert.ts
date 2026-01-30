@@ -271,6 +271,22 @@ export class Pfv6Alert extends LitElement {
       this.#checkTruncation();
     }
 
+    // Handle timeout property changes (matches React useEffect behavior)
+    if (changedProperties.has('timeout')) {
+      // Clear existing timer
+      if (this.timeoutTimer) {
+        clearTimeout(this.timeoutTimer);
+        this.timeoutTimer = undefined;
+      }
+      // Reset timedOut state and start new timer if timeout > 0
+      this.timedOut = false;
+      if (this.timeout > 0) {
+        this.timeoutTimer = window.setTimeout(() => {
+          this.timedOut = true;
+        }, this.timeout);
+      }
+    }
+
     // Handle timeout animation
     if (changedProperties.has('containsFocus') || changedProperties.has('isMouseOver')) {
       if (!this.containsFocus && !this.isMouseOver) {
