@@ -52,7 +52,7 @@ export class Pfv6BreadcrumbItem extends LitElement {
    * HREF for breadcrumb link.
    */
   @property({ type: String })
-  to?: string;
+  to?: string | undefined;
 
   /**
    * Flag indicating whether the item is active.
@@ -70,7 +70,7 @@ export class Pfv6BreadcrumbItem extends LitElement {
    * Target for breadcrumb link.
    */
   @property({ type: String })
-  target?: string;
+  target?: string | undefined;
 
   /**
    * Internal state to track if this is the first item.
