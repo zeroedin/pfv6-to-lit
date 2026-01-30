@@ -36,6 +36,18 @@ import styles from './pfv6-tooltip.css';
  * @cssprop --pf-v6-c-tooltip__arrow--Width - Width of arrow
  * @cssprop --pf-v6-c-tooltip__arrow--Height - Height of arrow
  * @cssprop --pf-v6-c-tooltip__arrow--BackgroundColor - Background color of arrow
+ * @cssprop --pf-v6-c-tooltip__arrow--m-top--TranslateX - Arrow X translation for top position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-top--TranslateY - Arrow Y translation for top position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-top--Rotate - Arrow rotation for top position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-right--TranslateX - Arrow X translation for right position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-right--TranslateY - Arrow Y translation for right position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-right--Rotate - Arrow rotation for right position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-bottom--TranslateX - Arrow X translation for bottom position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-bottom--TranslateY - Arrow Y translation for bottom position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-bottom--Rotate - Arrow rotation for bottom position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-left--TranslateX - Arrow X translation for left position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-left--TranslateY - Arrow Y translation for left position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-left--Rotate - Arrow rotation for left position
  */
 @customElement('pfv6-tooltip')
 export class Pfv6Tooltip extends LitElement {
