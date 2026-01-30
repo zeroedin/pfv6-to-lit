@@ -4,6 +4,8 @@ import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
 import styles from './pfv6-icon.css';
 
+import '@pfv6/elements/pfv6-spinner/pfv6-spinner.js';
+
 export type IconSize =
   | 'sm'
   | 'md'
@@ -46,28 +48,28 @@ export class Pfv6Icon extends LitElement {
   * Affects both the container dimensions and the icon content size.
   */
   @property({ type: String, reflect: true })
-  size?: IconSize;
+  size?: IconSize | undefined;
 
   /**
   * Size of icon content.
   * Overrides the icon size set by the size property.
   */
   @property({ type: String, reflect: true, attribute: 'icon-size' })
-  iconSize?: IconSize;
+  iconSize?: IconSize | undefined;
 
   /**
   * Size of progress icon.
   * Overrides the icon size set by the size property when in progress state.
   */
   @property({ type: String, reflect: true, attribute: 'progress-icon-size' })
-  progressIconSize?: IconSize;
+  progressIconSize?: IconSize | undefined;
 
   /**
   * Status color of the icon.
   * Applies semantic colors for different states.
   */
   @property({ type: String, reflect: true })
-  status?: 'custom' | 'info' | 'success' | 'warning' | 'danger';
+  status?: 'custom' | 'info' | 'success' | 'warning' | 'danger' | undefined;
 
   /**
   * Indicates the icon is inline and should inherit text font size and color.

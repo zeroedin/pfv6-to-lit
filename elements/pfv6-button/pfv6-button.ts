@@ -6,7 +6,7 @@ import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './pfv6-button.css';
-import '../pfv6-spinner/pfv6-spinner.js';
+import '@pfv6/elements/pfv6-spinner/pfv6-spinner.js';
 
 /**
  * Button component for triggering actions.
