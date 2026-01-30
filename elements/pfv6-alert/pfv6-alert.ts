@@ -146,7 +146,7 @@ export class Pfv6Alert extends LitElement {
   @property({ type: Number, attribute: 'truncate-title' })
   truncateTitle = 0;
 
-  /** Timeout in milliseconds (or true for 8000ms) */
+  /** Timeout in milliseconds. Set to 8000 for default timeout behavior. */
   @property({ type: Number })
   timeout = 0;
 
@@ -225,10 +225,9 @@ export class Pfv6Alert extends LitElement {
 
     // Setup timeout if configured
     if (this.timeout > 0) {
-      const calculatedTimeout = this.timeout === 8000 ? 8000 : this.timeout;
       this.timeoutTimer = window.setTimeout(() => {
         this.timedOut = true;
-      }, calculatedTimeout);
+      }, this.timeout);
     }
 
     // Setup focus tracking via focusin/focusout (composes through shadow boundaries)
