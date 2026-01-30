@@ -67,7 +67,7 @@ export class Pfv6Brand extends LitElement {
   * Breakpoints: sm, md, lg, xl, 2xl
   */
   @property({ converter: responsivePropertyConverter })
-  widths?: Record<string, string>;
+  widths?: Record<string, string> | undefined;
 
   /**
   * Responsive heights at various breakpoints.
@@ -82,7 +82,7 @@ export class Pfv6Brand extends LitElement {
   * Breakpoints: sm, md, lg, xl, 2xl
   */
   @property({ converter: responsivePropertyConverter })
-  heights?: Record<string, string>;
+  heights?: Record<string, string> | undefined;
 
   /**
   * Internal state tracking whether slot has content.
