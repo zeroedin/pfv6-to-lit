@@ -107,7 +107,7 @@ Read('.cache/patternfly-react/packages/react-core/src/components/Card/card-body.
 - **Location**: Immediately AFTER box-sizing reset, BEFORE `:host`
 - **Pattern**:
   ```css
-  :where(input) {
+  input {
     margin: 0;
     font-family: inherit;
     font-size: 100%;
@@ -115,6 +115,7 @@ Read('.cache/patternfly-react/packages/react-core/src/components/Card/card-body.
     color: var(--pf-t--global--text--color--regular, #151515);
   }
   ```
+- **Note**: Do NOT use `:where(input)` - the `:where()` pseudo-class is forbidden in Shadow DOM CSS (see Forbidden Selectors below). Specificity management is unnecessary in Shadow DOM's isolated scope.
 - **Why**: PatternFly's global `normalize.scss` resets form element margins/fonts globally. Shadow DOM isolates from global styles, so must recreate reset inside Shadow DOM.
 - **Source**: `.cache/patternfly/src/patternfly/base/normalize.scss` lines 58-70
 - **Detection**:
