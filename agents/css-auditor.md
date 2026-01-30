@@ -1025,6 +1025,7 @@ When CSS variable declarations with `var()` fallbacks span multiple lines, follo
 - Analyze what's slotted vs. template before deciding on lightdom CSS
 
 **If lightdom CSS exists, validate**:
+- [ ] NO resets of any kind (box-sizing, form element, `a` element, etc.) - resets are outside the scope of the component
 - [ ] ALL selectors scoped to component tag (`pfv6-card > ...`, never orphan selectors)
 - [ ] Uses modern CSS nesting with `&` ampersand
 - [ ] Sets CSS variables on child components (pattern: `pfv6-card > pfv6-card-title { --_variable: value; }`)
@@ -1400,6 +1401,7 @@ Provide a structured audit report:
 - ❌ CSS rules for components with no React CSS
 - ❌ BEM classes in Shadow DOM CSS (`.pf-v6-c-*`, `.pf-m-*`)
 - ❌ Unscoped lightdom CSS selectors
+- ❌ Resets in lightdom CSS (box-sizing, form element, `a` element resets) - outside component scope
 - ❌ JSDoc `@cssprop` for non-existent variables
 - ❌ JSDoc `@cssprop` with wrong variable name pattern
 - ❌ CSS variable missing `@cssprop` documentation
