@@ -137,19 +137,6 @@ export class Pfv6Checkbox extends LitElement {
       this.#updateFormValue();
     }
 
-    // Update ARIA attributes on host
-    if (changedProperties.has('disabled')) {
-      this.#internals.ariaDisabled = this.disabled ? 'true' : 'false';
-    }
-
-    if (changedProperties.has('required')) {
-      this.#internals.ariaRequired = this.required ? 'true' : 'false';
-    }
-
-    if (changedProperties.has('isValid')) {
-      this.#internals.ariaInvalid = this.isValid ? 'false' : 'true';
-    }
-
     // Validate when required or checked properties change
     if (changedProperties.has('required') || changedProperties.has('checked')) {
       this.#validate();

@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-:where(input) {
+input {
   margin: 0;
   font-family: inherit;
   font-size: 100%;
