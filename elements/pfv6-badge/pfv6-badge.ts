@@ -20,6 +20,7 @@ import styles from './pfv6-badge.css';
  * @cssprop --pf-v6-c-badge--PaddingInlineStart - Inline start padding of the badge
  * @cssprop --pf-v6-c-badge--Color - Text color of the badge
  * @cssprop --pf-v6-c-badge--MinWidth - Minimum width of the badge
+ * @cssprop --pf-v6-c-badge--BackgroundColor - Background color of the badge
  * @cssprop --pf-v6-c-badge--m-read--BackgroundColor - Background color when read
  * @cssprop --pf-v6-c-badge--m-read--Color - Text color when read
  * @cssprop --pf-v6-c-badge--m-read--BorderColor - Border color when read
