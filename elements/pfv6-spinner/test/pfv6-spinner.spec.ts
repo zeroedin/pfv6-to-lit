@@ -4,7 +4,7 @@
  * Tests validate 1:1 API parity with PatternFly React Spinner component.
  * React source: .cache/patternfly-react/packages/react-core/src/components/Spinner/Spinner.tsx
  */
-import { html, fixture } from '@open-wc/testing';
+import { html, fixture, expect } from '@open-wc/testing';
 import { Pfv6Spinner } from '../pfv6-spinner.js';
 import '../pfv6-spinner.js';
 
@@ -85,23 +85,24 @@ describe('<pfv6-spinner>', function() {
   });
 
   // ============================================
-  // ariaValuetext property
+  // accessibleValuetext property
   // React: 'aria-valuetext'?: string (default: 'Loading...')
+  // Lit: accessible-valuetext attribute (follows naming convention)
   // ============================================
-  describe('ariaValuetext property', function() {
+  describe('accessibleValuetext property', function() {
     it('defaults to "Loading..."', async function() {
       // React default: ariaValueText = 'Loading...'
       const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner></pfv6-spinner>`);
-      expect(el.ariaValuetext).to.equal('Loading...');
+      expect(el.accessibleValuetext).to.equal('Loading...');
     });
 
     it('accepts custom value', async function() {
-      const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner aria-valuetext="Processing..."></pfv6-spinner>`);
-      expect(el.ariaValuetext).to.equal('Processing...');
+      const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner accessible-valuetext="Processing..."></pfv6-spinner>`);
+      expect(el.accessibleValuetext).to.equal('Processing...');
     });
 
     it('applies to SVG element', async function() {
-      const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner aria-valuetext="Custom loading"></pfv6-spinner>`);
+      const el = await fixture<Pfv6Spinner>(html`<pfv6-spinner accessible-valuetext="Custom loading"></pfv6-spinner>`);
       const svg = el.shadowRoot?.querySelector('svg');
       expect(svg?.getAttribute('aria-valuetext')).to.equal('Custom loading');
     });

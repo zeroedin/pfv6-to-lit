@@ -44,8 +44,8 @@ export class Pfv6Spinner extends LitElement {
   * Text describing the current loading status.
   * Announced by screen readers to provide context.
   */
-  @property({ type: String, attribute: 'aria-valuetext' })
-  ariaValuetext = 'Loading...';
+  @property({ type: String, attribute: 'accessible-valuetext' })
+  accessibleValuetext = 'Loading...';
 
   /**
   * Custom diameter for the spinner.
@@ -103,7 +103,7 @@ export class Pfv6Spinner extends LitElement {
         id="spinner"
         class=${classMap(classes)}
         role="progressbar"
-        aria-valuetext=${this.ariaValuetext}
+        aria-valuetext=${this.accessibleValuetext}
         aria-label=${ifDefined(effectiveAriaLabel)}
         aria-labelledby=${ifDefined(this.accessibleLabelledby)}
         viewBox="0 0 100 100"
