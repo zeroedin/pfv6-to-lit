@@ -626,6 +626,7 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
       try {
         // Load React demo
         await reactPage.goto(`/elements/pfv6-alert/react/test/${demo}`);
+        await reactPage.waitForSelector('.pf-v6-c-alert');
 
         // If variant is specified, change all alerts to that variant
         if (variant) {
@@ -646,6 +647,7 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
 
         // Load Lit demo
         await page.goto(`/elements/pfv6-alert/test/${demo}`);
+        await page.waitForSelector('pfv6-alert');
 
         // If variant is specified, change all alerts to that variant
         if (variant) {
@@ -654,8 +656,6 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
               (alert as HTMLElement).setAttribute('variant', v);
             });
           }, variant);
-          // Wait for Lit to update the component
-          await page.waitForTimeout(100);
         }
 
         await applyCssOverride(page, 'pfv6-alert', name, testValue);
