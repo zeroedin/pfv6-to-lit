@@ -365,7 +365,9 @@ describe('<pfv6-menu-toggle>', function() {
     it('allows click events when not disabled', async function() {
       const el = await fixture<Pfv6MenuToggle>(html`<pfv6-menu-toggle></pfv6-menu-toggle>`);
       let clicked = false;
-      el.addEventListener('click', () => { clicked = true; });
+      el.addEventListener('click', () => {
+        clicked = true;
+      });
 
       const button = el.shadowRoot!.querySelector('button') as HTMLButtonElement;
       await userEvent.click(button);
@@ -376,7 +378,9 @@ describe('<pfv6-menu-toggle>', function() {
     it('prevents click events when disabled', async function() {
       const el = await fixture<Pfv6MenuToggle>(html`<pfv6-menu-toggle is-disabled></pfv6-menu-toggle>`);
       let clicked = false;
-      el.addEventListener('click', () => { clicked = true; });
+      el.addEventListener('click', () => {
+        clicked = true;
+      });
 
       const button = el.shadowRoot!.querySelector('button') as HTMLButtonElement;
       // Disabled buttons don't fire click events, but we test the handler logic
@@ -439,7 +443,9 @@ describe('<pfv6-menu-toggle-action>', function() {
     it('allows click events when not disabled', async function() {
       const el = await fixture<Pfv6MenuToggleAction>(html`<pfv6-menu-toggle-action>Action</pfv6-menu-toggle-action>`);
       let clicked = false;
-      el.addEventListener('click', () => { clicked = true; });
+      el.addEventListener('click', () => {
+        clicked = true;
+      });
 
       const button = el.shadowRoot!.querySelector('button') as HTMLButtonElement;
       await userEvent.click(button);
@@ -450,7 +456,9 @@ describe('<pfv6-menu-toggle-action>', function() {
     it('prevents click events when disabled', async function() {
       const el = await fixture<Pfv6MenuToggleAction>(html`<pfv6-menu-toggle-action is-disabled>Action</pfv6-menu-toggle-action>`);
       let clicked = false;
-      el.addEventListener('click', () => { clicked = true; });
+      el.addEventListener('click', () => {
+        clicked = true;
+      });
 
       const button = el.shadowRoot!.querySelector('button') as HTMLButtonElement;
       // Disabled buttons don't fire click events
@@ -700,7 +708,9 @@ describe('<pfv6-menu-toggle-checkbox>', function() {
     it('dispatches on checkbox change', async function() {
       const el = await fixture<Pfv6MenuToggleCheckbox>(html`<pfv6-menu-toggle-checkbox></pfv6-menu-toggle-checkbox>`);
       let eventFired = false;
-      el.addEventListener('change', () => { eventFired = true; });
+      el.addEventListener('change', () => {
+        eventFired = true;
+      });
 
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       await userEvent.click(input);
@@ -711,7 +721,9 @@ describe('<pfv6-menu-toggle-checkbox>', function() {
     it('event is instance of Pfv6MenuToggleCheckboxChangeEvent', async function() {
       const el = await fixture<Pfv6MenuToggleCheckbox>(html`<pfv6-menu-toggle-checkbox></pfv6-menu-toggle-checkbox>`);
       let capturedEvent: Event | null = null;
-      el.addEventListener('change', (e) => { capturedEvent = e; });
+      el.addEventListener('change', e => {
+        capturedEvent = e;
+      });
 
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       await userEvent.click(input);
@@ -722,7 +734,9 @@ describe('<pfv6-menu-toggle-checkbox>', function() {
     it('event contains checked state as class field', async function() {
       const el = await fixture<Pfv6MenuToggleCheckbox>(html`<pfv6-menu-toggle-checkbox></pfv6-menu-toggle-checkbox>`);
       let capturedEvent: Pfv6MenuToggleCheckboxChangeEvent | null = null;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6MenuToggleCheckboxChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6MenuToggleCheckboxChangeEvent;
+      });
 
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       await userEvent.click(input);
@@ -734,7 +748,9 @@ describe('<pfv6-menu-toggle-checkbox>', function() {
     it('event contains original event as class field', async function() {
       const el = await fixture<Pfv6MenuToggleCheckbox>(html`<pfv6-menu-toggle-checkbox></pfv6-menu-toggle-checkbox>`);
       let capturedEvent: Pfv6MenuToggleCheckboxChangeEvent | null = null;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6MenuToggleCheckboxChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6MenuToggleCheckboxChangeEvent;
+      });
 
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       await userEvent.click(input);
@@ -766,7 +782,9 @@ describe('<pfv6-menu-toggle-checkbox>', function() {
     it('does not fire when readonly', async function() {
       const el = await fixture<Pfv6MenuToggleCheckbox>(html`<pfv6-menu-toggle-checkbox readonly></pfv6-menu-toggle-checkbox>`);
       let eventFired = false;
-      el.addEventListener('change', () => { eventFired = true; });
+      el.addEventListener('change', () => {
+        eventFired = true;
+      });
 
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       await userEvent.click(input);

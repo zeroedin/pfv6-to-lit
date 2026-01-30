@@ -55,7 +55,7 @@ async function applyCssOverride(
   value: string
 ): Promise<void> {
   await page.addStyleTag({
-    content: `${selector} { ${cssVar}: ${value}; }`
+    content: `${selector} { ${cssVar}: ${value}; }`,
   });
 }
 
@@ -68,7 +68,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--PaddingBlockStart',
@@ -76,7 +76,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--PaddingInlineEnd',
@@ -84,7 +84,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--PaddingBlockEnd',
@@ -92,7 +92,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--PaddingInlineStart',
@@ -100,7 +100,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--FontSize',
@@ -108,7 +108,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--Color',
@@ -116,7 +116,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--LineHeight',
@@ -124,7 +124,7 @@ const cssApiTests = [
     resolvedValue: '1.5',
     type: 'number',
     testValue: '999',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--BackgroundColor',
@@ -132,7 +132,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--BorderRadius',
@@ -140,7 +140,7 @@ const cssApiTests = [
     resolvedValue: '6px',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--BorderColor',
@@ -148,7 +148,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--BorderWidth',
@@ -156,7 +156,7 @@ const cssApiTests = [
     resolvedValue: '1px',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--border--ZIndex',
@@ -164,7 +164,7 @@ const cssApiTests = [
     resolvedValue: '100',
     type: 'number',
     testValue: '999',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--TransitionDuration',
@@ -172,7 +172,7 @@ const cssApiTests = [
     resolvedValue: '100ms',
     type: 'size',
     testValue: '50ms',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Hover states
@@ -182,7 +182,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--hover--BackgroundColor',
@@ -190,7 +190,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--hover--BorderWidth',
@@ -198,7 +198,7 @@ const cssApiTests = [
     resolvedValue: '1px',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--hover--BorderColor',
@@ -206,7 +206,7 @@ const cssApiTests = [
     resolvedValue: '#4394e5',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--hover__toggle-icon--Color',
@@ -214,7 +214,7 @@ const cssApiTests = [
     resolvedValue: '#1f1f1f',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Expanded states
@@ -224,7 +224,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--expanded--BackgroundColor',
@@ -232,7 +232,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--expanded--BorderWidth',
@@ -240,7 +240,7 @@ const cssApiTests = [
     resolvedValue: '2px',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--expanded--BorderColor',
@@ -248,7 +248,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--expanded__toggle-icon--Color',
@@ -256,7 +256,7 @@ const cssApiTests = [
     resolvedValue: '#1f1f1f',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Disabled states
@@ -266,7 +266,7 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--disabled__icon--Color',
@@ -274,7 +274,7 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--disabled__toggle-icon--Color',
@@ -282,7 +282,7 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--disabled__status-icon--Color',
@@ -290,7 +290,7 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--disabled--BackgroundColor',
@@ -298,7 +298,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Icon
@@ -308,7 +308,7 @@ const cssApiTests = [
     resolvedValue: '#1f1f1f',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle__icon--TransitionDelay',
@@ -316,7 +316,7 @@ const cssApiTests = [
     resolvedValue: '0s',
     type: 'size',
     testValue: '50s',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle__icon--TransitionDuration',
@@ -324,7 +324,7 @@ const cssApiTests = [
     resolvedValue: '0s',
     type: 'size',
     testValue: '50s',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle__icon--Rotate',
@@ -332,7 +332,7 @@ const cssApiTests = [
     resolvedValue: '0deg',
     type: 'size',
     testValue: '50deg',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--hover__icon--Rotate',
@@ -340,7 +340,7 @@ const cssApiTests = [
     resolvedValue: '0deg',
     type: 'size',
     testValue: '50deg',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Toggle icon
@@ -350,7 +350,7 @@ const cssApiTests = [
     resolvedValue: '#1f1f1f',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Primary variant
@@ -360,7 +360,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--PaddingInlineEnd',
@@ -368,7 +368,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--Color',
@@ -376,7 +376,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--BackgroundColor',
@@ -384,7 +384,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--BorderRadius',
@@ -392,7 +392,7 @@ const cssApiTests = [
     resolvedValue: '999px',
     type: 'size',
     testValue: '50px',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--BorderColor',
@@ -400,7 +400,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--hover--Color',
@@ -408,7 +408,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--hover--BackgroundColor',
@@ -416,7 +416,7 @@ const cssApiTests = [
     resolvedValue: '#004d99',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--hover--BorderColor',
@@ -424,7 +424,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--expanded--Color',
@@ -432,7 +432,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--expanded--BackgroundColor',
@@ -440,7 +440,7 @@ const cssApiTests = [
     resolvedValue: '#004d99',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--expanded--BorderColor',
@@ -448,7 +448,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary__toggle-icon--Color',
@@ -456,7 +456,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--hover__toggle-icon--Color',
@@ -464,7 +464,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--expanded__toggle-icon--Color',
@@ -472,7 +472,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--m-small--PaddingInlineStart',
@@ -480,7 +480,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'primary'
+    demo: 'primary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-primary--m-small--PaddingInlineEnd',
@@ -488,7 +488,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'primary'
+    demo: 'primary',
   },
 
   // Secondary variant
@@ -498,7 +498,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--PaddingInlineEnd',
@@ -506,7 +506,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--BackgroundColor',
@@ -514,7 +514,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--Color',
@@ -522,7 +522,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--BorderColor',
@@ -530,7 +530,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--BorderRadius',
@@ -538,7 +538,7 @@ const cssApiTests = [
     resolvedValue: '999px',
     type: 'size',
     testValue: '50px',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--hover--Color',
@@ -546,7 +546,7 @@ const cssApiTests = [
     resolvedValue: '#004d99',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--hover--BorderWidth',
@@ -554,7 +554,7 @@ const cssApiTests = [
     resolvedValue: '2px',
     type: 'size',
     testValue: '50px',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--hover--BorderColor',
@@ -562,7 +562,7 @@ const cssApiTests = [
     resolvedValue: '#4394e5',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--expanded--Color',
@@ -570,7 +570,7 @@ const cssApiTests = [
     resolvedValue: '#004d99',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--expanded--BackgroundColor',
@@ -578,7 +578,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--expanded--BorderWidth',
@@ -586,7 +586,7 @@ const cssApiTests = [
     resolvedValue: '2px',
     type: 'size',
     testValue: '50px',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--expanded--BorderColor',
@@ -594,7 +594,7 @@ const cssApiTests = [
     resolvedValue: '#004d99',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary__toggle-icon--Color',
@@ -602,7 +602,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--hover__toggle-icon--Color',
@@ -610,7 +610,7 @@ const cssApiTests = [
     resolvedValue: '#004d99',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--expanded__toggle-icon--Color',
@@ -618,7 +618,7 @@ const cssApiTests = [
     resolvedValue: '#004d99',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--m-small--PaddingInlineStart',
@@ -626,7 +626,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'secondary'
+    demo: 'secondary',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-secondary--m-small--PaddingInlineEnd',
@@ -634,7 +634,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'secondary'
+    demo: 'secondary',
   },
 
   // Full height
@@ -644,7 +644,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-full-height--PaddingInlineStart',
@@ -652,7 +652,7 @@ const cssApiTests = [
     resolvedValue: '1.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Split button
@@ -662,7 +662,7 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-split-button--child--disabled--BackgroundColor',
@@ -670,7 +670,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-split-button--child--BorderInlineStartWidth',
@@ -678,7 +678,7 @@ const cssApiTests = [
     resolvedValue: '1px',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-split-button--child--BorderInlineStartColor',
@@ -686,7 +686,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-split-button--child--BorderRadius',
@@ -694,7 +694,7 @@ const cssApiTests = [
     resolvedValue: '999px',
     type: 'size',
     testValue: '50px',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-split-button--child--disabled--BorderInlineStartColor',
@@ -702,7 +702,7 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-split-button--pill--child--PaddingInlineStart--offset',
@@ -710,7 +710,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-split-button--pill--child--PaddingInlineEnd--offset',
@@ -718,7 +718,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-split-button--m-small--pill--child--PaddingInlineStart--offset',
@@ -726,7 +726,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-split-button--m-small--pill--child--PaddingInlineEnd--offset',
@@ -734,7 +734,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Split button primary
@@ -744,7 +744,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-split-button--m-primary--child--hover--BackgroundColor',
@@ -752,7 +752,7 @@ const cssApiTests = [
     resolvedValue: '#004d99',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-split-button--m-primary--child--BorderInlineStartColor',
@@ -760,7 +760,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-split-button--m-primary--expanded--child--BackgroundColor',
@@ -768,7 +768,7 @@ const cssApiTests = [
     resolvedValue: '#004d99',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Split button secondary
@@ -778,7 +778,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Button
@@ -788,7 +788,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle__button--Gap',
@@ -796,7 +796,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle__button--PaddingInlineStart',
@@ -804,7 +804,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle__button--PaddingInlineEnd',
@@ -812,7 +812,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle__button--m-text--PaddingInlineStart',
@@ -820,7 +820,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle__button--toggle-icon--PaddingInlineStart',
@@ -828,7 +828,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle__button--toggle-icon--PaddingInlineEnd',
@@ -836,7 +836,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-small__button--toggle-icon--PaddingInlineStart',
@@ -844,7 +844,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-small__button--toggle-icon--PaddingInlineEnd',
@@ -852,7 +852,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Plain variant
@@ -862,7 +862,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--PaddingInlineEnd',
@@ -870,7 +870,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--Color',
@@ -878,7 +878,7 @@ const cssApiTests = [
     resolvedValue: '#1f1f1f',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--BackgroundColor',
@@ -886,7 +886,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--BorderColor',
@@ -894,7 +894,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--BorderWidth',
@@ -902,7 +902,7 @@ const cssApiTests = [
     resolvedValue: '0px',
     type: 'size',
     testValue: '50px',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--hover--BorderWidth',
@@ -910,7 +910,7 @@ const cssApiTests = [
     resolvedValue: '0px',
     type: 'size',
     testValue: '50px',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--expanded--BorderWidth',
@@ -918,7 +918,7 @@ const cssApiTests = [
     resolvedValue: '0px',
     type: 'size',
     testValue: '50px',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--BorderRadius',
@@ -926,7 +926,7 @@ const cssApiTests = [
     resolvedValue: '6px',
     type: 'size',
     testValue: '50px',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--hover--BackgroundColor',
@@ -934,7 +934,7 @@ const cssApiTests = [
     resolvedValue: 'rgb(199 199 199 / 25%)',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--expanded--BackgroundColor',
@@ -942,7 +942,7 @@ const cssApiTests = [
     resolvedValue: 'rgb(199 199 199 / 25%)',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--disabled--Color',
@@ -950,7 +950,7 @@ const cssApiTests = [
     resolvedValue: '#a3a3a3',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--disabled__icon--Color',
@@ -958,7 +958,7 @@ const cssApiTests = [
     resolvedValue: '#a3a3a3',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--disabled__toggle-icon--Color',
@@ -966,7 +966,7 @@ const cssApiTests = [
     resolvedValue: '#a3a3a3',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--disabled--BackgroundColor',
@@ -974,7 +974,7 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--m-small--PaddingInlineStart',
@@ -982,7 +982,7 @@ const cssApiTests = [
     resolvedValue: '0.25rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'plain'
+    demo: 'plain',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-plain--m-small--PaddingInlineEnd',
@@ -990,7 +990,7 @@ const cssApiTests = [
     resolvedValue: '0.25rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'plain'
+    demo: 'plain',
   },
 
   // Small variant
@@ -1000,7 +1000,7 @@ const cssApiTests = [
     resolvedValue: '0.25rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-small--PaddingBlockEnd',
@@ -1008,7 +1008,7 @@ const cssApiTests = [
     resolvedValue: '0.25rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-small--PaddingInlineStart',
@@ -1016,7 +1016,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-small--PaddingInlineEnd',
@@ -1024,7 +1024,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Status icon
@@ -1034,7 +1034,7 @@ const cssApiTests = [
     resolvedValue: '#1f1f1f',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle__status-icon--m-danger--TransitionDuration--Opacity',
@@ -1042,7 +1042,7 @@ const cssApiTests = [
     resolvedValue: '100ms',
     type: 'size',
     testValue: '50ms',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Success
@@ -1052,7 +1052,7 @@ const cssApiTests = [
     resolvedValue: '#3d7317',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-success__status-icon--Color',
@@ -1060,7 +1060,7 @@ const cssApiTests = [
     resolvedValue: '#3d7317',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Warning
@@ -1070,7 +1070,7 @@ const cssApiTests = [
     resolvedValue: '#ffcc17',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-warning__status-icon--Color',
@@ -1078,7 +1078,7 @@ const cssApiTests = [
     resolvedValue: '#ffcc17',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Danger
@@ -1088,7 +1088,7 @@ const cssApiTests = [
     resolvedValue: '#f0561d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-danger__status-icon--Color',
@@ -1096,7 +1096,7 @@ const cssApiTests = [
     resolvedValue: '#f0561d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-danger--AnimationDuration--Transform',
@@ -1104,7 +1104,7 @@ const cssApiTests = [
     resolvedValue: '200ms',
     type: 'size',
     testValue: '50ms',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Placeholder
@@ -1114,7 +1114,7 @@ const cssApiTests = [
     resolvedValue: '#707070',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Controls
@@ -1124,7 +1124,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'basic'
+    demo: 'basic',
   },
 
   // Settings
@@ -1134,7 +1134,7 @@ const cssApiTests = [
     resolvedValue: '200ms',
     type: 'size',
     testValue: '50ms',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-settings--hover__icon--TransitionDuration',
@@ -1142,7 +1142,7 @@ const cssApiTests = [
     resolvedValue: '200ms',
     type: 'size',
     testValue: '50ms',
-    demo: 'basic'
+    demo: 'basic',
   },
   {
     name: '--pf-v6-c-menu-toggle--m-settings--hover__icon--Rotate',
@@ -1150,7 +1150,7 @@ const cssApiTests = [
     resolvedValue: '60deg',
     type: 'size',
     testValue: '50deg',
-    demo: 'basic'
+    demo: 'basic',
   },
 ];
 
@@ -1164,8 +1164,8 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Variable: ${name}`,
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
-          `Test value: ${testValue}`
-        ].join('\n')
+          `Test value: ${testValue}`,
+        ].join('\n'),
       });
 
       // Set consistent viewport
@@ -1189,12 +1189,12 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare
@@ -1212,23 +1212,23 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 }  // Pixel-perfect
+          { threshold: 0 } // Pixel-perfect
         );
 
         // Attach images to report
         await test.info().attach('React with CSS override (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit with CSS override (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match

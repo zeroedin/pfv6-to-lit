@@ -43,6 +43,7 @@ import styles from './pfv6-menu-toggle.css';
 @customElement('pfv6-menu-toggle')
 export class Pfv6MenuToggle extends LitElement {
   static styles = styles;
+  static shadowRootOptions = { ...LitElement.shadowRootOptions, delegatesFocus: true };
 
   /** Variant styles of the menu toggle */
   @property({ type: String, reflect: true })
@@ -50,7 +51,7 @@ export class Pfv6MenuToggle extends LitElement {
 
   /** Status styles of the menu toggle */
   @property({ type: String, reflect: true })
-  status?: 'success' | 'warning' | 'danger';
+  status?: 'success' | 'warning' | 'danger' | undefined;
 
   /** Adds styling which affects the size of the menu toggle */
   @property({ type: String, reflect: true })
@@ -82,7 +83,7 @@ export class Pfv6MenuToggle extends LitElement {
 
   /** Accessible label for the toggle */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   #renderStatusIcon(): TemplateResult | null {
     const hasCustomIcon = this.querySelector('[slot="status-icon"]');
