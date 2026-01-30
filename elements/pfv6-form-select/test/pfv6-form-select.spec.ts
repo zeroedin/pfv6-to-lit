@@ -4,7 +4,7 @@ import '../pfv6-form-select.js';
 
 /** Wait for MutationObserver callbacks to fire and component to update */
 async function waitForMutationObserver(el: Pfv6FormSelect) {
-  await aTimeout(0);  // MutationObserver callbacks are scheduled as microtasks
+  await aTimeout(0); // MutationObserver callbacks are scheduled as microtasks
   await el.updateComplete;
 }
 
