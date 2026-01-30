@@ -329,6 +329,10 @@ export class Pfv6Alert extends LitElement {
   };
 
   #handleClose = (event: Event) => {
+    // Ignore our own Pfv6AlertCloseEvent to prevent infinite recursion
+    if (event instanceof Pfv6AlertCloseEvent) {
+      return;
+    }
     // Stop the internal close event from escaping
     event.stopPropagation();
     // Dispatch the public close event
