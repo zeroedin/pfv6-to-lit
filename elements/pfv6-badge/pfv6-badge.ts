@@ -54,7 +54,7 @@ export class Pfv6Badge extends LitElement {
   * Example: "Unread Messages" for a notification count badge.
   */
   @property({ type: String, attribute: 'screen-reader-text' })
-  screenReaderText?: string;
+  screenReaderText?: string | undefined;
 
   render() {
     const classes = {
