@@ -155,7 +155,6 @@ export class Pfv6SimpleListItem extends LitElement {
           <button
             class=${classMap(classes)}
             type=${this.type}
-            tabindex="-1"
             @click=${this.#handleClick}
           >
             <slot></slot>
@@ -164,7 +163,6 @@ export class Pfv6SimpleListItem extends LitElement {
           <a
             class=${classMap(classes)}
             href=${ifDefined(this.href || undefined)}
-            tabindex="-1"
             @click=${this.#handleClick}
           >
             <slot></slot>
