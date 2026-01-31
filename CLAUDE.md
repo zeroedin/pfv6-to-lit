@@ -349,6 +349,33 @@ You CANNOT proceed until you have received `<function_results>` from the Task to
 
 **Save to memory**: Store failures, cleanup actions, warnings from aria-auditor output.
 
+#### Handle Rule 3 Warnings (ARIA Pattern Decision)
+
+If aria-auditor output contains `### ⚠️ Rule 3 Warning: ARIA Pattern Review Needed`:
+
+1. **Parse the structured output** - extract the machine-parseable JSON
+2. **Present options to user** using AskUserQuestion:
+
+```
+Use AskUserQuestion with:
+- question: "ARIA is on internal shadow DOM elements. How should we handle this?"
+- header: "ARIA Pattern"
+- options:
+  - label: "Option A: Refactor to ElementInternals (Recommended)"
+    description: "Move ARIA to :host via ElementInternals. Best for single-widget components."
+  - label: "Option B: Keep Internal ARIA"
+    description: "Keep current pattern. Valid for composite widgets with multiple children."
+  - label: "Option C: Request Expert Review"
+    description: "Flag for accessibility expert review before proceeding."
+```
+
+3. **Act on user's decision**:
+   - **Option A**: Refactor component to use ElementInternals pattern
+   - **Option B**: Add JSDoc comment documenting why internal ARIA is used
+   - **Option C**: Mark as blocked, skip to next component
+
+**Only proceed to Step 13b after Rule 3 decision is resolved (if applicable).**
+
 ### Step 13b: CHECK for ElementInternals Pattern
 
 **Detect ElementInternals usage**:
@@ -413,6 +440,7 @@ You CANNOT proceed until you have received `<function_results>` from the Task to
 4. Determine overall status:
    - ✅ PASS: Zero failures across all auditors
    - ❌ FAIL: One or more failures from any auditor
+   - ⚠️ PENDING: Rule 3 decision was required and user chose Option C (expert review)
 
 **Present aggregated report**:
 
@@ -433,6 +461,10 @@ You CANNOT proceed until you have received `<function_results>` from the Task to
 **Failures**: [count]
 **Cleanup Actions**: [count]
 **Warnings**: [count]
+
+**Rule 3 Decision** (if applicable):
+- User selected: [Option A/B/C]
+- Action taken: [Description of what was done]
 
 ---
 
@@ -458,7 +490,7 @@ You CANNOT proceed until you have received `<function_results>` from the Task to
 
 ## Overall Summary
 
-**Status**: ✅ PASS / ❌ FAIL
+**Status**: ✅ PASS / ❌ FAIL / ⚠️ PENDING
 
 **Total Failures**: [X]
 1. [All failures from all auditors]
@@ -469,13 +501,18 @@ You CANNOT proceed until you have received `<function_results>` from the Task to
 **Total Warnings**: [Z]
 1. [All warnings from all auditors]
 
+**Rule 3 Decisions**: [count]
+- [Component]: User selected [Option], action: [description]
+
 **Next Steps**:
 - [If PASS] Proceeding to test creation (Step 14)
 - [If FAIL] ❌ MUST fix all [X] failures before proceeding
+- [If PENDING] ⚠️ Blocked for expert review, skip to next component
 ```
 
 **BLOCKING REQUIREMENT:**
-If status is FAIL, you CANNOT proceed to Step 14 until ALL failures are fixed.
+- If status is **FAIL**: You CANNOT proceed to Step 14 until ALL failures are fixed.
+- If status is **PENDING**: Component is blocked for expert review. Skip to next component in queue.
 
 ## Phase 7: Create Tests
 
