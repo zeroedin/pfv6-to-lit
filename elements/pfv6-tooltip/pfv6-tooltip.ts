@@ -154,7 +154,7 @@ export class Pfv6Tooltip extends LitElement {
 
   /** Minimum width of the tooltip */
   @property({ type: String, attribute: 'min-width' })
-  minWidth?: string;
+  minWidth?: string | undefined;
 
   /** Z-index of the tooltip */
   @property({ type: Number, attribute: 'z-index' })
@@ -173,7 +173,7 @@ export class Pfv6Tooltip extends LitElement {
 
   /** ID of an external trigger element (alternative to slotted trigger) */
   @property({ type: String, attribute: 'trigger-id' })
-  triggerId?: string;
+  triggerId?: string | undefined;
 
   /** Internal visibility state */
   @state()
@@ -523,11 +523,7 @@ export class Pfv6Tooltip extends LitElement {
     };
   }
 
-  private _renderTooltip(): TemplateResult | null {
-    if (!this._visible) {
-      return null;
-    }
-
+  render(): TemplateResult {
     const classes = {
       ...this._getPlacementClasses(),
     };
@@ -546,25 +542,21 @@ export class Pfv6Tooltip extends LitElement {
     };
 
     return html`
-      <div
-        id="tooltip"
-        class=${classMap(classes)}
-        role="tooltip"
-        aria-labelledby="content"
-        style=${styleMap(tooltipStyles)}
-      >
-        <div id="arrow"></div>
-        <div id="content" class=${classMap(contentClasses)}>
-          ${this.content}
-        </div>
-      </div>
-    `;
-  }
-
-  render(): TemplateResult {
-    return html`
       <slot @slotchange=${this._handleSlotChange}></slot>
-      ${this._renderTooltip()}
+      ${this._visible ? html`
+        <div
+          id="tooltip"
+          class=${classMap(classes)}
+          role="tooltip"
+          aria-label=${this.content}
+          style=${styleMap(tooltipStyles)}
+        >
+          <div id="arrow"></div>
+          <div id="content" class=${classMap(contentClasses)}>
+            ${this.content}
+          </div>
+        </div>
+      ` : null}
     `;
   }
 
