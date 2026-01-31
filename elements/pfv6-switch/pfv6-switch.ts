@@ -32,12 +32,44 @@ export class Pfv6SwitchChangeEvent extends Event {
  *
  * @fires {Pfv6SwitchChangeEvent} change - Fired when the switch checked state changes
  *
+ * @cssprop [--pf-v6-c-switch--FontSize] - Font size of the switch
+ * @cssprop [--pf-v6-c-switch--ColumnGap] - Gap between toggle and label
+ * @cssprop [--pf-v6-c-switch--LineHeight] - Line height of the switch
+ * @cssprop [--pf-v6-c-switch--Height] - Height of the switch container
+ * @cssprop [--pf-v6-c-switch__toggle--Width] - Width of the toggle
+ * @cssprop [--pf-v6-c-switch__toggle--Height] - Height of the toggle
+ * @cssprop [--pf-v6-c-switch__toggle--BackgroundColor] - Background color of the toggle
+ * @cssprop [--pf-v6-c-switch__toggle--BorderColor] - Border color of the toggle
+ * @cssprop [--pf-v6-c-switch__toggle--BorderWidth] - Border width of the toggle
+ * @cssprop [--pf-v6-c-switch__toggle--BorderRadius] - Border radius of the toggle
+ * @cssprop [--pf-v6-c-switch__toggle--before--Width] - Width of the toggle handle
+ * @cssprop [--pf-v6-c-switch__toggle--before--Height] - Height of the toggle handle
+ * @cssprop [--pf-v6-c-switch__toggle--before--InsetInlineStart] - Inline start position of the toggle handle
+ * @cssprop [--pf-v6-c-switch__toggle--before--BorderWidth] - Border width of the toggle handle
+ * @cssprop [--pf-v6-c-switch__toggle--before--BorderRadius] - Border radius of the toggle handle
+ * @cssprop [--pf-v6-c-switch__toggle--before--TransitionTimingFunction] - Timing function for toggle handle transition
+ * @cssprop [--pf-v6-c-switch__toggle--before--TransitionDuration] - Duration of the toggle handle transition
+ * @cssprop [--pf-v6-c-switch__toggle--before--Transition] - Full transition property for toggle handle
+ * @cssprop [--pf-v6-c-switch__toggle-icon--FontSize] - Font size of the check icon
+ * @cssprop [--pf-v6-c-switch__toggle-icon--Color] - Color of the check icon
+ * @cssprop [--pf-v6-c-switch__toggle-icon--InsetInlineStart] - Inline start position of the check icon
+ * @cssprop [--pf-v6-c-switch__toggle-icon--Offset] - Offset for toggle handle positioning
  * @cssprop [--pf-v6-c-switch__input--checked__toggle--BackgroundColor] - Background color of the toggle when checked
  * @cssprop [--pf-v6-c-switch__input--checked__toggle--before--TranslateX] - X translation of the toggle handle when checked
- * @cssprop [--pf-v6-c-switch__toggle--BackgroundColor] - Background color of the toggle
- * @cssprop [--pf-v6-c-switch__toggle--BorderRadius] - Border radius of the toggle
- * @cssprop [--pf-v6-c-switch__toggle--Height] - Height of the toggle
- * @cssprop [--pf-v6-c-switch__toggle--Width] - Width of the toggle
+ * @cssprop [--pf-v6-c-switch__input--checked__toggle--before--BackgroundColor] - Background color of the toggle handle when checked
+ * @cssprop [--pf-v6-c-switch__input--checked__toggle--BorderColor] - Border color of the toggle when checked
+ * @cssprop [--pf-v6-c-switch__input--checked__toggle--BorderWidth] - Border width of the toggle when checked
+ * @cssprop [--pf-v6-c-switch__input--checked__label--Color] - Label color when checked
+ * @cssprop [--pf-v6-c-switch__input--not-checked__label--Color] - Label color when not checked
+ * @cssprop [--pf-v6-c-switch__input--not-checked__toggle--before--BackgroundColor] - Background color of the toggle handle when not checked
+ * @cssprop [--pf-v6-c-switch__input--disabled__label--Color] - Label color when disabled
+ * @cssprop [--pf-v6-c-switch__input--disabled__toggle--BackgroundColor] - Background color of the toggle when disabled
+ * @cssprop [--pf-v6-c-switch__input--disabled__toggle--BorderColor] - Border color of the toggle when disabled
+ * @cssprop [--pf-v6-c-switch__input--disabled__toggle--before--BackgroundColor] - Background color of the toggle handle when disabled
+ * @cssprop [--pf-v6-c-switch__input--disabled__toggle-icon--Color] - Color of the check icon when disabled
+ * @cssprop [--pf-v6-c-switch__input--focus__toggle--OutlineWidth] - Outline width when focused
+ * @cssprop [--pf-v6-c-switch__input--focus__toggle--OutlineOffset] - Outline offset when focused
+ * @cssprop [--pf-v6-c-switch__input--focus__toggle--OutlineColor] - Outline color when focused
  */
 @customElement('pfv6-switch')
 export class Pfv6Switch extends LitElement {
@@ -78,11 +110,11 @@ export class Pfv6Switch extends LitElement {
 
   /** Adds an accessible name when label is not provided */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   /** Initial checked state for uncontrolled mode (do not use with checked) */
   @property({ type: Boolean, attribute: 'default-checked' })
-  defaultChecked?: boolean;
+  defaultChecked?: boolean | undefined;
 
   /** Whether to show a check icon in the toggle */
   @property({ type: Boolean, reflect: true, attribute: 'has-check-icon' })
