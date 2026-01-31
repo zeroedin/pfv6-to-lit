@@ -154,7 +154,6 @@ export class Pfv6ProgressStep extends LitElement {
               id=${ifDefined(this.titleId)}
               class="help-text"
               type="button"
-              tabindex="-1"
               aria-haspopup="dialog"
             >
               <slot></slot>
