@@ -458,6 +458,11 @@ button {
     --pf-v6-c-tree-view__node--Color: var(--pf-v6-c-tree-view__node--m-current--Color, #151515);
     --pf-v6-c-tree-view__node--BorderWidth: var(--pf-v6-c-tree-view__node--m-current--BorderWidth, 0px);
   }
+
+  &:focus-visible {
+    outline: var(--pf-t--global--border--width--focus--default, 2px) solid var(--pf-t--global--color--brand--default, #0066cc);
+    outline-offset: var(--pf-t--global--spacer--xs, 0.25rem);
+  }
 }
 
 #node-container {
@@ -492,6 +497,11 @@ button {
   &:dir(rtl) {
     transform: translateX(calc(var(--pf-v6-c-tree-view__list-item__list-item__node-toggle--TranslateX, -100%) * -1));
   }
+
+  &:focus-visible {
+    outline: var(--pf-t--global--border--width--focus--default, 2px) solid var(--pf-t--global--color--brand--default, #0066cc);
+    outline-offset: var(--pf-t--global--spacer--xs, 0.25rem);
+  }
 }
 
 #toggle-icon {
@@ -512,6 +522,11 @@ button {
 
 #check {
   margin-inline-end: var(--pf-v6-c-tree-view__node-check--MarginInlineEnd, 0.5rem);
+
+  input[type="checkbox"]:focus-visible {
+    outline: var(--pf-t--global--border--width--focus--default, 2px) solid var(--pf-t--global--color--brand--default, #0066cc);
+    outline-offset: var(--pf-t--global--spacer--xs, 0.25rem);
+  }
 }
 
 #icon {
@@ -539,6 +554,11 @@ button {
   text-align: start;
   background-color: transparent;
   border: 0;
+
+  &:focus-visible {
+    outline: var(--pf-t--global--border--width--focus--default, 2px) solid var(--pf-t--global--color--brand--default, #0066cc);
+    outline-offset: var(--pf-t--global--spacer--xs, 0.25rem);
+  }
 }
 
 #count {
@@ -563,5 +583,5 @@ button {
 #container.compact.nested.level-8::before,
 #container.compact.nested.level-9::before,
 #container.compact.nested.level-10::before {
-  height: calc(var(--pf-v6-c-tree-view--m-compact__node--before--InsetBlockStart, 2rem) + var(--pf-v6-c-tree-view--m-compact__node--nested--PaddingBlockStart, 0.5rem)) !important;
+  height: calc(var(--pf-v6-c-tree-view--m-compact__node--before--InsetBlockStart, 2rem) + var(--pf-v6-c-tree-view--m-compact__node--nested--PaddingBlockStart, 0.5rem));
 }

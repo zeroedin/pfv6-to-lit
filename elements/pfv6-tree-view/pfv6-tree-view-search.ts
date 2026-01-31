@@ -31,11 +31,11 @@ export class Pfv6TreeViewSearch extends LitElement {
 
   /** Name attribute for the search input */
   @property({ type: String })
-  name?: string;
+  name?: string | undefined;
 
   /** Placeholder text for the search input */
   @property({ type: String })
-  placeholder?: string;
+  placeholder?: string | undefined;
 
   /** Value of the search input */
   @property({ type: String })
