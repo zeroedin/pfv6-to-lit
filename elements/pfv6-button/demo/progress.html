@@ -51,33 +51,49 @@
 
   const primaryButton = document.getElementById('primary-loading-button');
   primaryButton.addEventListener('click', () => {
-    const isLoading = primaryButton.getAttribute('is-loading') === 'true';
-    primaryButton.setAttribute('is-loading', String(!isLoading));
-    primaryButton.textContent = isLoading ? 'Click to start loading' : 'Click to stop loading';
+    const isLoading = primaryButton.hasAttribute('is-loading');
+    if (isLoading) {
+      primaryButton.removeAttribute('is-loading');
+      primaryButton.textContent = 'Click to start loading';
+    } else {
+      primaryButton.setAttribute('is-loading', '');
+      primaryButton.textContent = 'Click to stop loading';
+    }
   });
 
   const secondaryButton = document.getElementById('secondary-loading-button');
   secondaryButton.addEventListener('click', () => {
-    const isLoading = secondaryButton.getAttribute('is-loading') === 'true';
-    secondaryButton.setAttribute('is-loading', String(!isLoading));
-    secondaryButton.textContent = isLoading ? 'Click to start loading' : 'Click to stop loading';
+    const isLoading = secondaryButton.hasAttribute('is-loading');
+    if (isLoading) {
+      secondaryButton.removeAttribute('is-loading');
+      secondaryButton.textContent = 'Click to start loading';
+    } else {
+      secondaryButton.setAttribute('is-loading', '');
+      secondaryButton.textContent = 'Click to stop loading';
+    }
   });
 
   const uploadButton = document.getElementById('upload-button');
   uploadButton.addEventListener('click', () => {
-    const isLoading = uploadButton.getAttribute('is-loading') === 'true';
-    uploadButton.setAttribute('is-loading', String(!isLoading));
-    if (!isLoading) {
-      uploadButton.removeAttribute('accessible-label');
-    } else {
+    const isLoading = uploadButton.hasAttribute('is-loading');
+    if (isLoading) {
+      uploadButton.removeAttribute('is-loading');
       uploadButton.setAttribute('accessible-label', 'Upload');
+    } else {
+      uploadButton.setAttribute('is-loading', '');
+      uploadButton.removeAttribute('accessible-label');
     }
   });
 
   const inlineButton = document.getElementById('inline-loading-button');
   inlineButton.addEventListener('click', () => {
-    const isLoading = inlineButton.getAttribute('is-loading') === 'true';
-    inlineButton.setAttribute('is-loading', String(!isLoading));
-    inlineButton.textContent = isLoading ? 'Resume loading logs' : 'Pause loading logs';
+    const isLoading = inlineButton.hasAttribute('is-loading');
+    if (isLoading) {
+      inlineButton.removeAttribute('is-loading');
+      inlineButton.textContent = 'Resume loading logs';
+    } else {
+      inlineButton.setAttribute('is-loading', '');
+      inlineButton.textContent = 'Pause loading logs';
+    }
   });
 </script>
