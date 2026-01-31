@@ -38,46 +38,38 @@ A tooltip component that displays contextual information on trigger element hove
 
 ## Accessibility
 
-The tooltip uses a shared live region announcer pattern to announce content to screen readers. This approach avoids cross-shadow-root ARIA IDREF issues that would occur with `aria-describedby` or `aria-labelledby` references.
+The tooltip uses `ElementInternals.ariaLive` to announce content changes to screen readers. This approach:
 
-When the tooltip shows, its content is announced via a visually-hidden `role="status"` element in `document.body`. Set `silent` to `true` when the trigger element already has an accessible label.
+- Lets the browser handle announcement timing automatically
+- Announces when tooltip content appears or changes in the shadow DOM
+- Avoids cross-shadow-root ARIA IDREF issues that would occur with `aria-describedby`
+- Allows users to override with native `aria-live` attribute on the host element
 
-## Breaking Changes
+By default, `ariaLive` is set to `'polite'`. Set `silent` to `true` when the trigger element already has an accessible label and announcements are not needed.
 
-### Removed `aria` property
+## Differences from React
 
-The `aria` property (`'describedby' | 'labelledby' | 'none'`) has been removed and replaced with the `silent` boolean property.
+### `aria` property → `silent` property
 
-**Migration:**
+React's Tooltip has an `aria` property (`'describedby' | 'labelledby' | 'none'`) that sets ARIA IDREF attributes on the trigger element. This approach doesn't work in Shadow DOM because IDREF attributes cannot reference elements across shadow boundaries.
 
-```html
-<!-- Before -->
-<pfv6-tooltip aria="none" content="Info">...</pfv6-tooltip>
-<pfv6-tooltip aria="describedby" content="Info">...</pfv6-tooltip>
-<pfv6-tooltip aria="labelledby" content="Info">...</pfv6-tooltip>
+The Lit implementation uses `ElementInternals.ariaLive` on the host element instead, which correctly announces content to screen readers. The `silent` property controls this behavior:
 
-<!-- After -->
-<pfv6-tooltip silent content="Info">...</pfv6-tooltip>
-<pfv6-tooltip content="Info">...</pfv6-tooltip>
-<pfv6-tooltip content="Info">...</pfv6-tooltip>
-```
+| React | Lit |
+|-------|-----|
+| `aria="describedby"` (default) | Default behavior (ariaLive='polite') |
+| `aria="labelledby"` | Default behavior (ariaLive='polite') |
+| `aria="none"` | `silent` |
 
-**Reason:** The original `aria` property attempted to set `aria-describedby` or `aria-labelledby` IDREF attributes on the trigger element, referencing an ID inside the tooltip's shadow DOM. This is a cross-root ARIA violation - IDREF attributes cannot reference elements across shadow DOM boundaries.
+### `aria-live` property → `silent` property
 
-The new implementation uses a shared live region announcer which correctly announces tooltip content to screen readers without cross-root issues.
+React's Tooltip has an `aria-live` property (`'off' | 'polite'`) that sets the live region behavior on the tooltip element.
 
-### Removed `aria-live` property
+The Lit implementation uses `ElementInternals.ariaLive` to achieve the same result. The `silent` property controls whether announcements are enabled:
 
-The `aria-live` property (`'off' | 'polite'`) has been removed entirely.
+| React | Lit |
+|-------|-----|
+| `aria-live="polite"` (default) | Default behavior |
+| `aria-live="off"` | `silent` |
 
-**Migration:**
-
-```html
-<!-- Before -->
-<pfv6-tooltip aria-live="polite" content="Info">...</pfv6-tooltip>
-
-<!-- After -->
-<pfv6-tooltip content="Info">...</pfv6-tooltip>
-```
-
-**Reason:** The `aria-live` attribute on the tooltip element (which has `role="tooltip"`) served no useful purpose. Screen reader announcements are now handled by a shared live region announcer in `document.body`, making this property redundant.
+Users can still override by setting the native `aria-live` attribute directly on the host element.
