@@ -127,7 +127,7 @@ export class Pfv6Radio extends LitElement {
   * Either label or accessible-label must be provided.
   */
   @property({ type: String })
-  label?: string;
+  label?: string | undefined;
 
   /**
   * Position of the label relative to the radio input.
@@ -139,20 +139,20 @@ export class Pfv6Radio extends LitElement {
   * Description text displayed below the radio.
   */
   @property({ type: String })
-  description?: string;
+  description?: string | undefined;
 
   /**
   * Body text displayed below the description.
   */
   @property({ type: String })
-  body?: string;
+  body?: string | undefined;
 
   /**
   * Accessible label for the radio when no visible label is provided.
   * Either label or accessible-label must be provided.
   */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   /**
   * Whether the wrapper element should be a label element that wraps the input.
