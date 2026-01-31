@@ -64,9 +64,11 @@ grep -E "aria-(labelledby|describedby|controls|activedescendant)" component.ts
 
 **Reference**: [MDN ElementInternals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals)
 
-MDN explicitly recommends:
-> "Use ElementInternals on the host custom element, NOT ARIA on shadow DOM elements"
-> "Shadow DOM is encapsulated: Direct ARIA on shadow children won't be exposed to the accessibility tree"
+**Shadow DOM ARIA behavior**:
+- ARIA attributes on shadow DOM elements ARE exposed to the accessibility tree
+- However, IDREF-based attributes (`aria-labelledby`, `aria-describedby`, `aria-controls`, etc.) cannot cross shadow boundaries due to ID scoping
+- ElementInternals on the host provides default semantics without ARIA sprouting across internal nodes
+- User-provided `aria-*` attributes on the host can override ElementInternals defaults
 
 **When to use host-level ARIA via ElementInternals**:
 - Component IS a single widget (progressbar, checkbox, switch, slider)
