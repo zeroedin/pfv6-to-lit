@@ -55,7 +55,7 @@ async function applyCssOverride(
   value: string
 ): Promise<void> {
   await page.addStyleTag({
-    content: `${selector} { ${cssVar}: ${value}; }`
+    content: `${selector} { ${cssVar}: ${value}; }`,
   });
 }
 
@@ -68,7 +68,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'number',
     testValue: '999',
-    demo: 'compact'
+    demo: 'compact',
   },
   {
     name: '--pf-v6-c-toggle-group--m-compact__button--PaddingInlineEnd',
@@ -76,7 +76,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'compact'
+    demo: 'compact',
   },
   {
     name: '--pf-v6-c-toggle-group--m-compact__button--PaddingBlockEnd',
@@ -84,7 +84,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'number',
     testValue: '999',
-    demo: 'compact'
+    demo: 'compact',
   },
   {
     name: '--pf-v6-c-toggle-group--m-compact__button--PaddingInlineStart',
@@ -92,7 +92,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'compact'
+    demo: 'compact',
   },
   {
     name: '--pf-v6-c-toggle-group--m-compact__button--FontSize',
@@ -100,7 +100,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'compact'
+    demo: 'compact',
   },
 
   // Button variables (from pfv6-toggle-group-item.css)
@@ -110,7 +110,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--PaddingInlineEnd',
@@ -118,7 +118,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--PaddingBlockEnd',
@@ -126,7 +126,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--PaddingInlineStart',
@@ -134,7 +134,7 @@ const cssApiTests = [
     resolvedValue: '1rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--FontSize',
@@ -142,7 +142,7 @@ const cssApiTests = [
     resolvedValue: '0.875rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--LineHeight',
@@ -150,7 +150,7 @@ const cssApiTests = [
     resolvedValue: '1.5',
     type: 'number',
     testValue: '999',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--Color',
@@ -158,15 +158,16 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--BackgroundColor',
-    defaultValue: 'var(--pf-t--global--background--color--action--plain--default, rgb(255 255 255 / 0%))',
+    defaultValue:
+      'var(--pf-t--global--background--color--action--plain--default, rgb(255 255 255 / 0%))',
     resolvedValue: 'rgb(255 255 255 / 0%)',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--ZIndex',
@@ -174,7 +175,7 @@ const cssApiTests = [
     resolvedValue: 'auto',
     type: 'number',
     testValue: '999',
-    demo: 'default-single'
+    demo: 'default-single',
   },
 
   // Hover state variables
@@ -184,7 +185,7 @@ const cssApiTests = [
     resolvedValue: '#f2f2f2',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--hover--ZIndex',
@@ -192,7 +193,7 @@ const cssApiTests = [
     resolvedValue: '100',
     type: 'number',
     testValue: '999',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--hover--before--BorderColor',
@@ -200,7 +201,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--hover--after--BorderWidth',
@@ -208,7 +209,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'number',
     testValue: '999',
-    demo: 'default-single'
+    demo: 'default-single',
   },
 
   // Border variables
@@ -218,7 +219,7 @@ const cssApiTests = [
     resolvedValue: '1px',
     type: 'size',
     testValue: '50px',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--before--BorderColor',
@@ -226,7 +227,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-single'
+    demo: 'default-single',
   },
 
   // Selected state variables
@@ -236,7 +237,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--m-selected--Color',
@@ -244,7 +245,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--m-selected--before--BorderColor',
@@ -252,7 +253,7 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--m-selected-selected--before--BorderInlineStartColor',
@@ -260,7 +261,7 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-multiple'
+    demo: 'default-multiple',
   },
   {
     name: '--pf-v6-c-toggle-group__button--m-selected--ZIndex',
@@ -268,7 +269,7 @@ const cssApiTests = [
     resolvedValue: '100',
     type: 'number',
     testValue: '999',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--m-selected--after--BorderWidth',
@@ -276,7 +277,7 @@ const cssApiTests = [
     resolvedValue: '0',
     type: 'number',
     testValue: '999',
-    demo: 'default-single'
+    demo: 'default-single',
   },
 
   // Disabled state variables
@@ -286,7 +287,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--disabled--Color',
@@ -294,7 +295,7 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--disabled--before--BorderColor',
@@ -302,7 +303,7 @@ const cssApiTests = [
     resolvedValue: '#a3a3a3',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--disabled-disabled--before--BorderInlineStartColor',
@@ -310,7 +311,7 @@ const cssApiTests = [
     resolvedValue: '#a3a3a3',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-single'
+    demo: 'default-single',
   },
   {
     name: '--pf-v6-c-toggle-group__button--disabled--ZIndex',
@@ -318,7 +319,7 @@ const cssApiTests = [
     resolvedValue: '100',
     type: 'number',
     testValue: '999',
-    demo: 'default-single'
+    demo: 'default-single',
   },
 
   // Icon/text spacing
@@ -328,7 +329,7 @@ const cssApiTests = [
     resolvedValue: '0.5rem',
     type: 'size',
     testValue: '50rem',
-    demo: 'text-icon'
+    demo: 'text-icon',
   },
 ];
 
@@ -343,8 +344,8 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
           `Test value: ${testValue}`,
-          `Demo: ${demo}`
-        ].join('\n')
+          `Demo: ${demo}`,
+        ].join('\n'),
       });
 
       // Set consistent viewport
@@ -368,12 +369,12 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare
@@ -391,23 +392,23 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 }  // Pixel-perfect
+          { threshold: 0 } // Pixel-perfect
         );
 
         // Attach images to report
         await test.info().attach('React with CSS override (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit with CSS override (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match
