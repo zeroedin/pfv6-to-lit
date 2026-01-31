@@ -1303,7 +1303,7 @@ After fixing all issues, re-run audit to verify:
 - Verify text character-for-character (case-sensitive)
 - Check property values are exact (no approximations)
 - Validate file naming (kebab-case, descriptor only)
-- Validate static asset paths (`../../` for ALL demos - no exceptions)
+- Validate static asset paths (`../` for demo/ folder assets, `../../` for lightdom CSS in component root)
 - Verify lightdom CSS link in every demo (if component has lightdom CSS)
 - Check HTML validity (custom elements in valid parent contexts)
 - Validate boolean attributes (no `="true"` or `="false"` values)
@@ -1319,8 +1319,7 @@ After fixing all issues, re-run audit to verify:
 
 **NEVER**:
 - Allow absolute paths for static assets
-- Allow incorrect relative path depth
-- Allow `../` for static assets (always require `../../` for all demos)
+- Allow incorrect relative path depth (`../` for demo/ assets, `../../` for lightdom CSS)
 - Accept `index.html` file (breaks URL parity - every React demo maps to a specific descriptor)
 - Suggest creating `index.html` (NEVER - breaks 1:1 URL parity with React demos)
 - Approximate prop counts ("about the same")
