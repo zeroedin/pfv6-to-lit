@@ -26,7 +26,7 @@ export class Pfv6Sidebar extends LitElement {
   *
   */
   @property({ type: String, reflect: true })
-  orientation?: 'stack' | 'split';
+  orientation?: 'stack' | 'split' | undefined;
 
   /**
   * Indicates that the panel is displayed to the right of the content when the orientation is split

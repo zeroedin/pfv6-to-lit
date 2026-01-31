@@ -50,7 +50,7 @@ export class Pfv6SidebarPanel extends LitElement {
   * <pfv6-sidebar-panel width="width_25 md:width_50"></pfv6-sidebar-panel>
   */
   @property({ converter: responsivePropertyConverter })
-  width?: Record<string, string>;
+  width?: Record<string, string> | undefined;
 
   /**
   * Variant of the sidebar panel background
