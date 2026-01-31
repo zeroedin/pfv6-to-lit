@@ -74,7 +74,7 @@ import '@pfv6/elements/pfv6-button/pfv6-button.js';
 
 **Detection**:
 ```text
-Grep('\\.\\./pfv6-', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
+Grep('(\\.\\./)+pfv6-', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
 If matches found → **CRITICAL VIOLATION** - Must use `@pfv6/elements/` bare module specifier
