@@ -39,7 +39,7 @@ export class Pfv6TextInputGroup extends LitElement {
 
   /** Status variant of the text input group */
   @property({ type: String, reflect: true })
-  validated?: 'success' | 'warning' | 'error';
+  validated?: 'success' | 'warning' | 'error' | undefined;
 
   /** Context value provided to children */
   @provide({ context: textInputGroupContext })
@@ -69,11 +69,11 @@ export class Pfv6TextInputGroup extends LitElement {
 
   render() {
     const classes = {
-      disabled: this.isDisabled,
-      plain: this.isPlain,
-      success: this.validated === 'success',
-      warning: this.validated === 'warning',
-      error: this.validated === 'error',
+      'disabled': this.isDisabled,
+      'plain': this.isPlain,
+      'success': this.validated === 'success',
+      'warning': this.validated === 'warning',
+      'error': this.validated === 'error',
       'has-utilities': this._hasUtilities,
     };
 

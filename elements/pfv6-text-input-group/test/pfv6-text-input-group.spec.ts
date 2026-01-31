@@ -32,7 +32,11 @@ class TestOption extends HTMLElement {
 }
 customElements.define('test-option', TestOption);
 
-/** Helper to simulate typing into an input */
+/**
+ * Helper to simulate typing into an input
+ * @param input - The input element to fill
+ * @param value - The value to set
+ */
 function fillInput(input: HTMLInputElement, value: string): void {
   input.value = value;
   input.dispatchEvent(new Event('input', { bubbles: true }));
@@ -600,7 +604,7 @@ describe('<pfv6-text-input-group-main>', function() {
       });
 
       const input = el.shadowRoot!.querySelector('input#input') as HTMLInputElement;
-      fillInput(input,'test');
+      fillInput(input, 'test');
 
       expect(eventFired).to.be.true;
     });
@@ -613,7 +617,7 @@ describe('<pfv6-text-input-group-main>', function() {
       });
 
       const input = el.shadowRoot!.querySelector('input#input') as HTMLInputElement;
-      fillInput(input,'test');
+      fillInput(input, 'test');
 
       expect(capturedEvent).to.be.an.instanceof(Pfv6TextInputGroupMainChangeEvent);
     });
@@ -626,7 +630,7 @@ describe('<pfv6-text-input-group-main>', function() {
       });
 
       const input = el.shadowRoot!.querySelector('input#input') as HTMLInputElement;
-      fillInput(input,'new value');
+      fillInput(input, 'new value');
 
       expect(capturedEvent!.value).to.equal('new value');
     });
@@ -639,7 +643,7 @@ describe('<pfv6-text-input-group-main>', function() {
       });
 
       const input = el.shadowRoot!.querySelector('input#input') as HTMLInputElement;
-      fillInput(input,'test');
+      fillInput(input, 'test');
 
       expect(capturedEvent!.originalEvent).to.be.an.instanceof(Event);
     });
@@ -652,7 +656,7 @@ describe('<pfv6-text-input-group-main>', function() {
       });
 
       const input = el.shadowRoot!.querySelector('input#input') as HTMLInputElement;
-      fillInput(input,'test');
+      fillInput(input, 'test');
 
       expect(capturedEvent!.bubbles).to.be.true;
       expect(capturedEvent!.composed).to.be.true;
@@ -662,7 +666,7 @@ describe('<pfv6-text-input-group-main>', function() {
       const el = await fixture<Pfv6TextInputGroupMain>(html`<pfv6-text-input-group-main></pfv6-text-input-group-main>`);
       const input = el.shadowRoot!.querySelector('input#input') as HTMLInputElement;
 
-      fillInput(input,'updated value');
+      fillInput(input, 'updated value');
       await el.updateComplete;
 
       expect(el.value).to.equal('updated value');
@@ -885,7 +889,7 @@ describe('<pfv6-text-input-group-main>', function() {
           <test-option slot="options" value="test">Test Option</test-option>
         </pfv6-text-input-group-main>
       `);
-      const option = el.options[0];
+      const [option] = el.options;
       expect(option.selected).to.be.false;
       expect(option.active).to.be.false;
     });
