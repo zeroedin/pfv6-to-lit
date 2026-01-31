@@ -1,0 +1,93 @@
+/* Reset box-sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Component-level custom properties with token-derived fallback values */
+  --pf-v6-c-back-to-top--InsetInlineEnd: var(--pf-t--global--spacer--2xl, 3rem);
+  --pf-v6-c-back-to-top--InsetBlockEnd: var(--pf-t--global--spacer--lg, 1.5rem);
+  --pf-v6-c-back-to-top--md--InsetBlockEnd: var(--pf-t--global--spacer--2xl, 3rem);
+  --pf-v6-c-back-to-top--c-button--FontSize: var(--pf-t--global--font--size--body--sm, 0.75rem);
+  --pf-v6-c-back-to-top--c-button--PaddingBlockStart: var(--pf-t--global--spacer--xs, 0.25rem);
+  --pf-v6-c-back-to-top--c-button--PaddingInlineEnd: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-back-to-top--c-button--PaddingBlockEnd: var(--pf-t--global--spacer--xs, 0.25rem);
+  --pf-v6-c-back-to-top--c-button--PaddingInlineStart: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-back-to-top--c-button--BoxShadow:
+    var(
+      --pf-t--global--box-shadow--sm,
+      0px 1px 4px 0px rgb(41 41 41 / 15%)
+    );
+
+  @media (width >= 768px) {
+    --pf-v6-c-back-to-top--InsetBlockEnd: var(--pf-v6-c-back-to-top--md--InsetBlockEnd);
+  }
+}
+
+#container {
+  position: absolute;
+  inset-block-end: var(--pf-v6-c-back-to-top--InsetBlockEnd);
+  inset-inline-end: var(--pf-v6-c-back-to-top--InsetInlineEnd);
+
+  &.hidden {
+    display: none;
+  }
+}
+
+#button {
+  /* Button base styles */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-block-start: var(--pf-v6-c-back-to-top--c-button--PaddingBlockStart);
+  padding-inline-end: var(--pf-v6-c-back-to-top--c-button--PaddingInlineEnd);
+  padding-block-end: var(--pf-v6-c-back-to-top--c-button--PaddingBlockEnd);
+  padding-inline-start: var(--pf-v6-c-back-to-top--c-button--PaddingInlineStart);
+  font-size: var(--pf-v6-c-back-to-top--c-button--FontSize);
+  font-weight: var(--pf-t--global--font--weight--body--bold, 700);
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  font-family: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 0;
+  border-radius: var(--pf-t--global--border--radius--pill, 30rem);
+  cursor: pointer;
+  box-shadow: var(--pf-v6-c-back-to-top--c-button--BoxShadow);
+
+  /* Primary variant colors */
+  color: var(--pf-t--global--color--nonstatus--white--default, #ffffff);
+  background-color: var(--pf-t--global--color--brand--default, #0066cc);
+
+  &:hover {
+    background-color: var(--pf-t--global--color--brand--hover, #004080);
+  }
+
+  &:active,
+  &:focus {
+    background-color: var(--pf-t--global--color--brand--active, #004080);
+  }
+
+  &:focus-visible {
+    outline:
+      var(--pf-t--global--border--width--focus--default, 2px) solid
+      var(--pf-t--global--color--border--focus--default, #0066cc);
+    outline-offset: var(--pf-t--global--spacer--focus--default, 2px);
+  }
+}
+
+#text {
+  display: inline-block;
+}
+
+#icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  & svg {
+    display: block;
+  }
+}
