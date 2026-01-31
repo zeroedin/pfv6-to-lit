@@ -14,6 +14,10 @@ import styles from './pfv6-spinner.css';
  * Supports preset sizes (sm, md, lg, xl) or custom diameter via CSS variable.
  * When inline, the spinner inherits the current text font size.
  *
+ * ARIA is set on the host element via ElementInternals, making the internal
+ * SVG purely presentational. Users can add `aria-labelledby` directly to the
+ * host element if they need to reference an external label.
+ *
  * @cssprop --pf-v6-c-spinner--diameter - Custom diameter of the spinner
  * @cssprop --pf-v6-c-spinner--Width - Width of the spinner (defaults to diameter)
  * @cssprop --pf-v6-c-spinner--Height - Height of the spinner (defaults to diameter)
@@ -34,6 +38,18 @@ export class Pfv6Spinner extends LitElement {
   static styles = styles;
 
   /**
+   * ElementInternals for setting ARIA on the host element.
+   * The host is the accessible element; internal SVG is presentational.
+   */
+  #internals: ElementInternals;
+
+  constructor() {
+    super();
+    this.#internals = this.attachInternals();
+    this.#internals.role = 'progressbar';
+  }
+
+  /**
   * Size variant of the spinner.
   * Ignored when isInline is true.
   */
@@ -44,8 +60,8 @@ export class Pfv6Spinner extends LitElement {
   * Text describing the current loading status.
   * Announced by screen readers to provide context.
   */
-  @property({ type: String, attribute: 'aria-valuetext' })
-  ariaValuetext = 'Loading...';
+  @property({ type: String, attribute: 'accessible-valuetext' })
+  accessibleValuetext = 'Loading...';
 
   /**
   * Custom diameter for the spinner.
@@ -53,7 +69,7 @@ export class Pfv6Spinner extends LitElement {
   * Example: "80px", "3rem"
   */
   @property({ type: String })
-  diameter?: string;
+  diameter?: string | undefined;
 
   /**
   * When true, spinner displays inline and inherits text font size.
@@ -67,14 +83,26 @@ export class Pfv6Spinner extends LitElement {
   * Provides context for screen reader users.
   */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
-  /**
-  * ID of an element that describes what is loading.
-  * Alternative to accessible-label for referencing existing text.
-  */
-  @property({ type: String, attribute: 'accessible-labelledby' })
-  accessibleLabelledby?: string;
+  updated(changedProperties: Map<string, unknown>) {
+    super.updated(changedProperties);
+
+    // Sync ARIA properties to ElementInternals
+    if (changedProperties.has('accessibleLabel')) {
+      this.#internals.ariaLabel = this.accessibleLabel || 'Contents';
+    }
+    if (changedProperties.has('accessibleValuetext')) {
+      this.#internals.ariaValueText = this.accessibleValuetext;
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    // Set initial ARIA values
+    this.#internals.ariaLabel = this.accessibleLabel || 'Contents';
+    this.#internals.ariaValueText = this.accessibleValuetext;
+  }
 
   render() {
     // Build class map for size/inline modifiers
@@ -86,13 +114,6 @@ export class Pfv6Spinner extends LitElement {
       xl: this.size === 'xl' && !this.isInline,
     };
 
-    // Determine effective aria-label:
-    // 1. Use explicit accessibleLabel if provided
-    // 2. If accessibleLabelledby is set, don't set aria-label (let labelledby handle it)
-    // 3. Fall back to 'Contents' as default (matches React behavior)
-    const effectiveAriaLabel = this.accessibleLabel
-      || (!this.accessibleLabelledby ? 'Contents' : undefined);
-
     // Build inline style for custom diameter
     const customStyle = this.diameter ?
       `--pf-v6-c-spinner--diameter: ${this.diameter}`
@@ -102,10 +123,6 @@ export class Pfv6Spinner extends LitElement {
       <svg
         id="spinner"
         class=${classMap(classes)}
-        role="progressbar"
-        aria-valuetext=${this.ariaValuetext}
-        aria-label=${ifDefined(effectiveAriaLabel)}
-        aria-labelledby=${ifDefined(this.accessibleLabelledby)}
         viewBox="0 0 100 100"
         style=${ifDefined(customStyle)}
       >

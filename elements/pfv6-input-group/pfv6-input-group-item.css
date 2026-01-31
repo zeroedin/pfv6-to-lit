@@ -1,3 +1,5 @@
+/* stylelint-disable @stylistic/max-line-length -- PatternFly CSS variable names */
+
 *,
 *::before,
 *::after {
@@ -29,16 +31,7 @@
   /* Disabled variant */
   --pf-v6-c-input-group__item--m-disabled--BackgroundColor: var(--pf-t--global--background--color--disabled--default, #c7c7c7);
 
-  display: block;
-}
-
-:host([is-fill]) {
-  flex-grow: 1;
-}
-
-/* Consume private variable from pfv6-input-group-text for text color */
-::slotted(*) {
-  color: var(--_input-group-text-color);
+  display: contents;
 }
 
 #container {

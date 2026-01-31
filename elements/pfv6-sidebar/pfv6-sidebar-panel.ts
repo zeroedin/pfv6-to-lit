@@ -42,15 +42,15 @@ export class Pfv6SidebarPanel extends LitElement {
 
   /**
   * Sets the panel width at various breakpoints.
-  * Format: "value breakpoint:value" (e.g., "width_25 md:width_50 lg:width_33")
+  * Format: "value breakpoint:value" (e.g., "25 md:50 lg:33")
   *
-  * Values: default | width_25 | width_33 | width_50 | width_66 | width_75 | width_100
+  * Values: default | 25 | 33 | 50 | 66 | 75 | 100
   *
   * @example
-  * <pfv6-sidebar-panel width="width_25 md:width_50"></pfv6-sidebar-panel>
+  * <pfv6-sidebar-panel width="25 md:50"></pfv6-sidebar-panel>
   */
   @property({ converter: responsivePropertyConverter })
-  width?: Record<string, string>;
+  width?: Record<string, string> | undefined;
 
   /**
   * Variant of the sidebar panel background
@@ -71,7 +71,9 @@ export class Pfv6SidebarPanel extends LitElement {
     // Add width modifier classes
     if (this.width) {
       Object.entries(this.width).forEach(([breakpoint, value]) => {
-        const key = breakpoint === 'default' ? value : `${value}-on-${breakpoint}`;
+        // Add width_ prefix for numeric values (25, 33, 50, 66, 75, 100)
+        const widthValue = value === 'default' ? 'default' : `width_${value}`;
+        const key = breakpoint === 'default' ? widthValue : `${widthValue}-on-${breakpoint}`;
         classes[key] = true;
       });
     }

@@ -23,7 +23,7 @@ export class Pfv6PanelMain extends LitElement {
   * Max height of the panel main as a string with the value and unit (e.g., "200px")
   */
   @property({ type: String, attribute: 'max-height' })
-  maxHeight?: string;
+  maxHeight?: string | undefined;
 
   updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);

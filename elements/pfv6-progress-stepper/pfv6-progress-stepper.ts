@@ -38,7 +38,7 @@ export class Pfv6ProgressStepper extends LitElement {
 
   /** Accessible label for the progress stepper. */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   constructor() {
     super();

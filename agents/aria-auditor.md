@@ -60,6 +60,131 @@ grep -E "aria-(labelledby|describedby|controls|activedescendant)" component.ts
 
 **Fix**: Use `accessible-label` property instead of IDREF attributes.
 
+### Rule 3: Consider Host-Level ARIA via ElementInternals - GUIDANCE
+
+**Reference**: [MDN ElementInternals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals)
+
+**Shadow DOM ARIA behavior**:
+- ARIA attributes on shadow DOM elements ARE exposed to the accessibility tree
+- However, IDREF-based attributes (`aria-labelledby`, `aria-describedby`, `aria-controls`, etc.) cannot cross shadow boundaries due to ID scoping
+- ElementInternals on the host provides default semantics without ARIA sprouting across internal nodes
+- User-provided `aria-*` attributes on the host can override ElementInternals defaults
+
+**When to use host-level ARIA via ElementInternals**:
+- Component IS a single widget (progressbar, checkbox, switch, slider)
+- Component wraps non-semantic elements (div, span, svg)
+- Users should be able to add `aria-labelledby` directly to the host
+- You want user-provided `role` attributes to override defaults
+
+**When internal ARIA may be appropriate**:
+- Component has MULTIPLE accessible children (toolbar, menu)
+- Component wraps native form controls where native semantics matter
+- `aria-hidden="true"` on decorative internal elements
+- Complex composite widgets with internal focus management
+
+**Detection** (flag for human review, not auto-fail):
+```bash
+# Check for ARIA on internal elements
+grep -A 100 "render()" pfv6-{component}.ts | grep -E "role=|aria-"
+
+# Check for host-level ARIA
+grep -E "this\.(#?internals|_internals)\.(role|aria[A-Z])" pfv6-{component}.ts
+```
+
+**Example - Spinner (host ARIA is correct)**:
+```typescript
+// Component IS the progressbar - ARIA on host
+constructor() {
+  super();
+  this.#internals = this.attachInternals();
+  this.#internals.role = 'progressbar';
+}
+
+updated(changedProperties: Map<string, unknown>) {
+  if (changedProperties.has('accessibleLabel')) {
+    this.#internals.ariaLabel = this.accessibleLabel || 'Contents';
+  }
+}
+
+render() {
+  // SVG is purely presentational - no ARIA here
+  return html`<svg viewBox="0 0 100 100"><circle /></svg>`;
+}
+```
+
+**Benefits of host-level ARIA**:
+1. Custom element IS the widget in the a11y tree
+2. `<pfv6-spinner aria-labelledby="my-label">` works (host is in light DOM)
+3. `<pfv6-spinner role="status">` allows user override
+4. No cross-shadow IDREF issues
+
+**Note**: `attachInternals()` works without `static formAssociated = true`. Form association is only needed for form participation (setFormValue, validation, etc.), not for ARIA.
+
+#### Rule 3 Output Format (Structured for Orchestrator)
+
+When Rule 3 warning is triggered, output this structured format so the orchestrator can present options to the user:
+
+```markdown
+### ⚠️ Rule 3 Warning: ARIA Pattern Review Needed
+
+**Component**: pfv6-{component}
+**Detection**: ARIA found on internal shadow DOM elements
+**Component Type Assessment**: [Single widget | Composite widget | Uncertain]
+
+#### Current Pattern
+- **Location**: `render()` method, line {X}
+- **Found**: `<{element} role="{role}" aria-{attr}="{value}">`
+- **Host ARIA**: [None detected | Uses ElementInternals]
+
+#### Decision Required
+
+**ORCHESTRATOR: Present these options to user via AskUserQuestion**
+
+**Option A: Refactor to ElementInternals** (Recommended for single widgets)
+- Move `role` and `aria-*` from internal elements to `:host` via ElementInternals
+- Make internal elements purely presentational (add `role="none"` or remove ARIA)
+- Add `this.#internals = this.attachInternals()` in constructor
+- Set `this.#internals.role` and `this.#internals.aria*` in lifecycle methods
+- **Benefits**: Users can add `aria-labelledby` to host, role overrides work
+- **Effort**: Medium - requires refactoring ARIA handling
+
+**Option B: Keep Internal ARIA** (Valid for composite widgets)
+- Appropriate if component has MULTIPLE accessible children
+- Keep current pattern if component wraps native controls where native semantics matter
+- Document decision in component JSDoc explaining why internal ARIA is used
+- **Benefits**: Preserves native element semantics, simpler for composite widgets
+- **Effort**: Low - add documentation only
+
+**Option C: Request Expert Review** (When uncertain)
+- Flag for accessibility expert review before making changes
+- Useful for complex components where the correct pattern isn't obvious
+- **Benefits**: Ensures correct accessibility pattern is chosen
+- **Effort**: Blocks progress until review complete
+
+#### Machine-Parseable Data
+```json
+{
+  "rule": "3",
+  "status": "warning",
+  "component": "pfv6-{component}",
+  "componentType": "single|composite|uncertain",
+  "internalARIA": {
+    "file": "pfv6-{component}.ts",
+    "line": {X},
+    "elements": ["<{element} role=\"{role}\">"]
+  },
+  "hostARIA": {
+    "detected": true|false,
+    "usesElementInternals": true|false
+  },
+  "options": ["A", "B", "C"],
+  "recommendation": "A|B|C"
+}
+```
+```
+
+**Do NOT auto-fix Rule 3 issues. Return structured output for orchestrator decision.**
+
 ### Rule 4: React ARIA Pattern Comparison
 
 Always verify React component ARIA patterns.
@@ -256,9 +381,31 @@ render() {
 4. **Violates accessibility** - Screen readers may announce the same label twice
 
 **When Internal ARIA is Acceptable**:
-- ✅ Decorative elements: `<svg aria-hidden="true" role="img">`
+- ✅ Decorative elements: `<svg aria-hidden="true">`
 - ✅ Internal structure not exposed to `:host`: `<label for="input">` inside component
 - ❌ NEVER duplicate the same ARIA that's on `:host`
+
+**EXCEPTION: FACE Elements with formDisabledCallback**:
+
+For Form-Associated Custom Elements (components with `static formAssociated = true`), setting `ariaDisabled` on `:host` via ElementInternals in `formDisabledCallback` is **REQUIRED**, even if the internal `<input>` also has a native `disabled` attribute.
+
+**This is NOT duplicate ARIA** because:
+1. The FACE element `:host` IS the form control from the browser's perspective
+2. `formDisabledCallback` handles fieldset-inherited disabled state
+3. The browser does NOT automatically set ARIA on the custom element
+4. Host-level `ariaDisabled` ensures the custom element communicates its state
+
+**Detection**: Before flagging `ariaDisabled` as duplicate, check:
+```bash
+# If component is FACE, ariaDisabled in formDisabledCallback is ALLOWED
+grep -q "static formAssociated = true" component.ts && \
+grep -q "formDisabledCallback" component.ts && \
+grep -A 5 "formDisabledCallback" component.ts | grep -q "ariaDisabled"
+```
+
+**If all three conditions are true**: This is the CORRECT pattern, not a violation.
+
+See `agents/face-elements-auditor.md` for the complete FACE validation rules.
 
 **Examples**:
 
@@ -338,6 +485,10 @@ grep -A 50 "render()" pfv6-{component}.ts | grep -E "aria-(label|labelledby|desc
 - **Line X**: Uses `aria-label` property name
   - **Fix**: Change to `accessible-label`
 
+### ⚠️ Rule 3 Warning (Requires Orchestrator Decision)
+[Include full structured output from Rule 3 Output Format section above]
+- **ORCHESTRATOR ACTION REQUIRED**: Present options A, B, C to user via AskUserQuestion
+
 ### 🚨 Rule 9 Violations (Duplicate ARIA on Host and Internal Elements) - CRITICAL
 - **Lines X, Y**: Duplicate ARIA detected
   - **Host** (line X): `this.internals.ariaLabel = this.accessibleLabel`
@@ -363,8 +514,9 @@ grep -A 50 "render()" pfv6-{component}.ts | grep -E "aria-(label|labelledby|desc
 - Documented in component JSDoc
 
 ### Summary
-- **Status**: ✅ PASS / ❌ FAIL
+- **Status**: ✅ PASS / ❌ FAIL / ⚠️ PENDING (Rule 3 decision needed)
 - **Failures**: {count}
+- **Warnings requiring decision**: {count}
 - **Cleanup actions**: {count}
 ```
 
@@ -375,11 +527,18 @@ grep -A 50 "render()" pfv6-{component}.ts | grep -E "aria-(label|labelledby|desc
 - [ ] **Rule 1**: No `aria-*` property names in component
   - Command: `grep -E "@property.*aria-" pfv6-{component}.ts`
   - If found: Report as FAILURE
-  
+
 - [ ] **Rule 2**: No IDREF attributes in component
   - Command: `grep -E "aria-(labelledby|describedby|controls)" pfv6-{component}.ts`
   - If found: Report as FAILURE
-  
+
+- [ ] **Rule 3**: ARIA on host via ElementInternals (not internal elements) - GUIDANCE
+  - Command 1: `grep -A 100 "render()" pfv6-{component}.ts | grep -E "role=|aria-"`
+  - Command 2: `grep -E "this\.(#?internals|_internals)\.(role|aria[A-Z])" pfv6-{component}.ts`
+  - If ARIA on internal elements: Output structured warning with options (A, B, C)
+  - **Return to orchestrator** - do NOT auto-fix, let orchestrator present options to user
+  - Orchestrator will use AskUserQuestion to get user's decision
+
 - [ ] **Rule 4**: React ARIA patterns compared
   - Read React source component
   - Document any ARIA-related deviations
@@ -402,7 +561,8 @@ grep -A 50 "render()" pfv6-{component}.ts | grep -E "aria-(label|labelledby|desc
   - Compare results: If same ARIA property in both = CRITICAL FAILURE
   - Report: Line numbers for host ARIA and internal ARIA with fix required
 
-**🚨 CRITICAL: Rules 7 and 9 must ALWAYS run.**
+**🚨 CRITICAL: Rules 3, 7, and 9 must ALWAYS run.**
+- **Rule 3**: If ARIA is on internal elements, output structured warning with options → **Return to orchestrator for user decision**
 - **Rule 7**: If duplicative `component` attributes exist in demos, validation FAILS
 - **Rule 9**: If duplicate ARIA exists between host and internal elements, validation FAILS
 
@@ -413,14 +573,15 @@ grep -A 50 "render()" pfv6-{component}.ts | grep -E "aria-(label|labelledby|desc
 - Flag IDREF ARIA attributes that cross shadow boundaries
 - Recommend `accessible-label` over `aria-label` property names
 - Document API deviations from React with shadow DOM rationale
+- **Rule 3: Output structured warning with options when ARIA is on internal elements** → Return to orchestrator
 - **CRITICAL: Detect duplicate ARIA between `:host` and internal elements** (Rule 9)
 - **Proactively remove redundant roles from Lit demos** (Rule 8)
 - **Proactively remove duplicative component attributes from Lit demos** (Rule 7)
-- **Ask user for clarification** when uncertain about shadow DOM ARIA patterns
 
 **NEVER**:
 - Allow `aria-*` property names (except ElementInternals usage)
 - Allow IDREF ARIA attributes that reference across shadow boundaries
+- **Auto-fix Rule 3 issues** - always return to orchestrator with structured options
 - **Allow duplicate ARIA on both `:host` and internal shadow DOM elements** (Rule 9 - CRITICAL)
 - Edit React demos in `.cache/` (immutable reference)
 - Enforce strict ARIA parity when shadow DOM requires different approach

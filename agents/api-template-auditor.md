@@ -2,7 +2,7 @@
 name: api-template-auditor
 description: Validates template patterns, directives, and naming conventions in LitElement components. Use after component creation.
 tools: Read, Grep, Glob
-model: opus
+model: sonnet
 ---
 
 You are a template pattern validator. Your job is to check Lit template patterns, directives, and naming conventions.
@@ -153,7 +153,50 @@ ${repeat(this.items, item => item.id, item => html`
 
 ## Step 7: Check Render Method Structure
 
-### 7.1 No Dynamic Tag Names
+### 7.1 No Render Fragmentation
+
+**NEVER split render() into helper methods that return TemplateResult**:
+
+❌ **WRONG** - Helper methods fragment render logic:
+```typescript
+private _renderTooltip(): TemplateResult | null {
+  if (!this._visible) { return null; }
+  return html`<div id="tooltip">...</div>`;
+}
+
+render(): TemplateResult {
+  return html`
+    <slot></slot>
+    ${this._renderTooltip()}
+  `;
+}
+```
+
+✅ **CORRECT** - Ternaries directly in render():
+```typescript
+render(): TemplateResult {
+  return html`
+    <slot></slot>
+    ${this._visible ? html`<div id="tooltip">...</div>` : null}
+  `;
+}
+```
+
+**Why ternaries are required**:
+- Keeps all template logic in one place
+- Easier to understand data flow
+- Simpler to maintain and debug
+- No need to jump between methods
+- Lit templates are already concise
+
+**Detection**:
+```text
+Grep('private _render\\w+\\(\\).*TemplateResult', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
+```
+
+If found → **CRITICAL VIOLATION**
+
+### 7.2 No Dynamic Tag Names
 
 ❌ **WRONG**:
 ```typescript
@@ -163,7 +206,7 @@ html`<${Tag}>...</${Tag}>`
 
 ✅ **CORRECT** - Use fixed element types
 
-### 7.2 No Complex Expressions
+### 7.3 No Complex Expressions
 
 ❌ **WRONG**:
 ```typescript
@@ -195,6 +238,7 @@ render() { return html`${this.#getProcessedData()}`; }
 - [ ] Class for dynamic elements: ✅/❌
 
 ### Template Structure
+- [ ] No render fragmentation (no helper methods returning TemplateResult): ✅/❌
 - [ ] Proper sub-component rendering: ✅/❌
 - [ ] No dynamic tag names: ✅/❌
 - [ ] Render method is concise: ✅/❌

@@ -42,7 +42,7 @@ export class Pfv6MenuToggleCheckbox extends LitElement {
   static formAssociated = true;
   static styles = styles;
 
-  private internals: ElementInternals;
+  #internals: ElementInternals;
 
   /**
    * CRITICAL: name property MUST use reflect: true to match native input behavior.
@@ -88,11 +88,11 @@ export class Pfv6MenuToggleCheckbox extends LitElement {
 
   /** Label text for the checkbox */
   @property({ type: String })
-  label?: string;
+  label?: string | undefined;
 
   /** Accessible label for the checkbox (for standalone checkboxes without visible labels) */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   /** Flag to show if checkbox is in indeterminate state */
   @property({ type: Boolean, reflect: true })
@@ -111,7 +111,7 @@ export class Pfv6MenuToggleCheckbox extends LitElement {
 
   constructor() {
     super();
-    this.internals = this.attachInternals();
+    this.#internals = this.attachInternals();
   }
 
   override connectedCallback() {
@@ -135,29 +135,25 @@ export class Pfv6MenuToggleCheckbox extends LitElement {
     if (changedProperties.has('required')) {
       this.#validate();
     }
-
-    if (changedProperties.has('disabled')) {
-      this.internals.ariaDisabled = this.disabled ? 'true' : 'false';
-    }
   }
 
   #updateFormValue() {
     if (this.isChecked && !this.indeterminate) {
-      this.internals.setFormValue(this.value);
+      this.#internals.setFormValue(this.value);
     } else {
-      this.internals.setFormValue(null);
+      this.#internals.setFormValue(null);
     }
   }
 
   #validate() {
     if (this.required && !this.isChecked) {
-      this.internals.setValidity(
+      this.#internals.setValidity(
         { valueMissing: true },
         'This field is required',
         this.shadowRoot?.querySelector('input') ?? undefined
       );
     } else {
-      this.internals.setValidity({});
+      this.#internals.setValidity({});
     }
   }
 
@@ -187,8 +183,8 @@ export class Pfv6MenuToggleCheckbox extends LitElement {
     const nodes = slot?.assignedNodes({ flatten: true }) || [];
     this.hasLabel = nodes.some(
       node =>
-        node.nodeType === Node.ELEMENT_NODE ||
-        (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()),
+        node.nodeType === Node.ELEMENT_NODE
+        || (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()),
     );
   };
 
@@ -201,6 +197,7 @@ export class Pfv6MenuToggleCheckbox extends LitElement {
   formResetCallback() {
     this.isChecked = this.defaultChecked;
     this.indeterminate = false;
+    this.#updateFormValue();
   }
 
   formStateRestoreCallback(
@@ -232,7 +229,7 @@ export class Pfv6MenuToggleCheckbox extends LitElement {
           ?required=${this.required}
           ?readonly=${this.readonly}
           aria-label=${ifDefined(this.accessibleLabel)}
-          aria-invalid=${!this.isValid || !this.internals.checkValidity()}
+          aria-invalid=${!this.isValid || !this.#internals.checkValidity()}
           @change=${this.#handleChange}
         />
         ${this.label || this.hasLabel ? html`

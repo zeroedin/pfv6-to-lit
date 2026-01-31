@@ -6,7 +6,9 @@
   </ul>
 </pfv6-helper-text>
 
+<!-- Note: React uses component="ul" and component="li" props.
+     Web components cannot implement the component prop.
+     Instead, wrap items in semantic HTML in light DOM. -->
 <script type="module">
   import '@pfv6/elements/pfv6-helper-text/pfv6-helper-text.js';
-  import '@pfv6/elements/pfv6-helper-text/pfv6-helper-text-item.js';
 </script>

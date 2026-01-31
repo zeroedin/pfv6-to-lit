@@ -32,7 +32,7 @@ export class Pfv6EmptyStateHeader extends LitElement {
   * Text of the title inside empty state header, will be wrapped in headingLevel.
   */
   @property({ type: String, attribute: 'title-text' })
-  titleText?: string;
+  titleText?: string | undefined;
 
   /**
   * The heading level to use, default is h1.
@@ -45,7 +45,7 @@ export class Pfv6EmptyStateHeader extends LitElement {
   * unless a custom icon is provided via the icon slot.
   */
   @property({ type: String, reflect: true })
-  status?: StatusType;
+  status?: StatusType | undefined;
 
   @state()
   private _hasCustomIcon = false;

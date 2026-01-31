@@ -6,7 +6,7 @@ import { property } from 'lit/decorators/property.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import styles from './pfv6-button.css';
-import '../pfv6-spinner/pfv6-spinner.js';
+import '@pfv6/elements/pfv6-spinner/pfv6-spinner.js';
 
 /**
  * Button component for triggering actions.
@@ -111,7 +111,7 @@ export class Pfv6Button extends LitElement {
 
   /** Expanded state (required for hamburger variant) */
   @property({ type: Boolean, reflect: true, attribute: 'is-expanded' })
-  isExpanded?: boolean;
+  isExpanded?: boolean | undefined;
 
   /** Settings button variant (shows cog icon) */
   @property({ type: Boolean, reflect: true, attribute: 'is-settings' })
@@ -123,7 +123,7 @@ export class Pfv6Button extends LitElement {
 
   /** Hamburger animation variant */
   @property({ type: String, reflect: true, attribute: 'hamburger-variant' })
-  hamburgerVariant?: 'expand' | 'collapse';
+  hamburgerVariant?: 'expand' | 'collapse' | undefined;
 
   /** No padding (for plain variant) */
   @property({ type: Boolean, reflect: true, attribute: 'has-no-padding' })
@@ -139,15 +139,15 @@ export class Pfv6Button extends LitElement {
 
   /** Accessible label for the button */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   /** Spinner accessible valuetext */
   @property({ type: String, attribute: 'spinner-accessible-valuetext' })
-  spinnerAccessibleValuetext?: string;
+  spinnerAccessibleValuetext?: string | undefined;
 
   /** Spinner accessible label */
   @property({ type: String, attribute: 'spinner-accessible-label' })
-  spinnerAccessibleLabel?: string;
+  spinnerAccessibleLabel?: string | undefined;
 
   /**
   * Computes the appropriate tabindex for the inner button/span.

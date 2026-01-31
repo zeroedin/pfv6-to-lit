@@ -38,31 +38,31 @@ export class Pfv6Skeleton extends LitElement {
   * The width of the skeleton. Must specify pixels or percentage.
   */
   @property({ type: String })
-  width?: string;
+  width?: string | undefined;
 
   /**
   * The height of the skeleton. Must specify pixels or percentage.
   */
   @property({ type: String })
-  height?: string;
+  height?: string | undefined;
 
   /**
   * The font size height of the skeleton.
   */
   @property({ type: String, attribute: 'font-size' })
-  fontSize?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
+  fontSize?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | undefined;
 
   /**
   * The shape of the skeleton.
   */
   @property({ type: String })
-  shape?: 'circle' | 'square';
+  shape?: 'circle' | 'square' | undefined;
 
   /**
   * Text read just to screen reader users.
   */
   @property({ type: String, attribute: 'screenreader-text' })
-  screenreaderText?: string;
+  screenreaderText?: string | undefined;
 
   render() {
     const classes = {

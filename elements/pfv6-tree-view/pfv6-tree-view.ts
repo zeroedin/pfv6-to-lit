@@ -7,6 +7,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { provide } from '@lit/context';
 import { Pfv6TreeViewItem } from './pfv6-tree-view-item.js';
+import './pfv6-tree-view-search.js';
 import styles from './pfv6-tree-view.css';
 import {
   treeViewContext,
@@ -59,11 +60,11 @@ export class Pfv6TreeView extends LitElement {
 
   /** Accessible label for the tree view */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   /** Sets the expanded state on all tree nodes, overriding internal state */
   @property({ type: Boolean, attribute: 'all-expanded' })
-  allExpanded?: boolean;
+  allExpanded?: boolean | undefined;
 
   override willUpdate(changedProperties: PropertyValues) {
     super.willUpdate(changedProperties);

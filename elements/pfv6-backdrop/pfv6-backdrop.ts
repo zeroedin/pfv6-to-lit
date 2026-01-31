@@ -10,8 +10,6 @@ import styles from './pfv6-backdrop.css';
  *
  * @slot - Optional content rendered inside the backdrop
  *
- * @csspart backdrop - The main backdrop overlay element
- *
  * @cssprop --pf-v6-c-backdrop--Position - Backdrop positioning method (fixed or absolute)
  * @cssprop --pf-v6-c-backdrop--ZIndex - Z-index stacking level for backdrop overlay
  * @cssprop --pf-v6-c-backdrop--BackgroundColor - Backdrop overlay color

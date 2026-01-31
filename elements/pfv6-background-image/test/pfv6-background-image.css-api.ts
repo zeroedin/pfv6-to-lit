@@ -89,7 +89,7 @@ const cssVariables = [
 ];
 
 test.describe('CSS API Tests - Custom Property Overrides', () => {
-  cssVariables.forEach(({ name, testValue, description }) => {
+  cssVariables.forEach(({ name, testValue }) => {
     test(`CSS Variable: ${name}`, async ({ page, browser }) => {
       // Set consistent viewport
       await page.setViewportSize({ width: 1280, height: 720 });

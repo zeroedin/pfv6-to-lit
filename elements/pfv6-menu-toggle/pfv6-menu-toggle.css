@@ -1,10 +1,13 @@
+/* stylelint-disable @stylistic/max-line-length -- PatternFly CSS variable names */
+/* stylelint-disable no-descending-specificity -- Complex component with nested selectors */
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-:where(button) {
+button {
   margin: 0;
   font-family: inherit;
   font-size: 100%;
@@ -569,7 +572,8 @@
   color: inherit;
   background-color: var(--pf-v6-c-menu-toggle__button--BackgroundColor);
   border: 0;
-  border-inline-start: var(--pf-v6-c-menu-toggle--m-split-button--child--BorderInlineStartWidth)
+  border-inline-start:
+    var(--pf-v6-c-menu-toggle--m-split-button--child--BorderInlineStartWidth)
     solid var(--pf-v6-c-menu-toggle--m-split-button--child--BorderInlineStartColor);
   cursor: pointer;
 }

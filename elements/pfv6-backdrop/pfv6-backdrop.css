@@ -16,7 +16,7 @@
   --pf-v6-c-backdrop--BackgroundColor:
     var(
       --pf-t--global--background--color--backdrop--default,
-      rgb(21 21 21 / 20%)
+      rgba(21, 21, 21, 0.2)
     );
 
   display: contents;

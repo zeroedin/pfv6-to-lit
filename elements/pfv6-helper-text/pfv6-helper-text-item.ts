@@ -57,7 +57,7 @@ export class Pfv6HelperTextItem extends LitElement {
   * other than "default".
   */
   @property({ type: String, attribute: 'screen-reader-text' })
-  screenReaderText?: string;
+  screenReaderText?: string | undefined;
 
   #getDefaultIcon(): TemplateResult | null {
     switch (this.variant) {

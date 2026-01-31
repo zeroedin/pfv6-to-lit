@@ -38,46 +38,52 @@ A tooltip component that displays contextual information on trigger element hove
 
 ## Accessibility
 
-The tooltip uses a shared live region announcer pattern to announce content to screen readers. This approach avoids cross-shadow-root ARIA IDREF issues that would occur with `aria-describedby` or `aria-labelledby` references.
+The tooltip uses `ElementInternals` for accessibility:
 
-When the tooltip shows, its content is announced via a visually-hidden `role="status"` element in `document.body`. Set `silent` to `true` when the trigger element already has an accessible label.
+### Live Region Announcements
 
-## Breaking Changes
+`ElementInternals.ariaLive` announces content changes to screen readers:
 
-### Removed `aria` property
+- Browser handles announcement timing automatically
+- Announces when tooltip content appears or changes in shadow DOM
+- Set `silent` to `true` to disable announcements
+- Users can override with native `aria-live` attribute on the host
 
-The `aria` property (`'describedby' | 'labelledby' | 'none'`) has been removed and replaced with the `silent` boolean property.
+### aria-describedby Support
 
-**Migration:**
-
-```html
-<!-- Before -->
-<pfv6-tooltip aria="none" content="Info">...</pfv6-tooltip>
-<pfv6-tooltip aria="describedby" content="Info">...</pfv6-tooltip>
-<pfv6-tooltip aria="labelledby" content="Info">...</pfv6-tooltip>
-
-<!-- After -->
-<pfv6-tooltip silent content="Info">...</pfv6-tooltip>
-<pfv6-tooltip content="Info">...</pfv6-tooltip>
-<pfv6-tooltip content="Info">...</pfv6-tooltip>
-```
-
-**Reason:** The original `aria` property attempted to set `aria-describedby` or `aria-labelledby` IDREF attributes on the trigger element, referencing an ID inside the tooltip's shadow DOM. This is a cross-root ARIA violation - IDREF attributes cannot reference elements across shadow DOM boundaries.
-
-The new implementation uses a shared live region announcer which correctly announces tooltip content to screen readers without cross-root issues.
-
-### Removed `aria-live` property
-
-The `aria-live` property (`'off' | 'polite'`) has been removed entirely.
-
-**Migration:**
+`ElementInternals.ariaLabel` is set to the tooltip content, enabling `aria-describedby` references:
 
 ```html
-<!-- Before -->
-<pfv6-tooltip aria-live="polite" content="Info">...</pfv6-tooltip>
-
-<!-- After -->
-<pfv6-tooltip content="Info">...</pfv6-tooltip>
+<button aria-describedby="my-tooltip">Help</button>
+<pfv6-tooltip id="my-tooltip" content="Click for more info" trigger-id="...">
+</pfv6-tooltip>
 ```
 
-**Reason:** The `aria-live` attribute on the tooltip element (which has `role="tooltip"`) served no useful purpose. Screen reader announcements are now handled by a shared live region announcer in `document.body`, making this property redundant.
+The button's accessible description will be "Click for more info".
+
+## Differences from React
+
+### `aria` property → `silent` property
+
+React's Tooltip has an `aria` property (`'describedby' | 'labelledby' | 'none'`) that sets ARIA IDREF attributes on the trigger element. This approach doesn't work in Shadow DOM because IDREF attributes cannot reference elements across shadow boundaries.
+
+The Lit implementation uses `ElementInternals.ariaLive` on the host element instead, which correctly announces content to screen readers. The `silent` property controls this behavior:
+
+| React | Lit |
+|-------|-----|
+| `aria="describedby"` (default) | Default behavior (ariaLive='polite') |
+| `aria="labelledby"` | Default behavior (ariaLive='polite') |
+| `aria="none"` | `silent` |
+
+### `aria-live` property → `silent` property
+
+React's Tooltip has an `aria-live` property (`'off' | 'polite'`) that sets the live region behavior on the tooltip element.
+
+The Lit implementation uses `ElementInternals.ariaLive` to achieve the same result. The `silent` property controls whether announcements are enabled:
+
+| React | Lit |
+|-------|-----|
+| `aria-live="polite"` (default) | Default behavior |
+| `aria-live="off"` | `silent` |
+
+Users can still override by setting the native `aria-live` attribute directly on the host element.

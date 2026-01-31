@@ -37,6 +37,11 @@ export class Pfv6SimpleListItem extends LitElement {
   */
   static formAssociated = true;
 
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   /**
   * ElementInternals provides:
   * - listitem role on :host (Shadow DOM breaks ul > li relationship)
@@ -62,7 +67,7 @@ export class Pfv6SimpleListItem extends LitElement {
   * Unique identifier for the item.
   */
   @property({ type: String, attribute: 'item-id' })
-  itemId?: string | number;
+  itemId?: string | number | undefined;
 
   /**
   * Component type of the SimpleList item.
@@ -158,7 +163,6 @@ export class Pfv6SimpleListItem extends LitElement {
           <a
             class=${classMap(classes)}
             href=${ifDefined(this.href || undefined)}
-            tabindex="0"
             @click=${this.#handleClick}
           >
             <slot></slot>

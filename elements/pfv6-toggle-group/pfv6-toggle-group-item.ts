@@ -69,7 +69,7 @@ export class Pfv6ToggleGroupItem extends LitElement {
 
   /** Text rendered inside the toggle group item */
   @property({ type: String })
-  text?: string;
+  text?: string | undefined;
 
   /** Sets position of the icon when text is also passed in */
   @property({ type: String, reflect: true, attribute: 'icon-position' })
@@ -85,11 +85,11 @@ export class Pfv6ToggleGroupItem extends LitElement {
 
   /** Required when icon is used with no supporting text */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   /** Optional id for the button within the toggle group item */
   @property({ type: String, attribute: 'button-id' })
-  buttonId?: string;
+  buttonId?: string | undefined;
 
   /** Computed disabled state: individually disabled OR group disabled via context */
   get #effectiveDisabled(): boolean {

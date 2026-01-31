@@ -131,7 +131,7 @@ export class Pfv6TextInputGroupMain extends LitElement {
 
   /** Suggestion that will show up like a placeholder even with text in the input */
   @property({ type: String })
-  hint?: string;
+  hint?: string | undefined;
 
   /** Accessibility label for the input. Used when no external label is associated. */
   @property({ type: String, attribute: 'accessible-label' })
@@ -143,15 +143,15 @@ export class Pfv6TextInputGroupMain extends LitElement {
 
   /** Placeholder value for the input */
   @property({ type: String })
-  placeholder?: string;
+  placeholder?: string | undefined;
 
   /** Name for the input */
   @property({ type: String })
-  name?: string;
+  name?: string | undefined;
 
   /** Autocomplete attribute for the input */
   @property({ type: String })
-  autocomplete?: string;
+  autocomplete?: string | undefined;
 
   /** Whether the listbox is expanded. Only applies when options are slotted. */
   @property({ type: Boolean, reflect: true })
@@ -201,12 +201,12 @@ export class Pfv6TextInputGroupMain extends LitElement {
       return false;
     }
     this.expanded = true;
-    this.dispatchEvent(new Event('open', { bubbles: true }));
+    this.dispatchEvent(new Event('open', { bubbles: true, composed: true }));
   }
 
   #requestHideListbox(): void {
     this.expanded = false;
-    this.dispatchEvent(new Event('close', { bubbles: true }));
+    this.dispatchEvent(new Event('close', { bubbles: true, composed: true }));
   }
 
   #handleOptionsSlotChange(e: Event): void {

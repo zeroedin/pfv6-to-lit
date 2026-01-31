@@ -14,7 +14,7 @@ import {
   type TreeViewContext,
 } from './pfv6-tree-view-context.js';
 
-import '../pfv6-badge/pfv6-badge.js';
+import '@pfv6/elements/pfv6-badge/pfv6-badge.js';
 
 /**
  * Event fired when a tree item is selected.
@@ -102,7 +102,7 @@ export class Pfv6TreeViewItem extends LitElement {
 
   /** Title of the tree view item (used in compact mode) */
   @property({ type: String, attribute: 'item-title' })
-  itemTitle?: string;
+  itemTitle?: string | undefined;
 
   /** Flag indicating if node is expanded by default */
   @property({ type: Boolean, reflect: true, attribute: 'default-expanded' })
@@ -110,7 +110,7 @@ export class Pfv6TreeViewItem extends LitElement {
 
   /** Flag indicating if the node is expanded (controlled mode) */
   @property({ type: Boolean, attribute: 'is-expanded' })
-  isExpanded?: boolean;
+  isExpanded?: boolean | undefined;
 
   /** Flag indicating if the item has a checkbox */
   @property({ type: Boolean, reflect: true, attribute: 'has-checkbox' })
@@ -130,7 +130,7 @@ export class Pfv6TreeViewItem extends LitElement {
 
   /** Custom badge content (number or text) */
   @property({ type: String, attribute: 'badge-content' })
-  badgeContent?: string;
+  badgeContent?: string | undefined;
 
   /** Flag indicating if badge is read (affects styling) */
   @property({ type: Boolean, reflect: true, attribute: 'badge-is-read' })

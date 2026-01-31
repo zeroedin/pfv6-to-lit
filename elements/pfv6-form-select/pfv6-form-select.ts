@@ -98,12 +98,17 @@ export class Pfv6FormSelect extends LitElement {
 
       // Watch for disabled attribute changes
       this.#observer = new MutationObserver(this.#handleAttributeMutation);
-      this.#observer.observe(this.#selectElement, { attributes: true, attributeFilter: ['disabled'] });
+      this.#observer.observe(this.#selectElement, {
+        attributes: true,
+        attributeFilter: ['disabled'],
+      });
     }
   };
 
   #syncAriaInvalid() {
-    if (!this.#selectElement) return;
+    if (!this.#selectElement) {
+      return;
+    }
     if (this.validated === 'error') {
       this.#selectElement.setAttribute('aria-invalid', 'true');
     } else {

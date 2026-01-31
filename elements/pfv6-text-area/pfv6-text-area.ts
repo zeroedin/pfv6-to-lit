@@ -62,7 +62,7 @@ export class Pfv6TextArea extends LitElement {
    * Read only variant.
    */
   @property({ type: String, reflect: true, attribute: 'read-only-variant' })
-  readOnlyVariant?: 'default' | 'plain';
+  readOnlyVariant?: 'default' | 'plain' | undefined;
 
   /**
    * Flag to modify height based on contents.
@@ -80,7 +80,7 @@ export class Pfv6TextArea extends LitElement {
    * Custom accessible label for the text area (fallback if no visual label).
    */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   @state()
   private _textareaElement: HTMLTextAreaElement | null = null;

@@ -2,7 +2,7 @@
 name: api-bem-auditor
 description: Detects BEM classes (pf-v6-c-*, pf-m-*) in Shadow DOM templates. Use BEFORE other API auditors.
 tools: Read, Grep
-model: haiku
+model: sonnet
 ---
 
 You are a BEM class detector. Your ONLY job is to find PatternFly BEM classes in Shadow DOM templates.

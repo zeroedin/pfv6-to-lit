@@ -16,6 +16,7 @@
   --pf-v6-c-badge--PaddingInlineStart: var(--pf-t--global--spacer--sm, 0.5rem);
   --pf-v6-c-badge--Color: var(--pf-t--global--text--color--nonstatus--on-gray--default, #151515);
   --pf-v6-c-badge--MinWidth: var(--pf-t--global--spacer--xl, 2rem);
+  --pf-v6-c-badge--BackgroundColor: transparent;
 
   /* Read modifier variables */
   --pf-v6-c-badge--m-read--BackgroundColor: var(--pf-t--global--color--nonstatus--gray--default, #e0e0e0);

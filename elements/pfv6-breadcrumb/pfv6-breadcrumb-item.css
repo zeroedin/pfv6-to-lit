@@ -5,7 +5,7 @@
   box-sizing: border-box;
 }
 
-:where(button) {
+button {
   margin: 0;
   font-family: inherit;
   font-size: 100%;
@@ -14,14 +14,14 @@
   cursor: pointer;
 }
 
-:where(a) {
+a {
   color: var(--pf-t--global--text--color--link--default, #0066cc);
   text-decoration-line: var(--pf-t--global--text-decoration--link--line--default, underline);
-}
 
-:where(a:hover, a:focus) {
-  color: var(--pf-t--global--text--color--link--hover, #004d99);
-  text-decoration-line: var(--pf-t--global--text-decoration--link--line--hover, underline);
+  &:is(:hover, :focus) {
+    color: var(--pf-t--global--text--color--link--hover, #004d99);
+    text-decoration-line: var(--pf-t--global--text-decoration--link--line--hover, underline);
+  }
 }
 
 :host {

@@ -124,7 +124,9 @@
     --pf-v6-c-text-input-group__icon--m-status--Color: var(--pf-v6-c-text-input-group__main--m-error__icon--m-status--Color);
   }
 
-  &:where(.success, .warning, .error) {
+  &.success,
+  &.warning,
+  &.error {
     --pf-v6-c-text-input-group__text-input--PaddingInlineEnd: var(--pf-v6-c-text-input-group--status__text-input--PaddingInlineEnd);
   }
 

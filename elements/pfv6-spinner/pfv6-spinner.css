@@ -14,12 +14,7 @@
 }
 
 :host {
-  display: inline-block;
-}
-
-/* Main spinner SVG element */
-#spinner {
-  /* Public CSS API - All overrideable from outside via inline styles or :host */
+  /* Public CSS API - All overrideable from outside */
   --pf-v6-c-spinner--diameter:
     var(
       --pf-t--global--icon--size--2xl,
@@ -29,11 +24,8 @@
   --pf-v6-c-spinner--Height: var(--pf-v6-c-spinner--diameter);
   --pf-v6-c-spinner--Color:
     var(
-      --pf-v6-c-button__progress--Color,
-      var(
-        --pf-t--global--icon--color--brand--default,
-        #0066cc
-      )
+      --pf-t--global--icon--color--brand--default,
+      #0066cc
     );
   --pf-v6-c-spinner--AnimationDuration: 1.4s;
   --pf-v6-c-spinner--AnimationTimingFunction: linear;
@@ -62,6 +54,16 @@
     );
   --pf-v6-c-spinner--m-inline--diameter: 1em;
 
+  display: inline-block;
+}
+
+:host([is-inline]) {
+  display: inline;
+  font-size: inherit;
+}
+
+/* Main spinner SVG element */
+#spinner {
   display: block;
   width: var(--pf-v6-c-spinner--Width);
   height: var(--pf-v6-c-spinner--Height);
@@ -75,22 +77,35 @@
   /* Modifier classes - public variable overrides */
   &.inline {
     --pf-v6-c-spinner--diameter: var(--pf-v6-c-spinner--m-inline--diameter);
+    --pf-v6-c-spinner--Width: var(--pf-v6-c-spinner--diameter);
+    --pf-v6-c-spinner--Height: var(--pf-v6-c-spinner--diameter);
+
+    display: inline;
+    font-size: inherit;
   }
 
   &.sm {
     --pf-v6-c-spinner--diameter: var(--pf-v6-c-spinner--m-sm--diameter);
+    --pf-v6-c-spinner--Width: var(--pf-v6-c-spinner--diameter);
+    --pf-v6-c-spinner--Height: var(--pf-v6-c-spinner--diameter);
   }
 
   &.md {
     --pf-v6-c-spinner--diameter: var(--pf-v6-c-spinner--m-md--diameter);
+    --pf-v6-c-spinner--Width: var(--pf-v6-c-spinner--diameter);
+    --pf-v6-c-spinner--Height: var(--pf-v6-c-spinner--diameter);
   }
 
   &.lg {
     --pf-v6-c-spinner--diameter: var(--pf-v6-c-spinner--m-lg--diameter);
+    --pf-v6-c-spinner--Width: var(--pf-v6-c-spinner--diameter);
+    --pf-v6-c-spinner--Height: var(--pf-v6-c-spinner--diameter);
   }
 
   &.xl {
     --pf-v6-c-spinner--diameter: var(--pf-v6-c-spinner--m-xl--diameter);
+    --pf-v6-c-spinner--Width: var(--pf-v6-c-spinner--diameter);
+    --pf-v6-c-spinner--Height: var(--pf-v6-c-spinner--diameter);
   }
 }
 
@@ -104,7 +119,11 @@
   stroke-linecap: round;
   stroke-width: var(--pf-v6-c-spinner--StrokeWidth);
   transform-origin: 50% 50%;
-  animation: pf-v6-c-spinner-animation-dash var(--pf-v6-c-spinner--AnimationDuration) var(--pf-v6-c-spinner__path--AnimationTimingFunction) infinite;
+  animation:
+    pf-v6-c-spinner-animation-dash
+    var(--pf-v6-c-spinner--AnimationDuration)
+    var(--pf-v6-c-spinner__path--AnimationTimingFunction)
+    infinite;
 }
 
 /* Rotation animation for the spinner container */

@@ -1,4 +1,4 @@
-import { LitElement, html, isServer } from 'lit';
+import { LitElement, html } from 'lit';
 import type { PropertyValues, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
@@ -36,6 +36,18 @@ import styles from './pfv6-tooltip.css';
  * @cssprop --pf-v6-c-tooltip__arrow--Width - Width of arrow
  * @cssprop --pf-v6-c-tooltip__arrow--Height - Height of arrow
  * @cssprop --pf-v6-c-tooltip__arrow--BackgroundColor - Background color of arrow
+ * @cssprop --pf-v6-c-tooltip__arrow--m-top--TranslateX - Arrow X translation for top position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-top--TranslateY - Arrow Y translation for top position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-top--Rotate - Arrow rotation for top position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-right--TranslateX - Arrow X translation for right position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-right--TranslateY - Arrow Y translation for right position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-right--Rotate - Arrow rotation for right position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-bottom--TranslateX - Arrow X translation for bottom position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-bottom--TranslateY - Arrow Y translation for bottom position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-bottom--Rotate - Arrow rotation for bottom position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-left--TranslateX - Arrow X translation for left position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-left--TranslateY - Arrow Y translation for left position
+ * @cssprop --pf-v6-c-tooltip__arrow--m-left--Rotate - Arrow rotation for left position
  */
 @customElement('pfv6-tooltip')
 export class Pfv6Tooltip extends LitElement {
@@ -44,56 +56,12 @@ export class Pfv6Tooltip extends LitElement {
   /** Track all tooltip instances for global keyboard handling */
   private static instances = new Set<Pfv6Tooltip>();
 
-  /** Shared live region announcer element in document.body */
-  private static announcer: HTMLElement;
+  /** ElementInternals for host-level ARIA */
+  #internals: ElementInternals;
 
-  /** Initialize the shared announcer element */
-  private static initAnnouncer(): void {
-    if (Pfv6Tooltip.announcer) {
-      return;
-    }
-    Pfv6Tooltip.announcer = Object.assign(document.createElement('div'), {
-      role: 'status',
-      id: 'pfv6-tooltip-announcer',
-      // Visually hidden but accessible to screen readers
-      style: `
-        position: fixed;
-        inset-block-start: 0;
-        inset-inline-start: 0;
-        overflow: hidden;
-        clip: rect(0,0,0,0);
-        white-space: nowrap;
-        border: 0;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-      `,
-    });
-    document.body.append(Pfv6Tooltip.announcer);
-  }
-
-  /**
-  * Announce tooltip content to screen readers via live region
-  * @param message - The text content to announce
-  */
-  private static announce(message: string): void {
-    if (Pfv6Tooltip.announcer) {
-      Pfv6Tooltip.announcer.innerText = message;
-    }
-  }
-
-  /** Clear the announcer content */
-  private static clearAnnouncement(): void {
-    if (Pfv6Tooltip.announcer) {
-      Pfv6Tooltip.announcer.innerText = '';
-    }
-  }
-
-  static {
-    if (!isServer) {
-      Pfv6Tooltip.initAnnouncer();
-    }
+  constructor() {
+    super();
+    this.#internals = this.attachInternals();
   }
 
   /** Tooltip content text */
@@ -142,7 +110,7 @@ export class Pfv6Tooltip extends LitElement {
 
   /** Minimum width of the tooltip */
   @property({ type: String, attribute: 'min-width' })
-  minWidth?: string;
+  minWidth?: string | undefined;
 
   /** Z-index of the tooltip */
   @property({ type: Number, attribute: 'z-index' })
@@ -161,7 +129,7 @@ export class Pfv6Tooltip extends LitElement {
 
   /** ID of an external trigger element (alternative to slotted trigger) */
   @property({ type: String, attribute: 'trigger-id' })
-  triggerId?: string;
+  triggerId?: string | undefined;
 
   /** Internal visibility state */
   @state()
@@ -192,6 +160,10 @@ export class Pfv6Tooltip extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
+    // Set initial ariaLive value based on silent prop
+    this.#internals.ariaLive = this.silent ? 'off' : 'polite';
+    // Set ariaLabel so aria-describedby references to this element work
+    this.#internals.ariaLabel = this.content;
     this._setupTriggerElement();
     Pfv6Tooltip.instances.add(this);
   }
@@ -206,6 +178,16 @@ export class Pfv6Tooltip extends LitElement {
 
   updated(changedProperties: PropertyValues<this>): void {
     super.updated(changedProperties);
+
+    // Update ariaLive when silent prop changes
+    if (changedProperties.has('silent')) {
+      this.#internals.ariaLive = this.silent ? 'off' : 'polite';
+    }
+
+    // Update ariaLabel when content changes so aria-describedby references stay current
+    if (changedProperties.has('content')) {
+      this.#internals.ariaLabel = this.content;
+    }
 
     if (changedProperties.has('isVisible')) {
       if (this.trigger === 'manual') {
@@ -397,38 +379,18 @@ export class Pfv6Tooltip extends LitElement {
     this._updatePosition();
     // Setup Floating UI auto-update
     this._setupFloatingAutoUpdate();
-    // Announce to screen readers via shared live region
-    this._announceToScreenReader();
+    // Screen reader announcements are now handled automatically via
+    // ElementInternals.ariaLive on the host element
   }
 
   private _hide(): void {
     this._visible = false;
-    this._clearScreenReaderAnnouncement();
     this._cleanupFloating?.();
 
     // Dispatch event after animation completes
     this._hideTimeoutId = window.setTimeout(() => {
       this.dispatchEvent(new Event('tooltip-hidden', { bubbles: true, composed: true }));
     }, this.animationDuration);
-  }
-
-  /**
-  * Announce tooltip content to screen readers via shared live region.
-  * This approach avoids cross-shadow-root ARIA IDREF issues.
-  */
-  private _announceToScreenReader(): void {
-    if (this.silent) {
-      return;
-    }
-    Pfv6Tooltip.announce(this.content);
-  }
-
-  /** Clear the screen reader announcement */
-  private _clearScreenReaderAnnouncement(): void {
-    if (this.silent) {
-      return;
-    }
-    Pfv6Tooltip.clearAnnouncement();
   }
 
   private async _updatePosition(): Promise<void> {
@@ -511,11 +473,7 @@ export class Pfv6Tooltip extends LitElement {
     };
   }
 
-  private _renderTooltip(): TemplateResult | null {
-    if (!this._visible) {
-      return null;
-    }
-
+  render(): TemplateResult {
     const classes = {
       ...this._getPlacementClasses(),
     };
@@ -534,25 +492,21 @@ export class Pfv6Tooltip extends LitElement {
     };
 
     return html`
-      <div
-        id="tooltip"
-        class=${classMap(classes)}
-        role="tooltip"
-        aria-labelledby="content"
-        style=${styleMap(tooltipStyles)}
-      >
-        <div id="arrow"></div>
-        <div id="content" class=${classMap(contentClasses)}>
-          ${this.content}
-        </div>
-      </div>
-    `;
-  }
-
-  render(): TemplateResult {
-    return html`
       <slot @slotchange=${this._handleSlotChange}></slot>
-      ${this._renderTooltip()}
+      ${this._visible ? html`
+        <div
+          id="tooltip"
+          class=${classMap(classes)}
+          role="tooltip"
+          aria-label=${this.content}
+          style=${styleMap(tooltipStyles)}
+        >
+          <div id="arrow"></div>
+          <div id="content" class=${classMap(contentClasses)}>
+            ${this.content}
+          </div>
+        </div>
+      ` : null}
     `;
   }
 

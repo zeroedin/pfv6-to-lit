@@ -54,7 +54,7 @@ export class Pfv6HelperText extends LitElement {
   * items in a list for accessible labeling (equivalent to React's aria-label prop).
   */
   @property({ type: String, reflect: true, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   updated(changedProperties: Map<PropertyKey, unknown>) {
     super.updated(changedProperties);

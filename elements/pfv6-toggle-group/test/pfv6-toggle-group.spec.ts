@@ -271,7 +271,9 @@ describe('<pfv6-toggle-group-item>', function() {
       await el.updateComplete;
 
       let eventFired = false;
-      el.addEventListener('change', () => { eventFired = true; });
+      el.addEventListener('change', () => {
+        eventFired = true;
+      });
 
       const button = el.shadowRoot!.querySelector('button');
       button!.click();
@@ -376,7 +378,9 @@ describe('<pfv6-toggle-group-item>', function() {
       await el.updateComplete;
 
       let eventFired = false;
-      el.addEventListener('change', () => { eventFired = true; });
+      el.addEventListener('change', () => {
+        eventFired = true;
+      });
 
       const button = el.shadowRoot!.querySelector('button');
       button!.click();
@@ -389,7 +393,9 @@ describe('<pfv6-toggle-group-item>', function() {
       await el.updateComplete;
 
       let capturedEvent: Pfv6ToggleGroupItemChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6ToggleGroupItemChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6ToggleGroupItemChangeEvent;
+      });
 
       const button = el.shadowRoot!.querySelector('button');
       button!.click();
@@ -402,7 +408,9 @@ describe('<pfv6-toggle-group-item>', function() {
       await el.updateComplete;
 
       let capturedEvent: Pfv6ToggleGroupItemChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6ToggleGroupItemChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6ToggleGroupItemChangeEvent;
+      });
 
       const button = el.shadowRoot!.querySelector('button');
       button!.click();
@@ -416,7 +424,9 @@ describe('<pfv6-toggle-group-item>', function() {
       await el.updateComplete;
 
       let capturedEvent: Pfv6ToggleGroupItemChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6ToggleGroupItemChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6ToggleGroupItemChangeEvent;
+      });
 
       const button = el.shadowRoot!.querySelector('button');
       button!.click();
@@ -430,7 +440,9 @@ describe('<pfv6-toggle-group-item>', function() {
       await el.updateComplete;
 
       let capturedEvent: Pfv6ToggleGroupItemChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6ToggleGroupItemChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6ToggleGroupItemChangeEvent;
+      });
 
       const button = el.shadowRoot!.querySelector('button');
       button!.click();
@@ -443,7 +455,9 @@ describe('<pfv6-toggle-group-item>', function() {
       await el.updateComplete;
 
       let capturedEvent: Pfv6ToggleGroupItemChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6ToggleGroupItemChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6ToggleGroupItemChangeEvent;
+      });
 
       const button = el.shadowRoot!.querySelector('button');
       button!.click();
@@ -456,7 +470,9 @@ describe('<pfv6-toggle-group-item>', function() {
       await el.updateComplete;
 
       let eventFired = false;
-      el.addEventListener('change', () => { eventFired = true; });
+      el.addEventListener('change', () => {
+        eventFired = true;
+      });
 
       const button = el.shadowRoot!.querySelector('button');
       button!.click();
@@ -614,7 +630,9 @@ describe('integration tests', function() {
       await el.updateComplete;
 
       let eventCaught = false;
-      el.addEventListener('change', () => { eventCaught = true; });
+      el.addEventListener('change', () => {
+        eventCaught = true;
+      });
 
       const item = el.querySelector('pfv6-toggle-group-item');
       const button = item?.shadowRoot?.querySelector('button');
@@ -671,7 +689,7 @@ describe('integration tests', function() {
 
       // Set up single-selection behavior
       items.forEach(item => {
-        item.addEventListener('change', (e) => {
+        item.addEventListener('change', e => {
           const event = e as Pfv6ToggleGroupItemChangeEvent;
           const clickedId = item.buttonId!;
 

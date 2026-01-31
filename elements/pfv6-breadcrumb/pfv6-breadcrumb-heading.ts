@@ -33,6 +33,11 @@ import styles from './pfv6-breadcrumb-heading.css';
 export class Pfv6BreadcrumbHeading extends LitElement {
   static styles = styles;
 
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   readonly #internals = this.attachInternals();
 
   constructor() {
@@ -44,13 +49,13 @@ export class Pfv6BreadcrumbHeading extends LitElement {
    * HREF for breadcrumb link.
    */
   @property({ type: String })
-  to?: string;
+  to?: string | undefined;
 
   /**
    * Target for breadcrumb link.
    */
   @property({ type: String })
-  target?: string;
+  target?: string | undefined;
 
   /**
    * Internal state to track if this is the first item.

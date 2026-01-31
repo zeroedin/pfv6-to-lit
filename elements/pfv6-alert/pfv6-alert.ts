@@ -57,6 +57,7 @@ export class Pfv6AlertTimeoutEvent extends Event {
  * @slot - Alert description content
  * @slot action-close - Close button (use pfv6-alert-action-close-button)
  * @slot action-links - Action links (use pfv6-alert-action-link)
+ * @slot custom-icon - Custom icon (overrides default variant icon)
  * @cssprop --pf-v6-c-alert--BackgroundColor - Alert background color
  * @cssprop --pf-v6-c-alert--BorderColor - Alert border color
  * @cssprop --pf-v6-c-alert--BorderRadius - Alert border radius
@@ -206,6 +207,10 @@ export class Pfv6Alert extends LitElement {
   /** Whether action-links slot has content */
   @state()
   private hasActionLinks = false;
+
+  /** Whether custom-icon slot has content */
+  @state()
+  private hasCustomIcon = false;
 
   private timeoutTimer: number | undefined;
   private animationTimer: number | undefined;
@@ -387,6 +392,15 @@ export class Pfv6Alert extends LitElement {
     );
   };
 
+  #handleCustomIconSlotChange = (event: Event) => {
+    const slot = event.target as HTMLSlotElement;
+    const nodes = slot.assignedNodes({ flatten: true });
+    this.hasCustomIcon = nodes.some(
+      node => node.nodeType === Node.ELEMENT_NODE
+        || (node.nodeType === Node.TEXT_NODE && node.textContent?.trim())
+    );
+  };
+
   #renderTitle(): TemplateResult {
     const capitalizedVariant = this.variant.charAt(0).toUpperCase() + this.variant.slice(1);
     const variantLabelText = this.variantLabel || `${capitalizedVariant} alert:`;
@@ -455,7 +469,12 @@ export class Pfv6Alert extends LitElement {
           </div>
         ` : null}
 
-        <pfv6-alert-icon variant=${this.variant}></pfv6-alert-icon>
+        <div id="icon">
+          <slot name="custom-icon" @slotchange=${this.#handleCustomIconSlotChange}></slot>
+          ${!this.hasCustomIcon ? html`
+            <pfv6-alert-icon variant=${this.variant}></pfv6-alert-icon>
+          ` : null}
+        </div>
 
         ${this.#renderTitle()}
 

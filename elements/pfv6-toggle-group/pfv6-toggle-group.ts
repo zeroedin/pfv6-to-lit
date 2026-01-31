@@ -29,7 +29,7 @@ export { toggleGroupContext, type ToggleGroupContext } from './context.js';
 export class Pfv6ToggleGroup extends LitElement {
   static readonly styles = styles;
 
-  private internals: ElementInternals;
+  #internals: ElementInternals;
 
   /** Modifies the toggle group to include compact styling */
   @property({ type: Boolean, reflect: true, attribute: 'is-compact' })
@@ -41,7 +41,7 @@ export class Pfv6ToggleGroup extends LitElement {
 
   /** Accessible label for the toggle group */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   /**
    * Context value provided to child components.
@@ -56,15 +56,16 @@ export class Pfv6ToggleGroup extends LitElement {
 
   constructor() {
     super();
-    this.internals = this.attachInternals();
+    this.#internals = this.attachInternals();
+    this.#internals.role = 'group';
   }
 
   protected override willUpdate(changedProperties: PropertyValues): void {
     // Always update context on first render or when relevant properties change
     if (
-      !this.hasUpdated ||
-      changedProperties.has('isCompact') ||
-      changedProperties.has('areAllGroupsDisabled')
+      !this.hasUpdated
+      || changedProperties.has('isCompact')
+      || changedProperties.has('areAllGroupsDisabled')
     ) {
       this._context = {
         isCompact: this.isCompact,
@@ -77,7 +78,7 @@ export class Pfv6ToggleGroup extends LitElement {
     super.updated(changedProperties);
 
     if (changedProperties.has('accessibleLabel')) {
-      this.internals.ariaLabel = this.accessibleLabel ?? null;
+      this.#internals.ariaLabel = this.accessibleLabel ?? null;
     }
   }
 
@@ -87,7 +88,7 @@ export class Pfv6ToggleGroup extends LitElement {
     };
 
     return html`
-      <div id="container" class=${classMap(classes)} role="group">
+      <div id="container" class=${classMap(classes)}>
         <slot></slot>
       </div>
     `;
