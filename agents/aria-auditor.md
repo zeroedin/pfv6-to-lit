@@ -256,9 +256,31 @@ render() {
 4. **Violates accessibility** - Screen readers may announce the same label twice
 
 **When Internal ARIA is Acceptable**:
-- ✅ Decorative elements: `<svg aria-hidden="true" role="img">`
+- ✅ Decorative elements: `<svg aria-hidden="true">`
 - ✅ Internal structure not exposed to `:host`: `<label for="input">` inside component
 - ❌ NEVER duplicate the same ARIA that's on `:host`
+
+**EXCEPTION: FACE Elements with formDisabledCallback**:
+
+For Form-Associated Custom Elements (components with `static formAssociated = true`), setting `ariaDisabled` on `:host` via ElementInternals in `formDisabledCallback` is **REQUIRED**, even if the internal `<input>` also has a native `disabled` attribute.
+
+**This is NOT duplicate ARIA** because:
+1. The FACE element `:host` IS the form control from the browser's perspective
+2. `formDisabledCallback` handles fieldset-inherited disabled state
+3. The browser does NOT automatically set ARIA on the custom element
+4. Host-level `ariaDisabled` ensures the custom element communicates its state
+
+**Detection**: Before flagging `ariaDisabled` as duplicate, check:
+```bash
+# If component is FACE, ariaDisabled in formDisabledCallback is ALLOWED
+grep -q "static formAssociated = true" component.ts && \
+grep -q "formDisabledCallback" component.ts && \
+grep -A 5 "formDisabledCallback" component.ts | grep -q "ariaDisabled"
+```
+
+**If all three conditions are true**: This is the CORRECT pattern, not a violation.
+
+See `agents/face-elements-auditor.md` for the complete FACE validation rules.
 
 **Examples**:
 

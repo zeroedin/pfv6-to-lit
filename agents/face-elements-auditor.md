@@ -525,6 +525,14 @@ grep -q "formDisabledCallback" component.ts
 grep "formDisabledCallback" component.ts | grep -q "disabled.*boolean"
 ```
 
+**Must set ariaDisabled on host**:
+```bash
+# Check for ariaDisabled in formDisabledCallback
+grep -A 5 "formDisabledCallback" component.ts | grep -q "ariaDisabled"
+```
+
+**Fail if**: `ariaDisabled` not set in formDisabledCallback
+
 **Correct pattern**:
 ```typescript
 formDisabledCallback(disabled: boolean) {
@@ -533,11 +541,24 @@ formDisabledCallback(disabled: boolean) {
 }
 ```
 
-**Why setting ariaDisabled**:
-- Provides accessibility semantics for assistive technologies
-- Reflects the disabled state via ARIA
-- Standard pattern from MDN ElementInternals documentation
-- No need for `requestUpdate()` because @property handles that automatically
+**Why setting ariaDisabled on :host is REQUIRED (CRITICAL)**:
+
+This is **NOT duplicate ARIA** - it serves a distinct purpose:
+
+1. **FACE elements ARE the form control**: With `static formAssociated = true`, the custom element host (`<pfv6-radio>`) IS the form control from the browser's and accessibility tree's perspective. ElementInternals exposes the host to assistive technology.
+
+2. **formDisabledCallback purpose**: This callback handles when a parent `<fieldset disabled>` disables the element. The browser does NOT automatically set any ARIA on the custom element - the component must do this explicitly.
+
+3. **Host-level ARIA is the correct layer**: Even if there's an internal `<input disabled>` in shadow DOM, the host element needs its own ARIA state because:
+   - The host is what participates in the accessibility tree via ElementInternals
+   - Screen readers may announce the custom element, not just internal elements
+   - The fieldset-disabled state applies to the host, not the internal input
+
+4. **This is NOT the same as aria-auditor Rule 9**: The aria-auditor's rule about "duplicate ARIA between host and internal elements" does NOT apply to FACE elements. For FACE elements, setting `ariaDisabled` on the host via ElementInternals is the correct and expected pattern.
+
+**References**:
+- [MDN ElementInternals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals) - Shows ariaDisabled in formDisabledCallback examples
+- [Form Associated Custom Elements](https://bennypowers.dev/posts/form-associated-custom-elements/) - Standard FACE patterns
 
 **Fix if missing**:
 ```typescript
