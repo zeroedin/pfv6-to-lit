@@ -155,6 +155,7 @@ export class Pfv6ProgressStep extends LitElement {
               class="help-text"
               type="button"
               tabindex="-1"
+              aria-haspopup="dialog"
             >
               <slot></slot>
               <slot name="popover" @slotchange=${this.#onPopoverSlotChange}></slot>
