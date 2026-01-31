@@ -72,7 +72,7 @@ export class Pfv6SimpleList extends LitElement {
    * Aria-label for the internal list element.
    */
   @property({ type: String, attribute: 'accessible-label' })
-  accessibleLabel?: string;
+  accessibleLabel?: string | undefined;
 
   /** Current item element for controlled mode (like React's currentRef) */
   @state()

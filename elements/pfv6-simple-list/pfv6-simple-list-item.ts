@@ -67,7 +67,7 @@ export class Pfv6SimpleListItem extends LitElement {
   * Unique identifier for the item.
   */
   @property({ type: String, attribute: 'item-id' })
-  itemId?: string | number;
+  itemId?: string | number | undefined;
 
   /**
   * Component type of the SimpleList item.
@@ -155,6 +155,7 @@ export class Pfv6SimpleListItem extends LitElement {
           <button
             class=${classMap(classes)}
             type=${this.type}
+            tabindex="-1"
             @click=${this.#handleClick}
           >
             <slot></slot>
@@ -163,7 +164,7 @@ export class Pfv6SimpleListItem extends LitElement {
           <a
             class=${classMap(classes)}
             href=${ifDefined(this.href || undefined)}
-            tabindex="0"
+            tabindex="-1"
             @click=${this.#handleClick}
           >
             <slot></slot>

@@ -68,4 +68,12 @@
     --pf-v6-c-simple-list__item-link--Color: var(--pf-v6-c-simple-list__item-link--m-current--Color);
     --pf-v6-c-simple-list__item-link--BorderWidth: var(--pf-v6-c-simple-list__item-link--m-current--BorderWidth);
   }
+
+  &:focus-visible {
+    outline:
+      var(--pf-t--global--border--width--box--default, 2px)
+      solid
+      var(--pf-t--global--color--brand--default, #0066cc);
+    outline-offset: var(--pf-t--global--spacer--xs, 0.25rem);
+  }
 }

@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/elements/pfv6-simple-list/pfv6-simple-list-lightdom.css">
 <pfv6-simple-list id="uncontrolled-list" accessible-label="Uncontrolled Simple List Example">
   <pfv6-simple-list-item item-id="0">List item 1</pfv6-simple-list-item>
   <pfv6-simple-list-item item-id="1">List item 2</pfv6-simple-list-item>
@@ -14,7 +15,7 @@
 
   // Set initial active state
   const items = list.querySelectorAll('pfv6-simple-list-item');
-  items[activeItem].setAttribute('is-active', 'true');
+  items[activeItem].setAttribute('is-active', '');
 
   // Handle selection events
   list.addEventListener('select', (e) => {
@@ -23,7 +24,7 @@
     // Update active state on all items
     items.forEach((item, index) => {
       if (index === selectedItemId) {
-        item.setAttribute('is-active', 'true');
+        item.setAttribute('is-active', '');
       } else {
         item.removeAttribute('is-active');
       }
