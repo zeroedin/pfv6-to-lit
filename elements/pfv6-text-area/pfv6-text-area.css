@@ -295,17 +295,17 @@
 
   &.status {
     --pf-v6-c-form-control__icon--Color: var(--pf-v6-c-form-control__icon--m-status--Color);
+
+    #container.success & {
+      --pf-v6-c-form-control__icon--m-status--Color: var(--pf-v6-c-form-control--m-success__icon--m-status--Color);
+    }
+
+    #container.warning & {
+      --pf-v6-c-form-control__icon--m-status--Color: var(--pf-v6-c-form-control--m-warning__icon--m-status--Color);
+    }
+
+    #container.error & {
+      --pf-v6-c-form-control__icon--m-status--Color: var(--pf-v6-c-form-control--m-error__icon--m-status--Color);
+    }
   }
-}
-
-#container.success #icon.status {
-  --pf-v6-c-form-control__icon--m-status--Color: var(--pf-v6-c-form-control--m-success__icon--m-status--Color);
-}
-
-#container.warning #icon.status {
-  --pf-v6-c-form-control__icon--m-status--Color: var(--pf-v6-c-form-control--m-warning__icon--m-status--Color);
-}
-
-#container.error #icon.status {
-  --pf-v6-c-form-control__icon--m-status--Color: var(--pf-v6-c-form-control--m-error__icon--m-status--Color);
 }
