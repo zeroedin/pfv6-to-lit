@@ -69,8 +69,8 @@ export class Pfv6AccordionContent extends LitElement {
 
   override connectedCallback(): void {
     super.connectedCallback();
-    // Find sibling toggle element (they share the same parent accordion-item)
-    this.#siblingToggle = this.parentElement?.querySelector('pfv6-accordion-toggle') ?? null;
+    // Find sibling toggle element (direct child of parent accordion-item, not nested)
+    this.#siblingToggle = this.parentElement?.querySelector(':scope > pfv6-accordion-toggle') ?? null;
   }
 
   protected override willUpdate(changedProperties: PropertyValues): void {
