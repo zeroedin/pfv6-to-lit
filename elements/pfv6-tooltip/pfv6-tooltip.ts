@@ -162,6 +162,8 @@ export class Pfv6Tooltip extends LitElement {
     super.connectedCallback();
     // Set initial ariaLive value based on silent prop
     this.#internals.ariaLive = this.silent ? 'off' : 'polite';
+    // Set ariaLabel so aria-describedby references to this element work
+    this.#internals.ariaLabel = this.content;
     this._setupTriggerElement();
     Pfv6Tooltip.instances.add(this);
   }
@@ -180,6 +182,11 @@ export class Pfv6Tooltip extends LitElement {
     // Update ariaLive when silent prop changes
     if (changedProperties.has('silent')) {
       this.#internals.ariaLive = this.silent ? 'off' : 'polite';
+    }
+
+    // Update ariaLabel when content changes so aria-describedby references stay current
+    if (changedProperties.has('content')) {
+      this.#internals.ariaLabel = this.content;
     }
 
     if (changedProperties.has('isVisible')) {

@@ -38,14 +38,28 @@ A tooltip component that displays contextual information on trigger element hove
 
 ## Accessibility
 
-The tooltip uses `ElementInternals.ariaLive` to announce content changes to screen readers. This approach:
+The tooltip uses `ElementInternals` for accessibility:
 
-- Lets the browser handle announcement timing automatically
-- Announces when tooltip content appears or changes in the shadow DOM
-- Avoids cross-shadow-root ARIA IDREF issues that would occur with `aria-describedby`
-- Allows users to override with native `aria-live` attribute on the host element
+### Live Region Announcements
 
-By default, `ariaLive` is set to `'polite'`. Set `silent` to `true` when the trigger element already has an accessible label and announcements are not needed.
+`ElementInternals.ariaLive` announces content changes to screen readers:
+
+- Browser handles announcement timing automatically
+- Announces when tooltip content appears or changes in shadow DOM
+- Set `silent` to `true` to disable announcements
+- Users can override with native `aria-live` attribute on the host
+
+### aria-describedby Support
+
+`ElementInternals.ariaLabel` is set to the tooltip content, enabling `aria-describedby` references:
+
+```html
+<button aria-describedby="my-tooltip">Help</button>
+<pfv6-tooltip id="my-tooltip" content="Click for more info" trigger-id="...">
+</pfv6-tooltip>
+```
+
+The button's accessible description will be "Click for more info".
 
 ## Differences from React
 
