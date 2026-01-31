@@ -123,7 +123,7 @@ export class Pfv6TextInput extends LitElement {
   * - 'plain': Plain text appearance
   */
   @property({ type: String, reflect: true, attribute: 'read-only-variant' })
-  readOnlyVariant?: 'plain' | 'default';
+  readOnlyVariant?: 'plain' | 'default' | undefined;
 
   /**
   * Trim text at start (for long values that overflow).
@@ -147,7 +147,7 @@ export class Pfv6TextInput extends LitElement {
   * When set, applies expanded styling and proper ARIA attributes.
   */
   @property({ type: String, attribute: 'expanded-aria-controls' })
-  expandedAriaControls?: string;
+  expandedAriaControls?: string | undefined;
 
   /**
   * Internal state tracking if custom icon slot has content
@@ -280,7 +280,10 @@ export class Pfv6TextInput extends LitElement {
           }
         }
       });
-      this.#disabledObserver.observe(this.#slottedInput, { attributes: true, attributeFilter: ['disabled'] });
+      this.#disabledObserver.observe(this.#slottedInput, {
+        attributes: true,
+        attributeFilter: ['disabled'],
+      });
 
       // Set initial ARIA attributes if needed
       this.#updateInputAriaAttributes();
