@@ -1,0 +1,45 @@
+<pfv6-checkbox
+  id="display-size-checkbox"
+  label='displaySize="lg"'>
+</pfv6-checkbox>
+
+<br>
+
+<pfv6-expandable-section
+  id="indented-example"
+  is-indented
+  is-expanded>
+  This content is visible only when the component is expanded.
+</pfv6-expandable-section>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-expandable-section/pfv6-expandable-section.js';
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
+
+  const section = document.getElementById('indented-example');
+  const checkbox = document.getElementById('display-size-checkbox');
+
+  // Controlled mode - manage state
+  let isExpanded = true;
+  let isDisplayLgChecked = false;
+
+  // Update toggle text based on state
+  const updateToggleText = () => {
+    section.toggleText = isExpanded ? 'Show less indented example content' : 'Show more indented example content';
+  };
+
+  updateToggleText();
+
+  // Listen for toggle events
+  section.addEventListener('toggle', (e) => {
+    isExpanded = e.isExpanded;
+    section.isExpanded = isExpanded;
+    updateToggleText();
+  });
+
+  // Handle checkbox change for display size
+  checkbox.addEventListener('change', () => {
+    isDisplayLgChecked = checkbox.checked;
+    section.displaySize = isDisplayLgChecked ? 'lg' : 'default';
+  });
+</script>
