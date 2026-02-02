@@ -41,7 +41,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
   padding-block-start: var(--pf-v6-c-back-to-top--c-button--PaddingBlockStart);
   padding-inline-end: var(--pf-v6-c-back-to-top--c-button--PaddingInlineEnd);
   padding-block-end: var(--pf-v6-c-back-to-top--c-button--PaddingBlockEnd);
