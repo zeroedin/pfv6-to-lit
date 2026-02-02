@@ -138,6 +138,8 @@ export class Pfv6ExpandableSection extends LitElement {
     if (changedProperties.has('variant')) {
       if (this.variant === 'truncate') {
         this.#setupResizeObserver();
+        this.#updateLineClamp();
+        this.#checkToggleVisibility();
       } else {
         this.#cleanupResizeObserver();
       }
