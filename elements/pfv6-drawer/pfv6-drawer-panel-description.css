@@ -1,0 +1,14 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+#container {
+  padding-inline-start: var(--pf-v6-c-drawer__description--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-drawer__description--PaddingInlineEnd);
+}

@@ -1,0 +1,54 @@
+<pfv6-button id="toggle-stacked" aria-expanded="false">Toggle drawer</pfv6-button>
+
+<pfv6-drawer id="drawer-stacked">
+  <pfv6-drawer-content>
+    <pfv6-drawer-panel-content slot="panel">
+      <pfv6-drawer-head>
+        <h3 class="pf-v6-c-title pf-m-2xl" id="drawer-panel-header-stacked" tabindex="-1">Drawer panel header in a Title</h3>
+        <pfv6-drawer-actions>
+          <pfv6-drawer-close-button id="close-stacked"></pfv6-drawer-close-button>
+        </pfv6-drawer-actions>
+      </pfv6-drawer-head>
+      <pfv6-drawer-panel-body has-no-padding>Drawer panel body with no padding</pfv6-drawer-panel-body>
+      <pfv6-drawer-panel-body>Drawer panel body</pfv6-drawer-panel-body>
+    </pfv6-drawer-panel-content>
+    <pfv6-drawer-content-body>content-body</pfv6-drawer-content-body>
+    <pfv6-drawer-content-body has-padding>content-body with padding</pfv6-drawer-content-body>
+    <pfv6-drawer-content-body>content-body</pfv6-drawer-content-body>
+  </pfv6-drawer-content>
+</pfv6-drawer>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-drawer/pfv6-drawer.js';
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+  const button = document.getElementById('toggle-stacked');
+  const drawer = document.getElementById('drawer-stacked');
+  const closeButton = document.getElementById('close-stacked');
+  const panelHeader = document.getElementById('drawer-panel-header-stacked');
+
+  button.addEventListener('click', () => {
+    const isExpanded = drawer.hasAttribute('is-expanded');
+    if (isExpanded) {
+      drawer.removeAttribute('is-expanded');
+      button.setAttribute('aria-expanded', 'false');
+    } else {
+      drawer.setAttribute('is-expanded', '');
+      button.setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  closeButton.addEventListener('click', () => {
+    drawer.removeAttribute('is-expanded');
+    button.setAttribute('aria-expanded', 'false');
+  });
+
+  drawer.addEventListener('expand', () => {
+    if (drawer.hasAttribute('is-expanded')) {
+      panelHeader.setAttribute('tabindex', '0');
+      panelHeader.focus();
+    } else {
+      panelHeader.setAttribute('tabindex', '-1');
+    }
+  });
+</script>

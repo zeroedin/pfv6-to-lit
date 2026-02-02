@@ -1,0 +1,56 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  --pf-v6-c-drawer__content--BackgroundColor: var(--pf-v6-c-drawer__content--m-default--BackgroundColor, var(--pf-t--global--background--color--primary--default, #ffffff));
+
+  display: contents;
+}
+
+:host([color-variant="primary"]) {
+  --pf-v6-c-drawer__content--BackgroundColor: var(--pf-v6-c-drawer__content--m-primary--BackgroundColor, var(--pf-t--global--background--color--primary--default, #ffffff));
+}
+
+:host([color-variant="secondary"]) {
+  --pf-v6-c-drawer__content--BackgroundColor: var(--pf-v6-c-drawer__content--m-secondary--BackgroundColor, var(--pf-t--global--background--color--secondary--default, #f2f2f2));
+}
+
+/* Main wrapper - acts as drawer__main (flex row) */
+#main {
+  --_content-order: 0;
+  --_panel-order: 1;
+
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+
+  &.panel-left {
+    --_content-order: 1;
+    --_panel-order: 0;
+  }
+
+  &.panel-bottom {
+    flex-direction: column;
+  }
+}
+
+/* Content area - acts as drawer__content */
+#container {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: var(--pf-v6-c-drawer__content--ZIndex);
+  flex-basis: var(--pf-v6-c-drawer__content--FlexBasis);
+  order: var(--_content-order);
+  overflow: auto;
+  background-color: var(--pf-v6-c-drawer__content--BackgroundColor);
+}
+
+/* Style slotted panel to participate in flex layout */
+::slotted(pfv6-drawer-panel-content) {
+  flex-shrink: 0;
+  order: var(--_panel-order);
+}

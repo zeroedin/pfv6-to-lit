@@ -1,0 +1,23 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+#container {
+  padding-block-start: var(--pf-v6-c-drawer__content__body--PaddingBlockStart);
+  padding-block-end: var(--pf-v6-c-drawer__content__body--PaddingBlockEnd);
+  padding-inline-start: var(--pf-v6-c-drawer__content__body--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-drawer__content__body--PaddingInlineEnd);
+
+  &.padding {
+    padding-block-start: var(--pf-v6-c-drawer__body--m-padding--PaddingBlockStart);
+    padding-block-end: var(--pf-v6-c-drawer__body--m-padding--PaddingBlockEnd);
+    padding-inline-start: var(--pf-v6-c-drawer__body--m-padding--PaddingInlineStart);
+    padding-inline-end: var(--pf-v6-c-drawer__body--m-padding--PaddingInlineEnd);
+  }
+}
