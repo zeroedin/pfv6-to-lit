@@ -28,6 +28,7 @@
     if (isExpanded) {
       drawer.removeAttribute('is-expanded');
       button.setAttribute('aria-expanded', 'false');
+      panelHeader.setAttribute('tabindex', '-1');
     } else {
       drawer.setAttribute('is-expanded', '');
       button.setAttribute('aria-expanded', 'true');
@@ -37,14 +38,11 @@
   closeButton.addEventListener('click', () => {
     drawer.removeAttribute('is-expanded');
     button.setAttribute('aria-expanded', 'false');
+    panelHeader.setAttribute('tabindex', '-1');
   });
 
   drawer.addEventListener('expand', () => {
-    if (drawer.hasAttribute('is-expanded')) {
-      panelHeader.setAttribute('tabindex', '0');
-      panelHeader.focus();
-    } else {
-      panelHeader.setAttribute('tabindex', '-1');
-    }
+    panelHeader.setAttribute('tabindex', '0');
+    panelHeader.focus();
   });
 </script>
