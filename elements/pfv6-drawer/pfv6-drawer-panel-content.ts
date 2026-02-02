@@ -176,8 +176,11 @@ export class Pfv6DrawerPanelContent extends LitElement {
       const isStatic = this._drawerContext?.isStatic ?? false;
       const isExpanded = this._drawerContext?.isExpanded ?? false;
 
-      if (!isStatic && isExpanded) {
-        this._isExpandedInternal = isExpanded;
+      if (isStatic) {
+        // Static drawers always show content (no animation)
+        this._isExpandedInternal = true;
+      } else if (isExpanded) {
+        this._isExpandedInternal = true;
       }
     }
 
