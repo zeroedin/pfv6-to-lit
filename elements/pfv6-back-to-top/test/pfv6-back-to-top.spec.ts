@@ -217,7 +217,7 @@ describe('<pfv6-back-to-top>', function() {
   });
 
   describe('scroll functionality', function() {
-    it('clicking button scrolls to top when scrolling window', async function() {
+    it('clicking button scrolls window toward top', async function() {
       // Create scrollable content
       const scrollableContent = document.createElement('div');
       scrollableContent.style.height = '2000px';
@@ -226,36 +226,39 @@ describe('<pfv6-back-to-top>', function() {
       const el = await fixture<Pfv6BackToTop>(html`<pfv6-back-to-top is-always-visible></pfv6-back-to-top>`);
       await el.updateComplete;
 
-      // Scroll down
+      // Scroll down first
       window.scrollTo(0, 500);
       await new Promise(resolve => setTimeout(resolve, 100));
+      expect(window.scrollY).to.be.greaterThan(0);
 
       const button = el.shadowRoot!.querySelector('button') as HTMLButtonElement;
       expect(button).to.exist;
 
       // Click button
       await userEvent.click(button);
-      await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Note: scrollTo with behavior: 'smooth' may not work in test environment
-      // but we can verify the method was called by checking implementation
+      // Wait for smooth scroll to complete
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Assert scroll position moved toward top
+      expect(window.scrollY).to.be.lessThan(500);
 
       // Cleanup
       document.body.removeChild(scrollableContent);
       window.scrollTo(0, 0);
     });
 
-    it('clicking button scrolls scrollable element to top', async function() {
+    it('clicking button scrolls scrollable element toward top', async function() {
       // Create scrollable container
-      const container = document.createElement('div');
-      container.id = 'test-scrollable';
-      container.style.height = '200px';
-      container.style.overflow = 'auto';
+      const scrollContainer = document.createElement('div');
+      scrollContainer.id = 'test-scrollable';
+      scrollContainer.style.height = '200px';
+      scrollContainer.style.overflow = 'auto';
 
       const content = document.createElement('div');
       content.style.height = '1000px';
-      container.appendChild(content);
-      document.body.appendChild(container);
+      scrollContainer.appendChild(content);
+      document.body.appendChild(scrollContainer);
 
       const el = await fixture<Pfv6BackToTop>(html`
         <pfv6-back-to-top scrollable-selector="#test-scrollable" is-always-visible></pfv6-back-to-top>
@@ -263,15 +266,21 @@ describe('<pfv6-back-to-top>', function() {
       await el.updateComplete;
 
       // Scroll container down
-      container.scrollTop = 500;
+      scrollContainer.scrollTop = 500;
       await new Promise(resolve => setTimeout(resolve, 100));
+      expect(scrollContainer.scrollTop).to.equal(500);
 
       const button = el.shadowRoot!.querySelector('button') as HTMLButtonElement;
       await userEvent.click(button);
-      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Wait for smooth scroll to complete
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Assert scroll position moved toward top
+      expect(scrollContainer.scrollTop).to.be.lessThan(500);
 
       // Cleanup
-      document.body.removeChild(container);
+      document.body.removeChild(scrollContainer);
     });
   });
 
