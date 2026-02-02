@@ -31,7 +31,7 @@ import { drawerContext, type DrawerContext } from './context.js';
  * @summary Drawer component
  * @alias Drawer
  *
- * @fires Pfv6DrawerExpandEvent - Fired when drawer panel expansion animation completes (after 250ms)
+ * @fires Pfv6DrawerExpandEvent - Fired when drawer panel is expanded after waiting 250ms for animation to complete
  *
  * @slot - Default slot for drawer content (DrawerMain, DrawerContent, DrawerPanelContent)
  *
