@@ -1,7 +1,7 @@
 import { createContextWithRoot } from '@patternfly/pfe-core/functions/context.js';
 
 /**
- * Event fired when drawer panel expansion completes (after 250ms animation).
+ * Event fired when drawer panel is expanded after waiting 250ms for animation to complete.
  */
 export class Pfv6DrawerExpandEvent extends Event {
   constructor() {
