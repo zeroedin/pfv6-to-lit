@@ -120,56 +120,118 @@ html`<button part="button">...</button>`  // ✅ If users need to style button
 html`<div part="wrapper">...</div>`       // ❌ Probably unnecessary
 ```
 
-## Step 5: Check Sub-Component Usage
+## Step 5: Check Embedded Component Parity (CRITICAL)
 
-**For dynamically rendered sub-components, use proper patterns**:
+**CRITICAL: If React imports ANY PatternFly component, Lit MUST have the corresponding pfv6-* import**
 
-### 5.1 React Component → Lit Component Parity
+This is an import-based check. React's import path directly maps to the required Lit import.
 
-**CRITICAL: If React uses another React component, Lit MUST use the corresponding pfv6-* component**
+### 5.1 Import Mapping Rule
 
-**Detection**:
-1. Read the React source file from `.cache/patternfly-react/`
-2. Check for imports of other PatternFly components (e.g., `import { Button } from '../Button'`)
-3. Check if those components are used in the JSX (e.g., `<Button variant="plain" .../>`)
-4. Verify the Lit implementation uses the corresponding `pfv6-*` component
+React's relative imports tell you exactly what Lit needs:
 
-**Common mappings**:
-| React Component | Lit Component |
-|-----------------|---------------|
-| `<Button>` | `<pfv6-button>` |
-| `<Icon>` | `<pfv6-icon>` |
-| `<Spinner>` | `<pfv6-spinner>` |
-| `<Badge>` | `<pfv6-badge>` |
-| `<Tooltip>` | `<pfv6-tooltip>` |
-| `<Popover>` | `<pfv6-popover>` |
+| React Import | Lit Import |
+|--------------|------------|
+| `import { Button } from '../Button'` | `import '@pfv6/elements/pfv6-button/pfv6-button.js'` |
+| `import { Spinner } from '../Spinner'` | `import '@pfv6/elements/pfv6-spinner/pfv6-spinner.js'` |
+| `import { Icon } from '../Icon'` | `import '@pfv6/elements/pfv6-icon/pfv6-icon.js'` |
+| `import { MenuToggle } from '../MenuToggle'` | `import '@pfv6/elements/pfv6-menu-toggle/pfv6-menu-toggle.js'` |
 
-❌ **WRONG** - React uses Button but Lit uses plain HTML button:
-```typescript
-// React source uses: <Button variant="plain" icon={<TimesIcon />} />
-// But Lit uses:
-html`<button type="button">...</button>`
+**Conversion formula**:
+```
+React: import { ComponentName } from '../ComponentName'
+                     ↓
+         Convert PascalCase to kebab-case
+                     ↓
+Lit:   import '@pfv6/elements/pfv6-{kebab-case}/pfv6-{kebab-case}.js'
 ```
 
-✅ **CORRECT** - Match React's component usage:
+### 5.2 Detection Algorithm
+
+**Step 1: Find React component imports**
+
+Read the React source and find imports from relative paths (`../ComponentName`):
+```text
+Grep("from '\\.\\./" , path: '.cache/patternfly-react/.../ComponentName/', glob: '*.tsx', output_mode: 'content')
+```
+
+**Step 2: For each React import, check Lit has the matching import**
+
+```text
+# React has:
+import { Button } from '../Button';
+
+# Lit MUST have:
+Grep("@pfv6/elements/pfv6-button/pfv6-button.js", path: 'elements/pfv6-{component}/', glob: '*.ts')
+```
+
+### 5.3 Violation Classification
+
+**CRITICAL VIOLATION** - React imports component, Lit does NOT:
+```
+React: import { Button } from '../Button';
+Lit:   (no pfv6-button import found) ← WRONG!
+```
+
+**BLOCKED DEPENDENCY** - Lit component doesn't exist yet:
+```
+React: import { Dropdown } from '../Dropdown';
+Check: ls elements/pfv6-dropdown/ → does not exist
+→ Note as blocked, do not fail audit
+```
+
+**PASS** - Lit has matching import:
+```
+React: import { Button } from '../Button';
+Lit:   import '@pfv6/elements/pfv6-button/pfv6-button.js'; ← GOOD
+```
+
+### 5.4 Example Audit
+
+**Auditing: pfv6-expandable-section**
+
+**Step 1: Find React imports**
+```typescript
+// ExpandableSection.tsx:
+import { Button } from '../Button';  // ← Must check!
+```
+
+**Step 2: Verify Lit import exists**
+```bash
+grep "pfv6-button" elements/pfv6-expandable-section/*.ts
+# Found: import '@pfv6/elements/pfv6-button/pfv6-button.js';
+```
+
+**Result**: PASS
+
+### 5.5 Why This Matters
+
+- **Visual Parity**: PatternFly components have specific styling. Raw HTML elements won't match.
+- **Behavior Parity**: Components handle states (hover, focus, disabled) correctly.
+- **Accessibility Parity**: Components implement proper ARIA patterns.
+- **Maintenance**: Using pfv6-* components means styling updates propagate automatically.
+
+❌ **WRONG** - React imports Button but Lit uses raw HTML:
+```typescript
+// React: import { Button } from '../Button';
+// Lit (WRONG): no import, uses raw <button>
+html`<button type="button" @click=${this.#handleToggle}>Show more</button>`
+```
+
+✅ **CORRECT** - Lit has matching import and uses component:
 ```typescript
 import '@pfv6/elements/pfv6-button/pfv6-button.js';
-html`<pfv6-button variant="plain">...</pfv6-button>`
+html`<pfv6-button variant="link" @click=${this.#handleToggle}>Show more</pfv6-button>`
 ```
 
-**Important**:
-- Check if the pfv6-* component exists in `elements/` before flagging
-- If the component doesn't exist yet, note it as a blocked dependency
-- Prop names may differ between React and Lit (e.g., `aria-label` → `accessible-label`)
-
-### 5.2 Icon Sub-Components
+### 5.6 Sub-Components
 
 ```typescript
 // ✅ CORRECT - Conditional icon rendering
 ${this.icon ? html`<pfv6-icon .icon=${this.icon}></pfv6-icon>` : null}
 ```
 
-### 5.3 Repeat Directive
+### 5.7 Repeat Directive
 
 ```typescript
 import { repeat } from 'lit/directives/repeat.js';

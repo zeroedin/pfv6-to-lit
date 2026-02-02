@@ -332,6 +332,8 @@ npx stylelint elements/pfv6-{component}/pfv6-{component}.css
 
 **If errors found**: Fix all stylelint violations before proceeding.
 
+If max-line-length errors are found, fix them by breaking the line at the appropriate place.  Look at existing css files for examples. Do not attempt to use `stylelint --fix` to fix these errors, it will undo your changes.
+
 ## Phase 6: Accessibility Validation
 
 ### Step 13a: DELEGATE to aria-auditor (ALWAYS)
