@@ -124,14 +124,52 @@ html`<div part="wrapper">...</div>`       // ❌ Probably unnecessary
 
 **For dynamically rendered sub-components, use proper patterns**:
 
-### 5.1 Icon Sub-Components
+### 5.1 React Component → Lit Component Parity
+
+**CRITICAL: If React uses another React component, Lit MUST use the corresponding pfv6-* component**
+
+**Detection**:
+1. Read the React source file from `.cache/patternfly-react/`
+2. Check for imports of other PatternFly components (e.g., `import { Button } from '../Button'`)
+3. Check if those components are used in the JSX (e.g., `<Button variant="plain" .../>`)
+4. Verify the Lit implementation uses the corresponding `pfv6-*` component
+
+**Common mappings**:
+| React Component | Lit Component |
+|-----------------|---------------|
+| `<Button>` | `<pfv6-button>` |
+| `<Icon>` | `<pfv6-icon>` |
+| `<Spinner>` | `<pfv6-spinner>` |
+| `<Badge>` | `<pfv6-badge>` |
+| `<Tooltip>` | `<pfv6-tooltip>` |
+| `<Popover>` | `<pfv6-popover>` |
+
+❌ **WRONG** - React uses Button but Lit uses plain HTML button:
+```typescript
+// React source uses: <Button variant="plain" icon={<TimesIcon />} />
+// But Lit uses:
+html`<button type="button">...</button>`
+```
+
+✅ **CORRECT** - Match React's component usage:
+```typescript
+import '@pfv6/elements/pfv6-button/pfv6-button.js';
+html`<pfv6-button variant="plain">...</pfv6-button>`
+```
+
+**Important**:
+- Check if the pfv6-* component exists in `elements/` before flagging
+- If the component doesn't exist yet, note it as a blocked dependency
+- Prop names may differ between React and Lit (e.g., `aria-label` → `accessible-label`)
+
+### 5.2 Icon Sub-Components
 
 ```typescript
 // ✅ CORRECT - Conditional icon rendering
 ${this.icon ? html`<pfv6-icon .icon=${this.icon}></pfv6-icon>` : null}
 ```
 
-### 5.2 Repeat Directive
+### 5.3 Repeat Directive
 
 ```typescript
 import { repeat } from 'lit/directives/repeat.js';
@@ -239,6 +277,7 @@ render() { return html`${this.#getProcessedData()}`; }
 
 ### Template Structure
 - [ ] No render fragmentation (no helper methods returning TemplateResult): ✅/❌
+- [ ] React component → Lit component parity: ✅/❌
 - [ ] Proper sub-component rendering: ✅/❌
 - [ ] No dynamic tag names: ✅/❌
 - [ ] Render method is concise: ✅/❌
