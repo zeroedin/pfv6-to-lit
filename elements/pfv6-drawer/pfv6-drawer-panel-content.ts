@@ -415,12 +415,20 @@ export class Pfv6DrawerPanelContent extends LitElement {
   #handleMouseDown = (event: MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
+
+    // Initialize current width before starting resize
+    const panel = this.shadowRoot?.getElementById('panel');
+    if (panel) {
+      const position = this._drawerContext?.position ?? 'end';
+      const panelRect = panel.getBoundingClientRect();
+      this._currentWidth = position === 'bottom' ? panelRect.height : panelRect.width;
+    }
+
     document.addEventListener('mousemove', this.#handleMouseMove);
     document.addEventListener('mouseup', this.#handleMouseUp);
     this._isResizing = true;
 
     // Disable transitions during resize to prevent layout shifts
-    const panel = this.shadowRoot?.getElementById('panel');
     panel?.classList.add('resizing');
   };
 
@@ -482,11 +490,6 @@ export class Pfv6DrawerPanelContent extends LitElement {
 
     event.preventDefault();
 
-    if (key === 'Escape' || key === 'Enter') {
-      this.dispatchEvent(new Pfv6DrawerPanelResizeEvent(this._currentWidth, this.id));
-      return;
-    }
-
     const panel = this.shadowRoot?.getElementById('panel');
     if (!panel) {
       return;
@@ -494,6 +497,17 @@ export class Pfv6DrawerPanelContent extends LitElement {
 
     const position = this._drawerContext?.position ?? 'end';
     const panelRect = panel.getBoundingClientRect();
+
+    // Initialize current width if not set (e.g., Enter/Escape without prior arrow key)
+    if (this._currentWidth === 0) {
+      this._currentWidth = position === 'bottom' ? panelRect.height : panelRect.width;
+    }
+
+    if (key === 'Escape' || key === 'Enter') {
+      this.dispatchEvent(new Pfv6DrawerPanelResizeEvent(this._currentWidth, this.id));
+      return;
+    }
+
     let newSize = position === 'bottom' ? panelRect.height : panelRect.width;
 
     let delta = 0;
