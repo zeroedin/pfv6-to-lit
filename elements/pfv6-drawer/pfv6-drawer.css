@@ -206,6 +206,14 @@
   &.static {
     --pf-v6-c-drawer__panel--BackgroundColor: var(--pf-v6-c-drawer__panel--m-inline--BackgroundColor);
     --pf-v6-c-drawer__panel--BorderInlineStartWidth: var(--pf-v6-c-drawer--m-inline__panel--after--Width);
+
+    /* Inline drawers have no box-shadow, even when expanded */
+    --pf-v6-c-drawer--m-expanded__panel--BoxShadow: none;
+  }
+
+  &.inline.expanded,
+  &.static.expanded {
+    --pf-v6-c-drawer__panel--BorderColor: var(--pf-v6-c-drawer--m-inline--m-expanded__panel--after--BackgroundColor);
   }
 
   &.panel-left {

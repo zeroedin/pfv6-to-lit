@@ -38,6 +38,8 @@ export class Pfv6DrawerContent extends LitElement {
 
   render() {
     const position = this._drawerContext?.position ?? 'end';
+    const isInline = this._drawerContext?.isInline ?? false;
+    const isStatic = this._drawerContext?.isStatic ?? false;
     const isPanelLeft = position === 'start' || position === 'left';
     const isPanelBottom = position === 'bottom';
 
@@ -49,6 +51,7 @@ export class Pfv6DrawerContent extends LitElement {
     const mainClasses = {
       'panel-left': isPanelLeft,
       'panel-bottom': isPanelBottom,
+      'inline': isInline || isStatic,
     };
 
     return html`

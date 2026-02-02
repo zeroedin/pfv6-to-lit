@@ -35,6 +35,14 @@
   &.panel-bottom {
     flex-direction: column;
   }
+
+  /* Inline mode - content shrinks to accommodate panel */
+  @media screen and (width >= 768px) {
+    &.inline > #container {
+      flex-shrink: 1;
+      overflow-x: auto;
+    }
+  }
 }
 
 /* Content area - acts as drawer__content */

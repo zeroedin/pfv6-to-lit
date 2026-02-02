@@ -509,6 +509,7 @@ export class Pfv6DrawerPanelContent extends LitElement {
   render() {
     const isStatic = this._drawerContext?.isStatic ?? false;
     const isExpanded = this._drawerContext?.isExpanded ?? false;
+    const isInline = this._drawerContext?.isInline ?? false;
     const hidden = isStatic ? false : !isExpanded;
 
     const position = this._drawerContext?.position ?? 'end';
@@ -522,6 +523,8 @@ export class Pfv6DrawerPanelContent extends LitElement {
       'secondary': this.colorVariant === 'secondary',
       'panel-left': isPanelLeft,
       'panel-bottom': isPanelBottom,
+      'inline': isInline || isStatic,
+      'expanded': isExpanded,
     };
 
     // Add width modifier classes from responsive property
