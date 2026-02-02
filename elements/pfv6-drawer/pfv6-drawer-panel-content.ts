@@ -192,6 +192,12 @@ export class Pfv6DrawerPanelContent extends LitElement {
           `DrawerPanelContent: The focusTrapEnabled prop cannot be true if the Drawer's isStatic prop is true. This will cause a permanent focus trap.`
         );
       }
+
+      // Deactivate focus trap when focusTrapEnabled changes from true to false
+      const previousFocusTrapEnabled = changedProperties.get('focusTrapEnabled');
+      if (previousFocusTrapEnabled === true && !this.focusTrapEnabled && this._isFocusTrapActive) {
+        this.#deactivateFocusTrap();
+      }
     }
   }
 
