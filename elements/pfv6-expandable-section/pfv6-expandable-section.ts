@@ -5,6 +5,7 @@ import { property } from 'lit/decorators/property.js';
 import { state } from 'lit/decorators/state.js';
 import { query } from 'lit/decorators/query.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import '@pfv6/elements/pfv6-button/pfv6-button.js';
 import './pfv6-expandable-section-toggle.js';
 import styles from './pfv6-expandable-section.css';
@@ -36,6 +37,14 @@ export class Pfv6ExpandableSectionToggleEvent extends Event {
 export class Pfv6ExpandableSection extends LitElement {
   static readonly styles = styles;
   static shadowRootOptions = { ...LitElement.shadowRootOptions, delegatesFocus: true };
+
+  /** ElementInternals for host-level ARIA (used in detached mode) */
+  #internals: ElementInternals;
+
+  constructor() {
+    super();
+    this.#internals = this.attachInternals();
+  }
 
   /** Variant of the expandable section */
   @property({ type: String, reflect: true })
@@ -110,14 +119,6 @@ export class Pfv6ExpandableSection extends LitElement {
   /** Debounce timer for resize */
   #resizeTimer?: number;
 
-  /**
-   * Generate unique IDs
-   * @param prefix - Prefix for the generated ID
-   */
-  #generateId(prefix: string): string {
-    return `${prefix}-${crypto.randomUUID().slice(0, 8)}`;
-  }
-
   override connectedCallback() {
     super.connectedCallback();
 
@@ -149,19 +150,37 @@ export class Pfv6ExpandableSection extends LitElement {
       this.#updateLineClamp();
       this.#checkToggleVisibility();
     }
+
+    // Update host-level ARIA for detached mode (cross-shadow-boundary accessibility)
+    if (changedProperties.has('isDetached') || changedProperties.has('toggleId')) {
+      this.#updateHostAria();
+    }
+  }
+
+  /** Update host-level ARIA for detached mode */
+  #updateHostAria() {
+    if (this.isDetached && this.toggleId) {
+      // In detached mode, set role and aria-labelledby on the host element
+      // Use ariaLabelledByElements API with element reference for cross-shadow-boundary support
+      this.#internals.role = 'region';
+      const toggleElement = document.getElementById(this.toggleId);
+      if (toggleElement) {
+        this.#internals.ariaLabelledByElements = [toggleElement];
+      }
+    } else {
+      // Clear host-level ARIA when not detached (internal content div handles it)
+      this.#internals.role = null;
+      this.#internals.ariaLabelledByElements = [];
+    }
   }
 
   override firstUpdated() {
+    // Set initial host-level ARIA for detached mode
+    this.#updateHostAria();
+
     if (this.variant === 'truncate') {
       this.#updateLineClamp();
       this.#checkToggleVisibility();
-    }
-
-    if (this.isDetached && !this.toggleId) {
-      console.warn(
-        'ExpandableSection: The toggle-id value must be passed in'
-        + ' and must match the toggle-id of the ExpandableSectionToggle.',
-      );
     }
   }
 
@@ -256,9 +275,9 @@ export class Pfv6ExpandableSection extends LitElement {
 
   render() {
     const expanded = this.isExpanded ?? this._internalExpanded;
-    const uniqueContentId = this.contentId || this.#generateId('expandable-section-content');
-    const uniqueToggleId = this.toggleId || this.#generateId('expandable-section-toggle');
     const computedToggleText = this.#calculateToggleText();
+    const hasRenderedToggle = (this.variant === 'default' && !this.isDetached)
+      || (this.variant === 'truncate' && this._hasToggle && !this.isDetached);
 
     const classes = {
       'expanded': expanded,
@@ -278,9 +297,9 @@ export class Pfv6ExpandableSection extends LitElement {
             <pfv6-button
               variant="link"
               class="toggle-button"
-              aria-expanded=${expanded}
-              aria-controls=${uniqueContentId}
-              id=${uniqueToggleId}
+              .isExpanded=${expanded}
+              aria-controls="content"
+              id="toggle-button"
               @click=${this.#handleToggle}
             >
               <span slot="icon" class="toggle-icon">
@@ -297,8 +316,8 @@ export class Pfv6ExpandableSection extends LitElement {
           id="content"
           class="content"
           ?hidden=${this.variant !== 'truncate' && !expanded}
-          aria-labelledby=${uniqueToggleId}
-          role="region"
+          aria-labelledby=${ifDefined(hasRenderedToggle ? 'toggle-button' : undefined)}
+          role=${ifDefined(this.isDetached ? undefined : 'region')}
         >
           <slot></slot>
         </div>
@@ -309,9 +328,9 @@ export class Pfv6ExpandableSection extends LitElement {
               variant="link"
               is-inline
               class="toggle-button"
-              aria-expanded=${expanded}
-              aria-controls=${uniqueContentId}
-              id=${uniqueToggleId}
+              .isExpanded=${expanded}
+              aria-controls="content"
+              id="toggle-button"
               @click=${this.#handleToggle}
             >
               <slot name="toggle-content">${computedToggleText}</slot>

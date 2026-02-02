@@ -77,7 +77,7 @@ export class Pfv6ExpandableSectionToggle extends LitElement {
             variant="link"
             ?is-inline=${this.hasTruncatedContent}
             class="toggle-button"
-            aria-expanded=${this.isExpanded}
+            .isExpanded=${this.isExpanded}
             aria-controls=${this.contentId}
             id=${this.toggleId}
             @click=${this._handleClick}
