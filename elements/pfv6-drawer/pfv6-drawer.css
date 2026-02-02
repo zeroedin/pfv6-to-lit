@@ -1,0 +1,242 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+
+  /* Section */
+  --pf-v6-c-drawer__section--BackgroundColor: var(--pf-t--global--background--color--primary--default, #ffffff);
+  --pf-v6-c-drawer__section--m-secondary--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f2f2f2);
+
+  /* Content */
+  --pf-v6-c-drawer__content--FlexBasis: 100%;
+  --pf-v6-c-drawer__content--BackgroundColor: transparent;
+  --pf-v6-c-drawer__content--m-primary--BackgroundColor: var(--pf-t--global--background--color--primary--default, #ffffff);
+  --pf-v6-c-drawer__content--m-secondary--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f2f2f2);
+  --pf-v6-c-drawer__content--ZIndex: var(--pf-t--global--z-index--xs, 100);
+
+  /* Panel */
+  --pf-v6-c-drawer__panel--MinWidth: 50%;
+  --pf-v6-c-drawer__panel--MaxHeight: auto;
+  --pf-v6-c-drawer__panel--ZIndex: var(--pf-t--global--z-index--sm, 200);
+  --pf-v6-c-drawer__panel--BorderColor: var(--pf-t--global--border--color--high-contrast, rgb(255 255 255 / 0%));
+  --pf-v6-c-drawer__panel--BorderBlockStartWidth: 0;
+  --pf-v6-c-drawer__panel--BorderBlockEndWidth: 0;
+  --pf-v6-c-drawer__panel--BorderInlineStartWidth: 0;
+  --pf-v6-c-drawer__panel--BorderInlineEndWidth: 0;
+  --pf-v6-c-drawer__panel--BackgroundColor: var(--pf-t--global--background--color--floating--default, #ffffff);
+  --pf-v6-c-drawer__panel--m-inline--BackgroundColor: var(--pf-t--global--background--color--primary--default, #ffffff);
+  --pf-v6-c-drawer__panel--m-secondary--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f2f2f2);
+  --pf-v6-c-drawer__panel--RowGap: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-drawer__panel--PaddingBlockStart: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-drawer__panel--PaddingBlockEnd: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-drawer__panel--TransitionDelay: 0s, var(--pf-v6-c-drawer__panel--TransitionDelay--focus), var(--pf-v6-c-drawer__panel--TransitionDelay--focus);
+  --pf-v6-c-drawer__panel--TransitionDelay--focus: var(--pf-v6-c-drawer__panel--TransitionDuration--fade);
+  --pf-v6-c-drawer__panel--TransitionDelay--expand--focus: 0s;
+  --pf-v6-c-drawer__panel--TransitionTimingFunction: var(--pf-t--global--motion--timing-function--decelerate, cubic-bezier(0, 0, 0.2, 1));
+  --pf-v6-c-drawer__panel--TransitionDuration--fade: var(--pf-t--global--motion--duration--fade--default, 200ms);
+  --pf-v6-c-drawer__panel--TransitionDuration: var(--pf-v6-c-drawer__panel--TransitionDuration--fade), 0s, 0s;
+  --pf-v6-c-drawer__panel--TransitionProperty: opacity, visibility, transform;
+  --pf-v6-c-drawer__panel--Opacity: 0;
+  --pf-v6-c-drawer--m-expanded__panel--Opacity: 1;
+  --pf-v6-c-drawer__panel--FlexBasis: 100%;
+  --pf-v6-c-drawer__panel--md--FlexBasis--min: 1.5rem;
+  --pf-v6-c-drawer__panel--md--FlexBasis: 50%;
+  --pf-v6-c-drawer__panel--md--FlexBasis--max: 100%;
+  --pf-v6-c-drawer__panel--xl--MinWidth: 28.125rem;
+  --pf-v6-c-drawer__panel--xl--FlexBasis: 28.125rem;
+  --pf-v6-c-drawer--m-panel-bottom__panel--md--MinHeight: 50%;
+  --pf-v6-c-drawer--m-panel-bottom__panel--xl--MinHeight: 18.75rem;
+  --pf-v6-c-drawer--m-panel-bottom__panel--xl--FlexBasis: 18.75rem;
+  --pf-v6-c-drawer__panel--m-resizable--FlexDirection: row;
+  --pf-v6-c-drawer__panel--m-resizable--md--FlexBasis--min: var(--pf-v6-c-drawer__splitter--m-vertical--Width);
+  --pf-v6-c-drawer__panel--m-resizable--MinWidth: 1.5rem;
+  --pf-v6-c-drawer--m-panel-bottom__panel--m-resizable--FlexDirection: column;
+  --pf-v6-c-drawer--m-panel-bottom__panel--m-resizable--md--FlexBasis--min: 1.5rem;
+  --pf-v6-c-drawer--m-panel-bottom__panel--m-resizable--MinHeight: 1.5rem;
+
+  /* Drawer panel head */
+  --pf-v6-c-drawer__head--ColumnGap: var(--pf-t--global--spacer--gap--text-to-element--default, 0.5rem);
+  --pf-v6-c-drawer__head--PaddingBlockStart: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-drawer__head--PaddingBlockEnd: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-drawer__head--PaddingInlineStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-drawer__head--PaddingInlineEnd: var(--pf-t--global--spacer--md, 1rem);
+
+  /* Drawer panel description */
+  --pf-v6-c-drawer__description--PaddingInlineStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-drawer__description--PaddingInlineEnd: var(--pf-t--global--spacer--md, 1rem);
+
+  /* Drawer body padding */
+  --pf-v6-c-drawer__body--PaddingBlockStart--base: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-drawer__body--PaddingInlineEnd--base: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-drawer__body--PaddingBlockEnd--base: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-drawer__body--PaddingInlineStart--base: var(--pf-t--global--spacer--md, 1rem);
+
+  /* Drawer content body */
+  --pf-v6-c-drawer__content__body--PaddingBlockStart: 0;
+  --pf-v6-c-drawer__content__body--PaddingInlineEnd: 0;
+  --pf-v6-c-drawer__content__body--PaddingBlockEnd: 0;
+  --pf-v6-c-drawer__content__body--PaddingInlineStart: 0;
+
+  /* Drawer panel body */
+  --pf-v6-c-drawer__panel__body--PaddingBlockStart: var(--pf-v6-c-drawer__body--PaddingBlockStart--base);
+  --pf-v6-c-drawer__panel__body--PaddingInlineEnd: var(--pf-v6-c-drawer__body--PaddingInlineEnd--base);
+  --pf-v6-c-drawer__panel__body--PaddingBlockEnd: var(--pf-v6-c-drawer__body--PaddingBlockEnd--base);
+  --pf-v6-c-drawer__panel__body--PaddingInlineStart: var(--pf-v6-c-drawer__body--PaddingInlineStart--base);
+
+  /* Modified body padding */
+  --pf-v6-c-drawer__body--m-padding--PaddingBlockStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-drawer__body--m-padding--PaddingInlineEnd: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-drawer__body--m-padding--PaddingBlockEnd: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-drawer__body--m-padding--PaddingInlineStart: var(--pf-t--global--spacer--md, 1rem);
+
+  /* Splitter */
+  --pf-v6-c-drawer__splitter--Height: 0.5625rem;
+  --pf-v6-c-drawer__splitter--Width: 100%;
+  --pf-v6-c-drawer__splitter--BackgroundColor: var(--pf-t--global--background--color--primary--default, #ffffff);
+  --pf-v6-c-drawer__splitter--Cursor: row-resize;
+  --pf-v6-c-drawer__splitter--m-vertical--Height: 100%;
+  --pf-v6-c-drawer__splitter--m-vertical--Width: 0.5625rem;
+  --pf-v6-c-drawer__splitter--m-vertical--Cursor: col-resize;
+  --pf-v6-c-drawer--m-inline__splitter--focus--OutlineOffset: -0.0625rem;
+
+  /* Splitter border */
+  --pf-v6-c-drawer__splitter--after--BorderColor: var(--pf-t--global--border--color--default, #c7c7c7);
+  --pf-v6-c-drawer__splitter--after--border-width--base: var(--pf-t--global--border--width--divider--default, 1px);
+  --pf-v6-c-drawer__splitter--after--BorderBlockStartWidth: 0;
+  --pf-v6-c-drawer__splitter--after--BorderInlineEndWidth: var(--pf-v6-c-drawer__splitter--after--border-width--base);
+  --pf-v6-c-drawer__splitter--after--BorderBlockEndWidth: 0;
+  --pf-v6-c-drawer__splitter--after--BorderInlineStartWidth: var(--pf-v6-c-drawer__splitter--after--border-width--base);
+  --pf-v6-c-drawer--m-panel-bottom__splitter--after--BorderBlockStartWidth: var(--pf-v6-c-drawer__splitter--after--border-width--base);
+  --pf-v6-c-drawer--m-panel-bottom__splitter--after--BorderBlockEndWidth: var(--pf-v6-c-drawer__splitter--after--border-width--base);
+  --pf-v6-c-drawer--m-inline__splitter--m-vertical--Width: 0.625rem;
+  --pf-v6-c-drawer--m-inline__splitter-handle--InsetInlineStart: 50%;
+  --pf-v6-c-drawer--m-inline--m-panel-bottom__splitter--Height: 0.625rem;
+  --pf-v6-c-drawer--m-inline--m-panel-bottom__splitter-handle--InsetBlockStart: 50%;
+  --pf-v6-c-drawer--m-inline--m-panel-bottom__splitter--after--BorderBlockStartWidth: var(--pf-v6-c-drawer__splitter--after--border-width--base);
+
+  /* Splitter handle */
+  --pf-v6-c-drawer__splitter-handle--InsetBlockStart: 50%;
+  --pf-v6-c-drawer__splitter-handle--InsetInlineStart: calc(50% - var(--pf-v6-c-drawer__splitter--after--border-width--base));
+  --pf-v6-c-drawer--m-panel-left__splitter-handle--InsetInlineStart: 50%;
+  --pf-v6-c-drawer--m-panel-bottom__splitter-handle--InsetBlockStart: calc(50% - var(--pf-v6-c-drawer__splitter--after--border-width--base));
+
+  /* Splitter handle line */
+  --pf-v6-c-drawer__splitter-handle--after--BorderColor: var(--pf-t--global--border--color--default, #c7c7c7);
+  --pf-v6-c-drawer__splitter-handle--after--BorderBlockStartWidth: var(--pf-t--global--border--width--divider--default, 1px);
+  --pf-v6-c-drawer__splitter-handle--after--BorderInlineEndWidth: 0;
+  --pf-v6-c-drawer__splitter-handle--after--BorderBlockEndWidth: var(--pf-t--global--border--width--divider--default, 1px);
+  --pf-v6-c-drawer__splitter-handle--after--BorderInlineStartWidth: 0;
+  --pf-v6-c-drawer__splitter--hover__splitter-handle--after--BorderColor: var(--pf-t--global--border--color--hover, #0066cc);
+  --pf-v6-c-drawer__splitter--m-vertical__splitter-handle--after--BorderBlockStartWidth: 0;
+  --pf-v6-c-drawer__splitter--m-vertical__splitter-handle--after--BorderInlineEndWidth: var(--pf-t--global--border--width--divider--default, 1px);
+  --pf-v6-c-drawer__splitter--m-vertical__splitter-handle--after--BorderBlockEndWidth: 0;
+  --pf-v6-c-drawer__splitter--m-vertical__splitter-handle--after--BorderInlineStartWidth: var(--pf-t--global--border--width--divider--default, 1px);
+  --pf-v6-c-drawer__splitter-handle--after--Width: 0.75rem;
+  --pf-v6-c-drawer__splitter-handle--after--Height: 0.25rem;
+  --pf-v6-c-drawer__splitter--m-vertical__splitter-handle--after--Width: 0.25rem;
+  --pf-v6-c-drawer__splitter--m-vertical__splitter-handle--after--Height: 0.75rem;
+
+  /* Actions */
+  --pf-v6-c-drawer__actions--MarginBlockStart: calc(var(--pf-t--global--spacer--control--vertical--compact, 0.25rem) * -1.5);
+  --pf-v6-c-drawer__actions--MarginInlineEnd: calc(var(--pf-t--global--spacer--control--horizontal--compact, 0.5rem) * -1.5);
+
+  /* Box shadow */
+  --pf-v6-c-drawer__panel--BoxShadow: none;
+  --pf-v6-c-drawer--m-expanded--m-panel-bottom__panel--BoxShadow: var(--pf-t--global--box-shadow--md--top);
+
+  /* Divider */
+  --pf-v6-c-drawer__panel--after--Width: 0;
+  --pf-v6-c-drawer--m-inline__panel--after--Width: 0;
+  --pf-v6-c-drawer--m-inline__panel--after--md--Width: var(--pf-t--global--border--width--divider--default, 1px);
+  --pf-v6-c-drawer--m-panel-bottom__panel--after--Height: 0;
+  --pf-v6-c-drawer__panel--after--BackgroundColor: var(--pf-t--global--border--color--high-contrast, rgb(255 255 255 / 0%));
+  --pf-v6-c-drawer--m-inline--m-expanded__panel--after--BackgroundColor: var(--pf-t--global--border--color--default, #c7c7c7);
+  --pf-v6-c-drawer--m-inline__panel--PaddingInlineStart: 0;
+  --pf-v6-c-drawer--m-panel-left--m-inline__panel--PaddingInlineEnd: 0;
+  --pf-v6-c-drawer--m-panel-bottom--m-inline__panel--PaddingBlockStart: 0;
+
+  /* Box shadow directional */
+  --pf-v6-c-drawer--m-expanded__panel--BoxShadow: var(--pf-t--global--box-shadow--md--left);
+  --pf-v6-c-drawer--m-expanded--m-panel-left__panel--BoxShadow: var(--pf-t--global--box-shadow--md--right);
+
+  @media screen and (width >= 1200px) {
+    --pf-v6-c-drawer__panel--MinWidth: var(--pf-v6-c-drawer__panel--xl--MinWidth);
+  }
+
+  @media screen and (prefers-reduced-motion: no-preference) {
+    --pf-v6-c-drawer__panel--TransitionDuration--slide: var(--pf-t--global--motion--duration--slide-in--short, 300ms);
+    --pf-v6-c-drawer__panel--TransitionDelay--focus: var(--pf-v6-c-drawer__panel--TransitionDuration--slide);
+    --pf-v6-c-drawer__panel--TransitionDelay: 0s, 0s, 0s, 0s, var(--pf-v6-c-drawer__panel--TransitionDelay--focus);
+    --pf-v6-c-drawer__panel--TransitionTimingFunction: var(--pf-t--global--motion--timing-function--decelerate, cubic-bezier(0, 0, 0.2, 1));
+    --pf-v6-c-drawer__panel--TransitionDuration: var(--pf-v6-c-drawer__panel--TransitionDuration--slide), var(--pf-v6-c-drawer__panel--TransitionDuration--slide), 0s, 0s, 0s;
+    --pf-v6-c-drawer__panel--TransitionProperty: margin, transform, box-shadow, flex-basis, visibility;
+    --pf-v6-c-drawer__panel--Opacity: 1;
+  }
+}
+
+:host(:dir(rtl)) {
+  --pf-v6-c-drawer--m-expanded__panel--BoxShadow: var(--pf-t--global--box-shadow--md--right);
+  --pf-v6-c-drawer--m-expanded--m-panel-left__panel--BoxShadow: var(--pf-t--global--box-shadow--md--left);
+}
+
+:host([is-expanded]) {
+  --pf-v6-c-drawer__panel--TransitionDelay--focus: var(--pf-v6-c-drawer__panel--TransitionDelay--expand--focus);
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-x: hidden;
+
+  &.expanded {
+    --pf-v6-c-drawer__panel--Opacity: var(--pf-v6-c-drawer--m-expanded__panel--Opacity);
+    --pf-v6-c-drawer__panel--BoxShadow: var(--pf-v6-c-drawer--m-expanded__panel--BoxShadow);
+
+    &.panel-bottom {
+      --pf-v6-c-drawer__panel--BoxShadow: var(--pf-v6-c-drawer--m-expanded--m-panel-bottom__panel--BoxShadow);
+    }
+  }
+
+  &.inline,
+  &.static {
+    --pf-v6-c-drawer__panel--BackgroundColor: var(--pf-v6-c-drawer__panel--m-inline--BackgroundColor);
+    --pf-v6-c-drawer__panel--BorderInlineStartWidth: var(--pf-v6-c-drawer--m-inline__panel--after--Width);
+
+    /* Inline drawers have no box-shadow, even when expanded */
+    --pf-v6-c-drawer--m-expanded__panel--BoxShadow: none;
+  }
+
+  &.inline.expanded,
+  &.static.expanded {
+    --pf-v6-c-drawer__panel--BorderColor: var(--pf-v6-c-drawer--m-inline--m-expanded__panel--after--BackgroundColor);
+  }
+
+  &.panel-left {
+    --pf-v6-c-drawer__panel--BorderInlineEndWidth: var(--pf-v6-c-drawer__panel--after--Width);
+    --pf-v6-c-drawer__panel--BorderInlineStartWidth: 0;
+  }
+
+  &.panel-bottom {
+    --pf-v6-c-drawer__panel--BorderBlockStartWidth: var(--pf-v6-c-drawer--m-panel-bottom__panel--after--Height);
+    --pf-v6-c-drawer__panel--BorderInlineStartWidth: 0;
+  }
+
+  @media screen and (width >= 768px) {
+    &.inline,
+    &.static {
+      --pf-v6-c-drawer--m-inline__panel--after--Width: var(--pf-v6-c-drawer--m-inline__panel--after--md--Width);
+    }
+  }
+
+  @media screen and (width >= 1200px) {
+    &.panel-bottom {
+      --pf-v6-c-drawer__panel--MinWidth: auto;
+      --pf-v6-c-drawer__panel--MinHeight: var(--pf-v6-c-drawer--m-panel-bottom__panel--xl--MinHeight);
+    }
+  }
+}

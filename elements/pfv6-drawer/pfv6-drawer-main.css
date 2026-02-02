@@ -1,0 +1,15 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+#container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}

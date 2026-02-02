@@ -1,0 +1,24 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+#container {
+  padding-block-start: var(--pf-v6-c-drawer__panel__body--PaddingBlockStart);
+  padding-block-end: var(--pf-v6-c-drawer__panel__body--PaddingBlockEnd);
+  padding-inline-start: var(--pf-v6-c-drawer__panel__body--PaddingInlineStart);
+  padding-inline-end: var(--pf-v6-c-drawer__panel__body--PaddingInlineEnd);
+
+  &.no-padding {
+    padding: 0;
+  }
+
+  &:last-child {
+    flex: 1 1;
+  }
+}

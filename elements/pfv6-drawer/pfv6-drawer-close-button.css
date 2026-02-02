@@ -1,0 +1,13 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: inline-block;
+}
+
+#container {
+  display: inline-flex;
+}

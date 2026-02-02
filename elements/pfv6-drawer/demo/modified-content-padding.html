@@ -1,0 +1,50 @@
+<pfv6-button id="toggle-modified-content" aria-expanded="false">Toggle drawer</pfv6-button>
+
+<pfv6-drawer id="drawer-modified-content">
+  <pfv6-drawer-content>
+    <pfv6-drawer-panel-content slot="panel">
+      <pfv6-drawer-head>
+        <span id="drawer-panel-header-modified-content" tabindex="-1">Drawer panel header</span>
+        <pfv6-drawer-actions>
+          <pfv6-drawer-close-button id="close-modified-content"></pfv6-drawer-close-button>
+        </pfv6-drawer-actions>
+      </pfv6-drawer-head>
+    </pfv6-drawer-panel-content>
+    <pfv6-drawer-content-body has-padding>
+      <b>Drawer content padding.</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus pretium est a porttitor vehicula. Quisque vel commodo urna. Morbi mattis rutrum ante, id vehicula ex accumsan ut. Morbi viverra, eros vel porttitor facilisis, eros purus aliquet erat,nec lobortis felis elit pulvinar sem. Vivamus vulputate, risus eget commodo eleifend, eros nibh porta quam, vitae lacinia leo libero at magna. Maecenas aliquam sagittis orci, et posuere nisi ultrices sit amet. Aliquam ex odio, malesuada sed posuere quis, pellentesque at mauris. Phasellus venenatis massa ex, eget pulvinar libero auctor pretium. Aliquam erat volutpat. Duis euismod justo in quam ullamcorper, in commodo massa vulputate.
+    </pfv6-drawer-content-body>
+  </pfv6-drawer-content>
+</pfv6-drawer>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-drawer/pfv6-drawer.js';
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+  const button = document.getElementById('toggle-modified-content');
+  const drawer = document.getElementById('drawer-modified-content');
+  const closeButton = document.getElementById('close-modified-content');
+  const panelHeader = document.getElementById('drawer-panel-header-modified-content');
+
+  button.addEventListener('click', () => {
+    const isExpanded = drawer.hasAttribute('is-expanded');
+    if (isExpanded) {
+      drawer.removeAttribute('is-expanded');
+      button.setAttribute('aria-expanded', 'false');
+      panelHeader.setAttribute('tabindex', '-1');
+    } else {
+      drawer.setAttribute('is-expanded', '');
+      button.setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  closeButton.addEventListener('click', () => {
+    drawer.removeAttribute('is-expanded');
+    button.setAttribute('aria-expanded', 'false');
+    panelHeader.setAttribute('tabindex', '-1');
+  });
+
+  drawer.addEventListener('expand', () => {
+    panelHeader.setAttribute('tabindex', '0');
+    panelHeader.focus();
+  });
+</script>

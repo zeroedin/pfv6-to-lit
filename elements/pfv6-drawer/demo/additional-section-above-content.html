@@ -1,0 +1,49 @@
+<pfv6-button id="toggle-section" aria-expanded="false">Toggle drawer</pfv6-button>
+
+<pfv6-drawer id="drawer-section">
+  <pfv6-drawer-section>drawer-section</pfv6-drawer-section>
+  <pfv6-drawer-content>
+    <pfv6-drawer-content-body>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus pretium est a porttitor vehicula. Quisque vel commodo urna. Morbi mattis rutrum ante, id vehicula ex accumsan ut. Morbi viverra, eros vel porttitor facilisis, eros purus aliquet erat,nec lobortis felis elit pulvinar sem. Vivamus vulputate, risus eget commodo eleifend, eros nibh porta quam, vitae lacinia leo libero at magna. Maecenas aliquam sagittis orci, et posuere nisi ultrices sit amet. Aliquam ex odio, malesuada sed posuere quis, pellentesque at mauris. Phasellus venenatis massa ex, eget pulvinar libero auctor pretium. Aliquam erat volutpat. Duis euismod justo in quam ullamcorper, in commodo massa vulputate.</pfv6-drawer-content-body>
+    <pfv6-drawer-panel-content slot="panel">
+      <pfv6-drawer-head>
+        <span id="drawer-panel-header-section" tabindex="-1">drawer-panel</span>
+        <pfv6-drawer-actions>
+          <pfv6-drawer-close-button id="close-section"></pfv6-drawer-close-button>
+        </pfv6-drawer-actions>
+      </pfv6-drawer-head>
+    </pfv6-drawer-panel-content>
+  </pfv6-drawer-content>
+</pfv6-drawer>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-drawer/pfv6-drawer.js';
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+  const button = document.getElementById('toggle-section');
+  const drawer = document.getElementById('drawer-section');
+  const closeButton = document.getElementById('close-section');
+  const panelHeader = document.getElementById('drawer-panel-header-section');
+
+  button.addEventListener('click', () => {
+    const isExpanded = drawer.hasAttribute('is-expanded');
+    if (isExpanded) {
+      drawer.removeAttribute('is-expanded');
+      button.setAttribute('aria-expanded', 'false');
+      panelHeader.setAttribute('tabindex', '-1');
+    } else {
+      drawer.setAttribute('is-expanded', '');
+      button.setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  closeButton.addEventListener('click', () => {
+    drawer.removeAttribute('is-expanded');
+    button.setAttribute('aria-expanded', 'false');
+    panelHeader.setAttribute('tabindex', '-1');
+  });
+
+  drawer.addEventListener('expand', () => {
+    panelHeader.setAttribute('tabindex', '0');
+    panelHeader.focus();
+  });
+</script>
