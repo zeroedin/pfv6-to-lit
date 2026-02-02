@@ -67,9 +67,28 @@ describe('<pfv6-back-to-top>', function() {
     });
 
     it('listens to window when no selector provided', async function() {
+      // Create scrollable content
+      const scrollableContent = document.createElement('div');
+      scrollableContent.style.height = '2000px';
+      document.body.appendChild(scrollableContent);
+
       const el = await fixture<Pfv6BackToTop>(html`<pfv6-back-to-top></pfv6-back-to-top>`);
-      // Component should attach scroll listener to window
-      expect(el.scrollableSelector).to.be.undefined;
+      await el.updateComplete;
+
+      // Initially hidden
+      const container = el.shadowRoot!.querySelector('#container');
+      expect(container?.classList.contains('hidden')).to.be.true;
+
+      // Scroll down past threshold (400px)
+      window.scrollTo(0, 500);
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Should now be visible due to window scroll listener
+      expect(container?.classList.contains('hidden')).to.be.false;
+
+      // Cleanup
+      document.body.removeChild(scrollableContent);
+      window.scrollTo(0, 0);
     });
   });
 
