@@ -412,6 +412,38 @@ export class Pfv6DrawerPanelContent extends LitElement {
     }
   };
 
+  /**
+   * Calculate the current separator value as a percentage (0-100).
+   * Used for aria-valuenow to communicate resize position to assistive tech.
+   */
+  #calcValueNow(): number {
+    const panel = this.shadowRoot?.getElementById('panel');
+    if (!panel) {
+      return 0;
+    }
+
+    const position = this._drawerContext?.position ?? 'end';
+    const panelRect = panel.getBoundingClientRect();
+
+    // Find the drawer container to get total available size
+    const drawer = this.closest('pfv6-drawer');
+    if (!drawer) {
+      return 0;
+    }
+
+    const drawerRect = drawer.getBoundingClientRect();
+
+    let percentage: number;
+    if (position === 'bottom') {
+      percentage = (panelRect.height / drawerRect.height) * 100;
+    } else {
+      percentage = (panelRect.width / drawerRect.width) * 100;
+    }
+
+    // Round to 2 decimal places (matching React's implementation)
+    return Math.round((percentage + Number.EPSILON) * 100) / 100;
+  }
+
   #handleMouseDown = (event: MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
@@ -457,6 +489,7 @@ export class Pfv6DrawerPanelContent extends LitElement {
 
     panel.style.setProperty('--pf-v6-c-drawer__panel--md--FlexBasis', `${newSize}px`);
     this._currentWidth = newSize;
+    this._separatorValue = this.#calcValueNow();
   };
 
   #handleMouseUp = (_event: MouseEvent) => {
@@ -524,6 +557,7 @@ export class Pfv6DrawerPanelContent extends LitElement {
     newSize = newSize + delta;
     panel.style.setProperty('--pf-v6-c-drawer__panel--md--FlexBasis', `${newSize}px`);
     this._currentWidth = newSize;
+    this._separatorValue = this.#calcValueNow();
   };
 
   render() {
