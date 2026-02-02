@@ -9,13 +9,13 @@
 
   /* Section */
   --pf-v6-c-drawer__section--BackgroundColor: var(--pf-t--global--background--color--primary--default, #ffffff);
-  --pf-v6-c-drawer__section--m-secondary--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f0f0f0);
+  --pf-v6-c-drawer__section--m-secondary--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f2f2f2);
 
   /* Content */
   --pf-v6-c-drawer__content--FlexBasis: 100%;
   --pf-v6-c-drawer__content--BackgroundColor: transparent;
   --pf-v6-c-drawer__content--m-primary--BackgroundColor: var(--pf-t--global--background--color--primary--default, #ffffff);
-  --pf-v6-c-drawer__content--m-secondary--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f0f0f0);
+  --pf-v6-c-drawer__content--m-secondary--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f2f2f2);
   --pf-v6-c-drawer__content--ZIndex: var(--pf-t--global--z-index--xs, 100);
 
   /* Panel */
@@ -29,7 +29,7 @@
   --pf-v6-c-drawer__panel--BorderInlineEndWidth: 0;
   --pf-v6-c-drawer__panel--BackgroundColor: var(--pf-t--global--background--color--floating--default, #ffffff);
   --pf-v6-c-drawer__panel--m-inline--BackgroundColor: var(--pf-t--global--background--color--primary--default, #ffffff);
-  --pf-v6-c-drawer__panel--m-secondary--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f0f0f0);
+  --pf-v6-c-drawer__panel--m-secondary--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f2f2f2);
   --pf-v6-c-drawer__panel--RowGap: var(--pf-t--global--spacer--sm, 0.5rem);
   --pf-v6-c-drawer__panel--PaddingBlockStart: var(--pf-t--global--spacer--sm, 0.5rem);
   --pf-v6-c-drawer__panel--PaddingBlockEnd: var(--pf-t--global--spacer--sm, 0.5rem);
