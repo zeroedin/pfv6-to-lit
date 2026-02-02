@@ -204,11 +204,17 @@ export class Pfv6ExpandableSection extends LitElement {
   }
 
   #updateLineClamp() {
-    if (this._contentRef && this.truncateMaxLines && this.truncateMaxLines > 0) {
-      this._contentRef.style.setProperty(
-        '--pf-v6-c-expandable-section-m-truncate__content--LineClamp',
-        this.truncateMaxLines.toString(),
-      );
+    if (this._contentRef) {
+      if (this.truncateMaxLines && this.truncateMaxLines > 0) {
+        this._contentRef.style.setProperty(
+          '--pf-v6-c-expandable-section--m-truncate__content--LineClamp',
+          this.truncateMaxLines.toString(),
+        );
+      } else {
+        this._contentRef.style.removeProperty(
+          '--pf-v6-c-expandable-section--m-truncate__content--LineClamp',
+        );
+      }
     }
   }
 
