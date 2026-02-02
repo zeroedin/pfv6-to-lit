@@ -282,8 +282,9 @@ export class Pfv6DrawerPanelContent extends LitElement {
     // Focus the first tabbable element (e.g., close button)
     // Only fall back to panel if no tabbable elements exist
     const tabbableElements = this.#getTabbableElements();
-    if (tabbableElements.length > 0) {
-      tabbableElements[0].focus();
+    const firstTabbable = tabbableElements[0];
+    if (firstTabbable) {
+      firstTabbable.focus();
     } else {
       // Fallback: focus the panel itself
       const panel = this.shadowRoot?.getElementById('panel');
@@ -342,13 +343,13 @@ export class Pfv6DrawerPanelContent extends LitElement {
     }
 
     const tabbableElements = this.#getTabbableElements();
-    if (tabbableElements.length === 0) {
+    const firstElement = tabbableElements[0];
+    const lastElement = tabbableElements[tabbableElements.length - 1];
+
+    if (!firstElement || !lastElement) {
       event.preventDefault();
       return;
     }
-
-    const [firstElement] = tabbableElements;
-    const lastElement = tabbableElements[tabbableElements.length - 1];
 
     // Get the deepest active element across shadow DOM boundaries
     let { activeElement } = document;
