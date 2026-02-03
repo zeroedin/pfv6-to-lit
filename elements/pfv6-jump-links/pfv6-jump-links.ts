@@ -447,8 +447,8 @@ export class Pfv6JumpLinks extends LitElement {
               </div>
             ` : null}
           </div>
-          <div id="list" role="list" @slotchange=${this.handleSlotChange}>
-            <slot></slot>
+          <div id="list" role="list">
+            <slot @slotchange=${this.handleSlotChange}></slot>
           </div>
         </div>
       </div>
