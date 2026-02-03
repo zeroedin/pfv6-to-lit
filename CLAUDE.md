@@ -67,6 +67,16 @@ The find agent outputs a `## Machine-Parseable Data` section with JSON:
 - `blockedDemos` - demo filenames to SKIP
 - `blockedDemoDetails` - which components are blocking each demo
 
+### Displaying Progress Overview (After Find Agent)
+
+**After the find agent completes**, display accurate component progress:
+
+```bash
+npx tsx scripts/component-progress.ts
+```
+
+This shows **component count** (not task count). The `tasks.json` includes separate "demo" tasks for blocked demos that become unblocked later - these should NOT be counted as separate components.
+
 ## Phase 1: Initial Setup & API Analysis
 
 **MANDATORY**: Complete ALL steps before proceeding to Phase 2.
