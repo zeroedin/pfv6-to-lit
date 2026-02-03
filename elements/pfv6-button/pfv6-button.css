@@ -13,6 +13,16 @@ button {
   cursor: pointer;
 }
 
+a {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: var(--pf-t--global--font--line-height--body, 1.5);
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 :host {
   /* Base button variables */
   --pf-v6-c-button--Display: inline-flex;
