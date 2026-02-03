@@ -1023,19 +1023,152 @@ describe('<pfv6-button>', function() {
       expect(clicked).to.be.true;
     });
 
-    it('prevents keypress events when isAriaDisabled is true', async function() {
+    it('prevents keydown events when isAriaDisabled is true', async function() {
       const el = await fixture<Pfv6Button>(html`<pfv6-button is-aria-disabled>Click</pfv6-button>`);
       const button = el.shadowRoot!.querySelector('button')!;
 
-      let keypressed = false;
-      button.addEventListener('keypress', () => {
-        keypressed = true;
+      let keyedDown = false;
+      button.addEventListener('keydown', () => {
+        keyedDown = true;
       });
 
-      const event = new KeyboardEvent('keypress', { key: 'Enter' });
+      const event = new KeyboardEvent('keydown', { key: 'Enter' });
       button.dispatchEvent(event);
 
-      expect(keypressed).to.be.false;
+      expect(keyedDown).to.be.false;
+    });
+  });
+
+  describe('href property', function() {
+    it('defaults to undefined', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button></pfv6-button>`);
+      expect(el.href).to.be.undefined;
+    });
+
+    it('accepts string value', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com"></pfv6-button>`);
+      expect(el.href).to.equal('https://example.com');
+    });
+
+    it('reflects to attribute', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com"></pfv6-button>`);
+      expect(el.getAttribute('href')).to.equal('https://example.com');
+    });
+
+    it('renders anchor element instead of button when set', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com">Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      const button = el.shadowRoot!.querySelector('button');
+      expect(anchor).to.exist;
+      expect(button).to.not.exist;
+    });
+
+    it('anchor has id="container"', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com">Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      expect(anchor!.id).to.equal('container');
+    });
+
+    it('sets href attribute on anchor element', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com">Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      expect(anchor!.getAttribute('href')).to.equal('https://example.com');
+    });
+
+    it('applies variant class to anchor element', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com" variant="secondary">Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      expect(anchor!.classList.contains('secondary')).to.be.true;
+    });
+
+    it('applies size class to anchor element', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com" size="sm">Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      expect(anchor!.classList.contains('small')).to.be.true;
+    });
+
+    it('sets aria-label on anchor element', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com" accessible-label="Go to example">Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      expect(anchor!.getAttribute('aria-label')).to.equal('Go to example');
+    });
+
+    it('sets aria-disabled on anchor when isDisabled is true', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com" is-disabled>Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      expect(anchor!.getAttribute('aria-disabled')).to.equal('true');
+    });
+
+    it('sets aria-disabled on anchor when isAriaDisabled is true', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com" is-aria-disabled>Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      expect(anchor!.getAttribute('aria-disabled')).to.equal('true');
+    });
+
+    it('sets tabindex="-1" on anchor when isDisabled is true', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com" is-disabled>Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      expect(anchor!.getAttribute('tabindex')).to.equal('-1');
+    });
+
+    it('applies disabled class to anchor when isDisabled is true', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com" is-disabled>Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      expect(anchor!.classList.contains('disabled')).to.be.true;
+    });
+
+    it('renders spinner in anchor when isLoading is true', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com" is-loading>Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      const spinner = anchor!.querySelector('pfv6-spinner');
+      expect(spinner).to.exist;
+    });
+
+    it('renders icon in anchor element', async function() {
+      const el = await fixture<Pfv6Button>(html`
+        <pfv6-button href="https://example.com">
+          Link
+          <svg slot="icon" width="16" height="16"></svg>
+        </pfv6-button>
+      `);
+      const anchor = el.shadowRoot!.querySelector('a');
+      const iconSlot = anchor!.querySelector('slot[name="icon"]');
+      expect(iconSlot).to.exist;
+    });
+  });
+
+  describe('target property', function() {
+    it('defaults to undefined', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button></pfv6-button>`);
+      expect(el.target).to.be.undefined;
+    });
+
+    it('accepts string value', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com" target="_blank"></pfv6-button>`);
+      expect(el.target).to.equal('_blank');
+    });
+
+    it('reflects to attribute', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button target="_blank"></pfv6-button>`);
+      expect(el.getAttribute('target')).to.equal('_blank');
+    });
+
+    it('sets target attribute on anchor element', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com" target="_blank">Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      expect(anchor!.getAttribute('target')).to.equal('_blank');
+    });
+
+    it('does not set target on anchor when undefined', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com">Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      expect(anchor!.hasAttribute('target')).to.be.false;
+    });
+
+    it('accepts "_self" value', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com" target="_self">Link</pfv6-button>`);
+      const anchor = el.shadowRoot!.querySelector('a');
+      expect(anchor!.getAttribute('target')).to.equal('_self');
     });
   });
 
@@ -1088,6 +1221,29 @@ describe('<pfv6-button>', function() {
 
       expect(el.shadowRoot!.querySelector('.icon-end')).to.exist;
       expect(el.shadowRoot!.querySelector('.icon-start')).to.not.exist;
+    });
+
+    it('updates href dynamically and switches to anchor', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button>Click</pfv6-button>`);
+      expect(el.shadowRoot!.querySelector('button')).to.exist;
+      expect(el.shadowRoot!.querySelector('a')).to.not.exist;
+
+      el.href = 'https://example.com';
+      await el.updateComplete;
+
+      expect(el.shadowRoot!.querySelector('a')).to.exist;
+      expect(el.shadowRoot!.querySelector('button')).to.not.exist;
+    });
+
+    it('removes href dynamically and switches back to button', async function() {
+      const el = await fixture<Pfv6Button>(html`<pfv6-button href="https://example.com">Link</pfv6-button>`);
+      expect(el.shadowRoot!.querySelector('a')).to.exist;
+
+      el.href = undefined;
+      await el.updateComplete;
+
+      expect(el.shadowRoot!.querySelector('button')).to.exist;
+      expect(el.shadowRoot!.querySelector('a')).to.not.exist;
     });
   });
 });
