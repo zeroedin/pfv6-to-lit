@@ -1,0 +1,33 @@
+<pfv6-notification-badge
+  id="read-badge"
+  variant="read"
+  accessible-label="Basic notification badge with read variant"
+></pfv6-notification-badge><pfv6-notification-badge
+  id="unread-badge"
+  variant="unread"
+  accessible-label="Basic notification badge with unread variant"
+></pfv6-notification-badge><pfv6-notification-badge
+  id="attention-badge"
+  variant="attention"
+  accessible-label="Basic notification badge with attention variant"
+></pfv6-notification-badge>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-notification-badge/pfv6-notification-badge.js';
+
+  const readBadge = document.getElementById('read-badge');
+  const unreadBadge = document.getElementById('unread-badge');
+  const attentionBadge = document.getElementById('attention-badge');
+
+  readBadge.addEventListener('click', () => {
+    readBadge.isExpanded = !readBadge.isExpanded;
+  });
+
+  unreadBadge.addEventListener('click', () => {
+    unreadBadge.isExpanded = !unreadBadge.isExpanded;
+  });
+
+  attentionBadge.addEventListener('click', () => {
+    attentionBadge.isExpanded = !attentionBadge.isExpanded;
+  });
+</script>

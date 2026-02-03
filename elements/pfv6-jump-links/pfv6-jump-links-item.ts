@@ -54,7 +54,7 @@ export class Pfv6JumpLinksItem extends LitElement {
     delegatesFocus: true,
   };
 
-  readonly #internals = this.attachInternals();
+  #internals = this.attachInternals();
 
   /** Whether this item is active. Can be set directly or derived from parent context. */
   @property({ type: Boolean, reflect: true, attribute: 'is-active' })

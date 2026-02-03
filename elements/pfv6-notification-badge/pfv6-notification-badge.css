@@ -1,0 +1,48 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /*
+   * Public API - CSS Custom Properties
+   * Fallback values derived from PatternFly tokens:
+   * --pf-t--global--motion--duration--3xl: 600ms
+   * --pf-t--global--motion--timing-function--default: cubic-bezier(0.4, 0, 0.2, 1)
+   */
+  --pf-v6-c-button--m-notify__icon--AnimationDuration: var(--pf-t--global--motion--duration--3xl, 600ms);
+  /* stylelint-disable-next-line @stylistic/max-line-length */
+  --pf-v6-c-button--m-notify__icon--AnimationTimingFunction: var(--pf-t--global--motion--timing-function--default, cubic-bezier(0.4, 0, 0.2, 1));
+
+  display: inline-block;
+  vertical-align: top;
+}
+
+/* Icon wrapper - this is in notification-badge's shadow DOM, slotted into button */
+.icon {
+  display: block;
+
+  & svg {
+    vertical-align: -0.125em;
+  }
+}
+
+/* Notification animation - applied to the icon span when animating */
+.icon.notify {
+  animation-name: notification-badge-icon-notify;
+  animation-duration: var(--pf-v6-c-button--m-notify__icon--AnimationDuration, 600ms);
+  /* stylelint-disable-next-line @stylistic/max-line-length */
+  animation-timing-function: var(--pf-v6-c-button--m-notify__icon--AnimationTimingFunction, cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+/* Notification animation keyframes */
+@keyframes notification-badge-icon-notify {
+  33% {
+    transform: rotate(30deg);
+  }
+
+  66% {
+    transform: rotate(-60deg);
+  }
+}
