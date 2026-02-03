@@ -1,35 +1,22 @@
-<label for="input-default" class="pf-v6-screen-reader">number input</label>
 <pfv6-number-input
   id="number-input-default"
   value="90"
-  input-name="input"
+  name="input"
+  accessible-label="number input"
   minus-btn-accessible-label="minus"
   plus-btn-accessible-label="plus"
->
-  <input type="number" id="input-default" value="90">
-</pfv6-number-input>
+></pfv6-number-input>
 
 <script type="module">
   import '@pfv6/elements/pfv6-number-input/pfv6-number-input.js';
 
   const numberInput = document.getElementById('number-input-default');
-  const input = document.getElementById('input-default');
-
-  let value = 90;
 
   numberInput.addEventListener('minus', () => {
-    value = (value || 0) - 1;
-    input.value = value;
-    numberInput.value = value;
-  });
-
-  numberInput.addEventListener('change', (e) => {
-    value = e.value === '' ? e.value : +e.value;
+    numberInput.value = (numberInput.value || 0) - 1;
   });
 
   numberInput.addEventListener('plus', () => {
-    value = (value || 0) + 1;
-    input.value = value;
-    numberInput.value = value;
+    numberInput.value = (numberInput.value || 0) + 1;
   });
 </script>
