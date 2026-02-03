@@ -5,243 +5,35 @@
 }
 
 :host {
-  /* Public API - CSS Custom Properties */
-
-  /* Base stateful button properties */
-  --pf-v6-c-button--m-stateful--BorderRadius: var(--pf-t--global--border--radius--small);
-  --pf-v6-c-button--m-stateful--PaddingInlineStart: var(--pf-t--global--spacer--control--horizontal--default);
-  --pf-v6-c-button--m-stateful--PaddingInlineEnd: var(--pf-t--global--spacer--control--horizontal--default);
-  --pf-v6-c-button--m-stateful--m-small--PaddingInlineEnd: var(--pf-t--global--spacer--control--horizontal--compact);
-  --pf-v6-c-button--m-stateful--m-small--PaddingInlineStart: var(--pf-t--global--spacer--control--horizontal--compact);
-
-  /* Read variant */
-  --pf-v6-c-button--m-read--BackgroundColor: var(--pf-t--global--background--color--control--default);
-  --pf-v6-c-button--m-read--BorderColor: var(--pf-t--global--border--color--default);
-  --pf-v6-c-button--m-read--hover--BackgroundColor: var(--pf-t--global--background--color--control--default);
-  --pf-v6-c-button--m-read--hover--BorderColor: var(--pf-t--global--border--color--hover);
-  --pf-v6-c-button--m-read--m-clicked--BackgroundColor: var(--pf-t--global--background--color--control--default);
-  --pf-v6-c-button--m-read--m-clicked--BorderColor: var(--pf-t--global--border--color--clicked);
-
-  /* Unread variant */
-  --pf-v6-c-button--m-unread--Color: var(--pf-t--global--text--color--status--unread--on-default--default);
-  --pf-v6-c-button--m-unread--BackgroundColor: var(--pf-t--global--color--status--unread--default);
-  --pf-v6-c-button--m-unread__icon--Color: var(--pf-t--global--icon--color--status--unread--on-default--default);
-  --pf-v6-c-button--m-unread--hover--BackgroundColor: var(--pf-t--global--color--status--unread--hover);
-  --pf-v6-c-button--m-unread--m-clicked--BackgroundColor: var(--pf-t--global--color--status--unread--clicked);
-
-  /* Attention variant */
-  --pf-v6-c-button--m-attention--Color: var(--pf-t--global--text--color--status--unread--on-attention--default);
-  --pf-v6-c-button--m-attention--BackgroundColor: var(--pf-t--global--color--status--unread--attention--default);
-  --pf-v6-c-button--m-attention__icon--Color: var(--pf-t--global--icon--color--status--unread--on-attention--default);
+  /*
+   * Public API - CSS Custom Properties
+   * Fallback values derived from PatternFly tokens:
+   * --pf-t--global--motion--duration--3xl: 600ms
+   * --pf-t--global--motion--timing-function--default: cubic-bezier(0.4, 0, 0.2, 1)
+   */
+  --pf-v6-c-button--m-notify__icon--AnimationDuration: var(--pf-t--global--motion--duration--3xl, 600ms);
   /* stylelint-disable-next-line @stylistic/max-line-length */
-  --pf-v6-c-button--m-attention--hover--BackgroundColor: var(--pf-t--global--color--status--unread--attention--hover);
-  /* stylelint-disable-next-line @stylistic/max-line-length */
-  --pf-v6-c-button--m-attention--clicked--BackgroundColor: var(--pf-t--global--color--status--unread--attention--clicked);
-
-  /* Animation properties */
-  --pf-v6-c-button--m-notify__icon--AnimationDuration: var(--pf-t--global--motion--duration--3xl);
-  --pf-v6-c-button--m-notify__icon--AnimationTimingFunction: var(--pf-t--global--motion--timing-function--default);
-
-  /* Base button properties */
-  --pf-v6-c-button--Display: inline-flex;
-  --pf-v6-c-button--AlignItems: baseline;
-  --pf-v6-c-button--JustifyContent: center;
-  --pf-v6-c-button--Gap: var(--pf-t--global--spacer--gap--text-to-element--default);
-  --pf-v6-c-button--PaddingBlockStart: var(--pf-t--global--spacer--control--vertical--default);
-  --pf-v6-c-button--PaddingInlineEnd: var(--pf-t--global--spacer--action--horizontal--default);
-  --pf-v6-c-button--PaddingBlockEnd: var(--pf-t--global--spacer--control--vertical--default);
-  --pf-v6-c-button--PaddingInlineStart: var(--pf-t--global--spacer--action--horizontal--default);
-  --pf-v6-c-button--Color: var(--pf-t--global--text--color--regular);
-  --pf-v6-c-button--LineHeight: var(--pf-t--global--font--line-height--body);
-  --pf-v6-c-button--FontWeight: var(--pf-t--global--font--weight--body--default);
-  --pf-v6-c-button--FontSize: var(--pf-t--global--font--size--body--default);
-  --pf-v6-c-button--BackgroundColor: transparent;
-  --pf-v6-c-button--BorderColor: transparent;
-  --pf-v6-c-button--BorderWidth: var(--pf-t--global--border--width--action--default);
-  --pf-v6-c-button--BorderRadius: var(--pf-t--global--border--radius--pill);
-  --pf-v6-c-button--TransitionDelay: 0s;
-  --pf-v6-c-button--TransitionDuration: var(--pf-t--global--motion--duration--fade--default);
-  --pf-v6-c-button--TransitionTimingFunction: var(--pf-t--global--motion--timing-function--accelerate);
-  --pf-v6-c-button--TransitionProperty: color, background, border-color;
-  --pf-v6-c-button--hover--BackgroundColor: transparent;
-  --pf-v6-c-button--hover--BorderColor: transparent;
-  --pf-v6-c-button--hover--BorderWidth: var(--pf-t--global--border--width--action--hover);
-  --pf-v6-c-button--m-clicked--BackgroundColor: transparent;
-  --pf-v6-c-button--m-clicked--BorderColor: transparent;
-  --pf-v6-c-button--m-clicked--BorderWidth: var(--pf-t--global--border--width--action--clicked);
-  --pf-v6-c-button__icon--Color: var(--pf-t--global--icon--color--regular);
-  --pf-v6-c-button--hover__icon--Color: var(--pf-t--global--icon--color--regular);
-  --pf-v6-c-button--m-clicked__icon--Color: var(--pf-t--global--icon--color--regular);
-  --pf-v6-c-button--border--offset: 0;
+  --pf-v6-c-button--m-notify__icon--AnimationTimingFunction: var(--pf-t--global--motion--timing-function--default, cubic-bezier(0.4, 0, 0.2, 1));
 
   display: inline-block;
   vertical-align: top;
 }
 
+/* Icon wrapper - this is in notification-badge's shadow DOM, slotted into button */
 .icon {
-  color: var(--pf-v6-c-button__icon--Color);
+  display: block;
 
   & svg {
     vertical-align: -0.125em;
   }
 }
 
-.content {
-  display: inline-flex;
-  align-items: center;
-}
-
-#container {
-  /* Stateful base styling - custom properties first */
-  --pf-v6-c-button--BorderRadius: var(--pf-v6-c-button--m-stateful--BorderRadius);
-  --pf-v6-c-button--PaddingInlineStart: var(--pf-v6-c-button--m-stateful--PaddingInlineStart);
-  --pf-v6-c-button--PaddingInlineEnd: var(--pf-v6-c-button--m-stateful--PaddingInlineEnd);
-
-  /* Layout properties */
-  position: relative;
-  display: var(--pf-v6-c-button--Display);
-  gap: var(--pf-v6-c-button--Gap);
-  align-items: var(--pf-v6-c-button--AlignItems);
-  justify-content: var(--pf-v6-c-button--JustifyContent);
-
-  /* Spacing */
-  padding-block-start: var(--pf-v6-c-button--PaddingBlockStart);
-  padding-block-end: var(--pf-v6-c-button--PaddingBlockEnd);
-  padding-inline-start: var(--pf-v6-c-button--PaddingInlineStart);
-  padding-inline-end: var(--pf-v6-c-button--PaddingInlineEnd);
-
-  /* Typography */
-  font-size: var(--pf-v6-c-button--FontSize);
-  font-weight: var(--pf-v6-c-button--FontWeight);
-  line-height: var(--pf-v6-c-button--LineHeight);
-  color: var(--pf-v6-c-button--Color);
-  text-align: center;
-  white-space: nowrap;
-
-  /* Interaction */
-  cursor: pointer;
-  user-select: none;
-
-  /* Visual properties */
-  background:
-    var(--pf-v6-c-button--BackgroundColor)
-    radial-gradient(
-      circle,
-      transparent 1%,
-      color-mix(in srgb, currentcolor 15%, transparent) 2%
-    )
-    center / 15000% 15000%;
-  border: 0;
-  border-start-start-radius: var(--pf-v6-c-button--BorderRadius);
-  border-start-end-radius: var(--pf-v6-c-button--BorderRadius);
-  border-end-start-radius: var(--pf-v6-c-button--BorderRadius);
-  border-end-end-radius: var(--pf-v6-c-button--BorderRadius);
-
-  /* Transitions */
-  transition-delay: var(--pf-v6-c-button--TransitionDelay);
-  transition-timing-function: var(--pf-v6-c-button--TransitionTimingFunction);
-  transition-duration: var(--pf-v6-c-button--TransitionDuration);
-  transition-property: var(--pf-v6-c-button--TransitionProperty);
-
-  /* Border effect (via pseudo-element) */
-  &::after {
-    position: absolute;
-    inset: var(--pf-v6-c-button--border--offset);
-    pointer-events: none;
-    content: "";
-    border: var(--pf-v6-c-button--BorderWidth) solid;
-    border-color: var(--pf-v6-c-button--BorderColor);
-    border-radius: inherit;
-    transition: inherit;
-  }
-
-  /* Read variant (default state) */
-  &.read {
-    --pf-v6-c-button--BackgroundColor: var(--pf-v6-c-button--m-read--BackgroundColor);
-    --pf-v6-c-button--BorderColor: var(--pf-v6-c-button--m-read--BorderColor);
-  }
-
-  /* Unread variant */
-  &.unread {
-    --pf-v6-c-button--Color: var(--pf-v6-c-button--m-unread--Color);
-    --pf-v6-c-button--BackgroundColor: var(--pf-v6-c-button--m-unread--BackgroundColor);
-    --pf-v6-c-button__icon--Color: var(--pf-v6-c-button--m-unread__icon--Color);
-  }
-
-  /* Attention variant */
-  &.attention {
-    --pf-v6-c-button--Color: var(--pf-v6-c-button--m-attention--Color);
-    --pf-v6-c-button--BackgroundColor: var(--pf-v6-c-button--m-attention--BackgroundColor);
-    --pf-v6-c-button__icon--Color: var(--pf-v6-c-button--m-attention__icon--Color);
-  }
-
-  /* Clicked/expanded state */
-  &.clicked {
-    --pf-v6-c-button--Color: var(--pf-v6-c-button--m-clicked--Color, var(--pf-v6-c-button--Color));
-    --pf-v6-c-button--BackgroundColor: var(--pf-v6-c-button--m-clicked--BackgroundColor);
-    --pf-v6-c-button--BorderWidth: var(--pf-v6-c-button--m-clicked--BorderWidth);
-    --pf-v6-c-button--BorderColor: var(--pf-v6-c-button--m-clicked--BorderColor);
-    --pf-v6-c-button__icon--Color: var(--pf-v6-c-button--m-clicked__icon--Color);
-
-    &.read {
-      --pf-v6-c-button--m-clicked--BackgroundColor: var(--pf-v6-c-button--m-read--m-clicked--BackgroundColor);
-      --pf-v6-c-button--m-clicked--BorderColor: var(--pf-v6-c-button--m-read--m-clicked--BorderColor);
-    }
-
-    &.unread {
-      --pf-v6-c-button--m-clicked--Color: var(--pf-v6-c-button--m-unread--Color);
-      --pf-v6-c-button--m-clicked--BackgroundColor: var(--pf-v6-c-button--m-unread--m-clicked--BackgroundColor);
-      --pf-v6-c-button--m-clicked__icon--Color: var(--pf-v6-c-button--m-unread__icon--Color);
-    }
-
-    &.attention {
-      --pf-v6-c-button--m-clicked--Color: var(--pf-v6-c-button--m-attention--Color);
-      --pf-v6-c-button--m-clicked--BackgroundColor: var(--pf-v6-c-button--m-attention--clicked--BackgroundColor);
-      --pf-v6-c-button--m-clicked__icon--Color: var(--pf-v6-c-button--m-attention__icon--Color);
-    }
-  }
-
-  /* Hover and focus states */
-  &:hover,
-  &:focus {
-    --pf-v6-c-button--Color: var(--pf-v6-c-button--hover--Color, var(--pf-v6-c-button--Color));
-    --pf-v6-c-button--BackgroundColor: var(--pf-v6-c-button--hover--BackgroundColor);
-    --pf-v6-c-button--BorderColor: var(--pf-v6-c-button--hover--BorderColor);
-    --pf-v6-c-button--BorderWidth: var(--pf-v6-c-button--hover--BorderWidth);
-    --pf-v6-c-button__icon--Color: var(--pf-v6-c-button--hover__icon--Color);
-
-    outline-offset: var(--pf-t--global--focus-ring--position--offset, 2px);
-
-    &.read {
-      --pf-v6-c-button--hover--BackgroundColor: var(--pf-v6-c-button--m-read--hover--BackgroundColor);
-      --pf-v6-c-button--hover--BorderColor: var(--pf-v6-c-button--m-read--hover--BorderColor);
-    }
-
-    &.unread {
-      --pf-v6-c-button--hover--Color: var(--pf-v6-c-button--m-unread--Color);
-      --pf-v6-c-button--hover--BackgroundColor: var(--pf-v6-c-button--m-unread--hover--BackgroundColor);
-      --pf-v6-c-button--hover__icon--Color: var(--pf-v6-c-button--m-unread__icon--Color);
-    }
-
-    &.attention {
-      --pf-v6-c-button--hover--Color: var(--pf-v6-c-button--m-attention--Color);
-      --pf-v6-c-button--hover--BackgroundColor: var(--pf-v6-c-button--m-attention--hover--BackgroundColor);
-      --pf-v6-c-button--hover__icon--Color: var(--pf-v6-c-button--m-attention__icon--Color);
-    }
-  }
-
-  /* Active state (ripple effect) */
-  &:active {
-    background-size: 100% 100%;
-    transition-duration: 0s;
-  }
-
-  /* Notification animation */
-  &.notify .icon {
-    animation-name: notification-badge-icon-notify;
-    animation-duration: var(--pf-v6-c-button--m-notify__icon--AnimationDuration);
-    animation-timing-function: var(--pf-v6-c-button--m-notify__icon--AnimationTimingFunction);
-  }
+/* Notification animation - applied to the icon span when animating */
+.icon.notify {
+  animation-name: notification-badge-icon-notify;
+  animation-duration: var(--pf-v6-c-button--m-notify__icon--AnimationDuration, 600ms);
+  /* stylelint-disable-next-line @stylistic/max-line-length */
+  animation-timing-function: var(--pf-v6-c-button--m-notify__icon--AnimationTimingFunction, cubic-bezier(0.4, 0, 0.2, 1));
 }
 
 /* Notification animation keyframes */

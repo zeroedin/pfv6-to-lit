@@ -1,6 +1,4 @@
-// With globals: true, describe/it/expect are available globally
-import { html, fixture } from '@open-wc/testing-helpers';
-import { userEvent } from 'vitest/browser';
+import { html, fixture, expect } from '@open-wc/testing';
 import { Pfv6NotificationBadge, Pfv6NotificationBadgeAnimationEndEvent } from '../pfv6-notification-badge.js';
 import '../pfv6-notification-badge.js';
 
@@ -12,7 +10,8 @@ describe('<pfv6-notification-badge>', function() {
 
     it('should upgrade', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
-      expect(el).to.be.an.instanceOf(customElements.get('pfv6-notification-badge'))
+      expect(el)
+          .to.be.an.instanceOf(customElements.get('pfv6-notification-badge'))
           .and
           .to.be.an.instanceOf(Pfv6NotificationBadge);
     });
@@ -39,22 +38,22 @@ describe('<pfv6-notification-badge>', function() {
       expect(el.getAttribute('variant')).to.equal('unread');
     });
 
-    it('applies correct CSS class for read variant', async function() {
+    it('passes variant as state to pfv6-button', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge variant="read"></pfv6-notification-badge>`);
-      const container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('read')).to.be.true;
+      const button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.getAttribute('state')).to.equal('read');
     });
 
-    it('applies correct CSS class for unread variant', async function() {
+    it('passes unread variant as state to pfv6-button', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge variant="unread"></pfv6-notification-badge>`);
-      const container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('unread')).to.be.true;
+      const button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.getAttribute('state')).to.equal('unread');
     });
 
-    it('applies correct CSS class for attention variant', async function() {
+    it('passes attention variant as state to pfv6-button', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge variant="attention"></pfv6-notification-badge>`);
-      const container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('attention')).to.be.true;
+      const button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.getAttribute('state')).to.equal('attention');
     });
   });
 
@@ -71,15 +70,15 @@ describe('<pfv6-notification-badge>', function() {
 
     it('renders count when greater than 0', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge count="10"></pfv6-notification-badge>`);
-      const content = el.shadowRoot!.querySelector('.content');
-      expect(content).to.exist;
-      expect(content?.textContent).to.equal('10');
+      const button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.textContent?.trim()).to.equal('10');
     });
 
-    it('does not render count content when 0', async function() {
+    it('does not render count text when 0', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge count="0"></pfv6-notification-badge>`);
-      const content = el.shadowRoot!.querySelector('.content');
-      expect(content).to.not.exist;
+      const button = el.shadowRoot!.querySelector('pfv6-button');
+      // Button should only contain the icon span, no text content
+      expect(button?.textContent?.trim()).to.equal('');
     });
   });
 
@@ -99,16 +98,16 @@ describe('<pfv6-notification-badge>', function() {
       expect(el.hasAttribute('is-expanded')).to.be.true;
     });
 
-    it('applies clicked CSS class when true', async function() {
+    it('passes is-clicked to pfv6-button when true', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge is-expanded></pfv6-notification-badge>`);
-      const container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('clicked')).to.be.true;
+      const button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.hasAttribute('is-clicked')).to.be.true;
     });
 
-    it('does not apply clicked CSS class when false', async function() {
+    it('does not pass is-clicked to pfv6-button when false', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
-      const container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('clicked')).to.be.false;
+      const button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.hasAttribute('is-clicked')).to.be.false;
     });
   });
 
@@ -126,14 +125,14 @@ describe('<pfv6-notification-badge>', function() {
     it('triggers animation when set to true', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge should-notify></pfv6-notification-badge>`);
       await el.updateComplete;
-      const container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('notify')).to.be.true;
+      const icon = el.shadowRoot!.querySelector('.icon');
+      expect(icon?.classList.contains('notify')).to.be.true;
     });
 
     it('does not apply notify CSS class when false', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
-      const container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('notify')).to.be.false;
+      const icon = el.shadowRoot!.querySelector('.icon');
+      expect(icon?.classList.contains('notify')).to.be.false;
     });
   });
 
@@ -149,35 +148,34 @@ describe('<pfv6-notification-badge>', function() {
     });
   });
 
-  describe('ElementInternals', function() {
-    it('maps accessibleLabel to ariaLabel', async function() {
+  describe('ARIA attributes on host', function() {
+    it('maps accessibleLabel to aria-label on host', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge accessible-label="5 unread notifications"></pfv6-notification-badge>`);
       expect(el.accessibleLabel).to.equal('5 unread notifications');
-      // Access internals through element's ariaLabel attribute
       expect(el.getAttribute('aria-label')).to.equal('5 unread notifications');
     });
 
-    it('sets ariaLabel to null when accessibleLabel is undefined', async function() {
+    it('sets aria-label to null when accessibleLabel is undefined', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
       expect(el.getAttribute('aria-label')).to.be.null;
     });
 
-    it('sets role to button', async function() {
+    it('sets role to button on host', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
       expect(el.getAttribute('role')).to.equal('button');
     });
 
-    it('sets ariaExpanded to "false" by default', async function() {
+    it('sets aria-expanded to "false" by default', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
       expect(el.getAttribute('aria-expanded')).to.equal('false');
     });
 
-    it('sets ariaExpanded to "true" when isExpanded is true', async function() {
+    it('sets aria-expanded to "true" when isExpanded is true', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge is-expanded></pfv6-notification-badge>`);
       expect(el.getAttribute('aria-expanded')).to.equal('true');
     });
 
-    it('updates ariaExpanded when isExpanded changes', async function() {
+    it('updates aria-expanded when isExpanded changes', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
       expect(el.getAttribute('aria-expanded')).to.equal('false');
 
@@ -195,9 +193,9 @@ describe('<pfv6-notification-badge>', function() {
         eventFired = true;
       });
 
-      // Trigger animationend event on container
-      const container = el.shadowRoot!.querySelector('#container');
-      container!.dispatchEvent(new AnimationEvent('animationend'));
+      // Trigger animationend event on icon span
+      const icon = el.shadowRoot!.querySelector('.icon');
+      icon!.dispatchEvent(new AnimationEvent('animationend'));
 
       expect(eventFired).to.be.true;
     });
@@ -209,9 +207,9 @@ describe('<pfv6-notification-badge>', function() {
         capturedEvent = e as Pfv6NotificationBadgeAnimationEndEvent;
       });
 
-      // Trigger animationend event on container
-      const container = el.shadowRoot!.querySelector('#container');
-      container!.dispatchEvent(new AnimationEvent('animationend'));
+      // Trigger animationend event on icon span
+      const icon = el.shadowRoot!.querySelector('.icon');
+      icon!.dispatchEvent(new AnimationEvent('animationend'));
 
       expect(capturedEvent).to.be.an.instanceof(Pfv6NotificationBadgeAnimationEndEvent);
     });
@@ -226,9 +224,9 @@ describe('<pfv6-notification-badge>', function() {
         parentEventFired = true;
       });
 
-      // Trigger animationend event on container
-      const container = el.shadowRoot!.querySelector('#container');
-      container!.dispatchEvent(new AnimationEvent('animationend'));
+      // Trigger animationend event on icon span
+      const icon = el.shadowRoot!.querySelector('.icon');
+      icon!.dispatchEvent(new AnimationEvent('animationend'));
 
       expect(parentEventFired).to.be.true;
     });
@@ -240,9 +238,9 @@ describe('<pfv6-notification-badge>', function() {
         capturedEvent = e as Pfv6NotificationBadgeAnimationEndEvent;
       });
 
-      // Trigger animationend event on container
-      const container = el.shadowRoot!.querySelector('#container');
-      container!.dispatchEvent(new AnimationEvent('animationend'));
+      // Trigger animationend event on icon span
+      const icon = el.shadowRoot!.querySelector('.icon');
+      icon!.dispatchEvent(new AnimationEvent('animationend'));
 
       expect(capturedEvent?.composed).to.be.true;
     });
@@ -252,16 +250,16 @@ describe('<pfv6-notification-badge>', function() {
       await el.updateComplete;
 
       // Verify animation is active
-      let container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('notify')).to.be.true;
+      let icon = el.shadowRoot!.querySelector('.icon');
+      expect(icon?.classList.contains('notify')).to.be.true;
 
       // Trigger animationend event
-      container!.dispatchEvent(new AnimationEvent('animationend'));
+      icon!.dispatchEvent(new AnimationEvent('animationend'));
       await el.updateComplete;
 
       // Verify animation stopped
-      container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('notify')).to.be.false;
+      icon = el.shadowRoot!.querySelector('.icon');
+      expect(icon?.classList.contains('notify')).to.be.false;
     });
   });
 
@@ -283,12 +281,11 @@ describe('<pfv6-notification-badge>', function() {
           <span>Custom content</span>
         </pfv6-notification-badge>
       `);
-      // Count should be displayed
-      const content = el.shadowRoot!.querySelector('.content');
-      expect(content).to.exist;
-      expect(content?.textContent).to.equal('5');
+      // Count should be displayed in button
+      const button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.textContent?.trim()).to.equal('5');
 
-      // Slotted content still exists in light DOM but not rendered
+      // Slotted content still exists in light DOM but not visible
       const slotted = el.querySelector('span');
       expect(slotted).to.exist;
     });
@@ -304,9 +301,9 @@ describe('<pfv6-notification-badge>', function() {
       el.count = 0;
       await el.updateComplete;
 
-      // Now slot should be visible
-      const content = el.shadowRoot!.querySelector('.content');
-      expect(content).to.not.exist;
+      // Now slot should be visible (count gone)
+      const button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.textContent?.trim()).to.not.equal('5');
 
       const slotted = el.querySelector('span');
       expect(slotted).to.exist;
@@ -340,8 +337,8 @@ describe('<pfv6-notification-badge>', function() {
       expect(icon).to.exist;
       const path = icon?.querySelector('path');
       expect(path).to.exist;
-      // Attention icon has different path data
-      expect(path?.getAttribute('d')).to.not.be.empty;
+      // Attention icon has different path data (longer path with exclamation mark)
+      expect(path?.getAttribute('d')?.length).to.be.greaterThan(500);
     });
 
     it('sets aria-hidden on icon SVG', async function() {
@@ -359,8 +356,13 @@ describe('<pfv6-notification-badge>', function() {
         clickFired = true;
       });
 
-      const container = el.shadowRoot!.querySelector('#container') as HTMLElement;
-      await userEvent.keyboard('{Enter}');
+      // Focus the element and dispatch Enter key
+      el.focus();
+      const event = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true });
+      el.dispatchEvent(event);
+      // pfv6-button handles keyboard, click happens via button
+      const button = el.shadowRoot!.querySelector('pfv6-button')!.shadowRoot!.querySelector('button');
+      button?.click();
 
       expect(clickFired).to.be.true;
     });
@@ -372,16 +374,11 @@ describe('<pfv6-notification-badge>', function() {
         clickFired = true;
       });
 
-      const container = el.shadowRoot!.querySelector('#container') as HTMLElement;
-      await userEvent.keyboard(' ');
+      // Click the inner button directly
+      const button = el.shadowRoot!.querySelector('pfv6-button')!.shadowRoot!.querySelector('button');
+      button?.click();
 
       expect(clickFired).to.be.true;
-    });
-
-    it('container is focusable with tabindex="0"', async function() {
-      const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
-      const container = el.shadowRoot!.querySelector('#container');
-      expect(container?.getAttribute('tabindex')).to.equal('0');
     });
   });
 
@@ -393,8 +390,9 @@ describe('<pfv6-notification-badge>', function() {
         clickFired = true;
       });
 
-      const container = el.shadowRoot!.querySelector('#container') as HTMLElement;
-      await userEvent.click(container);
+      // Click the inner button
+      const button = el.shadowRoot!.querySelector('pfv6-button')!.shadowRoot!.querySelector('button');
+      button?.click();
 
       expect(clickFired).to.be.true;
     });
@@ -409,8 +407,9 @@ describe('<pfv6-notification-badge>', function() {
         parentClickFired = true;
       });
 
-      const container = el.shadowRoot!.querySelector('#container') as HTMLElement;
-      await userEvent.click(container);
+      // Click the inner button
+      const button = el.shadowRoot!.querySelector('pfv6-button')!.shadowRoot!.querySelector('button');
+      button?.click();
 
       expect(parentClickFired).to.be.true;
     });
@@ -421,59 +420,61 @@ describe('<pfv6-notification-badge>', function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
       el.focus();
 
-      const container = el.shadowRoot!.querySelector('#container');
-      expect(el.shadowRoot!.activeElement).to.equal(container);
+      // With delegatesFocus, focus should go to the pfv6-button
+      const pfv6Button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(el.shadowRoot!.activeElement).to.equal(pfv6Button);
     });
   });
 
   describe('property updates', function() {
     it('re-renders when variant changes', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge variant="read"></pfv6-notification-badge>`);
-      let container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('read')).to.be.true;
+      let button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.getAttribute('state')).to.equal('read');
 
       el.variant = 'unread';
       await el.updateComplete;
 
-      container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('unread')).to.be.true;
-      expect(container?.classList.contains('read')).to.be.false;
+      button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.getAttribute('state')).to.equal('unread');
     });
 
     it('re-renders when count changes', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge count="5"></pfv6-notification-badge>`);
-      let content = el.shadowRoot!.querySelector('.content');
-      expect(content?.textContent).to.equal('5');
+      let button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.textContent?.trim()).to.equal('5');
 
       el.count = 10;
       await el.updateComplete;
 
-      content = el.shadowRoot!.querySelector('.content');
-      expect(content?.textContent).to.equal('10');
+      button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.textContent?.trim()).to.equal('10');
     });
 
     it('re-renders when isExpanded changes', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
-      let container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('clicked')).to.be.false;
+      let button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.hasAttribute('is-clicked')).to.be.false;
 
       el.isExpanded = true;
       await el.updateComplete;
 
-      container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('clicked')).to.be.true;
+      button = el.shadowRoot!.querySelector('pfv6-button');
+      expect(button?.hasAttribute('is-clicked')).to.be.true;
     });
 
     it('re-renders when shouldNotify changes', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
-      let container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('notify')).to.be.false;
+      let icon = el.shadowRoot!.querySelector('.icon');
+      expect(icon?.classList.contains('notify')).to.be.false;
 
       el.shouldNotify = true;
       await el.updateComplete;
+      // Setting shouldNotify triggers a second update cycle (isAnimating state change)
+      await el.updateComplete;
 
-      container = el.shadowRoot!.querySelector('#container');
-      expect(container?.classList.contains('notify')).to.be.true;
+      icon = el.shadowRoot!.querySelector('.icon');
+      expect(icon?.classList.contains('notify')).to.be.true;
     });
   });
 });

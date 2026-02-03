@@ -106,7 +106,7 @@ export class Pfv6JumpLinksActiveChangeEvent extends Event {
 export class Pfv6JumpLinks extends LitElement {
   static styles = styles;
 
-  readonly #internals = this.attachInternals();
+  #internals = this.attachInternals();
 
   /** Whether to center children. */
   @property({ type: Boolean, reflect: true, attribute: 'is-centered' })

@@ -4,6 +4,7 @@ import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
 import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
+import '@pfv6/elements/pfv6-button/pfv6-button.js';
 import styles from './pfv6-notification-badge.css';
 
 /**
@@ -24,19 +25,8 @@ export class Pfv6NotificationBadgeAnimationEndEvent extends Event {
  * @fires Pfv6NotificationBadgeAnimationEndEvent - Fired when notification animation ends
  * @slot - Default slot for custom content (alternative to count)
  *
- * @cssprop --pf-v6-c-button--m-read--BackgroundColor - Read variant background color
- * @cssprop --pf-v6-c-button--m-read--BorderColor - Read variant border color
- * @cssprop --pf-v6-c-button--m-unread--Color - Unread variant text color
- * @cssprop --pf-v6-c-button--m-unread--BackgroundColor - Unread variant background color
- * @cssprop --pf-v6-c-button--m-unread__icon--Color - Unread variant icon color
- * @cssprop --pf-v6-c-button--m-attention--Color - Attention variant text color
- * @cssprop --pf-v6-c-button--m-attention--BackgroundColor - Attention variant background color
- * @cssprop --pf-v6-c-button--m-attention__icon--Color - Attention variant icon color
- * @cssprop --pf-v6-c-button--Gap - Gap between icon and content
- * @cssprop --pf-v6-c-button--PaddingBlockStart - Top padding
- * @cssprop --pf-v6-c-button--PaddingInlineEnd - Right padding
- * @cssprop --pf-v6-c-button--PaddingBlockEnd - Bottom padding
- * @cssprop --pf-v6-c-button--PaddingInlineStart - Left padding
+ * @cssprop --pf-v6-c-button--m-notify__icon--AnimationDuration - Duration of the notification animation
+ * @cssprop --pf-v6-c-button--m-notify__icon--AnimationTimingFunction - Timing function for notification animation
  */
 @customElement('pfv6-notification-badge')
 export class Pfv6NotificationBadge extends LitElement {
@@ -46,14 +36,6 @@ export class Pfv6NotificationBadge extends LitElement {
   };
 
   static styles = styles;
-
-  #internals = this.attachInternals();
-
-  constructor() {
-    super();
-    this.#internals.role = 'button';
-    this.#internals.ariaExpanded = 'false';
-  }
 
   /** Adds an accessible label to the notification badge */
   @property({ type: String, attribute: 'accessible-label' })
@@ -85,6 +67,10 @@ export class Pfv6NotificationBadge extends LitElement {
   @state()
   private isAnimating = false;
 
+  /** Internal state to track if there's slotted content */
+  @state()
+  private hasSlottedContent = false;
+
   override updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
 
@@ -92,13 +78,25 @@ export class Pfv6NotificationBadge extends LitElement {
       this.isAnimating = this.shouldNotify;
     }
 
-    // Update ElementInternals ARIA properties
     if (changedProperties.has('accessibleLabel')) {
-      this.#internals.ariaLabel = this.accessibleLabel ?? null;
+      this.ariaLabel = this.accessibleLabel ?? null;
     }
+
     if (changedProperties.has('isExpanded')) {
-      this.#internals.ariaExpanded = this.isExpanded ? 'true' : 'false';
+      this.ariaExpanded = this.isExpanded ? 'true' : 'false';
     }
+  }
+
+  override connectedCallback() {
+    super.connectedCallback();
+    // Set button role on the host element
+    this.role = 'button';
+  }
+
+  override firstUpdated() {
+    // Set initial ARIA state
+    this.ariaLabel = this.accessibleLabel ?? null;
+    this.ariaExpanded = this.isExpanded ? 'true' : 'false';
   }
 
   #handleAnimationEnd = () => {
@@ -106,36 +104,19 @@ export class Pfv6NotificationBadge extends LitElement {
     this.isAnimating = false;
   };
 
-  #handleKeydown = (event: KeyboardEvent) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      this.click();
-    }
-  };
-
-  #handleClick = (event: MouseEvent) => {
-    // Forward click event
-    this.dispatchEvent(new MouseEvent('click', {
-      bubbles: true,
-      composed: true,
-      cancelable: event.cancelable,
-      detail: event.detail,
-      clientX: event.clientX,
-      clientY: event.clientY,
-    }));
+  #handleSlotChange = (event: Event) => {
+    const slot = event.target as HTMLSlotElement;
+    const nodes = slot.assignedNodes({ flatten: true });
+    this.hasSlottedContent = nodes.some(node =>
+      node.nodeType === Node.ELEMENT_NODE
+      || (node.nodeType === Node.TEXT_NODE && node.textContent?.trim())
+    );
   };
 
   render() {
     const hasCount = this.count > 0;
+    const showSlottedContent = !hasCount && this.hasSlottedContent;
     const isAttention = this.variant === 'attention';
-
-    const classes = {
-      notify: this.isAnimating,
-      read: this.variant === 'read',
-      unread: this.variant === 'unread',
-      attention: this.variant === 'attention',
-      clicked: this.isExpanded,
-    };
 
     // Bell icon SVG path (read/unread variants) - matches PatternFly bell icon
     const bellIconPath = [
@@ -180,30 +161,40 @@ export class Pfv6NotificationBadge extends LitElement {
 
     const iconPath = isAttention ? attentionBellIconPath : bellIconPath;
 
-    // Determine notification content
-    let notificationContent = null;
-    if (hasCount) {
-      notificationContent = html`<span class="content">${this.count}</span>`;
-    } else {
-      notificationContent = html`<slot></slot>`;
-    }
+    const iconClasses = {
+      icon: true,
+      notify: this.isAnimating,
+    };
+
+    // Slot positioning logic:
+    // - When count is displayed OR no slotted content: hidden slot outside button (for detection)
+    // - When slotted content exists (no count): visible slot inside button
+    // This prevents an empty <slot> element from triggering pfv6-button's hasTextContent()
+
+    // Determine slot and content rendering
+    // prettier-ignore
+    const hiddenSlot = (hasCount || !this.hasSlottedContent) ? html`<slot style="display:none" @slotchange=${this.#handleSlotChange}></slot>` : null;
+    const buttonContent = hasCount ? this.count : showSlottedContent ? html`<slot @slotchange=${this.#handleSlotChange}></slot>` : null;
 
     return html`
-      <div
-        id="container"
-        tabindex="0"
-        class=${classMap(classes)}
-        @click=${this.#handleClick}
-        @keydown=${this.#handleKeydown}
-        @animationend=${this.#handleAnimationEnd}
+      ${hiddenSlot}
+      <pfv6-button
+        variant="stateful"
+        state=${this.variant}
+        ?is-clicked=${this.isExpanded}
+        ?is-expanded=${this.isExpanded}
       >
-        <span class="icon">
+        <span
+          slot="icon"
+          class=${classMap(iconClasses)}
+          @animationend=${this.#handleAnimationEnd}
+        >
           <svg fill="currentColor" height="1em" width="1em" viewBox="0 0 896 1024" aria-hidden="true">
             <path d=${iconPath}></path>
           </svg>
         </span>
-        ${notificationContent}
-      </div>
+        ${buttonContent}
+      </pfv6-button>
     `;
   }
 }

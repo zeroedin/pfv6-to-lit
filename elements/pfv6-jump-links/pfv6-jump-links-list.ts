@@ -22,7 +22,7 @@ import styles from './pfv6-jump-links-list.css';
 export class Pfv6JumpLinksList extends LitElement {
   static styles = styles;
 
-  readonly #internals = this.attachInternals();
+  #internals = this.attachInternals();
 
   /** Accessible label for the nested list */
   @property({ type: String, attribute: 'accessible-label' })
