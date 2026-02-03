@@ -119,14 +119,6 @@ export class Pfv6ExpandableSection extends LitElement {
   /** Debounce timer for resize */
   #resizeTimer?: number;
 
-  override connectedCallback() {
-    super.connectedCallback();
-
-    if (this.variant === 'truncate') {
-      this.#setupResizeObserver();
-    }
-  }
-
   override disconnectedCallback() {
     super.disconnectedCallback();
     this.#cleanupResizeObserver();
@@ -181,6 +173,7 @@ export class Pfv6ExpandableSection extends LitElement {
     this.#updateHostAria();
 
     if (this.variant === 'truncate') {
+      this.#setupResizeObserver();
       this.#updateLineClamp();
       this.#checkToggleVisibility();
     }
