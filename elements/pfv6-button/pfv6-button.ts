@@ -378,11 +378,11 @@ export class Pfv6Button extends LitElement {
             </span>
           ` : null}
           ${this.iconPosition === 'end' ? html`
-            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+            ${this.hasTextContent() ? html`<span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>` : html`<slot style="display:none" @slotchange=${() => this.requestUpdate()}></slot>`}
             ${this.renderIcon()}
           ` : html`
             ${this.renderIcon()}
-            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+            ${this.hasTextContent() ? html`<span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>` : html`<slot style="display:none" @slotchange=${() => this.requestUpdate()}></slot>`}
           `}
           ${this.querySelector('[slot="count"]') ? html`
             <span class="count"><slot name="count"></slot></span>
@@ -412,11 +412,11 @@ export class Pfv6Button extends LitElement {
             </span>
           ` : null}
           ${this.iconPosition === 'end' ? html`
-            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+            ${this.hasTextContent() ? html`<span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>` : html`<slot style="display:none" @slotchange=${() => this.requestUpdate()}></slot>`}
             ${this.renderIcon()}
           ` : html`
             ${this.renderIcon()}
-            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+            ${this.hasTextContent() ? html`<span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>` : html`<slot style="display:none" @slotchange=${() => this.requestUpdate()}></slot>`}
           `}
           ${this.querySelector('[slot="count"]') ? html`
             <span class="count"><slot name="count"></slot></span>
@@ -447,11 +447,11 @@ export class Pfv6Button extends LitElement {
             </span>
           ` : null}
           ${this.iconPosition === 'end' ? html`
-            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+            ${this.hasTextContent() ? html`<span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>` : html`<slot style="display:none" @slotchange=${() => this.requestUpdate()}></slot>`}
             ${this.renderIcon()}
           ` : html`
             ${this.renderIcon()}
-            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+            ${this.hasTextContent() ? html`<span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>` : html`<slot style="display:none" @slotchange=${() => this.requestUpdate()}></slot>`}
           `}
           ${this.querySelector('[slot="count"]') ? html`
             <span class="count"><slot name="count"></slot></span>
