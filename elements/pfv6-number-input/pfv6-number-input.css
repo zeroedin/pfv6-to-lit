@@ -5,7 +5,7 @@
 }
 
 :host {
-  /* Public CSS API variables - base values only */
+  /* Public CSS API variables */
   --pf-v6-c-number-input__unit--c-input-group--MarginInlineStart: var(--pf-t--global--spacer--sm, 0.5rem);
   --pf-v6-c-number-input__icon--FontSize: var(--pf-t--global--font--size--xs, 0.75rem);
   --pf-v6-c-number-input--c-form-control--width-base:
@@ -19,13 +19,13 @@
 }
 
 #container {
-  /* Width calculation happens here so width-chars override works */
-  --pf-v6-c-number-input--c-form-control--width-chars: 4;
+  /* Private variable: uses public override if set, otherwise defaults to 4 */
+  --_width-chars: var(--pf-v6-c-number-input--c-form-control--width-chars, 4);
   --pf-v6-c-number-input--c-form-control--Width:
     calc(
       calc(
         var(--pf-v6-c-number-input--c-form-control--width-base)
-        + var(--pf-v6-c-number-input--c-form-control--width-chars) * 1ch
+        + var(--_width-chars) * 1ch
       )
       + var(--pf-v6-c-number-input--c-form-control--width-icon)
     );
