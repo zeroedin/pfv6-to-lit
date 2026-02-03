@@ -160,6 +160,7 @@ export class Pfv6JumpLinks extends LitElement {
   @state() private scrollItems: HTMLElement[] = [];
   @state() private internalActiveIndex = 0;
   @state() private isLinkClicked = false;
+  @state() private hasSlottedLabel = false;
 
   private scrollSpyBound = this.scrollSpy.bind(this);
   private resizeObserver: ResizeObserver | null = null;
@@ -406,6 +407,21 @@ export class Pfv6JumpLinks extends LitElement {
     }
   };
 
+  /**
+   * Check if there's a visible label (either via prop or slotted content).
+   */
+  private hasVisibleLabel(): boolean {
+    return Boolean(this.label) || this.hasSlottedLabel;
+  }
+
+  /**
+   * Handle slotchange for the label slot.
+   */
+  private handleLabelSlotChange = (e: Event) => {
+    const slot = e.target as HTMLSlotElement;
+    this.hasSlottedLabel = slot.assignedNodes().length > 0;
+  };
+
   private getExpandableClasses(): Record<string, boolean> {
     if (!this.expandable) {
       return {};
@@ -461,7 +477,7 @@ export class Pfv6JumpLinks extends LitElement {
                 <button
                   id="toggle-button"
                   @click=${this.handleToggle}
-                  aria-label=${ifDefined(this.label ? undefined : this.toggleAccessibleLabel)}
+                  aria-label=${ifDefined(this.hasVisibleLabel() ? undefined : this.toggleAccessibleLabel)}
                   aria-expanded=${this.isExpanded ? 'true' : 'false'}
                 >
                   <span id="toggle-icon">
@@ -470,14 +486,14 @@ export class Pfv6JumpLinks extends LitElement {
                     </svg>
                   </span>
                   ${this.label ? html`<span id="toggle-text">${this.label}</span>` : null}
-                  <slot name="label"></slot>
+                  <slot name="label" @slotchange=${this.handleLabelSlotChange}></slot>
                 </button>
               </div>
             ` : null}
             ${this.label && this.alwaysShowLabel && !this.expandable ? html`
               <div id="label">
                 ${this.label}
-                <slot name="label"></slot>
+                <slot name="label" @slotchange=${this.handleLabelSlotChange}></slot>
               </div>
             ` : null}
           </div>

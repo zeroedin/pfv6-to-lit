@@ -269,6 +269,25 @@ describe('<pfv6-jump-links>', function() {
       const button = el.shadowRoot!.querySelector('#toggle-button');
       expect(button?.getAttribute('aria-label')).to.equal('Show navigation');
     });
+
+    it('does not apply aria-label when label prop is set', async function() {
+      const el = await fixture<Pfv6JumpLinks>(html`
+        <pfv6-jump-links expandable="expandable" label="Jump to section"></pfv6-jump-links>
+      `);
+      const button = el.shadowRoot!.querySelector('#toggle-button');
+      expect(button?.hasAttribute('aria-label')).to.be.false;
+    });
+
+    it('does not apply aria-label when slotted label is provided', async function() {
+      const el = await fixture<Pfv6JumpLinks>(html`
+        <pfv6-jump-links expandable="expandable">
+          <span slot="label">Custom Label</span>
+        </pfv6-jump-links>
+      `);
+      await el.updateComplete;
+      const button = el.shadowRoot!.querySelector('#toggle-button');
+      expect(button?.hasAttribute('aria-label')).to.be.false;
+    });
   });
 
   describe('shouldReplaceNavHistory property', function() {
