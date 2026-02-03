@@ -1,0 +1,36 @@
+<label for="input-unit-1" class="pf-v6-screen-reader">number input 1</label>
+<pfv6-number-input
+  id="number-input-unit-1"
+  value="90"
+  input-name="input 1"
+  minus-btn-accessible-label="minus 1"
+  plus-btn-accessible-label="plus 1"
+  unit="%"
+>
+  <input type="number" id="input-unit-1" value="90">
+</pfv6-number-input>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-number-input/pfv6-number-input.js';
+
+  const numberInput1 = document.getElementById('number-input-unit-1');
+  const input1 = document.getElementById('input-unit-1');
+
+  let value1 = 90;
+
+  numberInput1.addEventListener('minus', () => {
+    value1 = (value1 || 0) - 1;
+    input1.value = value1;
+    numberInput1.value = value1;
+  });
+
+  numberInput1.addEventListener('change', (e) => {
+    value1 = e.value === '' ? e.value : +e.value;
+  });
+
+  numberInput1.addEventListener('plus', () => {
+    value1 = (value1 || 0) + 1;
+    input1.value = value1;
+    numberInput1.value = value1;
+  });
+</script>

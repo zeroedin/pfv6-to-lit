@@ -1,0 +1,45 @@
+<pfv6-number-input
+  id="number-input-unit-1"
+  value="90"
+  name="input1"
+  accessible-label="number input 1"
+  minus-btn-accessible-label="minus 1"
+  plus-btn-accessible-label="plus 1"
+  unit="%"
+></pfv6-number-input>
+<br>
+<br>
+<pfv6-number-input
+  id="number-input-unit-2"
+  value="1.00"
+  step="0.01"
+  name="input2"
+  accessible-label="number input 2"
+  minus-btn-accessible-label="minus 0.01"
+  plus-btn-accessible-label="plus 0.01"
+  unit="$"
+  unit-position="before"
+></pfv6-number-input>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-number-input/pfv6-number-input.js';
+
+  const numberInput1 = document.getElementById('number-input-unit-1');
+  const numberInput2 = document.getElementById('number-input-unit-2');
+
+  numberInput1.addEventListener('minus', () => {
+    numberInput1.value = (numberInput1.value || 0) - 1;
+  });
+
+  numberInput1.addEventListener('plus', () => {
+    numberInput1.value = (numberInput1.value || 0) + 1;
+  });
+
+  numberInput2.addEventListener('minus', () => {
+    numberInput2.value = Number(((numberInput2.value || 0) - 0.01).toFixed(2));
+  });
+
+  numberInput2.addEventListener('plus', () => {
+    numberInput2.value = Number(((numberInput2.value || 0) + 0.01).toFixed(2));
+  });
+</script>

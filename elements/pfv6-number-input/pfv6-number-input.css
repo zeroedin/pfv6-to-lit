@@ -1,0 +1,65 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Public CSS API variables - base values only */
+  --pf-v6-c-number-input__unit--c-input-group--MarginInlineStart: var(--pf-t--global--spacer--sm, 0.5rem);
+  --pf-v6-c-number-input__icon--FontSize: var(--pf-t--global--font--size--xs, 0.75rem);
+  --pf-v6-c-number-input--c-form-control--width-base:
+    calc(
+      var(--pf-t--global--spacer--md, 1rem) * 2
+      + var(--pf-t--global--border--width--box--default, 1px) * 2
+    );
+  --pf-v6-c-number-input--c-form-control--width-icon: var(--pf-t--global--spacer--xl, 2rem);
+
+  display: inline-flex;
+}
+
+#container {
+  /* Width calculation happens here so width-chars override works */
+  --pf-v6-c-number-input--c-form-control--width-chars: 4;
+  --pf-v6-c-number-input--c-form-control--Width:
+    calc(
+      calc(
+        var(--pf-v6-c-number-input--c-form-control--width-base)
+        + var(--pf-v6-c-number-input--c-form-control--width-chars) * 1ch
+      )
+      + var(--pf-v6-c-number-input--c-form-control--width-icon)
+    );
+
+  display: inline-flex;
+  align-items: center;
+}
+
+#minus-icon,
+#plus-icon {
+  font-size: var(--pf-v6-c-number-input__icon--FontSize);
+}
+
+/* Unit spacing when positioned before or after input-group */
+pfv6-input-group + #unit,
+#unit + pfv6-input-group {
+  margin-inline-start: var(--pf-v6-c-number-input__unit--c-input-group--MarginInlineStart);
+}
+
+/* Set width on nested text-input */
+pfv6-text-input {
+  --_text-input-width: var(--pf-v6-c-number-input--c-form-control--Width);
+}
+
+/* Internal input styling */
+input[type="number"] {
+  text-align: end;
+  width: var(--pf-v6-c-number-input--c-form-control--Width);
+  appearance: textfield;
+}
+
+/* Chrome, Safari, Edge, Opera - hide native spin buttons */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
