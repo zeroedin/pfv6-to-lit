@@ -12,20 +12,6 @@ When you need a button that navigates to a URL, use the `href` property. This re
 </pfv6-button>
 ```
 
-## API Differences from React
-
-### `component` prop
-
-**Not implemented**
-
-- **React behavior**: The `component` prop allows changing the rendered element type to any arbitrary component (e.g., `<Button component={CustomLink}>`)
-- **Why not in Lit**: The `component` prop is a React-specific pattern for polymorphic components. Web components don't have an equivalent mechanism for arbitrary component substitution.
-- **Alternative**: For link behavior, use the `href` property which renders an anchor element internally. For other semantic contexts, wrap the button:
-  ```html
-  <!-- For list item context -->
-  <li><pfv6-button>Click me</pfv6-button></li>
-  ```
-
 ## Accessible Labels
 
 For icon-only buttons, always provide an accessible label via the `accessible-label` attribute or visible text content:
