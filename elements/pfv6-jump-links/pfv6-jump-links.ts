@@ -154,10 +154,6 @@ export class Pfv6JumpLinks extends LitElement {
   @property({ type: Boolean, reflect: true, attribute: 'should-replace-nav-history' })
   shouldReplaceNavHistory = false;
 
-  /** Custom ID applied to label if alwaysShowLabel is applied, or expandable toggle. */
-  @property({ type: String, attribute: 'label-id' })
-  labelId?: string | undefined;
-
   @state() private scrollableElement: HTMLElement | null = null;
   @state() private scrollItems: HTMLElement[] = [];
   @state() private internalActiveIndex = 0;

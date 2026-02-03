@@ -292,20 +292,6 @@ describe('<pfv6-jump-links>', function() {
     });
   });
 
-  describe('labelId property', function() {
-    it('defaults to undefined', async function() {
-      const el = await fixture<Pfv6JumpLinks>(html`<pfv6-jump-links></pfv6-jump-links>`);
-      expect(el.labelId).to.be.undefined;
-    });
-
-    it('accepts custom string value', async function() {
-      const el = await fixture<Pfv6JumpLinks>(html`
-        <pfv6-jump-links label-id="custom-label"></pfv6-jump-links>
-      `);
-      expect(el.labelId).to.equal('custom-label');
-    });
-  });
-
   describe('expand event', function() {
     it('dispatches when toggle is clicked to expand', async function() {
       const el = await fixture<Pfv6JumpLinks>(html`
