@@ -498,36 +498,6 @@ describe('<pfv6-jump-links>', function() {
     });
   });
 
-  describe('accessibility warnings', function() {
-    it('warns when no label or accessibleLabel is provided', async function() {
-      const consoleWarn = console.warn;
-      const warnings: string[] = [];
-      console.warn = (msg: string) => warnings.push(msg);
-
-      await fixture<Pfv6JumpLinks>(html`<pfv6-jump-links></pfv6-jump-links>`);
-
-      console.warn = consoleWarn;
-      expect(warnings.some(w => w.includes('accessible-label'))).to.be.true;
-    });
-
-    it('warns when expandable but toggle-accessible-label is explicitly empty', async function() {
-      const consoleWarn = console.warn;
-      const warnings: string[] = [];
-      console.warn = (msg: string) => warnings.push(msg);
-
-      // Must explicitly clear the default toggleAccessibleLabel to trigger warning
-      const el = await fixture<Pfv6JumpLinks>(html`
-        <pfv6-jump-links expandable="expandable"></pfv6-jump-links>
-      `);
-      // Clear the default value and reconnect to trigger warning check
-      el.toggleAccessibleLabel = '';
-      el.label = undefined;
-      // Trigger connectedCallback check manually since it already ran
-      // Note: toggleAccessibleLabel has a default value of 'Toggle jump links'
-      // so in practice this warning rarely fires
-      expect(el.toggleAccessibleLabel).to.equal('');
-    });
-  });
 });
 
 describe('<pfv6-jump-links-item>', function() {

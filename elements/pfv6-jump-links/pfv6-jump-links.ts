@@ -175,17 +175,6 @@ export class Pfv6JumpLinks extends LitElement {
   override connectedCallback() {
     super.connectedCallback();
 
-    if (!this.label && !this.accessibleLabel) {
-      console.warn(
-        'pfv6-jump-links: for accessibility, provide an accessible-label if no label is set'
-      );
-    }
-    if (!this.label && !this.toggleAccessibleLabel && this.expandable) {
-      console.warn(
-        'pfv6-jump-links: for accessibility, provide a toggle-accessible-label if no label is set'
-      );
-    }
-
     // Set up scroll spy if selector provided
     if (this.scrollableSelector) {
       this.setupScrollSpy();
