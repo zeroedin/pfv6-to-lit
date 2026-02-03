@@ -353,41 +353,8 @@ export class Pfv6Button extends LitElement {
       'display-lg': this.size === 'lg',
     };
 
-    return this.isInline && this.variant === 'link' ?
-      html`
-        <span
-          id="container"
-          class=${classMap(classes)}
-          role="button"
-          tabindex=${ifDefined(this.getComputedTabIndex())}
-          aria-disabled=${this.isAriaDisabled ? 'true' : 'false'}
-          aria-label=${ifDefined(this.accessibleLabel)}
-          @click=${this.handleClick}
-          @keydown=${this.handleKeyPress}
-        >
-          ${this.isLoading ? html`
-            <span class="progress">
-              <pfv6-spinner
-                size="md"
-                is-inline
-                accessible-valuetext=${ifDefined(this.spinnerAccessibleValuetext)}
-                accessible-label=${ifDefined(this.spinnerAccessibleLabel)}
-              ></pfv6-spinner>
-            </span>
-          ` : null}
-          ${this.iconPosition === 'end' ? html`
-            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
-            ${this.renderIcon()}
-          ` : html`
-            ${this.renderIcon()}
-            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
-          `}
-          ${this.querySelector('[slot="count"]') ? html`
-            <span class="count"><slot name="count"></slot></span>
-          ` : null}
-        </span>
-      `
-      : this.href ?
+    // When href is set, render as anchor element (takes priority over isInline)
+    return this.href ?
         html`
         <a
           id="container"
@@ -421,6 +388,40 @@ export class Pfv6Button extends LitElement {
             <span class="count"><slot name="count"></slot></span>
           ` : null}
         </a>
+      `
+      : this.isInline && this.variant === 'link' ?
+        html`
+        <span
+          id="container"
+          class=${classMap(classes)}
+          role="button"
+          tabindex=${ifDefined(this.getComputedTabIndex())}
+          aria-disabled=${this.isAriaDisabled ? 'true' : 'false'}
+          aria-label=${ifDefined(this.accessibleLabel)}
+          @click=${this.handleClick}
+          @keydown=${this.handleKeyPress}
+        >
+          ${this.isLoading ? html`
+            <span class="progress">
+              <pfv6-spinner
+                size="md"
+                is-inline
+                accessible-valuetext=${ifDefined(this.spinnerAccessibleValuetext)}
+                accessible-label=${ifDefined(this.spinnerAccessibleLabel)}
+              ></pfv6-spinner>
+            </span>
+          ` : null}
+          ${this.iconPosition === 'end' ? html`
+            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+            ${this.renderIcon()}
+          ` : html`
+            ${this.renderIcon()}
+            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+          `}
+          ${this.querySelector('[slot="count"]') ? html`
+            <span class="count"><slot name="count"></slot></span>
+          ` : null}
+        </span>
       `
         : html`
         <button
