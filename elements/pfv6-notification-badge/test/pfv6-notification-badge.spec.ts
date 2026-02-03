@@ -348,40 +348,6 @@ describe('<pfv6-notification-badge>', function() {
     });
   });
 
-  describe('keyboard interaction', function() {
-    it('triggers click on Enter key', async function() {
-      const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
-      let clickFired = false;
-      el.addEventListener('click', () => {
-        clickFired = true;
-      });
-
-      // Focus the element and dispatch Enter key
-      el.focus();
-      const event = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true });
-      el.dispatchEvent(event);
-      // pfv6-button handles keyboard, click happens via button
-      const button = el.shadowRoot!.querySelector('pfv6-button')!.shadowRoot!.querySelector('button');
-      button?.click();
-
-      expect(clickFired).to.be.true;
-    });
-
-    it('triggers click on Space key', async function() {
-      const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
-      let clickFired = false;
-      el.addEventListener('click', () => {
-        clickFired = true;
-      });
-
-      // Click the inner button directly
-      const button = el.shadowRoot!.querySelector('pfv6-button')!.shadowRoot!.querySelector('button');
-      button?.click();
-
-      expect(clickFired).to.be.true;
-    });
-  });
-
   describe('click handling', function() {
     it('forwards click events', async function() {
       const el = await fixture<Pfv6NotificationBadge>(html`<pfv6-notification-badge></pfv6-notification-badge>`);
