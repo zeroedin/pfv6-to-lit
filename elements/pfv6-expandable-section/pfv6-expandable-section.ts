@@ -235,9 +235,16 @@ export class Pfv6ExpandableSection extends LitElement {
   #checkToggleVisibility() {
     if (this._contentRef) {
       const maxLines = this.truncateMaxLines || 3;
-      const lineHeight = parseInt(getComputedStyle(this._contentRef).lineHeight);
-      const totalLines = this._contentRef.scrollHeight / lineHeight;
+      const styles = getComputedStyle(this._contentRef);
+      let lineHeight = parseFloat(styles.lineHeight);
 
+      // lineHeight may be "normal" or unitless, falling back to fontSize * 1.2
+      if (Number.isNaN(lineHeight) || lineHeight === 0) {
+        const fontSize = parseFloat(styles.fontSize) || 16;
+        lineHeight = fontSize * 1.2;
+      }
+
+      const totalLines = this._contentRef.scrollHeight / lineHeight;
       this._hasToggle = totalLines > maxLines;
     }
   }
