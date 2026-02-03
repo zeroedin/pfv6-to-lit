@@ -211,13 +211,28 @@ connectedCallback() {
 
 ### 4.3 Detection
 
-Search for IDREF attributes that reference properties (likely external IDs):
+Search for IDREF attributes that reference properties:
 
 ```text
-Grep('aria-labelledby=\\$\\{|aria-describedby=\\$\\{|aria-controls=\\$\\{.*this\\.', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
+Grep('aria-labelledby=\\$\\{|aria-describedby=\\$\\{|aria-controls=\\$\\{', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
-If found referencing a property that could be an external ID → **CRITICAL VIOLATION**
+**Evaluate each match - NOT all are violations:**
+
+✅ **VALID** - Internal shadow DOM references:
+- References to static IDs defined in same template (e.g., `aria-controls="content"`)
+- References to private fields (`#internalId`) used only within shadow DOM
+- Properties assigned via `this.shadowRoot.querySelector()`
+
+❌ **VIOLATION** - External/cross-boundary references:
+- `@property()` decorated props that accept IDs from light DOM (e.g., `toggleId`, `labelId`)
+- Properties documented as receiving external element IDs
+- Any IDREF pointing to elements outside the shadow root
+
+**Only flag as CRITICAL VIOLATION when:**
+1. The property is a public `@property()` that receives values from light DOM
+2. The referenced ID is expected to exist outside the shadow root
+3. There is clear evidence of cross-shadow-boundary wiring
 
 ### 4.4 Detached Component Pattern (CORRECT APPROACH)
 
