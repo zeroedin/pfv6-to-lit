@@ -1,0 +1,81 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Private variables set by parent pfv6-jump-links */
+  --pf-v6-c-jump-links__list--before--BorderColor: transparent;
+
+  display: contents;
+}
+
+#link {
+  position: relative;
+  display: flex;
+  flex: 1;
+  padding-block-start: var(--_jump-links-item-link-padding-block-start);
+  padding-block-end: var(--_jump-links-item-link-padding-block-end);
+  padding-inline-start: var(--_jump-links-item-link-padding-inline-start);
+  padding-inline-end: var(--_jump-links-item-link-padding-inline-end);
+  text-decoration-line: none;
+  outline-offset: var(--_jump-links-item-link-outline-offset);
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    border-color: var(--_jump-links-item-link-before-border-color);
+    border-style: solid;
+    border-block-start-width: var(--_jump-links-item-link-before-border-block-start-width);
+    border-block-end-width: var(--_jump-links-item-link-before-border-block-end-width);
+    border-inline-start-width: var(--_jump-links-item-link-before-border-inline-start-width);
+    border-inline-end-width: var(--_jump-links-item-link-before-border-inline-end-width);
+  }
+}
+
+#link-text {
+  color: var(--_jump-links-item-link-text-color);
+}
+
+#link-button {
+  /* Button component handles padding, display, and anchor reset */
+
+  &:is(:hover, :focus) {
+    & #link-text {
+      --_jump-links-item-link-text-color: var(--_jump-links-item-link-hover-text-color);
+    }
+  }
+}
+
+#container {
+  &.current {
+    /* Set variables on #link so ::before inherits them */
+    & #link {
+      --_jump-links-item-link-before-border-block-start-width:
+        var(
+          --_jump-links-item-current-link-before-border-block-start-width
+        );
+      --_jump-links-item-link-before-border-inline-start-width:
+        var(
+          --_jump-links-item-current-link-before-border-inline-start-width
+        );
+      --_jump-links-item-link-before-border-color:
+        var(
+          --_jump-links-item-current-link-before-border-color
+        );
+    }
+
+    & #link-text {
+      --_jump-links-item-link-text-color: var(--_jump-links-item-current-link-text-color);
+    }
+  }
+}
+
+::slotted(pfv6-jump-links-list) {
+  --_jump-links-list-link-padding-block-start: var(--_jump-links-item-link-padding-block-start);
+  --_jump-links-list-link-padding-block-end: var(--_jump-links-item-link-padding-block-end);
+  --_jump-links-list-link-padding-inline-start: var(--pf-t--global--spacer--lg, 1.5rem);
+}

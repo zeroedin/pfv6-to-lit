@@ -1,0 +1,25 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+#container {
+  padding-block-start: var(--_jump-links-list-padding-block-start);
+  padding-block-end: var(--_jump-links-list-padding-block-end);
+  margin-block-start: var(--_jump-links-list-margin-block-start);
+}
+
+#list {
+  display: contents;
+}
+
+::slotted(pfv6-jump-links-item) {
+  --_jump-links-item-link-padding-block-start: var(--_jump-links-list-link-padding-block-start);
+  --_jump-links-item-link-padding-block-end: var(--_jump-links-list-link-padding-block-end);
+  --_jump-links-item-link-padding-inline-start: var(--_jump-links-list-link-padding-inline-start);
+}
