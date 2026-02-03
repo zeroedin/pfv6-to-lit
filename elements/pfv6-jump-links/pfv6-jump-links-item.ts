@@ -2,7 +2,10 @@ import { LitElement, html } from 'lit';
 import type { PropertyValues } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { property } from 'lit/decorators/property.js';
+import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { consume } from '@lit/context';
+import { jumpLinksContext, type JumpLinksContext } from './context.js';
 import styles from './pfv6-jump-links-item.css';
 import '@pfv6/elements/pfv6-button/pfv6-button.js';
 
@@ -53,7 +56,7 @@ export class Pfv6JumpLinksItem extends LitElement {
 
   readonly #internals = this.attachInternals();
 
-  /** Whether this item is active. Parent JumpLinks component sets this when passed a scrollableSelector. */
+  /** Whether this item is active. Can be set directly or derived from parent context. */
   @property({ type: Boolean, reflect: true, attribute: 'is-active' })
   isActive = false;
 
@@ -65,9 +68,41 @@ export class Pfv6JumpLinksItem extends LitElement {
   @property({ type: String, reflect: true })
   node?: string | undefined;
 
+  /**
+   * Context value from parent JumpLinks.
+   * Uses @consume decorator to subscribe to context changes.
+   */
+  @consume({ context: jumpLinksContext, subscribe: true })
+  @state()
+  private jumpLinksContext: JumpLinksContext | undefined;
+
   constructor() {
     super();
     this.#internals.role = 'listitem';
+  }
+
+  /**
+   * Compute this item's index within the parent jump-links.
+   */
+  private getIndex(): number {
+    const parent = this.closest('pfv6-jump-links');
+    if (!parent) {
+      return -1;
+    }
+    const items = Array.from(parent.querySelectorAll('pfv6-jump-links-item'));
+    return items.indexOf(this);
+  }
+
+  /**
+   * Derive active state from context when context changes.
+   */
+  private updateActiveFromContext() {
+    if (this.jumpLinksContext) {
+      const index = this.getIndex();
+      if (index !== -1) {
+        this.isActive = index === this.jumpLinksContext.activeIndex;
+      }
+    }
   }
 
   private handleClick = (e: MouseEvent) => {
@@ -79,6 +114,11 @@ export class Pfv6JumpLinksItem extends LitElement {
 
   override updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
+
+    // Update active state when context changes
+    if (changedProperties.has('jumpLinksContext')) {
+      this.updateActiveFromContext();
+    }
 
     if (changedProperties.has('isActive')) {
       // Update aria-current on host via ElementInternals

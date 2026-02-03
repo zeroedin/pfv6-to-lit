@@ -5,6 +5,8 @@ import { property } from 'lit/decorators/property.js';
 import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { provide } from '@lit/context';
+import { jumpLinksContext, type JumpLinksContext } from './context.js';
 import { Pfv6JumpLinksItemClickEvent } from './pfv6-jump-links-item.js';
 import './pfv6-jump-links-list.js';
 import styles from './pfv6-jump-links.css';
@@ -162,6 +164,23 @@ export class Pfv6JumpLinks extends LitElement {
   private scrollSpyBound = this.scrollSpy.bind(this);
   private resizeObserver: ResizeObserver | null = null;
 
+  /**
+   * Context value provided to child items.
+   * Children consume this to determine their active state.
+   */
+  @provide({ context: jumpLinksContext })
+  @state()
+  private contextValue: JumpLinksContext = {
+    activeIndex: 0,
+  };
+
+  /**
+   * Update context when internal active index changes.
+   */
+  private updateContext() {
+    this.contextValue = { activeIndex: this.internalActiveIndex };
+  }
+
   constructor() {
     super();
     // Set navigation role on host via ElementInternals
@@ -225,6 +244,7 @@ export class Pfv6JumpLinks extends LitElement {
 
     if (changedProperties.has('activeIndex')) {
       this.internalActiveIndex = this.activeIndex;
+      this.updateContext();
     }
 
     // Update ariaLabel on host via ElementInternals when label props change
@@ -236,6 +256,9 @@ export class Pfv6JumpLinks extends LitElement {
   override firstUpdated() {
     // Set initial ariaLabel
     this.#internals.ariaLabel = this.accessibleLabel || this.label || null;
+
+    // Sync initial active state to children
+    this.updateContext();
 
     // Refresh scroll items after initial render
     if (this.scrollableSelector) {
@@ -314,6 +337,7 @@ export class Pfv6JumpLinks extends LitElement {
         if (scrollPosition >= y) {
           if (this.internalActiveIndex !== index) {
             this.internalActiveIndex = index;
+            this.updateContext();
             this.dispatchEvent(new Pfv6JumpLinksActiveChangeEvent(index));
           }
           return;
@@ -348,6 +372,7 @@ export class Pfv6JumpLinks extends LitElement {
       }
 
       this.internalActiveIndex = index;
+      this.updateContext();
       this.dispatchEvent(new Pfv6JumpLinksActiveChangeEvent(index));
     }
   }
