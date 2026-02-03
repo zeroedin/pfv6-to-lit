@@ -148,18 +148,152 @@ render() {
 }
 ```
 
-## Step 4: Validate IDREF Attributes
+## Step 4: Validate IDREF Attributes (CRITICAL)
 
-**IDREF attributes (aria-labelledby, aria-describedby) require special handling**:
+**IDREF attributes CANNOT cross shadow DOM boundaries**. This is a fundamental limitation.
 
-If component uses IDREF attributes:
-1. IDs must be unique within document
-2. Consider using `accessible-*` properties
-3. Generate IDs with component prefix
+### 4.1 Shadow DOM IDREF Constraint
+
+IDREF attributes (`aria-labelledby`, `aria-describedby`, `aria-controls`, `for`, etc.) can only reference elements **within the same shadow root or document**.
+
+❌ **WILL NOT WORK** - Referencing external element from shadow DOM:
+```typescript
+// toggleId is an ID from the light DOM
+render() {
+  return html`<div aria-labelledby=${this.toggleId}>`;  // BROKEN!
+}
+```
+
+❌ **WILL NOT WORK** - Referencing shadow DOM element from light DOM:
+```html
+<!-- External button trying to control shadow DOM content -->
+<button aria-controls="shadow-content-id">Toggle</button>  <!-- BROKEN! -->
+```
+
+### 4.2 Valid IDREF Patterns
+
+**Pattern A: Internal references only (within same shadow root)**
+```typescript
+render() {
+  return html`
+    <button id="toggle-button" aria-controls="content">Toggle</button>
+    <div id="content" aria-labelledby="toggle-button">...</div>
+  `;
+}
+```
+
+**Pattern B: Use ElementInternals for host-level ARIA**
+```typescript
+#internals: ElementInternals;
+
+constructor() {
+  super();
+  this.#internals = this.attachInternals();
+}
+
+updated() {
+  // Set ARIA on the host element itself
+  this.#internals.ariaLabel = this.accessibleLabel;
+}
+```
+
+**Pattern C: Use ariaLabelledByElements for cross-boundary references (experimental)**
+```typescript
+// Requires browser support for ARIAMixin element references
+connectedCallback() {
+  super.connectedCallback();
+  const labelElement = document.getElementById(this.labelId);
+  if (labelElement) {
+    this.#internals.ariaLabelledByElements = [labelElement];
+  }
+}
+```
+
+### 4.3 Detection
+
+Search for IDREF attributes that reference properties:
+
+```text
+Grep('aria-labelledby=\\$\\{|aria-describedby=\\$\\{|aria-controls=\\$\\{', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
+```
+
+**Evaluate each match - NOT all are violations:**
+
+✅ **VALID** - Internal shadow DOM references:
+- References to static IDs defined in same template (e.g., `aria-controls="content"`)
+- References to private fields (`#internalId`) used only within shadow DOM
+- Properties assigned via `this.shadowRoot.querySelector()`
+
+❌ **VIOLATION** - External/cross-boundary references:
+- `@property()` decorated props that accept IDs from light DOM (e.g., `toggleId`, `labelId`)
+- Properties documented as receiving external element IDs
+- Any IDREF pointing to elements outside the shadow root
+
+**Only flag as CRITICAL VIOLATION when:**
+1. The property is a public `@property()` that receives values from light DOM
+2. The referenced ID is expected to exist outside the shadow root
+3. There is clear evidence of cross-shadow-boundary wiring
+
+### 4.4 Detached Component Pattern (CORRECT APPROACH)
+
+For components with detached sub-components (like ExpandableSection with external toggle):
+
+**Solution: Set ARIA on the host element via ElementInternals**
+
+Since the host element is in light DOM, it can reference other light DOM elements.
 
 ```typescript
-#uniqueId = `pfv6-${this.tagName.toLowerCase()}-${crypto.randomUUID().slice(0, 8)}`;
+// Main component (e.g., pfv6-expandable-section)
+#internals: ElementInternals;
+
+constructor() {
+  super();
+  this.#internals = this.attachInternals();
+}
+
+updated(changedProperties: PropertyValues) {
+  if (this.isDetached && this.toggleId) {
+    // Host is in light DOM, can reference external toggle in light DOM
+    this.#internals.role = 'region';
+    this.#internals.ariaLabelledBy = this.toggleId;
+  } else {
+    this.#internals.role = null;
+    this.#internals.ariaLabelledBy = null;
+  }
+}
+
+render() {
+  // When detached, don't set role on internal content (host has it)
+  return html`
+    <div id="content" role=${ifDefined(this.isDetached ? undefined : 'region')}>
+      <slot></slot>
+    </div>
+  `;
+}
 ```
+
+**Usage:**
+```html
+<!-- External toggle (light DOM) -->
+<pfv6-expandable-section-toggle
+  id="my-toggle"
+  content-id="my-section">
+  Toggle
+</pfv6-expandable-section-toggle>
+
+<!-- Main component (light DOM host, shadow DOM content) -->
+<pfv6-expandable-section
+  id="my-section"
+  toggle-id="my-toggle"
+  is-detached>
+  Content
+</pfv6-expandable-section>
+```
+
+**Result:**
+- Toggle has `aria-controls="my-section"` → references host element ✅
+- Host has `role="region"` and `aria-labelledby="my-toggle"` via ElementInternals ✅
+- Both IDREF relationships are light DOM to light DOM ✅
 
 ## Report Format
 
@@ -181,9 +315,11 @@ If component uses IDREF attributes:
 - [ ] Internal tabindex correct: ✅/❌
 - [ ] Focus-visible styles present: ✅/❌
 
-### IDREF Handling
+### IDREF Validation (CRITICAL)
 - [ ] Uses IDREF attributes: Yes/No
-- [ ] IDs properly generated: ✅/❌
+- [ ] All IDREF references are internal (same shadow root): ✅/❌
+- [ ] No cross-boundary IDREF references: ✅/❌
+- [ ] External references use ElementInternals: ✅/❌/N/A
 
 ### Issues Found
 1. {issue description}

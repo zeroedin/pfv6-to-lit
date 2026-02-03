@@ -1,0 +1,26 @@
+<pfv6-expandable-section id="basic-example">
+  This content is visible only when the component is expanded.
+</pfv6-expandable-section>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-expandable-section/pfv6-expandable-section.js';
+
+  const section = document.getElementById('basic-example');
+
+  // Controlled mode - manage state
+  let isExpanded = false;
+
+  // Update toggle text based on state
+  const updateToggleText = () => {
+    section.toggleText = isExpanded ? 'Show less basic example content' : 'Show more basic example content';
+  };
+
+  updateToggleText();
+
+  // Listen for toggle events
+  section.addEventListener('toggle', (e) => {
+    isExpanded = e.isExpanded;
+    section.isExpanded = isExpanded;
+    updateToggleText();
+  });
+</script>

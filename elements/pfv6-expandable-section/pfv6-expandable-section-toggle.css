@@ -1,0 +1,74 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Public CSS API - Toggle icon variables */
+  --pf-v6-c-expandable-section__toggle-icon--MinWidth: 1em;
+  --pf-v6-c-expandable-section__toggle-icon--Color:
+    var(
+      --pf-t--global--icon--color--regular,
+      #151515
+    );
+  --pf-v6-c-expandable-section__toggle-icon--TransitionTimingFunction:
+    var(
+      --pf-t--global--motion--timing-function--default,
+      cubic-bezier(0.4, 0, 0.2, 1)
+    );
+  --pf-v6-c-expandable-section__toggle-icon--TransitionDuration:
+    var(
+      --pf-t--global--motion--duration--icon--default,
+      100ms
+    );
+  --pf-v6-c-expandable-section__toggle-icon--Transition:
+    transform
+    var(--pf-v6-c-expandable-section__toggle-icon--TransitionDuration)
+    var(--pf-v6-c-expandable-section__toggle-icon--TransitionTimingFunction);
+  --pf-v6-c-expandable-section__toggle-icon--Rotate: 0;
+  --pf-v6-c-expandable-section__toggle-icon--m-expand-top--Rotate: 0;
+  --pf-v6-c-expandable-section--m-expanded__toggle-icon--Rotate: 90deg;
+  --pf-v6-c-expandable-section--m-expanded__toggle-icon--m-expand-top--Rotate: -90deg;
+
+  /* Display property for host */
+  display: inline-block;
+}
+
+#container {
+  display: inline-block;
+
+  &.expanded {
+    --pf-v6-c-expandable-section__toggle-icon--Rotate:
+      var(
+        --pf-v6-c-expandable-section--m-expanded__toggle-icon--Rotate
+      );
+    --pf-v6-c-expandable-section__toggle-icon--m-expand-top--Rotate:
+      var(
+        --pf-v6-c-expandable-section--m-expanded__toggle-icon--m-expand-top--Rotate
+      );
+  }
+}
+
+.toggle-icon {
+  display: inline-block;
+  min-width: var(--pf-v6-c-expandable-section__toggle-icon--MinWidth);
+  color: var(--pf-v6-c-expandable-section__toggle-icon--Color);
+  transition: var(--pf-v6-c-expandable-section__toggle-icon--Transition);
+  transform: rotate(var(--pf-v6-c-expandable-section__toggle-icon--Rotate));
+
+  & svg {
+    vertical-align: -0.125em;
+  }
+
+  &.expand-top {
+    --pf-v6-c-expandable-section__toggle-icon--Rotate:
+      var(
+        --pf-v6-c-expandable-section__toggle-icon--m-expand-top--Rotate
+      );
+  }
+}
+
+.toggle-icon:dir(rtl) {
+  scale: -1 1;
+}

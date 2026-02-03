@@ -1,0 +1,44 @@
+<div class="pf-v6-l-stack pf-m-gutter">
+  <div>
+    <pfv6-expandable-section
+      id="detached-section"
+      is-detached
+      direction="up"
+      toggle-id="detached-toggle">
+      This content is visible only when the component is expanded.
+    </pfv6-expandable-section>
+  </div>
+  <div>
+    <pfv6-expandable-section-toggle
+      id="detached-toggle"
+      content-id="detached-section"
+      direction="up"
+      is-detached>
+    </pfv6-expandable-section-toggle>
+  </div>
+</div>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-expandable-section/pfv6-expandable-section.js';
+
+  const section = document.getElementById('detached-section');
+  const toggle = document.getElementById('detached-toggle');
+
+  // Controlled mode - manage state
+  let isExpanded = false;
+
+  // Update toggle text based on state
+  const updateToggleText = () => {
+    toggle.textContent = isExpanded ? 'Show less detached example content' : 'Show more detached example content';
+  };
+
+  updateToggleText();
+
+  // Listen for toggle events from the detached toggle
+  toggle.addEventListener('toggle', (e) => {
+    isExpanded = e.isExpanded;
+    section.isExpanded = isExpanded;
+    toggle.isExpanded = isExpanded;
+    updateToggleText();
+  });
+</script>
