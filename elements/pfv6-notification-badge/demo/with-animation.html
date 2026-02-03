@@ -1,0 +1,59 @@
+<div class="pf-v6-l-stack pf-m-gutter">
+  <div class="pf-v6-l-stack__item"><pfv6-notification-badge
+      id="read-badge"
+      variant="read"
+      accessible-label="Notification badge with read variant and no count"
+      count="0"
+    ></pfv6-notification-badge><pfv6-notification-badge
+      id="unread-badge"
+      variant="unread"
+      accessible-label="Notification badge animation with unread variant and count"
+      count="0"
+    ></pfv6-notification-badge><pfv6-notification-badge
+      id="attention-badge"
+      variant="attention"
+      accessible-label="Notification badge animation with attention variant and count"
+      count="0"
+    ></pfv6-notification-badge></div>
+  <div class="pf-v6-l-stack__item">
+    <pfv6-button id="add-notification-btn">Add Notification</pfv6-button>
+  </div>
+</div>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-notification-badge/pfv6-notification-badge.js';
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+  const readBadge = document.getElementById('read-badge');
+  const unreadBadge = document.getElementById('unread-badge');
+  const attentionBadge = document.getElementById('attention-badge');
+  const addNotificationBtn = document.getElementById('add-notification-btn');
+
+  let count = 0;
+
+  const badges = [readBadge, unreadBadge, attentionBadge];
+
+  const handleAnimationEnd = () => {
+    badges.forEach(badge => {
+      badge.shouldNotify = false;
+    });
+  };
+
+  badges.forEach(badge => {
+    badge.addEventListener('animation-end', handleAnimationEnd);
+  });
+
+  addNotificationBtn.addEventListener('click', () => {
+    count++;
+
+    badges.forEach(badge => {
+      badge.count = count;
+    });
+
+    if (count > 0) {
+      badges.forEach(badge => {
+        badge.shouldNotify = true;
+      });
+    }
+  });
+</script>

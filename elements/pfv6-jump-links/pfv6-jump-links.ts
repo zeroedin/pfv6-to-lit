@@ -194,11 +194,11 @@ export class Pfv6JumpLinks extends LitElement {
    */
   private handleJumpLinkClick = (e: Event) => {
     const event = e as Pfv6JumpLinksItemClickEvent;
-    const itemElement = e.target as HTMLElement;
+    const itemElement = e.target;
 
     // Compute global index from all items in this container
     const allItems = Array.from(this.querySelectorAll('pfv6-jump-links-item'));
-    const index = allItems.indexOf(itemElement);
+    const index = allItems.findIndex(item => item === itemElement);
 
     if (index !== -1) {
       // Set the index on the event so consumers can access it
