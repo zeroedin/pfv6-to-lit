@@ -75,7 +75,7 @@ These steps ensure:
 
 ```bash
 # Start development server
-npm run dev
+npm run start
 # Opens http://localhost:8000 with the development index page
 
 # Compile TypeScript
@@ -89,13 +89,6 @@ npm run test
 
 # Run E2E tests
 npm run e2e
-
-# Analyze component dependencies and generate conversion order
-npx tsx scripts/extract-component-dependencies.ts > component-dependencies.yaml
-npx tsx scripts/generate-conversion-order.ts 2>/dev/null > conversion-order.yaml
-
-# Find next component to convert
-npx tsx scripts/find-next-component.ts
 ```
 
 **Development Pages:**
@@ -105,26 +98,26 @@ npx tsx scripts/find-next-component.ts
 - **`/elements/pfv6-{name}/react/`** - React component demo index (comparison demos)
 - **`/elements/pfv6-{name}/react/{page}/`** - Individual React component demo pages
 
-## Getting Started
-
-### Component Conversion Workflow
+## Component Conversion Workflow
 
 This project uses specialized AI subagents to convert React PatternFly components to LitElement web components.
 
 ### Finding the Next Component to Convert
 
-Use the `find` subagent to identify the optimal next component based on dependency analysis:
+Use the `find` subagent to identify the optimal next task or component based on dependency analysis:
 
 **Prompt:**
 
 ```
-Use the find.md subagent to locate the next component we should build
+Find the next task or component to convert
 ```
 
 The `find` subagent:
-- Analyzes the conversion order in `conversion-order.yaml`
-- Recommends the next component to convert based on dependency order
-- Provides reasoning and next steps
+1. Regenerates `tasks.json` by running `npm run deps:extract && npm run deps:tasks`
+2. Detects which `elements/pfv6-*/` directories exist
+3. Analyzes dependencies from PatternFly React source
+4. Recommends the next component to convert based on dependency order
+5. Provides reasoning and next steps
 
 ### Converting a Component
 
@@ -140,38 +133,69 @@ Replace `{{ Component Name }}` with the component name from the `find` recommend
 
 **Conversion Workflow:**
 
-The main conversation orchestrates the conversion by delegating to specialized subagents in sequence:
+The main conversation orchestrates the conversion by delegating to specialized subagents in phases:
 
+**Phase 1: Initial Setup**
+- Verify component type (layout vs regular)
+- Verify `.cache/` repositories exist
+
+**Phase 2: Component Implementation**
 1. **api-writer** - Translates React props to LitElement properties and creates TypeScript component files
-2. **api-auditor** - Validates component API against Lit best practices
-3. **demo-writer** - Converts React examples to HTML demos
-4. **demo-auditor** - Validates 1:1 parity with React demos
-5. **css-writer** - Translates React CSS to Shadow DOM CSS with token-derived fallbacks
-6. **css-auditor** - Validates CSS against React source
-7. **aria-auditor** - Validates ARIA patterns (property naming, IDREF, React parity, redundant roles)
-8. **element-internals-auditor** - Validates ElementInternals usage (host-level ARIA, duplicative semantics)
-9. **face-elements-auditor** - Validates Form-Associated Custom Element implementation
-10. **test-spec-writer** - Generates comprehensive unit tests
-11. **test-visual-writer** - Creates visual regression tests
-12. **test-css-api-writer** - Generates CSS API override tests
+2. **face-elements-writer** (conditional) - Adds Form-Associated Custom Element patterns for form controls
+3. **6 focused api-auditors** (run in parallel):
+   - **api-bem-auditor** - Detects BEM classes in Shadow DOM templates
+   - **api-import-auditor** - Validates import patterns and unused code
+   - **api-property-auditor** - Validates property decorators and React API parity
+   - **api-template-auditor** - Validates template patterns and naming conventions
+   - **api-internals-auditor** - Validates ElementInternals and focus delegation
+   - **api-lifecycle-auditor** - Validates lifecycle patterns and event translation
+
+**Phase 3: Demo Creation**
+4. **demo-writer** - Converts React examples to HTML demos
+5. **layout-translator** (conditional) - Translates React layout components to CSS classes
+6. **style-components** (conditional) - Translates React styling components to semantic HTML
+
+**Phase 4: Demo Validation**
+7. **demo-auditor** - Validates 1:1 parity with React demos
+
+**Phase 5: CSS Translation**
+8. **css-writer** - Translates React CSS to Shadow DOM CSS with token-derived fallbacks
+9. **css-auditor** - Validates CSS against React source
+
+**Phase 6: Accessibility Validation**
+10. **aria-auditor** - Validates ARIA patterns (property naming, IDREF, React parity, redundant roles)
+11. **element-internals-auditor** (conditional) - Validates ElementInternals usage
+12. **face-elements-auditor** (conditional) - Validates Form-Associated Custom Element implementation
+
+**Phase 7: Test Creation**
+13. **test-spec-writer** - Generates comprehensive unit tests
+14. **test-visual-writer** - Creates visual regression tests
+15. **test-css-api-writer** - Generates CSS API override tests
+
+**Phase 8: Test Analysis**
+16. **test-runner** (if failures) - Analyzes test failures and categorizes as fixable vs blocked
 
 Each subagent runs in isolation and reports back to the main conversation, which manages the overall workflow.
 
 **Example workflow:**
 
 ```bash
-# Step 1: Find next component
-> Use the find.md subagent to locate the next component we should build
+# Step 1: Find next task or component
+> Find the next task or component to convert
 
-# Agent responds: "Next Component: Spinner (0 dependencies, blocks 6 components)"
+# Agent responds with recommendation from tasks.json
+# (e.g., "Next Component: NotificationBadge" or "Next Demo Task: AccordionBordered.tsx")
 
 # Step 2: Convert the component
-> Convert Spinner component
+> Convert NotificationBadge component
 
-# Main conversation delegates to each subagent in sequence:
+# Main conversation delegates to each subagent through all phases:
 #   - api-writer creates component files
-#   - api-auditor validates API
+#   - 6 api-auditors validate in parallel
 #   - demo-writer creates demos
+#   - css-writer translates CSS
+#   - aria-auditor validates accessibility
+#   - test-spec-writer creates tests
 #   - ... (continues through all phases)
 ```
 
@@ -228,9 +252,9 @@ Our demos use two PatternFly CSS files:
   - Location: `/dev-server/styles/patternfly/base.css`
 
 - **`patternfly.css`** - Full PatternFly CSS (includes component styles and layout utilities)
-  - Copied from `@patternfly/patternfly/patternfly.css`
+  - Part of the patternfly-react distribution
   - Used by all demos (Lit and React)
-  - Location: `/dev-server/styles/patternfly/patternfly.css`
+  - Location: `/patternfly-react/dist/patternfly.css`
 
 **Why patternfly.css for Lit demos?**
 
