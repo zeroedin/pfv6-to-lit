@@ -2,21 +2,28 @@
 
 Button component for triggering actions.
 
+## Link Buttons
+
+When you need a button that navigates to a URL, use the `href` property. This renders an anchor element internally while maintaining button styling:
+
+```html
+<pfv6-button href="https://www.patternfly.org/" target="_blank" variant="primary">
+  Link to PatternFly
+</pfv6-button>
+```
+
 ## API Differences from React
 
 ### `component` prop
 
 **Not implemented**
 
-- **React behavior**: The `component` prop allows changing the rendered element type (e.g., `<Button component="a">` renders as `<a>`)
-- **Why not in Lit**: Web components have a fixed element type and cannot be transformed to different element types at runtime. The `component` prop is a React-specific feature that relies on JSX compilation.
-- **Alternative**: For link behavior, use the `variant="link"` style prop. For semantic wrapping, wrap the button in appropriate HTML elements outside the component:
+- **React behavior**: The `component` prop allows changing the rendered element type to any arbitrary component (e.g., `<Button component={CustomLink}>`)
+- **Why not in Lit**: The `component` prop is a React-specific pattern for polymorphic components. Web components don't have an equivalent mechanism for arbitrary component substitution.
+- **Alternative**: For link behavior, use the `href` property which renders an anchor element internally. For other semantic contexts, wrap the button:
   ```html
   <!-- For list item context -->
   <li><pfv6-button>Click me</pfv6-button></li>
-
-  <!-- For anchor-like behavior -->
-  <a href="/page"><pfv6-button>Link button</pfv6-button></a>
   ```
 
 ## Accessible Labels

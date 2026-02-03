@@ -149,6 +149,14 @@ export class Pfv6Button extends LitElement {
   @property({ type: String, attribute: 'spinner-accessible-label' })
   spinnerAccessibleLabel?: string | undefined;
 
+  /** URL to link to. When set, renders as an anchor element instead of a button. */
+  @property({ type: String, reflect: true })
+  href?: string | undefined;
+
+  /** Link target (e.g., '_blank', '_self'). Only used when href is set. */
+  @property({ type: String, reflect: true })
+  target?: string | undefined;
+
   /**
   * Computes the appropriate tabindex for the inner button/span.
   * With delegatesFocus, the host's native tabindex controls tab order.
@@ -379,14 +387,49 @@ export class Pfv6Button extends LitElement {
           ` : null}
         </span>
       `
-      : html`
+      : this.href ?
+        html`
+        <a
+          id="container"
+          class=${classMap(classes)}
+          href=${this.href}
+          target=${ifDefined(this.target)}
+          aria-disabled=${this.isAriaDisabled || this.isDisabled ? 'true' : 'false'}
+          aria-label=${ifDefined(this.accessibleLabel)}
+          tabindex=${ifDefined(this.isDisabled ? -1 : this.getComputedTabIndex())}
+          @click=${this.handleClick}
+          @keypress=${this.handleKeyPress}
+        >
+          ${this.isLoading ? html`
+            <span class="progress">
+              <pfv6-spinner
+                size="md"
+                ?is-inline=${this.isInline}
+                accessible-valuetext=${ifDefined(this.spinnerAccessibleValuetext)}
+                accessible-label=${ifDefined(this.spinnerAccessibleLabel)}
+              ></pfv6-spinner>
+            </span>
+          ` : null}
+          ${this.iconPosition === 'end' ? html`
+            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+            ${this.renderIcon()}
+          ` : html`
+            ${this.renderIcon()}
+            <span class="text"><slot @slotchange=${() => this.requestUpdate()}></slot></span>
+          `}
+          ${this.querySelector('[slot="count"]') ? html`
+            <span class="count"><slot name="count"></slot></span>
+          ` : null}
+        </a>
+      `
+        : html`
         <button
           id="container"
           class=${classMap(classes)}
           type=${this.type}
           ?disabled=${this.isDisabled}
           aria-disabled=${this.isAriaDisabled ? 'true' : 'false'}
-          aria-expanded=${ifDefined(this.isExpanded !== undefined ? String(this.isExpanded) : undefined)}
+          aria-expanded=${ifDefined(this.isExpanded !== undefined ? (this.isExpanded ? 'true' : 'false') : undefined)}
           aria-label=${ifDefined(this.accessibleLabel)}
           tabindex=${ifDefined(this.getComputedTabIndex())}
           @click=${this.handleClick}
