@@ -18,19 +18,19 @@ body {
 }
 
 /* Top navigation bar */
-nav {
+#demo-nav {
   padding: 1rem;
   border-bottom: 1px solid var(--pf-t--global--border--color--default, #c7c7c7);
   background-color: var(--pf-t--global--background--color--primary--default, #fff);
 }
 
-nav a {
+#demo-nav a {
   color: var(--pf-t--global--color--brand--default, #06c);
   text-decoration: none;
   margin-right: 0.5rem;
 }
 
-nav a:hover {
+#demo-nav a:hover {
   text-decoration: underline;
 }
 
