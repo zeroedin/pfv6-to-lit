@@ -322,7 +322,7 @@ export class Pfv6Button extends LitElement {
     }
   }
 
-  private handleKeyPress(event: KeyboardEvent) {
+  private handleKeyDown(event: KeyboardEvent) {
     if (this.isAriaDisabled) {
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -365,7 +365,7 @@ export class Pfv6Button extends LitElement {
           aria-label=${ifDefined(this.accessibleLabel)}
           tabindex=${ifDefined(this.isDisabled ? -1 : this.getComputedTabIndex())}
           @click=${this.handleClick}
-          @keypress=${this.handleKeyPress}
+          @keydown=${this.handleKeyDown}
         >
           ${this.isLoading ? html`
             <span class="progress">
@@ -399,7 +399,7 @@ export class Pfv6Button extends LitElement {
           aria-disabled=${this.isAriaDisabled ? 'true' : 'false'}
           aria-label=${ifDefined(this.accessibleLabel)}
           @click=${this.handleClick}
-          @keydown=${this.handleKeyPress}
+          @keydown=${this.handleKeyDown}
         >
           ${this.isLoading ? html`
             <span class="progress">
@@ -434,7 +434,7 @@ export class Pfv6Button extends LitElement {
           aria-label=${ifDefined(this.accessibleLabel)}
           tabindex=${ifDefined(this.getComputedTabIndex())}
           @click=${this.handleClick}
-          @keypress=${this.handleKeyPress}
+          @keydown=${this.handleKeyDown}
         >
           ${this.isLoading ? html`
             <span class="progress">

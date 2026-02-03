@@ -1023,19 +1023,19 @@ describe('<pfv6-button>', function() {
       expect(clicked).to.be.true;
     });
 
-    it('prevents keypress events when isAriaDisabled is true', async function() {
+    it('prevents keydown events when isAriaDisabled is true', async function() {
       const el = await fixture<Pfv6Button>(html`<pfv6-button is-aria-disabled>Click</pfv6-button>`);
       const button = el.shadowRoot!.querySelector('button')!;
 
-      let keypressed = false;
-      button.addEventListener('keypress', () => {
-        keypressed = true;
+      let keyedDown = false;
+      button.addEventListener('keydown', () => {
+        keyedDown = true;
       });
 
-      const event = new KeyboardEvent('keypress', { key: 'Enter' });
+      const event = new KeyboardEvent('keydown', { key: 'Enter' });
       button.dispatchEvent(event);
 
-      expect(keypressed).to.be.false;
+      expect(keyedDown).to.be.false;
     });
   });
 
