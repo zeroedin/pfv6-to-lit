@@ -5,7 +5,7 @@ import { property } from 'lit/decorators/property.js';
 import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import './pfv6-jump-links-item.js';
+import { Pfv6JumpLinksItemClickEvent } from './pfv6-jump-links-item.js';
 import './pfv6-jump-links-list.js';
 import styles from './pfv6-jump-links.css';
 
@@ -172,8 +172,30 @@ export class Pfv6JumpLinks extends LitElement {
     this.#internals.role = 'navigation';
   }
 
+  /**
+   * Handle bubbling jump-link-click events from child items.
+   * Computes the global index and triggers navigation.
+   */
+  private handleJumpLinkClick = (e: Event) => {
+    const event = e as Pfv6JumpLinksItemClickEvent;
+    const itemElement = e.target as HTMLElement;
+
+    // Compute global index from all items in this container
+    const allItems = Array.from(this.querySelectorAll('pfv6-jump-links-item'));
+    const index = allItems.indexOf(itemElement);
+
+    if (index !== -1) {
+      // Set the index on the event so consumers can access it
+      event.index = index;
+      this.handleItemClick(index, event.href);
+    }
+  };
+
   override connectedCallback() {
     super.connectedCallback();
+
+    // Listen for bubbling click events from child items
+    this.addEventListener('jump-link-click', this.handleJumpLinkClick);
 
     // Set up scroll spy if selector provided
     if (this.scrollableSelector) {
@@ -189,6 +211,7 @@ export class Pfv6JumpLinks extends LitElement {
 
   override disconnectedCallback() {
     super.disconnectedCallback();
+    this.removeEventListener('jump-link-click', this.handleJumpLinkClick);
     if (this.scrollableElement) {
       this.scrollableElement.removeEventListener('scroll', this.scrollSpyBound);
     }

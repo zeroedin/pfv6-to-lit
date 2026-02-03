@@ -8,11 +8,14 @@ import '@pfv6/elements/pfv6-button/pfv6-button.js';
 
 /**
  * Event fired when a jump link item is clicked.
+ * The index is computed by the parent JumpLinks component.
  */
 export class Pfv6JumpLinksItemClickEvent extends Event {
+  /** Index of the clicked item (set by parent JumpLinks) */
+  index = -1;
+
   constructor(
-    public href: string,
-    public index: number
+    public href: string
   ) {
     super('jump-link-click', { bubbles: true, composed: true });
   }
@@ -70,22 +73,8 @@ export class Pfv6JumpLinksItem extends LitElement {
   private handleClick = (e: MouseEvent) => {
     e.preventDefault();
 
-    // Get index from parent
-    const parent = this.parentElement;
-    if (parent) {
-      const items = Array.from(parent.querySelectorAll('pfv6-jump-links-item'));
-      const index = items.indexOf(this);
-
-      // Dispatch event that parent can listen to
-      this.dispatchEvent(new Pfv6JumpLinksItemClickEvent(this.href, index));
-
-      // Let parent handle the actual scrolling via the event
-      const jumpLinks = this.closest('pfv6-jump-links');
-      if (jumpLinks && 'handleItemClick' in jumpLinks) {
-        (jumpLinks as { handleItemClick: (i: number, h: string) => void })
-            .handleItemClick(index, this.href);
-      }
-    }
+    // Dispatch bubbling event - parent will compute index and handle navigation
+    this.dispatchEvent(new Pfv6JumpLinksItemClickEvent(this.href));
   };
 
   override updated(changedProperties: PropertyValues) {

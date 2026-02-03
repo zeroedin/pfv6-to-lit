@@ -497,7 +497,6 @@ describe('<pfv6-jump-links>', function() {
       expect(container?.classList.contains('non-expandable-on-default')).to.be.false;
     });
   });
-
 });
 
 describe('<pfv6-jump-links-item>', function() {
@@ -659,16 +658,17 @@ describe('<pfv6-jump-links-item>', function() {
       expect(capturedEvent!.href).to.equal('#section1');
     });
 
-    it('event contains index data as class field', async function() {
-      const el = await fixture(html`
-        <div>
+    it('event contains index data computed by parent JumpLinks', async function() {
+      // Index is computed by parent pfv6-jump-links when event bubbles up
+      const el = await fixture<Pfv6JumpLinks>(html`
+        <pfv6-jump-links>
           <pfv6-jump-links-item href="#section1">Section 1</pfv6-jump-links-item>
           <pfv6-jump-links-item href="#section2">Section 2</pfv6-jump-links-item>
-        </div>
+        </pfv6-jump-links>
       `);
       const [, item] = el.querySelectorAll('pfv6-jump-links-item');
       let capturedEvent: Pfv6JumpLinksItemClickEvent | undefined;
-      item.addEventListener('jump-link-click', e => {
+      el.addEventListener('jump-link-click', e => {
         capturedEvent = e as Pfv6JumpLinksItemClickEvent;
       });
 
