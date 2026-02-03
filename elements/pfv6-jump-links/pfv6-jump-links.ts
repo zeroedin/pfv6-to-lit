@@ -354,27 +354,36 @@ export class Pfv6JumpLinks extends LitElement {
     }
 
     const scrollItem = this.scrollItems[index];
-    if (scrollItem && this.scrollableElement) {
-      // Check if responsive and collapse if needed
-      const isResponsive = this.isResponsive();
-      if (isResponsive) {
-        this.isExpanded = false;
-        this.dispatchEvent(new Pfv6JumpLinksExpandEvent(false));
-      }
 
-      this.scrollableElement.scrollTo(0, scrollItem.offsetTop - this.offset);
-      scrollItem.focus();
-
+    // Fallback to native navigation if scroll spy isn't set up
+    if (!scrollItem || !this.scrollableElement) {
       if (this.shouldReplaceNavHistory) {
-        window.history.replaceState('', '', href);
+        window.location.replace(href);
       } else {
-        window.history.pushState('', '', href);
+        window.location.assign(href);
       }
-
-      this.internalActiveIndex = index;
-      this.updateContext();
-      this.dispatchEvent(new Pfv6JumpLinksActiveChangeEvent(index));
+      return;
     }
+
+    // Check if responsive and collapse if needed
+    const isResponsive = this.isResponsive();
+    if (isResponsive) {
+      this.isExpanded = false;
+      this.dispatchEvent(new Pfv6JumpLinksExpandEvent(false));
+    }
+
+    this.scrollableElement.scrollTo(0, scrollItem.offsetTop - this.offset);
+    scrollItem.focus();
+
+    if (this.shouldReplaceNavHistory) {
+      window.history.replaceState('', '', href);
+    } else {
+      window.history.pushState('', '', href);
+    }
+
+    this.internalActiveIndex = index;
+    this.updateContext();
+    this.dispatchEvent(new Pfv6JumpLinksActiveChangeEvent(index));
   }
 
   private isResponsive(): boolean {
