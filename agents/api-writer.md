@@ -50,6 +50,55 @@ A comprehensive API design document specifying:
 - All sub-components and their props
 - Callback functions and their signatures
 
+### CRITICAL: React Component Imports → Lit Component Usage
+
+**Check if React imports other PatternFly components:**
+
+```tsx
+// React NotificationBadge.tsx
+import { Button, ButtonVariant } from '../Button';  // ← MUST CHECK!
+import { Spinner } from '../Spinner';
+```
+
+**If React imports a component, you MUST use the corresponding `pfv6-*` component in Lit:**
+
+| React Import | Lit Import |
+|-------------|------------|
+| `import { Button } from '../Button'` | `import '@pfv6/elements/pfv6-button/pfv6-button.js'` |
+| `import { Spinner } from '../Spinner'` | `import '@pfv6/elements/pfv6-spinner/pfv6-spinner.js'` |
+| `import { Icon } from '../Icon'` | `import '@pfv6/elements/pfv6-icon/pfv6-icon.js'` |
+
+**DO NOT reimplement component behavior:**
+
+```typescript
+// ❌ WRONG - React uses <Button> but Lit reimplements with div
+render() {
+  return html`
+    <div tabindex="0" role="button" @keydown=${this.#handleKeydown}>
+      ...
+    </div>
+  `;
+}
+
+// ✅ CORRECT - Use pfv6-button just like React uses Button
+import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+render() {
+  return html`
+    <pfv6-button variant="stateful" state=${this.variant}>
+      ...
+    </pfv6-button>
+  `;
+}
+```
+
+**Report in output:**
+```
+**React Component Dependencies:**
+- Imports: Button (used with variant=stateful)
+- Lit equivalent: pfv6-button with variant="stateful"
+```
+
 **Create component directory structure**:
 ```
 elements/pfv6-{component}/
