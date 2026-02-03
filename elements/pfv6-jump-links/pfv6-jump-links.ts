@@ -288,10 +288,8 @@ export class Pfv6JumpLinks extends LitElement {
 
     window.requestAnimationFrame(() => {
       // Refresh items if needed
-      const requiresRefresh = this.scrollItems.every(e => !e?.offsetTop)
-        || !this.scrollItems[0]
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        || this.scrollItems.includes(null as any);
+      const requiresRefresh = this.scrollItems.length === 0
+        || this.scrollItems.every(e => !e.offsetTop);
 
       if (requiresRefresh) {
         this.refreshScrollItems();
@@ -299,14 +297,13 @@ export class Pfv6JumpLinks extends LitElement {
 
       const scrollElements = this.scrollItems
           .map((e, index) => ({
-            y: e ? e.offsetTop : null,
+            y: e.offsetTop,
             index,
           }))
-          .filter(({ y }) => y !== null)
-          .sort((e1, e2) => (e2.y as number) - (e1.y as number));
+          .sort((e1, e2) => e2.y - e1.y);
 
       for (const { y, index } of scrollElements) {
-        if (scrollPosition >= (y as number)) {
+        if (scrollPosition >= y) {
           if (this.internalActiveIndex !== index) {
             this.internalActiveIndex = index;
             this.dispatchEvent(new Pfv6JumpLinksActiveChangeEvent(index));
