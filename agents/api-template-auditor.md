@@ -62,6 +62,31 @@ html`<button ?disabled=${this.disabled}>`  // ✅ Correct
 html`<input ?checked=${this.checked}>`     // ✅ Correct
 ```
 
+### 1.4 slotchange Event Placement
+
+**The `slotchange` event is non-bubbling and MUST be placed on `<slot>` elements, not parent elements**:
+
+❌ **WRONG** - Event on parent element won't fire:
+```typescript
+html`<div id="list" @slotchange=${this.handleSlotChange}>
+  <slot></slot>
+</div>`
+```
+
+✅ **CORRECT** - Event on slot element:
+```typescript
+html`<div id="list">
+  <slot @slotchange=${this.handleSlotChange}></slot>
+</div>`
+```
+
+**Detection**:
+```text
+Grep('@slotchange.*>\\s*<slot', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
+```
+
+If `@slotchange` appears on any element other than `<slot>` → **CRITICAL VIOLATION**
+
 ## Step 2: Check React/JSX Property Names
 
 **NEVER use React/JSX property names in templates**:
@@ -331,6 +356,7 @@ render() { return html`${this.#getProcessedData()}`; }
 - [ ] ifDefined() for optional attributes: ✅/❌
 - [ ] classMap() for conditional classes: ✅/❌
 - [ ] Boolean attribute binding (?attr): ✅/❌
+- [ ] slotchange on slot elements (not parents): ✅/❌
 
 ### Naming Conventions
 - [ ] No React/JSX property names: ✅/❌
