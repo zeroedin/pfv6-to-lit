@@ -1,0 +1,85 @@
+<pfv6-radio
+  id="progress-helper-text-undefined-selector"
+  label="Default variant"
+  name="Progress variant options"
+  checked>
+</pfv6-radio>
+<pfv6-radio
+  id="progress-helper-text-success-selector"
+  label="Success variant"
+  name="Progress variant options">
+</pfv6-radio>
+<pfv6-radio
+  id="progress-helper-text-warning-selector"
+  label="Warning variant"
+  name="Progress variant options">
+</pfv6-radio>
+<pfv6-radio
+  id="progress-helper-text-danger-selector"
+  label="Danger variant"
+  name="Progress variant options">
+</pfv6-radio>
+<br>
+<pfv6-progress
+  id="progress-example"
+  accessible-describedby="progress-helper-text-example-help-text"
+  value="33"
+  title="Title">
+</pfv6-progress>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-progress/pfv6-progress.js';
+  import '@pfv6/elements/pfv6-radio/pfv6-radio.js';
+
+  const progress = document.getElementById('progress-example');
+  const defaultRadio = document.getElementById('progress-helper-text-undefined-selector');
+  const successRadio = document.getElementById('progress-helper-text-success-selector');
+  const warningRadio = document.getElementById('progress-helper-text-warning-selector');
+  const dangerRadio = document.getElementById('progress-helper-text-danger-selector');
+
+  const capitalize = (input) => input[0].toUpperCase() + input.substring(1);
+  const formatVariantName = (variant) => (variant ? capitalize(variant) : 'Default');
+
+  function updateProgress(variant) {
+    // Remove variant attribute if undefined
+    if (!variant) {
+      progress.removeAttribute('variant');
+    } else {
+      progress.variant = variant;
+    }
+
+    // Determine helper text variant (danger maps to error)
+    const helperTextVariant = variant === 'danger' ? 'error' : variant;
+
+    // Update helper text
+    progress.helperText = `${formatVariantName(variant)} variant is being displayed`;
+    progress.setAttribute('accessible-describedby', 'progress-helper-text-example-help-text');
+  }
+
+  defaultRadio.addEventListener('change', (e) => {
+    if (e.target.checked) {
+      updateProgress(undefined);
+    }
+  });
+
+  successRadio.addEventListener('change', (e) => {
+    if (e.target.checked) {
+      updateProgress('success');
+    }
+  });
+
+  warningRadio.addEventListener('change', (e) => {
+    if (e.target.checked) {
+      updateProgress('warning');
+    }
+  });
+
+  dangerRadio.addEventListener('change', (e) => {
+    if (e.target.checked) {
+      updateProgress('danger');
+    }
+  });
+
+  // Initialize with default variant
+  updateProgress(undefined);
+</script>

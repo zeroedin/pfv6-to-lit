@@ -1,0 +1,15 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+#container {
+  grid-row: 3 / 4;
+  grid-column: 1 / 3;
+  margin-block-start: var(--pf-v6-c-progress__helper-text--MarginBlockStart);
+}

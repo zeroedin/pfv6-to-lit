@@ -1,0 +1,71 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+
+  /* Grid positioning - consumed from parent via private variables */
+  grid-row: var(--_progress-bar-grid-row, 2 / 3);
+  grid-column: var(--_progress-bar-grid-column, 1 / 3);
+}
+
+#container {
+  position: relative;
+  align-self: center;
+  height: var(--pf-v6-c-progress__bar--Height);
+  overflow: hidden;
+  background-color: var(--pf-v6-c-progress__bar--BackgroundColor);
+  border-radius: var(--pf-v6-c-progress__bar--BorderRadius);
+
+  /* Consume private variables for danger jiggle animation from parent */
+  translate: var(--_progress-bar-translate);
+  animation-name: var(--_progress-bar-animation-name);
+  animation-duration: var(--_progress-bar-animation-duration);
+  animation-timing-function: var(--_progress-bar-animation-timing-function);
+  animation-fill-mode: var(--_progress-bar-animation-fill-mode);
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    border:
+      var(--pf-v6-c-progress__bar--BorderWidth) solid
+      var(--pf-v6-c-progress__bar--BorderColor);
+    border-radius: inherit;
+  }
+}
+
+#indicator {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  height: var(--pf-v6-c-progress__bar--Height);
+  background-color: var(--pf-v6-c-progress__indicator--BackgroundColor);
+
+  /* Consume private variables from parent for inside measure layout */
+  display: var(--_progress-bar-indicator-display);
+  align-items: var(--_progress-bar-indicator-align-items);
+  justify-content: var(--_progress-bar-indicator-justify-content);
+  min-width: var(--_progress-bar-indicator-min-width);
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    content: "";
+    border:
+      var(--pf-v6-c-progress__indicator--BorderWidth) solid
+      var(--pf-v6-c-progress__indicator--BorderColor);
+    border-radius: var(--pf-v6-c-progress__bar--BorderRadius);
+  }
+}
+
+#measure {
+  /* Consume private variables from parent for inside measure styling */
+  font-size: var(--_progress-bar-measure-font-size);
+  color: var(--_progress-bar-measure-color);
+  text-align: var(--_progress-bar-measure-text-align);
+}
