@@ -211,7 +211,7 @@ export class Pfv6Progress extends LitElement {
         ${this.title ? html`
           ${isTruncatedAndString ? html`
             <pfv6-tooltip
-              .content=${this.tooltipText || this.title}
+              .content=${this.tooltipText}
               .position=${this.tooltipPosition}
             >
               <div
