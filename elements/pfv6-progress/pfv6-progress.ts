@@ -204,7 +204,7 @@ export class Pfv6Progress extends LitElement {
 
     const isTruncatedAndString = this.isTitleTruncated && typeof this.title === 'string';
     const statusIcon = this.#getVariantIcon();
-    const effectiveLabelledby = this.title ? `${this.generatedId}-description` : this.accessibleLabelledby;
+    const effectiveLabelledby = this.accessibleLabelledby || (this.title ? `${this.generatedId}-description` : undefined);
 
     return html`
       <div id="container" class=${classMap(classes)}>
