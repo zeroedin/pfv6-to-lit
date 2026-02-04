@@ -72,7 +72,7 @@ export class Pfv6ProgressStep extends LitElement {
 
   /** Reference to the button element when popover is present */
   @query('button.help-text')
-  private _buttonElement: HTMLButtonElement | null = null;
+  private _buttonElement: HTMLButtonElement | null;
 
   /** Reference to the slotted popover element */
   private _popoverElement: Pfv6Popover | null = null;
@@ -158,12 +158,14 @@ export class Pfv6ProgressStep extends LitElement {
     const slot = event.target as HTMLSlotElement;
     const elements = slot.assignedElements();
 
-    // Find the first pfv6-popover element in the slot
+    // Any slotted content triggers button rendering
+    this._hasPopover = elements.length > 0;
+
+    // Find the first pfv6-popover element in the slot for trigger wiring
     const popover = elements.find(
       el => el.localName === 'pfv6-popover'
     ) as Pfv6Popover | undefined;
 
-    this._hasPopover = !!popover;
     this._popoverElement = popover ?? null;
 
     // If button already exists, connect (async to wait for popover upgrade)

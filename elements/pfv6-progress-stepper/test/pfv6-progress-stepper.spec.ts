@@ -1,5 +1,4 @@
-// With globals: true, describe/it/expect are available globally
-import { html, fixture } from '@open-wc/testing-helpers';
+import { html, fixture, expect } from '@open-wc/testing';
 import { Pfv6ProgressStepper } from '../pfv6-progress-stepper.js';
 import { Pfv6ProgressStep } from '../pfv6-progress-step.js';
 import '../pfv6-progress-stepper.js';
@@ -504,6 +503,29 @@ describe('<pfv6-progress-step>', function() {
       `);
       const titleElement = el.shadowRoot!.querySelector('#step-1') as HTMLButtonElement;
       expect(titleElement?.getAttribute('type')).to.equal('button');
+    });
+
+    it('wires popover triggerElement to the help-text button', async function() {
+      // Dynamically import popover to avoid breaking test globals
+      await import('../../pfv6-popover/pfv6-popover.js');
+
+      const el = await fixture<Pfv6ProgressStep>(html`
+        <pfv6-progress-step title-id="step-1">
+          Title
+          <pfv6-popover slot="popover" header-content="Help" body-content="More info"></pfv6-popover>
+        </pfv6-progress-step>
+      `);
+
+      // Wait for custom element upgrade and trigger connection
+      await customElements.whenDefined('pfv6-popover');
+      await el.updateComplete;
+
+      const popover = el.querySelector('pfv6-popover') as HTMLElement & { triggerElement: HTMLElement | null };
+      const button = el.shadowRoot!.querySelector('button.help-text');
+
+      expect(popover).to.exist;
+      expect(button).to.exist;
+      expect(popover.triggerElement).to.equal(button);
     });
   });
 
