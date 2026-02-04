@@ -157,17 +157,18 @@ export class Pfv6ProgressStep extends LitElement {
   #onPopoverSlotChange(event: Event) {
     const slot = event.target as HTMLSlotElement;
     const elements = slot.assignedElements();
-    this._hasPopover = elements.length > 0;
 
-    // Capture the popover element reference
-    if (this._hasPopover && elements[0]) {
-      this._popoverElement = elements[0] as Pfv6Popover;
-      // If button already exists, connect (async to wait for popover upgrade)
-      if (this._buttonElement) {
-        this.#connectPopoverToButton();
-      }
-    } else {
-      this._popoverElement = null;
+    // Find the first pfv6-popover element in the slot
+    const popover = elements.find(
+      el => el.localName === 'pfv6-popover'
+    ) as Pfv6Popover | undefined;
+
+    this._hasPopover = !!popover;
+    this._popoverElement = popover ?? null;
+
+    // If button already exists, connect (async to wait for popover upgrade)
+    if (this._popoverElement && this._buttonElement) {
+      this.#connectPopoverToButton();
     }
   }
 
