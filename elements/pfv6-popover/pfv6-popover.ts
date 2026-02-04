@@ -286,6 +286,25 @@ export class Pfv6Popover extends LitElement {
   /** Trigger element reference */
   private _triggerElement: HTMLElement | null = null;
 
+  /**
+   * Sets the trigger element programmatically.
+   * Use this when the trigger is in a different shadow root (e.g., parent component).
+   */
+  set triggerElement(element: HTMLElement | null) {
+    if (this._triggerElement === element) {
+      return;
+    }
+    this._cleanupEventListeners();
+    this._triggerElement = element;
+    if (element) {
+      this._setupEventListeners();
+    }
+  }
+
+  get triggerElement(): HTMLElement | null {
+    return this._triggerElement;
+  }
+
   /** Hide timeout ID (for animation) */
   private _hideTimeoutId: number | undefined;
 
@@ -662,11 +681,12 @@ export class Pfv6Popover extends LitElement {
       '--pfv6-c-popover--AnimationDuration': `${this.animationDuration}ms`,
     };
 
-    // Only apply min-width/max-width when explicitly set by user
-    // Otherwise let CSS variables handle sizing (matches React behavior)
-    if (this.minWidth) {
-      popoverStyles['min-width'] = this.minWidth;
-    }
+    // Size popover to content while respecting max-width
+    // React applies min-width: auto inline to override the CSS min-width
+    // We use width: max-content + min-width: 0 to achieve the same effect
+    popoverStyles['width'] = 'max-content';
+    popoverStyles['min-width'] = this.minWidth ?? '0';
+
     if (this.maxWidth) {
       popoverStyles['max-width'] = this.maxWidth;
     }

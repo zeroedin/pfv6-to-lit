@@ -9,5 +9,6 @@
 }
 
 #body {
+  font-weight: var(--pf-t--global--font--weight--body--default, 400);
   word-wrap: break-word;
 }

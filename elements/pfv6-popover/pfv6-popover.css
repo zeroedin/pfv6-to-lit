@@ -92,6 +92,7 @@
   min-width: var(--pf-v6-c-popover--MinWidth);
   max-width: var(--pf-v6-c-popover--MaxWidth);
   font-size: var(--pf-v6-c-popover--FontSize);
+  color: var(--pf-t--global--text--color--regular, #151515);
   border: var(--pf-v6-c-popover--BorderWidth) solid var(--pf-v6-c-popover--BorderColor);
   border-radius: var(--pf-v6-c-popover--BorderRadius);
   box-shadow: var(--pf-v6-c-popover--BoxShadow);
@@ -240,6 +241,10 @@
     translateX(var(--pf-v6-c-popover__arrow--TranslateX, 0))
     translateY(var(--pf-v6-c-popover__arrow--TranslateY, 0))
     rotate(var(--pf-v6-c-popover__arrow--Rotate, 0));
+}
+
+#footer-wrapper {
+  margin-block-start: var(--pf-v6-c-popover__footer--MarginBlockStart);
 }
 
 .empty {
