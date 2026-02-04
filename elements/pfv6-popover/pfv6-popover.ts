@@ -465,9 +465,17 @@ export class Pfv6Popover extends LitElement {
       return;
     }
 
-    const target = event.target as Node;
-    const isFromTrigger = this._triggerElement?.contains(target);
-    const isFromPopover = this._popoverElement?.contains(target);
+    // Use composedPath() to get the full event path including shadow DOM elements
+    // This is necessary because event.target is retargeted to the shadow host
+    const path = event.composedPath();
+    const isFromTrigger = this._triggerElement ?
+      path.some(node =>
+        node === this._triggerElement || this._triggerElement?.contains(node as Node)
+      ) : false;
+    const isFromPopover = this._popoverElement ?
+      path.some(node =>
+        node === this._popoverElement || this._popoverElement?.contains(node as Node)
+      ) : false;
 
     if (!isFromTrigger && !isFromPopover) {
       const shouldCloseEvent = new Pfv6PopoverShouldCloseEvent();
