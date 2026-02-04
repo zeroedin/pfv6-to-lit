@@ -777,7 +777,8 @@ describe('<pfv6-popover>', function() {
 
       await el.updateComplete;
 
-      expect(el.getAttribute('role')).to.equal('dialog');
+      // ElementInternals exposes ARIA via ARIAMixin, not DOM attributes
+      expect(el.role).to.equal('dialog');
     });
 
     it('sets ariaModal to "true" when visible', async function() {
@@ -789,7 +790,8 @@ describe('<pfv6-popover>', function() {
 
       await el.updateComplete;
 
-      expect(el.getAttribute('aria-modal')).to.equal('true');
+      // ElementInternals exposes ARIA via ARIAMixin, not DOM attributes
+      expect(el.ariaModal).to.equal('true');
     });
 
     it('sets ariaLabel from accessibleLabel when visible', async function() {
@@ -805,7 +807,8 @@ describe('<pfv6-popover>', function() {
 
       await el.updateComplete;
 
-      expect(el.getAttribute('aria-label')).to.equal('Test popover');
+      // ElementInternals exposes ARIA via ARIAMixin, not DOM attributes
+      expect(el.ariaLabel).to.equal('Test popover');
     });
 
     it('clears ARIA when not visible', async function() {
@@ -821,9 +824,10 @@ describe('<pfv6-popover>', function() {
 
       await el.updateComplete;
 
-      expect(el.getAttribute('role')).to.be.null;
-      expect(el.getAttribute('aria-modal')).to.be.null;
-      expect(el.getAttribute('aria-label')).to.be.null;
+      // ElementInternals exposes ARIA via ARIAMixin, not DOM attributes
+      expect(el.role).to.be.null;
+      expect(el.ariaModal).to.be.null;
+      expect(el.ariaLabel).to.be.null;
     });
   });
 
