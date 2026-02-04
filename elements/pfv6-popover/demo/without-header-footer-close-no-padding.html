@@ -1,0 +1,22 @@
+<div style="margin: 50px">
+  <pfv6-popover
+    id="popover"
+    accessible-label="Popover with no header, footer, close button, and padding"
+    has-no-padding
+  >
+    <div slot="body">
+      This popover has no padding and is intended for use with content that has its own spacing and should touch the
+      edges of the popover container.
+    </div>
+    <pfv6-button>Toggle popover</pfv6-button>
+  </pfv6-popover>
+</div>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-popover/pfv6-popover.js';
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+  const popover = document.getElementById('popover');
+  // Set boolean property to false (cannot be done via attribute)
+  popover.showClose = false;
+</script>

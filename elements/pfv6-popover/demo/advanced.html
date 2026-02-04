@@ -1,0 +1,80 @@
+<div>
+  <label for="position-select" class="pf-v6-screen-reader">Popover position</label>
+  <span style="padding-right: 10px">Popover position</span>
+  <select id="position-select" aria-label="Popover position">
+    <option value="auto">auto</option>
+    <option value="top">top</option>
+    <option value="bottom">bottom</option>
+    <option value="left">left</option>
+    <option value="right">right</option>
+    <option value="top-start">top-start</option>
+    <option value="top-end">top-end</option>
+    <option value="bottom-start">bottom-start</option>
+    <option value="bottom-end">bottom-end</option>
+    <option value="left-start">left-start</option>
+    <option value="left-end">left-end</option>
+    <option value="right-start">right-start</option>
+    <option value="right-end">right-end</option>
+  </select>
+  <pfv6-checkbox
+    id="keep-in-view-check"
+    label="Flip popover if the position falls outside the view"
+    accessible-label="Keep in view"
+    checked
+  ></pfv6-checkbox>
+  <pfv6-checkbox
+    id="toggle-outside-check"
+    label="Toggle popover from outside"
+    accessible-label="Toggle popover from outside"
+  ></pfv6-checkbox>
+</div>
+
+<div style="margin: 50px">
+  <pfv6-popover
+    id="popover"
+    accessible-label="Advanced popover usages example"
+    position="auto"
+    enable-flip
+    header-content="Popover header"
+    body-content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id feugiat augue, nec fringilla turpis."
+    footer-content="Popover footer"
+  >
+    <pfv6-button>Toggle popover</pfv6-button>
+  </pfv6-popover>
+</div>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-popover/pfv6-popover.js';
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
+
+  const positionSelect = document.getElementById('position-select');
+  const keepInViewCheck = document.getElementById('keep-in-view-check');
+  const toggleOutsideCheck = document.getElementById('toggle-outside-check');
+  const popover = document.getElementById('popover');
+
+  // Set boolean property to false (cannot be done via attribute)
+  popover.hideOnOutsideClick = false;
+
+  positionSelect.addEventListener('change', (event) => {
+    popover.position = event.target.value;
+  });
+
+  keepInViewCheck.addEventListener('change', (event) => {
+    popover.enableFlip = event.target.checked;
+  });
+
+  toggleOutsideCheck.addEventListener('change', (event) => {
+    popover.isVisible = event.target.checked;
+  });
+
+  popover.addEventListener('should-close', () => {
+    popover.isVisible = false;
+    toggleOutsideCheck.checked = false;
+  });
+
+  popover.addEventListener('should-open', () => {
+    popover.isVisible = true;
+    toggleOutsideCheck.checked = true;
+  });
+</script>

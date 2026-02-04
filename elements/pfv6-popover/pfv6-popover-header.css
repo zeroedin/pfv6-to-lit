@@ -1,0 +1,65 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+#header {
+  margin-block-end: var(--pf-v6-c-popover__header--MarginBlockEnd, var(--pf-t--global--spacer--sm, 0.5rem));
+
+  /* Apply close button sibling padding if passed from parent */
+  padding-inline-end: var(--_popover-header-padding-inline-end, 0);
+}
+
+#title {
+  display: flex;
+  flex: 0 0 auto;
+}
+
+#title-text {
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  font-size: var(--pf-v6-c-popover__title-text--FontSize, var(--pf-t--global--font--size--body--default, 0.875rem));
+  font-weight: var(--pf-v6-c-popover__title-text--FontWeight, var(--pf-t--global--font--weight--body--bold, 500));
+  color: var(--pf-v6-c-popover__title-text--Color, var(--pf-t--global--text--color--regular, #151515));
+  overflow-wrap: break-word;
+}
+
+::slotted([slot="icon"]) {
+  display: flex;
+  align-items: center;
+  margin-inline-end:
+    var(
+      --pf-v6-c-popover__title-icon--MarginInlineEnd,
+      var(--pf-t--global--spacer--sm, 0.5rem)
+    );
+  font-size:
+    var(
+      --pf-v6-c-popover__title-icon--FontSize,
+      var(--pf-t--global--icon--size--font--body--default, 0.875rem)
+    );
+  color:
+    var(
+      --pf-v6-c-popover__title-icon--Color,
+      var(--pf-t--global--icon--color--regular, #151515)
+    );
+}
+
+::slotted(.empty) {
+  display: none;
+}
+
+.screen-reader {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
