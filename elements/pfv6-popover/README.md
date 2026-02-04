@@ -39,12 +39,25 @@ If exact positioning parity with React is critical:
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
+| `accessible-label` | `string` | `undefined` | Accessible label for the popover (required when no header) |
+| `header-content` | `string` | `''` | Header content text |
+| `body-content` | `string` | `''` | Body content text |
+| `footer-content` | `string` | `''` | Footer content text |
 | `position` | `'auto' \| Placement` | `'top'` | Initial position of the popover |
-| `enable-flip` | `boolean` | `true` | Whether to flip position when space is limited |
 | `distance` | `number` | `25` | Distance from trigger element in pixels |
-| `is-visible` | `boolean` | `false` | Controls visibility (for manual mode) |
+| `enable-flip` | `boolean` | `true` | Whether to flip position when space is limited |
+| `alert-severity-variant` | `'custom' \| 'info' \| 'warning' \| 'success' \| 'danger'` | `undefined` | Severity variant for alert-style popovers |
+| `alert-severity-screen-reader-text` | `string` | `''` | Screen reader text for alert severity |
+| `header-component` | `'h1' \| 'h2' \| 'h3' \| 'h4' \| 'h5' \| 'h6'` | `'h6'` | Heading level for the header |
 | `trigger-action` | `'click' \| 'hover'` | `'click'` | How the popover is triggered |
+| `is-visible` | `boolean` | `false` | Controls visibility (for manual mode) |
+| `max-width` | `string` | `undefined` | Maximum width of the popover |
+| `min-width` | `string` | `undefined` | Minimum width of the popover |
+| `z-index` | `number` | `9999` | Z-index of the popover |
+| `animation-duration` | `number` | `300` | Animation duration in milliseconds |
+| `trigger-id` | `string` | `undefined` | ID of an external trigger element |
 | `show-close` | `boolean` | `true` | Whether to show the close button |
+| `close-btn-accessible-label` | `string` | `'Close'` | Accessible label for the close button |
 | `hide-on-outside-click` | `boolean` | `true` | Hide when clicking outside |
 | `has-auto-width` | `boolean` | `false` | Allow width to be defined by contents |
 | `has-no-padding` | `boolean` | `false` | Remove content padding |
