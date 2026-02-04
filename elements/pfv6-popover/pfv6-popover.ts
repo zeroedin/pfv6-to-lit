@@ -682,7 +682,7 @@ export class Pfv6Popover extends LitElement {
                 <pfv6-popover-header
                   header-component=${this.headerComponent}
                   alert-severity-variant=${ifDefined(this.alertSeverityVariant)}
-                  alert-severity-screen-reader-text=${this.alertSeverityScreenReaderText}
+                  alert-severity-screen-reader-text=${this.alertSeverityScreenReaderText || (this.alertSeverityVariant ? `${this.alertSeverityVariant} alert:` : '')}
                   style=${styleMap(headerStyles)}
                 >
                   <span slot="icon" class=${this._hasHeaderIcon ? '' : 'empty'}><slot name="header-icon" @slotchange=${this._handleHeaderIconSlotChange}></slot></span>
