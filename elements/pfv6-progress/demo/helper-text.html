@@ -22,7 +22,6 @@
 <br>
 <pfv6-progress
   id="progress-example"
-  accessible-describedby="progress-helper-text-example-help-text"
   value="33"
   title="Title">
 </pfv6-progress>
@@ -48,12 +47,8 @@
       progress.variant = variant;
     }
 
-    // Determine helper text variant (danger maps to error)
-    const helperTextVariant = variant === 'danger' ? 'error' : variant;
-
     // Update helper text
     progress.helperText = `${formatVariantName(variant)} variant is being displayed`;
-    progress.setAttribute('accessible-describedby', 'progress-helper-text-example-help-text');
   }
 
   defaultRadio.addEventListener('change', (e) => {
