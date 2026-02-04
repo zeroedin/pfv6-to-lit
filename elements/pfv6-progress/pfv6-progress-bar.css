@@ -43,7 +43,7 @@
   position: absolute;
   inset-block-start: 0;
   inset-inline-start: 0;
-  height: var(--pf-v6-c-progress__bar--Height);
+  height: var(--pf-v6-c-progress__indicator--Height);
   background-color: var(--pf-v6-c-progress__indicator--BackgroundColor);
 
   /* Consume private variables from parent for inside measure layout */
