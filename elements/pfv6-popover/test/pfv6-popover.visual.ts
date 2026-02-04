@@ -48,15 +48,14 @@ async function waitForFullLoad(page: Page): Promise<void> {
 
 // Helper to trigger popover visibility and wait for it to be visible
 async function showPopover(page: Page): Promise<void> {
-  // Click the trigger element to show the popover
-  const trigger = page.locator('pfv6-popover').first();
+  // Click the slotted trigger element (button inside pfv6-popover) to show the popover
+  const popover = page.locator('pfv6-popover').first();
+  const trigger = popover.locator('pfv6-button, button').first();
   await trigger.click();
 
   // Wait for popover to be visible (account for animation)
   // Use shadow-piercing selector since #popover is inside pfv6-popover's shadow DOM
-  await page.locator('pfv6-popover')
-      .locator('#popover')
-      .waitFor({ state: 'visible', timeout: 5000 });
+  await popover.locator('#popover').waitFor({ state: 'visible', timeout: 5000 });
 
   // Wait for animations to complete
   await page.waitForTimeout(500);
