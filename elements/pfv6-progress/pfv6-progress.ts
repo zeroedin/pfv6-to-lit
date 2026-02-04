@@ -6,6 +6,7 @@ import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ref, createRef } from 'lit/directives/ref.js';
+import { getRandomId } from '@patternfly/pfe-core/functions/random.js';
 import './pfv6-progress-bar.js';
 import './pfv6-progress-helper-text.js';
 import '@pfv6/elements/pfv6-tooltip/pfv6-tooltip.js';
@@ -118,7 +119,7 @@ export class Pfv6Progress extends LitElement {
   private tooltipText = '';
 
   private titleRef = createRef<HTMLDivElement>();
-  private generatedId = `pfv6-progress-${Math.random().toString(36).substr(2, 9)}`;
+  private generatedId = getRandomId('pfv6-progress');
 
   override updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
