@@ -246,9 +246,9 @@ describe('<pfv6-popover>', function() {
   });
 
   describe('maxWidth property', function() {
-    it('defaults to "18.75rem"', async function() {
+    it('defaults to undefined (CSS handles visual default)', async function() {
       const el = await fixture<Pfv6Popover>(html`<pfv6-popover></pfv6-popover>`);
-      expect(el.maxWidth).to.equal('18.75rem');
+      expect(el.maxWidth).to.be.undefined;
     });
 
     it('accepts custom value', async function() {
@@ -258,9 +258,9 @@ describe('<pfv6-popover>', function() {
   });
 
   describe('minWidth property', function() {
-    it('defaults to "6.25rem"', async function() {
+    it('defaults to undefined (CSS handles visual default)', async function() {
       const el = await fixture<Pfv6Popover>(html`<pfv6-popover></pfv6-popover>`);
-      expect(el.minWidth).to.equal('6.25rem');
+      expect(el.minWidth).to.be.undefined;
     });
 
     it('accepts custom value', async function() {
