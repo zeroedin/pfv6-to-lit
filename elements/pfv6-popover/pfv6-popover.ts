@@ -595,6 +595,9 @@ export class Pfv6Popover extends LitElement {
       return;
     }
 
+    // Clean up any existing listeners before adding new ones
+    this._cleanupFloating?.();
+
     // Simple auto-update on scroll/resize
     const handleUpdate = () => this._updatePosition();
     window.addEventListener('scroll', handleUpdate, true);
