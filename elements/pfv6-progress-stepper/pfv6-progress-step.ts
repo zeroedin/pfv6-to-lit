@@ -5,7 +5,9 @@ import { property } from 'lit/decorators/property.js';
 import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { query } from 'lit/decorators/query.js';
 import styles from './pfv6-progress-step.css';
+import type { Pfv6Popover } from '../pfv6-popover/pfv6-popover.js';
 
 /**
  * Progress step component for individual steps within a progress stepper.
@@ -68,6 +70,13 @@ export class Pfv6ProgressStep extends LitElement {
   @state()
   private _hasPopover = false;
 
+  /** Reference to the button element when popover is present */
+  @query('button.help-text')
+  private _buttonElement!: HTMLButtonElement;
+
+  /** Reference to the slotted popover element */
+  private _popoverElement: Pfv6Popover | null = null;
+
   constructor() {
     super();
     this.internals = this.attachInternals();
@@ -92,6 +101,20 @@ export class Pfv6ProgressStep extends LitElement {
         this.internals.ariaCurrent = null;
       }
     }
+
+    // Connect popover to button when hasPopover becomes true
+    if (changedProperties.has('_hasPopover') && this._hasPopover) {
+      this.#connectPopoverToButton();
+    }
+  }
+
+  #connectPopoverToButton() {
+    // Wait for the button to be rendered
+    this.updateComplete.then(() => {
+      if (this._popoverElement && this._buttonElement) {
+        this._popoverElement.triggerElement = this._buttonElement;
+      }
+    });
   }
 
   #renderDefaultIcon() {
@@ -128,7 +151,19 @@ export class Pfv6ProgressStep extends LitElement {
 
   #onPopoverSlotChange(event: Event) {
     const slot = event.target as HTMLSlotElement;
-    this._hasPopover = slot.assignedNodes().length > 0;
+    const elements = slot.assignedElements();
+    this._hasPopover = elements.length > 0;
+
+    // Capture the popover element reference
+    if (this._hasPopover && elements[0]) {
+      this._popoverElement = elements[0] as Pfv6Popover;
+      // If button already exists, connect immediately
+      if (this._buttonElement) {
+        this._popoverElement.triggerElement = this._buttonElement;
+      }
+    } else {
+      this._popoverElement = null;
+    }
   }
 
   render() {
