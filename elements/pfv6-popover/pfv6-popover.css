@@ -242,10 +242,6 @@
     rotate(var(--pf-v6-c-popover__arrow--Rotate, 0));
 }
 
-#footer-wrapper {
-  margin-block-start: var(--pf-v6-c-popover__footer--MarginBlockStart);
-}
-
 .empty {
   display: none;
 }
