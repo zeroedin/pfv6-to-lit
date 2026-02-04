@@ -69,3 +69,14 @@
   color: var(--_progress-bar-measure-color);
   text-align: var(--_progress-bar-measure-text-align);
 }
+
+/* Keyframe animation for danger jiggle - must be in same shadow root as #container */
+@keyframes pf-v6-global-danger-jiggle-motion {
+  33% {
+    --pf-v6-global--danger-jiggle--TranslateX: -2px;
+  }
+
+  66% {
+    --pf-v6-global--danger-jiggle--TranslateX: 3px;
+  }
+}

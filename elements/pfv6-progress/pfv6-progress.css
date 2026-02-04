@@ -186,6 +186,10 @@
       var(
         --pf-v6-c-progress--m-sm__bar--Height
       );
+    --pf-v6-c-progress__indicator--Height:
+      var(
+        --pf-v6-c-progress--m-sm__bar--Height
+      );
 
     & .measure {
       font-size: var(--pf-v6-c-progress--m-sm__measure--FontSize);
@@ -194,6 +198,10 @@
 
   &.lg {
     --pf-v6-c-progress__bar--Height:
+      var(
+        --pf-v6-c-progress--m-lg__bar--Height
+      );
+    --pf-v6-c-progress__indicator--Height:
       var(
         --pf-v6-c-progress--m-lg__bar--Height
       );
@@ -362,17 +370,7 @@
   }
 }
 
-/* Keyframe animations */
-@keyframes pf-v6-global-danger-jiggle-motion {
-  33% {
-    --pf-v6-global--danger-jiggle--TranslateX: -2px;
-  }
-
-  66% {
-    --pf-v6-global--danger-jiggle--TranslateX: 3px;
-  }
-}
-
+/* Keyframe animation for status icon fade-in */
 @keyframes pf-v6-global-fade-in {
   from {
     opacity: 0;
