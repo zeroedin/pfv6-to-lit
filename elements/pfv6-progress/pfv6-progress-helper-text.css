@@ -1,0 +1,16 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+#container {
+  /* Grid placement via private variables from parent */
+  grid-row: var(--_progress-helper-text-grid-row, 3 / 4);
+  grid-column: var(--_progress-helper-text-grid-column, 1 / 3);
+  margin-block-start: var(--pf-v6-c-progress__helper-text--MarginBlockStart);
+}
