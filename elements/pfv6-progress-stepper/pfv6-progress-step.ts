@@ -72,7 +72,7 @@ export class Pfv6ProgressStep extends LitElement {
 
   /** Reference to the button element when popover is present */
   @query('button.help-text')
-  private _buttonElement!: HTMLButtonElement;
+  private _buttonElement: HTMLButtonElement | null = null;
 
   /** Reference to the slotted popover element */
   private _popoverElement: Pfv6Popover | null = null;
