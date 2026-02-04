@@ -54,7 +54,9 @@ async function showPopover(page: Page): Promise<void> {
 
   // Wait for popover to be visible (account for animation)
   // Use shadow-piercing selector since #popover is inside pfv6-popover's shadow DOM
-  await page.locator('pfv6-popover').locator('#popover').waitFor({ state: 'visible', timeout: 5000 });
+  await page.locator('pfv6-popover')
+      .locator('#popover')
+      .waitFor({ state: 'visible', timeout: 5000 });
 
   // Wait for animations to complete
   await page.waitForTimeout(500);

@@ -205,9 +205,6 @@ export class Pfv6Popover extends LitElement {
   @property({ type: String, attribute: 'alert-severity-screen-reader-text' })
   alertSeverityScreenReaderText = '';
 
-  /** Icon element for header */
-  @property({ type: String, attribute: 'header-icon' })
-  headerIcon = '';
 
   /** Heading level for header */
   @property({ type: String, attribute: 'header-component' })
@@ -652,7 +649,7 @@ export class Pfv6Popover extends LitElement {
       popoverStyles['max-width'] = this.maxWidth;
     }
 
-    const hasHeader = this.headerContent || this.headerIcon || this._hasSlottedHeader;
+    const hasHeader = this.headerContent || this._hasHeaderIcon || this._hasSlottedHeader;
     const hasFooter = this.footerContent || this._hasSlottedFooter;
     const hasCloseButton = this.showClose && this.triggerAction === 'click';
 

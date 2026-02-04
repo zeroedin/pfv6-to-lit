@@ -172,18 +172,6 @@ describe('<pfv6-popover>', function() {
     });
   });
 
-  describe('headerIcon property', function() {
-    it('defaults to empty string', async function() {
-      const el = await fixture<Pfv6Popover>(html`<pfv6-popover></pfv6-popover>`);
-      expect(el.headerIcon).to.equal('');
-    });
-
-    it('accepts string value', async function() {
-      const el = await fixture<Pfv6Popover>(html`<pfv6-popover header-icon="icon-class"></pfv6-popover>`);
-      expect(el.headerIcon).to.equal('icon-class');
-    });
-  });
-
   describe('headerComponent property', function() {
     it('defaults to "h6"', async function() {
       const el = await fixture<Pfv6Popover>(html`<pfv6-popover></pfv6-popover>`);
