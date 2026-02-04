@@ -1,0 +1,50 @@
+With a minimum value of 0 and maximum value of 10
+<br>
+<pfv6-number-input
+  id="number-input-unit-threshold"
+  value="0"
+  min="0"
+  max="10"
+  name="input"
+  accessible-label="number input"
+  minus-btn-accessible-label="minus"
+  plus-btn-accessible-label="plus"
+  unit="%"
+></pfv6-number-input>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-number-input/pfv6-number-input.js';
+
+  const numberInput = document.getElementById('number-input-unit-threshold');
+
+  const minValue = 0;
+  const maxValue = 10;
+
+  const normalizeBetween = (value, min, max) => {
+    if (min !== undefined && max !== undefined) {
+      return Math.max(Math.min(value, max), min);
+    } else if (value <= min) {
+      return min;
+    } else if (value >= max) {
+      return max;
+    }
+    return value;
+  };
+
+  numberInput.addEventListener('minus', () => {
+    numberInput.value = normalizeBetween((numberInput.value || 0) - 1, minValue, maxValue);
+  });
+
+  numberInput.addEventListener('plus', () => {
+    numberInput.value = normalizeBetween((numberInput.value || 0) + 1, minValue, maxValue);
+  });
+
+  numberInput.addEventListener('input-blur', (e) => {
+    const blurVal = Number(e.value);
+    if (blurVal < minValue) {
+      numberInput.value = minValue;
+    } else if (blurVal > maxValue) {
+      numberInput.value = maxValue;
+    }
+  });
+</script>

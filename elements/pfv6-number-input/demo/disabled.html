@@ -1,0 +1,26 @@
+<pfv6-number-input
+  id="number-input-disabled"
+  value="100"
+  min="0"
+  max="100"
+  name="input"
+  accessible-label="number input"
+  minus-btn-accessible-label="minus"
+  plus-btn-accessible-label="plus"
+  unit="%"
+  disabled
+></pfv6-number-input>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-number-input/pfv6-number-input.js';
+
+  const numberInput = document.getElementById('number-input-disabled');
+
+  numberInput.addEventListener('minus', () => {
+    numberInput.value = (numberInput.value || 0) - 1;
+  });
+
+  numberInput.addEventListener('plus', () => {
+    numberInput.value = (numberInput.value || 0) + 1;
+  });
+</script>

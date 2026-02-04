@@ -1,0 +1,50 @@
+In the following example, the validated status will update based on the value of the number input and how far from the number 5 it is.
+<br>
+<pfv6-number-input
+  id="number-input-status"
+  value="5"
+  min="0"
+  max="10"
+  name="input"
+  accessible-label="number input"
+  minus-btn-accessible-label="minus"
+  plus-btn-accessible-label="plus"
+  validated="success"
+></pfv6-number-input>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-number-input/pfv6-number-input.js';
+
+  const numberInput = document.getElementById('number-input-status');
+
+  const max = 10;
+  const min = 0;
+
+  const validate = (newVal) => {
+    const diff = Math.abs(5 - newVal);
+    if (diff > 3) {
+      numberInput.validated = 'error';
+    } else if (diff > 1) {
+      numberInput.validated = 'warning';
+    } else {
+      numberInput.validated = 'success';
+    }
+  };
+
+  numberInput.addEventListener('plus', () => {
+    const newVal = Math.max(min, Math.min(max, (numberInput.value || 0) + 1));
+    numberInput.value = newVal;
+    validate(newVal);
+  });
+
+  numberInput.addEventListener('minus', () => {
+    const newVal = Math.max(min, Math.min(max, (numberInput.value || 0) - 1));
+    numberInput.value = newVal;
+    validate(newVal);
+  });
+
+  numberInput.addEventListener('change', (e) => {
+    const newVal = e.value === '' ? 0 : +e.value;
+    validate(Math.max(min, Math.min(max, newVal)));
+  });
+</script>
