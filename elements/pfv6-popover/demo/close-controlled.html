@@ -1,0 +1,36 @@
+<div style="margin: 50px">
+  <pfv6-popover
+    id="popover"
+    accessible-label="Popover with button in the body that can close it"
+    header-content="Popover header"
+    footer-content="Popover footer"
+  >
+    <div slot="body">
+      <div>A controlled popover can be closed by updating its isVisible state after some user interaction.</div>
+      <div>
+        <button id="close-button">Close popover</button>
+      </div>
+    </div>
+    <pfv6-button>Toggle popover</pfv6-button>
+  </pfv6-popover>
+</div>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-popover/pfv6-popover.js';
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+  const popover = document.getElementById('popover');
+  const closeButton = document.getElementById('close-button');
+
+  popover.addEventListener('should-open', () => {
+    popover.isVisible = true;
+  });
+
+  popover.addEventListener('should-close', () => {
+    popover.isVisible = false;
+  });
+
+  closeButton.addEventListener('click', () => {
+    popover.isVisible = false;
+  });
+</script>

@@ -1,0 +1,44 @@
+<pfv6-popover
+  id="popover"
+  accessible-label="Popover with custom focus"
+  header-content="Popover header"
+>
+  <div slot="body">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+    <a id="example-link" class="pf-v6-c-button pf-m-link pf-m-inline" href="#basic">
+      View the basic example
+    </a>
+  </div>
+  <div slot="footer">
+    <pfv6-button variant="secondary" id="popover-cancel-button">
+      Cancel
+    </pfv6-button>
+  </div>
+  <pfv6-button>Toggle popover with custom focus</pfv6-button>
+</pfv6-popover>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-popover/pfv6-popover.js';
+  import '@pfv6/elements/pfv6-button/pfv6-button.js';
+
+  const popover = document.getElementById('popover');
+  // Hide close button (React uses showClose={false})
+  popover.showClose = false;
+  const cancelButton = document.getElementById('popover-cancel-button');
+  const link = document.getElementById('example-link');
+
+  // Focus cancel button when popover shows
+  popover.addEventListener('shown', () => {
+    cancelButton.focus();
+  });
+
+  // Close popover when cancel button is clicked
+  cancelButton.addEventListener('click', () => {
+    popover.isVisible = false;
+  });
+
+  // Handle link click (preventing default for example purposes only)
+  link.addEventListener('click', (event) => {
+    event.preventDefault();
+  });
+</script>
