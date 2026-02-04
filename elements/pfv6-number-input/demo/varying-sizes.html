@@ -1,0 +1,65 @@
+<pfv6-number-input
+  id="number-input-1"
+  value="1"
+  width-chars="1"
+  name="input1"
+  accessible-label="number input 1"
+  minus-btn-accessible-label="input 1 minus"
+  plus-btn-accessible-label="input 1 plus"
+></pfv6-number-input>
+<br>
+<br>
+<pfv6-number-input
+  id="number-input-2"
+  value="1234567890"
+  width-chars="10"
+  name="input2"
+  accessible-label="number input 2"
+  minus-btn-accessible-label="input 2 minus"
+  plus-btn-accessible-label="input 2 plus"
+></pfv6-number-input>
+<br>
+<br>
+<pfv6-number-input
+  id="number-input-3"
+  value="5"
+  width-chars="5"
+  name="input3"
+  accessible-label="number input 3"
+  minus-btn-accessible-label="input 3 minus"
+  plus-btn-accessible-label="input 3 plus"
+></pfv6-number-input>
+<br>
+<br>
+<pfv6-number-input
+  id="number-input-4"
+  value="12345"
+  width-chars="5"
+  name="input4"
+  accessible-label="number input 4"
+  minus-btn-accessible-label="input 4 minus"
+  plus-btn-accessible-label="input 4 plus"
+></pfv6-number-input>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-number-input/pfv6-number-input.js';
+
+  const numberInput1 = document.getElementById('number-input-1');
+  const numberInput2 = document.getElementById('number-input-2');
+  const numberInput3 = document.getElementById('number-input-3');
+  const numberInput4 = document.getElementById('number-input-4');
+
+  const setupHandlers = (el) => {
+    el.addEventListener('minus', () => {
+      el.value = (el.value || 0) - 1;
+    });
+    el.addEventListener('plus', () => {
+      el.value = (el.value || 0) + 1;
+    });
+  };
+
+  setupHandlers(numberInput1);
+  setupHandlers(numberInput2);
+  setupHandlers(numberInput3);
+  setupHandlers(numberInput4);
+</script>

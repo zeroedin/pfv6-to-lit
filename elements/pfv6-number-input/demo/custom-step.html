@@ -1,0 +1,24 @@
+<pfv6-number-input
+  id="number-input-custom-step"
+  value="90"
+  step="3"
+  name="input"
+  accessible-label="number input"
+  minus-btn-accessible-label="minus"
+  plus-btn-accessible-label="plus"
+></pfv6-number-input>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-number-input/pfv6-number-input.js';
+
+  const numberInput = document.getElementById('number-input-custom-step');
+  const step = 3;
+
+  numberInput.addEventListener('minus', () => {
+    numberInput.value = (numberInput.value || 0) - step;
+  });
+
+  numberInput.addEventListener('plus', () => {
+    numberInput.value = (numberInput.value || 0) + step;
+  });
+</script>
