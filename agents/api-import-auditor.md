@@ -71,13 +71,21 @@ import '@pfv6/elements/pfv6-button/pfv6-button.js';
 **Rule**:
 - Subcomponents (same directory): Use relative `./pfv6-foo-bar.js`
 - External components (different directory): Use bare module `@pfv6/elements/pfv6-foo/pfv6-foo.js`
+- ❌ NEVER USE: `@patternfly/elements/...` (this scope does NOT exist)
 
-**Detection**:
+**Detection for relative paths**:
 ```text
 Grep('(\\.\\./)+pfv6-', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
 ```
 
 If matches found → **CRITICAL VIOLATION** - Must use `@pfv6/elements/` bare module specifier
+
+**Detection for wrong scope**:
+```text
+Grep('@patternfly/elements', path: 'elements/pfv6-{component}/', glob: '*.ts', output_mode: 'content')
+```
+
+If matches found → **CRITICAL VIOLATION** - Wrong scope! Use `@pfv6/elements/` not `@patternfly/elements/`
 
 ## Step 3: Check for Unused Imports
 

@@ -67,9 +67,10 @@ Component is purely functional with no styling. Create minimal CSS:
 **NEVER**:
 - Make up CSS variables that don't exist in React
 - Add styling rules beyond box-sizing and `:host`
-- Create `@cssprop` JSDoc tags for non-existent variables
 
 Inform user that component has no React CSS and only minimal Shadow DOM CSS is needed.
+
+**Note**: JSDoc `@cssprop` documentation is handled by the `jsdoc-writer` subagent after CSS is created.
 
 ## Step 2: Mandatory Rules (CRITICAL)
 

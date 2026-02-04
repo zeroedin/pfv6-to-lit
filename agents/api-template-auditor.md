@@ -162,6 +162,10 @@ React's relative imports tell you exactly what Lit needs:
 | `import { Icon } from '../Icon'` | `import '@pfv6/elements/pfv6-icon/pfv6-icon.js'` |
 | `import { MenuToggle } from '../MenuToggle'` | `import '@pfv6/elements/pfv6-menu-toggle/pfv6-menu-toggle.js'` |
 
+**CRITICAL - Bare Module Specifier Scope**:
+- ✅ CORRECT: `@pfv6/elements/pfv6-{component}/pfv6-{component}.js`
+- ❌ NEVER USE: `@patternfly/elements/...` (this scope does NOT exist)
+
 **Conversion formula**:
 ```
 React: import { ComponentName } from '../ComponentName'

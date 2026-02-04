@@ -126,13 +126,9 @@ Check that all event classes include both `bubbles: true` and `composed: true` i
 
 ### 2.4 Event Documentation
 
-**Events should be documented in JSDoc**:
+**Note**: Event JSDoc validation (`@fires` annotations) is now handled by the `jsdoc-auditor` subagent.
 
-```typescript
-/**
- * @fires {Pfv6ToggleEvent} toggle - Fired when panel is toggled
- */
-```
+This auditor checks that event classes are properly structured; jsdoc-auditor validates they are documented.
 
 ## Step 3: useEffect Translation (CRITICAL)
 

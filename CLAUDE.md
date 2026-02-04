@@ -344,6 +344,37 @@ npx stylelint elements/pfv6-{component}/pfv6-{component}.css
 
 If max-line-length errors are found, fix them by breaking the line at the appropriate place.  Look at existing css files for examples. Do not attempt to use `stylelint --fix` to fix these errors, it will undo your changes.
 
+## Phase 5.5: JSDoc Documentation
+
+### Step 12a: DELEGATE to jsdoc-writer
+
+**MANDATORY: Call the Task tool with these exact parameters**:
+- Tool name: `Task`
+- subagent_type: `'jsdoc-writer'`
+- description: `'Write JSDoc for pfv6-{component}'`
+- prompt: `'Generate complete JSDoc documentation for pfv6-{component} including @cssprop, @csspart, @slot, and @fires annotations.'`
+
+**BLOCKING REQUIREMENT:**
+You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+
+Expected response includes:
+- List of CSS variables found and documented
+- List of slots, events, and parts documented
+- Confirmation of files updated
+
+### Step 12b: DELEGATE to jsdoc-auditor
+
+**MANDATORY: Call the Task tool with these exact parameters**:
+- Tool name: `Task`
+- subagent_type: `'jsdoc-auditor'`
+- description: `'Audit pfv6-{component} JSDoc'`
+- prompt: `'Validate JSDoc documentation for pfv6-{component} ensuring all @cssprop, @csspart, @slot, and @fires annotations are complete and accurate.'`
+
+**BLOCKING REQUIREMENT:**
+You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+
+**If issues found**: You MUST fix ALL of them before proceeding.
+
 ## Phase 6: Accessibility Validation
 
 ### Step 13a: DELEGATE to aria-auditor (ALWAYS)
@@ -655,6 +686,8 @@ The dependency tracking files (`component-dependencies.yaml` and `conversion-ord
 - [ ] **css-writer invoked** - CSS files created
 - [ ] **css-auditor invoked** - CSS validated
 - [ ] **stylelint passed** - No CSS syntax errors
+- [ ] **jsdoc-writer invoked** - JSDoc documentation generated
+- [ ] **jsdoc-auditor invoked** - JSDoc documentation validated
 - [ ] **aria-auditor invoked** - ARIA patterns validated
 - [ ] **element-internals-auditor invoked** (if applicable) - ElementInternals validated
 - [ ] **face-elements-auditor invoked** (if applicable) - FACE validated
@@ -683,6 +716,7 @@ The dependency tracking files (`component-dependencies.yaml` and `conversion-ord
 - [ ] Demos match React 1:1 (verified by demo-auditor)
 - [ ] Accessibility validated (verified by aria-auditor, element-internals-auditor, face-elements-auditor)
 - [ ] CSS audit passed (verified by css-auditor)
+- [ ] JSDoc documentation complete (verified by jsdoc-writer and jsdoc-auditor)
 - [ ] Tests comprehensive (verified by test-spec-writer)
 - [ ] Code passes linters
 

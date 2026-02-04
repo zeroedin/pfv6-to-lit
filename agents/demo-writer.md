@@ -282,7 +282,7 @@ Demos MUST be minimal HTML fragments, NOT full documents.
 
 **For demos with child sub-components**:
 ```html
-<pfv6-component variant="compact" is-rounded="true">
+<pfv6-component variant="compact" is-rounded>
   <pfv6-component-title>Title</pfv6-component-title>
   <pfv6-component-body>Body content</pfv6-component-body>
 </pfv6-component>
@@ -673,7 +673,8 @@ Content, Title, Form, and DescriptionList styles are part of PatternFly's core C
 **CONVERT** (React → Lit):
 - Component names: `<Card>` → `<pfv6-card>`
 - Prop names: `isCompact` → `is-compact`
-- Boolean props: `isCompact` → `is-compact="true"`
+- Boolean props (true): `isCompact` → `is-compact` (attribute present = true)
+- Boolean props (false): omit the attribute entirely (absence = false)
 - camelCase → kebab-case for all attributes
 
 **STUB** (Missing dependencies):
@@ -697,7 +698,7 @@ export const CardBasic = () => (
 
 **Lit Demo** (`basic.html`):
 ```html
-<pfv6-card is-compact="true">
+<pfv6-card is-compact>
   <pfv6-card-title>Title</pfv6-card-title>
   <pfv6-card-body>Body content</pfv6-card-body>
 </pfv6-card>
