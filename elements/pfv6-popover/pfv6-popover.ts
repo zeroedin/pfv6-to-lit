@@ -13,9 +13,11 @@ import {
   shift,
   offset,
   autoPlacement,
+  platform,
   type Placement,
   type Middleware,
 } from '@floating-ui/dom';
+import { offsetParent } from 'composed-offset-position';
 import './pfv6-popover-header.js';
 import './pfv6-popover-body.js';
 import './pfv6-popover-footer.js';
@@ -572,9 +574,20 @@ export class Pfv6Popover extends LitElement {
 
     middleware.push(shift({ padding: 5 }));
 
-    const options: { middleware: Middleware[]; placement?: Placement } = {
+    const options: {
+      middleware: Middleware[];
+      placement?: Placement;
+      platform: typeof platform;
+    } = {
       middleware,
+      // Use composed-offset-position to fix shadow DOM offsetParent issues
+      // See: https://floating-ui.com/docs/platform#shadow-dom-fix
+      platform: {
+        ...platform,
+        getOffsetParent: (element: Element) => platform.getOffsetParent(element, offsetParent),
+      },
     };
+
     if (this.position !== 'auto') {
       options.placement = this.position;
     }
@@ -587,10 +600,10 @@ export class Pfv6Popover extends LitElement {
 
     this._currentPlacement = placement;
 
-    // Position popover
     Object.assign(this._popoverElement.style, {
-      left: `${x}px`,
-      top: `${y}px`,
+      position: 'absolute',
+      left: `${Math.round(x)}px`,
+      top: `${Math.round(y)}px`,
     });
   }
 
@@ -647,11 +660,13 @@ export class Pfv6Popover extends LitElement {
     const popoverStyles: Record<string, string> = {
       'z-index': this.zIndex.toString(),
       '--pfv6-c-popover--AnimationDuration': `${this.animationDuration}ms`,
-      // React's Popper.js sets min-width: auto inline, allowing content-based sizing
-      'min-width': this.minWidth || 'auto',
     };
 
-    // Only apply max-width when explicitly set
+    // Only apply min-width/max-width when explicitly set by user
+    // Otherwise let CSS variables handle sizing (matches React behavior)
+    if (this.minWidth) {
+      popoverStyles['min-width'] = this.minWidth;
+    }
     if (this.maxWidth) {
       popoverStyles['max-width'] = this.maxWidth;
     }
