@@ -336,11 +336,10 @@ export class Pfv6Popover extends LitElement {
     }
 
     if (changedProperties.has('isVisible')) {
-      // Respond to external isVisible changes
-      if (this.isVisible) {
+      // Respond to external isVisible changes, but avoid re-triggering if already in sync
+      if (this.isVisible && !this._visible) {
         this._show(undefined, true);
-      } else if (changedProperties.get('isVisible') === true) {
-        // Only hide if isVisible changed from true to false
+      } else if (!this.isVisible && this._visible) {
         this._hide();
       }
     }
@@ -520,6 +519,7 @@ export class Pfv6Popover extends LitElement {
     this._clearTimeouts();
     this.dispatchEvent(new Pfv6PopoverShowEvent());
     this._visible = true;
+    this.isVisible = true;
     this.requestUpdate();
     await this.updateComplete;
     this._updatePosition();
@@ -534,6 +534,7 @@ export class Pfv6Popover extends LitElement {
   private _hide(_event?: MouseEvent | KeyboardEvent): void {
     this.dispatchEvent(new Pfv6PopoverHideEvent());
     this._visible = false;
+    this.isVisible = false;
     this._cleanupFloating?.();
 
     // Dispatch hidden event after animation completes
