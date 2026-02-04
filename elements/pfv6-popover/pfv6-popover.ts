@@ -158,9 +158,6 @@ export class Pfv6PopoverShouldOpenEvent extends Event {
 export class Pfv6Popover extends LitElement {
   static styles = styles;
 
-  /** Track all popover instances for global keyboard handling */
-  private static instances = new Set<Pfv6Popover>();
-
   /** ElementInternals for host-level ARIA */
   #internals: ElementInternals;
 
@@ -303,7 +300,6 @@ export class Pfv6Popover extends LitElement {
     requestAnimationFrame(() => {
       this._checkSlottedContent();
     });
-    Pfv6Popover.instances.add(this);
     this.dispatchEvent(new Pfv6PopoverMountEvent());
   }
 
@@ -318,7 +314,6 @@ export class Pfv6Popover extends LitElement {
     this._cleanupEventListeners();
     this._clearTimeouts();
     this._cleanupFloating?.();
-    Pfv6Popover.instances.delete(this);
   }
 
   updated(changedProperties: PropertyValues<this>): void {
