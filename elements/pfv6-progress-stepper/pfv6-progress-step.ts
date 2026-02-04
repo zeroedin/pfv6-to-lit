@@ -108,13 +108,18 @@ export class Pfv6ProgressStep extends LitElement {
     }
   }
 
-  #connectPopoverToButton() {
+  async #connectPopoverToButton() {
     // Wait for the button to be rendered
-    this.updateComplete.then(() => {
-      if (this._popoverElement && this._buttonElement) {
-        this._popoverElement.triggerElement = this._buttonElement;
-      }
-    });
+    await this.updateComplete;
+
+    // Wait for pfv6-popover to be defined to avoid shadowing the accessor
+    // with an own-property on an unupgraded element
+    await customElements.whenDefined('pfv6-popover');
+
+    // Re-check references after async wait
+    if (this._popoverElement && this._buttonElement) {
+      this._popoverElement.triggerElement = this._buttonElement;
+    }
   }
 
   #renderDefaultIcon() {
@@ -157,9 +162,9 @@ export class Pfv6ProgressStep extends LitElement {
     // Capture the popover element reference
     if (this._hasPopover && elements[0]) {
       this._popoverElement = elements[0] as Pfv6Popover;
-      // If button already exists, connect immediately
+      // If button already exists, connect (async to wait for popover upgrade)
       if (this._buttonElement) {
-        this._popoverElement.triggerElement = this._buttonElement;
+        this.#connectPopoverToButton();
       }
     } else {
       this._popoverElement = null;
