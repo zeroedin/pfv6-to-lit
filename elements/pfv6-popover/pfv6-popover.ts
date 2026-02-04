@@ -533,6 +533,8 @@ export class Pfv6Popover extends LitElement {
   }
 
   private _hide(_event?: MouseEvent | KeyboardEvent): void {
+    // Cancel any pending timeouts (e.g., shown event that hasn't fired yet)
+    this._clearTimeouts();
     this.dispatchEvent(new Pfv6PopoverHideEvent());
     this._visible = false;
     this.isVisible = false;
