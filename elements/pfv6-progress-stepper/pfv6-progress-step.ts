@@ -5,7 +5,9 @@ import { property } from 'lit/decorators/property.js';
 import { state } from 'lit/decorators/state.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { query } from 'lit/decorators/query.js';
 import styles from './pfv6-progress-step.css';
+import type { Pfv6Popover } from '../pfv6-popover/pfv6-popover.js';
 
 /**
  * Progress step component for individual steps within a progress stepper.
@@ -68,6 +70,13 @@ export class Pfv6ProgressStep extends LitElement {
   @state()
   private _hasPopover = false;
 
+  /** Reference to the button element when popover is present */
+  @query('button.help-text')
+  private _buttonElement: HTMLButtonElement | null;
+
+  /** Reference to the slotted popover element */
+  private _popoverElement: Pfv6Popover | null = null;
+
   constructor() {
     super();
     this.internals = this.attachInternals();
@@ -91,6 +100,25 @@ export class Pfv6ProgressStep extends LitElement {
       } else {
         this.internals.ariaCurrent = null;
       }
+    }
+
+    // Connect popover to button when hasPopover becomes true
+    if (changedProperties.has('_hasPopover') && this._hasPopover) {
+      this.#connectPopoverToButton();
+    }
+  }
+
+  async #connectPopoverToButton() {
+    // Wait for the button to be rendered
+    await this.updateComplete;
+
+    // Wait for pfv6-popover to be defined to avoid shadowing the accessor
+    // with an own-property on an unupgraded element
+    await customElements.whenDefined('pfv6-popover');
+
+    // Re-check references after async wait
+    if (this._popoverElement && this._buttonElement) {
+      this._popoverElement.triggerElement = this._buttonElement;
     }
   }
 
@@ -128,7 +156,22 @@ export class Pfv6ProgressStep extends LitElement {
 
   #onPopoverSlotChange(event: Event) {
     const slot = event.target as HTMLSlotElement;
-    this._hasPopover = slot.assignedNodes().length > 0;
+    const elements = slot.assignedElements();
+
+    // Any slotted content triggers button rendering
+    this._hasPopover = elements.length > 0;
+
+    // Find the first pfv6-popover element in the slot for trigger wiring
+    const popover = elements.find(
+      el => el.localName === 'pfv6-popover'
+    ) as Pfv6Popover | undefined;
+
+    this._popoverElement = popover ?? null;
+
+    // If button already exists, connect (async to wait for popover upgrade)
+    if (this._popoverElement && this._buttonElement) {
+      this.#connectPopoverToButton();
+    }
   }
 
   render() {

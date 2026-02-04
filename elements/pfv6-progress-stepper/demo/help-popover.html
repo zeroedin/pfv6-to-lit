@@ -1,0 +1,64 @@
+<pfv6-progress-stepper accessible-label="Progress stepper with help popover">
+  <pfv6-progress-step
+    variant="success"
+    id="popover-step1"
+    title-id="popover-step1-title"
+    accessible-label="completed step with popover, step with success"
+  >
+    First step
+    <pfv6-popover
+      slot="popover"
+      accessible-label="First step help"
+      header-content="First step popover"
+      body-content="Additional info or help text content."
+      position="right"
+      trigger-action="click"
+    ></pfv6-popover>
+  </pfv6-progress-step>
+  <pfv6-progress-step
+    variant="danger"
+    id="popover-step2"
+    title-id="popover-step2-title"
+    accessible-label="completed step with popover, step with danger"
+  >
+    Second step
+    <pfv6-popover
+      slot="popover"
+      accessible-label="Second step help"
+      header-content="Second step popover"
+      body-content="Additional info or help text content."
+      position="right"
+      trigger-action="click"
+    ></pfv6-popover>
+  </pfv6-progress-step>
+  <pfv6-progress-step
+    variant="info"
+    id="popover-step3"
+    title-id="popover-step3-title"
+    accessible-label="step with popover"
+    is-current
+  >
+    Third step
+    <pfv6-popover
+      slot="popover"
+      accessible-label="Third step help"
+      header-content="Third step popover"
+      body-content="Additional info or help text content."
+      position="right"
+      trigger-action="click"
+    ></pfv6-popover>
+  </pfv6-progress-step>
+  <pfv6-progress-step
+    variant="pending"
+    id="popover-step4"
+    title-id="popover-step4-title"
+    accessible-label="pending step"
+  >
+    Fourth step
+  </pfv6-progress-step>
+</pfv6-progress-stepper>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-progress-stepper/pfv6-progress-stepper.js';
+  import '@pfv6/elements/pfv6-popover/pfv6-popover.js';
+</script>
