@@ -68,8 +68,8 @@ export class Pfv6PopoverMountEvent extends Event {
 }
 
 /**
- * Event fired when close button is clicked or Escape is pressed.
- * Only dispatched when isVisible is controlled (manual mode).
+ * Event fired before popover closes. Cancelable to prevent closing.
+ * Dispatched on close button click, Escape key, outside click, mouse leave, or blur.
  */
 export class Pfv6PopoverShouldCloseEvent extends Event {
   constructor() {
@@ -78,8 +78,8 @@ export class Pfv6PopoverShouldCloseEvent extends Event {
 }
 
 /**
- * Event fired when trigger is clicked in manual mode.
- * Only dispatched when isVisible is controlled (manual mode).
+ * Event fired before popover opens. Cancelable to prevent opening.
+ * Dispatched on trigger click, mouse enter, or focus.
  */
 export class Pfv6PopoverShouldOpenEvent extends Event {
   constructor() {
@@ -102,8 +102,8 @@ export class Pfv6PopoverShouldOpenEvent extends Event {
  * @fires Pfv6PopoverShowEvent - Dispatched when popover begins to show
  * @fires Pfv6PopoverShownEvent - Dispatched after popover show animation completes
  * @fires Pfv6PopoverMountEvent - Dispatched when popover mounts to DOM
- * @fires Pfv6PopoverShouldCloseEvent - Dispatched when close should occur (manual mode only)
- * @fires Pfv6PopoverShouldOpenEvent - Dispatched when open should occur (manual mode only)
+ * @fires Pfv6PopoverShouldCloseEvent - Dispatched before popover closes (cancelable)
+ * @fires Pfv6PopoverShouldOpenEvent - Dispatched before popover opens (cancelable)
  * @cssprop --pf-v6-c-popover--FontSize - Font size of popover
  * @cssprop --pf-v6-c-popover--MinWidth - Minimum width of popover
  * @cssprop --pf-v6-c-popover--MaxWidth - Maximum width of popover
