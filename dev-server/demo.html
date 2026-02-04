@@ -3,7 +3,9 @@
 {% block styles %}
   <link rel="stylesheet" href="/dev-server/styles/patternfly/base.css">
   <link rel="stylesheet" href="/patternfly-react/dist/patternfly.css">
-  <link rel="stylesheet" href="/styles/layout.css">
+  {% if not isReactDemo %}
+    <link rel="stylesheet" href="/styles/layout.css">
+  {% endif %}
   <link rel="stylesheet" href="/dev-server/styles/styles.css">
 {% endblock %}
 
@@ -45,10 +47,10 @@
 
       import { createElement } from 'react';
       import * as Demo from '{{ scriptSrc }}';
-      
+
       // Get the exported component (it's the default or first named export)
       const Component = Demo.default || Object.values(Demo)[0];
-      
+
       const root = document.getElementById('root');
       if (root && Component) {
         createRoot(root).render(createElement(Component));
