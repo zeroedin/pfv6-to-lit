@@ -124,6 +124,7 @@ const cssApiTests = [
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
     demo: 'default-tooltip',
+    interaction: 'hover',
   },
   {
     name: '--pf-v6-c-timestamp--m-help-text--hover--TextDecorationLine',
@@ -132,6 +133,7 @@ const cssApiTests = [
     type: 'text-decoration-line',
     testValue: 'none',
     demo: 'default-tooltip',
+    interaction: 'hover',
   },
   {
     name: '--pf-v6-c-timestamp--m-help-text--hover--TextDecorationStyle',
@@ -140,11 +142,15 @@ const cssApiTests = [
     type: 'text-decoration-style',
     testValue: 'solid',
     demo: 'default-tooltip',
+    interaction: 'hover',
   },
-];
+] as const;
 
 test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
-  cssApiTests.forEach(({ name, defaultValue, resolvedValue, type, testValue, demo }) => {
+  cssApiTests.forEach(testConfig => {
+    const { name, defaultValue, resolvedValue, type, testValue, demo } = testConfig;
+    const interaction = 'interaction' in testConfig ? testConfig.interaction : undefined;
+
     test(`CSS API: ${name}`, async ({ page, browser }) => {
       // Add metadata to test report
       test.info().annotations.push({
@@ -154,6 +160,7 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
           `Test value: ${testValue}`,
+          ...(interaction ? [`Interaction: ${interaction}`] : []),
         ].join('\n'),
       });
 
@@ -174,6 +181,17 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         await page.goto(`/elements/pfv6-timestamp/test/${demo}`);
         await applyCssOverride(page, 'pfv6-timestamp', name, testValue);
         await waitForFullLoad(page);
+
+        // Trigger hover interaction if required
+        if (interaction === 'hover') {
+          const reactElement = reactPage.locator('.pf-v6-c-timestamp').first();
+          const litElement = page.locator('pfv6-timestamp').first();
+          await reactElement.hover();
+          await litElement.hover();
+          // Small delay to ensure hover styles are applied
+          await reactPage.waitForTimeout(100);
+          await page.waitForTimeout(100);
+        }
 
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
