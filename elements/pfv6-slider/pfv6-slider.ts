@@ -286,10 +286,6 @@ export class Pfv6Slider extends LitElement {
   };
 
   #handleThumbMove = (e: MouseEvent | TouchEvent) => {
-    if (!this.isDragging) {
-      return;
-    }
-
     if (e.type === 'touchmove') {
       e.preventDefault();
       e.stopImmediatePropagation();
@@ -387,6 +383,8 @@ export class Pfv6Slider extends LitElement {
     if (this.disabled) {
       return;
     }
+    // Reset dragStartDiff so thumb jumps to click position
+    this.dragStartDiff = 0;
     this.#handleThumbMove(e);
     if (this.snapValue && !this.areCustomStepsContinuous) {
       this.localValue = this.snapValue;
