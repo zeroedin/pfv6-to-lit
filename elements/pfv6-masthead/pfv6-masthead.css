@@ -368,6 +368,11 @@
     padding-inline-end: 0;
   }
 
+  &.inset-xs {
+    padding-inline-start: var(--pf-t--global--spacer--xs, 0.25rem);
+    padding-inline-end: var(--pf-t--global--spacer--xs, 0.25rem);
+  }
+
   &.inset-sm {
     padding-inline-start: var(--pf-t--global--spacer--sm, 0.5rem);
     padding-inline-end: var(--pf-t--global--spacer--sm, 0.5rem);
@@ -393,11 +398,21 @@
     padding-inline-end: var(--pf-t--global--spacer--2xl, 3rem);
   }
 
+  &.inset-3xl {
+    padding-inline-start: var(--pf-t--global--spacer--3xl, 4rem);
+    padding-inline-end: var(--pf-t--global--spacer--3xl, 4rem);
+  }
+
   /* Responsive inset modifiers */
   @media (width >= 576px) {
     &.inset-none-on-sm {
       padding-inline-start: 0;
       padding-inline-end: 0;
+    }
+
+    &.inset-xs-on-sm {
+      padding-inline-start: var(--pf-t--global--spacer--xs, 0.25rem);
+      padding-inline-end: var(--pf-t--global--spacer--xs, 0.25rem);
     }
 
     &.inset-sm-on-sm {
@@ -424,12 +439,22 @@
       padding-inline-start: var(--pf-t--global--spacer--2xl, 3rem);
       padding-inline-end: var(--pf-t--global--spacer--2xl, 3rem);
     }
+
+    &.inset-3xl-on-sm {
+      padding-inline-start: var(--pf-t--global--spacer--3xl, 4rem);
+      padding-inline-end: var(--pf-t--global--spacer--3xl, 4rem);
+    }
   }
 
   @media (width >= 768px) {
     &.inset-none-on-md {
       padding-inline-start: 0;
       padding-inline-end: 0;
+    }
+
+    &.inset-xs-on-md {
+      padding-inline-start: var(--pf-t--global--spacer--xs, 0.25rem);
+      padding-inline-end: var(--pf-t--global--spacer--xs, 0.25rem);
     }
 
     &.inset-sm-on-md {
@@ -456,12 +481,22 @@
       padding-inline-start: var(--pf-t--global--spacer--2xl, 3rem);
       padding-inline-end: var(--pf-t--global--spacer--2xl, 3rem);
     }
+
+    &.inset-3xl-on-md {
+      padding-inline-start: var(--pf-t--global--spacer--3xl, 4rem);
+      padding-inline-end: var(--pf-t--global--spacer--3xl, 4rem);
+    }
   }
 
   @media (width >= 992px) {
     &.inset-none-on-lg {
       padding-inline-start: 0;
       padding-inline-end: 0;
+    }
+
+    &.inset-xs-on-lg {
+      padding-inline-start: var(--pf-t--global--spacer--xs, 0.25rem);
+      padding-inline-end: var(--pf-t--global--spacer--xs, 0.25rem);
     }
 
     &.inset-sm-on-lg {
@@ -488,12 +523,22 @@
       padding-inline-start: var(--pf-t--global--spacer--2xl, 3rem);
       padding-inline-end: var(--pf-t--global--spacer--2xl, 3rem);
     }
+
+    &.inset-3xl-on-lg {
+      padding-inline-start: var(--pf-t--global--spacer--3xl, 4rem);
+      padding-inline-end: var(--pf-t--global--spacer--3xl, 4rem);
+    }
   }
 
   @media (width >= 1200px) {
     &.inset-none-on-xl {
       padding-inline-start: 0;
       padding-inline-end: 0;
+    }
+
+    &.inset-xs-on-xl {
+      padding-inline-start: var(--pf-t--global--spacer--xs, 0.25rem);
+      padding-inline-end: var(--pf-t--global--spacer--xs, 0.25rem);
     }
 
     &.inset-sm-on-xl {
@@ -520,12 +565,22 @@
       padding-inline-start: var(--pf-t--global--spacer--2xl, 3rem);
       padding-inline-end: var(--pf-t--global--spacer--2xl, 3rem);
     }
+
+    &.inset-3xl-on-xl {
+      padding-inline-start: var(--pf-t--global--spacer--3xl, 4rem);
+      padding-inline-end: var(--pf-t--global--spacer--3xl, 4rem);
+    }
   }
 
   @media (width >= 1450px) {
     &.inset-none-on-2xl {
       padding-inline-start: 0;
       padding-inline-end: 0;
+    }
+
+    &.inset-xs-on-2xl {
+      padding-inline-start: var(--pf-t--global--spacer--xs, 0.25rem);
+      padding-inline-end: var(--pf-t--global--spacer--xs, 0.25rem);
     }
 
     &.inset-sm-on-2xl {
@@ -551,6 +606,11 @@
     &.inset-2xl-on-2xl {
       padding-inline-start: var(--pf-t--global--spacer--2xl, 3rem);
       padding-inline-end: var(--pf-t--global--spacer--2xl, 3rem);
+    }
+
+    &.inset-3xl-on-2xl {
+      padding-inline-start: var(--pf-t--global--spacer--3xl, 4rem);
+      padding-inline-end: var(--pf-t--global--spacer--3xl, 4rem);
     }
   }
 }
