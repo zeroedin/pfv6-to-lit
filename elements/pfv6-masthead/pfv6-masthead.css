@@ -580,7 +580,7 @@
 
 ::slotted(pfv6-masthead-content) {
   --_masthead-content-grid-column: var(--pf-v6-c-masthead__content--GridColumn);
-  --_masthead-content-row-gap: var(--pf-v6-c-masthead__content-RowGap, var(--pf-v6-c-masthead--RowGap));
+  --_masthead-content-row-gap: var(--pf-v6-c-masthead__content--RowGap, var(--pf-v6-c-masthead--RowGap));
   --_masthead-content-column-gap:
     var(
       --pf-v6-c-masthead__content--ColumnGap,
