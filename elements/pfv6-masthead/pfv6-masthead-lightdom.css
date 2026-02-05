@@ -1,9 +1,0 @@
-/*
- * Light DOM styles for pfv6-masthead.
- * Provides CSS-only toggle detection as a fallback before slotchange fires.
- */
-
-/* When toggle is present, content moves to column 2 in the grid */
-pfv6-masthead:has(pfv6-masthead-toggle) pfv6-masthead-content {
-  --_masthead-content-grid-column: 2 !important;
-}
