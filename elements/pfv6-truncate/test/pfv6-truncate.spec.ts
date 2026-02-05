@@ -464,7 +464,7 @@ describe('<pfv6-truncate>', function() {
       const textElement = el.shadowRoot!.querySelector('.text');
       expect(textElement).to.exist;
       // Last 15 characters
-      expect(textElement!.textContent).to.equal('e be truncated');
+      expect(textElement!.textContent).to.equal('ld be truncated');
     });
 
     it('truncates at middle position', async function() {
