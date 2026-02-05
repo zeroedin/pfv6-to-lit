@@ -344,12 +344,11 @@ describe('<pfv6-slider>', function() {
     });
 
     it('can be set to false', async function() {
-      const el = await fixture<Pfv6Slider>(html`<pfv6-slider show-boundaries="false"></pfv6-slider>`);
       // Boolean attribute - presence sets to true, need to set property
-      const el2 = await fixture<Pfv6Slider>(html`<pfv6-slider></pfv6-slider>`);
-      el2.showBoundaries = false;
-      await el2.updateComplete;
-      expect(el2.showBoundaries).to.be.false;
+      const el = await fixture<Pfv6Slider>(html`<pfv6-slider></pfv6-slider>`);
+      el.showBoundaries = false;
+      await el.updateComplete;
+      expect(el.showBoundaries).to.be.false;
     });
 
     it('renders boundary step labels when true', async function() {
@@ -399,9 +398,12 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let capturedEvent: Pfv6SliderChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6SliderChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6SliderChangeEvent;
+      });
 
       const thumb = el.shadowRoot!.querySelector('#thumb') as HTMLElement;
+      thumb.focus();
       await userEvent.keyboard('{ArrowRight}');
 
       expect(capturedEvent).to.be.an.instanceof(Pfv6SliderChangeEvent);
@@ -441,7 +443,9 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let eventFired = false;
-      el.addEventListener('change', () => { eventFired = true; });
+      el.addEventListener('change', () => {
+        eventFired = true;
+      });
 
       const thumb = el.shadowRoot!.querySelector('#thumb') as HTMLElement;
       thumb.focus();
@@ -455,7 +459,9 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let capturedEvent: Event | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e; });
+      el.addEventListener('change', e => {
+        capturedEvent = e;
+      });
 
       const thumb = el.shadowRoot!.querySelector('#thumb') as HTMLElement;
       thumb.focus();
@@ -469,7 +475,9 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let capturedEvent: Pfv6SliderChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6SliderChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6SliderChangeEvent;
+      });
 
       const thumb = el.shadowRoot!.querySelector('#thumb') as HTMLElement;
       thumb.focus();
@@ -486,7 +494,9 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let capturedEvent: Pfv6SliderChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6SliderChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6SliderChangeEvent;
+      });
 
       const thumb = el.shadowRoot!.querySelector('#thumb') as HTMLElement;
       thumb.focus();
@@ -501,7 +511,9 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let eventFired = false;
-      el.parentElement!.addEventListener('change', () => { eventFired = true; });
+      el.parentElement!.addEventListener('change', () => {
+        eventFired = true;
+      });
 
       const thumb = el.shadowRoot!.querySelector('#thumb') as HTMLElement;
       thumb.focus();
@@ -517,7 +529,9 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let eventFired = false;
-      el.addEventListener('change', () => { eventFired = true; });
+      el.addEventListener('change', () => {
+        eventFired = true;
+      });
 
       const input = el.shadowRoot!.querySelector('input[type="number"]') as HTMLInputElement;
       input.focus();
@@ -707,7 +721,9 @@ describe('<pfv6-slider>', function() {
       expect(el.value).to.equal(50); // Component doesn't auto-update value prop
       // But internal localValue should change - check via event
       let capturedEvent: Pfv6SliderChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6SliderChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6SliderChangeEvent;
+      });
 
       thumb.focus();
       await userEvent.keyboard('{ArrowRight}');
@@ -720,7 +736,9 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let capturedEvent: Pfv6SliderChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6SliderChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6SliderChangeEvent;
+      });
 
       const thumb = el.shadowRoot!.querySelector('#thumb') as HTMLElement;
       thumb.focus();
@@ -734,7 +752,9 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let capturedEvent: Pfv6SliderChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6SliderChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6SliderChangeEvent;
+      });
 
       const thumb = el.shadowRoot!.querySelector('#thumb') as HTMLElement;
       thumb.focus();
@@ -749,7 +769,9 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let capturedEvent: Pfv6SliderChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6SliderChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6SliderChangeEvent;
+      });
 
       const thumb = el.shadowRoot!.querySelector('#thumb') as HTMLElement;
       thumb.focus();
@@ -764,7 +786,9 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let eventFired = false;
-      el.addEventListener('change', () => { eventFired = true; });
+      el.addEventListener('change', () => {
+        eventFired = true;
+      });
 
       const thumb = el.shadowRoot!.querySelector('#thumb') as HTMLElement;
       // Disabled element has tabindex -1, cannot receive focus via normal means
@@ -793,7 +817,9 @@ describe('<pfv6-slider>', function() {
       expect(el.inputValue).to.equal(50); // Component property not auto-updated
       // Check internal state via blur event
       let capturedEvent: Pfv6SliderChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6SliderChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6SliderChangeEvent;
+      });
 
       input.blur();
       await el.updateComplete;
@@ -808,7 +834,9 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let eventFired = false;
-      el.addEventListener('change', () => { eventFired = true; });
+      el.addEventListener('change', () => {
+        eventFired = true;
+      });
 
       const input = el.shadowRoot!.querySelector('input[type="number"]') as HTMLInputElement;
       input.focus();
@@ -824,7 +852,9 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let eventFired = false;
-      el.addEventListener('change', () => { eventFired = true; });
+      el.addEventListener('change', () => {
+        eventFired = true;
+      });
 
       const input = el.shadowRoot!.querySelector('input[type="number"]') as HTMLInputElement;
       input.focus();
@@ -881,7 +911,9 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       let capturedEvent: Pfv6SliderChangeEvent | undefined;
-      el.addEventListener('change', (e) => { capturedEvent = e as Pfv6SliderChangeEvent; });
+      el.addEventListener('change', e => {
+        capturedEvent = e as Pfv6SliderChangeEvent;
+      });
 
       const thumb = el.shadowRoot!.querySelector('#thumb') as HTMLElement;
       thumb.focus();
