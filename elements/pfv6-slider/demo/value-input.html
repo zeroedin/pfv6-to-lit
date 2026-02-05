@@ -1,0 +1,171 @@
+<pfv6-slider id="slider-discrete" value="62.5" is-input-visible="true" input-value="5"></pfv6-slider>
+
+<br>
+
+<pfv6-slider id="slider-percent" value="50" is-input-visible="true" input-value="50" input-label="%"></pfv6-slider>
+
+<br>
+
+<pfv6-slider id="slider-continuous" value="50" is-input-visible="true" input-value="50" input-label="%"></pfv6-slider>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-slider/pfv6-slider.js';
+
+  const sliderDiscrete = document.getElementById('slider-discrete');
+  const sliderPercent = document.getElementById('slider-percent');
+  const sliderContinuous = document.getElementById('slider-continuous');
+
+  let valueDiscrete = 62.5;
+  let inputValueDiscrete = 5;
+  let valuePercent = 50;
+  let inputValuePercent = 50;
+  let valueContinuous = 50;
+  let inputValueContinuous = 50;
+
+  const stepsDiscrete = [
+    { value: 0, label: '0' },
+    { value: 12.5, label: '1', isLabelHidden: true },
+    { value: 25, label: '2' },
+    { value: 37.5, label: '3', isLabelHidden: true },
+    { value: 50, label: '4' },
+    { value: 62.5, label: '5', isLabelHidden: true },
+    { value: 75, label: '6' },
+    { value: 87.5, label: '7', isLabelHidden: true },
+    { value: 100, label: '8' }
+  ];
+
+  const stepsPercent = [
+    { value: 0, label: '0%' },
+    { value: 25, label: '25%', isLabelHidden: true },
+    { value: 50, label: '50%' },
+    { value: 75, label: '75%', isLabelHidden: true },
+    { value: 100, label: '100%' }
+  ];
+
+  // Set custom steps
+  sliderDiscrete.customSteps = stepsDiscrete;
+  sliderPercent.customSteps = stepsPercent;
+
+  // Discrete slider change handler
+  sliderDiscrete.addEventListener('change', (e) => {
+    const { value, inputValue: newInputValue } = e;
+    let newValue;
+    let newInputValueFinal;
+
+    if (newInputValue === undefined) {
+      const step = stepsDiscrete.find((step) => step.value === value);
+      newInputValueFinal = step ? step.label : '0';
+      newInputValueFinal = Number(newInputValueFinal);
+      newValue = value;
+    } else {
+      const maxValue = Number(stepsDiscrete[stepsDiscrete.length - 1].label);
+      if (newInputValue > maxValue) {
+        newValue = Number(stepsDiscrete[stepsDiscrete.length - 1].value);
+        newInputValueFinal = maxValue;
+        sliderDiscrete.inputValue = maxValue;
+      } else {
+        const minValue = Number(stepsDiscrete[0].label);
+        if (newInputValue < minValue) {
+          newValue = Number(stepsDiscrete[0].value);
+          newInputValueFinal = minValue;
+          sliderDiscrete.inputValue = minValue;
+        } else {
+          const stepIndex = stepsDiscrete.findIndex((step) => Number(step.label) >= newInputValue);
+          if (Number(stepsDiscrete[stepIndex].label) === newInputValue) {
+            newValue = stepsDiscrete[stepIndex].value;
+            newInputValueFinal = newInputValue;
+          } else {
+            const midpoint = (Number(stepsDiscrete[stepIndex].label) + Number(stepsDiscrete[stepIndex - 1].label)) / 2;
+            if (midpoint > newInputValue) {
+              newValue = stepsDiscrete[stepIndex - 1].value;
+              newInputValueFinal = Number(stepsDiscrete[stepIndex - 1].label);
+            } else {
+              newValue = stepsDiscrete[stepIndex].value;
+              newInputValueFinal = Number(stepsDiscrete[stepIndex].label);
+            }
+          }
+        }
+      }
+    }
+
+    inputValueDiscrete = newInputValueFinal;
+    valueDiscrete = newValue;
+    sliderDiscrete.value = newValue;
+    sliderDiscrete.inputValue = newInputValueFinal;
+  });
+
+  // Percent slider change handler
+  sliderPercent.addEventListener('change', (e) => {
+    const { value, inputValue: newInputValue } = e;
+    let newValue;
+    let newInputValueFinal;
+
+    if (newInputValue === undefined) {
+      const step = stepsPercent.find((step) => step.value === value);
+      newInputValueFinal = step ? step.label.slice(0, -1) : '0';
+      newInputValueFinal = Number(newInputValueFinal);
+      newValue = value;
+    } else {
+      const maxValue = Number(stepsPercent[stepsPercent.length - 1].label.slice(0, -1));
+      if (newInputValue > maxValue) {
+        newValue = Number(stepsPercent[stepsPercent.length - 1].value);
+        newInputValueFinal = maxValue;
+        sliderPercent.inputValue = maxValue;
+      } else {
+        const minValue = Number(stepsPercent[0].label.slice(0, -1));
+        if (newInputValue < minValue) {
+          newValue = minValue;
+          sliderPercent.inputValue = minValue;
+        } else {
+          const stepIndex = stepsPercent.findIndex((step) => Number(step.label.slice(0, -1)) >= newInputValue);
+          if (Number(stepsPercent[stepIndex].label.slice(0, -1)) === newInputValue) {
+            newValue = stepsPercent[stepIndex].value;
+            newInputValueFinal = newInputValue;
+          } else {
+            const midpoint =
+              (Number(stepsPercent[stepIndex].label.slice(0, -1)) +
+                Number(stepsPercent[stepIndex - 1].label.slice(0, -1))) /
+              2;
+            if (midpoint > newInputValue) {
+              newValue = stepsPercent[stepIndex - 1].value;
+              newInputValueFinal = Number(stepsPercent[stepIndex - 1].label.slice(0, -1));
+            } else {
+              newValue = stepsPercent[stepIndex].value;
+              newInputValueFinal = Number(stepsPercent[stepIndex].label.slice(0, -1));
+            }
+          }
+        }
+      }
+    }
+
+    inputValuePercent = newInputValueFinal;
+    valuePercent = newValue;
+    sliderPercent.value = newValue;
+    sliderPercent.inputValue = newInputValueFinal;
+  });
+
+  // Continuous slider change handler
+  sliderContinuous.addEventListener('change', (e) => {
+    const { value, inputValue: newInputValue } = e;
+    let newValue;
+
+    if (newInputValue === undefined) {
+      newValue = Math.floor(value);
+    } else {
+      if (newInputValue > 100) {
+        newValue = 100;
+        sliderContinuous.inputValue = 100;
+      } else if (newInputValue < 0) {
+        newValue = 0;
+        sliderContinuous.inputValue = 0;
+      } else {
+        newValue = Math.floor(newInputValue);
+      }
+    }
+
+    inputValueContinuous = newValue;
+    valueContinuous = newValue;
+    sliderContinuous.value = newValue;
+    sliderContinuous.inputValue = newValue;
+  });
+</script>

@@ -1,0 +1,42 @@
+<h3 class="pf-v6-c-content--h3">Slider value is: <span id="value-display">4</span></h3>
+<pfv6-slider id="slider" disabled value="50"></pfv6-slider>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-slider/pfv6-slider.js';
+
+  const slider = document.getElementById('slider');
+  const valueDisplay = document.getElementById('value-display');
+
+  const steps = [
+    { value: 0, label: '0' },
+    { value: 12.5, label: '1', isLabelHidden: true },
+    { value: 25, label: '2' },
+    { value: 37.5, label: '3', isLabelHidden: true },
+    { value: 50, label: '4' },
+    { value: 62.5, label: '5', isLabelHidden: true },
+    { value: 75, label: '6' },
+    { value: 87.5, label: '7', isLabelHidden: true },
+    { value: 100, label: '8' }
+  ];
+
+  let value = 50;
+
+  // Function to display value based on steps
+  const displayValue = () => {
+    const step = steps.find((step) => step.value === value);
+    return step ? step.label : '0';
+  };
+
+  // Set custom steps
+  slider.customSteps = steps;
+
+  // Update display with initial value
+  valueDisplay.textContent = displayValue();
+
+  // Change handler
+  slider.addEventListener('change', (e) => {
+    value = e.value;
+    slider.value = value;
+    valueDisplay.textContent = displayValue();
+  });
+</script>

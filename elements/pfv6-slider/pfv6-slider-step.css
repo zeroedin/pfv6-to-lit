@@ -1,0 +1,85 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+#container {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: var(--pf-v6-c-slider__step--InsetInlineStart);
+}
+
+#container.active {
+  --pf-v6-c-slider__step-tick--BackgroundColor:
+    var(
+      --pf-v6-c-slider__step--m-active__slider-tick--BackgroundColor
+    );
+}
+
+#tick {
+  position: absolute;
+  inset-block-start: var(--pf-v6-c-slider__step-tick--InsetBlockStart);
+  inset-inline-start: 0;
+  width: var(--pf-v6-c-slider__step-tick--Width);
+  height: var(--pf-v6-c-slider__step-tick--Height);
+  background-color: var(--pf-v6-c-slider__step-tick--BackgroundColor);
+  border:
+    var(--pf-v6-c-slider__step-tick--BorderWidth) solid
+    var(--pf-v6-c-slider__step-tick--BorderColor);
+  border-radius: var(--pf-v6-c-slider__step-tick--BorderRadius);
+  transform: translateX(var(--pf-v6-c-slider__step-tick--TranslateX));
+}
+
+#tick:dir(rtl) {
+  transform:
+    translateX(
+      calc(-1 * var(--pf-v6-c-slider__step-tick--TranslateX))
+    );
+}
+
+#label {
+  position: absolute;
+  inset-block-start: var(--pf-v6-c-slider__step-label--InsetBlockStart);
+  word-break: normal;
+  transform: translateX(var(--pf-v6-c-slider__step-label--TranslateX));
+}
+
+#label:dir(rtl) {
+  transform:
+    translateX(
+      calc(-1 * var(--pf-v6-c-slider__step-label--TranslateX))
+    );
+}
+
+/* First step - align label to start */
+:host(:first-of-type) {
+  --pf-v6-c-slider__step-tick--TranslateX:
+    var(
+      --pf-v6-c-slider__step--first-child__step-tick--TranslateX,
+      0
+    );
+  --pf-v6-c-slider__step-label--TranslateX:
+    var(
+      --pf-v6-c-slider__step--first-child__step-label--TranslateX,
+      0
+    );
+}
+
+/* Last step - align label to end */
+:host(:last-of-type) {
+  --pf-v6-c-slider__step-tick--TranslateX:
+    var(
+      --pf-v6-c-slider__step--last-child__step-tick--TranslateX,
+      -100%
+    );
+  --pf-v6-c-slider__step-label--TranslateX:
+    var(
+      --pf-v6-c-slider__step--last-child__step-label--TranslateX,
+      -100%
+    );
+}

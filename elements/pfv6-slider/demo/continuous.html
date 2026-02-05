@@ -1,0 +1,51 @@
+<pfv6-checkbox id="tooltip-checkbox" label="hasTooltipOverThumb" style="margin-bottom: 20px"></pfv6-checkbox>
+
+<h3 class="pf-v6-c-content--h3">Slider Value is: <span id="value-display">50</span></h3>
+<pfv6-slider id="slider1" value="50"></pfv6-slider>
+
+<br>
+
+<h3 class="pf-v6-c-content--h3">Slider value is: <span id="value-custom-display">50</span></h3>
+<pfv6-slider id="slider2" value="50" are-custom-steps-continuous></pfv6-slider>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-slider/pfv6-slider.js';
+  import '@pfv6/elements/pfv6-checkbox/pfv6-checkbox.js';
+
+  const tooltipCheckbox = document.getElementById('tooltip-checkbox');
+  const slider1 = document.getElementById('slider1');
+  const slider2 = document.getElementById('slider2');
+  const valueDisplay = document.getElementById('value-display');
+  const valueCustomDisplay = document.getElementById('value-custom-display');
+
+  let value = 50;
+  let valueCustom = 50;
+  let hasTooltipOverThumb = false;
+
+  // Checkbox change handler
+  tooltipCheckbox.addEventListener('change', () => {
+    hasTooltipOverThumb = tooltipCheckbox.checked;
+    slider1.hasTooltipOverThumb = hasTooltipOverThumb;
+    slider2.hasTooltipOverThumb = hasTooltipOverThumb;
+  });
+
+  // Slider 1 change handler
+  slider1.addEventListener('change', (e) => {
+    value = e.value;
+    slider1.value = value;
+    valueDisplay.textContent = value;
+  });
+
+  // Slider 2 change handler
+  slider2.addEventListener('change', (e) => {
+    valueCustom = e.value;
+    slider2.value = valueCustom;
+    valueCustomDisplay.textContent = valueCustom;
+  });
+
+  // Set custom steps for slider2
+  slider2.customSteps = [
+    { value: 0, label: '0%' },
+    { value: 100, label: '100%' }
+  ];
+</script>
