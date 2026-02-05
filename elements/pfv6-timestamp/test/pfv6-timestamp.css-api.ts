@@ -55,7 +55,7 @@ async function applyCssOverride(
   value: string
 ): Promise<void> {
   await page.addStyleTag({
-    content: `${selector} { ${cssVar}: ${value}; }`
+    content: `${selector} { ${cssVar}: ${value}; }`,
   });
 }
 
@@ -67,7 +67,7 @@ const cssApiTests = [
     resolvedValue: '0.75rem',
     type: 'size',
     testValue: '50px',
-    demo: 'basic-formats'
+    demo: 'basic-formats',
   },
   {
     name: '--pf-v6-c-timestamp--Color',
@@ -75,7 +75,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic-formats'
+    demo: 'basic-formats',
   },
   {
     name: '--pf-v6-c-timestamp--OutlineOffset',
@@ -83,7 +83,7 @@ const cssApiTests = [
     resolvedValue: '0.1875rem',
     type: 'size',
     testValue: '50px',
-    demo: 'basic-formats'
+    demo: 'basic-formats',
   },
   {
     name: '--pf-v6-c-timestamp--m-help-text--TextDecorationLine',
@@ -91,7 +91,7 @@ const cssApiTests = [
     resolvedValue: 'underline',
     type: 'text-decoration-line',
     testValue: 'none',
-    demo: 'default-tooltip'
+    demo: 'default-tooltip',
   },
   {
     name: '--pf-v6-c-timestamp--m-help-text--TextDecorationStyle',
@@ -99,7 +99,7 @@ const cssApiTests = [
     resolvedValue: 'dashed',
     type: 'text-decoration-style',
     testValue: 'solid',
-    demo: 'default-tooltip'
+    demo: 'default-tooltip',
   },
   {
     name: '--pf-v6-c-timestamp--m-help-text--TextUnderlineOffset',
@@ -107,7 +107,7 @@ const cssApiTests = [
     resolvedValue: '0.25rem',
     type: 'size',
     testValue: '50px',
-    demo: 'default-tooltip'
+    demo: 'default-tooltip',
   },
   {
     name: '--pf-v6-c-timestamp--m-help-text--Color',
@@ -115,7 +115,7 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-tooltip'
+    demo: 'default-tooltip',
   },
   {
     name: '--pf-v6-c-timestamp--m-help-text--hover--Color',
@@ -123,7 +123,7 @@ const cssApiTests = [
     resolvedValue: '#151515',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'default-tooltip'
+    demo: 'default-tooltip',
   },
   {
     name: '--pf-v6-c-timestamp--m-help-text--hover--TextDecorationLine',
@@ -131,7 +131,7 @@ const cssApiTests = [
     resolvedValue: 'underline',
     type: 'text-decoration-line',
     testValue: 'none',
-    demo: 'default-tooltip'
+    demo: 'default-tooltip',
   },
   {
     name: '--pf-v6-c-timestamp--m-help-text--hover--TextDecorationStyle',
@@ -139,8 +139,8 @@ const cssApiTests = [
     resolvedValue: 'dashed',
     type: 'text-decoration-style',
     testValue: 'solid',
-    demo: 'default-tooltip'
-  }
+    demo: 'default-tooltip',
+  },
 ];
 
 test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
@@ -153,8 +153,8 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Variable: ${name}`,
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
-          `Test value: ${testValue}`
-        ].join('\n')
+          `Test value: ${testValue}`,
+        ].join('\n'),
       });
 
       // Set consistent viewport
@@ -178,12 +178,12 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
         // Take screenshots
         const reactBuffer = await reactPage.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         const litBuffer = await page.screenshot({
           fullPage: true,
-          animations: 'disabled'
+          animations: 'disabled',
         });
 
         // Decode and compare
@@ -201,23 +201,23 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           diff.data,
           reactPng.width,
           reactPng.height,
-          { threshold: 0 }  // Pixel-perfect
+          { threshold: 0 } // Pixel-perfect
         );
 
         // Attach images to report
         await test.info().attach('React with CSS override (expected)', {
           body: reactBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Lit with CSS override (actual)', {
           body: litBuffer,
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         await test.info().attach('Diff (red = different pixels)', {
           body: PNG.sync.write(diff),
-          contentType: 'image/png'
+          contentType: 'image/png',
         });
 
         // Assert pixel-perfect match
