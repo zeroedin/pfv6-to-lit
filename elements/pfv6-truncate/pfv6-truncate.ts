@@ -164,8 +164,8 @@ export class Pfv6Truncate extends LitElement {
       parseFloat(computedStyle.width)
       - parseFloat(computedStyle.paddingLeft)
       - parseFloat(computedStyle.paddingRight)
-      - parseFloat(computedStyle.borderRight)
-      - parseFloat(computedStyle.borderLeft)
+      - parseFloat(computedStyle.borderRightWidth)
+      - parseFloat(computedStyle.borderLeftWidth)
     );
   }
 
