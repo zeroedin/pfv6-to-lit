@@ -66,32 +66,32 @@ const cssApiTests = [
     defaultValue: '0',
     resolvedValue: '0',
     type: 'number',
-    testValue: '999',
-    demo: 'basic'
+    testValue: '50%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__rail--PaddingBlockStart',
     defaultValue: 'var(--pf-t--global--spacer--md, 1rem)',
     resolvedValue: '1rem',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '3rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__rail--PaddingBlockEnd',
     defaultValue: 'var(--pf-t--global--spacer--md, 1rem)',
     resolvedValue: '1rem',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '3rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__rail-track--Height',
     defaultValue: '0.25rem',
     resolvedValue: '0.25rem',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '1rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__rail-track--before--base--BackgroundColor',
@@ -99,7 +99,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__rail-track--before--fill--BackgroundColor',
@@ -107,15 +107,15 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__rail-track--before--BorderWidth',
     defaultValue: 'var(--pf-t--global--border--width--high-contrast--regular, 0px)',
     resolvedValue: '0px',
     type: 'size',
-    testValue: '50px',
-    demo: 'basic'
+    testValue: '3px',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__rail-track--before--BorderColor',
@@ -123,55 +123,63 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__rail-track--before--BorderRadius',
     defaultValue: 'var(--pf-t--global--border--radius--tiny, 4px)',
     resolvedValue: '4px',
     type: 'size',
-    testValue: '50px',
-    demo: 'basic'
+    testValue: '20px',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__rail-track--before--fill--BackgroundColor--gradient-stop',
     defaultValue: 'var(--pf-v6-c-slider--value)',
     resolvedValue: '0',
-    type: 'number',
-    testValue: '999',
-    demo: 'basic'
+    type: 'percentage',
+    testValue: '75%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__steps--FontSize',
     defaultValue: 'var(--pf-t--global--font--size--sm, 0.875rem)',
     resolvedValue: '0.875rem',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '2rem',
+    demo: 'continuous'
+  },
+  {
+    name: '--pf-v6-c-slider__steps--Height',
+    defaultValue: 'var(--pf-v6-c-slider__steps--FontSize)',
+    resolvedValue: '0.875rem',
+    type: 'size',
+    testValue: '2rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step-tick--InsetBlockStart',
     defaultValue: 'var(--pf-t--global--spacer--md, 1rem)',
     resolvedValue: '1rem',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '3rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step-tick--Width',
     defaultValue: '0.15rem',
     resolvedValue: '0.15rem',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '0.5rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step-tick--Height',
     defaultValue: '0.25rem',
     resolvedValue: '0.25rem',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '1rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step-tick--BackgroundColor',
@@ -179,23 +187,23 @@ const cssApiTests = [
     resolvedValue: '#4d4d4d',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step-tick--TranslateX',
     defaultValue: '-50%',
     resolvedValue: '-50%',
-    type: 'size',
-    testValue: '50%',
-    demo: 'basic'
+    type: 'percentage',
+    testValue: '0%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step-tick--BorderWidth',
     defaultValue: 'var(--pf-t--global--border--width--high-contrast--regular, 0px)',
     resolvedValue: '0px',
     type: 'size',
-    testValue: '50px',
-    demo: 'basic'
+    testValue: '3px',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step-tick--BorderColor',
@@ -203,15 +211,15 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step-tick--BorderRadius',
     defaultValue: 'var(--pf-t--global--border--radius--sharp, 0px)',
     resolvedValue: '0px',
     type: 'size',
-    testValue: '50px',
-    demo: 'basic'
+    testValue: '10px',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step--m-active__slider-tick--BackgroundColor',
@@ -219,87 +227,87 @@ const cssApiTests = [
     resolvedValue: '#ffffff',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step--first-child__step-tick--TranslateX',
     defaultValue: '0',
     resolvedValue: '0',
     type: 'number',
-    testValue: '999',
-    demo: 'basic'
+    testValue: '10px',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step--last-child__step-tick--TranslateX',
     defaultValue: '-100%',
     resolvedValue: '-100%',
-    type: 'size',
-    testValue: '50%',
-    demo: 'basic'
+    type: 'percentage',
+    testValue: '0%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step-label--TranslateX',
     defaultValue: '-50%',
     resolvedValue: '-50%',
-    type: 'size',
-    testValue: '50%',
-    demo: 'basic'
+    type: 'percentage',
+    testValue: '0%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step-label--InsetBlockStart',
     defaultValue: 'calc(var(--pf-t--global--spacer--xl, 2rem) + var(--pf-v6-c-slider__rail-track--Height))',
     resolvedValue: 'calc(2rem + 0.25rem)',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '5rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step--first-child__step-label--TranslateX',
     defaultValue: '0',
     resolvedValue: '0',
     type: 'number',
-    testValue: '999',
-    demo: 'basic'
+    testValue: '10px',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__step--last-child__step-label--TranslateX',
     defaultValue: '-100%',
     resolvedValue: '-100%',
-    type: 'size',
-    testValue: '50%',
-    demo: 'basic'
+    type: 'percentage',
+    testValue: '0%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--InsetBlockStart',
     defaultValue: 'calc(var(--pf-v6-c-slider__rail-track--Height) / 2 + var(--pf-t--global--spacer--md, 1rem))',
     resolvedValue: 'calc(0.25rem / 2 + 1rem)',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '3rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--Width',
     defaultValue: '1rem',
     resolvedValue: '1rem',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '2rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--Height',
     defaultValue: '1rem',
     resolvedValue: '1rem',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '2rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--InsetInlineStart',
     defaultValue: 'var(--pf-v6-c-slider--value)',
     resolvedValue: '0',
-    type: 'number',
-    testValue: '999',
-    demo: 'basic'
+    type: 'percentage',
+    testValue: '75%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--BackgroundColor',
@@ -307,31 +315,31 @@ const cssApiTests = [
     resolvedValue: '#0066cc',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--TranslateX',
     defaultValue: '-50%',
     resolvedValue: '-50%',
-    type: 'size',
-    testValue: '50%',
-    demo: 'basic'
+    type: 'percentage',
+    testValue: '0%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--TranslateY',
     defaultValue: '-50%',
     resolvedValue: '-50%',
-    type: 'size',
-    testValue: '50%',
-    demo: 'basic'
+    type: 'percentage',
+    testValue: '0%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--BorderWidth',
     defaultValue: 'var(--pf-t--global--border--width--high-contrast--regular, 0px)',
     resolvedValue: '0px',
     type: 'size',
-    testValue: '50px',
-    demo: 'basic'
+    testValue: '3px',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--BorderColor',
@@ -339,15 +347,15 @@ const cssApiTests = [
     resolvedValue: 'transparent',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--BorderRadius',
     defaultValue: 'var(--pf-t--global--border--radius--large, 24px)',
     resolvedValue: '24px',
     type: 'size',
-    testValue: '50px',
-    demo: 'basic'
+    testValue: '5px',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--BoxShadow--base',
@@ -355,7 +363,7 @@ const cssApiTests = [
     resolvedValue: '0 0 0 2px #ffffff, 0 0 0 3px #0066cc',
     type: 'shadow',
     testValue: '0 0 20px 10px rgba(255, 0, 0, 0.8)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--hover--BoxShadow',
@@ -363,7 +371,7 @@ const cssApiTests = [
     resolvedValue: '0 0 0 2px #ffffff, 0 0 0 3px #0066cc',
     type: 'shadow',
     testValue: '0 0 20px 10px rgba(255, 0, 0, 0.8)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--focus--BoxShadow',
@@ -371,7 +379,7 @@ const cssApiTests = [
     resolvedValue: '0 0 0 2px #ffffff, 0 0 0 3px #0066cc',
     type: 'shadow',
     testValue: '0 0 20px 10px rgba(255, 0, 0, 0.8)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--active--BoxShadow',
@@ -379,127 +387,127 @@ const cssApiTests = [
     resolvedValue: '0 0 0 2px #ffffff, 0 0 0 3px #0066cc, 0 0 2px 5px #92c5f9',
     type: 'shadow',
     testValue: '0 0 20px 10px rgba(255, 0, 0, 0.8)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--before--Width',
     defaultValue: '44px',
     resolvedValue: '44px',
     type: 'size',
-    testValue: '50px',
-    demo: 'basic'
+    testValue: '80px',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--before--Height',
     defaultValue: 'var(--pf-v6-c-slider__thumb--before--Width)',
     resolvedValue: '44px',
     type: 'size',
-    testValue: '50px',
-    demo: 'basic'
+    testValue: '80px',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--before--BorderRadius',
     defaultValue: 'var(--pf-t--global--border--radius--large, 24px)',
     resolvedValue: '24px',
     type: 'size',
-    testValue: '50px',
-    demo: 'basic'
+    testValue: '10px',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--before--TranslateX',
     defaultValue: '-50%',
     resolvedValue: '-50%',
-    type: 'size',
-    testValue: '50%',
-    demo: 'basic'
+    type: 'percentage',
+    testValue: '0%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__thumb--before--TranslateY',
     defaultValue: '-50%',
     resolvedValue: '-50%',
-    type: 'size',
-    testValue: '50%',
-    demo: 'basic'
+    type: 'percentage',
+    testValue: '0%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__value--MarginInlineStart',
     defaultValue: 'var(--pf-t--global--spacer--md, 1rem)',
     resolvedValue: '1rem',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '3rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__value--c-form-control--width-base',
     defaultValue: 'calc(var(--pf-t--global--spacer--control--horizontal--default, 1rem) + var(--pf-t--global--spacer--control--horizontal--default, 1rem) + 1.25rem)',
     resolvedValue: 'calc(1rem + 1rem + 1.25rem)',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '10rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__value--c-form-control--width-chars',
     defaultValue: '3',
     resolvedValue: '3',
     type: 'number',
-    testValue: '999',
-    demo: 'basic'
+    testValue: '10',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__value--c-form-control--Width',
     defaultValue: 'calc(var(--pf-v6-c-slider__value--c-form-control--width-base) + var(--pf-v6-c-slider__value--c-form-control--width-chars) * 1ch)',
     resolvedValue: 'calc(calc(1rem + 1rem + 1.25rem) + 3 * 1ch)',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '15rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__value--m-floating--TranslateX',
     defaultValue: '-50%',
     resolvedValue: '-50%',
-    type: 'size',
-    testValue: '50%',
-    demo: 'basic'
+    type: 'percentage',
+    testValue: '0%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__value--m-floating--TranslateY',
     defaultValue: '-100%',
     resolvedValue: '-100%',
-    type: 'size',
-    testValue: '50%',
-    demo: 'basic'
+    type: 'percentage',
+    testValue: '0%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__value--m-floating--InsetInlineStart',
     defaultValue: 'var(--pf-v6-c-slider--value)',
     resolvedValue: '0',
-    type: 'number',
-    testValue: '999',
-    demo: 'basic'
+    type: 'percentage',
+    testValue: '75%',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__value--m-floating--ZIndex',
     defaultValue: 'var(--pf-t--global--z-index--sm, 200)',
     resolvedValue: '200',
     type: 'number',
-    testValue: '999',
-    demo: 'basic'
+    testValue: '500',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__actions--MarginInlineEnd',
     defaultValue: 'var(--pf-t--global--spacer--sm, 0.5rem)',
     resolvedValue: '0.5rem',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '2rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__main--actions--MarginInlineStart',
     defaultValue: 'var(--pf-t--global--spacer--sm, 0.5rem)',
     resolvedValue: '0.5rem',
     type: 'size',
-    testValue: '50rem',
-    demo: 'basic'
+    testValue: '2rem',
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider--m-disabled__rail-track--before--fill--BackgroundColor',
@@ -507,7 +515,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider--m-disabled__step--m-active__slider-tick--BackgroundColor',
@@ -515,7 +523,7 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider--m-disabled__thumb--BackgroundColor',
@@ -523,15 +531,15 @@ const cssApiTests = [
     resolvedValue: '#c7c7c7',
     type: 'color',
     testValue: 'rgb(255, 0, 0)',
-    demo: 'basic'
+    demo: 'continuous'
   },
   {
     name: '--pf-v6-c-slider__rail-track--before--fill--direction',
     defaultValue: 'right',
     resolvedValue: 'right',
-    type: 'unknown',
+    type: 'direction',
     testValue: 'left',
-    demo: 'basic'
+    demo: 'continuous'
   }
 ];
 
