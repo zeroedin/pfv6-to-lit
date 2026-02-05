@@ -624,7 +624,6 @@ describe('<pfv6-slider>', function() {
       await el.updateComplete;
 
       // Should reset to original value
-      const formData = new FormData();
       expect(el.value).to.equal(50);
     });
 
