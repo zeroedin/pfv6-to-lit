@@ -1,0 +1,22 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+#container {
+  display: flex;
+  flex-shrink: 0;
+  grid-column: var(--_masthead-brand-grid-column, revert);
+  row-gap: var(--_masthead-brand-row-gap, var(--pf-t--global--spacer--sm, 0.5rem));
+  align-self: stretch;
+  order: var(--_masthead-brand-order, revert);
+  min-width: 4ch;
+  padding-block-end: var(--_masthead-brand-padding-block-end, 0);
+  border-block-end: var(--_masthead-brand-border-block-end, 0);
+  position: relative;
+}

@@ -1,0 +1,21 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+#container {
+  display: var(--_masthead-main-display, flex);
+  grid-column: var(--_masthead-main-grid-column, auto);
+  column-gap: var(--_masthead-main-column-gap, var(--pf-t--global--spacer--md, 1rem));
+  align-items: center;
+  margin-inline-end:
+    var(
+      --_masthead-main-margin-inline-end,
+      var(--pf-t--global--spacer--inset--page-chrome, 1.5rem)
+    );
+}

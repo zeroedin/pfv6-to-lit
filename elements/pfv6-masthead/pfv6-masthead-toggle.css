@@ -1,0 +1,14 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: inline-block;
+}
+
+#container {
+  display: inline-block;
+  font-size: var(--_masthead-toggle-size, var(--pf-t--global--icon--size--xl, 1.5rem));
+}

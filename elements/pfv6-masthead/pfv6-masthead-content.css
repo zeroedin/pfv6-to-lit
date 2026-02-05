@@ -1,0 +1,24 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+#container {
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: var(--_masthead-content-grid-column, auto);
+  row-gap: var(--_masthead-content-row-gap, var(--pf-t--global--spacer--sm, 0.5rem));
+  column-gap:
+    var(
+      --_masthead-content-column-gap,
+      var(--pf-t--global--spacer--gutter--default, 1rem)
+    );
+  align-self: center;
+  order: var(--_masthead-content-order, 0);
+  min-width: 4ch;
+}

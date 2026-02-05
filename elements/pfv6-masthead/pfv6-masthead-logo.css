@@ -1,0 +1,21 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+#container {
+  position: relative;
+  width: var(--pf-v6-c-masthead__logo--Width, 11.8125rem);
+  max-height: var(--pf-v6-c-masthead__logo--MaxHeight, 2.375rem);
+}
+
+::slotted(*) {
+  max-width: 100%;
+  max-height: 100%;
+  vertical-align: middle;
+}
