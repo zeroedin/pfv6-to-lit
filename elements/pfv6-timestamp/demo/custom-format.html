@@ -1,0 +1,8 @@
+<pfv6-timestamp id="custom-format"></pfv6-timestamp>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-timestamp/pfv6-timestamp.js';
+
+  const timestamp = document.getElementById('custom-format');
+  timestamp.customFormat = { year: '2-digit', month: 'short', weekday: 'short', day: 'numeric', hour: 'numeric' };
+</script>

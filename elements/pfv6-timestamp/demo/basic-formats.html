@@ -1,0 +1,21 @@
+<pfv6-timestamp id="full-full" date-format="full" time-format="full"></pfv6-timestamp>
+<br>
+<br>
+<pfv6-timestamp id="full-date" date-format="full"></pfv6-timestamp>
+<br>
+<br>
+<pfv6-timestamp id="full-time" time-format="full"></pfv6-timestamp>
+<br>
+<br>
+<pfv6-timestamp id="medium-short" date-format="medium" time-format="short" display-suffix="US Eastern"></pfv6-timestamp>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-timestamp/pfv6-timestamp.js';
+
+  const currentDate = new Date('2025-04-21T23:35:25');
+
+  document.getElementById('full-full').date = currentDate;
+  document.getElementById('full-date').date = currentDate;
+  document.getElementById('full-time').date = currentDate;
+  document.getElementById('medium-short').date = currentDate;
+</script>

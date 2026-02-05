@@ -1,0 +1,17 @@
+<pfv6-timestamp id="custom-1" has-tooltip tooltip-variant="default">
+  1 hour ago
+</pfv6-timestamp>
+<br>
+<br>
+<pfv6-timestamp id="custom-2" date-format="medium" time-format="short" has-tooltip tooltip-variant="default">
+  Last updated August 9th, 2022 at 2:57 PM EDT
+</pfv6-timestamp>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-timestamp/pfv6-timestamp.js';
+
+  const date = new Date(2022, 7, 9, 14, 57, 0);
+
+  document.getElementById('custom-1').date = date;
+  document.getElementById('custom-2').date = date;
+</script>

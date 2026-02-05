@@ -1,0 +1,13 @@
+<pfv6-timestamp id="custom-tooltip-1" has-tooltip tooltip-variant="custom" tooltip-content="Last updated on August 9th, 2022 - 2:57 PM UTC"></pfv6-timestamp>
+<br>
+<br>
+<pfv6-timestamp id="custom-tooltip-2" has-tooltip tooltip-variant="custom" tooltip-content="31st of October, 2022">
+  Halloween
+</pfv6-timestamp>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-timestamp/pfv6-timestamp.js';
+
+  document.getElementById('custom-tooltip-1').date = new Date(2022, 7, 9, 14, 57, 0);
+  document.getElementById('custom-tooltip-2').date = new Date(2022, 9, 31);
+</script>
