@@ -1,0 +1,17 @@
+<div>With default width-observing truncation:</div>
+<div class="truncate-example-resize">
+  <pfv6-truncate href="#" content="A very lengthy anchor text content to trigger truncation"></pfv6-truncate>
+  <pfv6-truncate position="start" href="#" content="A very lengthy anchor text content to trigger truncation"></pfv6-truncate>
+  <pfv6-truncate position="middle" href="#" content="A very lengthy anchor text content to trigger truncation"></pfv6-truncate>
+</div>
+<br>
+<div>With max characters truncation:</div>
+<pfv6-truncate max-chars-displayed="15" href="#" content="A very lengthy anchor text content to trigger truncation"></pfv6-truncate>
+<br>
+<pfv6-truncate max-chars-displayed="15" position="start" href="#" content="A very lengthy anchor text content to trigger truncation"></pfv6-truncate>
+<br>
+<pfv6-truncate max-chars-displayed="15" position="middle" href="#" content="A very lengthy anchor text content to trigger truncation"></pfv6-truncate>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-truncate/pfv6-truncate.js';
+</script>

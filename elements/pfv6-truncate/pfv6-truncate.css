@@ -1,0 +1,104 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Public CSS variables from React source */
+  --pf-v6-c-truncate--MinWidth: 6ch;
+  --pf-v6-c-truncate__start--MinWidth: 6ch;
+
+  display: inline;
+}
+
+#wrapper {
+  display: inline;
+}
+
+/* Main truncate container (span or a element in shadow DOM) */
+span:not(.text, .omission, .pf-v6-screen-reader, .container, #wrapper, .start, .end),
+a {
+  display: inline-grid;
+  grid-auto-flow: column;
+  align-items: baseline;
+  min-width: var(--pf-v6-c-truncate--MinWidth);
+  text-decoration: inherit;
+
+  &.fixed {
+    display: inline;
+    align-items: revert;
+    min-width: revert;
+  }
+}
+
+a {
+  color: var(--pf-t--global--text--color--link--default, #0066cc);
+  text-decoration-line: var(--pf-t--global--text-decoration--link--line--default, underline);
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    color: var(--pf-t--global--text--color--link--hover, #004d99);
+    text-decoration-line: var(--pf-t--global--text-decoration--link--line--hover, underline);
+  }
+}
+
+.start,
+.end {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
+}
+
+.start {
+  min-width: var(--pf-v6-c-truncate__start--MinWidth);
+}
+
+.end {
+  direction: rtl;
+
+  &:dir(rtl) {
+    direction: ltr;
+  }
+}
+
+.start + .end {
+  overflow: visible;
+  direction: ltr;
+
+  &:dir(rtl) {
+    direction: rtl;
+  }
+}
+
+@supports (-webkit-hyphens: none) {
+  .end {
+    direction: ltr;
+
+    &:dir(rtl) {
+      direction: rtl;
+    }
+  }
+}
+
+.pf-v6-screen-reader {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus styles for keyboard navigation */
+span:not(.text, .omission, .pf-v6-screen-reader, .container, #wrapper):focus-visible,
+a:focus-visible {
+  outline:
+    var(--pf-t--global--border--width--box--default, 2px)
+    solid
+    var(--pf-t--global--color--brand--default, #0066cc);
+  outline-offset: var(--pf-t--global--spacer--xs, 0.25rem);
+}
