@@ -1,0 +1,42 @@
+<pfv6-slider
+  id="slider"
+  value="50"
+  is-input-visible="true"
+  input-value="50"
+  input-label="%"
+  input-position="aboveThumb">
+</pfv6-slider>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-slider/pfv6-slider.js';
+
+  const slider = document.getElementById('slider');
+
+  let value = 50;
+  let inputValue = 50;
+
+  // Change handler with input value validation
+  slider.addEventListener('change', (e) => {
+    const { value: newValue, inputValue: newInputValue } = e;
+    let finalValue;
+
+    if (newInputValue === undefined) {
+      finalValue = Number(newValue);
+    } else {
+      if (newInputValue > 100) {
+        finalValue = 100;
+        slider.inputValue = 100;
+      } else if (newInputValue < 0) {
+        finalValue = 0;
+        slider.inputValue = 0;
+      } else {
+        finalValue = Math.floor(newInputValue);
+      }
+    }
+
+    value = finalValue;
+    inputValue = finalValue;
+    slider.value = finalValue;
+    slider.inputValue = finalValue;
+  });
+</script>

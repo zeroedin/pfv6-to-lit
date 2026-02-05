@@ -1,0 +1,151 @@
+<h3 class="pf-v6-c-content--h3">Slider value is: <span id="value1-display">50</span></h3>
+<pfv6-slider id="slider1" value="50"></pfv6-slider>
+
+<br>
+
+<h3 class="pf-v6-c-content--h3">Slider value is: <span id="value2-display">50</span></h3>
+<small class="pf-v6-c-content--small">(min = 0, max = 200, step = 50) </small>
+<pfv6-slider id="slider2" value="50" max="200" step="50" show-ticks></pfv6-slider>
+
+<br>
+
+<h3 class="pf-v6-c-content--h3">Slider value is: <span id="value3-display">25</span></h3>
+<small class="pf-v6-c-content--small">(min = -25, max = 75, step = 10, boundaries not shown) </small>
+<pfv6-slider id="slider3" value="25" min="-25" max="75" step="10" show-ticks></pfv6-slider>
+
+<br>
+
+<h3 class="pf-v6-c-content--h3">Slider value is: <span id="value4-display">50</span></h3>
+<small class="pf-v6-c-content--small">(min = -25, max = 75, step = 10, boundaries shown) </small>
+<pfv6-slider id="slider4" value="50" min="-25" max="75" step="10" show-ticks></pfv6-slider>
+
+<br>
+
+<h3 class="pf-v6-c-content--h3">Slider value is: <span id="value5-display">50</span></h3>
+<small class="pf-v6-c-content--small">(min = -25, max = 75, step = 10, boundaries shown, ticks not shown) </small>
+<pfv6-slider id="slider5" value="50" min="-25" max="75" step="10"></pfv6-slider>
+
+<br>
+
+<h3 class="pf-v6-c-content--h3">Slider value is: <span id="value6-display">3</span></h3>
+<small class="pf-v6-c-content--small">(max = 5, custom steps) </small>
+<pfv6-slider id="slider6" value="3" max="5" show-ticks></pfv6-slider>
+
+<br>
+
+<h3 class="pf-v6-c-content--h3">Slider value is: <span id="value7-display">25</span></h3>
+<small class="pf-v6-c-content--small">(min = 12, max = 86, custom steps with non linear data) </small>
+<pfv6-slider id="slider7" value="25" min="12" max="86" show-ticks></pfv6-slider>
+
+<br>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-slider/pfv6-slider.js';
+
+  const initialValues = {
+    value1: 50,
+    value2: 50,
+    value3: 25,
+    value4: 50,
+    value5: 50,
+    value6: 3,
+    value7: 25
+  };
+
+  const steps = [
+    { value: 0, label: '0' },
+    { value: 12.5, label: '1', isLabelHidden: true },
+    { value: 25, label: '2' },
+    { value: 37.5, label: '3', isLabelHidden: true },
+    { value: 50, label: '4' },
+    { value: 62.5, label: '5', isLabelHidden: true },
+    { value: 75, label: '6' },
+    { value: 87.5, label: '7', isLabelHidden: true },
+    { value: 100, label: '8' }
+  ];
+
+  const stepsDiscreteWithMax = [
+    { value: 0, label: 'A' },
+    { value: 1, label: 'B' },
+    { value: 2, label: 'C' },
+    { value: 3, label: 'D' },
+    { value: 4, label: 'E' },
+    { value: 5, label: 'F' }
+  ];
+
+  const stepsDiscreteNoLinearWithMaxMin = [
+    { value: 12, label: '12' },
+    { value: 15, label: '15' },
+    { value: 25, label: '25' },
+    { value: 54, label: '54' },
+    { value: 67, label: '67' },
+    { value: 86, label: '86' }
+  ];
+
+  const slider1 = document.getElementById('slider1');
+  const slider2 = document.getElementById('slider2');
+  const slider3 = document.getElementById('slider3');
+  const slider4 = document.getElementById('slider4');
+  const slider5 = document.getElementById('slider5');
+  const slider6 = document.getElementById('slider6');
+  const slider7 = document.getElementById('slider7');
+
+  const value1Display = document.getElementById('value1-display');
+  const value2Display = document.getElementById('value2-display');
+  const value3Display = document.getElementById('value3-display');
+  const value4Display = document.getElementById('value4-display');
+  const value5Display = document.getElementById('value5-display');
+  const value6Display = document.getElementById('value6-display');
+  const value7Display = document.getElementById('value7-display');
+
+  // Set custom steps
+  slider1.customSteps = steps;
+  slider6.customSteps = stepsDiscreteWithMax;
+  slider7.customSteps = stepsDiscreteNoLinearWithMaxMin;
+
+  // Set showBoundaries to false for slider3
+  slider3.showBoundaries = false;
+
+  // Change handlers
+  slider1.addEventListener('change', (e) => {
+    const value = e.value;
+    slider1.value = value;
+    value1Display.textContent = value;
+  });
+
+  slider2.addEventListener('change', (e) => {
+    const value = e.value;
+    slider2.value = value;
+    value2Display.textContent = value;
+  });
+
+  slider3.addEventListener('change', (e) => {
+    const value = e.value;
+    slider3.value = value;
+    value3Display.textContent = Math.floor(value);
+  });
+
+  slider4.addEventListener('change', (e) => {
+    const value = e.value;
+    slider4.value = value;
+    value4Display.textContent = Math.floor(value);
+  });
+
+  slider5.addEventListener('change', (e) => {
+    const value = e.value;
+    slider5.value = value;
+    value5Display.textContent = Math.floor(value);
+  });
+
+  slider6.addEventListener('change', (e) => {
+    const value = e.value;
+    slider6.value = value;
+    value6Display.textContent = Math.floor(value);
+  });
+
+  slider7.addEventListener('change', (e) => {
+    const value = e.value;
+    slider7.value = value;
+    value7Display.textContent = Math.floor(value);
+  });
+</script>
