@@ -6,8 +6,6 @@ import styles from './pfv6-slider-step.css';
 
 /**
  * Individual step marker for the slider component.
- *
- * @slot - Default slot for custom content
  */
 @customElement('pfv6-slider-step')
 export class Pfv6SliderStep extends LitElement {
