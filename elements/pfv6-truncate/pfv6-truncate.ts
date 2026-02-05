@@ -288,7 +288,6 @@ export class Pfv6Truncate extends LitElement {
       <span id="wrapper" class=${classMap(containerClasses)}>
         ${this.isTruncated ? html`
           <pfv6-tooltip
-            ?hidden=${!this.isTruncated}
             position=${this.tooltipPosition}
             .content=${this.content}
           >
