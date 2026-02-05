@@ -674,12 +674,12 @@ describe('Masthead composition', function() {
       </pfv6-masthead>
     `);
 
-    const masthead = el.querySelector('pfv6-masthead');
-    const main = el.querySelector('pfv6-masthead-main');
-    const toggle = el.querySelector('pfv6-masthead-toggle');
-    const brand = el.querySelector('pfv6-masthead-brand');
-    const logo = el.querySelector('pfv6-masthead-logo');
-    const content = el.querySelector('pfv6-masthead-content');
+    const masthead = el;
+    const main = masthead.querySelector('pfv6-masthead-main');
+    const toggle = masthead.querySelector('pfv6-masthead-toggle');
+    const brand = masthead.querySelector('pfv6-masthead-brand');
+    const logo = masthead.querySelector('pfv6-masthead-logo');
+    const content = masthead.querySelector('pfv6-masthead-content');
 
     expect(masthead).to.exist;
     expect(main).to.exist;
@@ -711,8 +711,8 @@ describe('Masthead composition', function() {
       </pfv6-masthead>
     `);
 
-    const masthead = el.querySelector('pfv6-masthead');
-    const main = masthead!.querySelector('pfv6-masthead-main');
+    const masthead = el;
+    const main = masthead.querySelector('pfv6-masthead-main');
     const brand = main!.querySelector('pfv6-masthead-brand');
     const logo = brand!.querySelector('pfv6-masthead-logo');
 
