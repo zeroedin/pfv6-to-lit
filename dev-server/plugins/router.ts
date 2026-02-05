@@ -12,6 +12,7 @@ import {
   hasReactDemos,
   litDemoExists,
 } from './demo.js';
+import { getComponentComparisonData } from './demo-list.js';
 import { registerCustomFilters } from './liquid-filters.js';
 
 // Initialize LiquidJS engine with custom filters
@@ -54,8 +55,9 @@ export function routerPlugin(): Plugin {
       // Route: / - serves dev-server/index.html (processed through LiquidJS)
       router.get('/', async ctx => {
         try {
+          const components = await getComponentComparisonData();
           ctx.type = 'html';
-          ctx.body = await liquid.renderFile('index.html', {});
+          ctx.body = await liquid.renderFile('index.html', { components });
         } catch (error) {
           console.error('[router] Error rendering index:', error);
           ctx.status = 500;

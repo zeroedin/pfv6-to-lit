@@ -23,9 +23,31 @@
         </tr>
       </thead>
       <tbody id="demo-comparison-tbody">
+        {% if components.size == 0 %}
         <tr>
-          <td colspan="3">Loading components...</td>
+          <td colspan="3">No components available yet. Run <code>npm run compile</code> to generate manifests.</td>
         </tr>
+        {% else %}
+        {% for component in components %}
+        <tr>
+          <td><strong>{{ component.displayName }}</strong></td>
+          <td>
+            {% if component.litDemos.size > 0 %}
+            <a href="/elements/pfv6-{{ component.componentName }}/demo">View Lit Demos ({{ component.litDemos.size }}) →</a>
+            {% else %}
+            <span style="color: #999;">N/A</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if component.reactDemos.size > 0 %}
+            <a href="/elements/pfv6-{{ component.componentName }}/react">View React Demos ({{ component.reactDemos.size }}) →</a>
+            {% else %}
+            <span style="color: #999;">N/A</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+        {% endif %}
       </tbody>
     </table>
   </section>

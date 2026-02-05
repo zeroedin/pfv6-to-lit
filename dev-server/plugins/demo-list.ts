@@ -1,4 +1,3 @@
-import type { Plugin } from '@web/dev-server-core';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -6,7 +5,7 @@ interface ReactComponentData {
   demos: Record<string, unknown>;
 }
 
-interface ComponentComparison {
+export interface ComponentComparison {
   componentName: string;
   displayName: string;
   litDemos: { name: string; url: string }[];
@@ -14,9 +13,10 @@ interface ComponentComparison {
 }
 
 /**
- * Generate component comparison table HTML
+ * Get component comparison data for the index page
+ * Reads from custom-elements.json (Lit) and patternfly-react/demos.json (React)
  */
-async function generateComparisonTableHTML(): Promise<string> {
+export async function getComponentComparisonData(): Promise<ComponentComparison[]> {
   const components = new Map<string, ComponentComparison>();
 
   // Read Lit demos from custom-elements.json
@@ -55,7 +55,7 @@ async function generateComparisonTableHTML(): Promise<string> {
     }
   } catch (error) {
     console.warn(
-      '[demo-list-plugin] Could not read custom-elements.json:',
+      '[demo-list] Could not read custom-elements.json:',
       error instanceof Error ? error.message : error
     );
   }
@@ -93,59 +93,13 @@ async function generateComparisonTableHTML(): Promise<string> {
     }
   } catch (error) {
     console.warn(
-      '[demo-list-plugin] Could not read patternfly-react/demos.json:',
+      '[demo-list] Could not read patternfly-react/demos.json:',
       error instanceof Error ? error.message : error
     );
   }
 
   // Sort components alphabetically
-  const sortedComponents = Array.from(components.values()).sort((a, b) =>
+  return Array.from(components.values()).sort((a, b) =>
     a.displayName.localeCompare(b.displayName)
   );
-
-  if (sortedComponents.length === 0) {
-    return `<tr>
-            <td colspan="3">No components available yet. Run <code>npm run compile</code> to generate manifests.</td>
-          </tr>`;
-  }
-
-  return sortedComponents
-      .map(component => {
-        const litCell = component.litDemos.length > 0 ?
-        `<a href="/elements/pfv6-${component.componentName}/demo">View Lit Demos (${component.litDemos.length}) →</a>`
-        : '<span style="color: #999;">N/A</span>';
-
-        const reactCell = component.reactDemos.length > 0 ?
-        `<a href="/elements/pfv6-${component.componentName}/react">View React Demos (${component.reactDemos.length}) →</a>`
-        : '<span style="color: #999;">N/A</span>';
-
-        return `<tr>
-            <td><strong>${component.displayName}</strong></td>
-            <td>${litCell}</td>
-            <td>${reactCell}</td>
-          </tr>`;
-      })
-      .join('\n          ');
-}
-
-/**
- * Plugin that injects a component comparison table into dev-server/index.html
- * Reads from custom-elements.json (Lit) and patternfly-react/demos.json (React)
- */
-export function demoListPlugin(): Plugin {
-  return {
-    name: 'demo-list-plugin',
-    async transform(context) {
-      // Only inject comparison table into the root index.html (served via router)
-      if (context.path === '/' && context.response.is('html')) {
-        const comparisonTableHTML = await generateComparisonTableHTML();
-        let html = context.body as string;
-        html = html.replace(
-          /<tbody id="demo-comparison-tbody">[\s\S]*?<\/tbody>/,
-          `<tbody id="demo-comparison-tbody">\n          ${comparisonTableHTML}\n        </tbody>`
-        );
-        return html;
-      }
-    },
-  };
 }

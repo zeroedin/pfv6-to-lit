@@ -5,7 +5,6 @@ import { esbuildPlugin } from '@web/dev-server-esbuild';
 import { litCss } from 'web-dev-server-plugin-lit-css';
 import { routerPlugin } from './dev-server/plugins/router.ts';
 import { injectImportMapPlugin } from './dev-server/plugins/inject-import-map.ts';
-import { demoListPlugin } from './dev-server/plugins/demo-list.ts';
 
 /**
  * Redirect .js requests to .ts files for elements and lib directories.
@@ -62,7 +61,6 @@ export default {
     }),
     routerPlugin(),
     injectImportMapPlugin(),
-    demoListPlugin(),
     // Watch TypeScript files and trigger reload on changes
     {
       name: 'watch-ts-files',
