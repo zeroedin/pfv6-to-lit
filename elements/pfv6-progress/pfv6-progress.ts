@@ -66,7 +66,7 @@ export class Pfv6Progress extends LitElement {
 
   /** Title above progress */
   @property({ type: String })
-  override title = '';
+  override title: string = '';
 
   /** Text description of current progress value to display instead of percentage */
   @property({ type: String })
