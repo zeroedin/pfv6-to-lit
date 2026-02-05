@@ -147,6 +147,8 @@ export class Pfv6Slider extends LitElement {
 
   private dragStartDiff = 0;
   private snapValue?: number;
+  #initialValue = 0;
+  #initialInputValue = 0;
 
   constructor() {
     super();
@@ -155,6 +157,9 @@ export class Pfv6Slider extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback();
+    // Store initial values for form reset
+    this.#initialValue = this.value;
+    this.#initialInputValue = this.inputValue;
     this.localValue = this.value;
     this.localInputValue = this.inputValue;
   }
@@ -200,8 +205,8 @@ export class Pfv6Slider extends LitElement {
   }
 
   formResetCallback() {
-    this.localValue = this.value;
-    this.localInputValue = this.inputValue;
+    this.localValue = this.#initialValue;
+    this.localInputValue = this.#initialInputValue;
     this.#updateFormValue();
   }
 
