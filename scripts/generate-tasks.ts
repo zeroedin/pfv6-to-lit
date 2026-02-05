@@ -411,8 +411,9 @@ function generateTasks(
 
       // Determine task type - only blocked if deps are unsatisfied
       const unsatisfiedBlockers = uniqueBlockers.filter(b => !createdComponents.has(b));
+      const unsatisfiedDemoBlockers = demoBlockers?.filter(b => !createdComponents.has(b)) || [];
       let taskType: 'ready' | 'blocked';
-      if (unsatisfiedBlockers.length > 0 || demoBlockers) {
+      if (unsatisfiedBlockers.length > 0 || unsatisfiedDemoBlockers.length > 0) {
         taskType = 'blocked';
       } else {
         taskType = 'ready';
@@ -423,8 +424,8 @@ function generateTasks(
         type: taskType,
         component: compName,
         demos: satisfied.sort(),
-        blockers: uniqueBlockers.length > 0 ? uniqueBlockers : undefined,
-        demoBlockers: demoBlockers,
+        blockers: unsatisfiedBlockers.length > 0 ? unsatisfiedBlockers : undefined,
+        demoBlockers: unsatisfiedDemoBlockers.length > 0 ? unsatisfiedDemoBlockers : undefined,
       };
       if (isTaskCompleted(task)) {
         task.type = 'completed';
@@ -432,10 +433,10 @@ function generateTasks(
 
       tasks.push(task);
       let blockerInfo = '';
-      if (uniqueBlockers.length > 0) {
-        blockerInfo = ` [blockers: ${uniqueBlockers.join(', ')}]`;
-      } else if (demoBlockers) {
-        blockerInfo = ` [demoBlockers: ${demoBlockers.join(', ')}]`;
+      if (unsatisfiedBlockers.length > 0) {
+        blockerInfo = ` [blockers: ${unsatisfiedBlockers.join(', ')}]`;
+      } else if (unsatisfiedDemoBlockers.length > 0) {
+        blockerInfo = ` [demoBlockers: ${unsatisfiedDemoBlockers.join(', ')}]`;
       }
       console.error(`  Task ${task.task}: ${taskType} - ${compName} (${satisfied.length} demos)${blockerInfo}`);
 
