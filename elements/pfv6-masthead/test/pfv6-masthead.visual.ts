@@ -60,7 +60,7 @@ test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
       await reactPage.setViewportSize({ width: 1280, height: 720 });
 
       try {
-        // Load BOTH demos simultaneously
+        // Load both demos
         await reactPage.goto(`/elements/pfv6-masthead/react/test/${demoName}`);
         await waitForFullLoad(reactPage);
 

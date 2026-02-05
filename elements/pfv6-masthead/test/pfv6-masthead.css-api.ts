@@ -403,6 +403,7 @@ test.describe('CSS API Tests - React vs Lit with CSS Overrides', () => {
           `Default: ${defaultValue}`,
           `Resolves to: ${resolvedValue} (${type})`,
           `Test value: ${testValue}`,
+          `Demo: ${demo}`,
         ].join('\n'),
       });
 
