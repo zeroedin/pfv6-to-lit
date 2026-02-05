@@ -1,0 +1,73 @@
+/* Box-sizing reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Component base variables */
+  --pf-v6-c-timestamp--FontSize: var(--pf-t--global--font--size--body--sm, 0.75rem);
+  --pf-v6-c-timestamp--Color: var(--pf-t--global--text--color--regular, #151515);
+  --pf-v6-c-timestamp--OutlineOffset: var(--pf-t--global--spacer--xs, 0.1875rem);
+
+  /* Help text modifier variables */
+  --pf-v6-c-timestamp--m-help-text--TextDecorationLine:
+    var(
+      --pf-t--global--text-decoration--help-text--line--default,
+      underline
+    );
+  --pf-v6-c-timestamp--m-help-text--TextDecorationStyle:
+    var(
+      --pf-t--global--text-decoration--help-text--style--default,
+      dashed
+    );
+  --pf-v6-c-timestamp--m-help-text--TextUnderlineOffset: 0.25rem;
+  --pf-v6-c-timestamp--m-help-text--Color: var(--pf-t--global--text--color--subtle, #4d4d4d);
+  --pf-v6-c-timestamp--m-help-text--hover--Color: var(--pf-t--global--text--color--regular, #151515);
+  --pf-v6-c-timestamp--m-help-text--hover--TextDecorationLine:
+    var(
+      --pf-t--global--text-decoration--help-text--line--hover,
+      underline
+    );
+  --pf-v6-c-timestamp--m-help-text--hover--TextDecorationStyle:
+    var(
+      --pf-t--global--text-decoration--help-text--style--hover,
+      dashed
+    );
+
+  display: inline-block;
+}
+
+#container {
+  display: inline-block;
+  font-size: var(--pf-v6-c-timestamp--FontSize);
+  color: var(--pf-v6-c-timestamp--Color);
+  outline-offset: var(--pf-v6-c-timestamp--OutlineOffset);
+}
+
+#container.help-text {
+  --pf-v6-c-timestamp--Color: var(--pf-v6-c-timestamp--m-help-text--Color);
+
+  text-decoration-line: var(--pf-v6-c-timestamp--m-help-text--TextDecorationLine);
+  text-decoration-style: var(--pf-v6-c-timestamp--m-help-text--TextDecorationStyle);
+  text-underline-offset: var(--pf-v6-c-timestamp--m-help-text--TextUnderlineOffset);
+  cursor: pointer;
+}
+
+#container.help-text:is(:hover, :focus) {
+  --pf-v6-c-timestamp--Color: var(--pf-v6-c-timestamp--m-help-text--hover--Color);
+  --pf-v6-c-timestamp--m-help-text--TextDecorationLine:
+    var(
+      --pf-v6-c-timestamp--m-help-text--hover--TextDecorationLine
+    );
+  --pf-v6-c-timestamp--m-help-text--TextDecorationStyle:
+    var(
+      --pf-v6-c-timestamp--m-help-text--hover--TextDecorationStyle
+    );
+}
+
+/* Enable timestamp with tooltip to have dashed underline when used with truncate */
+.text {
+  text-decoration: inherit;
+}
