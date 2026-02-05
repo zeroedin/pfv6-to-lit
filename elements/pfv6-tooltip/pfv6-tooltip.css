@@ -37,7 +37,7 @@
   --pf-v6-c-tooltip__arrow--m-left--TranslateY: -50%;
   --pf-v6-c-tooltip__arrow--m-left--Rotate: 45deg;
 
-  display: inline-block;
+  display: contents;
 }
 
 #tooltip {
