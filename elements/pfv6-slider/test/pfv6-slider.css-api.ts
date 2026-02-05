@@ -530,7 +530,7 @@ const cssApiTests = [
     defaultValue: 'right',
     resolvedValue: 'right',
     type: 'unknown',
-    testValue: '50px',
+    testValue: 'left',
     demo: 'basic'
   }
 ];
