@@ -54,7 +54,7 @@ export class Pfv6ClipboardCopyExpandEvent extends Event {
  * @alias ClipboardCopy
  * @summary Allows users to copy text to clipboard with multiple display variants
  * @slot - Default slot for text content (string)
- * @slot additional-actions - Additional action buttons (should use pfv6-clipboard-copy-action wrapper)
+ * @slot additional-actions - Additional action buttons for inline-compact variant only (should use pfv6-clipboard-copy-action wrapper)
  * @fires Pfv6ClipboardCopyCopyEvent - Fired when copy button is clicked
  * @fires Pfv6ClipboardCopyChangeEvent - Fired when text value changes
  * @fires Pfv6ClipboardCopyExpandEvent - Fired when expansion state changes
