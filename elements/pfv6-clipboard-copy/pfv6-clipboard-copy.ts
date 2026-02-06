@@ -178,7 +178,7 @@ export class Pfv6ClipboardCopy extends LitElement {
     super.connectedCallback();
     // Initialize state from properties
     this.expanded = this.isExpanded;
-    this.#updateTextFromSlot();
+    // Note: text is initialized via @slotchange handler after first render
   }
 
   override updated(changedProperties: PropertyValues) {
