@@ -10,7 +10,7 @@ export class Pfv6ClipboardCopyExpandedChangeEvent extends Event {
   constructor(
     public text: string
   ) {
-    super('change', { bubbles: true, composed: true });
+    super('change', { bubbles: true });
   }
 }
 
