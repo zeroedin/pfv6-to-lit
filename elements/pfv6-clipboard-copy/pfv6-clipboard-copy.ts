@@ -295,6 +295,7 @@ export class Pfv6ClipboardCopy extends LitElement {
               <pfv6-clipboard-copy-toggle
                 ?is-expanded=${this.expanded}
                 id=${this.toggleId}
+                content-id=${this.contentId}
                 aria-label=${this.toggleAriaLabel}
                 @click=${this.#handleToggle}
               ></pfv6-clipboard-copy-toggle>

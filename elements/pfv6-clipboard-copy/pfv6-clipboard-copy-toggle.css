@@ -5,7 +5,48 @@
 }
 
 :host {
-  display: inline-block;
+  /* Control button styling */
+  --_toggle-padding-block: var(--pf-t--global--spacer--control--vertical--default, 0.5rem);
+  --_toggle-padding-inline: var(--pf-t--global--spacer--control--horizontal--default, 0.75rem);
+  --_toggle-color: var(--pf-t--global--icon--color--regular, #1f1f1f);
+  --_toggle-background-color: var(--pf-t--global--background--color--control--default, #ffffff);
+  --_toggle-border-color: var(--pf-t--global--border--color--default, #c7c7c7);
+  --_toggle-border-width: var(--pf-t--global--border--width--control--default, 1px);
+  --_toggle-border-radius: var(--pf-t--global--border--radius--small, 6px);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-block-start: var(--_toggle-padding-block);
+  padding-block-end: var(--_toggle-padding-block);
+  padding-inline-start: var(--_toggle-padding-inline);
+  padding-inline-end: var(--_toggle-padding-inline);
+  color: var(--_toggle-color);
+  background-color: var(--_toggle-background-color);
+  border: var(--_toggle-border-width) solid var(--_toggle-border-color);
+  border-radius: var(--_toggle-border-radius);
+  cursor: pointer;
+  transition:
+    border-color var(--pf-t--global--motion--duration--fade--default, 200ms)
+    var(--pf-t--global--motion--timing-function--default, cubic-bezier(0.4, 0, 0.2, 1));
+
+  &:hover {
+    --_toggle-border-color: var(--pf-t--global--border--color--hover, #707070);
+    --_toggle-border-width: var(--pf-t--global--border--width--control--hover, 1px);
+  }
+
+  &:active {
+    --_toggle-border-color: var(--pf-t--global--border--color--clicked, #1f1f1f);
+    --_toggle-border-width: var(--pf-t--global--border--width--control--clicked, 1px);
+  }
+
+  &:focus-visible {
+    outline:
+      var(--pf-t--global--border--width--box--default, 2px)
+      solid
+      var(--pf-t--global--color--brand--default, #0066cc);
+    outline-offset: var(--pf-t--global--spacer--xs, 0.25rem);
+  }
 }
 
 .toggle-icon {
