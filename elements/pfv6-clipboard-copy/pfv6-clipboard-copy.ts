@@ -11,7 +11,7 @@ import '@pfv6/elements/pfv6-text-input/pfv6-text-input.js';
 import '@pfv6/elements/pfv6-truncate/pfv6-truncate.js';
 import './pfv6-clipboard-copy-button.js';
 import './pfv6-clipboard-copy-toggle.js';
-import './pfv6-clipboard-copy-expanded.js';
+import { type Pfv6ClipboardCopyExpandedChangeEvent } from './pfv6-clipboard-copy-expanded.js';
 import './pfv6-clipboard-copy-action.js';
 import styles from './pfv6-clipboard-copy.css';
 
@@ -226,10 +226,9 @@ export class Pfv6ClipboardCopy extends LitElement {
   }
 
   #handleExpandedTextChange(event: Event) {
-    const target = event.target as HTMLElement;
-    const newText = target.innerText || '';
-    this.textWhenExpanded = newText;
-    this.dispatchEvent(new Pfv6ClipboardCopyChangeEvent(newText));
+    const { text } = event as Pfv6ClipboardCopyExpandedChangeEvent;
+    this.textWhenExpanded = text;
+    this.dispatchEvent(new Pfv6ClipboardCopyChangeEvent(text));
   }
 
   #handleToggle() {
