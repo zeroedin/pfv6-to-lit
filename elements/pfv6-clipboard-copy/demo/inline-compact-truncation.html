@@ -1,0 +1,25 @@
+<pfv6-clipboard-copy
+  copy-aria-label="Copy inline compact with truncation at end example"
+  truncation
+  hover-tip="Copy"
+  click-tip="Copied"
+  variant="inline-compact"
+>
+  This lengthy, copyable content will be truncated with default settings when the truncation prop is simply set to true. This is useful for quickly applying truncation without needing to worry about any other properties to set.
+</pfv6-clipboard-copy>
+<br>
+<br>
+<pfv6-clipboard-copy
+  copy-aria-label="Copy inline compact with truncation at start example"
+  truncation
+  truncation-position="start"
+  hover-tip="Copy"
+  click-tip="Copied"
+  variant="inline-compact"
+>
+  This lengthy, copyable content will be truncated with customized settings when the truncation prop is passed an object containing Truncate props. This is useful for finetuning truncation for your particular use-case.
+</pfv6-clipboard-copy>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-clipboard-copy/pfv6-clipboard-copy.js';
+</script>

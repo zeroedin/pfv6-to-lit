@@ -1,0 +1,131 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  /* Toggle icon */
+  --pf-v6-c-clipboard-copy__toggle-icon--TransitionDuration:
+    var(
+      --pf-t--global--motion--duration--icon--default,
+      100ms
+    );
+  --pf-v6-c-clipboard-copy__toggle-icon--TransitionTimingFunction:
+    var(
+      --pf-t--global--motion--timing-function--default,
+      cubic-bezier(0.4, 0, 0.2, 1)
+    );
+  --pf-v6-c-clipboard-copy__toggle-icon--Transition:
+    transform
+    var(--pf-v6-c-clipboard-copy__toggle-icon--TransitionDuration)
+    var(--pf-v6-c-clipboard-copy__toggle-icon--TransitionTimingFunction);
+  --pf-v6-c-clipboard-copy--m-expanded__toggle-icon--Rotate: 90deg;
+
+  /* Clipboard copy expanded content */
+  --pf-v6-c-clipboard-copy__expandable-content--MarginBlockStart: var(--pf-t--global--spacer--xs, 0.25rem);
+  --pf-v6-c-clipboard-copy__expandable-content--PaddingBlockStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-clipboard-copy__expandable-content--PaddingInlineEnd: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-clipboard-copy__expandable-content--PaddingBlockEnd: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-clipboard-copy__expandable-content--PaddingInlineStart: var(--pf-t--global--spacer--md, 1rem);
+  --pf-v6-c-clipboard-copy__expandable-content--BackgroundColor:
+    var(
+      --pf-t--global--background--color--primary--default,
+      #ffffff
+    );
+  --pf-v6-c-clipboard-copy__expandable-content--BorderBlockStartWidth: var(--pf-t--global--border--width--control--default, 1px);
+  --pf-v6-c-clipboard-copy__expandable-content--BorderInlineEndWidth: var(--pf-t--global--border--width--control--default, 1px);
+  --pf-v6-c-clipboard-copy__expandable-content--BorderBlockEndWidth: var(--pf-t--global--border--width--control--default, 1px);
+  --pf-v6-c-clipboard-copy__expandable-content--BorderInlineStartWidth: var(--pf-t--global--border--width--control--default, 1px);
+  --pf-v6-c-clipboard-copy__expandable-content--BorderColor: var(--pf-t--global--border--color--default, #c7c7c7);
+  --pf-v6-c-clipboard-copy__expandable-content--BorderRadius: var(--pf-t--global--border--radius--small, 6px);
+  --pf-v6-c-clipboard-copy__expandable-content--OutlineOffset: var(--pf-t--global--spacer--xs, 0.25rem);
+  --pf-v6-c-clipboard-copy__expandable-content--BoxShadow: none;
+
+  /* Group */
+  --pf-v6-c-clipboard-copy__group--Gap: var(--pf-t--global--spacer--gap--control-to-control--default, 0.25rem);
+
+  /* Inline */
+  --pf-v6-c-clipboard-copy--m-inline--PaddingInlineStart: var(--pf-t--global--spacer--xs, 0.25rem);
+  --pf-v6-c-clipboard-copy--m-inline--PaddingInlineEnd: var(--pf-t--global--spacer--xs, 0.25rem);
+  --pf-v6-c-clipboard-copy--m-inline--BackgroundColor:
+    var(
+      --pf-t--global--background--color--secondary--default,
+      #f2f2f2
+    );
+  --pf-v6-c-clipboard-copy__actions--Gap: var(--pf-t--global--spacer--gap--action-to-action--plain, 0.25rem);
+  --pf-v6-c-clipboard-copy__actions--MarginInlineStart: var(--pf-t--global--spacer--gap--text-to-element--compact, 0.25rem);
+  --pf-v6-c-clipboard-copy__actions-item--button--Color: var(--pf-t--global--icon--color--subtle, #707070);
+  --pf-v6-c-clipboard-copy__actions-item--button--hover--Color: var(--pf-t--global--icon--color--regular, #1f1f1f);
+
+  /* Text */
+  --pf-v6-c-clipboard-copy__text--m-code--FontFamily:
+    var(
+      --pf-t--global--font--family--mono,
+      "Red Hat Mono",
+      "RedHatMono",
+      "Courier New",
+      Courier,
+      monospace
+    );
+  --pf-v6-c-clipboard-copy__text--m-code--FontSize: var(--pf-t--global--font--size--body--default, 0.875rem);
+
+  display: block;
+}
+
+:host([variant="inline-compact"]) {
+  display: inline;
+}
+
+#container {
+  &.inline {
+    display: inline;
+    padding-inline-start: var(--pf-v6-c-clipboard-copy--m-inline--PaddingInlineStart);
+    padding-inline-end: var(--pf-v6-c-clipboard-copy--m-inline--PaddingInlineEnd);
+    white-space: nowrap;
+    background-color: var(--pf-v6-c-clipboard-copy--m-inline--BackgroundColor);
+
+    &.block {
+      display: block;
+    }
+
+    &.truncate {
+      display: inline-flex;
+    }
+  }
+}
+
+.group {
+  display: flex;
+  gap: var(--pf-v6-c-clipboard-copy__group--Gap);
+
+  /* Text input fills remaining space */
+  pfv6-text-input {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.text {
+  overflow-wrap: break-word;
+  white-space: normal;
+
+  &.code {
+    font-family: var(--pf-v6-c-clipboard-copy__text--m-code--FontFamily);
+    font-size: var(--pf-v6-c-clipboard-copy__text--m-code--FontSize);
+  }
+}
+
+.actions {
+  display: inline-flex;
+  gap: var(--pf-v6-c-clipboard-copy__actions--Gap);
+  margin-inline-start: var(--pf-v6-c-clipboard-copy__actions--MarginInlineStart);
+}
+
+.actions-item {
+  /* Override private variables of child button components */
+  ::slotted(pfv6-clipboard-copy-button) {
+    --_button-plain-icon-color: var(--pf-v6-c-clipboard-copy__actions-item--button--Color);
+    --_button-plain-hover-icon-color: var(--pf-v6-c-clipboard-copy__actions-item--button--hover--Color);
+  }
+}

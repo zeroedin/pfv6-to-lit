@@ -1,0 +1,27 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:host {
+  display: inline-block;
+}
+
+.toggle-icon {
+  transition: var(--pf-v6-c-clipboard-copy__toggle-icon--Transition);
+
+  /* RTL mirror for angle-right icon */
+  &:dir(rtl) {
+    transform: scaleX(-1);
+  }
+
+  &.expanded {
+    transform: rotate(var(--pf-v6-c-clipboard-copy--m-expanded__toggle-icon--Rotate));
+
+    /* Combine RTL mirror with rotation */
+    &:dir(rtl) {
+      transform: scaleX(-1) rotate(var(--pf-v6-c-clipboard-copy--m-expanded__toggle-icon--Rotate));
+    }
+  }
+}
