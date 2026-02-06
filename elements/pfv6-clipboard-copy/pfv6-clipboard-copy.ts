@@ -163,9 +163,16 @@ export class Pfv6ClipboardCopy extends LitElement {
   @state() private copied = false;
   @state() private textWhenExpanded = '';
 
-  private textId = `text-${crypto.randomUUID()}`;
-  private toggleId = `toggle-${crypto.randomUUID()}`;
-  private contentId = `content-${crypto.randomUUID()}`;
+  private textId = `text-${Pfv6ClipboardCopy.#generateId()}`;
+  private toggleId = `toggle-${Pfv6ClipboardCopy.#generateId()}`;
+  private contentId = `content-${Pfv6ClipboardCopy.#generateId()}`;
+
+  static #generateId(): string {
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+    return new Date().getTime() + Math.random().toString(36).slice(2);
+  }
 
   override connectedCallback() {
     super.connectedCallback();
