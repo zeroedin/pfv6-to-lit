@@ -163,9 +163,9 @@ export class Pfv6ClipboardCopy extends LitElement {
   @state() private copied = false;
   @state() private textWhenExpanded = '';
 
-  private textId = `text-${Math.random().toString(36).substr(2, 9)}`;
-  private toggleId = `toggle-${Math.random().toString(36).substr(2, 9)}`;
-  private contentId = `content-${Math.random().toString(36).substr(2, 9)}`;
+  private textId = `text-${crypto.randomUUID()}`;
+  private toggleId = `toggle-${crypto.randomUUID()}`;
+  private contentId = `content-${crypto.randomUUID()}`;
 
   override connectedCallback() {
     super.connectedCallback();
