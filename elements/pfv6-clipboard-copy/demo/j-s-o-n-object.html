@@ -1,0 +1,22 @@
+<pfv6-clipboard-copy
+  copy-aria-label="Copy JSON object example"
+  toggle-aria-label="Show content for JSON object example"
+  is-code
+  hover-tip="Copy"
+  click-tip="Copied"
+  variant="expansion"
+>{ "menu": {
+    "id": "file",
+    "value": "File",
+    "popup": {
+      "menuitem": [
+        {"value": "New", "onclick": "CreateNewDoc()"},
+        {"value": "Open", "onclick": "OpenDoc()"},
+        {"value": "Close", "onclick": "CloseDoc()"}
+      ]
+    }
+  }} </pfv6-clipboard-copy>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-clipboard-copy/pfv6-clipboard-copy.js';
+</script>

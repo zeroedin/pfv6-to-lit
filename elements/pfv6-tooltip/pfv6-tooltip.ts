@@ -189,13 +189,13 @@ export class Pfv6Tooltip extends LitElement {
       this.#internals.ariaLabel = this.content;
     }
 
+    // isVisible works regardless of trigger mode (matches React behavior)
     if (changedProperties.has('isVisible')) {
-      if (this.trigger === 'manual') {
-        if (this.isVisible) {
-          this._show();
-        } else {
-          this._hide();
-        }
+      if (this.isVisible) {
+        this._show();
+      } else if (this._visible) {
+        // Only hide if currently visible (avoid hiding on initial render)
+        this._hide();
       }
     }
 

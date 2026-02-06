@@ -1,0 +1,49 @@
+<pfv6-clipboard-copy
+  copy-aria-label="Copy inline compact with additional action example"
+  hover-tip="Copy"
+  click-tip="Copied"
+  variant="inline-compact"
+  id="clipboard-with-action"
+>
+  <pfv6-clipboard-copy-action slot="additional-actions">
+    <pfv6-tooltip id="tooltip" content="Run in web terminal" position="top">
+      <pfv6-button
+        variant="plain"
+        has-no-padding
+        aria-label="Run in web terminal"
+        id="run-button"
+      >
+        <svg
+          slot="icon"
+          style="vertical-align: -0.125em;"
+          fill="currentColor"
+          height="1em"
+          width="1em"
+          viewBox="0 0 448 512"
+          aria-hidden="true"
+        >
+          <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+        </svg>
+      </pfv6-button>
+    </pfv6-tooltip>
+  </pfv6-clipboard-copy-action>
+  2.3.4-2-redhat
+</pfv6-clipboard-copy>
+
+<script type="module">
+  import '@pfv6/elements/pfv6-clipboard-copy/pfv6-clipboard-copy.js';
+
+  const runButton = document.getElementById('run-button');
+  const tooltip = document.getElementById('tooltip');
+  let isRunning = false;
+
+  runButton.addEventListener('click', () => {
+    isRunning = !isRunning;
+    tooltip.content = isRunning ? 'Running in web terminal' : 'Run in web terminal';
+  });
+
+  tooltip.addEventListener('hidden', () => {
+    isRunning = false;
+    tooltip.content = 'Run in web terminal';
+  });
+</script>
