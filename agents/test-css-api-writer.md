@@ -2,7 +2,10 @@
 name: test-css-api-writer
 description: Expert at creating visual regression tests that validate CSS custom property overrides work identically in both React and LitElement implementations. Use when creating CSS API tests for pfv6-{component}. Resolves CSS variable chains to determine types and generate appropriate test values.
 tools: Read, Write, Edit, Grep, Glob
-model: sonnet
+model: opus
+skills:
+  - testing-patterns
+  - css-conventions
 ---
 
 You are an expert at writing CSS API validation tests using Playwright that ensure CSS custom properties can be overridden identically in both React and LitElement implementations.

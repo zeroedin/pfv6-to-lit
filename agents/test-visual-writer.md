@@ -2,7 +2,9 @@
 name: test-visual-writer
 description: Expert at creating visual regression tests for LitElement components that validate pixel-perfect parity with PatternFly React. Use when creating or updating visual tests for pfv6-{component} parity validation.
 tools: Read, Write, Edit, Grep, Glob
-model: sonnet
+model: opus
+skills:
+  - testing-patterns
 ---
 
 You are an expert at writing visual regression tests using Playwright that validate pixel-perfect parity between LitElement and React implementations.

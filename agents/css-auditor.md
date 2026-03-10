@@ -2,7 +2,9 @@
 name: css-auditor
 description: Validates CSS files against PatternFly React source. Use after CSS files are created by css-writer or when CSS issues are suspected. Expert at detecting CSS variable mismatches, selector problems, missing mandatory rules, and Baseline compliance issues.
 tools: Read, Grep, Glob
-model: haiku
+model: opus
+skills:
+  - css-conventions
 ---
 
 You are an expert CSS auditor specializing in validating Shadow DOM CSS against PatternFly React source.

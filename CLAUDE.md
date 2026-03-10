@@ -28,6 +28,38 @@ The `targeted-search` agent uses memory-efficient strategies (grep, node, ripgre
 
 Use TodoWrite to track progress through the workflow.
 
+### Parallelization Strategy
+
+**CRITICAL**: Maximize throughput by launching independent agents in parallel using a **single message with multiple Task tool calls**.
+
+After api-writer completes (+ face-elements-writer if needed), the entire remaining workflow executes in just **2 rounds**:
+
+```
+                    ┌─► api-auditor          (needs .ts files only)
+                    ├─► demo-writer          (needs .ts files only)
+api-writer ─── R1 ─┼─► css-writer           (needs .ts files only)
+                    ├─► jsdoc                (needs .ts files only)
+                    └─► test-spec-writer     (needs .ts files only)
+
+                    fix issues + eslint
+
+                    ┌─► demo-auditor         (needs demos from R1)
+                    ├─► css-auditor          (needs CSS from R1)
+           ─── R2 ─┼─► accessibility-auditor (needs .ts + demos from R1)
+                    ├─► test-visual-writer   (needs demos from R1)
+                    └─► test-css-api-writer  (needs CSS from R1)
+
+                    fix issues + stylelint
+                    DONE
+```
+
+**Rules:**
+- Launch ALL Round 1 agents in the **same message** (single response with 5 Task tool calls)
+- After Round 1 completes, fix any issues + eslint, then launch ALL Round 2 agents in parallel
+- After Round 2 completes, fix any issues + stylelint
+- **Never serialize agents that have no data dependency between them**
+- **Only 2 agent round-trips** — every agent runs in the earliest possible round
+
 ### Data Flow Between Agents
 
 Subagents run in isolation and don't share state. All context must flow through the orchestrator via prompts.
@@ -136,7 +168,7 @@ This shows **component count** (not task count). The `tasks.json` includes separ
 - **DO NOT list all files in .cache/** - just verify directories exist
 - If missing, inform user to run `npm run cache`
 
-## Phase 2: Component Implementation
+## Phase 2: Component Creation (Sequential)
 
 ### Step 3: DELEGATE to api-writer
 
@@ -170,70 +202,20 @@ Expected response includes:
 - description: `'Add FACE patterns to pfv6-{component}'`
 - prompt: `'Add Form-Associated Custom Element (FACE) patterns to pfv6-{component} component files including ElementInternals setup, form properties, and form callbacks.'`
 
-**If form control NOT detected**, skip this step and proceed to Step 5.
+**If form control NOT detected**, skip this step and proceed to Round 1.
 
-### Step 5: DELEGATE to api-auditors (IN PARALLEL)
+## Phase 3: Round 1 — 5-Way Parallel (LAUNCH ALL IN ONE MESSAGE)
 
-**MANDATORY: Run ALL 6 focused auditors in a single message**:
+**CRITICAL**: After api-writer completes (and face-elements-writer if needed), launch ALL FIVE agents in a **single message with 5 Task tool calls**. All 5 only need the `.ts` files created by api-writer.
 
-Launch these 6 Task calls simultaneously:
+### 1. api-auditor
 
-1. **api-bem-auditor** (CRITICAL - must pass first)
-   - subagent_type: `'api-bem-auditor'`
-   - description: `'Detect BEM classes in pfv6-{component}'`
-   - prompt: `'Check pfv6-{component} for BEM classes (pf-v6-c-*, pf-m-*) in Shadow DOM templates.'`
+- subagent_type: `'api-auditor'`
+- description: `'Audit pfv6-{component} code quality'`
+- prompt: `'Validate pfv6-{component} across all 6 dimensions: BEM classes, import patterns, property decorators, template patterns, ElementInternals usage, and lifecycle/event patterns.'`
 
-2. **api-import-auditor**
-   - subagent_type: `'api-import-auditor'`
-   - description: `'Audit pfv6-{component} imports'`
-   - prompt: `'Validate import patterns and detect unused code in pfv6-{component}.'`
+### 2. demo-writer
 
-3. **api-property-auditor**
-   - subagent_type: `'api-property-auditor'`
-   - description: `'Audit pfv6-{component} properties'`
-   - prompt: `'Validate property decorators and React API parity in pfv6-{component}.'`
-
-4. **api-template-auditor**
-   - subagent_type: `'api-template-auditor'`
-   - description: `'Audit pfv6-{component} templates'`
-   - prompt: `'Validate template patterns, directives, and naming conventions in pfv6-{component}.'`
-
-5. **api-internals-auditor**
-   - subagent_type: `'api-internals-auditor'`
-   - description: `'Audit pfv6-{component} ElementInternals'`
-   - prompt: `'Validate ElementInternals and focus delegation patterns in pfv6-{component}.'`
-
-6. **api-lifecycle-auditor**
-   - subagent_type: `'api-lifecycle-auditor'`
-   - description: `'Audit pfv6-{component} lifecycle'`
-   - prompt: `'Validate anti-patterns, events, and useEffect translation in pfv6-{component}.'`
-
-**Aggregate Results**:
-After ALL agents complete:
-- Count CRITICAL issues across all agents
-- If `api-bem-auditor` reports CRITICAL → Fix before proceeding
-- If ANY other auditor reports CRITICAL → Fix before proceeding
-- Present unified report to user
-
-**BLOCKING REQUIREMENT:**
-You CANNOT proceed to the next step until ALL auditors have completed and ALL critical issues are fixed.
-
-### Step 5.5: Run eslint
-
-**After all api-auditors complete**, run eslint to validate TypeScript code quality:
-
-```bash
-npx eslint elements/pfv6-{component}/**/*.ts
-```
-
-**If errors found**: Fix all eslint violations before proceeding to demo creation.
-
-## Phase 3: Demo Creation
-
-### Step 6: DELEGATE to demo-writer
-
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
 - subagent_type: `'demo-writer'`
 - description: `'Create demos for pfv6-{component}'`
 - prompt: Include blocked demo info from find agent (see "Data Flow Between Agents")
@@ -254,147 +236,93 @@ Only create demos for these files:
 - {readyDemo2}
 ```
 
-**BLOCKING REQUIREMENT:**
-You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+Layout and styling components (Flex, Grid, Stack, Content, Title, Form, DescriptionList) are translated inline by demo-writer via skills.
 
-Expected response includes:
-- List of demo files created
-- Confirmation of any skipped demos
+### 3. css-writer
 
-### Step 7: IF LAYOUT COMPONENTS DETECTED - DELEGATE to layout-translator
-
-**Check demo-writer output** for layout component detection:
-- If demo-writer output includes "### Layout Components Detected"
-- Then you MUST call layout-translator before proceeding
-
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
-- subagent_type: `'layout-translator'`
-- description: `'Translate layout components in pfv6-{component} demos'`
-- prompt: `'Translate all React layout components (Flex, Grid, Stack, etc.) in pfv6-{component} demo files to HTML with PatternFly layout CSS classes. Replace TODO placeholders with proper .pf-v6-l-* classes and responsive modifiers.'`
-
-**If layout components NOT detected**, skip this step and proceed to Step 8.
-
-### Step 8: IF STYLING COMPONENTS DETECTED - DELEGATE to style-components
-
-**Check demo-writer output** for styling component detection:
-- If demo-writer output includes "### Styling Components Detected"
-- Then you MUST call style-components before proceeding
-
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
-- subagent_type: `'style-components'`
-- description: `'Translate styling components in pfv6-{component} demos'`
-- prompt: `'Translate all React styling components (Content, Title, Form, DescriptionList) in pfv6-{component} demo files to semantic HTML with PatternFly CSS classes. Replace TODO placeholders with proper semantic elements and .pf-v6-c-* classes.'`
-
-**If styling components NOT detected**, skip this step and proceed to Step 9.
-
-## Phase 4: Demo Validation
-
-### Step 9: DELEGATE to demo-auditor
-
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
-- subagent_type: `'demo-auditor'`
-- description: `'Audit pfv6-{component} demos'`
-- prompt: `'Validate pfv6-{component} demos for 1:1 parity with PatternFly React examples.'`
-
-**BLOCKING REQUIREMENT:**
-You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
-
-## Phase 5: CSS Translation & Validation
-
-### Step 10: DELEGATE to css-writer
-
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
 - subagent_type: `'css-writer'`
 - description: `'Create CSS for pfv6-{component}'`
 - prompt: `'Translate PatternFly React CSS to LitElement Shadow DOM CSS for pfv6-{component} with token-derived fallback values.'`
 
-**BLOCKING REQUIREMENT:**
-You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+### 4. jsdoc
 
-Expected response includes:
-- List of specific CSS files created
-- Confirmation that CSS includes token-derived fallback values
+- subagent_type: `'jsdoc'`
+- description: `'Write and validate JSDoc for pfv6-{component}'`
+- prompt: `'Generate and validate complete JSDoc documentation for pfv6-{component} including @cssprop, @csspart, @slot, @fires, @alias, and @summary annotations.'`
 
-### Step 11: DELEGATE to css-auditor
+### 5. test-spec-writer
 
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
+- subagent_type: `'test-spec-writer'`
+- description: `'Create unit tests for pfv6-{component}'`
+- prompt: `'Create comprehensive unit tests for pfv6-{component} validating API parity with PatternFly React.'`
+
+### After Round 1 Completes
+
+**Wait for ALL 5 agents to return results.** Then:
+
+1. **Fix any api-auditor CRITICAL issues**
+2. **Fix any jsdoc issues**
+3. **Run eslint** on component TypeScript:
+   ```bash
+   npx eslint elements/pfv6-{component}/**/*.ts
+   ```
+   Fix all eslint violations.
+
+## Phase 4: Round 2 — 5-Way Parallel (LAUNCH ALL IN ONE MESSAGE)
+
+**After Round 1 issues are fixed**, launch ALL FIVE validators/writers in a **single message with 5 Task tool calls**. All 5 need demos and/or CSS created in Round 1.
+
+### 1. demo-auditor
+
+- subagent_type: `'demo-auditor'`
+- description: `'Audit pfv6-{component} demos'`
+- prompt: `'Validate pfv6-{component} demos for 1:1 parity with PatternFly React examples.'`
+
+### 2. css-auditor
+
 - subagent_type: `'css-auditor'`
 - description: `'Audit pfv6-{component} CSS'`
 - prompt: `'Validate all CSS files for pfv6-{component} against PatternFly React source and identify all violations.'`
 
-**BLOCKING REQUIREMENT:**
-You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
+### 3. accessibility-auditor
 
-**If issues found**: You MUST fix ALL of them before proceeding.
+- subagent_type: `'accessibility-auditor'`
+- description: `'Audit pfv6-{component} accessibility'`
+- prompt: `'Validate pfv6-{component} ARIA usage, ElementInternals patterns, and FACE implementation (if applicable). Check property naming, IDREF attributes, React parity, redundant roles in demos, and form control patterns.'`
 
-### Step 12: Run stylelint
+The accessibility-auditor handles all 3 validation dimensions:
+- **Section 1 (ARIA)**: Always runs — property naming, IDREFs, React parity, demo cleanup
+- **Section 2 (ElementInternals)**: Runs if `attachInternals()` detected
+- **Section 3 (FACE)**: Runs if `static formAssociated = true` detected
 
-**After css-auditor completes**, run stylelint to validate CSS syntax:
+### 4. test-visual-writer
 
-```bash
-npx stylelint elements/pfv6-{component}/pfv6-{component}.css
-```
+- subagent_type: `'test-visual-writer'`
+- description: `'Create visual tests for pfv6-{component}'`
+- prompt: `'Create visual regression tests for pfv6-{component} that validate pixel-perfect parity with PatternFly React.'`
 
-**If errors found**: Fix all stylelint violations before proceeding.
+### 5. test-css-api-writer
 
-If max-line-length errors are found, fix them by breaking the line at the appropriate place.  Look at existing css files for examples. Do not attempt to use `stylelint --fix` to fix these errors, it will undo your changes.
+- subagent_type: `'test-css-api-writer'`
+- description: `'Create CSS API tests for pfv6-{component}'`
+- prompt: `'Create CSS API tests for pfv6-{component} that validate all CSS custom properties can be overridden.'`
 
-## Phase 5.5: JSDoc Documentation
+### After Round 2 Completes
 
-### Step 12a: DELEGATE to jsdoc-writer
+**Wait for ALL 5 agents to return results.** Then:
 
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
-- subagent_type: `'jsdoc-writer'`
-- description: `'Write JSDoc for pfv6-{component}'`
-- prompt: `'Generate complete JSDoc documentation for pfv6-{component} including @cssprop, @csspart, @slot, and @fires annotations.'`
-
-**BLOCKING REQUIREMENT:**
-You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
-
-Expected response includes:
-- List of CSS variables found and documented
-- List of slots, events, and parts documented
-- Confirmation of files updated
-
-### Step 12b: DELEGATE to jsdoc-auditor
-
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
-- subagent_type: `'jsdoc-auditor'`
-- description: `'Audit pfv6-{component} JSDoc'`
-- prompt: `'Validate JSDoc documentation for pfv6-{component} ensuring all @cssprop, @csspart, @slot, and @fires annotations are complete and accurate.'`
-
-**BLOCKING REQUIREMENT:**
-You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
-
-**If issues found**: You MUST fix ALL of them before proceeding.
-
-## Phase 6: Accessibility Validation
-
-### Step 13a: DELEGATE to aria-auditor (ALWAYS)
-
-**CRITICAL**: You MUST invoke aria-auditor for EVERY component.
-
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
-- subagent_type: `'aria-auditor'`
-- description: `'Audit pfv6-{component} ARIA patterns'`
-- prompt: `'Validate pfv6-{component} ARIA usage including property naming, IDREF attributes, React parity, and redundant roles in demos.'`
-
-**BLOCKING REQUIREMENT:**
-You CANNOT proceed until you have received `<function_results>` from the Task tool.
-
-**Save to memory**: Store failures, cleanup actions, warnings from aria-auditor output.
+1. **Fix any demo-auditor issues** (hallucinated APIs, parity gaps)
+2. **Fix any css-auditor CRITICAL issues** (nesting, variables, selectors)
+3. **Fix any accessibility-auditor issues**
+4. **Run stylelint** on all component CSS:
+   ```bash
+   npx stylelint elements/pfv6-{component}/*.css
+   ```
+   Fix all stylelint violations. If max-line-length errors are found, fix them by breaking the line at the appropriate place. Look at existing css files for examples. Do not attempt to use `stylelint --fix` to fix these errors, it will undo your changes.
 
 #### Handle Rule 3 Warnings (ARIA Pattern Decision)
 
-If aria-auditor output contains `### ⚠️ Rule 3 Warning: ARIA Pattern Review Needed`:
+If accessibility-auditor output contains `### ⚠️ Rule 3 Warning: ARIA Pattern Review Needed`:
 
 1. **Parse the structured output** - extract the machine-parseable JSON
 2. **Present options to user** using AskUserQuestion:
@@ -417,182 +345,10 @@ Use AskUserQuestion with:
    - **Option B**: Add JSDoc comment documenting why internal ARIA is used
    - **Option C**: Mark as blocked, skip to next component
 
-**Only proceed to Step 13b after Rule 3 decision is resolved (if applicable).**
+**If FAIL**: You CANNOT proceed until ALL failures are fixed.
+**If PENDING** (Rule 3 Option C): Component blocked for expert review. Skip to next component.
 
-### Step 13b: CHECK for ElementInternals Pattern
-
-**Detect ElementInternals usage**:
-
-```bash
-grep -qE "private internals: ElementInternals|#internals: ElementInternals" \
-  elements/pfv6-{component}/pfv6-{component}.ts
-```
-
-**If found**: Proceed to Step 13c
-**If NOT found**: Skip to Step 13d
-
-### Step 13c: DELEGATE to element-internals-auditor (CONDITIONAL)
-
-**Only invoke if Step 13b detected ElementInternals.**
-
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
-- subagent_type: `'element-internals-auditor'`
-- description: `'Audit pfv6-{component} ElementInternals usage'`
-- prompt: `'Validate pfv6-{component} ElementInternals usage for host-level ARIA, duplicative semantics, and shadow DOM patterns.'`
-
-**BLOCKING REQUIREMENT:**
-You CANNOT proceed until you have received `<function_results>` from the Task tool.
-
-**Save to memory**: Store failures, cleanup actions, warnings from element-internals-auditor output.
-
-### Step 13d: CHECK for FACE Pattern
-
-**Detect FACE usage**:
-
-```bash
-grep -q "static formAssociated = true" \
-  elements/pfv6-{component}/pfv6-{component}.ts
-```
-
-**If found**: Proceed to Step 13e
-**If NOT found**: Skip to Step 13f
-
-### Step 13e: DELEGATE to face-elements-auditor (CONDITIONAL)
-
-**Only invoke if Step 13d detected FACE pattern.**
-
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
-- subagent_type: `'face-elements-auditor'`
-- description: `'Audit pfv6-{component} FACE implementation'`
-- prompt: `'Validate pfv6-{component} Form-Associated Custom Element implementation including form callbacks, properties, and value synchronization.'`
-
-**BLOCKING REQUIREMENT:**
-You CANNOT proceed until you have received `<function_results>` from the Task tool.
-
-**Save to memory**: Store failures, cleanup actions, warnings from face-elements-auditor output.
-
-### Step 13f: Aggregate Accessibility Results
-
-**Orchestrator aggregates results from all completed audits**:
-
-1. Collect all failures from each auditor's output (stored in memory)
-2. Collect all cleanup actions from each auditor's output
-3. Collect all warnings from each auditor's output
-4. Determine overall status:
-   - ✅ PASS: Zero failures across all auditors
-   - ❌ FAIL: One or more failures from any auditor
-   - ⚠️ PENDING: Rule 3 decision was required and user chose Option C (expert review)
-
-**Present aggregated report**:
-
-```
-## Accessibility Validation: pfv6-{component}
-
-**Audits Performed**:
-- ✅ ARIA patterns (aria-auditor)
-- [✅/➖] ElementInternals usage (element-internals-auditor) [if applicable]
-- [✅/➖] FACE implementation (face-elements-auditor) [if applicable]
-
----
-
-### Part 1: ARIA Validation
-
-[Summarize key findings from aria-auditor]
-
-**Failures**: [count]
-**Cleanup Actions**: [count]
-**Warnings**: [count]
-
-**Rule 3 Decision** (if applicable):
-- User selected: [Option A/B/C]
-- Action taken: [Description of what was done]
-
----
-
-### Part 2: ElementInternals Validation
-
-[If applicable, summarize key findings from element-internals-auditor]
-
-**Failures**: [count]
-**Cleanup Actions**: [count]
-**Warnings**: [count]
-
----
-
-### Part 3: FACE Validation
-
-[If applicable, summarize key findings from face-elements-auditor]
-
-**Failures**: [count]
-**Cleanup Actions**: [count]
-**Warnings**: [count]
-
----
-
-## Overall Summary
-
-**Status**: ✅ PASS / ❌ FAIL / ⚠️ PENDING
-
-**Total Failures**: [X]
-1. [All failures from all auditors]
-
-**Total Cleanup Actions**: [Y]
-1. [All cleanup actions from all auditors]
-
-**Total Warnings**: [Z]
-1. [All warnings from all auditors]
-
-**Rule 3 Decisions**: [count]
-- [Component]: User selected [Option], action: [description]
-
-**Next Steps**:
-- [If PASS] Proceeding to test creation (Step 14)
-- [If FAIL] ❌ MUST fix all [X] failures before proceeding
-- [If PENDING] ⚠️ Blocked for expert review, skip to next component
-```
-
-**BLOCKING REQUIREMENT:**
-- If status is **FAIL**: You CANNOT proceed to Step 14 until ALL failures are fixed.
-- If status is **PENDING**: Component is blocked for expert review. Skip to next component in queue.
-
-## Phase 7: Create Tests
-
-### Step 14: DELEGATE to test-spec-writer
-
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
-- subagent_type: `'test-spec-writer'`
-- description: `'Create unit tests for pfv6-{component}'`
-- prompt: `'Create comprehensive unit tests for pfv6-{component} validating API parity with PatternFly React.'`
-
-**BLOCKING REQUIREMENT:**
-You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
-
-### Step 15: DELEGATE to test-visual-writer
-
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
-- subagent_type: `'test-visual-writer'`
-- description: `'Create visual tests for pfv6-{component}'`
-- prompt: `'Create visual regression tests for pfv6-{component} that validate pixel-perfect parity with PatternFly React.'`
-
-**BLOCKING REQUIREMENT:**
-You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
-
-### Step 16: DELEGATE to test-css-api-writer
-
-**MANDATORY: Call the Task tool with these exact parameters**:
-- Tool name: `Task`
-- subagent_type: `'test-css-api-writer'`
-- description: `'Create CSS API tests for pfv6-{component}'`
-- prompt: `'Create CSS API tests for pfv6-{component} that validate all CSS custom properties can be overridden.'`
-
-**BLOCKING REQUIREMENT:**
-You CANNOT proceed to the next step until you have received `<function_results>` from the Task tool.
-
-## Phase 8: Test Analysis
+## Phase 5: Test Analysis
 
 ### Step 17: Ask User to Run Tests (RECOMMENDED)
 
@@ -628,7 +384,7 @@ You CANNOT proceed until you have received `<function_results>` from the Task to
 - **WAIT** for analysis and fix recommendations in function_results
 - **FIX** all issues identified as fixable
 
-## Phase 9: Final Validation
+## Phase 6: Final Validation
 
 ### Step 19: Run All Tests and Verify Passing
 
@@ -652,7 +408,7 @@ Once all tests pass, the component conversion is complete!
 **Completion Criteria (ALL must be true):**
 - ✅ All subagents have run successfully
 - ✅ All linters pass (eslint, stylelint)
-- ✅ All audits pass (api-auditors, demo-auditor, css-auditor, aria-auditor, etc.)
+- ✅ All audits pass (api-auditor, demo-auditor, css-auditor, accessibility-auditor)
 - ✅ Component files are created (`elements/pfv6-{component}/` exists)
 - ✅ Demos are created and validated
 - ✅ CSS is created and validated
@@ -672,25 +428,15 @@ The dependency tracking files (`component-dependencies.yaml` and `conversion-ord
 **Delegation Requirements:**
 - [ ] **api-writer invoked** - Component API design received and verified
 - [ ] **face-elements-writer invoked** (if form control) - FACE patterns added
-- [ ] **api-bem-auditor invoked** - BEM class detection passed
-- [ ] **api-import-auditor invoked** - Import patterns validated
-- [ ] **api-property-auditor invoked** - Property decorators validated
-- [ ] **api-template-auditor invoked** - Template patterns validated
-- [ ] **api-internals-auditor invoked** - ElementInternals validated
-- [ ] **api-lifecycle-auditor invoked** - Lifecycle patterns validated
+- [ ] **api-auditor invoked** - All 6 code quality dimensions validated (BEM, imports, properties, templates, ElementInternals, lifecycle)
 - [ ] **eslint passed** - No TypeScript code quality errors
-- [ ] **demo-writer invoked** - Demo files created
-- [ ] **layout-translator invoked** (if layout components detected) - Layouts translated
-- [ ] **style-components invoked** (if styling components detected) - Styling translated
+- [ ] **demo-writer invoked** - Demo files created (includes layout/styling translation via skills)
 - [ ] **demo-auditor invoked** - Demo parity validated
 - [ ] **css-writer invoked** - CSS files created
 - [ ] **css-auditor invoked** - CSS validated
 - [ ] **stylelint passed** - No CSS syntax errors
-- [ ] **jsdoc-writer invoked** - JSDoc documentation generated
-- [ ] **jsdoc-auditor invoked** - JSDoc documentation validated
-- [ ] **aria-auditor invoked** - ARIA patterns validated
-- [ ] **element-internals-auditor invoked** (if applicable) - ElementInternals validated
-- [ ] **face-elements-auditor invoked** (if applicable) - FACE validated
+- [ ] **jsdoc invoked** - JSDoc documentation written and validated
+- [ ] **accessibility-auditor invoked** - ARIA, ElementInternals, and FACE patterns validated
 - [ ] **test-spec-writer invoked** - Unit tests created
 - [ ] **test-visual-writer invoked** - Visual tests created
 - [ ] **test-css-api-writer invoked** - CSS API tests created
@@ -699,14 +445,14 @@ The dependency tracking files (`component-dependencies.yaml` and `conversion-ord
 - [ ] `.cache/` repositories verified
 - [ ] Component has ZERO dependencies OR all dependencies exist as pfv6-* components
 - [ ] Component API matches api-writer specification exactly
-- [ ] Component API passes all api-auditor validations (6 focused auditors)
+- [ ] Component API passes all api-auditor validations (6 validation sections)
 - [ ] Template structure follows api-writer patterns (id vs class, classMap, etc.)
 - [ ] **If form control**: FACE patterns implemented correctly
   - [ ] `static formAssociated = true` present
   - [ ] Form properties (name, value, disabled, required) implemented
   - [ ] Form callbacks (formResetCallback, formDisabledCallback) implemented
   - [ ] `setFormValue()` called in updated() lifecycle
-  - [ ] Validated by face-elements-auditor (Step 13e)
+  - [ ] Validated by accessibility-auditor (Step 13, Section 3)
 - [ ] CSS variables match React CSS source (not made up)
 - [ ] CSS fallback values derived from PatternFly token source (NEVER guessed)
 - [ ] Box-sizing reset in ALL CSS files
@@ -714,9 +460,9 @@ The dependency tracking files (`component-dependencies.yaml` and `conversion-ord
 - [ ] NO `index.ts` export files created
 - [ ] Demos created from React (verified by demo-writer)
 - [ ] Demos match React 1:1 (verified by demo-auditor)
-- [ ] Accessibility validated (verified by aria-auditor, element-internals-auditor, face-elements-auditor)
+- [ ] Accessibility validated (verified by accessibility-auditor)
 - [ ] CSS audit passed (verified by css-auditor)
-- [ ] JSDoc documentation complete (verified by jsdoc-writer and jsdoc-auditor)
+- [ ] JSDoc documentation complete (verified by jsdoc agent)
 - [ ] Tests comprehensive (verified by test-spec-writer)
 - [ ] Code passes linters
 

@@ -1,7 +1,7 @@
 ---
 name: targeted-search
 description: "Memory-efficient code search specialist. Use when searching patterns, text, or code across large directories (especially .cache/ with 1,400+ files). Uses grep/ripgrep instead of Glob/ListDir to avoid memory issues."
-model: haiku
+model: opus
 color: yellow
 ---
 

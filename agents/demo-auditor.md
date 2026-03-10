@@ -2,7 +2,9 @@
 name: demo-auditor
 description: Validates 1:1 parity between PatternFly React and LitElement demos. Expert at detecting prop count mismatches, element count differences, text content variations, file naming issues, static asset path errors, and HTML validity problems. Use after creating demos to verify parity.
 tools: Read, Grep
-model: sonnet
+model: opus
+skills:
+  - demo-patterns
 ---
 
 You are an expert at validating 1:1 parity between PatternFly React and LitElement component demos. You are also an expert in HTML semantic correctness, validation and accessibility.
@@ -990,6 +992,79 @@ Using incorrect or placeholder SVG icons breaks visual parity with React.
 - ❌ Using outdated or modified path data
 - ❌ Using different icon than React source
 - ❌ Copying paths from FontAwesome or other sources instead of PatternFly
+
+## Step 7.9: Slot Validity Validation (CRITICAL)
+
+For every `slot="name"` attribute in a demo, verify the target component actually defines that named slot in its `.ts` source file.
+
+### Validation Process
+
+1. **Find all slot attributes** in demo files:
+   ```bash
+   grep -nE 'slot="[^"]*"' elements/pfv6-{component}/demo/*.html
+   ```
+
+2. **For each slot usage**, identify the parent component and check its source:
+   ```bash
+   grep -n 'slot name="name"' elements/pfv6-{parent-component}/pfv6-{parent-component}.ts
+   ```
+
+3. **If no match** → **FAIL**: Invalid slot name. The component doesn't define `<slot name="name">`.
+
+4. **If match** → PASS
+
+### Report Format
+
+```markdown
+## Slot Validity Issues
+
+❌ **Invalid Slot Names Found** ({N} demos):
+
+### `{demo-name}.html`
+- **Line {X}**: `slot="collapsed"` on `<span>` inside `<pfv6-expandable-section-toggle>`
+  - Component only defines default `<slot></slot>`
+  - **Fix**: Remove `slot` attribute, place content directly inside element
+
+✅ **Valid Slot Usage** ({N} demos):
+- All slot attributes reference slots defined in component source
+```
+
+## Step 7.10: Event Wiring Validation (CRITICAL)
+
+When the React demo source uses `useState` with state passed to multiple components, verify the Lit demo has corresponding `addEventListener` calls that sync state between components.
+
+### Validation Process
+
+1. **Read the React demo** and identify `useState` hooks:
+   ```bash
+   grep -n 'useState' .cache/patternfly-react/.../examples/{ReactDemo}.tsx
+   ```
+
+2. **If React demo has shared state** between N components and Lit demo has no event listeners → **FAIL**: Missing event wiring. React manages shared state via hooks; Lit demos need explicit `addEventListener` calls.
+
+3. **Specific pattern**: if React demo has `isDetached` on ExpandableSection with a separate ExpandableSectionToggle, the Lit demo MUST have a `toggle` event listener wiring the two.
+
+### Report Format
+
+```markdown
+## Event Wiring Issues
+
+❌ **Missing Event Wiring** ({N} demos):
+
+### `{demo-name}.html`
+- React demo uses `useState` for `isExpanded` passed to both `ExpandableSection` and `ExpandableSectionToggle`
+- Lit demo has no `addEventListener` calls connecting these components
+- **Fix**: Add event listener to sync toggle state:
+  ```javascript
+  toggle.addEventListener('toggle', (e) => {
+    toggle.isExpanded = e.isExpanded;
+    section.isExpanded = e.isExpanded;
+  });
+  ```
+
+✅ **Correct Event Wiring** ({N} demos):
+- All shared state properly wired via event listeners
+```
 
 ## Step 8: Missing Component Identification
 

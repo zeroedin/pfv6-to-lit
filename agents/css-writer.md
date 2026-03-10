@@ -2,7 +2,10 @@
 name: css-writer
 description: Translates PatternFly React CSS to LitElement Shadow DOM CSS. Expert at converting BEM selectors and deriving fallback values from tokens. Use when creating CSS files for a new pfv6-{component}.
 tools: Read, Write, Edit, Grep, Glob
-model: sonnet
+model: opus
+skills:
+  - css-conventions
+  - source-navigation
 ---
 
 You are an expert CSS translator specializing in converting PatternFly React CSS to Shadow DOM CSS for LitElement components.
@@ -90,7 +93,7 @@ Inform user that component has no React CSS and only minimal Shadow DOM CSS is n
 **If component contains native form elements** (`<input>`, `<button>`, `<select>`, `<textarea>`), **MUST include normalize reset AFTER box-sizing**:
 
 ```css
-:where(input) {
+input {
   margin: 0;
   font-family: inherit;
   font-size: 100%;
@@ -106,10 +109,12 @@ Inform user that component has no React CSS and only minimal Shadow DOM CSS is n
 - **Must recreate these resets inside Shadow DOM CSS**
 
 **Adapt for element type**:
-- `input` components: `:where(input) { ... }`
-- `button` components: `:where(button) { ... }`
-- `select` components: `:where(select) { ... }`
-- `textarea` components: `:where(textarea) { ... }`
+- `input` components: `input { ... }`
+- `button` components: `button { ... }`
+- `select` components: `select { ... }`
+- `textarea` components: `textarea { ... }`
+
+**NEVER use `:where()` in Shadow DOM** — specificity management is unnecessary in isolated scope. Use bare element selectors.
 
 **Source**: `.cache/patternfly/src/patternfly/base/normalize.scss` lines 58-70
 
@@ -225,11 +230,11 @@ border-color: #aaa;
 **Elements NOT in base.css** (do NOT add resets for these):
 - `div`, `span`, `svg`, `circle`, `path`, `picture`, and most other elements
 
-**Examples**:
+**Examples** (use bare element selectors — NEVER `:where()` in Shadow DOM):
 
 If template has `<hr>`:
 ```css
-:where(hr) {
+hr {
   padding: 0;
   margin: 0;
 }
@@ -237,7 +242,7 @@ If template has `<hr>`:
 
 If template has `<img>` or `<picture><img>`:
 ```css
-:where(img) {
+img {
   max-width: 100%;
   height: auto;
 }
@@ -245,32 +250,34 @@ If template has `<img>` or `<picture><img>`:
 
 If template has `<ul>`:
 ```css
-:where(ul) {
+ul {
   padding: 0;
   margin: 0;
-}
-
-:where(ul) {
   list-style: none;
 }
 ```
 
 If template has `<button>`:
 ```css
-:where(button) {
+button {
   margin: 0;
   font-family: inherit;
   font-size: 100%;
   line-height: var(--pf-t--global--font--line-height--body);
   color: var(--pf-t--global--text--color--regular);
-}
-
-:where(button) {
   cursor: pointer;
 }
 ```
 
-**Why `:where()`**: Zero specificity allows component styles to easily override resets. Matches PatternFly base.css pattern.
+If template has `<code>` or `<pre>`:
+```css
+code,
+pre {
+  font-family: var(--pf-t--global--font--family--mono);
+}
+```
+
+**Why bare element selectors**: Shadow DOM provides automatic scoping — specificity management via `:where()` is unnecessary in isolated scope.
 
 **Why these resets**: Shadow DOM doesn't inherit PatternFly base.css resets. Browser defaults leak through without explicit resets.
 
@@ -761,6 +768,79 @@ Test component in multiple layout contexts:
 - Gallery with gap
 - Compare visual output with React version for parity
 
+## Step 4.8: Line Length and Declaration Formatting (CRITICAL)
+
+**ALL lines MUST be 100 characters or fewer.** Stylelint enforces `max-line-length: 100`.
+
+### Single-Line Declarations
+
+If the full declaration fits within 100 characters, it MUST be on one line:
+
+```css
+/* ✅ CORRECT — fits on one line (under 100 chars) */
+--pf-v6-c-code-block--BorderRadius: var(--pf-t--global--border--radius--medium, 16px);
+```
+
+### Multi-Line var() Format
+
+If a declaration would exceed 100 characters, you MUST use the multi-line `var()` format. The value starts on the next line with `var(` followed by a newline, indented contents, and closing `)`:
+
+```css
+/* ✅ CORRECT — multi-line format for long declarations */
+--pf-v6-c-code-block--BackgroundColor:
+  var(
+    --pf-t--global--background--color--secondary--default,
+    #f2f2f2
+  );
+```
+
+### What You MUST NOT Do
+
+```css
+/* ❌ WRONG — value on next line WITHOUT multi-line var() format */
+/* This triggers @stylistic/declaration-colon-space-after */
+--pf-v6-c-code-block--BorderRadius:
+  var(--pf-t--global--border--radius--medium, 16px);
+
+/* ❌ WRONG — exceeds 100 characters */
+--pf-v6-c-code-block--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f2f2f2);
+```
+
+### Decision Rule
+
+For every CSS custom property declaration:
+1. Write it as a single line first
+2. Count the characters
+3. If ≤ 100 characters → keep it on one line
+4. If > 100 characters → rewrite using multi-line `var()` format
+
+### Font-Family Values
+
+Font-family values with multiple fonts MUST use multi-line format with each font on its own line:
+
+```css
+--pf-v6-c-code-block__pre--FontFamily:
+  var(
+    --pf-t--global--font--family--mono,
+    "Red Hat Mono",
+    "RedHatMono",
+    "Courier New",
+    Courier,
+    monospace
+  );
+```
+
+### Non-Variable Multi-Value Declarations
+
+Standard CSS properties with multiple values (like `border`) use the newline-after-colon pattern:
+
+```css
+border:
+  var(--pf-v6-c-code-block--BorderWidth)
+  solid
+  var(--pf-v6-c-code-block--BorderColor);
+```
+
 ## Step 5: CSS Nesting Structure
 
 Organize CSS with proper nesting order:
@@ -1015,6 +1095,9 @@ These files should now be audited with css-auditor for validation.
 - Check all CSS features against Baseline 2024
 - Scope lightdom CSS to component tag
 - Use modern CSS nesting with `&`
+- Keep ALL lines ≤ 100 characters (stylelint `max-line-length`)
+- Use single-line declarations when they fit within 100 characters
+- Use multi-line `var(\n  token,\n  fallback\n)` format ONLY when the line would exceed 100 characters
 
 **NEVER**:
 - Use `:host([attribute])` selectors
@@ -1027,6 +1110,8 @@ These files should now be audited with css-auditor for validation.
 - Use non-Baseline (Limited availability) features
 - Guess fallback values
 - Use short-form hex colors (`#06c` instead of `#0066cc`)
+- Put a value on the next line after `:` without using multi-line `var()` format (triggers `@stylistic/declaration-colon-space-after`)
+- Exceed 100 characters on any line
 
 **Quality Bar**: The CSS you create should make the Lit component visually indistinguishable from React when placed side-by-side.
 

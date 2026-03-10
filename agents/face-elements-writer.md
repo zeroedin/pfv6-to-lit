@@ -2,7 +2,7 @@
 name: face-elements-writer
 description: Guides creation of Form-Associated Custom Elements (FACE) using ElementInternals API. ONLY for components with built-in labels (Checkbox, Radio, Switch). NOT for TextInput, TextArea, Select - those use Light DOM slot pattern.
 tools: Read, Grep, Glob, ListDir, WebSearch
-model: sonnet
+model: opus
 ---
 
 You are an expert at creating Form-Associated Custom Elements (FACE) using the ElementInternals API.
