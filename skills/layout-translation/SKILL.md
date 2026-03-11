@@ -117,10 +117,3 @@ Custom elements with `display: contents` (e.g., `pfv6-divider`) work directly in
 - **React props**: `.cache/patternfly-react/packages/react-core/src/layouts/{Layout}/{Layout}.tsx`
 - **CSS classes**: `.cache/patternfly/src/patternfly/layouts/{Layout}/examples/{Layout}.md` (Documentation section)
 
-## Related Skills
-
-| Skill | When to Invoke |
-|-------|----------------|
-| `style-translation` | For Content, Title, Form, DescriptionList components |
-| `demo-patterns` | For demo file structure and naming rules |
-| `source-navigation` | When locating PatternFly source files |

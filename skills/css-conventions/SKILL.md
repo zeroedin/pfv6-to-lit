@@ -362,10 +362,3 @@ Copy exactly from `.cache/patternfly/src/patternfly/sass-utilities/mixins.scss`.
 }
 ```
 
-## Related Skills
-
-| Skill | When to Invoke |
-|-------|----------------|
-| `component-patterns` | For naming, imports, template rules |
-| `source-navigation` | When locating PatternFly CSS source files |
-| `lit-conventions` | For Lit framework API reference |

@@ -168,10 +168,3 @@ Set `composed: true` on events that need to cross shadow boundaries:
 new Event('change', { bubbles: true, composed: true });
 ```
 
-## Related Skills
-
-| Skill | When to Invoke |
-|-------|----------------|
-| `component-patterns` | For pfe-v6-specific patterns on top of Lit framework |
-| `accessibility` | When implementing ARIA or form controls |
-| `css-conventions` | When writing component CSS files |

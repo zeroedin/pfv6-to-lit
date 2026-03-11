@@ -50,10 +50,3 @@ Check `.config/component-exclusions.json` for the current exclusion list.
 grep -q "ComponentName" .config/component-exclusions.json && echo "excluded" || echo "not excluded"
 ```
 
-## Related Skills
-
-| Skill | When to Invoke |
-|-------|----------------|
-| `component-patterns` | For pfe-v6 component structure and naming |
-| `layout-translation` | When translating React layout components to CSS classes |
-| `style-translation` | When translating React styling components to semantic HTML |

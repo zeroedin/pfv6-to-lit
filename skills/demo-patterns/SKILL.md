@@ -369,10 +369,3 @@ When converting a React demo with state:
 
 When orchestrator specifies blocked demos (unconverted dependencies), skip them entirely. Document skipped demos in output.
 
-## Related Skills
-
-| Skill | When to Invoke |
-|-------|----------------|
-| `layout-translation` | For translating React layout components to CSS classes |
-| `style-translation` | For translating Content, Title, Form, DescriptionList |
-| `source-navigation` | When locating React demo source files |

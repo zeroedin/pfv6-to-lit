@@ -149,10 +149,3 @@ npm run e2e:parity -- pfv6-{component}.css-api.ts
 
 **Note**: Test commands start dev servers and may take time. Recommend user runs manually.
 
-## Related Skills
-
-| Skill | When to Invoke |
-|-------|----------------|
-| `component-patterns` | For component API and event patterns being tested |
-| `css-conventions` | For CSS variable naming and placement rules |
-| `source-navigation` | When locating React source for parity reference |

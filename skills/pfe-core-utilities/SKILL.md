@@ -46,9 +46,3 @@ if (this.#slots.hasSlotted('icon')) { ... }
 | `getRandomId(prefix)` | Generate unique IDs | `@patternfly/pfe-core/functions/random.js` |
 | `debounce(fn, delay)` | Debounce function calls | `@patternfly/pfe-core/functions/debounce.js` |
 
-## Related Skills
-
-| Skill | When to Invoke |
-|-------|----------------|
-| `accessibility` | When using `InternalsController` or `RovingTabindexController` for ARIA and keyboard patterns |
-| `lit-conventions` | When integrating controllers into component Shadow DOM structure and templates |

@@ -169,10 +169,3 @@ Process recursively — inner `<Content component="a">` becomes `<a class="pf-v6
 - Preserve all HTML attributes (`href`, `id`, `data-*`, `className` → `class`)
 - PatternFly CSS already loaded in project setup — no additional CSS needed
 
-## Related Skills
-
-| Skill | When to Invoke |
-|-------|----------------|
-| `layout-translation` | For Flex, Gallery, Grid, Stack, etc. layout components |
-| `demo-patterns` | For demo file structure and naming rules |
-| `source-navigation` | When locating PatternFly source files |

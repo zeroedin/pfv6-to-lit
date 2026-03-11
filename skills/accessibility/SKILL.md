@@ -221,10 +221,3 @@ When custom element is wrapped in semantic HTML, `component` attribute is redund
 <li><pfv6-divider></pfv6-divider></li>
 ```
 
-## Related Skills
-
-| Skill | When to Invoke |
-|-------|----------------|
-| `component-patterns` | For pfe-v6 naming and event patterns |
-| `lit-conventions` | For lifecycle hooks and ElementInternals setup |
-| `css-conventions` | For `:host` display and focus delegation |

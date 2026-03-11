@@ -64,7 +64,11 @@ import styles from './pfv6-card.css';
 - **Don't redefine** inherited `HTMLElement` properties (`id`, `title`, `tabindex`) unless reactive behavior is needed in `render()`
 - **Avoid** `@property({ type: Object })` or `@property({ type: Array })` — prefer slots and primitive props
 - **Boolean props**: Use `@property({ type: Boolean, reflect: true })` — covers 99% of cases
-- **String enum exception**: Only use `'true' | 'false'` string type when React's type is **explicitly** a string literal (not a boolean). Add a converter so HTML boolean attribute syntax still works:
+- **Camelcase attributes**: Multi-word props get kebab-case attribute: `isCompact` → `attribute: 'is-compact'`
+
+### String Enum Converter
+
+Only use `'true' | 'false'` string type when the type is explicitly a string literal (not a boolean). Add a converter so HTML boolean attribute syntax still works:
 
 ```typescript
 @property({
@@ -80,7 +84,22 @@ import styles from './pfv6-card.css';
 someFlag: 'true' | 'false' = 'false';
 ```
 
-- **Camelcase attributes**: Multi-word props get kebab-case attribute: `isCompact` → `attribute: 'is-compact'`
+### Responsive Property Converter
+
+Use a string-based attribute with `responsivePropertyConverter` instead of `@property({ type: Object })`:
+
+```typescript
+import { responsivePropertyConverter } from '../../lib/converters.js';
+
+@property({ converter: responsivePropertyConverter })
+inset?: string;
+
+// HTML: <pfv6-divider inset="md md:lg lg:xl xl:2xl"></pfv6-divider>
+```
+
+Pattern: `value breakpoint:value breakpoint:value`
+- First value (no prefix) = default
+- `breakpoint:value` = value at that breakpoint
 
 ## Event Pattern
 
@@ -116,43 +135,6 @@ declare global {
 - Main component **auto-imports** all sub-components
 - Event classes go **before** the component class in the same file
 
-## useEffect → updated() Translation
-
-When converting React `useEffect`, check ALL dependencies:
-
-```typescript
-// React: useEffect(() => { ... }, [dep1, dep2, dep3])
-// Lit: Check ALL deps in updated()
-updated(changedProperties: PropertyValues) {
-  if (changedProperties.has('dep1') ||
-      changedProperties.has('dep2') ||
-      changedProperties.has('dep3')) {
-    this.#sideEffect();
-  }
-}
-```
-
-- `useEffect(fn, [])` (empty array) → `firstUpdated()`
-- `useEffect(fn, [deps])` → `updated()` with `changedProperties.has()` checks
-- `useEffect(() => { return cleanup }, [])` → cleanup in `disconnectedCallback()`
-
-## Responsive Properties
-
-When React uses objects for responsive breakpoints (e.g., `{ default: 'sm', md: 'lg' }`), use a string-based attribute with a custom converter instead of `@property({ type: Object })`:
-
-```typescript
-import { responsivePropertyConverter } from '../../lib/converters.js';
-
-@property({ converter: responsivePropertyConverter })
-inset?: string;
-
-// HTML: <pfv6-divider inset="md md:lg lg:xl xl:2xl"></pfv6-divider>
-```
-
-Pattern: `value breakpoint:value breakpoint:value`
-- First value (no prefix) = default
-- `breakpoint:value` = value at that breakpoint
-
 ## Anti-Patterns
 
 - **No `console.*`** statements (log, warn, error, debug, info)
@@ -160,7 +142,6 @@ Pattern: `value breakpoint:value breakpoint:value`
 - **No Light DOM manipulation** (`createElement`, `appendChild`, `innerHTML`)
 - **No imperative Shadow DOM manipulation** (`createElement`, `appendChild`, `insertBefore`, `remove()` in Shadow DOM) — use `@state()` + conditional rendering instead (see below)
 - **No `part` attributes** unless explicitly requested
-- **No `component` prop** to change element type (users wrap with semantic HTML)
 - **No dynamic tag names** — use ternaries for conditional element types
 - **No custom ID generation** — use `getRandomId(prefix)` from `@patternfly/pfe-core/functions/random.js`
 - **No `static #privateFields`** on decorated classes — incompatible with `experimentalDecorators`
@@ -239,20 +220,18 @@ render() {
 }
 ```
 
+**CSS file** must include a `[hidden]` rule — the `hidden` attribute alone does nothing if the element has an explicit `display` value in CSS (author styles override the browser default):
+```css
+[hidden] {
+  display: none !important;
+}
+```
+
 **Key points:**
 - **One slot, one location** — the slot never moves in the DOM
 - `slotchange` fires reliably because the slot element is stable
 - `?hidden` is Lit's idiomatic boolean attribute binding — adds/removes the `hidden` attribute
 - `@state()` drives the toggle reactively — no imperative DOM manipulation
-- No extra CSS needed — `hidden` is a standard HTML attribute that hides elements
+- **`[hidden]` requires CSS** — without `[hidden] { display: none !important; }`, elements with explicit `display` values (e.g. `display: flex`) will remain visible
 - Ternaries in templates should be reserved for cases where different DOM structures are genuinely needed, not for show/hide
 
-## Related Skills
-
-| Skill | When to Invoke |
-|-------|----------------|
-| `lit-conventions` | For Lit framework API reference |
-| `source-navigation` | When accessing PatternFly React source files |
-| `css-conventions` | When writing component CSS files |
-| `accessibility` | When implementing ARIA, form controls, ElementInternals |
-| `pfe-core-utilities` | When generating IDs, debouncing, or using controllers |
