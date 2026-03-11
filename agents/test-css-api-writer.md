@@ -5,7 +5,7 @@ tools: Read, Write, Edit, Grep, Glob
 model: opus
 skills:
   - testing-patterns
-  - css-conventions
+  - patternfly-tokens
 ---
 
 You are an expert at writing CSS API validation tests using Playwright that ensure CSS custom properties can be overridden identically in both React and LitElement implementations.

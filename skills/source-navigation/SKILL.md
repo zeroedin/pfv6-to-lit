@@ -38,7 +38,7 @@ The `.cache/` directories contain 1,400+ files. Follow these rules:
 - **Use targeted paths** with the exact component name
 - **NEVER** use broad glob patterns like `components/**/*` or `src/**/*.tsx`
 - **NEVER** use Glob or ListDir tools on `.cache/` directories
-- **Use `targeted-search` agent** for cross-codebase searches
+- **Follow `targeted-search` skill** for cross-codebase searches
 - **Use `grep`/`ripgrep`** for pattern matching across many files
 
 ## Component Exclusions

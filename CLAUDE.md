@@ -8,19 +8,10 @@ When the user asks to convert a PatternFly React component (e.g., "Convert Check
 
 ### Memory Efficiency (CRITICAL)
 
-**The codebase contains 1,400+ .tsx files. Delegate searches to the `targeted-search` subagent.**
-
-**For any codebase search task**, use the Task tool with `subagent_type: 'targeted-search'`:
-- Finding patterns, text, or code across multiple files
-- Locating components, functions, or imports
-- Querying `.cache/` directories (1,400+ files)
-- Searching `conversion-order.yaml` or other structured data
-
-The `targeted-search` agent uses memory-efficient strategies (grep, node, ripgrep) instead of loading files into memory.
-
-**Quick reference for simple lookups** (when not delegating):
-- ✅ GOOD: Target specific component paths with component name
-- ❌ BAD: Never use Glob/ListDir on `.cache/` directories
+**The codebase contains 1,400+ .tsx files.** Follow the `targeted-search` skill patterns:
+- Never use Glob/ListDir on `.cache/` directories
+- Use grep/ripgrep for cross-codebase searches
+- Target specific component paths with the component name
 
 ### Workflow Orchestration
 
