@@ -118,9 +118,13 @@ export class Pfv6Popover extends LitElement {
 
 **Sub-components** also need `@alias` matching their React counterpart.
 
-### Step 4: Apply to Component File
+### Step 4: Apply to Component and Sub-component Files
 
-Use Edit tool to update the component's TypeScript file. Place JSDoc immediately before `@customElement` decorator.
+Use Edit tool to update:
+- `elements/pfv6-{component}/pfv6-{component}.ts`
+- Every discovered `elements/pfv6-{component}/pfv6-{component}-*.ts`
+
+Place each JSDoc block immediately before that file's `@customElement` decorator.
 
 ---
 
