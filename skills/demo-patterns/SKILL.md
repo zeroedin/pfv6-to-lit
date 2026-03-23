@@ -174,12 +174,14 @@ You MUST follow these exact steps — do NOT skip any:
 
 ### pfv6-icon Valid Attributes
 
-The ONLY attributes `pfv6-icon` accepts (check its source at `elements/pfv6-icon/pfv6-icon.ts`):
+Supported attributes (source of truth: `elements/pfv6-icon/pfv6-icon.ts`):
 - `size` — icon size (sm, md, lg, xl, 2xl, 3xl, etc.)
 - `icon-size` — overrides content size
+- `progress-icon-size` — overrides progress spinner size
 - `status` — semantic color (info, success, warning, danger, custom)
 - `is-inline` — inherit text sizing
 - `is-in-progress` — show progress spinner
+- `default-progress-aria-label` — aria-label for progress spinner (default: "Loading...")
 - `should-mirror-rtl` — mirror for RTL
 
 **There is NO `icon`, `name`, `set`, or `src` attribute.** The icon SVG goes in the default slot.
