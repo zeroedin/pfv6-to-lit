@@ -157,8 +157,8 @@ constructor() {
 
 ```typescript
 formResetCallback() {
-  this.value = 'on';
-  this.#internals.setFormValue('');
+  this.checked = this.defaultChecked ?? false;
+  this.#internals.setFormValue(this.checked ? this.value : null);
 }
 
 formDisabledCallback(disabled: boolean) {
@@ -172,8 +172,8 @@ formDisabledCallback(disabled: boolean) {
 ```typescript
 updated(changedProperties: PropertyValues) {
   super.updated(changedProperties);
-  if (changedProperties.has('value')) {
-    this.#internals.setFormValue(this.value);
+  if (changedProperties.has('checked') || changedProperties.has('value')) {
+    this.#internals.setFormValue(this.checked ? this.value : null);
   }
 }
 ```
