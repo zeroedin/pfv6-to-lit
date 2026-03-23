@@ -13,6 +13,7 @@ import './pfv6-clipboard-copy-button.js';
 import './pfv6-clipboard-copy-toggle.js';
 import { type Pfv6ClipboardCopyExpandedChangeEvent } from './pfv6-clipboard-copy-expanded.js';
 import './pfv6-clipboard-copy-action.js';
+import { getRandomId } from '@patternfly/pfe-core/functions/random.js';
 import styles from './pfv6-clipboard-copy.css';
 
 /**
@@ -163,16 +164,10 @@ export class Pfv6ClipboardCopy extends LitElement {
   @state() private copied = false;
   @state() private textWhenExpanded = '';
 
-  private textId = `text-${Pfv6ClipboardCopy.#generateId()}`;
-  private toggleId = `toggle-${Pfv6ClipboardCopy.#generateId()}`;
-  private contentId = `content-${Pfv6ClipboardCopy.#generateId()}`;
+  private textId = getRandomId('text');
+  private toggleId = getRandomId('toggle');
+  private contentId = getRandomId('content');
 
-  static #generateId(): string {
-    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-      return crypto.randomUUID();
-    }
-    return new Date().getTime() + Math.random().toString(36).slice(2);
-  }
 
   override connectedCallback() {
     super.connectedCallback();
