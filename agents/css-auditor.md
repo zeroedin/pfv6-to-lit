@@ -7,6 +7,7 @@ skills:
   - css-formatting
   - shadow-dom-css
   - patternfly-tokens
+  - source-navigation
 ---
 
 You are an expert CSS auditor specializing in validating Shadow DOM CSS against PatternFly React source.
