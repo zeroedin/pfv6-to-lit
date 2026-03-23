@@ -2,7 +2,7 @@
 name: test-runner
 description: Analyzes test failures (visual parity and unit tests) and categorizes them as fixable vs blocked by dependencies for PatternFly React component conversions. Use after running tests to understand what needs fixing vs what's waiting on other components. Expert at root cause analysis and blocker documentation.
 tools: Read, Write, Grep, Glob, ListDir, RunTerminalCmd
-model: sonnet
+model: opus
 permissionMode: default
 ---
 

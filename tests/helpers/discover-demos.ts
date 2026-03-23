@@ -5,8 +5,56 @@
  * tests automatically pick up new demos or renamed demos.
  */
 
-import { readdirSync } from 'fs';
+import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
+
+interface ReactDemoManifest {
+  components: Record<string, {
+    demos: Record<string, string>;
+  }>;
+}
+
+let manifestCache: ReactDemoManifest | null = null;
+
+function loadManifest(): ReactDemoManifest | null {
+  if (manifestCache) return manifestCache;
+  try {
+    const content = readFileSync(
+      join(process.cwd(), 'patternfly-react/demos.json'), 'utf-8'
+    );
+    manifestCache = JSON.parse(content);
+    return manifestCache;
+  } catch {
+    return null;
+  }
+}
+
+function toPascalCase(kebab: string): string {
+  return kebab.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+}
+
+/**
+ * Resolve the React manifest key for a Lit demo name.
+ * Returns the exact key if it exists, otherwise matches by .tsx filename.
+ * e.g., for Panel: 'basic' → finds 'basic-panel' (via PanelBasic.tsx match)
+ */
+export function resolveReactDemoName(componentName: string, litDemoName: string): string {
+  const manifest = loadManifest();
+  if (!manifest) return litDemoName;
+
+  const pascalComponent = toPascalCase(componentName);
+  const componentData = manifest.components[pascalComponent];
+  if (!componentData) return litDemoName;
+
+  if (litDemoName in componentData.demos) return litDemoName;
+
+  const expectedFile = `${pascalComponent}${toPascalCase(litDemoName)}.tsx`;
+  for (const [key, file] of Object.entries(componentData.demos)) {
+    if (file === expectedFile) return key;
+  }
+
+  return litDemoName;
+}
 
 /**
  * Discovers all demo files for a given component

@@ -46,18 +46,33 @@ async function waitForFullLoad(page: Page): Promise<void> {
   });
 }
 
-// Helper to trigger popover visibility and wait for it to be visible
-async function showPopover(page: Page): Promise<void> {
-  // Click the slotted trigger element (button inside pfv6-popover) to show the popover
-  const popover = page.locator('pfv6-popover').first();
-  const trigger = popover.locator('pfv6-button, button').first();
-  await trigger.click();
+async function triggerPopover(page: Page, framework: 'lit' | 'react'): Promise<void> {
+  if (framework === 'lit') {
+    const popover = page.locator('pfv6-popover').first();
+    const triggerAction = await popover.getAttribute('trigger-action');
+    const triggerId = await popover.getAttribute('trigger-id');
 
-  // Wait for popover to be visible (account for animation)
-  // Use shadow-piercing selector since #popover is inside pfv6-popover's shadow DOM
-  await popover.locator('#popover').waitFor({ state: 'visible', timeout: 5000 });
+    let trigger;
+    if (triggerId) {
+      trigger = page.locator(`#${triggerId}`);
+    } else {
+      // Use :visible to skip hidden pfv6-buttons inside the popover body/footer
+      // slots and the close button in shadow DOM — only the trigger is visible
+      // when the popover is closed
+      trigger = popover.locator('pfv6-button:visible').first();
+    }
 
-  // Wait for animations to complete
+    if (triggerAction === 'hover') {
+      await trigger.hover({ force: true });
+    } else {
+      await trigger.click();
+    }
+    await popover.locator('#popover').waitFor({ state: 'visible', timeout: 5000 });
+  } else {
+    const trigger = page.locator('button').first();
+    await trigger.click();
+    await page.locator('.pf-v6-c-popover').waitFor({ state: 'visible', timeout: 5000 });
+  }
   await page.waitForTimeout(500);
 }
 
@@ -83,8 +98,8 @@ test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
         await waitForFullLoad(page);
 
         // Show popover on both pages (popovers are hidden by default)
-        await showPopover(reactPage);
-        await showPopover(page);
+        await triggerPopover(reactPage, 'react');
+        await triggerPopover(page, 'lit');
 
         // Take FRESH screenshots (no baseline files)
         const reactBuffer = await reactPage.screenshot({

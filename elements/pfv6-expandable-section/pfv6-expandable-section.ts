@@ -292,8 +292,11 @@ export class Pfv6ExpandableSection extends LitElement {
       'detached': this.isDetached && !!this.direction,
     };
 
-    return html`
-      <div id="container" class=${classMap(classes)}>
+    // No leading/trailing whitespace — this component may be used inside <pre> where
+    // shadow DOM whitespace text nodes inherit white-space: pre-wrap and render visibly.
+    // The #content div's <slot> must also be whitespace-free for the same reason.
+    // Whitespace between #container's children is safe (flex suppresses it).
+    return html`<div id="container" class=${classMap(classes)}>
         ${this.variant === 'default' && !this.isDetached ? html`
           <div id="toggle" class="toggle">
             <pfv6-button
@@ -313,17 +316,13 @@ export class Pfv6ExpandableSection extends LitElement {
             </pfv6-button>
           </div>
         ` : null}
-
         <div
           id="content"
           class="content"
           ?hidden=${this.variant !== 'truncate' && !expanded}
           aria-labelledby=${ifDefined(hasRenderedToggle ? 'toggle-button' : undefined)}
           role=${ifDefined(this.isDetached ? undefined : 'region')}
-        >
-          <slot></slot>
-        </div>
-
+        ><slot></slot></div>
         ${this.variant === 'truncate' && this._hasToggle && !this.isDetached ? html`
           <div id="toggle" class="toggle">
             <pfv6-button
@@ -339,8 +338,7 @@ export class Pfv6ExpandableSection extends LitElement {
             </pfv6-button>
           </div>
         ` : null}
-      </div>
-    `;
+      </div>`;
   }
 }
 

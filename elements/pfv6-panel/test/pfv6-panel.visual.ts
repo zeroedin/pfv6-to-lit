@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
-import { discoverDemos } from '../../../tests/helpers/discover-demos.js';
+import { discoverDemos, resolveReactDemoName } from '../../../tests/helpers/discover-demos.js';
 
 /**
  * CRITICAL: Demos are discovered dynamically from the filesystem, not hardcoded.
@@ -61,7 +61,8 @@ test.describe('Parity Tests - Lit vs React Side-by-Side', () => {
 
       try {
         // Load BOTH demos simultaneously
-        await reactPage.goto(`/elements/pfv6-panel/react/test/${demoName}`);
+        const reactDemoName = resolveReactDemoName('panel', demoName);
+        await reactPage.goto(`/elements/pfv6-panel/react/test/${reactDemoName}`);
         await waitForFullLoad(reactPage);
 
         await page.goto(`/elements/pfv6-panel/test/${demoName}`);
