@@ -14,7 +14,7 @@ description: CSS formatting and linting rules including hex colors, rgba notatio
 
 ## Color Notation: `rgba()` → `rgb()` (CRITICAL)
 
-PatternFly token source files use legacy `rgba()` notation (e.g., `rgba(255, 255, 255, 0.0000)`). **ALWAYS convert to modern `rgb()` notation** in our CSS files. Stylelint enforces this.
+PatternFly token source files use legacy `rgba()` notation (e.g., `rgba(255, 255, 255, 0.0000)`). **ALWAYS convert to modern `rgb()` notation** in our CSS files. Stylelint enforces this via inherited `color-function-notation: "modern"` from `stylelint-config-standard`.
 
 **Conversion rules:**
 - `rgba(R, G, B, A)` → `rgb(R G B / A%)`
@@ -51,14 +51,14 @@ rgb(199 199 199 / 25%)   /* correct */
 
 Custom properties (`--*`) MUST appear before style declarations in each block (stylelint `order/order` enforces this).
 
-## Line Length (max 100 characters)
+## Line Length (max 120 characters)
 
-**ALL lines MUST be 100 characters or fewer** (stylelint `max-line-length`).
+**ALL lines MUST be 120 characters or fewer** (inherited `@stylistic/max-line-length: 120` from `@stylistic/stylelint-config`).
 
-**Use multi-line `var()` format for ANY declaration that would exceed 100 characters:**
+**Use multi-line `var()` format for ANY declaration that would exceed 120 characters:**
 
 ```css
-/* wrong — exceeds 100 characters */
+/* wrong — exceeds 120 characters */
 --pf-v6-c-code-block--BackgroundColor: var(--pf-t--global--background--color--secondary--default, #f2f2f2);
 
 /* right — multi-line format */
@@ -89,8 +89,8 @@ Custom properties (`--*`) MUST appear before style declarations in each block (s
 
 **Decision rule** — for every custom property declaration:
 1. Write as single line first
-2. If ≤ 100 characters → MUST keep on one line
-3. If > 100 characters → MUST use multi-line `var()` format
+2. If ≤ 120 characters → MUST keep on one line
+3. If > 120 characters → MUST use multi-line `var()` format
 
 You MUST NOT break a declaration across lines without using multi-line `var()` format:
 
@@ -99,7 +99,7 @@ You MUST NOT break a declaration across lines without using multi-line `var()` f
 --pf-v6-c-code-block--BorderRadius:
   var(--pf-t--global--border--radius--medium, 16px);
 
-/* right — single line (fits under 100 chars) */
+/* right — single line (fits under 120 chars) */
 --pf-v6-c-code-block--BorderRadius: var(--pf-t--global--border--radius--medium, 16px);
 ```
 
