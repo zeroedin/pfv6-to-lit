@@ -29,13 +29,13 @@ After api-writer completes (+ face-elements-writer if needed), the entire remain
                     ┌─► api-auditor          (needs .ts files only)
                     ├─► demo-writer          (needs .ts files only)
 api-writer ─── R1 ─┼─► css-writer           (needs .ts files only)
-                    ├─► jsdoc                (needs .ts files only)
                     └─► test-spec-writer     (needs .ts files only)
 
                     fix issues + eslint
 
                     ┌─► demo-auditor         (needs demos from R1)
                     ├─► css-auditor          (needs CSS from R1)
+                    ├─► jsdoc                (needs .ts + CSS from R1)
            ─── R2 ─┼─► accessibility-auditor (needs .ts + demos from R1)
                     ├─► test-visual-writer   (needs demos from R1)
                     └─► test-css-api-writer  (needs CSS from R1)
@@ -45,7 +45,7 @@ api-writer ─── R1 ─┼─► css-writer           (needs .ts files only)
 ```
 
 **Rules:**
-- Launch ALL Round 1 agents in the **same message** (single response with 5 Task tool calls)
+- Launch ALL Round 1 agents in the **same message** (single response with 4 Task tool calls)
 - After Round 1 completes, fix any issues + eslint, then launch ALL Round 2 agents in parallel
 - After Round 2 completes, fix any issues + stylelint
 - **Never serialize agents that have no data dependency between them**
@@ -195,9 +195,9 @@ Expected response includes:
 
 **If form control NOT detected**, skip this step and proceed to Round 1.
 
-## Phase 3: Round 1 — 5-Way Parallel (LAUNCH ALL IN ONE MESSAGE)
+## Phase 3: Round 1 — 4-Way Parallel (LAUNCH ALL IN ONE MESSAGE)
 
-**CRITICAL**: After api-writer completes (and face-elements-writer if needed), launch ALL FIVE agents in a **single message with 5 Task tool calls**. All 5 only need the `.ts` files created by api-writer.
+**CRITICAL**: After api-writer completes (and face-elements-writer if needed), launch ALL FOUR agents in a **single message with 4 Task tool calls**. All 4 only need the `.ts` files created by api-writer.
 
 ### 1. api-auditor
 
@@ -235,13 +235,7 @@ Layout and styling components (Flex, Grid, Stack, Content, Title, Form, Descript
 - description: `'Create CSS for pfv6-{component}'`
 - prompt: `'Translate PatternFly React CSS to LitElement Shadow DOM CSS for pfv6-{component} with token-derived fallback values.'`
 
-### 4. jsdoc
-
-- subagent_type: `'jsdoc'`
-- description: `'Write and validate JSDoc for pfv6-{component}'`
-- prompt: `'Generate and validate complete JSDoc documentation for pfv6-{component} including @cssprop, @csspart, @slot, @fires, @alias, and @summary annotations.'`
-
-### 5. test-spec-writer
+### 4. test-spec-writer
 
 - subagent_type: `'test-spec-writer'`
 - description: `'Create unit tests for pfv6-{component}'`
@@ -249,19 +243,18 @@ Layout and styling components (Flex, Grid, Stack, Content, Title, Form, Descript
 
 ### After Round 1 Completes
 
-**Wait for ALL 5 agents to return results.** Then:
+**Wait for ALL 4 agents to return results.** Then:
 
 1. **Fix any api-auditor CRITICAL issues**
-2. **Fix any jsdoc issues**
-3. **Run eslint** on component TypeScript:
+2. **Run eslint** on component TypeScript:
    ```bash
    npx eslint elements/pfv6-{component}/**/*.ts
    ```
    Fix all eslint violations.
 
-## Phase 4: Round 2 — 5-Way Parallel (LAUNCH ALL IN ONE MESSAGE)
+## Phase 4: Round 2 — 6-Way Parallel (LAUNCH ALL IN ONE MESSAGE)
 
-**After Round 1 issues are fixed**, launch ALL FIVE validators/writers in a **single message with 5 Task tool calls**. All 5 need demos and/or CSS created in Round 1.
+**After Round 1 issues are fixed**, launch ALL SIX validators/writers in a **single message with 6 Task tool calls**. All 6 need demos and/or CSS created in Round 1.
 
 ### 1. demo-auditor
 
@@ -275,7 +268,13 @@ Layout and styling components (Flex, Grid, Stack, Content, Title, Form, Descript
 - description: `'Audit pfv6-{component} CSS'`
 - prompt: `'Validate all CSS files for pfv6-{component} against PatternFly React source and identify all violations.'`
 
-### 3. accessibility-auditor
+### 3. jsdoc
+
+- subagent_type: `'jsdoc'`
+- description: `'Write and validate JSDoc for pfv6-{component}'`
+- prompt: `'Generate and validate complete JSDoc documentation for pfv6-{component} including @cssprop, @csspart, @slot, @fires, @alias, and @summary annotations.'`
+
+### 4. accessibility-auditor
 
 - subagent_type: `'accessibility-auditor'`
 - description: `'Audit pfv6-{component} accessibility'`
@@ -286,13 +285,13 @@ The accessibility-auditor handles all 3 validation dimensions:
 - **Section 2 (ElementInternals)**: Runs if `attachInternals()` detected
 - **Section 3 (FACE)**: Runs if `static formAssociated = true` detected
 
-### 4. test-visual-writer
+### 5. test-visual-writer
 
 - subagent_type: `'test-visual-writer'`
 - description: `'Create visual tests for pfv6-{component}'`
 - prompt: `'Create visual regression tests for pfv6-{component} that validate pixel-perfect parity with PatternFly React.'`
 
-### 5. test-css-api-writer
+### 6. test-css-api-writer
 
 - subagent_type: `'test-css-api-writer'`
 - description: `'Create CSS API tests for pfv6-{component}'`
@@ -300,11 +299,12 @@ The accessibility-auditor handles all 3 validation dimensions:
 
 ### After Round 2 Completes
 
-**Wait for ALL 5 agents to return results.** Then:
+**Wait for ALL 6 agents to return results.** Then:
 
 1. **Fix any demo-auditor issues** (hallucinated APIs, parity gaps)
 2. **Fix any css-auditor CRITICAL issues** (nesting, variables, selectors)
-3. **Fix any accessibility-auditor issues**
+3. **Fix any jsdoc issues**
+4. **Fix any accessibility-auditor issues**
 4. **Run stylelint** on all component CSS:
    ```bash
    npx stylelint elements/pfv6-{component}/*.css
