@@ -127,7 +127,7 @@ this.#internals.role = 'listitem';
 
 ### Pattern Selection Decision Tree
 
-```
+```text
 Does component have built-in label (renders label with input)?
 ├── YES (Checkbox, Radio, Switch) → Shadow DOM + FACE
 └── NO (TextInput, TextArea, Select) → Light DOM Slot (NO FACE)

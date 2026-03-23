@@ -7,7 +7,7 @@ description: Testing conventions for pfe-v6 components including unit tests (web
 
 ## Test File Locations
 
-```
+```text
 elements/pfv6-{component}/test/
   pfv6-{component}.spec.ts      # Unit tests
   pfv6-{component}.visual.ts    # Visual parity tests

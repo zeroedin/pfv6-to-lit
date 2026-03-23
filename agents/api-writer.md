@@ -34,7 +34,7 @@ Apply `react-to-lit` for all translation decisions. Use `lit-conventions` for im
 
 Document findings in output:
 
-```
+```text
 ### Parent-Child State Sharing
 **Uses Context**: YES/NO
 **Context Purpose**: (describe)
@@ -52,7 +52,7 @@ Apply `component-patterns` for naming, imports, file structure, and template con
 ### Report Completion
 
 After writing files, report:
-```
+```text
 Created component files:
 - elements/pfv6-{component}/pfv6-{component}.ts
 - elements/pfv6-{component}/pfv6-{component}-{sub}.ts
