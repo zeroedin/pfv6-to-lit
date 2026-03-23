@@ -213,7 +213,7 @@ If not found → Skip to Section 3.
 **2.4 Valid ARIA properties only**:
 - Valid string props: `ariaLabel`, `ariaChecked`, `ariaDisabled`, `ariaExpanded`, etc.
 - Valid element refs: `ariaLabelledByElements`, `ariaDescribedByElements`, `ariaControlsElements`
-- **INVALID** (common mistakes): `ariaLabelledBy`, `ariaDescribedBy`, `ariaControls`
+- `ariaLabelledBy`, `ariaDescribedBy`, `ariaControls` — valid ONLY via ElementInternals for cross-root IDREF references (e.g., `this.#internals.ariaControls`). Invalid on internal shadow DOM elements.
 
 **2.5 Shadow DOM list accessibility**: If element renders `<li>`, `<tr>`, `<td>`, `<dt>`, `<dd>` inside shadow DOM when used as slotted children → Must use ElementInternals role instead
 
