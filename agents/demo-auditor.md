@@ -1004,9 +1004,9 @@ For every `slot="name"` attribute in a demo, verify the target component actuall
    grep -nE 'slot="[^"]*"' elements/pfv6-{component}/demo/*.html
    ```
 
-2. **For each slot usage**, identify the parent component and check its source:
+2. **For each slot usage**, identify the parent component and search all `.ts` files in its directory (slots may be defined in sub-component files):
    ```bash
-   grep -n 'slot name="name"' elements/pfv6-{parent-component}/pfv6-{parent-component}.ts
+   grep -rn 'slot name="name"' elements/pfv6-{parent-component}/*.ts
    ```
 
 3. **If no match** → **FAIL**: Invalid slot name. The component doesn't define `<slot name="name">`.
