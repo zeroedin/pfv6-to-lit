@@ -19,8 +19,11 @@ Import from `@patternfly/pfe-core`.
 ### InternalsController Example
 
 ```typescript
+#internals = InternalsController.of(this);
 #internals = InternalsController.of(this, { role: 'button' });
 ```
+
+Options parameter is optional — pass initial ARIA properties (any `ARIAMixin` field) or `getHTMLElement()` callback.
 
 ### SlotController Example
 
