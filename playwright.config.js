@@ -1,19 +1,22 @@
 import { defineConfig, devices } from '@playwright/test';
+
+const testMatch = process.env.TEST_MATCH || 'elements/**/test/*.{visual,css-api}.ts';
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
     testDir: './',
-    testMatch: 'elements/**/test/*.{visual,css-api}.ts',
-    
+    testMatch,
+
     /* Run tests in files in parallel */
     fullyParallel: true,
     /* Fail the build on CI if you accidentally left test.only in the source code. */
     forbidOnly: !!process.env.CI,
     /* Retry on CI only */
     retries: process.env.CI ? 2 : 0,
-    /* Opt out of parallel tests on CI. */
-    ...(process.env.CI ? { workers: 1 } : {}),
+    /* Workers: 1 on CI, max available locally */
+    workers: process.env.CI ? 1 : '100%',
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
     reporter: 'html',
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -29,21 +32,16 @@ export default defineConfig({
             name: 'chromium',
             use: { ...devices['Desktop Chrome'] },
         },
-        {
-            name: 'firefox',
-            use: { ...devices['Desktop Firefox'] },
-        },
-        {
-            name: 'webkit',
-            use: { ...devices['Desktop Safari'] },
-        },
+        // Firefox and WebKit disabled - visual parity tests compare Lit vs React
+        // in the same browser, so cross-browser testing adds cost without benefit
+        // {
+        //     name: 'firefox',
+        //     use: { ...devices['Desktop Firefox'] },
+        // },
+        // {
+        //     name: 'webkit',
+        //     use: { ...devices['Desktop Safari'] },
+        // },
     ],
-    // Run your local dev server before starting the tests
-    webServer: {
-        command: 'npm run dev -- --port 8000 --host 0.0.0.0',
-        url: 'http://localhost:8000',
-        reuseExistingServer: !process.env.CI, // Reuse existing server in dev, start fresh in CI
-        timeout: 120 * 1000,
-    },
+    // Server lifecycle managed by wireit (serve:e2e service dependency)
 });
-//# sourceMappingURL=playwright.config.js.map

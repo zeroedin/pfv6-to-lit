@@ -17,6 +17,7 @@
     "copy:assets": "wireit",
     "copy:demos": "wireit",
     "e2e": "wireit",
+    "e2e:css-api": "wireit",
     "e2e:parity": "wireit",
     "lint": "wireit",
     "cache": "wireit",
@@ -137,20 +138,36 @@
       ]
     },
     "e2e": {
-      "command": "playwright test",
-      "description": "Run ALL E2E tests (Parity + CSS API)",
+      "dependencies": [
+        "e2e:parity",
+        "e2e:css-api"
+      ],
+      "description": "Run ALL E2E tests (Parity + CSS API)"
+    },
+    "e2e:css-api": {
+      "command": "TEST_MATCH='elements/**/test/*.css-api.ts' playwright test",
+      "description": "Validate CSS custom property overrides work correctly",
       "dependencies": [
         "compile:tsc",
-        "compile:react-demos"
+        "compile:react-demos",
+        { "script": "serve:e2e", "cascade": false }
       ]
     },
     "e2e:parity": {
-      "command": "playwright test",
+      "command": "TEST_MATCH='elements/**/test/*.visual.ts' playwright test",
       "description": "CRITICAL: Validate 1:1 visual parity (Lit vs React live comparison)",
       "dependencies": [
         "compile:tsc",
-        "compile:react-demos"
+        "compile:react-demos",
+        { "script": "serve:e2e", "cascade": false }
       ]
+    },
+    "serve:e2e": {
+      "service": true,
+      "command": "web-dev-server --port 8000 --host 0.0.0.0",
+      "readyWhen": {
+        "lineMatches": "Web Dev Server started..."
+      }
     },
     "lint": {
       "dependencies": [
