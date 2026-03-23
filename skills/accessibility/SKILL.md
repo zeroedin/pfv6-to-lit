@@ -25,11 +25,13 @@ accessibleLabel?: string;
 
 ## No IDREF Attributes Across Shadow Boundaries
 
-**NEVER accept** IDREF attributes that reference across shadow boundaries:
+**NEVER accept** IDREF attributes on public `@property()` decorators that reference across shadow boundaries:
 
 - `aria-labelledby`, `aria-describedby`, `aria-controls`, `aria-activedescendant`, `aria-owns`
 
 **Why**: Shadow DOM creates separate ID namespaces. Use `accessible-label` property instead.
+
+**Exception**: Host-level ElementInternals string IDREFs (`this.#internals.ariaControls`, `ariaLabelledBy`, `ariaDescribedBy`) are valid for cross-root references. See "ElementInternals for Host-Level ARIA" below.
 
 ## ElementInternals for Host-Level ARIA
 
