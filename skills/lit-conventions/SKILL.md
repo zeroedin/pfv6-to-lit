@@ -49,10 +49,12 @@ Lit uses tagged template literals (`html``) with binding expressions:
 | Syntax | Purpose | Example |
 |--------|---------|---------|
 | `${expr}` | Text content | `<p>${this.name}</p>` |
-| `attr=${expr}` | Set attribute | `<img src=${this.url}>` |
+| `attr="${expr}"` | Set attribute | `<img src="${this.url}">` |
 | `?attr=${expr}` | Toggle boolean attribute | `?disabled=${this.disabled}` |
 | `.prop=${expr}` | Set JS property | `.value=${this.val}` |
 | `@event=${handler}` | Add event listener | `@click=${this.#onClick}` |
+
+**Always quote attribute values** in Lit templates (e.g., `src="${this.url}"` not `src=${this.url}`). While Lit doesn't require quotes, they prevent tree-sitter highlighting issues and a class of bugs from unclosed quotes in mixed documents.
 
 ## Directives
 
@@ -71,7 +73,7 @@ Import individually from `lit/directives/`:
 Prevents rendering `"undefined"` string as attribute value:
 
 ```typescript
-html`<div aria-label=${ifDefined(this.label)}>` // omits attr when undefined
+html`<div aria-label="${ifDefined(this.label)}">` // omits attr when undefined
 ```
 
 ### classMap usage
@@ -79,7 +81,7 @@ Conditional class application from an object:
 
 ```typescript
 const classes = { active: this.isActive, disabled: this.disabled };
-html`<div class=${classMap(classes)}>`;
+html`<div class="${classMap(classes)}">`;
 ```
 
 ## Lifecycle Methods
