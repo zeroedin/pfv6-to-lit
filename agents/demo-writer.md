@@ -664,11 +664,14 @@ Content, Title, Form, and DescriptionList styles are part of PatternFly's core C
 ### Procedure
 
 1. **Identify all React component imports** in the demo file (e.g., `ClipboardCopyButton`, `Button`, `Tooltip`, `ExpandableSection`)
-2. **For EACH imported component**, check if the pfv6-* equivalent exists:
+2. **For EACH imported component**, check if the pfv6-* equivalent exists. Sub-components may live inside a parent directory, so check both patterns:
    ```bash
+   # Top-level component (e.g., Button → elements/pfv6-button/pfv6-button.ts)
    ls elements/pfv6-{component}/pfv6-{component}.ts
+   # Sub-component (e.g., ClipboardCopyButton → elements/pfv6-clipboard-copy/pfv6-clipboard-copy-button.ts)
+   ls elements/pfv6-{parent}/pfv6-{full-component}.ts
    ```
-   Use kebab-case conversion: `ClipboardCopyButton` → check `elements/pfv6-clipboard-copy/` directory
+   Use kebab-case conversion: `ClipboardCopyButton` → `pfv6-clipboard-copy-button`. Check `elements/pfv6-clipboard-copy-button/` first; if not found, search parent directories: `ls elements/pfv6-clipboard-copy/pfv6-clipboard-copy-button.ts`
 3. **Record the result** for each dependency:
    - EXISTS → you MUST use the actual pfv6-* element with correct attributes and events
    - MISSING → you MAY stub with a TODO comment and semantic HTML fallback
